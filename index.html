@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WALDO Design System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #171819;
+      --bg-card:    #202123;
+      --bg-high:    #242528;
+      --fill-low:   #27282b;
+      --fill-reg:   #2d2f33;
+      --fill-menu:  #323539;
+      --fill-high:  #41454b;
+      --txt-high:   #d2d3d3;
+      --txt-med:    rgba(210,211,211,.68);
+      --txt-reg:    #8f9091;
+      --txt-low:    #636465;
+      --line-low:   rgba(210,211,211,.12);
+      --line-reg:   rgba(210,211,211,.20);
+      --line-high:  rgba(210,211,211,.28);
+      --teal:       #32a9a9;
+      --radius:     6px;
+    }
+
+    html { font-family: 'Inter', sans-serif; font-size: 16px; background: var(--bg); color: var(--txt-high); -webkit-font-smoothing: antialiased; }
+    body { padding: 64px 48px 120px; max-width: 1400px; margin: 0 auto; }
+
+    /* ── Header ── */
+    .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 64px; padding-bottom: 32px; border-bottom: 1px solid var(--line-low); }
+    .header h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.04em; color: var(--txt-high); }
+    .header p  { font-size: 13px; color: var(--txt-reg); margin-top: 4px; }
+    .tag { display: inline-flex; align-items: center; gap: 5px; background: rgba(50,169,169,.12); color: var(--teal); border: 1px solid rgba(50,169,169,.25); border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 500; margin-top: 10px; }
+    .tag::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--teal); }
+    .legend { display: inline-flex; align-items: center; gap: 5px; background: var(--fill-low); border-radius: 20px; padding: 3px 10px; font-size: 11px; color: var(--txt-reg); margin-top: 10px; margin-left: 8px; }
+
+    /* ── Nav ── */
+    .nav { display: flex; gap: 0; margin-bottom: 48px; border-bottom: 1px solid var(--line-low); }
+    .nav a { font-size: 13px; color: var(--txt-reg); padding: 10px 16px; border-bottom: 2px solid transparent; cursor: pointer; transition: color .15s; }
+    .nav a.active { color: var(--txt-high); border-bottom-color: var(--teal); font-weight: 500; }
+    .nav a:hover { color: var(--txt-high); }
+
+    /* ── Sections ── */
+    section { display: none; }
+    section.active { display: block; }
+    .section-title { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 6px; color: var(--txt-high); }
+    .section-sub   { font-size: 13px; color: var(--txt-reg); margin-bottom: 40px; }
+
+    /* ── Palette table ── */
+    .chip { width: 100%; height: 44px; border-radius: 6px; position: relative; cursor: default; transition: transform .1s; display: block; }
+    .chip:hover { transform: scaleY(1.06); z-index: 2; }
+    .chip-tip { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--fill-menu); color: var(--txt-high); border: 1px solid var(--line-reg); border-radius: 4px; padding: 4px 8px; font-size: 10px; white-space: nowrap; z-index: 10; }
+    .chip:hover .chip-tip { display: block; }
+    .anchor-dot { position: absolute; top: 4px; right: 4px; width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,.55); }
+
+    /* ── Semantic tokens ── */
+    .token-group-title { font-size: 11px; font-weight: 600; color: var(--txt-reg); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line-low); }
+    .token-section { margin-bottom: 40px; }
+    .token-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 6px; }
+    .token-card { background: var(--bg-card); border: 1px solid var(--line-low); border-radius: var(--radius); padding: 10px 12px; display: flex; gap: 10px; align-items: center; }
+    .token-dot { width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0; border: 1px solid var(--line-low); }
+    .token-var { font-size: 11px; font-weight: 500; color: var(--txt-med); font-family: 'SF Mono','Fira Code',monospace; }
+    .token-src { font-size: 10px; color: var(--txt-low); margin-top: 2px; }
+
+    /* Mode toggle */
+    .mode-toggle { display: flex; background: var(--fill-low); border-radius: var(--radius); padding: 3px; width: fit-content; margin-bottom: 28px; }
+    .mode-btn { font-size: 12px; font-weight: 500; padding: 5px 14px; border-radius: 4px; cursor: pointer; color: var(--txt-reg); border: none; background: transparent; }
+    .mode-btn.active { background: var(--fill-high); color: var(--txt-high); }
+
+    /* ── Typography ── */
+    .type-head { display: grid; grid-template-columns: 140px 1fr 200px; gap: 24px; padding-bottom: 10px; border-bottom: 1px solid var(--line-low); margin-bottom: 0; }
+    .type-head span { font-size: 11px; font-weight: 600; color: var(--txt-reg); text-transform: uppercase; letter-spacing: .08em; }
+    .type-row { display: grid; grid-template-columns: 180px 1fr 200px; gap: 24px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--line-low); }
+    .type-tag  { font-size: 11px; font-family: 'SF Mono','Fira Code',monospace; background: var(--fill-low); border-radius: 4px; padding: 2px 7px; color: var(--txt-reg); display: inline-block; white-space: nowrap; }
+    .type-meta { display: flex; flex-wrap: wrap; gap: 6px; }
+    .type-meta span { font-size: 10px; background: var(--fill-low); border-radius: 3px; padding: 2px 6px; color: var(--txt-reg); font-family: monospace; }
+    .type-meta .anchor { background: rgba(50,169,169,.12); color: var(--teal); }
+
+    /* ── Components ── */
+    .comp-group { margin-bottom: 40px; }
+    .comp-label { font-size: 11px; font-weight: 600; color: var(--txt-reg); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 14px; }
+    .comp-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+
+    /* ─────────────────────────────────────────────────────
+       WALDO BUTTON SYSTEM — Shadcn/Tailwind naming
+       Variants: default · secondary · outline · ghost ·
+                 link · destructive  (Shadcn core)
+       Extensions: muted · subtle · inverse  (Waldo-specific)
+       ───────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      border-radius: 24px; border: 1px solid transparent; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; line-height: 20px;
+      padding: 8px 16px; height: 36px;
+      transition: background .15s, opacity .15s, color .15s, box-shadow .15s;
+      white-space: nowrap; text-decoration: none; outline: none;
+    }
+    /* Focus ring — Shadcn standard: 2px offset ring in brand color */
+    .btn:focus-visible {
+      box-shadow: 0 0 0 2px #171819, 0 0 0 4px #32a9a9;
+    }
+    /* Sizes */
+    .btn-lg   { height: 44px; padding: 12px 16px; }
+    .btn-sm   { height: 28px; padding: 6px 16px; font-size: 13px; line-height: 16px; }
+    .btn-icon { height: 32px; width: 32px; padding: 8px; flex-shrink: 0; }
+
+    /* ── SHADCN CORE VARIANTS ── */
+
+    /* default — brand primary CTA */
+    .btn-default       { background: #32a9a9; color: #171819; border-color: #32a9a9; }
+    .btn-default:hover { background: #2c797a; border-color: #2c797a; }
+    .btn-default:focus-visible { box-shadow: 0 0 0 2px #171819, 0 0 0 4px #4dbcbc; }
+
+    /* secondary — main fill action (zinc-600, from Figma FILL/500) */
+    .btn-secondary       { background: #41454b; color: #d2d3d3; border-color: #41454b; }
+    .btn-secondary:hover { background: #2d2f33; border-color: #2d2f33; }
+
+    /* outline — transparent + border (from Figma GHOST/DARK) */
+    .btn-outline       { background: transparent; color: #d2d3d3; border-color: rgba(210,211,211,.20); }
+    .btn-outline:hover { background: rgba(23,24,25,.5); }
+
+    /* ghost — no bg, no border (from Figma NOBG/DARK) */
+    .btn-ghost       { background: transparent; color: #d2d3d3; border-color: transparent; }
+    .btn-ghost:hover { background: rgba(23,24,25,.5); }
+
+    /* link — text only, teal color */
+    .btn-link        { background: transparent; color: #32a9a9; border-color: transparent;
+                       padding-left: 4px; padding-right: 4px; text-decoration: underline;
+                       text-underline-offset: 4px; text-decoration-color: transparent; }
+    .btn-link:hover  { text-decoration-color: #32a9a9; color: #4dbcbc; }
+
+    /* destructive — Waldo style: tint (intentional divergence from Shadcn solid red) */
+    .btn-destructive       { background: rgba(255,100,103,.10); color: #ff6467; border-color: rgba(255,100,103,.20); }
+    .btn-destructive:hover { background: rgba(255,100,103,.20); }
+    .btn-destructive:focus-visible { box-shadow: 0 0 0 2px #171819, 0 0 0 4px #ff6467; }
+
+    /* ── WALDO EXTENSIONS (not in Shadcn core) ── */
+
+    /* muted — darker surface (from Figma FILL/800) */
+    .btn-muted       { background: #27282b; color: #d2d3d3; border-color: #27282b; }
+    .btn-muted:hover { background: #242528; border-color: #242528; }
+
+    /* subtle — opacity-based, adapts to any bg (from Figma OPACITY/700) */
+    .btn-subtle       { background: rgba(210,211,211,.05); color: rgba(210,211,211,.68); border-color: transparent; }
+    .btn-subtle:hover { background: rgba(210,211,211,.10); color: #d2d3d3; }
+
+    /* inverse — light bg for dark-on-light contexts (from Figma WHITE/WHITE) */
+    .btn-inverse        { background: #d2d3d3; color: #171819; border-color: #d2d3d3; }
+    .btn-inverse:hover  { background: rgba(210,211,211,.9); }
+
+    /* disabled — applied as attribute or class */
+    .btn[disabled], .btn-disabled {
+      background: #2d2f33; color: rgba(210,211,211,.28);
+      border-color: transparent; cursor: not-allowed; pointer-events: none;
+    }
+
+    /* Badge */
+    .badge { display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+
+    /* Input */
+    .inp { height: 32px; border-radius: var(--radius); padding: 0 12px; font-size: 13px; font-family: 'Inter',sans-serif; outline: none; width: 200px; background: transparent; border: 1px solid var(--line-reg); color: var(--txt-high); }
+    .inp::placeholder { color: var(--txt-low); }
+    .inp:focus { border-color: var(--teal); box-shadow: 0 0 0 2px rgba(50,169,169,.18); }
+
+    /* Card */
+    .card { background: var(--bg-card); border: 1px solid var(--line-low); border-radius: 8px; padding: 20px; }
+    .card h4 { font-size: 14px; font-weight: 600; color: var(--txt-high); margin-bottom: 6px; }
+    .card p  { font-size: 13px; color: var(--txt-med); line-height: 1.5; }
+    .card-footer { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line-low); display: flex; gap: 8px; }
+
+    /* Radius */
+    .r-box { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .r-demo { width: 64px; height: 64px; background: var(--fill-reg); border: 1px solid var(--line-reg); }
+
+    /* Footer */
+    footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--line-low); display: flex; justify-content: space-between; }
+    footer p { font-size: 12px; color: var(--txt-low); }
+    footer span { color: var(--teal); font-weight: 500; }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div>
+    <h1>WALDO Design System</h1>
+    <p>Shadcn/ui · Inter · Dark-first · 7 color families · 80+ tokens</p>
+    <div style="display:flex;gap:0;flex-wrap:wrap">
+      <span class="tag">v1.0</span>
+      <span class="legend">◉ Anchor = Figma value</span>
+      <span class="legend">○ Derived = interpolated</span>
+    </div>
+  </div>
+  <div style="text-align:right">
+    <p style="font-size:12px;color:var(--txt-low)">Deliverables</p>
+    <p style="font-size:13px;font-weight:500;margin-top:4px;color:var(--teal)">waldo-shadcn-theme.css</p>
+    <p style="font-size:13px;font-weight:500;color:var(--teal)">waldo-tokens.json</p>
+  </div>
+</header>
+
+<nav class="nav">
+  <a class="active" onclick="showTab('typography',this)">Typography</a>
+  <a onclick="showTab('brand',this)">Brand Colors</a>
+</nav>
+
+
+<section id="tab-typography" class="active">
+  <h2 class="section-title">Typography</h2>
+  <p class="section-sub">Inter · two-track scale (Linear-style) · weights 400 / 500 / 600 / 700 + italic</p>
+
+  <!-- Two-track explainer -->
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:32px;">
+    <div style="padding:16px; background:var(--fill-low); border-radius:8px; border:1px solid var(--line-low);">
+      <p style="font-size:11px;font-weight:600;color:var(--txt-reg);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase">text-* track</p>
+      <p style="font-size:14px;color:var(--txt-high);font-weight:500;margin-bottom:6px">UI, body, product surfaces</p>
+      <p style="font-size:13px;color:var(--txt-med);line-height:1.5">Tailwind standard scale 12→48. Default tracking <span style="font-family:'SF Mono','Fira Code',monospace;font-size:12px;background:var(--fill-menu);padding:1px 6px;border-radius:3px;color:var(--txt-high)">-0.02em</span> (-2%).</p>
+    </div>
+    <div style="padding:16px; background:var(--fill-low); border-radius:8px; border:1px solid var(--line-low);">
+      <p style="font-size:11px;font-weight:600;color:var(--teal);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase">text-display-* track</p>
+      <p style="font-size:14px;color:var(--txt-high);font-weight:500;margin-bottom:6px">Marketing heros + section headings</p>
+      <p style="font-size:13px;color:var(--txt-med);line-height:1.5">Custom scale 24 / 32 / 40 / 56 / 72 / 96. Default tracking <span style="font-family:'SF Mono','Fira Code',monospace;font-size:12px;background:var(--fill-menu);padding:1px 6px;border-radius:3px;color:var(--txt-high)">-0.04em</span> (-4%). Tailwind-native: utility class is <span style="font-family:'SF Mono','Fira Code',monospace;font-size:12px;background:var(--fill-menu);padding:1px 6px;border-radius:3px;color:var(--teal)">text-display-md</span>.</p>
+    </div>
+  </div>
+
+  <!-- ── TEXT TRACK ── -->
+  <p style="font-size:11px;font-weight:600;color:var(--txt-reg);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--line-low)">Text track</p>
+
+  <div class="type-head"><span>Class</span><span>Specimen</span><span>Specs</span></div>
+
+  <div class="type-row"><span class="type-tag">text-xs · normal</span>    <span style="font-size:12px;line-height:16px;font-weight:400;letter-spacing:-.02em;color:var(--txt-high)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>12/16</span><span>400</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-xs · medium</span>    <span style="font-size:12px;line-height:16px;font-weight:500;letter-spacing:-.02em;color:var(--txt-high)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>12/16</span><span>500</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-sm · normal</span>    <span style="font-size:14px;line-height:20px;font-weight:400;letter-spacing:-.02em;color:var(--txt-high)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>14/20</span><span>400</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-sm · medium</span>    <span style="font-size:14px;line-height:20px;font-weight:500;letter-spacing:-.02em;color:var(--txt-high)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>14/20</span><span>500</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-sm · semibold</span>  <span style="font-size:14px;line-height:20px;font-weight:600;letter-spacing:-.02em;color:var(--txt-high)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>14/20</span><span>600</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-base · normal</span>  <span style="font-size:16px;line-height:24px;font-weight:400;letter-spacing:-.02em;color:var(--txt-high)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span class="anchor">16/24 — default</span><span>400</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-base · italic</span>  <span style="font-size:16px;line-height:24px;font-weight:400;font-style:italic;letter-spacing:-.02em;color:var(--txt-high)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>16/24</span><span>400 italic</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-base · medium</span>  <span style="font-size:16px;line-height:24px;font-weight:500;letter-spacing:-.02em;color:var(--txt-high)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>16/24</span><span>500</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-base · semibold</span><span style="font-size:16px;line-height:24px;font-weight:600;letter-spacing:-.02em;color:var(--txt-high)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>16/24</span><span>600</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-lg · normal</span>    <span style="font-size:18px;line-height:28px;font-weight:400;letter-spacing:-.02em;color:var(--txt-high)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>18/28</span><span>400</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-lg · medium</span>    <span style="font-size:18px;line-height:28px;font-weight:500;letter-spacing:-.02em;color:var(--txt-high)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>18/28</span><span>500</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-lg · semibold</span>  <span style="font-size:18px;line-height:28px;font-weight:600;letter-spacing:-.02em;color:var(--txt-high)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>18/28</span><span>600</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-xl · normal</span>    <span style="font-size:20px;line-height:28px;font-weight:400;letter-spacing:-.02em;color:var(--txt-high)">The quick brown fox jumps</span><div class="type-meta"><span>20/28</span><span>400</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-xl · medium</span>    <span style="font-size:20px;line-height:28px;font-weight:500;letter-spacing:-.02em;color:var(--txt-high)">The quick brown fox jumps</span><div class="type-meta"><span>20/28</span><span>500</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-xl · semibold</span>  <span style="font-size:20px;line-height:28px;font-weight:600;letter-spacing:-.02em;color:var(--txt-high)">The quick brown fox jumps</span><div class="type-meta"><span>20/28</span><span>600</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-2xl · medium</span>   <span style="font-size:24px;line-height:32px;font-weight:500;letter-spacing:-.02em;color:var(--txt-high)">The quick brown fox</span><div class="type-meta"><span>24/32</span><span>500</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-2xl · semibold</span> <span style="font-size:24px;line-height:32px;font-weight:600;letter-spacing:-.02em;color:var(--txt-high)">The quick brown fox</span><div class="type-meta"><span>24/32</span><span>600</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-3xl · semibold</span> <span style="font-size:30px;line-height:36px;font-weight:600;letter-spacing:-.02em;color:var(--txt-high)">Waldo Agents</span><div class="type-meta"><span>30/36</span><span>600</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-4xl · semibold</span> <span style="font-size:36px;line-height:40px;font-weight:600;letter-spacing:-.02em;color:var(--txt-high)">Waldo</span><div class="type-meta"><span>36/40</span><span>600</span><span>-0.02em</span></div></div>
+
+  <!-- ── DISPLAY TRACK ── -->
+  <p style="font-size:11px;font-weight:600;color:var(--teal);text-transform:uppercase;letter-spacing:.08em;margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line-low)">text-display-* track — marketing only</p>
+
+  <div class="type-head"><span>Class</span><span>Specimen</span><span>Specs</span></div>
+
+  <div class="type-row"><span class="type-tag">text-display-xs · regular</span>   <span style="font-size:24px;line-height:32px;font-weight:400;letter-spacing:-.04em;color:var(--txt-high)">Briefed before you ask</span><div class="type-meta"><span>24/32</span><span>400</span><span>-0.04em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-display-xs · medium</span>    <span style="font-size:24px;line-height:32px;font-weight:500;letter-spacing:-.04em;color:var(--txt-high)">Getting smart on a brand, fast</span><div class="type-meta"><span>24/32</span><span>500</span><span>-0.04em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-display-sm · regular</span>   <span style="font-size:32px;line-height:40px;font-weight:400;letter-spacing:-.04em;color:var(--txt-high)">Why strategists never go back</span><div class="type-meta"><span>32/40</span><span>400</span><span>-0.04em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-display-sm · semibold</span>  <span style="font-size:32px;line-height:40px;font-weight:600;letter-spacing:-.04em;color:var(--txt-high)">Connect and go.</span><div class="type-meta"><span>32/40</span><span>600</span><span>-0.04em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-display-md · regular</span>   <span style="font-size:40px;line-height:48px;font-weight:400;letter-spacing:-.04em;color:var(--txt-high)">Get everything you need</span><div class="type-meta"><span class="anchor">40/48 — hero default</span><span>400</span><span>-0.04em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-display-md · semibold</span>  <span style="font-size:40px;line-height:48px;font-weight:600;letter-spacing:-.04em;color:var(--txt-high)">A built-in strategist</span><div class="type-meta"><span>40/48</span><span>600</span><span>-0.04em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-display-lg · regular</span>   <span style="font-size:56px;line-height:64px;font-weight:400;letter-spacing:-.04em;color:var(--txt-high)">Move first.</span><div class="type-meta"><span>56/64</span><span>400</span><span>-0.04em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-display-lg · semibold</span>  <span style="font-size:56px;line-height:64px;font-weight:600;letter-spacing:-.04em;color:var(--txt-high)">Move first.</span><div class="type-meta"><span>56/64</span><span>600</span><span>-0.04em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-display-xl · semibold</span>  <span style="font-size:72px;line-height:80px;font-weight:600;letter-spacing:-.04em;color:var(--txt-high)">Waldo</span><div class="type-meta"><span>72/80</span><span>600</span><span>-0.04em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-display-2xl · semibold</span> <span style="font-size:96px;line-height:100px;font-weight:600;letter-spacing:-.04em;color:var(--txt-high)">Waldo</span><div class="type-meta"><span>96/100</span><span>600</span><span>-0.04em</span></div></div>
+
+  <!-- ── Notes ── -->
+  <p style="font-size:11px;font-weight:600;color:var(--txt-reg);text-transform:uppercase;letter-spacing:.08em;margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line-low)">Mono &amp; rules of thumb</p>
+
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:20px;">
+    <div style="padding:16px; background:var(--fill-low); border-radius:8px; border:1px solid var(--line-low);">
+      <p style="font-size:11px;font-weight:600;color:var(--txt-reg);margin-bottom:6px;letter-spacing:.08em;text-transform:uppercase">--font-mono</p>
+      <p style="font-family:'SF Mono','Fira Code',ui-monospace,monospace;font-size:13px;color:var(--txt-high);margin-bottom:4px">const briefing = waldo.scan();</p>
+      <p style="font-size:12px;color:var(--txt-low)">ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace</p>
+    </div>
+    <div style="padding:16px; background:var(--fill-low); border-radius:8px; border:1px solid var(--line-low);">
+      <p style="font-size:11px;font-weight:600;color:var(--txt-reg);margin-bottom:6px;letter-spacing:.08em;text-transform:uppercase">When to pick which track</p>
+      <p style="font-size:12px;color:var(--txt-med);line-height:1.6">Anything inside the <strong style="color:var(--txt-high)">product UI</strong> → <code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--fill-menu);padding:1px 5px;border-radius:3px;color:var(--txt-high)">text-*</code><br>Anything that's a <strong style="color:var(--txt-high)">marketing hero or section title</strong> → <code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--fill-menu);padding:1px 5px;border-radius:3px;color:var(--teal)">text-display-*</code></p>
+    </div>
+  </div>
+</section>
+
+
+<section id="tab-brand">
+  <h2 class="section-title">Brand Colors</h2>
+  <p class="section-sub">5 families · 5 steps each · marketing website only (packages/web) · Tailwind: <code style="font-family:'SF Mono','Fira Code',monospace;background:var(--fill-low);padding:1px 6px;border-radius:3px;font-size:12px">brand-[family]-[step]</code></p>
+
+  <style>
+    .brand-grid { display: grid; grid-template-columns: 100px repeat(5, 1fr); gap: 6px; align-items: center; margin-bottom: 8px; }
+    .brand-label { font-size: 13px; font-weight: 600; color: var(--txt-high); letter-spacing: -0.01em; }
+    .brand-step-head { font-size: 11px; font-weight: 500; color: var(--txt-reg); text-align: center; padding-bottom: 8px; }
+    .brand-swatch {
+      width: 100%; height: 44px; border-radius: 24px; position: relative; cursor: default;
+      transition: transform .1s, box-shadow .1s;
+    }
+    .brand-swatch:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.4); z-index: 2; }
+    .brand-swatch-tip {
+      display: none; position: absolute; bottom: calc(100% + 8px); left: 50%;
+      transform: translateX(-50%); background: var(--fill-menu); color: var(--txt-high);
+      border: 1px solid var(--line-reg); border-radius: 6px; padding: 6px 10px;
+      font-size: 10px; white-space: nowrap; z-index: 10; line-height: 1.6;
+      box-shadow: 0 4px 12px rgba(0,0,0,.4);
+    }
+    .brand-swatch:hover .brand-swatch-tip { display: block; }
+    .brand-swatch-tip code { font-family: 'SF Mono','Fira Code',monospace; color: var(--teal); display: block; }
+    .brand-main-dot { position: absolute; bottom: 6px; right: 6px; width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.5); }
+    .brand-section-divider { height: 1px; background: var(--line-low); margin: 32px 0; }
+    .brand-notice { display: inline-flex; align-items: center; gap: 6px; background: rgba(129,58,239,.1); color: #ba91f7; border: 1px solid rgba(129,58,239,.2); border-radius: 20px; padding: 3px 12px; font-size: 11px; font-weight: 500; margin-bottom: 32px; }
+  </style>
+
+  <div class="brand-notice">⚡ These colors are flashy by design — use in marketing, not in the product UI</div>
+
+  <!-- Header row -->
+  <div class="brand-grid" style="margin-bottom:4px">
+    <div></div>
+    <div class="brand-step-head">700</div>
+    <div class="brand-step-head">600</div>
+    <div class="brand-step-head">500 ★</div>
+    <div class="brand-step-head">300</div>
+    <div class="brand-step-head">100</div>
+  </div>
+
+  <!-- Green -->
+  <div class="brand-grid">
+    <div class="brand-label">Green</div>
+    <div class="brand-swatch" style="background:#1b8c8c">
+      <div class="brand-swatch-tip"><code>brand-green-700</code>#1b8c8c</div>
+    </div>
+    <div class="brand-swatch" style="background:#2db4b4">
+      <div class="brand-swatch-tip"><code>brand-green-600</code>#2db4b4</div>
+    </div>
+    <div class="brand-swatch" style="background:#63dbdb">
+      <div class="brand-main-dot"></div>
+      <div class="brand-swatch-tip"><code>brand-green-500</code>#63dbdb · main</div>
+    </div>
+    <div class="brand-swatch" style="background:#8cfaf5">
+      <div class="brand-swatch-tip"><code>brand-green-300</code>#8cfaf5</div>
+    </div>
+    <div class="brand-swatch" style="background:#dafffd;border:1px solid var(--line-low)">
+      <div class="brand-swatch-tip"><code>brand-green-100</code>#dafffd</div>
+    </div>
+  </div>
+
+  <!-- Yellow -->
+  <div class="brand-grid">
+    <div class="brand-label">Yellow</div>
+    <div class="brand-swatch" style="background:#de8d13">
+      <div class="brand-swatch-tip"><code>brand-yellow-700</code>#de8d13</div>
+    </div>
+    <div class="brand-swatch" style="background:#e3ac38">
+      <div class="brand-swatch-tip"><code>brand-yellow-600</code>#e3ac38</div>
+    </div>
+    <div class="brand-swatch" style="background:#fac034">
+      <div class="brand-main-dot"></div>
+      <div class="brand-swatch-tip"><code>brand-yellow-500</code>#fac034 · main</div>
+    </div>
+    <div class="brand-swatch" style="background:#f7d372">
+      <div class="brand-swatch-tip"><code>brand-yellow-300</code>#f7d372</div>
+    </div>
+    <div class="brand-swatch" style="background:#ffedc0;border:1px solid var(--line-low)">
+      <div class="brand-swatch-tip"><code>brand-yellow-100</code>#ffedc0</div>
+    </div>
+  </div>
+
+  <!-- Pink -->
+  <div class="brand-grid">
+    <div class="brand-label">Pink</div>
+    <div class="brand-swatch" style="background:#9a164e">
+      <div class="brand-swatch-tip"><code>brand-pink-700</code>#9a164e</div>
+    </div>
+    <div class="brand-swatch" style="background:#c10b59">
+      <div class="brand-swatch-tip"><code>brand-pink-600</code>#c10b59</div>
+    </div>
+    <div class="brand-swatch" style="background:#d40a60">
+      <div class="brand-main-dot"></div>
+      <div class="brand-swatch-tip"><code>brand-pink-500</code>#d40a60 · main</div>
+    </div>
+    <div class="brand-swatch" style="background:#f8589e">
+      <div class="brand-swatch-tip"><code>brand-pink-300</code>#f8589e</div>
+    </div>
+    <div class="brand-swatch" style="background:#fdc9df;border:1px solid var(--line-low)">
+      <div class="brand-swatch-tip"><code>brand-pink-100</code>#fdc9df</div>
+    </div>
+  </div>
+
+  <!-- Chrome -->
+  <div class="brand-grid">
+    <div class="brand-label">Chrome</div>
+    <div class="brand-swatch" style="background:#7a9fa0">
+      <div class="brand-swatch-tip"><code>brand-chrome-700</code>#7a9fa0</div>
+    </div>
+    <div class="brand-swatch" style="background:#a7d3d3">
+      <div class="brand-swatch-tip"><code>brand-chrome-600</code>#a7d3d3</div>
+    </div>
+    <div class="brand-swatch" style="background:#bdd8d8">
+      <div class="brand-main-dot" style="background:rgba(0,0,0,.2)"></div>
+      <div class="brand-swatch-tip"><code>brand-chrome-500</code>#bdd8d8 · main</div>
+    </div>
+    <div class="brand-swatch" style="background:#d5e9e9;border:1px solid var(--line-low)">
+      <div class="brand-swatch-tip"><code>brand-chrome-300</code>#d5e9e9</div>
+    </div>
+    <div class="brand-swatch" style="background:#ecfbfb;border:1px solid var(--line-low)">
+      <div class="brand-swatch-tip"><code>brand-chrome-100</code>#ecfbfb</div>
+    </div>
+  </div>
+
+  <!-- Purple -->
+  <div class="brand-grid">
+    <div class="brand-label">Purple</div>
+    <div class="brand-swatch" style="background:#4d12a5">
+      <div class="brand-swatch-tip"><code>brand-purple-700</code>#4d12a5</div>
+    </div>
+    <div class="brand-swatch" style="background:#6616de">
+      <div class="brand-swatch-tip"><code>brand-purple-600</code>#6616de</div>
+    </div>
+    <div class="brand-swatch" style="background:#813aef">
+      <div class="brand-main-dot"></div>
+      <div class="brand-swatch-tip"><code>brand-purple-500</code>#813aef · main</div>
+    </div>
+    <div class="brand-swatch" style="background:#ba91f7">
+      <div class="brand-swatch-tip"><code>brand-purple-300</code>#ba91f7</div>
+    </div>
+    <div class="brand-swatch" style="background:#f0e7fe;border:1px solid var(--line-low)">
+      <div class="brand-swatch-tip"><code>brand-purple-100</code>#f0e7fe</div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<script>
+  const steps = [50,100,200,300,400,500,600,700,800,900,950];
+  const anchors = {
+    zinc:   {200:1,400:1,500:1,600:1,700:1,800:1,900:1,950:1},
+    teal:   {500:1,600:1,700:1,800:1,900:1},
+    amber:  {300:1,600:1,700:1,800:1},
+    orange: {300:1,400:1,500:1},
+    pink:   {500:1,600:1,700:1,800:1,900:1},
+    red:    {400:1},
+    blue:   {}
+  };
+  const palette = {
+    zinc:   {50:'#f8f8f9',100:'#f0f0f2',200:'#d2d3d3',300:'#b4b5b6',400:'#8f9091',500:'#636465',600:'#41454b',700:'#323539',800:'#27282b',900:'#202123',950:'#171819'},
+    teal:   {50:'#edfafa',100:'#d5f3f3',200:'#a8e6e6',300:'#6dcece',400:'#4dbcbc',500:'#32a9a9',600:'#2c797a',700:'#2a6c6d',800:'#265152',900:'#223133',950:'#111e1f'},
+    amber:  {50:'#fffbeb',100:'#fef3c7',200:'#fde68a',300:'#f7d371',400:'#f0c040',500:'#e5b020',600:'#d6ac32',700:'#b48a00',800:'#946f00',900:'#713d00',950:'#3d2100'},
+    orange: {50:'#fff8f5',100:'#ffeed5',200:'#ffd4b0',300:'#cd917b',400:'#a95d41',500:'#e76638',600:'#c94e22',700:'#a83a18',800:'#86280f',900:'#5e1a08',950:'#380e03'},
+    pink:   {50:'#fff5f9',100:'#ffe8f3',200:'#ffd0e8',300:'#ffbbda',400:'#ffc0d5',500:'#ffabd0',600:'#d76695',700:'#bd005e',800:'#ab0054',900:'#970049',950:'#570029'},
+    red:    {50:'#fff0f0',100:'#ffe0e0',200:'#ffb8b9',300:'#ff8d8f',400:'#ff6467',500:'#f03638',600:'#d91b1d',700:'#b80000',800:'#920000',900:'#6b0000',950:'#400000'},
+    blue:   {50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',500:'#3b82f6',600:'#2563eb',700:'#1d4ed8',800:'#1e40af',900:'#1e3a8a',950:'#172554'}
+  };
+  const families = ['zinc','teal','amber','orange','pink','red','blue'];
+  const tbody = document.getElementById('palette-body');
+
+  steps.forEach(step => {
+    const tr = document.createElement('tr');
+    const tdL = document.createElement('td');
+    tdL.style.cssText = 'font-size:11px;color:#636465;text-align:right;padding-right:8px;padding-bottom:4px;vertical-align:middle;width:44px;white-space:nowrap';
+    tdL.textContent = step;
+    tr.appendChild(tdL);
+    families.forEach(fam => {
+      const hex = palette[fam][step];
+      const isA = anchors[fam][step];
+      const td = document.createElement('td');
+      td.style.cssText = 'padding:2px;min-width:90px';
+      td.innerHTML = `<div class="chip" style="background:${hex}">${isA?'<div class="anchor-dot"></div>':''}<div class="chip-tip">${fam}-${step} · ${hex}${isA?' ◉':' ○'}</div></div>`;
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+
+  function showTab(id, el) {
+    document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
+    document.getElementById('tab-'+id).classList.add('active');
+    el.classList.add('active');
+  }
+  function showMode(mode, el) {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('mode-dark').style.display  = mode==='dark'  ? 'block' : 'none';
+    document.getElementById('mode-light').style.display = mode==='light' ? 'block' : 'none';
+  }
+</script>
+</body>
+</html>

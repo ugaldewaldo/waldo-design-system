@@ -1,0 +1,43 @@
+{
+  "$metadata": {
+    "tokenSetOrder": ["brand"]
+  },
+  "$themes": [],
+  "brand": {
+    "green": {
+      "100": { "value": "#dafffd", "type": "color" },
+      "300": { "value": "#8cfaf5", "type": "color" },
+      "500": { "value": "#63dbdb", "type": "color", "description": "Main — brand-green-500" },
+      "600": { "value": "#2db4b4", "type": "color" },
+      "700": { "value": "#1b8c8c", "type": "color" }
+    },
+    "yellow": {
+      "100": { "value": "#ffedc0", "type": "color" },
+      "300": { "value": "#f7d372", "type": "color" },
+      "500": { "value": "#fac034", "type": "color", "description": "Main — brand-yellow-500" },
+      "600": { "value": "#e3ac38", "type": "color" },
+      "700": { "value": "#de8d13", "type": "color" }
+    },
+    "pink": {
+      "100": { "value": "#fdc9df", "type": "color" },
+      "300": { "value": "#f8589e", "type": "color" },
+      "500": { "value": "#d40a60", "type": "color", "description": "Main — brand-pink-500" },
+      "600": { "value": "#c10b59", "type": "color" },
+      "700": { "value": "#9a164e", "type": "color" }
+    },
+    "chrome": {
+      "100": { "value": "#ecfbfb", "type": "color" },
+      "300": { "value": "#d5e9e9", "type": "color" },
+      "500": { "value": "#bdd8d8", "type": "color", "description": "Main — brand-chrome-500" },
+      "600": { "value": "#a7d3d3", "type": "color" },
+      "700": { "value": "#7a9fa0", "type": "color" }
+    },
+    "purple": {
+      "100": { "value": "#f0e7fe", "type": "color" },
+      "300": { "value": "#ba91f7", "type": "color" },
+      "500": { "value": "#813aef", "type": "color", "description": "Main — brand-purple-500" },
+      "600": { "value": "#6616de", "type": "color" },
+      "700": { "value": "#4d12a5", "type": "color" }
+    }
+  }
+}

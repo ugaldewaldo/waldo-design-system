@@ -1,0 +1,404 @@
+/*
+  WALDO Design System — Shadcn/ui CSS Variables
+  ─────────────────────────────────────────────
+  Nomenclature: Shadcn/Tailwind convention
+    zinc   = Waldo neutral scale (dark grays)
+    teal   = Brand primary (#32a9a9)
+    amber  = Accent yellow
+    orange = Accent orange
+    pink   = Accent pink
+    red    = Destructive (anchored to #ff6467)
+    blue   = Info/link (gap fill)
+
+  ANCHOR = real Figma value
+  DERIVED = interpolated to fill scale gaps
+  GAP FILL = new family added for system completeness
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
+
+
+/* ══════════════════════════════════════════════════════
+   PRIMITIVES — full 50→950 scales
+   ══════════════════════════════════════════════════════ */
+:root {
+
+  /* ── zinc (Waldo dark neutral) ── */
+  --zinc-50:   #f8f8f9;   /* DERIVED */
+  --zinc-100:  #f0f0f2;   /* DERIVED */
+  --zinc-200:  #d2d3d3;   /* ANCHOR — text50High */
+  --zinc-300:  #b4b5b6;   /* DERIVED */
+  --zinc-400:  #8f9091;   /* ANCHOR — text100Regular */
+  --zinc-500:  #636465;   /* ANCHOR — text200Low */
+  --zinc-600:  #41454b;   /* ANCHOR — fill500Highest */
+  --zinc-700:  #323539;   /* ANCHOR — fill600Menu */
+  --zinc-750:  #2d2f33;   /* ANCHOR — fill700Regular (custom step) */
+  --zinc-800:  #27282b;   /* ANCHOR — fill800Low */
+  --zinc-850:  #242528;   /* ANCHOR — bg850High (custom step) */
+  --zinc-900:  #202123;   /* ANCHOR — bg900Regular */
+  --zinc-950:  #171819;   /* ANCHOR — bg950Low */
+
+  /* ── teal (brand primary) ── */
+  --teal-50:   #edfafa;   /* DERIVED */
+  --teal-100:  #d5f3f3;   /* DERIVED */
+  --teal-200:  #a8e6e6;   /* DERIVED */
+  --teal-300:  #6dcece;   /* DERIVED */
+  --teal-400:  #4dbcbc;   /* DERIVED */
+  --teal-500:  #32a9a9;   /* ANCHOR — primary brand */
+  --teal-600:  #2c797a;   /* ANCHOR */
+  --teal-700:  #2a6c6d;   /* ANCHOR */
+  --teal-800:  #265152;   /* ANCHOR */
+  --teal-900:  #223133;   /* ANCHOR */
+  --teal-950:  #111e1f;   /* DERIVED */
+
+  /* ── amber ── */
+  --amber-50:   #fffbeb;  /* DERIVED */
+  --amber-100:  #fef3c7;  /* DERIVED */
+  --amber-200:  #fde68a;  /* DERIVED */
+  --amber-300:  #f7d371;  /* ANCHOR */
+  --amber-400:  #f0c040;  /* DERIVED */
+  --amber-500:  #e5b020;  /* DERIVED */
+  --amber-600:  #d6ac32;  /* ANCHOR */
+  --amber-700:  #b48a00;  /* ANCHOR */
+  --amber-800:  #946f00;  /* ANCHOR */
+  --amber-900:  #713d00;  /* DERIVED */
+  --amber-950:  #3d2100;  /* DERIVED */
+
+  /* ── orange ── */
+  --orange-50:   #fff8f5; /* DERIVED */
+  --orange-100:  #ffeed5; /* DERIVED */
+  --orange-200:  #ffd4b0; /* DERIVED */
+  --orange-300:  #cd917b; /* ANCHOR — muted warm */
+  --orange-400:  #a95d41; /* ANCHOR — terracotta */
+  --orange-500:  #e76638; /* ANCHOR — bright orange */
+  --orange-600:  #c94e22; /* DERIVED */
+  --orange-700:  #a83a18; /* DERIVED */
+  --orange-800:  #86280f; /* DERIVED */
+  --orange-900:  #5e1a08; /* DERIVED */
+  --orange-950:  #380e03; /* DERIVED */
+
+  /* ── pink ── */
+  --pink-50:   #fff5f9;   /* DERIVED */
+  --pink-100:  #ffe8f3;   /* DERIVED */
+  --pink-200:  #ffd0e8;   /* DERIVED */
+  --pink-300:  #ffbbda;   /* DERIVED */
+  --pink-400:  #ffc0d5;   /* DERIVED */
+  --pink-500:  #ffabd0;   /* ANCHOR */
+  --pink-600:  #d76695;   /* ANCHOR */
+  --pink-700:  #bd005e;   /* ANCHOR */
+  --pink-800:  #ab0054;   /* ANCHOR */
+  --pink-900:  #970049;   /* ANCHOR */
+  --pink-950:  #570029;   /* DERIVED */
+
+  /* ── red (destructive) ── */
+  --red-50:    #fff0f0;   /* DERIVED */
+  --red-100:   #ffe0e0;   /* DERIVED */
+  --red-200:   #ffb8b9;   /* DERIVED */
+  --red-300:   #ff8d8f;   /* DERIVED */
+  --red-400:   #ff6467;   /* ANCHOR — dark mode destructive */
+  --red-500:   #f03638;   /* DERIVED */
+  --red-600:   #d91b1d;   /* DERIVED — light mode destructive */
+  --red-700:   #b80000;   /* DERIVED */
+  --red-800:   #920000;   /* DERIVED */
+  --red-900:   #6b0000;   /* DERIVED */
+  --red-950:   #400000;   /* DERIVED */
+
+  /* ── blue (info / links) — GAP FILL ── */
+  --blue-50:   #eff6ff;   /* GAP FILL */
+  --blue-100:  #dbeafe;   /* GAP FILL */
+  --blue-200:  #bfdbfe;   /* GAP FILL */
+  --blue-300:  #93c5fd;   /* GAP FILL */
+  --blue-400:  #60a5fa;   /* GAP FILL */
+  --blue-500:  #3b82f6;   /* GAP FILL */
+  --blue-600:  #2563eb;   /* GAP FILL */
+  --blue-700:  #1d4ed8;   /* GAP FILL */
+  --blue-800:  #1e40af;   /* GAP FILL */
+  --blue-900:  #1e3a8a;   /* GAP FILL */
+  --blue-950:  #172554;   /* GAP FILL */
+}
+
+
+/* ══════════════════════════════════════════════════════
+   ALPHA PRIMITIVES — transparent variants
+   Why: semi-transparent colors adapt to any background
+   automatically, so the same token works on zinc-900,
+   zinc-850 or zinc-800 without defining separate values.
+   Naming: --{color}-{step}-{opacity%}
+   ══════════════════════════════════════════════════════ */
+:root {
+
+  /* ── zinc-200 alpha — text & borders on dark ── */
+  /* Use for text/icons that sit on variable-depth backgrounds */
+  --zinc-200-5:  rgba(210, 211, 211, 0.05);  /* fillOpacity800Low   — very subtle fill */
+  --zinc-200-10: rgba(210, 211, 211, 0.10);  /* fillOpacity700Reg   — subtle fill */
+  --zinc-200-12: rgba(210, 211, 211, 0.12);  /* border / input bg   — current --border */
+  --zinc-200-20: rgba(210, 211, 211, 0.20);  /* line700Low          — low contrast border */
+  --zinc-200-30: rgba(210, 211, 211, 0.30);  /* line400High         — medium border */
+  --zinc-200-50: rgba(210, 211, 211, 0.50);  /* text50Disabled      — disabled text */
+  --zinc-200-70: rgba(210, 211, 211, 0.70);  /* text50Med           — secondary text */
+
+  /* ── zinc-950 alpha — dark overlays & surface fills ── */
+  /* Use for frosted/overlay surfaces that sit on lighter panels */
+  --zinc-950-40: rgba(23, 24, 25, 0.40);     /* fillOpacityWidgetBg      — widget bg */
+  --zinc-950-50: rgba(23, 24, 25, 0.50);     /* fillOpacityWidgetBgHover — hover state */
+  --zinc-950-80: rgba(23, 24, 25, 0.80);     /* scrim / modal backdrop  */
+
+  /* ── teal alpha — brand tints ── */
+  /* Use for highlighted states, tags, focus rings, active indicators */
+  --teal-500-10: rgba(50, 169, 169, 0.10);   /* brand tag bg */
+  --teal-500-15: rgba(50, 169, 169, 0.15);   /* brand tag hover */
+  --teal-500-20: rgba(50, 169, 169, 0.20);   /* brand subtle border */
+  --teal-500-25: rgba(50, 169, 169, 0.25);   /* brand ring / focus glow */
+
+  /* ── red alpha — destructive states ── */
+  /* Use for error backgrounds, danger hover fills */
+  --red-400-10:  rgba(255, 100, 103, 0.10);  /* error bg subtle */
+  --red-400-20:  rgba(255, 100, 103, 0.20);  /* error bg hover */
+  --red-400-40:  rgba(255, 100, 103, 0.40);  /* ring destructive shadow */
+
+  /* ── amber alpha — warning states ── */
+  --amber-300-10: rgba(247, 211, 113, 0.10); /* warning bg subtle */
+  --amber-300-20: rgba(247, 211, 113, 0.20); /* warning bg hover */
+}
+
+
+/* ══════════════════════════════════════════════════════
+   SHADCN SEMANTIC TOKENS
+   ══════════════════════════════════════════════════════ */
+
+@layer base {
+  :root {
+    /* ── LIGHT MODE ── */
+    --background:             0 0% 100%;
+    --foreground:             220 4% 9%;            /* zinc-950 */
+
+    --card:                   0 0% 98%;
+    --card-foreground:        220 4% 9%;
+
+    --popover:                0 0% 100%;
+    --popover-foreground:     220 4% 9%;
+
+    --primary:                180 54% 43%;           /* teal-500 #32a9a9 */
+    --primary-foreground:     0 0% 100%;
+
+    --secondary:              220 9% 94%;            /* zinc-100 */
+    --secondary-foreground:   220 4% 9%;
+
+    --muted:                  220 9% 94%;
+    --muted-foreground:       210 1% 39%;            /* zinc-500 */
+
+    --accent:                 180 70% 96%;           /* teal-50 */
+    --accent-foreground:      180 54% 30%;           /* teal-700 */
+
+    --destructive:            359 100% 56%;          /* red-600 */
+    --destructive-foreground: 0 0% 100%;
+
+    --border:                 220 9% 88%;
+    --input:                  220 9% 88%;
+    --ring:                   180 54% 43%;           /* teal-500 */
+
+    --radius: 0.375rem;
+
+    --chart-1: 180 54% 43%;    /* teal-500  */
+    --chart-2: 42 67% 51%;     /* amber-600 */
+    --chart-3: 18 80% 56%;     /* orange-500 */
+    --chart-4: 334 51% 63%;    /* pink-600  */
+    --chart-5: 217 91% 60%;    /* blue-500  */
+
+    --sidebar-background:           220 9% 96%;
+    --sidebar-foreground:           220 4% 9%;
+    --sidebar-primary:              180 54% 43%;
+    --sidebar-primary-foreground:   0 0% 100%;
+    --sidebar-accent:               180 70% 94%;
+    --sidebar-accent-foreground:    180 54% 30%;
+    --sidebar-border:               220 9% 88%;
+    --sidebar-ring:                 180 54% 43%;
+  }
+
+  .dark {
+    /* ── DARK MODE — WALDO ── */
+    --background:             220 4% 9%;             /* zinc-950  #171819 */
+    --foreground:             180 1% 82%;            /* zinc-200  #d2d3d3 */
+
+    --card:                   220 4% 13%;            /* zinc-900  #202123 */
+    --card-foreground:        180 1% 82%;
+
+    --popover:                214 7% 21%;            /* zinc-700  #323539 */
+    --popover-foreground:     180 1% 82%;
+
+    --primary:                180 54% 43%;           /* teal-500  #32a9a9 */
+    --primary-foreground:     220 4% 9%;             /* zinc-950  #171819 */
+
+    --secondary:              220 6% 19%;            /* zinc-750  #2d2f33 */
+    --secondary-foreground:   180 1% 82%;
+
+    --muted:                  225 5% 16%;            /* zinc-800  #27282b */
+    --muted-foreground:       210 1% 56%;            /* zinc-400  #8f9091 */
+
+    --accent:                 216 7% 27%;            /* zinc-600  #41454b */
+    --accent-foreground:      180 1% 82%;
+
+    --destructive:            359 100% 70%;          /* red-400   #ff6467 */
+    --destructive-foreground: 180 1% 82%;
+
+    --border:                 180 1% 82% / 0.12;     /* zinc-200  12% */
+    --input:                  180 1% 82% / 0.20;     /* zinc-200  20% */
+    --ring:                   180 54% 43%;           /* teal-500  #32a9a9 */
+
+    --chart-1: 180 54% 43%;
+    --chart-2: 42 67% 51%;
+    --chart-3: 18 80% 56%;
+    --chart-4: 334 51% 63%;
+    --chart-5: 217 91% 60%;
+
+    --sidebar-background:           225 5% 15%;     /* zinc-850  #242528 */
+    --sidebar-foreground:           180 1% 82%;
+    --sidebar-primary:              180 54% 43%;
+    --sidebar-primary-foreground:   220 4% 9%;
+    --sidebar-accent:               214 7% 21%;     /* zinc-700  #323539 */
+    --sidebar-accent-foreground:    180 1% 82%;
+    --sidebar-border:               180 1% 82% / 0.12;
+    --sidebar-ring:                 180 54% 43%;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════
+   TYPOGRAPHY — Inter, two-track scale (Linear-style)
+
+   Track A — text-*         UI + body + product (Tailwind standard)
+   Track B — text-display-* Marketing heros + section headings
+
+   Naming uses Tailwind v4 compound syntax: each font-size carries its paired
+   --line-height and --letter-spacing on the same token via `--`. That way a
+   single utility (`text-display-md`) applies size + line-height + tracking
+   automatically when these vars live inside an @theme block.
+
+   Tracking convention:
+     • text-*         uses -0.02em (-2%)  — bundled per size
+     • text-display-* uses -0.04em (-4%)  — bundled per size
+     • --tracking-normal/tight/tighter remain for arbitrary overrides
+
+   ─── For Tailwind v4 users (recommended) ────────────────────────
+   Wrap the typography vars below in `@theme { ... }` so utilities
+   `text-xs`, `text-display-md`, `font-mono`, etc. auto-generate.
+
+   ─── For Tailwind v3 users ──────────────────────────────────────
+   Mirror these tokens in tailwind.config.js → theme.extend.fontSize
+   using the compound tuple syntax. See NOTES-FOR-STEVE.md.
+   ══════════════════════════════════════════════════════ */
+:root {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+
+  /* ── TEXT TRACK — Tailwind standard sizes, compound syntax ── */
+  --text-xs:                  0.75rem;     /* 12px */
+  --text-xs--line-height:     1rem;        /* 16px */
+  --text-xs--letter-spacing: -0.02em;
+
+  --text-sm:                  0.875rem;    /* 14px */
+  --text-sm--line-height:     1.25rem;     /* 20px */
+  --text-sm--letter-spacing: -0.02em;
+
+  --text-base:                  1rem;      /* 16px — default body */
+  --text-base--line-height:     1.5rem;    /* 24px */
+  --text-base--letter-spacing: -0.02em;
+
+  --text-lg:                  1.125rem;    /* 18px */
+  --text-lg--line-height:     1.75rem;     /* 28px */
+  --text-lg--letter-spacing: -0.02em;
+
+  --text-xl:                  1.25rem;     /* 20px */
+  --text-xl--line-height:     1.75rem;     /* 28px */
+  --text-xl--letter-spacing: -0.02em;
+
+  --text-2xl:                  1.5rem;     /* 24px */
+  --text-2xl--line-height:     2rem;       /* 32px */
+  --text-2xl--letter-spacing: -0.02em;
+
+  --text-3xl:                  1.875rem;   /* 30px */
+  --text-3xl--line-height:     2.25rem;    /* 36px */
+  --text-3xl--letter-spacing: -0.02em;
+
+  --text-4xl:                  2.25rem;    /* 36px — top of text-* track */
+  --text-4xl--line-height:     2.5rem;     /* 40px */
+  --text-4xl--letter-spacing: -0.02em;
+
+  /* For sizes ≥ 40px use text-display-* below. Tailwind's stock text-5xl/6xl/7xl
+     utilities still work via Tailwind defaults if anyone needs them, but they
+     are not declared as Waldo tokens. */
+
+  /* ── DISPLAY TRACK — marketing only, compound syntax ── */
+  --text-display-xs:                  1.5rem;     /* 24px — soft card title (display tracking) */
+  --text-display-xs--line-height:     2rem;       /* 32px */
+  --text-display-xs--letter-spacing: -0.04em;
+
+  --text-display-sm:                  2rem;       /* 32px — section heading */
+  --text-display-sm--line-height:     2.5rem;     /* 40px */
+  --text-display-sm--letter-spacing: -0.04em;
+
+  --text-display-md:                  2.5rem;     /* 40px — default hero */
+  --text-display-md--line-height:     3rem;       /* 48px */
+  --text-display-md--letter-spacing: -0.04em;
+
+  --text-display-lg:                  3.5rem;     /* 56px — big hero (Home / Pricing) */
+  --text-display-lg--line-height:     4rem;       /* 64px */
+  --text-display-lg--letter-spacing: -0.04em;
+
+  --text-display-xl:                  4.5rem;     /* 72px — wow hero / closing CTA */
+  --text-display-xl--line-height:     5rem;       /* 80px */
+  --text-display-xl--letter-spacing: -0.04em;
+
+  --text-display-2xl:                  6rem;       /* 96px — landing wow hero (Vercel/Linear scale max) */
+  --text-display-2xl--line-height:     6.25rem;    /* 100px */
+  --text-display-2xl--letter-spacing: -0.04em;
+
+  /* ── Unitless line-height utilities — for `leading-tight` etc. ── */
+  --leading-none:    1;
+  --leading-tight:   1.25;
+  --leading-snug:    1.375;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose:   2;
+
+  /* ── Letter spacing — independent utilities (Tailwind tracking-*) ── */
+  --tracking-normal:   0em;
+  --tracking-tight:   -0.02em;   /* -2% — matches text-* compound default    */
+  --tracking-tighter: -0.04em;   /* -4% — matches text-display-* compound    */
+}
+
+html {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-size: var(--text-base);
+  line-height: var(--text-base--line-height);
+  letter-spacing: var(--text-base--letter-spacing);
+  font-weight: 400;
+}
+
+/* Product / app headings — text-* track, compound vars handle size + LH + tracking */
+h1 { font-size: var(--text-4xl);  line-height: var(--text-4xl--line-height);  letter-spacing: var(--text-4xl--letter-spacing);  font-weight: 700; }
+h2 { font-size: var(--text-3xl);  line-height: var(--text-3xl--line-height);  letter-spacing: var(--text-3xl--letter-spacing);  font-weight: 600; }
+h3 { font-size: var(--text-2xl);  line-height: var(--text-2xl--line-height);  letter-spacing: var(--text-2xl--letter-spacing);  font-weight: 600; }
+h4 { font-size: var(--text-xl);   line-height: var(--text-xl--line-height);   letter-spacing: var(--text-xl--letter-spacing);   font-weight: 600; }
+h5 { font-size: var(--text-lg);   line-height: var(--text-lg--line-height);   letter-spacing: var(--text-lg--letter-spacing);   font-weight: 600; }
+h6 { font-size: var(--text-base); line-height: var(--text-base--line-height); letter-spacing: var(--text-base--letter-spacing); font-weight: 600; }
+
+/* Marketing display helpers — text-display-* track.
+   Class names match the Tailwind utility names so JSX works the same whether
+   Tailwind auto-generates them (v4 @theme) or Steve registers them in v3 config.
+   In raw HTML (no Tailwind) these helpers still produce the right output. */
+.text-display-xs { font-size: var(--text-display-xs); line-height: var(--text-display-xs--line-height); letter-spacing: var(--text-display-xs--letter-spacing); }
+.text-display-sm { font-size: var(--text-display-sm); line-height: var(--text-display-sm--line-height); letter-spacing: var(--text-display-sm--letter-spacing); }
+.text-display-md { font-size: var(--text-display-md); line-height: var(--text-display-md--line-height); letter-spacing: var(--text-display-md--letter-spacing); }
+.text-display-lg { font-size: var(--text-display-lg); line-height: var(--text-display-lg--line-height); letter-spacing: var(--text-display-lg--letter-spacing); }
+.text-display-xl  { font-size: var(--text-display-xl);  line-height: var(--text-display-xl--line-height);  letter-spacing: var(--text-display-xl--letter-spacing); }
+.text-display-2xl { font-size: var(--text-display-2xl); line-height: var(--text-display-2xl--line-height); letter-spacing: var(--text-display-2xl--letter-spacing); }
+
+/* Mono — for code, tags, technical labels */
+code, kbd, samp, pre { font-family: var(--font-mono); }
