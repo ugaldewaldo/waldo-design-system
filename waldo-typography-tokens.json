@@ -345,12 +345,52 @@
         },
         "type": "typography"
       },
+      "text-3xl-normal": {
+        "value": {
+          "fontFamily": "Inter",
+          "fontWeight": "Regular",
+          "fontSize": "30",
+          "lineHeight": "36px",
+          "letterSpacing": "-2%"
+        },
+        "type": "typography"
+      },
+      "text-3xl-medium": {
+        "value": {
+          "fontFamily": "Inter",
+          "fontWeight": "Medium",
+          "fontSize": "30",
+          "lineHeight": "36px",
+          "letterSpacing": "-2%"
+        },
+        "type": "typography"
+      },
       "text-3xl-semibold": {
         "value": {
           "fontFamily": "Inter",
           "fontWeight": "Semi Bold",
           "fontSize": "30",
           "lineHeight": "36px",
+          "letterSpacing": "-2%"
+        },
+        "type": "typography"
+      },
+      "text-4xl-normal": {
+        "value": {
+          "fontFamily": "Inter",
+          "fontWeight": "Regular",
+          "fontSize": "36",
+          "lineHeight": "40px",
+          "letterSpacing": "-2%"
+        },
+        "type": "typography"
+      },
+      "text-4xl-medium": {
+        "value": {
+          "fontFamily": "Inter",
+          "fontWeight": "Medium",
+          "fontSize": "36",
+          "lineHeight": "40px",
           "letterSpacing": "-2%"
         },
         "type": "typography"
