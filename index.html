@@ -203,8 +203,145 @@
 
 <nav class="nav">
   <a class="active" onclick="showTab('typography',this)">Typography</a>
+  <a onclick="showTab('colors',this)">Colors</a>
   <a onclick="showTab('brand',this)">Brand Colors</a>
+  <a onclick="showTab('semantic',this)">Semantic Tokens</a>
+  <a onclick="showTab('migration',this)">Migration</a>
 </nav>
+
+
+<!-- ══ COLORS ══ -->
+<section id="tab-colors">
+  <h2 class="section-title">Color Palette</h2>
+  <p class="section-sub">Full 50–950 scale · 7 families · ◉ Figma anchor · ○ derived</p>
+  <div style="overflow-x:auto">
+    <table style="border-collapse:separate;border-spacing:4px;min-width:900px">
+      <thead>
+        <tr>
+          <th style="width:44px"></th>
+          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Zinc</th>
+          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Teal</th>
+          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Amber</th>
+          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Orange</th>
+          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Pink</th>
+          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Red</th>
+          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Blue</th>
+        </tr>
+      </thead>
+      <tbody id="palette-body"></tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:40px;padding-top:32px;border-top:1px solid var(--line-low)">
+    <p style="font-size:13px;font-weight:500;margin-bottom:16px;color:var(--txt-med)">Zinc custom steps</p>
+    <div style="display:flex;gap:16px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:4px;background:#323539;border:1px solid var(--line-low)"></div>
+        <div><div style="font-size:12px;font-weight:500;color:var(--txt-high)">zinc-700</div><div style="font-size:11px;color:var(--txt-low)">#323539 · fill600Menu</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:4px;background:#2d2f33;border:1px solid var(--line-low)"></div>
+        <div><div style="font-size:12px;font-weight:500;color:var(--txt-high)">zinc-750</div><div style="font-size:11px;color:var(--txt-low)">#2d2f33 · fill700Regular</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:4px;background:#242528;border:1px solid var(--line-low)"></div>
+        <div><div style="font-size:12px;font-weight:500;color:var(--txt-high)">zinc-850</div><div style="font-size:11px;color:var(--txt-low)">#242528 · bg850High</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alpha scale -->
+  <div style="margin-top:48px">
+    <h3 class="section-title" style="font-size:16px;margin-bottom:4px">Alpha Scale</h3>
+    <p class="section-sub" style="margin-bottom:28px">Semi-transparent variants — adapt automatically to any background depth.</p>
+
+    <style>
+      .alpha-row { display:flex; gap:0; margin-bottom:24px; }
+      .alpha-chip { flex:1; height:40px; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:600; font-family:monospace; color:rgba(255,255,255,.7); letter-spacing:.02em; position:relative; cursor:default; }
+      .alpha-chip:first-child { border-radius:4px 0 0 4px; }
+      .alpha-chip:last-child  { border-radius:0 4px 4px 0; }
+      .alpha-family-label { font-size:11px; font-weight:600; color:var(--txt-reg); text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px; }
+      .alpha-demo-row { display:flex; gap:8px; align-items:stretch; margin-top:20px; }
+      .alpha-demo-bg { flex:1; border-radius:6px; padding:12px; display:flex; flex-direction:column; gap:6px; }
+    </style>
+
+    <div style="margin-bottom:28px">
+      <div class="alpha-family-label">zinc-200 alpha — text &amp; borders on dark</div>
+      <div class="alpha-row">
+        <div class="alpha-chip" style="background:rgba(210,211,211,0.05)">5%</div>
+        <div class="alpha-chip" style="background:rgba(210,211,211,0.10)">10%</div>
+        <div class="alpha-chip" style="background:rgba(210,211,211,0.12)">12%</div>
+        <div class="alpha-chip" style="background:rgba(210,211,211,0.20)">20%</div>
+        <div class="alpha-chip" style="background:rgba(210,211,211,0.30)">30%</div>
+        <div class="alpha-chip" style="background:rgba(210,211,211,0.50)">50%</div>
+        <div class="alpha-chip" style="background:rgba(210,211,211,0.70);color:#171819">70%</div>
+      </div>
+      <div class="alpha-demo-row">
+        <div class="alpha-demo-bg" style="background:#171819;border:1px solid var(--line-low)">
+          <div style="font-size:9px;color:rgba(210,211,211,.4);margin-bottom:4px">ON zinc-950</div>
+          <div style="font-size:13px;color:rgba(210,211,211,1.0);font-weight:600">Primary text</div>
+          <div style="font-size:12px;color:rgba(210,211,211,0.70)">Secondary text /70</div>
+          <div style="font-size:11px;color:rgba(210,211,211,0.50)">Disabled text /50</div>
+          <div style="height:1px;background:rgba(210,211,211,0.20);margin:2px 0"></div>
+          <div style="height:24px;background:rgba(210,211,211,0.10);border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:10px;color:rgba(210,211,211,.5)">fill /10</div>
+        </div>
+        <div class="alpha-demo-bg" style="background:#202123;border:1px solid var(--line-low)">
+          <div style="font-size:9px;color:rgba(210,211,211,.4);margin-bottom:4px">ON zinc-900</div>
+          <div style="font-size:13px;color:rgba(210,211,211,1.0);font-weight:600">Primary text</div>
+          <div style="font-size:12px;color:rgba(210,211,211,0.70)">Secondary text /70</div>
+          <div style="font-size:11px;color:rgba(210,211,211,0.50)">Disabled text /50</div>
+          <div style="height:1px;background:rgba(210,211,211,0.20);margin:2px 0"></div>
+          <div style="height:24px;background:rgba(210,211,211,0.10);border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:10px;color:rgba(210,211,211,.5)">fill /10</div>
+        </div>
+        <div class="alpha-demo-bg" style="background:#27282b;border:1px solid var(--line-low)">
+          <div style="font-size:9px;color:rgba(210,211,211,.4);margin-bottom:4px">ON zinc-800</div>
+          <div style="font-size:13px;color:rgba(210,211,211,1.0);font-weight:600">Primary text</div>
+          <div style="font-size:12px;color:rgba(210,211,211,0.70)">Secondary text /70</div>
+          <div style="font-size:11px;color:rgba(210,211,211,0.50)">Disabled text /50</div>
+          <div style="height:1px;background:rgba(210,211,211,0.20);margin:2px 0"></div>
+          <div style="height:24px;background:rgba(210,211,211,0.10);border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:10px;color:rgba(210,211,211,.5)">fill /10</div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:var(--txt-low);margin-top:8px">↑ Same tokens, 3 different backgrounds — text and borders adapt without separate definitions.</p>
+    </div>
+
+    <div style="margin-bottom:28px">
+      <div class="alpha-family-label">zinc-950 alpha — dark overlays &amp; widget fills</div>
+      <div class="alpha-row" style="background:repeating-linear-gradient(45deg,#636465 0,#636465 1px,transparent 0,transparent 50%) center/6px 6px;border-radius:4px">
+        <div class="alpha-chip" style="background:rgba(23,24,25,0.40)">40%</div>
+        <div class="alpha-chip" style="background:rgba(23,24,25,0.50)">50%</div>
+        <div class="alpha-chip" style="background:rgba(23,24,25,0.80)">80%</div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
+      <div>
+        <div class="alpha-family-label">teal-500 alpha — brand tints</div>
+        <div class="alpha-row">
+          <div class="alpha-chip" style="background:rgba(50,169,169,0.10)">10%</div>
+          <div class="alpha-chip" style="background:rgba(50,169,169,0.15)">15%</div>
+          <div class="alpha-chip" style="background:rgba(50,169,169,0.20)">20%</div>
+          <div class="alpha-chip" style="background:rgba(50,169,169,0.25)">25%</div>
+        </div>
+      </div>
+      <div>
+        <div class="alpha-family-label">red-400 alpha — destructive</div>
+        <div class="alpha-row">
+          <div class="alpha-chip" style="background:rgba(255,100,103,0.10)">10%</div>
+          <div class="alpha-chip" style="background:rgba(255,100,103,0.20)">20%</div>
+          <div class="alpha-chip" style="background:rgba(255,100,103,0.40)">40%</div>
+        </div>
+      </div>
+      <div>
+        <div class="alpha-family-label">amber-300 alpha — warning</div>
+        <div class="alpha-row">
+          <div class="alpha-chip" style="background:rgba(247,211,113,0.10)">10%</div>
+          <div class="alpha-chip" style="background:rgba(247,211,113,0.20)">20%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 
 <section id="tab-typography" class="active">
@@ -247,7 +384,11 @@
   <div class="type-row"><span class="type-tag">text-xl · semibold</span>  <span style="font-size:20px;line-height:28px;font-weight:600;letter-spacing:-.02em;color:var(--txt-high)">The quick brown fox jumps</span><div class="type-meta"><span>20/28</span><span>600</span><span>-0.02em</span></div></div>
   <div class="type-row"><span class="type-tag">text-2xl · medium</span>   <span style="font-size:24px;line-height:32px;font-weight:500;letter-spacing:-.02em;color:var(--txt-high)">The quick brown fox</span><div class="type-meta"><span>24/32</span><span>500</span><span>-0.02em</span></div></div>
   <div class="type-row"><span class="type-tag">text-2xl · semibold</span> <span style="font-size:24px;line-height:32px;font-weight:600;letter-spacing:-.02em;color:var(--txt-high)">The quick brown fox</span><div class="type-meta"><span>24/32</span><span>600</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-3xl · normal</span>   <span style="font-size:30px;line-height:36px;font-weight:400;letter-spacing:-.02em;color:var(--txt-high)">Waldo Agents</span><div class="type-meta"><span>30/36</span><span>400</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-3xl · medium</span>   <span style="font-size:30px;line-height:36px;font-weight:500;letter-spacing:-.02em;color:var(--txt-high)">Waldo Agents</span><div class="type-meta"><span>30/36</span><span>500</span><span>-0.02em</span></div></div>
   <div class="type-row"><span class="type-tag">text-3xl · semibold</span> <span style="font-size:30px;line-height:36px;font-weight:600;letter-spacing:-.02em;color:var(--txt-high)">Waldo Agents</span><div class="type-meta"><span>30/36</span><span>600</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-4xl · normal</span>   <span style="font-size:36px;line-height:40px;font-weight:400;letter-spacing:-.02em;color:var(--txt-high)">Waldo</span><div class="type-meta"><span>36/40</span><span>400</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-4xl · medium</span>   <span style="font-size:36px;line-height:40px;font-weight:500;letter-spacing:-.02em;color:var(--txt-high)">Waldo</span><div class="type-meta"><span>36/40</span><span>500</span><span>-0.02em</span></div></div>
   <div class="type-row"><span class="type-tag">text-4xl · semibold</span> <span style="font-size:36px;line-height:40px;font-weight:600;letter-spacing:-.02em;color:var(--txt-high)">Waldo</span><div class="type-meta"><span>36/40</span><span>600</span><span>-0.02em</span></div></div>
 
   <!-- ── DISPLAY TRACK ── -->
@@ -426,6 +567,205 @@
       <div class="brand-swatch-tip"><code>brand-purple-100</code>#f0e7fe</div>
     </div>
   </div>
+</section>
+
+
+<!-- ══ SEMANTIC TOKENS ══ -->
+<section id="tab-semantic">
+  <h2 class="section-title">Semantic Tokens</h2>
+  <p class="section-sub">3-layer model: primitives → alpha primitives → <strong>semantic</strong>. Components only ever touch semantic tokens.</p>
+
+  <style>
+    .sem-cat-title { font-size:11px;font-weight:600;color:var(--teal);text-transform:uppercase;letter-spacing:.08em;margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line-low); }
+    .sem-cat-title:first-of-type { margin-top: 8px; }
+    .sem-row { display:grid; grid-template-columns: 56px 200px 180px 1fr; gap:16px; align-items:center; padding:10px 0; border-bottom:1px solid var(--line-low); }
+    .sem-row:last-child { border-bottom: none; }
+    .sem-swatch { width:40px; height:40px; border-radius:6px; border:1px solid var(--line-low); position:relative; }
+    .sem-swatch-checker { position:absolute; inset:0; border-radius:6px; background-image:linear-gradient(45deg,#444 25%,transparent 25%),linear-gradient(-45deg,#444 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#444 75%),linear-gradient(-45deg,transparent 75%,#444 75%); background-size:8px 8px; background-position:0 0,0 4px,4px -4px,-4px 0px; }
+    .sem-swatch-color { position:absolute; inset:0; border-radius:6px; }
+    .sem-token { font-family:'SF Mono','Fira Code',monospace; font-size:13px; font-weight:500; color:var(--txt-high); }
+    .sem-ref { font-family:'SF Mono','Fira Code',monospace; font-size:11px; color:var(--txt-med); background:var(--fill-low); padding:2px 7px; border-radius:4px; display:inline-block; }
+    .sem-use { font-size:12px; color:var(--txt-reg); line-height:1.4; }
+  </style>
+
+  <p class="sem-cat-title">Surfaces — backgrounds</p>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#171819"></div></div><div class="sem-token">surface-default</div><div><span class="sem-ref">zinc-950</span></div><div class="sem-use">Main app background</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#202123"></div></div><div class="sem-token">surface-elevated</div><div><span class="sem-ref">zinc-900</span></div><div class="sem-use">Cards, panels sitting on surface-default</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#323539"></div></div><div class="sem-token">surface-popover</div><div><span class="sem-ref">zinc-700</span></div><div class="sem-use">Popovers, dropdowns, menus (highest stacked layer)</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#27282b"></div></div><div class="sem-token">surface-sunken</div><div><span class="sem-ref">zinc-800</span></div><div class="sem-use">Inputs, code blocks, recessed surfaces</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(23,24,25,0.4)"></div></div><div class="sem-token">surface-frosted</div><div><span class="sem-ref">zinc-950 / 40%</span></div><div class="sem-use">Translucent widgets sitting over images or color</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(23,24,25,0.5)"></div></div><div class="sem-token">surface-frosted-hover</div><div><span class="sem-ref">zinc-950 / 50%</span></div><div class="sem-use">Hover state of surface-frosted</div></div>
+
+  <p class="sem-cat-title">Borders &amp; lines</p>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(210,211,211,0.12)"></div></div><div class="sem-token">border-subtle</div><div><span class="sem-ref">zinc-200 / 12%</span></div><div class="sem-use">Quietest dividers, hover outlines</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(210,211,211,0.20)"></div></div><div class="sem-token">border-default</div><div><span class="sem-ref">zinc-200 / 20%</span></div><div class="sem-use">Standard card / input border</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(210,211,211,0.30)"></div></div><div class="sem-token">border-strong</div><div><span class="sem-ref">zinc-200 / 30%</span></div><div class="sem-use">Emphasis dividers</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#32a9a9"></div></div><div class="sem-token">border-focus</div><div><span class="sem-ref">teal-500</span></div><div class="sem-use">Focused inputs, active state</div></div>
+
+  <p class="sem-cat-title">Text</p>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#d2d3d3"></div></div><div class="sem-token">text-primary</div><div><span class="sem-ref">zinc-200</span></div><div class="sem-use">Main copy, headings</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(210,211,211,0.70)"></div></div><div class="sem-token">text-secondary</div><div><span class="sem-ref">zinc-200 / 70%</span></div><div class="sem-use">Captions, secondary copy</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#8f9091"></div></div><div class="sem-token">text-tertiary</div><div><span class="sem-ref">zinc-400</span></div><div class="sem-use">Helper text, placeholders, muted labels</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(210,211,211,0.50)"></div></div><div class="sem-token">text-disabled</div><div><span class="sem-ref">zinc-200 / 50%</span></div><div class="sem-use">Disabled buttons, deactivated copy</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#32a9a9"></div></div><div class="sem-token">text-brand</div><div><span class="sem-ref">teal-500</span></div><div class="sem-use">Links, brand-colored text</div></div>
+
+  <p class="sem-cat-title">Interactive states</p>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(210,211,211,0.05)"></div></div><div class="sem-token">interactive-hover</div><div><span class="sem-ref">zinc-200 / 5%</span></div><div class="sem-use">Generic hover overlay on any surface</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(210,211,211,0.10)"></div></div><div class="sem-token">interactive-pressed</div><div><span class="sem-ref">zinc-200 / 10%</span></div><div class="sem-use">Active / pressed state</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(50,169,169,0.15)"></div></div><div class="sem-token">interactive-selected</div><div><span class="sem-ref">teal-500 / 15%</span></div><div class="sem-use">Selected items in list, active tab background</div></div>
+
+  <p class="sem-cat-title">Overlays</p>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(23,24,25,0.80)"></div></div><div class="sem-token">scrim-modal</div><div><span class="sem-ref">zinc-950 / 80%</span></div><div class="sem-use">Modal backdrop, sheet overlay</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(50,169,169,0.25)"></div></div><div class="sem-token">ring-focus</div><div><span class="sem-ref">teal-500 / 25%</span></div><div class="sem-use">Focus glow around inputs / buttons</div></div>
+
+  <p class="sem-cat-title">Brand accents</p>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#32a9a9"></div></div><div class="sem-token">accent-brand</div><div><span class="sem-ref">teal-500</span></div><div class="sem-use">Primary brand surface, CTAs</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#f7d371"></div></div><div class="sem-token">accent-warning</div><div><span class="sem-ref">amber-300</span></div><div class="sem-use">Warning indicators</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#ff6467"></div></div><div class="sem-token">accent-destructive</div><div><span class="sem-ref">red-400</span></div><div class="sem-use">Destructive actions, errors</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#3b82f6"></div></div><div class="sem-token">accent-info</div><div><span class="sem-ref">blue-500</span></div><div class="sem-use">Informational, links in light mode</div></div>
+
+  <p class="sem-cat-title" style="color:var(--txt-reg)">How to use</p>
+  <div style="padding:16px;background:var(--fill-low);border-radius:8px;border:1px solid var(--line-low);font-size:13px;color:var(--txt-med);line-height:1.5">
+    <strong style="color:var(--txt-high)">Rule of thumb</strong>: never reference primitives (<code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--fill-menu);padding:1px 5px;border-radius:3px;color:var(--txt-high)">zinc-200</code>, <code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--fill-menu);padding:1px 5px;border-radius:3px;color:var(--txt-high)">teal-500</code>) directly from components. Always go through a semantic token. If you can't find one that fits your case, either add a new semantic token or rethink the use case.
+    <br><br>
+    <strong style="color:var(--txt-high)">Why translucent (alpha) tokens matter</strong>: when a layer sits over an image or another color (like the Monitor cards over the gradient hero), a solid color reads wrong. Use <code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--fill-menu);padding:1px 5px;border-radius:3px;color:var(--teal)">surface-frosted</code> so the layer adapts to whatever's behind.
+  </div>
+</section>
+
+
+<!-- ══ MIGRATION ══ -->
+<section id="tab-migration">
+  <h2 class="section-title">Migration Guide</h2>
+  <p class="section-sub">Map every legacy style to its new token. Work top-to-bottom and use Figma's "Select all using this style" to swap in bulk.</p>
+
+  <style>
+    .mig-table { width: 100%; border-collapse: collapse; margin-bottom: 32px; }
+    .mig-table th { text-align: left; padding: 12px 12px; font-size: 11px; font-weight: 600; color: var(--txt-reg); text-transform: uppercase; letter-spacing: .08em; border-bottom: 1px solid var(--line-low); }
+    .mig-table td { padding: 10px 12px; font-size: 13px; color: var(--txt-med); border-bottom: 1px solid var(--line-low); vertical-align: middle; }
+    .mig-table tr:hover { background: var(--fill-low); }
+    .mig-table td.mig-old { color: var(--txt-low); }
+    .mig-table td.mig-arrow { color: var(--txt-low); text-align: center; width: 24px; }
+    .mig-table td.mig-new code { font-family: 'SF Mono','Fira Code',monospace; font-size: 12px; color: var(--teal); background: rgba(50,169,169,.10); padding: 2px 8px; border-radius: 4px; }
+    .mig-table td.mig-note { font-size: 12px; color: var(--txt-low); font-style: italic; }
+    .mig-table td.mig-exact { color: var(--teal); font-weight: 500; font-style: normal; }
+    .mig-cat { font-size: 11px; font-weight: 600; color: var(--teal); text-transform: uppercase; letter-spacing: .08em; margin: 40px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line-low); }
+    .mig-cat:first-of-type { margin-top: 8px; }
+    .mig-cat-sub { font-size: 13px; color: var(--txt-reg); margin-bottom: 16px; line-height: 1.5; }
+    .mig-sw { display:inline-block; width:18px; height:18px; border-radius:4px; border:1px solid var(--line-low); vertical-align:middle; margin-right:6px; }
+    .mig-sw-checker { position:relative; overflow:hidden; }
+    .mig-sw-checker::before { content:''; position:absolute; inset:0; background-image:linear-gradient(45deg,#444 25%,transparent 25%),linear-gradient(-45deg,#444 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#444 75%),linear-gradient(-45deg,transparent 75%,#444 75%); background-size:6px 6px; background-position:0 0,0 3px,3px -3px,-3px 0; }
+    .mig-sw-checker::after { content:''; position:absolute; inset:0; background: var(--alpha-bg); }
+    .mig-mono { font-family: 'SF Mono','Fira Code',monospace; font-size: 12px; color: var(--txt-high); background: var(--fill-menu); padding: 1px 6px; border-radius: 3px; }
+    .mig-note-box { padding: 14px 16px; background: var(--fill-low); border: 1px solid var(--line-low); border-radius: 8px; font-size: 13px; color: var(--txt-med); margin-top: 12px; line-height: 1.5; }
+    .mig-note-box strong { color: var(--txt-high); }
+  </style>
+
+  <!-- TEXT STYLES -->
+  <p class="mig-cat">Text styles</p>
+  <p class="mig-cat-sub">Warning: labels of old styles don't always reflect their real values. Verify each via the Edit Style panel if unsure.</p>
+  <table class="mig-table">
+    <thead><tr><th>Old style</th><th>Size / LH</th><th></th><th>New token</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td class="mig-old">XS · Medium</td><td>12 / 16</td><td class="mig-arrow">→</td><td class="mig-new"><code>text-xs-medium</code></td><td class="mig-note mig-exact">Exact match</td></tr>
+      <tr><td class="mig-old">SM · Regular</td><td>13 / 16</td><td class="mig-arrow">→</td><td class="mig-new"><code>text-sm-normal</code></td><td class="mig-note">Size +1px, LH +4px</td></tr>
+      <tr><td class="mig-old">SM · SemiBold</td><td>13 / 16</td><td class="mig-arrow">→</td><td class="mig-new"><code>text-sm-semibold</code></td><td class="mig-note">Size +1px, LH +4px</td></tr>
+      <tr><td class="mig-old">BASE · Regular</td><td>14 / 20</td><td class="mig-arrow">→</td><td class="mig-new"><code>text-sm-normal</code></td><td class="mig-note mig-exact">Exact (rename only)</td></tr>
+      <tr><td class="mig-old">BASE · SemiBold</td><td>14 / 20</td><td class="mig-arrow">→</td><td class="mig-new"><code>text-sm-semibold</code></td><td class="mig-note mig-exact">Exact (rename only)</td></tr>
+      <tr><td class="mig-old">LG · Regular</td><td>16 / 24</td><td class="mig-arrow">→</td><td class="mig-new"><code>text-base-normal</code></td><td class="mig-note mig-exact">Exact (rename only)</td></tr>
+      <tr><td class="mig-old">LG · SemiBold</td><td>16 / 24</td><td class="mig-arrow">→</td><td class="mig-new"><code>text-base-semibold</code></td><td class="mig-note mig-exact">Exact (rename only)</td></tr>
+      <tr><td class="mig-old">LX · Regular</td><td>18 / 24</td><td class="mig-arrow">→</td><td class="mig-new"><code>text-lg-normal</code></td><td class="mig-note">LH +4px</td></tr>
+      <tr><td class="mig-old">LX · Semi Bold</td><td>18 / 24</td><td class="mig-arrow">→</td><td class="mig-new"><code>text-lg-semibold</code></td><td class="mig-note">LH +4px</td></tr>
+      <tr><td class="mig-old">LX2 · Regular</td><td>20 / 28</td><td class="mig-arrow">→</td><td class="mig-new"><code>text-xl-normal</code></td><td class="mig-note mig-exact">Exact match</td></tr>
+      <tr><td class="mig-old">LX2 · Semi Bold</td><td>20 / 28</td><td class="mig-arrow">→</td><td class="mig-new"><code>text-xl-semibold</code></td><td class="mig-note mig-exact">Exact match</td></tr>
+      <tr><td class="mig-old">LX3 · Regular</td><td>22 / 32 <span style="color:var(--red)">(label may lie)</span></td><td class="mig-arrow">→</td><td class="mig-new"><code>text-2xl-normal</code></td><td class="mig-note">Verify real size — some seen at 80/96</td></tr>
+      <tr><td class="mig-old">LX3 · Semi bold</td><td>22 / 32</td><td class="mig-arrow">→</td><td class="mig-new"><code>text-2xl-semibold</code></td><td class="mig-note">Verify real size</td></tr>
+      <tr><td class="mig-old">LX4 · Regular</td><td>24 / 32</td><td class="mig-arrow">→</td><td class="mig-new"><code>text-2xl-normal</code> <em style="color:var(--txt-low);font-size:11px">or display-xs-regular (tracking -4%)</em></td><td class="mig-note mig-exact">Exact size</td></tr>
+      <tr><td class="mig-old">LX4 · Semi Bold</td><td>24 / 32</td><td class="mig-arrow">→</td><td class="mig-new"><code>text-2xl-semibold</code> <em style="color:var(--txt-low);font-size:11px">or display-xs-semibold</em></td><td class="mig-note mig-exact">Exact size</td></tr>
+      <tr><td class="mig-old">LX5 · Regular</td><td>28 / 40</td><td class="mig-arrow">→</td><td class="mig-new"><code>display-sm-regular</code></td><td class="mig-note">Size +4px (28→32)</td></tr>
+      <tr><td class="mig-old">LX5 · Semi Bold</td><td>28 / 40</td><td class="mig-arrow">→</td><td class="mig-new"><code>display-sm-semibold</code></td><td class="mig-note">Size +4px (28→32)</td></tr>
+      <tr><td class="mig-old">LX6 · Semi Bold</td><td>40 / 48</td><td class="mig-arrow">→</td><td class="mig-new"><code>display-md-semibold</code></td><td class="mig-note mig-exact">Exact match</td></tr>
+      <tr><td class="mig-old">LX7 · Semi Bold</td><td>48 / 56</td><td class="mig-arrow">→</td><td class="mig-new"><code>display-lg-semibold</code> <em style="color:var(--txt-low);font-size:11px">(or display-md if smaller)</em></td><td class="mig-note">Size +8px (48→56)</td></tr>
+    </tbody>
+  </table>
+
+  <!-- SOLID FILLS -->
+  <p class="mig-cat">Solid fills — backgrounds</p>
+  <p class="mig-cat-sub">Old <code class="mig-mono">FILL/*</code> → primitive zinc step → semantic surface token.</p>
+  <table class="mig-table">
+    <thead><tr><th></th><th>Old style</th><th></th><th>Primitive</th><th></th><th>Semantic</th><th>Use case</th></tr></thead>
+    <tbody>
+      <tr><td><span class="mig-sw" style="background:#171819"></span></td><td class="mig-old">FILL/950 🌙 DARK</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-950</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>surface-default</code></td><td class="mig-note">App background</td></tr>
+      <tr><td><span class="mig-sw" style="background:#202123"></span></td><td class="mig-old">FILL/900 🌙 REGULAR</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-900</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>surface-elevated</code></td><td class="mig-note">Cards, panels</td></tr>
+      <tr><td><span class="mig-sw" style="background:#242528"></span></td><td class="mig-old">FILL/850 🌙 HIGH</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-850</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>surface-elevated</code> <em style="color:var(--txt-low);font-size:11px">(alt)</em></td><td class="mig-note">Sidebar, raised</td></tr>
+      <tr><td><span class="mig-sw" style="background:#27282b"></span></td><td class="mig-old">FILL/800 🌙 LOW</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-800</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>surface-sunken</code></td><td class="mig-note">Inputs, code blocks</td></tr>
+      <tr><td><span class="mig-sw" style="background:#2d2f33"></span></td><td class="mig-old">FILL/750</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-750</code></td><td class="mig-arrow">→</td><td class="mig-new">—</td><td class="mig-note">Custom step</td></tr>
+      <tr><td><span class="mig-sw" style="background:#323539"></span></td><td class="mig-old">FILL/700 🌙 REGULAR</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-700</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>surface-popover</code></td><td class="mig-note">Popovers, dropdowns</td></tr>
+      <tr><td><span class="mig-sw" style="background:#41454b"></span></td><td class="mig-old">FILL/600 🌙 MENU</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-600</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>accent</code></td><td class="mig-note">Menu items</td></tr>
+      <tr><td><span class="mig-sw" style="background:#41454b"></span></td><td class="mig-old">FILL/500 🌙 HIGHEST</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-600</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>accent</code></td><td class="mig-note">Topmost solid layer</td></tr>
+    </tbody>
+  </table>
+  <div class="mig-note-box"><strong>Note</strong>: in the old system "500 HIGHEST" meant highest visual depth (lightest in dark mode). In the new system primitives follow Tailwind convention (50 = lightest, 950 = darkest) and the depth concept lives in the semantic token name.</div>
+
+  <!-- TRANSLUCENT FILLS -->
+  <p class="mig-cat">Translucent fills — FILL OPACITY</p>
+  <p class="mig-cat-sub">Old <code class="mig-mono">FILL OPACITY/*</code> → alpha primitive → semantic token. These adapt over images / other surfaces.</p>
+  <table class="mig-table">
+    <thead><tr><th></th><th>Old style</th><th></th><th>Alpha primitive</th><th></th><th>Semantic</th><th>Use case</th></tr></thead>
+    <tbody>
+      <tr><td><span class="mig-sw mig-sw-checker" style="--alpha-bg:rgba(23,24,25,0.40)"></span></td><td class="mig-old">FILL OPACITY/Widget BG</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-950 / 40%</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>surface-frosted</code></td><td class="mig-note">Translucent widgets over images</td></tr>
+      <tr><td><span class="mig-sw mig-sw-checker" style="--alpha-bg:rgba(23,24,25,0.50)"></span></td><td class="mig-old">FILL OPACITY/Widget BG Hover</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-950 / 50%</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>surface-frosted-hover</code></td><td class="mig-note">Hover state</td></tr>
+      <tr><td><span class="mig-sw mig-sw-checker" style="--alpha-bg:rgba(210,211,211,0.05)"></span></td><td class="mig-old">FILL OPACITY/800 🌙 LOW</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-200 / 5%</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>interactive-hover</code></td><td class="mig-note">Subtle hover overlay</td></tr>
+      <tr><td><span class="mig-sw mig-sw-checker" style="--alpha-bg:rgba(210,211,211,0.10)"></span></td><td class="mig-old">FILL OPACITY/700 🌙 REGULAR</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-200 / 10%</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>interactive-pressed</code></td><td class="mig-note">Active / pressed</td></tr>
+      <tr><td><span class="mig-sw mig-sw-checker" style="--alpha-bg:rgba(210,211,211,0.15)"></span></td><td class="mig-old">FILL OPACITY/500 🌙 HIGHEST</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-200 / 15%</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>interactive-pressed</code></td><td class="mig-note">Strongest hover</td></tr>
+    </tbody>
+  </table>
+
+  <!-- TEXT COLORS -->
+  <p class="mig-cat">Text colors</p>
+  <p class="mig-cat-sub">Old <code class="mig-mono">TXT/*</code> → semantic text tokens.</p>
+  <table class="mig-table">
+    <thead><tr><th></th><th>Old style</th><th></th><th>Primitive / alpha</th><th></th><th>Semantic</th><th>Use case</th></tr></thead>
+    <tbody>
+      <tr><td><span class="mig-sw" style="background:#d2d3d3"></span></td><td class="mig-old">TXT/50 🌙 HIGH</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-200</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>text-primary</code></td><td class="mig-note">Main copy, headings</td></tr>
+      <tr><td><span class="mig-sw mig-sw-checker" style="--alpha-bg:rgba(210,211,211,0.70)"></span></td><td class="mig-old">TXT/50 🌙 MED 68%</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-200 / 70%</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>text-secondary</code></td><td class="mig-note">Captions, secondary copy</td></tr>
+      <tr><td><span class="mig-sw" style="background:#8f9091"></span></td><td class="mig-old">TXT/100 🌙 REGULAR</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-400</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>text-tertiary</code></td><td class="mig-note">Helper text, placeholders</td></tr>
+      <tr><td><span class="mig-sw" style="background:#636465"></span></td><td class="mig-old">TXT/200 🌙 LOW</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-500</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>text-tertiary</code> <em style="color:var(--txt-low);font-size:11px">(alt)</em></td><td class="mig-note">Quieter helper</td></tr>
+      <tr><td><span class="mig-sw mig-sw-checker" style="--alpha-bg:rgba(210,211,211,0.50)"></span></td><td class="mig-old">TXT/50 DISABLED 🌙 47%</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-200 / 50%</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>text-disabled</code></td><td class="mig-note">Disabled state</td></tr>
+      <tr><td><span class="mig-sw" style="background:#32a9a9"></span></td><td class="mig-old"><em>(any teal text)</em></td><td class="mig-arrow">→</td><td><code class="mig-mono">teal-500</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>text-brand</code></td><td class="mig-note">Links</td></tr>
+    </tbody>
+  </table>
+
+  <!-- LINES / BORDERS -->
+  <p class="mig-cat">Lines / borders</p>
+  <p class="mig-cat-sub">Old <code class="mig-mono">LINE/*</code> → semantic border tokens. All translucent.</p>
+  <table class="mig-table">
+    <thead><tr><th></th><th>Old style</th><th></th><th>Alpha primitive</th><th></th><th>Semantic</th><th>Use case</th></tr></thead>
+    <tbody>
+      <tr><td><span class="mig-sw mig-sw-checker" style="--alpha-bg:rgba(210,211,211,0.12)"></span></td><td class="mig-old">LINE/700 🌙 LOW</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-200 / 12%</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>border-subtle</code></td><td class="mig-note">Quiet dividers</td></tr>
+      <tr><td><span class="mig-sw mig-sw-checker" style="--alpha-bg:rgba(210,211,211,0.20)"></span></td><td class="mig-old">LINE/REG 🌙</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-200 / 20%</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>border-default</code></td><td class="mig-note">Standard border</td></tr>
+      <tr><td><span class="mig-sw mig-sw-checker" style="--alpha-bg:rgba(210,211,211,0.30)"></span></td><td class="mig-old">LINE/400 🌙 HIGH</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-200 / 30%</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>border-strong</code></td><td class="mig-note">Emphasis dividers</td></tr>
+      <tr><td><span class="mig-sw" style="background:#32a9a9"></span></td><td class="mig-old"><em>(focus state)</em></td><td class="mig-arrow">→</td><td><code class="mig-mono">teal-500</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>border-focus</code></td><td class="mig-note">Focused inputs</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ACCENT / BRAND -->
+  <p class="mig-cat">Accent &amp; brand</p>
+  <p class="mig-cat-sub">Old <code class="mig-mono">ACCENT/*</code> and <code class="mig-mono">HEYKID/*</code> → consolidated brand colors (marketing) and product accents.</p>
+  <table class="mig-table">
+    <thead><tr><th></th><th>Old style</th><th></th><th>New token</th><th>Where to use</th></tr></thead>
+    <tbody>
+      <tr><td><span class="mig-sw" style="background:#63dbdb"></span></td><td class="mig-old">ACCENT/GREEN, HEYKID/GREEN</td><td class="mig-arrow">→</td><td class="mig-new"><code>brand-green-500</code></td><td class="mig-note">Marketing only</td></tr>
+      <tr><td><span class="mig-sw" style="background:#fac034"></span></td><td class="mig-old">ACCENT/YELLOW, HEYKID/YELLOW</td><td class="mig-arrow">→</td><td class="mig-new"><code>brand-yellow-500</code></td><td class="mig-note">Marketing · <span style="color:var(--red)">duplicate F7D371/F7D372 — pick one</span></td></tr>
+      <tr><td><span class="mig-sw" style="background:#d40a60"></span></td><td class="mig-old">ACCENT/PINK, HEYKID/PINK</td><td class="mig-arrow">→</td><td class="mig-new"><code>brand-pink-500</code></td><td class="mig-note">Marketing only</td></tr>
+      <tr><td><span class="mig-sw" style="background:#bdd8d8"></span></td><td class="mig-old">(new)</td><td class="mig-arrow">→</td><td class="mig-new"><code>brand-chrome-500</code></td><td class="mig-note">Marketing chrome accent</td></tr>
+      <tr><td><span class="mig-sw" style="background:#813aef"></span></td><td class="mig-old">(new)</td><td class="mig-arrow">→</td><td class="mig-new"><code>brand-purple-500</code></td><td class="mig-note">Marketing purple</td></tr>
+      <tr><td colspan="5" style="padding-top:20px;color:var(--txt-reg);font-style:italic;font-size:12px;border-bottom:none">Product UI accents (separate from marketing brand)</td></tr>
+      <tr><td><span class="mig-sw" style="background:#32a9a9"></span></td><td class="mig-old"><em>(brand primary)</em></td><td class="mig-arrow">→</td><td class="mig-new"><code>accent-brand</code></td><td class="mig-note">Primary CTA in product UI</td></tr>
+      <tr><td><span class="mig-sw" style="background:#f7d371"></span></td><td class="mig-old"><em>(warning)</em></td><td class="mig-arrow">→</td><td class="mig-new"><code>accent-warning</code></td><td class="mig-note">Warning states</td></tr>
+      <tr><td><span class="mig-sw" style="background:#ff6467"></span></td><td class="mig-old"><em>(destructive)</em></td><td class="mig-arrow">→</td><td class="mig-new"><code>accent-destructive</code></td><td class="mig-note">Destructive actions, errors</td></tr>
+    </tbody>
+  </table>
+  <div class="mig-note-box"><strong>Important</strong>: <code class="mig-mono">brand-*</code> (5 marketing families) ≠ <code class="mig-mono">accent-*</code> (product UI semantics). Marketing pages use <code class="mig-mono">brand-pink-500</code>; product UI uses <code class="mig-mono">accent-brand</code> (teal-500) for the primary button.</div>
 </section>
 
 

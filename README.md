@@ -2,12 +2,13 @@
 
 Living reference for the Waldo design system — typography scale, brand colors, and design tokens.
 
-🔗 **Live site:** `https://<your-org>.github.io/<repo-name>/`
+🔗 **Live site:** https://ugaldewaldo.github.io/waldo-design-system/
 
 ## Pages
 
-- **[index.html](index.html)** — Essentials reference (Typography + Brand Colors). The page most people visit.
-- **[waldo-design-system.html](waldo-design-system.html)** — Full system (Colors, Brand Colors, Semantic Tokens, Typography, Components, Migration).
+- **[index.html](index.html)** — Living reference. 5 tabs: Typography, Colors (primitives + alpha), Brand Colors, Semantic Tokens, Migration. The page most people visit.
+- **[waldo-design-system.html](waldo-design-system.html)** — Original full system with extra Components and Migration sections.
+- **[waldo-design-system-migration.html](waldo-design-system-migration.html)** — Standalone migration guide (old → new equivalences).
 
 ## Design tokens
 
