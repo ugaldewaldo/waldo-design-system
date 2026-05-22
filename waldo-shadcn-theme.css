@@ -3,12 +3,12 @@
   ─────────────────────────────────────────────
   Nomenclature: Shadcn/Tailwind convention
     zinc   = Waldo neutral scale (dark grays)
-    teal   = Brand primary (#32a9a9)
-    amber  = Accent yellow
+    green  = Brand primary (formerly teal) (#32a9a9)
+    yellow = Warning / accent (formerly amber)
     orange = Accent orange
-    pink   = Accent pink
-    red    = Destructive (anchored to #ff6467)
-    blue   = Info/link (gap fill)
+    pink   = (pink removed from product DS)
+    coral  = Destructive (red-orange, NOT blood-red)
+    
 
   ANCHOR = real Figma value
   DERIVED = interpolated to fill scale gaps
@@ -38,31 +38,31 @@
   --zinc-900:  #202123;   /* ANCHOR — bg900Regular */
   --zinc-950:  #171819;   /* ANCHOR — bg950Low */
 
-  /* ── teal (brand primary) ── */
-  --teal-50:   #edfafa;   /* DERIVED */
-  --teal-100:  #d5f3f3;   /* DERIVED */
-  --teal-200:  #a8e6e6;   /* DERIVED */
-  --teal-300:  #6dcece;   /* DERIVED */
-  --teal-400:  #4dbcbc;   /* DERIVED */
-  --teal-500:  #32a9a9;   /* ANCHOR — primary brand */
-  --teal-600:  #2c797a;   /* ANCHOR */
-  --teal-700:  #2a6c6d;   /* ANCHOR */
-  --teal-800:  #265152;   /* ANCHOR */
-  --teal-900:  #223133;   /* ANCHOR */
-  --teal-950:  #111e1f;   /* DERIVED */
+  /* ── green (brand primary — formerly teal) ── */
+  --green-50:   #edfafa;   /* DERIVED */
+  --green-100:  #d5f3f3;   /* DERIVED */
+  --green-200:  #a8e6e6;   /* DERIVED */
+  --green-300:  #6dcece;   /* DERIVED */
+  --green-400:  #4dbcbc;   /* DERIVED */
+  --green-500:  #32a9a9;   /* ANCHOR — primary brand */
+  --green-600:  #2c797a;   /* ANCHOR */
+  --green-700:  #2a6c6d;   /* ANCHOR */
+  --green-800:  #265152;   /* ANCHOR */
+  --green-900:  #223133;   /* ANCHOR */
+  --green-950:  #111e1f;   /* DERIVED */
 
-  /* ── amber ── */
-  --amber-50:   #fffbeb;  /* DERIVED */
-  --amber-100:  #fef3c7;  /* DERIVED */
-  --amber-200:  #fde68a;  /* DERIVED */
-  --amber-300:  #f7d371;  /* ANCHOR */
-  --amber-400:  #f0c040;  /* DERIVED */
-  --amber-500:  #e5b020;  /* DERIVED */
-  --amber-600:  #d6ac32;  /* ANCHOR */
-  --amber-700:  #b48a00;  /* ANCHOR */
-  --amber-800:  #946f00;  /* ANCHOR */
-  --amber-900:  #713d00;  /* DERIVED */
-  --amber-950:  #3d2100;  /* DERIVED */
+  /* ── yellow (formerly amber) ── */
+  --yellow-50:   #fffbeb;  /* DERIVED */
+  --yellow-100:  #fef3c7;  /* DERIVED */
+  --yellow-200:  #fde68a;  /* DERIVED */
+  --yellow-300:  #f7d371;  /* ANCHOR */
+  --yellow-400:  #f0c040;  /* DERIVED */
+  --yellow-500:  #e5b020;  /* DERIVED */
+  --yellow-600:  #d6ac32;  /* ANCHOR */
+  --yellow-700:  #b48a00;  /* ANCHOR */
+  --yellow-800:  #946f00;  /* ANCHOR */
+  --yellow-900:  #713d00;  /* DERIVED */
+  --yellow-950:  #3d2100;  /* DERIVED */
 
   /* ── orange ── */
   --orange-50:   #fff8f5; /* DERIVED */
@@ -77,44 +77,9 @@
   --orange-900:  #5e1a08; /* DERIVED */
   --orange-950:  #380e03; /* DERIVED */
 
-  /* ── pink ── */
-  --pink-50:   #fff5f9;   /* DERIVED */
-  --pink-100:  #ffe8f3;   /* DERIVED */
-  --pink-200:  #ffd0e8;   /* DERIVED */
-  --pink-300:  #ffbbda;   /* DERIVED */
-  --pink-400:  #ffc0d5;   /* DERIVED */
-  --pink-500:  #ffabd0;   /* ANCHOR */
-  --pink-600:  #d76695;   /* ANCHOR */
-  --pink-700:  #bd005e;   /* ANCHOR */
-  --pink-800:  #ab0054;   /* ANCHOR */
-  --pink-900:  #970049;   /* ANCHOR */
-  --pink-950:  #570029;   /* DERIVED */
 
-  /* ── red (destructive) ── */
-  --red-50:    #fff0f0;   /* DERIVED */
-  --red-100:   #ffe0e0;   /* DERIVED */
-  --red-200:   #ffb8b9;   /* DERIVED */
-  --red-300:   #ff8d8f;   /* DERIVED */
-  --red-400:   #ff6467;   /* ANCHOR — dark mode destructive */
-  --red-500:   #f03638;   /* DERIVED */
-  --red-600:   #d91b1d;   /* DERIVED — light mode destructive */
-  --red-700:   #b80000;   /* DERIVED */
-  --red-800:   #920000;   /* DERIVED */
-  --red-900:   #6b0000;   /* DERIVED */
-  --red-950:   #400000;   /* DERIVED */
-
-  /* ── blue (info / links) — GAP FILL ── */
-  --blue-50:   #eff6ff;   /* GAP FILL */
-  --blue-100:  #dbeafe;   /* GAP FILL */
-  --blue-200:  #bfdbfe;   /* GAP FILL */
-  --blue-300:  #93c5fd;   /* GAP FILL */
-  --blue-400:  #60a5fa;   /* GAP FILL */
-  --blue-500:  #3b82f6;   /* GAP FILL */
-  --blue-600:  #2563eb;   /* GAP FILL */
-  --blue-700:  #1d4ed8;   /* GAP FILL */
-  --blue-800:  #1e40af;   /* GAP FILL */
-  --blue-900:  #1e3a8a;   /* GAP FILL */
-  --blue-950:  #172554;   /* GAP FILL */
+  /* red / blue removed from DS. Destructive now references orange.
+     If you need them later, re-add as primitives. */
 }
 
 
@@ -143,22 +108,18 @@
   --zinc-950-50: rgba(23, 24, 25, 0.50);     /* fillOpacityWidgetBgHover — hover state */
   --zinc-950-80: rgba(23, 24, 25, 0.80);     /* scrim / modal backdrop  */
 
-  /* ── teal alpha — brand tints ── */
+  /* ── green alpha — brand tints ── */
   /* Use for highlighted states, tags, focus rings, active indicators */
-  --teal-500-10: rgba(50, 169, 169, 0.10);   /* brand tag bg */
-  --teal-500-15: rgba(50, 169, 169, 0.15);   /* brand tag hover */
-  --teal-500-20: rgba(50, 169, 169, 0.20);   /* brand subtle border */
-  --teal-500-25: rgba(50, 169, 169, 0.25);   /* brand ring / focus glow */
+  --green-500-10: rgba(50, 169, 169, 0.10);   /* brand tag bg */
+  --green-500-15: rgba(50, 169, 169, 0.15);   /* brand tag hover */
+  --green-500-20: rgba(50, 169, 169, 0.20);   /* brand subtle border */
+  --green-500-25: rgba(50, 169, 169, 0.25);   /* brand ring / focus glow */
 
-  /* ── red alpha — destructive states ── */
-  /* Use for error backgrounds, danger hover fills */
-  --red-400-10:  rgba(255, 100, 103, 0.10);  /* error bg subtle */
-  --red-400-20:  rgba(255, 100, 103, 0.20);  /* error bg hover */
-  --red-400-40:  rgba(255, 100, 103, 0.40);  /* ring destructive shadow */
+  /* red alpha removed — destructive now uses orange */
 
-  /* ── amber alpha — warning states ── */
-  --amber-300-10: rgba(247, 211, 113, 0.10); /* warning bg subtle */
-  --amber-300-20: rgba(247, 211, 113, 0.20); /* warning bg hover */
+  /* ── yellow alpha — warning states ── */
+  --yellow-300-10: rgba(247, 211, 113, 0.10); /* warning bg subtle */
+  --yellow-300-20: rgba(247, 211, 113, 0.20); /* warning bg hover */
 }
 
 
@@ -178,7 +139,7 @@
     --popover:                0 0% 100%;
     --popover-foreground:     220 4% 9%;
 
-    --primary:                180 54% 43%;           /* teal-500 #32a9a9 */
+    --primary:                180 54% 43%;           /* green-500 #32a9a9 */
     --primary-foreground:     0 0% 100%;
 
     --secondary:              220 9% 94%;            /* zinc-100 */
@@ -187,23 +148,23 @@
     --muted:                  220 9% 94%;
     --muted-foreground:       210 1% 39%;            /* zinc-500 */
 
-    --accent:                 180 70% 96%;           /* teal-50 */
-    --accent-foreground:      180 54% 30%;           /* teal-700 */
+    --accent:                 180 70% 96%;           /* green-50 */
+    --accent-foreground:      180 54% 30%;           /* green-700 */
 
-    --destructive:            359 100% 56%;          /* red-600 */
+    --destructive:            15 79% 47%;             /* orange-600 #c94e22 */
     --destructive-foreground: 0 0% 100%;
 
     --border:                 220 9% 88%;
     --input:                  220 9% 88%;
-    --ring:                   180 54% 43%;           /* teal-500 */
+    --ring:                   180 54% 43%;           /* green-500 */
 
     --radius: 0.375rem;
 
-    --chart-1: 180 54% 43%;    /* teal-500  */
-    --chart-2: 42 67% 51%;     /* amber-600 */
+    --chart-1: 180 54% 43%;    /* green-500  */
+    --chart-2: 42 67% 51%;     /* yellow-600 */
     --chart-3: 18 80% 56%;     /* orange-500 */
-    --chart-4: 334 51% 63%;    /* pink-600  */
-    --chart-5: 217 91% 60%;    /* blue-500  */
+    --chart-4: 51 50% 56%;     /* yellow-600 (was pink) */
+    --chart-5: 180 50% 62%;    /* green-300 (was blue-500) */
 
     --sidebar-background:           220 9% 96%;
     --sidebar-foreground:           220 4% 9%;
@@ -226,7 +187,7 @@
     --popover:                214 7% 21%;            /* zinc-700  #323539 */
     --popover-foreground:     180 1% 82%;
 
-    --primary:                180 54% 43%;           /* teal-500  #32a9a9 */
+    --primary:                180 54% 43%;           /* green-500  #32a9a9 */
     --primary-foreground:     220 4% 9%;             /* zinc-950  #171819 */
 
     --secondary:              220 6% 19%;            /* zinc-750  #2d2f33 */
@@ -238,18 +199,18 @@
     --accent:                 216 7% 27%;            /* zinc-600  #41454b */
     --accent-foreground:      180 1% 82%;
 
-    --destructive:            359 100% 70%;          /* red-400   #ff6467 */
+    --destructive:            14 81% 56%;             /* orange-500 #e76638 */
     --destructive-foreground: 180 1% 82%;
 
     --border:                 180 1% 82% / 0.12;     /* zinc-200  12% */
     --input:                  180 1% 82% / 0.20;     /* zinc-200  20% */
-    --ring:                   180 54% 43%;           /* teal-500  #32a9a9 */
+    --ring:                   180 54% 43%;           /* green-500  #32a9a9 */
 
     --chart-1: 180 54% 43%;
     --chart-2: 42 67% 51%;
     --chart-3: 18 80% 56%;
-    --chart-4: 334 51% 63%;
-    --chart-5: 217 91% 60%;
+    --chart-4: 51 50% 56%;     /* yellow-600 (was pink) */
+    --chart-5: 180 50% 62%;    /* green-300 (was blue-500) */
 
     --sidebar-background:           225 5% 15%;     /* zinc-850  #242528 */
     --sidebar-foreground:           180 1% 82%;

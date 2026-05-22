@@ -73,7 +73,7 @@
         "description": "ANCHOR \u2014 bg950Low"
       }
     },
-    "teal": {
+    "green": {
       "50": {
         "value": "#edfafa",
         "type": "color",
@@ -130,7 +130,7 @@
         "description": "DERIVED"
       }
     },
-    "amber": {
+    "yellow": {
       "50": {
         "value": "#fffbeb",
         "type": "color",
@@ -244,177 +244,6 @@
         "description": "DERIVED"
       }
     },
-    "pink": {
-      "50": {
-        "value": "#fff5f9",
-        "type": "color",
-        "description": "DERIVED"
-      },
-      "100": {
-        "value": "#ffe8f3",
-        "type": "color",
-        "description": "DERIVED"
-      },
-      "200": {
-        "value": "#ffd0e8",
-        "type": "color",
-        "description": "DERIVED"
-      },
-      "300": {
-        "value": "#ffbbda",
-        "type": "color",
-        "description": "DERIVED"
-      },
-      "400": {
-        "value": "#ffc0d5",
-        "type": "color",
-        "description": "DERIVED"
-      },
-      "500": {
-        "value": "#ffabd0",
-        "type": "color",
-        "description": "ANCHOR"
-      },
-      "600": {
-        "value": "#d76695",
-        "type": "color",
-        "description": "ANCHOR"
-      },
-      "700": {
-        "value": "#bd005e",
-        "type": "color",
-        "description": "ANCHOR"
-      },
-      "800": {
-        "value": "#ab0054",
-        "type": "color",
-        "description": "ANCHOR"
-      },
-      "900": {
-        "value": "#970049",
-        "type": "color",
-        "description": "ANCHOR"
-      },
-      "950": {
-        "value": "#570029",
-        "type": "color",
-        "description": "DERIVED"
-      }
-    },
-    "red": {
-      "50": {
-        "value": "#fff0f0",
-        "type": "color",
-        "description": "DERIVED"
-      },
-      "100": {
-        "value": "#ffe0e0",
-        "type": "color",
-        "description": "DERIVED"
-      },
-      "200": {
-        "value": "#ffb8b9",
-        "type": "color",
-        "description": "DERIVED"
-      },
-      "300": {
-        "value": "#ff8d8f",
-        "type": "color",
-        "description": "DERIVED"
-      },
-      "400": {
-        "value": "#ff6467",
-        "type": "color",
-        "description": "ANCHOR \u2014 dark mode destructive"
-      },
-      "500": {
-        "value": "#f03638",
-        "type": "color",
-        "description": "DERIVED"
-      },
-      "600": {
-        "value": "#d91b1d",
-        "type": "color",
-        "description": "DERIVED \u2014 light mode destructive"
-      },
-      "700": {
-        "value": "#b80000",
-        "type": "color",
-        "description": "DERIVED"
-      },
-      "800": {
-        "value": "#920000",
-        "type": "color",
-        "description": "DERIVED"
-      },
-      "900": {
-        "value": "#6b0000",
-        "type": "color",
-        "description": "DERIVED"
-      },
-      "950": {
-        "value": "#400000",
-        "type": "color",
-        "description": "DERIVED"
-      }
-    },
-    "blue": {
-      "50": {
-        "value": "#eff6ff",
-        "type": "color",
-        "description": "GAP FILL"
-      },
-      "100": {
-        "value": "#dbeafe",
-        "type": "color",
-        "description": "GAP FILL"
-      },
-      "200": {
-        "value": "#bfdbfe",
-        "type": "color",
-        "description": "GAP FILL"
-      },
-      "300": {
-        "value": "#93c5fd",
-        "type": "color",
-        "description": "GAP FILL"
-      },
-      "400": {
-        "value": "#60a5fa",
-        "type": "color",
-        "description": "GAP FILL"
-      },
-      "500": {
-        "value": "#3b82f6",
-        "type": "color",
-        "description": "GAP FILL"
-      },
-      "600": {
-        "value": "#2563eb",
-        "type": "color",
-        "description": "GAP FILL"
-      },
-      "700": {
-        "value": "#1d4ed8",
-        "type": "color",
-        "description": "GAP FILL"
-      },
-      "800": {
-        "value": "#1e40af",
-        "type": "color",
-        "description": "GAP FILL"
-      },
-      "900": {
-        "value": "#1e3a8a",
-        "type": "color",
-        "description": "GAP FILL"
-      },
-      "950": {
-        "value": "#172554",
-        "type": "color",
-        "description": "GAP FILL"
-      }
-    },
     "alpha": {
       "zinc-200": {
         "5": {
@@ -470,7 +299,7 @@
           "description": "scrim / modal backdrop"
         }
       },
-      "teal-500": {
+      "green-500": {
         "10": {
           "value": "rgba(50, 169, 169, 0.10)",
           "type": "color",
@@ -492,24 +321,7 @@
           "description": "brand ring / focus glow"
         }
       },
-      "red-400": {
-        "10": {
-          "value": "rgba(255, 100, 103, 0.10)",
-          "type": "color",
-          "description": "error bg subtle"
-        },
-        "20": {
-          "value": "rgba(255, 100, 103, 0.20)",
-          "type": "color",
-          "description": "error bg hover"
-        },
-        "40": {
-          "value": "rgba(255, 100, 103, 0.40)",
-          "type": "color",
-          "description": "ring destructive shadow"
-        }
-      },
-      "amber-300": {
+      "yellow-300": {
         "10": {
           "value": "rgba(247, 211, 113, 0.10)",
           "type": "color",

@@ -23,7 +23,7 @@
       --line-low:   rgba(210,211,211,.12);
       --line-reg:   rgba(210,211,211,.20);
       --line-high:  rgba(210,211,211,.28);
-      --teal:       #32a9a9;
+      --green:       #32a9a9;
       --radius:     6px;
     }
 
@@ -34,14 +34,14 @@
     .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 64px; padding-bottom: 32px; border-bottom: 1px solid var(--line-low); }
     .header h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.04em; color: var(--txt-high); }
     .header p  { font-size: 13px; color: var(--txt-reg); margin-top: 4px; }
-    .tag { display: inline-flex; align-items: center; gap: 5px; background: rgba(50,169,169,.12); color: var(--teal); border: 1px solid rgba(50,169,169,.25); border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 500; margin-top: 10px; }
-    .tag::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--teal); }
+    .tag { display: inline-flex; align-items: center; gap: 5px; background: rgba(50,169,169,.12); color: var(--green); border: 1px solid rgba(50,169,169,.25); border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 500; margin-top: 10px; }
+    .tag::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
     .legend { display: inline-flex; align-items: center; gap: 5px; background: var(--fill-low); border-radius: 20px; padding: 3px 10px; font-size: 11px; color: var(--txt-reg); margin-top: 10px; margin-left: 8px; }
 
     /* ── Nav ── */
     .nav { display: flex; gap: 0; margin-bottom: 48px; border-bottom: 1px solid var(--line-low); }
     .nav a { font-size: 13px; color: var(--txt-reg); padding: 10px 16px; border-bottom: 2px solid transparent; cursor: pointer; transition: color .15s; }
-    .nav a.active { color: var(--txt-high); border-bottom-color: var(--teal); font-weight: 500; }
+    .nav a.active { color: var(--txt-high); border-bottom-color: var(--green); font-weight: 500; }
     .nav a:hover { color: var(--txt-high); }
 
     /* ── Sections ── */
@@ -78,7 +78,7 @@
     .type-tag  { font-size: 11px; font-family: 'SF Mono','Fira Code',monospace; background: var(--fill-low); border-radius: 4px; padding: 2px 7px; color: var(--txt-reg); display: inline-block; white-space: nowrap; }
     .type-meta { display: flex; flex-wrap: wrap; gap: 6px; }
     .type-meta span { font-size: 10px; background: var(--fill-low); border-radius: 3px; padding: 2px 6px; color: var(--txt-reg); font-family: monospace; }
-    .type-meta .anchor { background: rgba(50,169,169,.12); color: var(--teal); }
+    .type-meta .anchor { background: rgba(50,169,169,.12); color: var(--green); }
 
     /* ── Components ── */
     .comp-group { margin-bottom: 40px; }
@@ -127,7 +127,7 @@
     .btn-ghost       { background: transparent; color: #d2d3d3; border-color: transparent; }
     .btn-ghost:hover { background: rgba(23,24,25,.5); }
 
-    /* link — text only, teal color */
+    /* link — text only, green color */
     .btn-link        { background: transparent; color: #32a9a9; border-color: transparent;
                        padding-left: 4px; padding-right: 4px; text-decoration: underline;
                        text-underline-offset: 4px; text-decoration-color: transparent; }
@@ -164,7 +164,7 @@
     /* Input */
     .inp { height: 32px; border-radius: var(--radius); padding: 0 12px; font-size: 13px; font-family: 'Inter',sans-serif; outline: none; width: 200px; background: transparent; border: 1px solid var(--line-reg); color: var(--txt-high); }
     .inp::placeholder { color: var(--txt-low); }
-    .inp:focus { border-color: var(--teal); box-shadow: 0 0 0 2px rgba(50,169,169,.18); }
+    .inp:focus { border-color: var(--green); box-shadow: 0 0 0 2px rgba(50,169,169,.18); }
 
     /* Card */
     .card { background: var(--bg-card); border: 1px solid var(--line-low); border-radius: 8px; padding: 20px; }
@@ -179,7 +179,7 @@
     /* Footer */
     footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--line-low); display: flex; justify-content: space-between; }
     footer p { font-size: 12px; color: var(--txt-low); }
-    footer span { color: var(--teal); font-weight: 500; }
+    footer span { color: var(--green); font-weight: 500; }
   </style>
 </head>
 <body>
@@ -196,8 +196,8 @@
   </div>
   <div style="text-align:right">
     <p style="font-size:12px;color:var(--txt-low)">Deliverables</p>
-    <p style="font-size:13px;font-weight:500;margin-top:4px;color:var(--teal)">waldo-shadcn-theme.css</p>
-    <p style="font-size:13px;font-weight:500;color:var(--teal)">waldo-tokens.json</p>
+    <p style="font-size:13px;font-weight:500;margin-top:4px;color:var(--green)">waldo-shadcn-theme.css</p>
+    <p style="font-size:13px;font-weight:500;color:var(--green)">waldo-tokens.json</p>
   </div>
 </header>
 
@@ -221,13 +221,9 @@
         <tr>
           <th style="width:44px"></th>
           <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Zinc</th>
-          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Teal</th>
-          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Amber</th>
-          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Orange</th>
-          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Pink</th>
-          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Red</th>
-          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Blue</th>
-        </tr>
+          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Green</th>
+          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Yellow</th>
+          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Orange</th>        </tr>
       </thead>
       <tbody id="palette-body"></tbody>
     </table>
@@ -321,7 +317,7 @@
     <!-- Brand + State alphas -->
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
       <div>
-        <div class="alpha-family-label">teal-500 alpha — brand tints</div>
+        <div class="alpha-family-label">green-500 alpha — brand tints</div>
         <div class="alpha-row">
           <div class="alpha-chip" style="background:rgba(50,169,169,0.10)">10%</div>
           <div class="alpha-chip" style="background:rgba(50,169,169,0.15)">15%</div>
@@ -338,7 +334,7 @@
         </div>
       </div>
       <div>
-        <div class="alpha-family-label">amber-300 alpha — warning</div>
+        <div class="alpha-family-label">yellow-300 alpha — warning</div>
         <div class="alpha-row">
           <div class="alpha-chip" style="background:rgba(247,211,113,0.10)">10%</div>
           <div class="alpha-chip" style="background:rgba(247,211,113,0.20)">20%</div>
@@ -371,7 +367,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,.4);
     }
     .brand-swatch:hover .brand-swatch-tip { display: block; }
-    .brand-swatch-tip code { font-family: 'SF Mono','Fira Code',monospace; color: var(--teal); display: block; }
+    .brand-swatch-tip code { font-family: 'SF Mono','Fira Code',monospace; color: var(--green); display: block; }
     .brand-main-dot { position: absolute; bottom: 6px; right: 6px; width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.5); }
     .brand-section-divider { height: 1px; background: var(--line-low); margin: 32px 0; }
     .brand-notice { display: inline-flex; align-items: center; gap: 6px; background: rgba(129,58,239,.1); color: #ba91f7; border: 1px solid rgba(129,58,239,.2); border-radius: 20px; padding: 3px 12px; font-size: 11px; font-weight: 500; margin-bottom: 32px; }
@@ -536,10 +532,10 @@
     <div class="token-section">
       <div class="token-group-title">Brand & status</div>
       <div class="token-grid">
-        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--primary</div><div class="token-src">#32a9a9 · teal-500</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--primary</div><div class="token-src">#32a9a9 · green-500</div></div></div>
         <div class="token-card"><div class="token-dot" style="background:#171819"></div><div><div class="token-var">--primary-foreground</div><div class="token-src">#171819 · zinc-950</div></div></div>
         <div class="token-card"><div class="token-dot" style="background:#ff6467"></div><div><div class="token-var">--destructive</div><div class="token-src">#ff6467 · red-400</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--ring</div><div class="token-src">#32a9a9 · teal-500</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--ring</div><div class="token-src">#32a9a9 · green-500</div></div></div>
       </div>
     </div>
     <div class="token-section">
@@ -552,8 +548,8 @@
     <div class="token-section">
       <div class="token-group-title">Charts</div>
       <div class="token-grid">
-        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--chart-1</div><div class="token-src">teal-500</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#d6ac32"></div><div><div class="token-var">--chart-2</div><div class="token-src">amber-600</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--chart-1</div><div class="token-src">green-500</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#d6ac32"></div><div><div class="token-var">--chart-2</div><div class="token-src">yellow-600</div></div></div>
         <div class="token-card"><div class="token-dot" style="background:#e76638"></div><div><div class="token-var">--chart-3</div><div class="token-src">orange-500</div></div></div>
         <div class="token-card"><div class="token-dot" style="background:#d76695"></div><div><div class="token-var">--chart-4</div><div class="token-src">pink-600</div></div></div>
         <div class="token-card"><div class="token-dot" style="background:#3b82f6"></div><div><div class="token-var">--chart-5</div><div class="token-src">blue-500</div></div></div>
@@ -573,10 +569,10 @@
     <div class="token-section">
       <div class="token-group-title">Brand & status</div>
       <div class="token-grid">
-        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--primary</div><div class="token-src">#32a9a9 · teal-500</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--primary</div><div class="token-src">#32a9a9 · green-500</div></div></div>
         <div class="token-card"><div class="token-dot" style="background:#d91b1d"></div><div><div class="token-var">--destructive</div><div class="token-src">#d91b1d · red-600</div></div></div>
         <div class="token-card"><div class="token-dot" style="background:#636465"></div><div><div class="token-var">--muted-foreground</div><div class="token-src">#636465 · zinc-500</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#edfafa;border:1px solid var(--line-low)"></div><div><div class="token-var">--accent</div><div class="token-src">#edfafa · teal-50</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#edfafa;border:1px solid var(--line-low)"></div><div><div class="token-var">--accent</div><div class="token-src">#edfafa · green-50</div></div></div>
       </div>
     </div>
   </div>
@@ -596,9 +592,9 @@
       <p style="font-size:13px;color:var(--txt-med);line-height:1.5">Tailwind standard scale 12→48. Default tracking <span style="font-family:'SF Mono','Fira Code',monospace;font-size:12px;background:var(--fill-menu);padding:1px 6px;border-radius:3px;color:var(--txt-high)">-0.02em</span> (-2%).</p>
     </div>
     <div style="padding:16px; background:var(--fill-low); border-radius:8px; border:1px solid var(--line-low);">
-      <p style="font-size:11px;font-weight:600;color:var(--teal);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase">text-display-* track</p>
+      <p style="font-size:11px;font-weight:600;color:var(--green);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase">text-display-* track</p>
       <p style="font-size:14px;color:var(--txt-high);font-weight:500;margin-bottom:6px">Marketing heros + section headings</p>
-      <p style="font-size:13px;color:var(--txt-med);line-height:1.5">Custom scale 24 / 32 / 40 / 56 / 72 / 96. Default tracking <span style="font-family:'SF Mono','Fira Code',monospace;font-size:12px;background:var(--fill-menu);padding:1px 6px;border-radius:3px;color:var(--txt-high)">-0.04em</span> (-4%). Tailwind-native: utility class is <span style="font-family:'SF Mono','Fira Code',monospace;font-size:12px;background:var(--fill-menu);padding:1px 6px;border-radius:3px;color:var(--teal)">text-display-md</span>.</p>
+      <p style="font-size:13px;color:var(--txt-med);line-height:1.5">Custom scale 24 / 32 / 40 / 56 / 72 / 96. Default tracking <span style="font-family:'SF Mono','Fira Code',monospace;font-size:12px;background:var(--fill-menu);padding:1px 6px;border-radius:3px;color:var(--txt-high)">-0.04em</span> (-4%). Tailwind-native: utility class is <span style="font-family:'SF Mono','Fira Code',monospace;font-size:12px;background:var(--fill-menu);padding:1px 6px;border-radius:3px;color:var(--green)">text-display-md</span>.</p>
     </div>
   </div>
 
@@ -632,7 +628,7 @@
   <div class="type-row"><span class="type-tag">text-4xl · semibold</span> <span style="font-size:36px;line-height:40px;font-weight:600;letter-spacing:-.02em;color:var(--txt-high)">Waldo</span><div class="type-meta"><span>36/40</span><span>600</span><span>-0.02em</span></div></div>
 
   <!-- ── DISPLAY TRACK ── -->
-  <p style="font-size:11px;font-weight:600;color:var(--teal);text-transform:uppercase;letter-spacing:.08em;margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line-low)">text-display-* track — marketing only</p>
+  <p style="font-size:11px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.08em;margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line-low)">text-display-* track — marketing only</p>
 
   <div class="type-head"><span>Class</span><span>Specimen</span><span>Specs</span></div>
 
@@ -658,7 +654,7 @@
     </div>
     <div style="padding:16px; background:var(--fill-low); border-radius:8px; border:1px solid var(--line-low);">
       <p style="font-size:11px;font-weight:600;color:var(--txt-reg);margin-bottom:6px;letter-spacing:.08em;text-transform:uppercase">When to pick which track</p>
-      <p style="font-size:12px;color:var(--txt-med);line-height:1.6">Anything inside the <strong style="color:var(--txt-high)">product UI</strong> → <code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--fill-menu);padding:1px 5px;border-radius:3px;color:var(--txt-high)">text-*</code><br>Anything that's a <strong style="color:var(--txt-high)">marketing hero or section title</strong> → <code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--fill-menu);padding:1px 5px;border-radius:3px;color:var(--teal)">text-display-*</code></p>
+      <p style="font-size:12px;color:var(--txt-med);line-height:1.6">Anything inside the <strong style="color:var(--txt-high)">product UI</strong> → <code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--fill-menu);padding:1px 5px;border-radius:3px;color:var(--txt-high)">text-*</code><br>Anything that's a <strong style="color:var(--txt-high)">marketing hero or section title</strong> → <code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--fill-menu);padding:1px 5px;border-radius:3px;color:var(--green)">text-display-*</code></p>
     </div>
   </div>
 </section>
@@ -672,12 +668,12 @@
   <!-- BUTTONS -->
   <div class="comp-group">
     <h3 class="section-title" style="font-size:16px;margin-bottom:4px">Buttons</h3>
-    <p class="section-sub" style="margin-bottom:28px">border-radius: 24px · font-semibold · sizes: sm=28 · md=36 · lg=44 · icon=32 · focus-visible ring: teal-500</p>
+    <p class="section-sub" style="margin-bottom:28px">border-radius: 24px · font-semibold · sizes: sm=28 · md=36 · lg=44 · icon=32 · focus-visible ring: green-500</p>
 
     <style>
       .btn-grid { display: grid; grid-template-columns: 180px 1fr; gap: 0; margin-bottom: 2px; }
       .btn-grid-label { display: flex; flex-direction: column; justify-content: center; font-size: 11px; font-weight: 600; color: var(--txt-reg); letter-spacing: .01em; padding-right: 20px; gap: 2px; }
-      .btn-grid-label code { font-size: 10px; font-family: monospace; color: var(--teal); font-weight: 400; }
+      .btn-grid-label code { font-size: 10px; font-family: monospace; color: var(--green); font-weight: 400; }
       .btn-grid-label small { font-size: 10px; color: var(--txt-low); font-weight: 400; }
       .btn-grid-row { display: flex; align-items: center; gap: 8px; padding: 12px 0; border-bottom: 1px solid var(--line-low); flex-wrap: wrap; }
       .btn-grid-row:last-child { border-bottom: none; }
@@ -692,7 +688,7 @@
     <div class="btn-section-head">Shadcn Core <span class="btn-section-badge shadcn-core">shadcn/ui</span></div>
 
     <div class="btn-grid">
-      <div class="btn-grid-label"><code>default</code><small>teal-500 · brand CTA</small></div>
+      <div class="btn-grid-label"><code>default</code><small>green-500 · brand CTA</small></div>
       <div class="btn-grid-row">
         <button class="btn btn-default btn-sm">Save</button>
         <button class="btn btn-default">Save changes</button>
@@ -735,7 +731,7 @@
     </div>
 
     <div class="btn-grid">
-      <div class="btn-grid-label"><code>link</code><small>teal text · underline on hover</small></div>
+      <div class="btn-grid-label"><code>link</code><small>green text · underline on hover</small></div>
       <div class="btn-grid-row">
         <button class="btn btn-link btn-sm">Learn more</button>
         <button class="btn btn-link">View documentation</button>
@@ -803,7 +799,7 @@
     </div>
 
     <div class="btn-grid">
-      <div class="btn-grid-label"><code>focus-visible</code><small>2px zinc-950 + 4px teal-500 ring</small></div>
+      <div class="btn-grid-label"><code>focus-visible</code><small>2px zinc-950 + 4px green-500 ring</small></div>
       <div class="btn-grid-row">
         <button class="btn btn-default" style="box-shadow:0 0 0 2px #171819,0 0 0 4px #4dbcbc">default</button>
         <button class="btn btn-secondary" style="box-shadow:0 0 0 2px #171819,0 0 0 4px #32a9a9">secondary</button>
@@ -854,7 +850,7 @@
           <span class="chip-inner">Status</span>
           <svg class="chip-chevron" width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
-        <!-- Active/selected — teal tint -->
+        <!-- Active/selected — green tint -->
         <button class="chip chip-selected">
           <span class="chip-inner">
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8l4 4 6-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -927,12 +923,12 @@
           <button class="btn btn-ghost btn-sm">Edit</button>
         </div>
       </div>
-      <div class="card" style="width:240px;border-color:var(--teal);box-shadow:0 0 0 1px rgba(50,169,169,.25)">
+      <div class="card" style="width:240px;border-color:var(--green);box-shadow:0 0 0 1px rgba(50,169,169,.25)">
         <div style="display:flex;justify-content:space-between;margin-bottom:6px">
           <h4>Selected</h4>
           <span class="badge" style="background:rgba(50,169,169,.15);color:#4dbcbc;font-size:10px">Active</span>
         </div>
-        <p>--ring state applied via teal-500</p>
+        <p>--ring state applied via green-500</p>
       </div>
       <div class="card" style="width:240px;background:var(--fill-low)">
         <h4>Muted Card</h4>
@@ -948,7 +944,7 @@
     <div class="comp-label">Border Radius</div>
     <div class="comp-row" style="align-items:flex-end;gap:20px">
       <div class="r-box"><div class="r-demo" style="border-radius:4px"></div><span style="font-size:11px;color:var(--txt-reg)">rounded-sm</span></div>
-      <div class="r-box"><div class="r-demo" style="border-radius:6px"></div><span style="font-size:11px;color:var(--teal)">rounded-md ★</span></div>
+      <div class="r-box"><div class="r-demo" style="border-radius:6px"></div><span style="font-size:11px;color:var(--green)">rounded-md ★</span></div>
       <div class="r-box"><div class="r-demo" style="border-radius:8px"></div><span style="font-size:11px;color:var(--txt-reg)">rounded-lg</span></div>
       <div class="r-box"><div class="r-demo" style="border-radius:12px"></div><span style="font-size:11px;color:var(--txt-reg)">rounded-xl</span></div>
       <div class="r-box"><div class="r-demo" style="border-radius:9999px"></div><span style="font-size:11px;color:var(--txt-reg)">rounded-full</span></div>
@@ -974,7 +970,7 @@
     .mig-table td { padding:12px 12px; border-bottom:1px solid var(--line-low); vertical-align:middle; }
     .mig-table tr:last-child td { border-bottom:none; }
     .mig-old  { font-family:'SF Mono','Fira Code',monospace; background:var(--fill-low); border-radius:4px; padding:2px 7px; color:var(--txt-reg); display:inline-block; }
-    .mig-new  { font-family:'SF Mono','Fira Code',monospace; background:rgba(50,169,169,.1); border-radius:4px; padding:2px 7px; color:var(--teal); display:inline-block; }
+    .mig-new  { font-family:'SF Mono','Fira Code',monospace; background:rgba(50,169,169,.1); border-radius:4px; padding:2px 7px; color:var(--green); display:inline-block; }
     .mig-new-added { font-family:'SF Mono','Fira Code',monospace; background:rgba(247,211,113,.1); border-radius:4px; padding:2px 7px; color:#f7d371; display:inline-block; }
     .badge-exact   { background:rgba(50,169,169,.15); color:#4dbcbc; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
     .badge-close   { background:rgba(247,211,113,.15); color:#f7d371; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
@@ -1333,40 +1329,40 @@
         <td><div class="mig-note">Border alpha variants → border / input / muted tokens</div></td>
       </tr>
 
-      <tr><td colspan="5" class="mig-section">Teal — Brand Primary</td></tr>
+      <tr><td colspan="5" class="mig-section">Green — Brand Primary</td></tr>
       <tr>
         <td><span class="mig-old">accentGreen500</span></td>
-        <td><span class="mig-new">teal-500</span></td>
+        <td><span class="mig-new">green-500</span></td>
         <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#32a9a9;display:inline-block"></span><code style="font-size:10px;color:var(--txt-low)">#32a9a9</code></span></td>
         <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">"accentGreen" renamed — color is teal, not green</div></td>
+        <td><div class="mig-note">"accentGreen" renamed — color is green, not green</div></td>
       </tr>
       <tr>
         <td><span class="mig-old">accentGreen600</span></td>
-        <td><span class="mig-new">teal-600</span></td>
+        <td><span class="mig-new">green-600</span></td>
         <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#2c797a;display:inline-block"></span><code style="font-size:10px;color:var(--txt-low)">#2c797a</code></span></td>
         <td><span class="badge-changed">changed</span></td>
         <td></td>
       </tr>
       <tr>
         <td><span class="mig-old">accentGreen700 · 800 · 900</span></td>
-        <td><span class="mig-new">teal-700 · 800 · 900</span></td>
+        <td><span class="mig-new">green-700 · 800 · 900</span></td>
         <td><code style="font-size:10px;color:var(--txt-low)">#2a6c6d · #265152 · #223133</code></td>
         <td><span class="badge-changed">changed</span></td>
         <td></td>
       </tr>
 
-      <tr><td colspan="5" class="mig-section">Amber — Yellow Accent</td></tr>
+      <tr><td colspan="5" class="mig-section">Yellow — Yellow Accent</td></tr>
       <tr>
         <td><span class="mig-old">accentYellow300</span></td>
-        <td><span class="mig-new">amber-300</span></td>
+        <td><span class="mig-new">yellow-300</span></td>
         <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#f7d371;display:inline-block"></span><code style="font-size:10px;color:var(--txt-low)">#f7d371</code></span></td>
         <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">"accentYellow" → "amber" (Tailwind family name)</div></td>
+        <td><div class="mig-note">"accentYellow" → "yellow" (Tailwind family name)</div></td>
       </tr>
       <tr>
         <td><span class="mig-old">accentYellow600 · 700 · 800</span></td>
-        <td><span class="mig-new">amber-600 · 700 · 800</span></td>
+        <td><span class="mig-new">yellow-600 · 700 · 800</span></td>
         <td><code style="font-size:10px;color:var(--txt-low)">#d6ac32 · #b48a00 · #946f00</code></td>
         <td><span class="badge-changed">changed</span></td>
         <td></td>
@@ -1450,9 +1446,9 @@
       <tr>
         <td><span class="mig-old">primary ⚠️</span></td>
         <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#d9d9d9;border:1px solid var(--line-reg);display:inline-block"></span><code style="font-size:10px">#d9d9d9 (gray!)</code></span></td>
-        <td><span class="mig-new">teal-500 · #32a9a9</span></td>
+        <td><span class="mig-new">green-500 · #32a9a9</span></td>
         <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">Critical error — primary was set to gray, not Waldo's brand teal</div></td>
+        <td><div class="mig-note">Critical error — primary was set to gray, not Waldo's brand green</div></td>
       </tr>
       <tr>
         <td><span class="mig-old">secondary</span></td>
@@ -1478,9 +1474,9 @@
       <tr>
         <td><span class="mig-old">ring ⚠️</span></td>
         <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#737373;border:1px solid var(--line-reg);display:inline-block"></span><code style="font-size:10px">#737373 (neutral)</code></span></td>
-        <td><span class="mig-new">teal-500 · #32a9a9</span></td>
+        <td><span class="mig-new">green-500 · #32a9a9</span></td>
         <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">Ring should match primary — teal for focus states, not gray</div></td>
+        <td><div class="mig-note">Ring should match primary — green for focus states, not gray</div></td>
       </tr>
       <tr>
         <td><span class="mig-old">destructive</span></td>
@@ -1499,9 +1495,9 @@
       <tr>
         <td><span class="mig-old">sidebarPrimary ⚠️</span></td>
         <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#1447e6;display:inline-block"></span><code style="font-size:10px">#1447e6 (blue!)</code></span></td>
-        <td><span class="mig-new">teal-500 · #32a9a9</span></td>
+        <td><span class="mig-new">green-500 · #32a9a9</span></td>
         <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">Sidebar primary was set to blue (Shadcn default) — should be Waldo teal</div></td>
+        <td><div class="mig-note">Sidebar primary was set to blue (Shadcn default) — should be Waldo green</div></td>
       </tr>
     </tbody>
   </table>
@@ -1509,7 +1505,7 @@
   <div style="margin-top:40px;padding:16px 20px;background:var(--bg-card);border:1px solid var(--line-low);border-radius:var(--radius)">
     <div style="font-size:11px;font-weight:600;color:var(--txt-reg);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Summary</div>
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
-      <div style="text-align:center"><div style="font-size:24px;font-weight:700;color:var(--teal)">5</div><div style="font-size:11px;color:var(--txt-low);margin-top:2px">Exact match</div></div>
+      <div style="text-align:center"><div style="font-size:24px;font-weight:700;color:var(--green)">5</div><div style="font-size:11px;color:var(--txt-low);margin-top:2px">Exact match</div></div>
       <div style="text-align:center"><div style="font-size:24px;font-weight:700;color:#f7d371">12</div><div style="font-size:11px;color:var(--txt-low);margin-top:2px">Updated to standard</div></div>
       <div style="text-align:center"><div style="font-size:24px;font-weight:700;color:#90cd90">4</div><div style="font-size:11px;color:var(--txt-low);margin-top:2px">New additions</div></div>
       <div style="text-align:center"><div style="font-size:24px;font-weight:700;color:var(--txt-high)">21</div><div style="font-size:11px;color:var(--txt-low);margin-top:2px">Total tokens</div></div>
@@ -1522,23 +1518,21 @@
   const steps = [50,100,200,300,400,500,600,700,800,900,950];
   const anchors = {
     zinc:   {200:1,400:1,500:1,600:1,700:1,800:1,900:1,950:1},
-    teal:   {500:1,600:1,700:1,800:1,900:1},
-    amber:  {300:1,600:1,700:1,800:1},
+    green:   {500:1,600:1,700:1,800:1,900:1},
+    yellow:  {300:1,600:1,700:1,800:1},
     orange: {300:1,400:1,500:1},
-    pink:   {500:1,600:1,700:1,800:1,900:1},
     red:    {400:1},
     blue:   {}
   };
   const palette = {
     zinc:   {50:'#f8f8f9',100:'#f0f0f2',200:'#d2d3d3',300:'#b4b5b6',400:'#8f9091',500:'#636465',600:'#41454b',700:'#323539',800:'#27282b',900:'#202123',950:'#171819'},
-    teal:   {50:'#edfafa',100:'#d5f3f3',200:'#a8e6e6',300:'#6dcece',400:'#4dbcbc',500:'#32a9a9',600:'#2c797a',700:'#2a6c6d',800:'#265152',900:'#223133',950:'#111e1f'},
-    amber:  {50:'#fffbeb',100:'#fef3c7',200:'#fde68a',300:'#f7d371',400:'#f0c040',500:'#e5b020',600:'#d6ac32',700:'#b48a00',800:'#946f00',900:'#713d00',950:'#3d2100'},
+    green:   {50:'#edfafa',100:'#d5f3f3',200:'#a8e6e6',300:'#6dcece',400:'#4dbcbc',500:'#32a9a9',600:'#2c797a',700:'#2a6c6d',800:'#265152',900:'#223133',950:'#111e1f'},
+    yellow:  {50:'#fffbeb',100:'#fef3c7',200:'#fde68a',300:'#f7d371',400:'#f0c040',500:'#e5b020',600:'#d6ac32',700:'#b48a00',800:'#946f00',900:'#713d00',950:'#3d2100'},
     orange: {50:'#fff8f5',100:'#ffeed5',200:'#ffd4b0',300:'#cd917b',400:'#a95d41',500:'#e76638',600:'#c94e22',700:'#a83a18',800:'#86280f',900:'#5e1a08',950:'#380e03'},
-    pink:   {50:'#fff5f9',100:'#ffe8f3',200:'#ffd0e8',300:'#ffbbda',400:'#ffc0d5',500:'#ffabd0',600:'#d76695',700:'#bd005e',800:'#ab0054',900:'#970049',950:'#570029'},
     red:    {50:'#fff0f0',100:'#ffe0e0',200:'#ffb8b9',300:'#ff8d8f',400:'#ff6467',500:'#f03638',600:'#d91b1d',700:'#b80000',800:'#920000',900:'#6b0000',950:'#400000'},
     blue:   {50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',500:'#3b82f6',600:'#2563eb',700:'#1d4ed8',800:'#1e40af',900:'#1e3a8a',950:'#172554'}
   };
-  const families = ['zinc','teal','amber','orange','pink','red','blue'];
+  const families = ['zinc','green','yellow','orange'];
   const tbody = document.getElementById('palette-body');
 
   steps.forEach(step => {

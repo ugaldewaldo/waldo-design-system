@@ -17,8 +17,8 @@
     --txt-med: rgba(210,211,211,.70);
     --txt-reg: #8f9091;
     --txt-low: #636465;
-    --teal: #32a9a9;
-    --amber: #f7d371;
+    --green: #32a9a9;
+    --yellow: #f7d371;
     --red: #ff6467;
     --radius: 6px;
   }
@@ -30,7 +30,7 @@
   .header { padding-bottom: 32px; margin-bottom: 40px; border-bottom: 1px solid var(--line-low); }
   .header h1 { font-size: 28px; font-weight: 600; letter-spacing: -0.04em; color: var(--txt-high); }
   .header p { font-size: 14px; color: var(--txt-med); margin-top: 6px; line-height: 1.5; max-width: 720px; }
-  .tag { display: inline-flex; align-items: center; gap: 5px; background: rgba(50,169,169,.12); color: var(--teal); border: 1px solid rgba(50,169,169,.25); border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 500; margin-top: 12px; }
+  .tag { display: inline-flex; align-items: center; gap: 5px; background: rgba(50,169,169,.12); color: var(--green); border: 1px solid rgba(50,169,169,.25); border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 500; margin-top: 12px; }
 
   /* Section */
   section { margin-bottom: 56px; }
@@ -44,9 +44,9 @@
   tr:hover { background: var(--fill-low); }
   td.old { color: var(--txt-low); }
   td.arrow { color: var(--txt-low); text-align: center; width: 32px; }
-  td.new code { font-family: 'SF Mono','Fira Code',monospace; font-size: 12px; color: var(--teal); background: rgba(50,169,169,.10); padding: 2px 8px; border-radius: 4px; }
+  td.new code { font-family: 'SF Mono','Fira Code',monospace; font-size: 12px; color: var(--green); background: rgba(50,169,169,.10); padding: 2px 8px; border-radius: 4px; }
   td.note { font-size: 12px; color: var(--txt-low); font-style: italic; }
-  td.exact { color: var(--teal); font-weight: 500; }
+  td.exact { color: var(--green); font-weight: 500; }
   .swatch { display: inline-block; width: 18px; height: 18px; border-radius: 4px; border: 1px solid var(--line-low); vertical-align: middle; margin-right: 6px; }
   .swatch-checker { position:relative; overflow:hidden; }
   .swatch-checker::before { content:''; position:absolute; inset:0; background-image:linear-gradient(45deg,#444 25%,transparent 25%),linear-gradient(-45deg,#444 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#444 75%),linear-gradient(-45deg,transparent 75%,#444 75%); background-size:6px 6px; background-position:0 0,0 3px,3px -3px,-3px 0; }
@@ -86,7 +86,7 @@
       <tr><td class="old">LX · Semi Bold</td><td>18 / 24</td><td class="arrow">→</td><td class="new"><code>text-lg-semibold</code></td><td class="note">LH +4px</td></tr>
       <tr><td class="old">LX2 · Regular</td><td>20 / 28</td><td class="arrow">→</td><td class="new"><code>text-xl-normal</code></td><td class="exact">Exact match</td></tr>
       <tr><td class="old">LX2 · Semi Bold</td><td>20 / 28</td><td class="arrow">→</td><td class="new"><code>text-xl-semibold</code></td><td class="exact">Exact match</td></tr>
-      <tr><td class="old">LX3 · Regular</td><td>22 / 32 (label) <br><span style="color:var(--red)">actually varies, verify</span></td><td class="arrow">→</td><td class="new"><code>text-2xl-normal</code> <em style="color:var(--txt-low);font-size:11px">or display-2xl-regular if 80px</em></td><td class="note">Label says 22 but real values seen at 80. Always open Edit Style.</td></tr>
+      <tr><td class="old">LX3 · Regular</td><td>22 / 32 (label) <br><span style="color:var(--coral)">actually varies, verify</span></td><td class="arrow">→</td><td class="new"><code>text-2xl-normal</code> <em style="color:var(--txt-low);font-size:11px">or display-2xl-regular if 80px</em></td><td class="note">Label says 22 but real values seen at 80. Always open Edit Style.</td></tr>
       <tr><td class="old">LX3 · Semi bold</td><td>22 / 32 (label)</td><td class="arrow">→</td><td class="new"><code>text-2xl-semibold</code></td><td class="note">Verify real size</td></tr>
       <tr><td class="old">LX4 · Regular</td><td>24 / 32</td><td class="arrow">→</td><td class="new"><code>text-2xl-normal</code> <em style="color:var(--txt-low);font-size:11px">or display-xs-regular if tracking -4%</em></td><td class="exact">Exact size</td></tr>
       <tr><td class="old">LX4 · Semi Bold</td><td>24 / 32</td><td class="arrow">→</td><td class="new"><code>text-2xl-semibold</code> <em style="color:var(--txt-low);font-size:11px">or display-xs-semibold</em></td><td class="exact">Exact size</td></tr>
@@ -169,7 +169,7 @@
       <tr><td><span class="swatch" style="background:#8f9091"></span></td><td class="old">TXT/100 🌙 REGULAR</td><td class="arrow">→</td><td><code class="mono">zinc-400</code></td><td class="arrow">→</td><td class="new"><code>text-tertiary</code></td><td>Helper text, placeholders</td></tr>
       <tr><td><span class="swatch" style="background:#636465"></span></td><td class="old">TXT/200 🌙 LOW</td><td class="arrow">→</td><td><code class="mono">zinc-500</code></td><td class="arrow">→</td><td class="new"><code>text-tertiary</code> <em style="color:var(--txt-low);font-size:11px">(alt)</em></td><td>Even quieter helper text</td></tr>
       <tr><td><span class="swatch swatch-checker" style="--alpha-bg:rgba(210,211,211,0.50)"></span></td><td class="old">TXT/50 DISABLED 🌙 47%</td><td class="arrow">→</td><td><code class="mono">zinc-200 / 50%</code> <em style="color:var(--txt-low);font-size:11px">(rounded 47→50)</em></td><td class="arrow">→</td><td class="new"><code>text-disabled</code></td><td>Disabled state copy</td></tr>
-      <tr><td><span class="swatch" style="background:#32a9a9"></span></td><td class="old"><em>(any teal-on-text)</em></td><td class="arrow">→</td><td><code class="mono">teal-500</code></td><td class="arrow">→</td><td class="new"><code>text-brand</code></td><td>Links, brand-colored text</td></tr>
+      <tr><td><span class="swatch" style="background:#32a9a9"></span></td><td class="old"><em>(any green-on-text)</em></td><td class="arrow">→</td><td><code class="mono">green-500</code></td><td class="arrow">→</td><td class="new"><code>text-brand</code></td><td>Links, brand-colored text</td></tr>
     </tbody>
   </table>
 </section>
@@ -188,7 +188,7 @@
       <tr><td><span class="swatch swatch-checker" style="--alpha-bg:rgba(210,211,211,0.12)"></span></td><td class="old">LINE/700 🌙 LOW</td><td class="arrow">→</td><td><code class="mono">zinc-200 / 12%</code></td><td class="arrow">→</td><td class="new"><code>border-subtle</code></td><td>Quietest dividers, input borders</td></tr>
       <tr><td><span class="swatch swatch-checker" style="--alpha-bg:rgba(210,211,211,0.20)"></span></td><td class="old">LINE/REG 🌙</td><td class="arrow">→</td><td><code class="mono">zinc-200 / 20%</code></td><td class="arrow">→</td><td class="new"><code>border-default</code></td><td>Standard card / input border</td></tr>
       <tr><td><span class="swatch swatch-checker" style="--alpha-bg:rgba(210,211,211,0.30)"></span></td><td class="old">LINE/400 🌙 HIGH</td><td class="arrow">→</td><td><code class="mono">zinc-200 / 30%</code></td><td class="arrow">→</td><td class="new"><code>border-strong</code></td><td>Emphasis dividers</td></tr>
-      <tr><td><span class="swatch" style="background:#32a9a9"></span></td><td class="old"><em>(focus / active)</em></td><td class="arrow">→</td><td><code class="mono">teal-500</code></td><td class="arrow">→</td><td class="new"><code>border-focus</code></td><td>Focused inputs, active state</td></tr>
+      <tr><td><span class="swatch" style="background:#32a9a9"></span></td><td class="old"><em>(focus / active)</em></td><td class="arrow">→</td><td><code class="mono">green-500</code></td><td class="arrow">→</td><td class="new"><code>border-focus</code></td><td>Focused inputs, active state</td></tr>
     </tbody>
   </table>
 </section>
@@ -205,7 +205,7 @@
     </thead>
     <tbody>
       <tr><td><span class="swatch" style="background:#63dbdb"></span></td><td class="old">ACCENT/GREEN, HEYKID/GREEN</td><td class="arrow">→</td><td class="new"><code>brand-green-500</code></td><td>Marketing only (website hero accents)</td></tr>
-      <tr><td><span class="swatch" style="background:#fac034"></span></td><td class="old">ACCENT/YELLOW/300, HEYKID/YELLOW</td><td class="arrow">→</td><td class="new"><code>brand-yellow-500</code></td><td>Marketing only · <em style="color:var(--red)">duplicate hex (F7D371 vs F7D372) — pick one</em></td></tr>
+      <tr><td><span class="swatch" style="background:#fac034"></span></td><td class="old">ACCENT/YELLOW/300, HEYKID/YELLOW</td><td class="arrow">→</td><td class="new"><code>brand-yellow-500</code></td><td>Marketing only · <em style="color:var(--coral)">duplicate hex (F7D371 vs F7D372) — pick one</em></td></tr>
       <tr><td><span class="swatch" style="background:#d40a60"></span></td><td class="old">ACCENT/PINK, HEYKID/PINK</td><td class="arrow">→</td><td class="new"><code>brand-pink-500</code></td><td>Marketing only</td></tr>
       <tr><td><span class="swatch" style="background:#bdd8d8"></span></td><td class="old">(none — new)</td><td class="arrow">→</td><td class="new"><code>brand-chrome-500</code></td><td>Marketing chrome / neutral accent</td></tr>
       <tr><td><span class="swatch" style="background:#813aef"></span></td><td class="old">(none — new)</td><td class="arrow">→</td><td class="new"><code>brand-purple-500</code></td><td>Marketing purple</td></tr>
@@ -217,7 +217,7 @@
   </table>
 
   <div class="note-box">
-    <strong>Important distinction</strong>: <code class="mono">brand-*</code> (5 families × 5 steps, marketing scale) is <em>different</em> from <code class="mono">accent-*</code> (semantic product UI accents). Marketing pages use <code class="mono">brand-pink-500</code> for a flashy CTA; product UI uses <code class="mono">accent-brand</code> (= teal-500) for the primary button.
+    <strong>Important distinction</strong>: <code class="mono">brand-*</code> (5 families × 5 steps, marketing scale) is <em>different</em> from <code class="mono">accent-*</code> (semantic product UI accents). Marketing pages use <code class="mono">brand-pink-500</code> for a flashy CTA; product UI uses <code class="mono">accent-brand</code> (= green-500) for the primary button.
   </div>
 </section>
 

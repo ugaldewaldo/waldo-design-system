@@ -23,7 +23,7 @@
       --line-low:   rgba(210,211,211,.12);
       --line-reg:   rgba(210,211,211,.20);
       --line-high:  rgba(210,211,211,.28);
-      --teal:       #32a9a9;
+      --green:       #32a9a9;
       --radius:     6px;
     }
 
@@ -34,14 +34,14 @@
     .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 64px; padding-bottom: 32px; border-bottom: 1px solid var(--line-low); }
     .header h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.04em; color: var(--txt-high); }
     .header p  { font-size: 13px; color: var(--txt-reg); margin-top: 4px; }
-    .tag { display: inline-flex; align-items: center; gap: 5px; background: rgba(50,169,169,.12); color: var(--teal); border: 1px solid rgba(50,169,169,.25); border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 500; margin-top: 10px; }
-    .tag::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--teal); }
+    .tag { display: inline-flex; align-items: center; gap: 5px; background: rgba(50,169,169,.12); color: var(--green); border: 1px solid rgba(50,169,169,.25); border-radius: 20px; padding: 3px 10px; font-size: 11px; font-weight: 500; margin-top: 10px; }
+    .tag::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
     .legend { display: inline-flex; align-items: center; gap: 5px; background: var(--fill-low); border-radius: 20px; padding: 3px 10px; font-size: 11px; color: var(--txt-reg); margin-top: 10px; margin-left: 8px; }
 
     /* ── Nav ── */
     .nav { display: flex; gap: 0; margin-bottom: 48px; border-bottom: 1px solid var(--line-low); }
     .nav a { font-size: 13px; color: var(--txt-reg); padding: 10px 16px; border-bottom: 2px solid transparent; cursor: pointer; transition: color .15s; }
-    .nav a.active { color: var(--txt-high); border-bottom-color: var(--teal); font-weight: 500; }
+    .nav a.active { color: var(--txt-high); border-bottom-color: var(--green); font-weight: 500; }
     .nav a:hover { color: var(--txt-high); }
 
     /* ── Sections ── */
@@ -78,7 +78,7 @@
     .type-tag  { font-size: 11px; font-family: 'SF Mono','Fira Code',monospace; background: var(--fill-low); border-radius: 4px; padding: 2px 7px; color: var(--txt-reg); display: inline-block; white-space: nowrap; }
     .type-meta { display: flex; flex-wrap: wrap; gap: 6px; }
     .type-meta span { font-size: 10px; background: var(--fill-low); border-radius: 3px; padding: 2px 6px; color: var(--txt-reg); font-family: monospace; }
-    .type-meta .anchor { background: rgba(50,169,169,.12); color: var(--teal); }
+    .type-meta .anchor { background: rgba(50,169,169,.12); color: var(--green); }
 
     /* ── Components ── */
     .comp-group { margin-bottom: 40px; }
@@ -127,7 +127,7 @@
     .btn-ghost       { background: transparent; color: #d2d3d3; border-color: transparent; }
     .btn-ghost:hover { background: rgba(23,24,25,.5); }
 
-    /* link — text only, teal color */
+    /* link — text only, green color */
     .btn-link        { background: transparent; color: #32a9a9; border-color: transparent;
                        padding-left: 4px; padding-right: 4px; text-decoration: underline;
                        text-underline-offset: 4px; text-decoration-color: transparent; }
@@ -164,7 +164,7 @@
     /* Input */
     .inp { height: 32px; border-radius: var(--radius); padding: 0 12px; font-size: 13px; font-family: 'Inter',sans-serif; outline: none; width: 200px; background: transparent; border: 1px solid var(--line-reg); color: var(--txt-high); }
     .inp::placeholder { color: var(--txt-low); }
-    .inp:focus { border-color: var(--teal); box-shadow: 0 0 0 2px rgba(50,169,169,.18); }
+    .inp:focus { border-color: var(--green); box-shadow: 0 0 0 2px rgba(50,169,169,.18); }
 
     /* Card */
     .card { background: var(--bg-card); border: 1px solid var(--line-low); border-radius: 8px; padding: 20px; }
@@ -179,7 +179,7 @@
     /* Footer */
     footer { margin-top: 80px; padding-top: 24px; border-top: 1px solid var(--line-low); display: flex; justify-content: space-between; }
     footer p { font-size: 12px; color: var(--txt-low); }
-    footer span { color: var(--teal); font-weight: 500; }
+    footer span { color: var(--green); font-weight: 500; }
   </style>
 </head>
 <body>
@@ -196,8 +196,8 @@
   </div>
   <div style="text-align:right">
     <p style="font-size:12px;color:var(--txt-low)">Deliverables</p>
-    <p style="font-size:13px;font-weight:500;margin-top:4px;color:var(--teal)">waldo-shadcn-theme.css</p>
-    <p style="font-size:13px;font-weight:500;color:var(--teal)">waldo-tokens.json</p>
+    <p style="font-size:13px;font-weight:500;margin-top:4px;color:var(--green)">waldo-shadcn-theme.css</p>
+    <p style="font-size:13px;font-weight:500;color:var(--green)">waldo-tokens.json</p>
   </div>
 </header>
 
@@ -220,12 +220,9 @@
         <tr>
           <th style="width:44px"></th>
           <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Zinc</th>
-          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Teal</th>
-          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Amber</th>
-          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Orange</th>
-          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Pink</th>
-          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Red</th>
-          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Blue</th>
+          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Green</th>
+          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Yellow</th>
+          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Orange</th>          <th style="font-size:11px;font-weight:500;color:var(--txt-reg);text-align:center;padding-bottom:10px">Coral</th>
         </tr>
       </thead>
       <tbody id="palette-body"></tbody>
@@ -316,7 +313,7 @@
 
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
       <div>
-        <div class="alpha-family-label">teal-500 alpha — brand tints</div>
+        <div class="alpha-family-label">green-500 alpha — brand tints</div>
         <div class="alpha-row">
           <div class="alpha-chip" style="background:rgba(50,169,169,0.10)">10%</div>
           <div class="alpha-chip" style="background:rgba(50,169,169,0.15)">15%</div>
@@ -325,20 +322,13 @@
         </div>
       </div>
       <div>
-        <div class="alpha-family-label">red-400 alpha — destructive</div>
-        <div class="alpha-row">
-          <div class="alpha-chip" style="background:rgba(255,100,103,0.10)">10%</div>
-          <div class="alpha-chip" style="background:rgba(255,100,103,0.20)">20%</div>
-          <div class="alpha-chip" style="background:rgba(255,100,103,0.40)">40%</div>
-        </div>
-      </div>
-      <div>
-        <div class="alpha-family-label">amber-300 alpha — warning</div>
+        <div class="alpha-family-label">yellow-300 alpha — warning</div>
         <div class="alpha-row">
           <div class="alpha-chip" style="background:rgba(247,211,113,0.10)">10%</div>
           <div class="alpha-chip" style="background:rgba(247,211,113,0.20)">20%</div>
         </div>
       </div>
+      <div></div>
     </div>
   </div>
 </section>
@@ -356,9 +346,9 @@
       <p style="font-size:13px;color:var(--txt-med);line-height:1.5">Tailwind standard scale 12→48. Default tracking <span style="font-family:'SF Mono','Fira Code',monospace;font-size:12px;background:var(--fill-menu);padding:1px 6px;border-radius:3px;color:var(--txt-high)">-0.02em</span> (-2%).</p>
     </div>
     <div style="padding:16px; background:var(--fill-low); border-radius:8px; border:1px solid var(--line-low);">
-      <p style="font-size:11px;font-weight:600;color:var(--teal);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase">text-display-* track</p>
+      <p style="font-size:11px;font-weight:600;color:var(--green);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase">text-display-* track</p>
       <p style="font-size:14px;color:var(--txt-high);font-weight:500;margin-bottom:6px">Marketing heros + section headings</p>
-      <p style="font-size:13px;color:var(--txt-med);line-height:1.5">Custom scale 24 / 32 / 40 / 56 / 72 / 96. Default tracking <span style="font-family:'SF Mono','Fira Code',monospace;font-size:12px;background:var(--fill-menu);padding:1px 6px;border-radius:3px;color:var(--txt-high)">-0.04em</span> (-4%). Tailwind-native: utility class is <span style="font-family:'SF Mono','Fira Code',monospace;font-size:12px;background:var(--fill-menu);padding:1px 6px;border-radius:3px;color:var(--teal)">text-display-md</span>.</p>
+      <p style="font-size:13px;color:var(--txt-med);line-height:1.5">Custom scale 24 / 32 / 40 / 56 / 72 / 96. Default tracking <span style="font-family:'SF Mono','Fira Code',monospace;font-size:12px;background:var(--fill-menu);padding:1px 6px;border-radius:3px;color:var(--txt-high)">-0.04em</span> (-4%). Tailwind-native: utility class is <span style="font-family:'SF Mono','Fira Code',monospace;font-size:12px;background:var(--fill-menu);padding:1px 6px;border-radius:3px;color:var(--green)">text-display-md</span>.</p>
     </div>
   </div>
 
@@ -392,7 +382,7 @@
   <div class="type-row"><span class="type-tag">text-4xl · semibold</span> <span style="font-size:36px;line-height:40px;font-weight:600;letter-spacing:-.02em;color:var(--txt-high)">Waldo</span><div class="type-meta"><span>36/40</span><span>600</span><span>-0.02em</span></div></div>
 
   <!-- ── DISPLAY TRACK ── -->
-  <p style="font-size:11px;font-weight:600;color:var(--teal);text-transform:uppercase;letter-spacing:.08em;margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line-low)">text-display-* track — marketing only</p>
+  <p style="font-size:11px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.08em;margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line-low)">text-display-* track — marketing only</p>
 
   <div class="type-head"><span>Class</span><span>Specimen</span><span>Specs</span></div>
 
@@ -418,7 +408,7 @@
     </div>
     <div style="padding:16px; background:var(--fill-low); border-radius:8px; border:1px solid var(--line-low);">
       <p style="font-size:11px;font-weight:600;color:var(--txt-reg);margin-bottom:6px;letter-spacing:.08em;text-transform:uppercase">When to pick which track</p>
-      <p style="font-size:12px;color:var(--txt-med);line-height:1.6">Anything inside the <strong style="color:var(--txt-high)">product UI</strong> → <code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--fill-menu);padding:1px 5px;border-radius:3px;color:var(--txt-high)">text-*</code><br>Anything that's a <strong style="color:var(--txt-high)">marketing hero or section title</strong> → <code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--fill-menu);padding:1px 5px;border-radius:3px;color:var(--teal)">text-display-*</code></p>
+      <p style="font-size:12px;color:var(--txt-med);line-height:1.6">Anything inside the <strong style="color:var(--txt-high)">product UI</strong> → <code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--fill-menu);padding:1px 5px;border-radius:3px;color:var(--txt-high)">text-*</code><br>Anything that's a <strong style="color:var(--txt-high)">marketing hero or section title</strong> → <code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--fill-menu);padding:1px 5px;border-radius:3px;color:var(--green)">text-display-*</code></p>
     </div>
   </div>
 </section>
@@ -445,7 +435,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,.4);
     }
     .brand-swatch:hover .brand-swatch-tip { display: block; }
-    .brand-swatch-tip code { font-family: 'SF Mono','Fira Code',monospace; color: var(--teal); display: block; }
+    .brand-swatch-tip code { font-family: 'SF Mono','Fira Code',monospace; color: var(--green); display: block; }
     .brand-main-dot { position: absolute; bottom: 6px; right: 6px; width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.5); }
     .brand-section-divider { height: 1px; background: var(--line-low); margin: 32px 0; }
     .brand-notice { display: inline-flex; align-items: center; gap: 6px; background: rgba(129,58,239,.1); color: #ba91f7; border: 1px solid rgba(129,58,239,.2); border-radius: 20px; padding: 3px 12px; font-size: 11px; font-weight: 500; margin-bottom: 32px; }
@@ -576,7 +566,7 @@
   <p class="section-sub">3-layer model: primitives → alpha primitives → <strong>semantic</strong>. Components only ever touch semantic tokens.</p>
 
   <style>
-    .sem-cat-title { font-size:11px;font-weight:600;color:var(--teal);text-transform:uppercase;letter-spacing:.08em;margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line-low); }
+    .sem-cat-title { font-size:11px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.08em;margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line-low); }
     .sem-cat-title:first-of-type { margin-top: 8px; }
     .sem-row { display:grid; grid-template-columns: 56px 200px 180px 1fr; gap:16px; align-items:center; padding:10px 0; border-bottom:1px solid var(--line-low); }
     .sem-row:last-child { border-bottom: none; }
@@ -600,35 +590,37 @@
   <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(210,211,211,0.12)"></div></div><div class="sem-token">border-subtle</div><div><span class="sem-ref">zinc-200 / 12%</span></div><div class="sem-use">Quietest dividers, hover outlines</div></div>
   <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(210,211,211,0.20)"></div></div><div class="sem-token">border-default</div><div><span class="sem-ref">zinc-200 / 20%</span></div><div class="sem-use">Standard card / input border</div></div>
   <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(210,211,211,0.30)"></div></div><div class="sem-token">border-strong</div><div><span class="sem-ref">zinc-200 / 30%</span></div><div class="sem-use">Emphasis dividers</div></div>
-  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#32a9a9"></div></div><div class="sem-token">border-focus</div><div><span class="sem-ref">teal-500</span></div><div class="sem-use">Focused inputs, active state</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#32a9a9"></div></div><div class="sem-token">border-focus</div><div><span class="sem-ref">green-500</span></div><div class="sem-use">Focused inputs, active state</div></div>
 
   <p class="sem-cat-title">Text</p>
   <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#d2d3d3"></div></div><div class="sem-token">text-primary</div><div><span class="sem-ref">zinc-200</span></div><div class="sem-use">Main copy, headings</div></div>
   <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(210,211,211,0.70)"></div></div><div class="sem-token">text-secondary</div><div><span class="sem-ref">zinc-200 / 70%</span></div><div class="sem-use">Captions, secondary copy</div></div>
   <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#8f9091"></div></div><div class="sem-token">text-tertiary</div><div><span class="sem-ref">zinc-400</span></div><div class="sem-use">Helper text, placeholders, muted labels</div></div>
   <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(210,211,211,0.50)"></div></div><div class="sem-token">text-disabled</div><div><span class="sem-ref">zinc-200 / 50%</span></div><div class="sem-use">Disabled buttons, deactivated copy</div></div>
-  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#32a9a9"></div></div><div class="sem-token">text-brand</div><div><span class="sem-ref">teal-500</span></div><div class="sem-use">Links, brand-colored text</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#32a9a9"></div></div><div class="sem-token">text-brand</div><div><span class="sem-ref">green-500</span></div><div class="sem-use">Links, brand-colored text</div></div>
 
   <p class="sem-cat-title">Interactive states</p>
   <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(210,211,211,0.05)"></div></div><div class="sem-token">interactive-hover</div><div><span class="sem-ref">zinc-200 / 5%</span></div><div class="sem-use">Generic hover overlay on any surface</div></div>
   <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(210,211,211,0.10)"></div></div><div class="sem-token">interactive-pressed</div><div><span class="sem-ref">zinc-200 / 10%</span></div><div class="sem-use">Active / pressed state</div></div>
-  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(50,169,169,0.15)"></div></div><div class="sem-token">interactive-selected</div><div><span class="sem-ref">teal-500 / 15%</span></div><div class="sem-use">Selected items in list, active tab background</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(50,169,169,0.15)"></div></div><div class="sem-token">interactive-selected</div><div><span class="sem-ref">green-500 / 15%</span></div><div class="sem-use">Selected items in list, active tab background</div></div>
 
   <p class="sem-cat-title">Overlays</p>
   <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(23,24,25,0.80)"></div></div><div class="sem-token">scrim-modal</div><div><span class="sem-ref">zinc-950 / 80%</span></div><div class="sem-use">Modal backdrop, sheet overlay</div></div>
-  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(50,169,169,0.25)"></div></div><div class="sem-token">ring-focus</div><div><span class="sem-ref">teal-500 / 25%</span></div><div class="sem-use">Focus glow around inputs / buttons</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-checker"></div><div class="sem-swatch-color" style="background:rgba(50,169,169,0.25)"></div></div><div class="sem-token">ring-focus</div><div><span class="sem-ref">green-500 / 25%</span></div><div class="sem-use">Focus glow around inputs / buttons</div></div>
 
   <p class="sem-cat-title">Brand accents</p>
-  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#32a9a9"></div></div><div class="sem-token">accent-brand</div><div><span class="sem-ref">teal-500</span></div><div class="sem-use">Primary brand surface, CTAs</div></div>
-  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#f7d371"></div></div><div class="sem-token">accent-warning</div><div><span class="sem-ref">amber-300</span></div><div class="sem-use">Warning indicators</div></div>
-  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#ff6467"></div></div><div class="sem-token">accent-destructive</div><div><span class="sem-ref">red-400</span></div><div class="sem-use">Destructive actions, errors</div></div>
-  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#3b82f6"></div></div><div class="sem-token">accent-info</div><div><span class="sem-ref">blue-500</span></div><div class="sem-use">Informational, links in light mode</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#32a9a9"></div></div><div class="sem-token">accent-brand</div><div><span class="sem-ref">green-500</span></div><div class="sem-use">Primary brand surface, CTAs</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#32a9a9"></div></div><div class="sem-token">accent-success</div><div><span class="sem-ref">green-500</span></div><div class="sem-use">Success — confirmations (reuses brand by design)</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#4dbcbc"></div></div><div class="sem-token">accent-info</div><div><span class="sem-ref">green-400</span></div><div class="sem-use">Informational — lighter green to differentiate from brand</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#e76638"></div></div><div class="sem-token">accent-warning</div><div><span class="sem-ref">orange-500</span></div><div class="sem-use">Warning — proceed with caution (was yellow)</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#e8533a"></div></div><div class="sem-token">accent-destructive</div><div><span class="sem-ref">coral-500</span></div><div class="sem-use">Destructive / error — &quot;cuando algo se descompuso&quot;. Coral, NOT blood-red.</div></div>
+  <div class="sem-row"><div class="sem-swatch"><div class="sem-swatch-color" style="background:#f7d371"></div></div><div class="sem-token">accent-highlight</div><div><span class="sem-ref">yellow-300</span></div><div class="sem-use">Decorative accent (no semantic urgency). Use for badges, highlights, "Pro" tags</div></div>
 
   <p class="sem-cat-title" style="color:var(--txt-reg)">How to use</p>
   <div style="padding:16px;background:var(--fill-low);border-radius:8px;border:1px solid var(--line-low);font-size:13px;color:var(--txt-med);line-height:1.5">
-    <strong style="color:var(--txt-high)">Rule of thumb</strong>: never reference primitives (<code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--fill-menu);padding:1px 5px;border-radius:3px;color:var(--txt-high)">zinc-200</code>, <code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--fill-menu);padding:1px 5px;border-radius:3px;color:var(--txt-high)">teal-500</code>) directly from components. Always go through a semantic token. If you can't find one that fits your case, either add a new semantic token or rethink the use case.
+    <strong style="color:var(--txt-high)">Rule of thumb</strong>: never reference primitives (<code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--fill-menu);padding:1px 5px;border-radius:3px;color:var(--txt-high)">zinc-200</code>, <code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--fill-menu);padding:1px 5px;border-radius:3px;color:var(--txt-high)">green-500</code>) directly from components. Always go through a semantic token. If you can't find one that fits your case, either add a new semantic token or rethink the use case.
     <br><br>
-    <strong style="color:var(--txt-high)">Why translucent (alpha) tokens matter</strong>: when a layer sits over an image or another color (like the Monitor cards over the gradient hero), a solid color reads wrong. Use <code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--fill-menu);padding:1px 5px;border-radius:3px;color:var(--teal)">surface-frosted</code> so the layer adapts to whatever's behind.
+    <strong style="color:var(--txt-high)">Why translucent (alpha) tokens matter</strong>: when a layer sits over an image or another color (like the Monitor cards over the gradient hero), a solid color reads wrong. Use <code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--fill-menu);padding:1px 5px;border-radius:3px;color:var(--green)">surface-frosted</code> so the layer adapts to whatever's behind.
   </div>
 </section>
 
@@ -645,10 +637,10 @@
     .mig-table tr:hover { background: var(--fill-low); }
     .mig-table td.mig-old { color: var(--txt-low); }
     .mig-table td.mig-arrow { color: var(--txt-low); text-align: center; width: 24px; }
-    .mig-table td.mig-new code { font-family: 'SF Mono','Fira Code',monospace; font-size: 12px; color: var(--teal); background: rgba(50,169,169,.10); padding: 2px 8px; border-radius: 4px; }
+    .mig-table td.mig-new code { font-family: 'SF Mono','Fira Code',monospace; font-size: 12px; color: var(--green); background: rgba(50,169,169,.10); padding: 2px 8px; border-radius: 4px; }
     .mig-table td.mig-note { font-size: 12px; color: var(--txt-low); font-style: italic; }
-    .mig-table td.mig-exact { color: var(--teal); font-weight: 500; font-style: normal; }
-    .mig-cat { font-size: 11px; font-weight: 600; color: var(--teal); text-transform: uppercase; letter-spacing: .08em; margin: 40px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line-low); }
+    .mig-table td.mig-exact { color: var(--green); font-weight: 500; font-style: normal; }
+    .mig-cat { font-size: 11px; font-weight: 600; color: var(--green); text-transform: uppercase; letter-spacing: .08em; margin: 40px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line-low); }
     .mig-cat:first-of-type { margin-top: 8px; }
     .mig-cat-sub { font-size: 13px; color: var(--txt-reg); margin-bottom: 16px; line-height: 1.5; }
     .mig-sw { display:inline-block; width:18px; height:18px; border-radius:4px; border:1px solid var(--line-low); vertical-align:middle; margin-right:6px; }
@@ -677,7 +669,7 @@
       <tr><td class="mig-old">LX · Semi Bold</td><td>18 / 24</td><td class="mig-arrow">→</td><td class="mig-new"><code>text-lg-semibold</code></td><td class="mig-note">LH +4px</td></tr>
       <tr><td class="mig-old">LX2 · Regular</td><td>20 / 28</td><td class="mig-arrow">→</td><td class="mig-new"><code>text-xl-normal</code></td><td class="mig-note mig-exact">Exact match</td></tr>
       <tr><td class="mig-old">LX2 · Semi Bold</td><td>20 / 28</td><td class="mig-arrow">→</td><td class="mig-new"><code>text-xl-semibold</code></td><td class="mig-note mig-exact">Exact match</td></tr>
-      <tr><td class="mig-old">LX3 · Regular</td><td>22 / 32 <span style="color:var(--red)">(label may lie)</span></td><td class="mig-arrow">→</td><td class="mig-new"><code>text-2xl-normal</code></td><td class="mig-note">Verify real size — some seen at 80/96</td></tr>
+      <tr><td class="mig-old">LX3 · Regular</td><td>22 / 32 <span style="color:var(--coral)">(label may lie)</span></td><td class="mig-arrow">→</td><td class="mig-new"><code>text-2xl-normal</code></td><td class="mig-note">Verify real size — some seen at 80/96</td></tr>
       <tr><td class="mig-old">LX3 · Semi bold</td><td>22 / 32</td><td class="mig-arrow">→</td><td class="mig-new"><code>text-2xl-semibold</code></td><td class="mig-note">Verify real size</td></tr>
       <tr><td class="mig-old">LX4 · Regular</td><td>24 / 32</td><td class="mig-arrow">→</td><td class="mig-new"><code>text-2xl-normal</code> <em style="color:var(--txt-low);font-size:11px">or display-xs-regular (tracking -4%)</em></td><td class="mig-note mig-exact">Exact size</td></tr>
       <tr><td class="mig-old">LX4 · Semi Bold</td><td>24 / 32</td><td class="mig-arrow">→</td><td class="mig-new"><code>text-2xl-semibold</code> <em style="color:var(--txt-low);font-size:11px">or display-xs-semibold</em></td><td class="mig-note mig-exact">Exact size</td></tr>
@@ -731,7 +723,7 @@
       <tr><td><span class="mig-sw" style="background:#8f9091"></span></td><td class="mig-old">TXT/100 🌙 REGULAR</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-400</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>text-tertiary</code></td><td class="mig-note">Helper text, placeholders</td></tr>
       <tr><td><span class="mig-sw" style="background:#636465"></span></td><td class="mig-old">TXT/200 🌙 LOW</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-500</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>text-tertiary</code> <em style="color:var(--txt-low);font-size:11px">(alt)</em></td><td class="mig-note">Quieter helper</td></tr>
       <tr><td><span class="mig-sw mig-sw-checker" style="--alpha-bg:rgba(210,211,211,0.50)"></span></td><td class="mig-old">TXT/50 DISABLED 🌙 47%</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-200 / 50%</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>text-disabled</code></td><td class="mig-note">Disabled state</td></tr>
-      <tr><td><span class="mig-sw" style="background:#32a9a9"></span></td><td class="mig-old"><em>(any teal text)</em></td><td class="mig-arrow">→</td><td><code class="mig-mono">teal-500</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>text-brand</code></td><td class="mig-note">Links</td></tr>
+      <tr><td><span class="mig-sw" style="background:#32a9a9"></span></td><td class="mig-old"><em>(any green text)</em></td><td class="mig-arrow">→</td><td><code class="mig-mono">green-500</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>text-brand</code></td><td class="mig-note">Links</td></tr>
     </tbody>
   </table>
 
@@ -744,7 +736,7 @@
       <tr><td><span class="mig-sw mig-sw-checker" style="--alpha-bg:rgba(210,211,211,0.12)"></span></td><td class="mig-old">LINE/700 🌙 LOW</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-200 / 12%</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>border-subtle</code></td><td class="mig-note">Quiet dividers</td></tr>
       <tr><td><span class="mig-sw mig-sw-checker" style="--alpha-bg:rgba(210,211,211,0.20)"></span></td><td class="mig-old">LINE/REG 🌙</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-200 / 20%</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>border-default</code></td><td class="mig-note">Standard border</td></tr>
       <tr><td><span class="mig-sw mig-sw-checker" style="--alpha-bg:rgba(210,211,211,0.30)"></span></td><td class="mig-old">LINE/400 🌙 HIGH</td><td class="mig-arrow">→</td><td><code class="mig-mono">zinc-200 / 30%</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>border-strong</code></td><td class="mig-note">Emphasis dividers</td></tr>
-      <tr><td><span class="mig-sw" style="background:#32a9a9"></span></td><td class="mig-old"><em>(focus state)</em></td><td class="mig-arrow">→</td><td><code class="mig-mono">teal-500</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>border-focus</code></td><td class="mig-note">Focused inputs</td></tr>
+      <tr><td><span class="mig-sw" style="background:#32a9a9"></span></td><td class="mig-old"><em>(focus state)</em></td><td class="mig-arrow">→</td><td><code class="mig-mono">green-500</code></td><td class="mig-arrow">→</td><td class="mig-new"><code>border-focus</code></td><td class="mig-note">Focused inputs</td></tr>
     </tbody>
   </table>
 
@@ -755,7 +747,7 @@
     <thead><tr><th></th><th>Old style</th><th></th><th>New token</th><th>Where to use</th></tr></thead>
     <tbody>
       <tr><td><span class="mig-sw" style="background:#63dbdb"></span></td><td class="mig-old">ACCENT/GREEN, HEYKID/GREEN</td><td class="mig-arrow">→</td><td class="mig-new"><code>brand-green-500</code></td><td class="mig-note">Marketing only</td></tr>
-      <tr><td><span class="mig-sw" style="background:#fac034"></span></td><td class="mig-old">ACCENT/YELLOW, HEYKID/YELLOW</td><td class="mig-arrow">→</td><td class="mig-new"><code>brand-yellow-500</code></td><td class="mig-note">Marketing · <span style="color:var(--red)">duplicate F7D371/F7D372 — pick one</span></td></tr>
+      <tr><td><span class="mig-sw" style="background:#fac034"></span></td><td class="mig-old">ACCENT/YELLOW, HEYKID/YELLOW</td><td class="mig-arrow">→</td><td class="mig-new"><code>brand-yellow-500</code></td><td class="mig-note">Marketing · <span style="color:var(--coral)">duplicate F7D371/F7D372 — pick one</span></td></tr>
       <tr><td><span class="mig-sw" style="background:#d40a60"></span></td><td class="mig-old">ACCENT/PINK, HEYKID/PINK</td><td class="mig-arrow">→</td><td class="mig-new"><code>brand-pink-500</code></td><td class="mig-note">Marketing only</td></tr>
       <tr><td><span class="mig-sw" style="background:#bdd8d8"></span></td><td class="mig-old">(new)</td><td class="mig-arrow">→</td><td class="mig-new"><code>brand-chrome-500</code></td><td class="mig-note">Marketing chrome accent</td></tr>
       <tr><td><span class="mig-sw" style="background:#813aef"></span></td><td class="mig-old">(new)</td><td class="mig-arrow">→</td><td class="mig-new"><code>brand-purple-500</code></td><td class="mig-note">Marketing purple</td></tr>
@@ -765,7 +757,7 @@
       <tr><td><span class="mig-sw" style="background:#ff6467"></span></td><td class="mig-old"><em>(destructive)</em></td><td class="mig-arrow">→</td><td class="mig-new"><code>accent-destructive</code></td><td class="mig-note">Destructive actions, errors</td></tr>
     </tbody>
   </table>
-  <div class="mig-note-box"><strong>Important</strong>: <code class="mig-mono">brand-*</code> (5 marketing families) ≠ <code class="mig-mono">accent-*</code> (product UI semantics). Marketing pages use <code class="mig-mono">brand-pink-500</code>; product UI uses <code class="mig-mono">accent-brand</code> (teal-500) for the primary button.</div>
+  <div class="mig-note-box"><strong>Important</strong>: <code class="mig-mono">brand-*</code> (5 marketing families) ≠ <code class="mig-mono">accent-*</code> (product UI semantics). Marketing pages use <code class="mig-mono">brand-pink-500</code>; product UI uses <code class="mig-mono">accent-brand</code> (green-500) for the primary button.</div>
 </section>
 
 
@@ -775,23 +767,19 @@
   const steps = [50,100,200,300,400,500,600,700,800,900,950];
   const anchors = {
     zinc:   {200:1,400:1,500:1,600:1,700:1,800:1,900:1,950:1},
-    teal:   {500:1,600:1,700:1,800:1,900:1},
-    amber:  {300:1,600:1,700:1,800:1},
+    green:   {500:1,600:1,700:1,800:1,900:1},
+    yellow:  {300:1,600:1,700:1,800:1},
     orange: {300:1,400:1,500:1},
-    pink:   {500:1,600:1,700:1,800:1,900:1},
-    red:    {400:1},
-    blue:   {}
+    coral:  {500:1}
   };
   const palette = {
     zinc:   {50:'#f8f8f9',100:'#f0f0f2',200:'#d2d3d3',300:'#b4b5b6',400:'#8f9091',500:'#636465',600:'#41454b',700:'#323539',800:'#27282b',900:'#202123',950:'#171819'},
-    teal:   {50:'#edfafa',100:'#d5f3f3',200:'#a8e6e6',300:'#6dcece',400:'#4dbcbc',500:'#32a9a9',600:'#2c797a',700:'#2a6c6d',800:'#265152',900:'#223133',950:'#111e1f'},
-    amber:  {50:'#fffbeb',100:'#fef3c7',200:'#fde68a',300:'#f7d371',400:'#f0c040',500:'#e5b020',600:'#d6ac32',700:'#b48a00',800:'#946f00',900:'#713d00',950:'#3d2100'},
+    green:   {50:'#edfafa',100:'#d5f3f3',200:'#a8e6e6',300:'#6dcece',400:'#4dbcbc',500:'#32a9a9',600:'#2c797a',700:'#2a6c6d',800:'#265152',900:'#223133',950:'#111e1f'},
+    yellow:  {50:'#fffbeb',100:'#fef3c7',200:'#fde68a',300:'#f7d371',400:'#f0c040',500:'#e5b020',600:'#d6ac32',700:'#b48a00',800:'#946f00',900:'#713d00',950:'#3d2100'},
     orange: {50:'#fff8f5',100:'#ffeed5',200:'#ffd4b0',300:'#cd917b',400:'#a95d41',500:'#e76638',600:'#c94e22',700:'#a83a18',800:'#86280f',900:'#5e1a08',950:'#380e03'},
-    pink:   {50:'#fff5f9',100:'#ffe8f3',200:'#ffd0e8',300:'#ffbbda',400:'#ffc0d5',500:'#ffabd0',600:'#d76695',700:'#bd005e',800:'#ab0054',900:'#970049',950:'#570029'},
-    red:    {50:'#fff0f0',100:'#ffe0e0',200:'#ffb8b9',300:'#ff8d8f',400:'#ff6467',500:'#f03638',600:'#d91b1d',700:'#b80000',800:'#920000',900:'#6b0000',950:'#400000'},
-    blue:   {50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',500:'#3b82f6',600:'#2563eb',700:'#1d4ed8',800:'#1e40af',900:'#1e3a8a',950:'#172554'}
+    coral:  {50:'#fff4f0',100:'#ffe3da',200:'#ffc6b3',300:'#ff9b80',400:'#f37553',500:'#e8533a',600:'#d33d24',700:'#b02d18',800:'#872010',900:'#5e1409',950:'#380a04'},
   };
-  const families = ['zinc','teal','amber','orange','pink','red','blue'];
+  const families = ['zinc','green','yellow','orange','coral'];
   const tbody = document.getElementById('palette-body');
 
   steps.forEach(step => {

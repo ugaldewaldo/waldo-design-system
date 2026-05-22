@@ -1,0 +1,68 @@
+{
+  "$metadata": {
+    "tokenSetOrder": ["primitives", "semantic"]
+  },
+  "$themes": [],
+  "primitives": {
+    "zinc": {
+      "50":  { "value": "#f8f8f9", "type": "color" },
+      "100": { "value": "#f0f0f2", "type": "color" },
+      "200": { "value": "#d2d3d3", "type": "color", "description": "Anchor — text on dark" },
+      "300": { "value": "#b4b5b6", "type": "color" },
+      "400": { "value": "#8f9091", "type": "color", "description": "Anchor — tertiary text" },
+      "500": { "value": "#636465", "type": "color", "description": "Anchor — quietest text" },
+      "600": { "value": "#41454b", "type": "color", "description": "Anchor — accent fills" },
+      "700": { "value": "#323539", "type": "color", "description": "Anchor — popover" },
+      "750": { "value": "#2d2f33", "type": "color", "description": "Custom step" },
+      "800": { "value": "#27282b", "type": "color", "description": "Anchor — sunken" },
+      "850": { "value": "#242528", "type": "color", "description": "Custom step — sidebar" },
+      "900": { "value": "#202123", "type": "color", "description": "Anchor — card / elevated" },
+      "950": { "value": "#171819", "type": "color", "description": "Anchor — app background" }
+    },
+    "alpha": {
+      "zinc-200": {
+        "5":  { "value": "rgba(210, 211, 211, 0.05)", "type": "color" },
+        "10": { "value": "rgba(210, 211, 211, 0.10)", "type": "color" },
+        "12": { "value": "rgba(210, 211, 211, 0.12)", "type": "color" },
+        "20": { "value": "rgba(210, 211, 211, 0.20)", "type": "color" },
+        "30": { "value": "rgba(210, 211, 211, 0.30)", "type": "color" },
+        "50": { "value": "rgba(210, 211, 211, 0.50)", "type": "color" },
+        "70": { "value": "rgba(210, 211, 211, 0.70)", "type": "color" }
+      },
+      "zinc-950": {
+        "40": { "value": "rgba(23, 24, 25, 0.40)", "type": "color" },
+        "50": { "value": "rgba(23, 24, 25, 0.50)", "type": "color" },
+        "80": { "value": "rgba(23, 24, 25, 0.80)", "type": "color" }
+      }
+    }
+  },
+  "semantic": {
+    "surface": {
+      "default":        { "value": "{primitives.zinc.950}",       "type": "color", "description": "Main app background" },
+      "elevated":       { "value": "{primitives.zinc.900}",       "type": "color", "description": "Cards, panels on surface-default" },
+      "elevated-alt":   { "value": "{primitives.zinc.850}",       "type": "color", "description": "Sidebar, raised panels" },
+      "sunken":         { "value": "{primitives.zinc.800}",       "type": "color", "description": "Inputs, code blocks" },
+      "popover":        { "value": "{primitives.zinc.700}",       "type": "color", "description": "Popovers, dropdowns, menus" },
+      "frosted":        { "value": "{primitives.alpha.zinc-950.40}", "type": "color", "description": "Translucent widgets over images" },
+      "frosted-hover":  { "value": "{primitives.alpha.zinc-950.50}", "type": "color", "description": "Hover of surface-frosted" }
+    },
+    "border": {
+      "subtle":  { "value": "{primitives.alpha.zinc-200.12}", "type": "color", "description": "Quietest dividers" },
+      "default": { "value": "{primitives.alpha.zinc-200.20}", "type": "color", "description": "Standard card / input border" },
+      "strong":  { "value": "{primitives.alpha.zinc-200.30}", "type": "color", "description": "Emphasis dividers" }
+    },
+    "text": {
+      "primary":   { "value": "{primitives.zinc.200}",         "type": "color", "description": "Main copy, headings" },
+      "secondary": { "value": "{primitives.alpha.zinc-200.70}", "type": "color", "description": "Captions, secondary copy" },
+      "tertiary":  { "value": "{primitives.zinc.400}",         "type": "color", "description": "Helper text, placeholders, muted labels" },
+      "disabled":  { "value": "{primitives.alpha.zinc-200.50}", "type": "color", "description": "Disabled state copy" }
+    },
+    "interactive": {
+      "hover":   { "value": "{primitives.alpha.zinc-200.5}",  "type": "color", "description": "Generic hover overlay" },
+      "pressed": { "value": "{primitives.alpha.zinc-200.10}", "type": "color", "description": "Active / pressed state" }
+    },
+    "scrim": {
+      "modal": { "value": "{primitives.alpha.zinc-950.80}", "type": "color", "description": "Modal backdrop, sheet overlay" }
+    }
+  }
+}
