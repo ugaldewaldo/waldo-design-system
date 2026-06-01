@@ -1,0 +1,164 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────
+   WALDO UI — Theme
+   shadcn/ui CSS variable layer mapped to the
+   Waldo Design System token model.
+
+   3-layer model:
+     primitives  (zinc, green, coral…)
+   → alpha       (zinc-200/12%, etc.)
+   → semantic    (--surface-*, --text-*, …)
+   → shadcn vars (--background, --foreground, …)
+
+   Values come from waldo-tokens.json (DS source
+   of truth), NOT Tailwind defaults.
+   ───────────────────────────────────────────── */
+
+@layer base {
+  :root {
+    /* ── Waldo primitives ──────────────────── */
+    --zinc-50:  248 248 249;
+    --zinc-100: 240 240 242;
+    --zinc-200: 210 211 211;   /* text-primary base */
+    --zinc-300: 180 181 182;
+    --zinc-400: 143 144 145;   /* text-tertiary */
+    --zinc-500:  99 100 101;
+    --zinc-600:  65  69  75;
+    --zinc-700:  50  53  57;   /* surface-popover */
+    --zinc-750:  45  47  51;
+    --zinc-800:  39  40  43;   /* surface-sunken */
+    --zinc-850:  36  37  40;   /* surface-elevated alt */
+    --zinc-900:  32  33  35;   /* surface-elevated */
+    --zinc-950:  23  24  25;   /* surface-default */
+
+    --green-400:  77 188 188;
+    --green-500:  50 169 169;  /* product brand / accent */
+    --green-600:  44 121 122;
+    --green-700:  42 108 109;
+
+    --coral-500: 222  58  40;  /* destructive */
+    --orange-500: 231 102  56; /* warning */
+    --yellow-300: 247 211 113; /* highlight */
+
+    /* ── Semantic → shadcn mapping ─────────── */
+
+    /* shadcn: background = app surface */
+    --background:        23 24 25;          /* zinc-950 */
+    --foreground:       210 211 211;        /* zinc-200 (text-primary) */
+
+    /* shadcn: card = elevated surface */
+    --card:              32 33 35;          /* zinc-900 */
+    --card-foreground:  210 211 211;
+
+    /* shadcn: popover = menus, dropdowns */
+    --popover:           50 53 57;          /* zinc-700 */
+    --popover-foreground: 210 211 211;
+
+    /* shadcn: primary = brand CTA */
+    --primary:           50 169 169;        /* green-500 — product brand */
+    --primary-foreground: 23  24  25;       /* zinc-950 — dark text on teal */
+
+    /* shadcn: secondary = subtle interactive */
+    --secondary:         45 47 51;          /* zinc-750 */
+    --secondary-foreground: 210 211 211;
+
+    /* shadcn: muted = disabled / recessed */
+    --muted:             39 40 43;          /* zinc-800 */
+    --muted-foreground: 143 144 145;        /* zinc-400 */
+
+    /* shadcn: accent = hover/selected state */
+    --accent:            65 69 75;          /* zinc-600 */
+    --accent-foreground: 210 211 211;
+
+    /* shadcn: destructive */
+    --destructive:      222  58  40;        /* coral-500 */
+    --destructive-foreground: 210 211 211;
+
+    /* shadcn: border / input / ring */
+    --border:           210 211 211;        /* zinc-200 — applied via opacity-12 in components */
+    --input:            210 211 211;
+    --ring:              50 169 169;        /* green-500 focus ring */
+
+    /* ── Waldo semantic extras (non-shadcn) ── */
+    --surface-default:     23 24 25;
+    --surface-elevated:    32 33 35;
+    --surface-popover:     50 53 57;
+    --surface-sunken:      39 40 43;
+
+    --text-primary:       210 211 211;
+    --text-secondary:     210 211 211;      /* + opacity-70 */
+    --text-tertiary:      143 144 145;
+    --text-disabled:      210 211 211;      /* + opacity-50 */
+    --text-brand:          50 169 169;
+
+    --border-subtle:      210 211 211;      /* + opacity-12 */
+    --border-default:     210 211 211;      /* + opacity-20 */
+    --border-strong:      210 211 211;      /* + opacity-30 */
+    --border-focus:        50 169 169;
+
+    --accent-brand:        50 169 169;
+    --accent-destructive: 222  58  40;      /* coral-500 */
+    --accent-warning:     231 102  56;      /* orange-500 */
+    --accent-highlight:   247 211 113;
+
+    /* ── Radius ──────────────────────────────
+       Waldo uses tight radii — product/tool aesthetic.
+       Base = 6px (matching Linear/Raycast density).
+    ──────────────────────────────────────────── */
+    --radius: 0.375rem;   /* 6px */
+  }
+
+  /* Waldo is dark-first — light mode intentionally mirrors dark */
+  .light {
+    --background:       255 255 255;
+    --foreground:        23  24  25;
+    --card:             250 250 250;
+    --card-foreground:   23  24  25;
+    --popover:          255 255 255;
+    --popover-foreground: 23 24 25;
+    --primary:           50 169 169;
+    --primary-foreground: 255 255 255;
+    --secondary:        240 240 242;        /* zinc-100 */
+    --secondary-foreground: 23 24 25;
+    --muted:            240 240 242;
+    --muted-foreground:  99 100 101;        /* zinc-500 */
+    --accent:           237 250 250;        /* green-50 */
+    --accent-foreground: 42 108 109;        /* green-700 */
+    --destructive:      186  40  24;        /* coral-600 */
+    --destructive-foreground: 255 255 255;
+    --border:           210 211 211;
+    --input:            210 211 211;
+    --ring:              50 169 169;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border/20;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Scrollbar — Waldo dark style */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-zinc-700 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-zinc-600;
+  }
+}

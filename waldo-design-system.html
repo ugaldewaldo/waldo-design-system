@@ -23,7 +23,7 @@
       --line-low:   rgba(210,211,211,.12);
       --line-reg:   rgba(210,211,211,.20);
       --line-high:  rgba(210,211,211,.28);
-      --green:       #32a9a9;
+      --green:       #63dbdb;
       --radius:     6px;
     }
 
@@ -101,7 +101,7 @@
     }
     /* Focus ring — Shadcn standard: 2px offset ring in brand color */
     .btn:focus-visible {
-      box-shadow: 0 0 0 2px #171819, 0 0 0 4px #32a9a9;
+      box-shadow: 0 0 0 2px #171819, 0 0 0 4px #63dbdb;
     }
     /* Sizes */
     .btn-lg   { height: 44px; padding: 12px 16px; }
@@ -111,9 +111,9 @@
     /* ── SHADCN CORE VARIANTS ── */
 
     /* default — brand primary CTA */
-    .btn-default       { background: #32a9a9; color: #171819; border-color: #32a9a9; }
-    .btn-default:hover { background: #2c797a; border-color: #2c797a; }
-    .btn-default:focus-visible { box-shadow: 0 0 0 2px #171819, 0 0 0 4px #4dbcbc; }
+    .btn-default       { background: #1b8c8c; color: #ffffff; border-color: #1b8c8c; }
+    .btn-default:hover { background: #14706f; border-color: #14706f; }
+    .btn-default:focus-visible { box-shadow: 0 0 0 2px #171819, 0 0 0 4px rgba(99,219,219,.5); }
 
     /* secondary — main fill action (zinc-600, from Figma FILL/500) */
     .btn-secondary       { background: #41454b; color: #d2d3d3; border-color: #41454b; }
@@ -128,15 +128,15 @@
     .btn-ghost:hover { background: rgba(23,24,25,.5); }
 
     /* link — text only, green color */
-    .btn-link        { background: transparent; color: #32a9a9; border-color: transparent;
+    .btn-link        { background: transparent; color: #63dbdb; border-color: transparent;
                        padding-left: 4px; padding-right: 4px; text-decoration: underline;
                        text-underline-offset: 4px; text-decoration-color: transparent; }
-    .btn-link:hover  { text-decoration-color: #32a9a9; color: #4dbcbc; }
+    .btn-link:hover  { text-decoration-color: #63dbdb; color: #7fe8e8; }
 
     /* destructive — Waldo style: tint (intentional divergence from Shadcn solid red) */
-    .btn-destructive       { background: rgba(255,100,103,.10); color: #ff6467; border-color: rgba(255,100,103,.20); }
-    .btn-destructive:hover { background: rgba(255,100,103,.20); }
-    .btn-destructive:focus-visible { box-shadow: 0 0 0 2px #171819, 0 0 0 4px #ff6467; }
+    .btn-destructive       { background: rgba(222, 58, 40,.10); color: #de3a28; border-color: rgba(222, 58, 40,.20); }
+    .btn-destructive:hover { background: rgba(222, 58, 40,.20); }
+    .btn-destructive:focus-visible { box-shadow: 0 0 0 2px #171819, 0 0 0 4px #de3a28; }
 
     /* ── WALDO EXTENSIONS (not in Shadcn core) ── */
 
@@ -326,11 +326,11 @@
         </div>
       </div>
       <div>
-        <div class="alpha-family-label">red-400 alpha — destructive</div>
+        <div class="alpha-family-label">coral-500 alpha — destructive</div>
         <div class="alpha-row">
-          <div class="alpha-chip" style="background:rgba(255,100,103,0.10)">10%</div>
-          <div class="alpha-chip" style="background:rgba(255,100,103,0.20)">20%</div>
-          <div class="alpha-chip" style="background:rgba(255,100,103,0.40)">40%</div>
+          <div class="alpha-chip" style="background:rgba(222, 58, 40,0.10)">10%</div>
+          <div class="alpha-chip" style="background:rgba(222, 58, 40,0.20)">20%</div>
+          <div class="alpha-chip" style="background:rgba(222, 58, 40,0.40)">40%</div>
         </div>
       </div>
       <div>
@@ -532,10 +532,10 @@
     <div class="token-section">
       <div class="token-group-title">Brand & status</div>
       <div class="token-grid">
-        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--primary</div><div class="token-src">#32a9a9 · green-500</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#63dbdb"></div><div><div class="token-var">--primary</div><div class="token-src">#63dbdb · green-500</div></div></div>
         <div class="token-card"><div class="token-dot" style="background:#171819"></div><div><div class="token-var">--primary-foreground</div><div class="token-src">#171819 · zinc-950</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#ff6467"></div><div><div class="token-var">--destructive</div><div class="token-src">#ff6467 · red-400</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--ring</div><div class="token-src">#32a9a9 · green-500</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#de3a28"></div><div><div class="token-var">--destructive</div><div class="token-src">#de3a28 · coral-500</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#63dbdb"></div><div><div class="token-var">--ring</div><div class="token-src">#63dbdb · green-500</div></div></div>
       </div>
     </div>
     <div class="token-section">
@@ -548,7 +548,7 @@
     <div class="token-section">
       <div class="token-group-title">Charts</div>
       <div class="token-grid">
-        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--chart-1</div><div class="token-src">green-500</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#63dbdb"></div><div><div class="token-var">--chart-1</div><div class="token-src">green-500</div></div></div>
         <div class="token-card"><div class="token-dot" style="background:#d6ac32"></div><div><div class="token-var">--chart-2</div><div class="token-src">yellow-600</div></div></div>
         <div class="token-card"><div class="token-dot" style="background:#e76638"></div><div><div class="token-var">--chart-3</div><div class="token-src">orange-500</div></div></div>
         <div class="token-card"><div class="token-dot" style="background:#d76695"></div><div><div class="token-var">--chart-4</div><div class="token-src">pink-600</div></div></div>
@@ -569,8 +569,8 @@
     <div class="token-section">
       <div class="token-group-title">Brand & status</div>
       <div class="token-grid">
-        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--primary</div><div class="token-src">#32a9a9 · green-500</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#d91b1d"></div><div><div class="token-var">--destructive</div><div class="token-src">#d91b1d · red-600</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#63dbdb"></div><div><div class="token-var">--primary</div><div class="token-src">#63dbdb · green-500</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#ba2818"></div><div><div class="token-var">--destructive</div><div class="token-src">#ba2818 · coral-600</div></div></div>
         <div class="token-card"><div class="token-dot" style="background:#636465"></div><div><div class="token-var">--muted-foreground</div><div class="token-src">#636465 · zinc-500</div></div></div>
         <div class="token-card"><div class="token-dot" style="background:#edfafa;border:1px solid var(--line-low)"></div><div><div class="token-var">--accent</div><div class="token-src">#edfafa · green-50</div></div></div>
       </div>
@@ -679,7 +679,7 @@
       .btn-grid-row:last-child { border-bottom: none; }
       .btn-section-head { font-size: 11px; font-weight: 600; color: var(--txt-reg); text-transform: uppercase; letter-spacing: .08em; margin: 32px 0 12px; border-bottom: 1px solid var(--line-low); padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
       .btn-section-badge { font-size: 9px; font-weight: 500; padding: 2px 7px; border-radius: 20px; letter-spacing: .04em; text-transform: uppercase; }
-      .shadcn-core { background: rgba(50,169,169,.12); color: #4dbcbc; }
+      .shadcn-core { background: rgba(50,169,169,.12); color: #2db4b4; }
       .waldo-ext  { background: rgba(210,211,211,.08); color: var(--txt-low); }
       .note-chip { font-size: 10px; color: var(--txt-low); font-style: italic; padding: 2px 8px; background: rgba(247,211,113,.08); border-radius: 4px; border: 1px solid rgba(247,211,113,.15); color: #f7d371; }
     </style>
@@ -741,7 +741,7 @@
     </div>
 
     <div class="btn-grid">
-      <div class="btn-grid-label"><code>destructive</code><small>red-400/10 tint · ⚠ diverges from Shadcn solid</small></div>
+      <div class="btn-grid-label"><code>destructive</code><small>coral-500/10 tint</small></div>
       <div class="btn-grid-row">
         <button class="btn btn-destructive btn-sm"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Remove</button>
         <button class="btn btn-destructive">Delete agent</button>
@@ -801,10 +801,10 @@
     <div class="btn-grid">
       <div class="btn-grid-label"><code>focus-visible</code><small>2px zinc-950 + 4px green-500 ring</small></div>
       <div class="btn-grid-row">
-        <button class="btn btn-default" style="box-shadow:0 0 0 2px #171819,0 0 0 4px #4dbcbc">default</button>
-        <button class="btn btn-secondary" style="box-shadow:0 0 0 2px #171819,0 0 0 4px #32a9a9">secondary</button>
-        <button class="btn btn-outline" style="box-shadow:0 0 0 2px #171819,0 0 0 4px #32a9a9">outline</button>
-        <button class="btn btn-destructive" style="box-shadow:0 0 0 2px #171819,0 0 0 4px #ff6467">destructive</button>
+        <button class="btn btn-default" style="box-shadow:0 0 0 2px #171819,0 0 0 4px #2db4b4">default</button>
+        <button class="btn btn-secondary" style="box-shadow:0 0 0 2px #171819,0 0 0 4px #63dbdb">secondary</button>
+        <button class="btn btn-outline" style="box-shadow:0 0 0 2px #171819,0 0 0 4px #63dbdb">outline</button>
+        <button class="btn btn-destructive" style="box-shadow:0 0 0 2px #171819,0 0 0 4px #de3a28">destructive</button>
       </div>
     </div>
   </div>
@@ -827,7 +827,7 @@
       .chip-inner { display: flex; align-items: center; gap: 6px; }
       .chip-chevron { opacity: .6; }
       /* Selected state */
-      .chip-selected { background: rgba(50,169,169,0.12); color: #4dbcbc; }
+      .chip-selected { background: rgba(50,169,169,0.12); color: #2db4b4; }
       .chip-selected:hover { background: rgba(50,169,169,0.18); }
       /* Active/filled */
       .chip-active { background: #41454b; color: #d2d3d3; }
@@ -895,12 +895,12 @@
   <div class="comp-group">
     <div class="comp-label">Badges</div>
     <div class="comp-row">
-      <span class="badge" style="background:rgba(50,169,169,.15);color:#4dbcbc">Active</span>
+      <span class="badge" style="background:rgba(50,169,169,.15);color:#2db4b4">Active</span>
       <span class="badge" style="background:rgba(215,172,50,.15);color:#d6ac32">Pending</span>
       <span class="badge" style="background:rgba(231,102,56,.15);color:#e76638">Warning</span>
       <span class="badge" style="background:rgba(215,102,149,.15);color:#d76695">Beta</span>
       <span class="badge" style="background:var(--fill-low);color:var(--txt-reg)">Default</span>
-      <span class="badge" style="background:rgba(255,100,103,.15);color:#ff6467">Error</span>
+      <span class="badge" style="background:rgba(222, 58, 40,.15);color:#de3a28">Error</span>
     </div>
   </div>
 
@@ -926,7 +926,7 @@
       <div class="card" style="width:240px;border-color:var(--green);box-shadow:0 0 0 1px rgba(50,169,169,.25)">
         <div style="display:flex;justify-content:space-between;margin-bottom:6px">
           <h4>Selected</h4>
-          <span class="badge" style="background:rgba(50,169,169,.15);color:#4dbcbc;font-size:10px">Active</span>
+          <span class="badge" style="background:rgba(50,169,169,.15);color:#2db4b4;font-size:10px">Active</span>
         </div>
         <p>--ring state applied via green-500</p>
       </div>
@@ -972,10 +972,10 @@
     .mig-old  { font-family:'SF Mono','Fira Code',monospace; background:var(--fill-low); border-radius:4px; padding:2px 7px; color:var(--txt-reg); display:inline-block; }
     .mig-new  { font-family:'SF Mono','Fira Code',monospace; background:rgba(50,169,169,.1); border-radius:4px; padding:2px 7px; color:var(--green); display:inline-block; }
     .mig-new-added { font-family:'SF Mono','Fira Code',monospace; background:rgba(247,211,113,.1); border-radius:4px; padding:2px 7px; color:#f7d371; display:inline-block; }
-    .badge-exact   { background:rgba(50,169,169,.15); color:#4dbcbc; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
+    .badge-exact   { background:rgba(50,169,169,.15); color:#2db4b4; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
     .badge-close   { background:rgba(247,211,113,.15); color:#f7d371; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
     .badge-new     { background:rgba(144,205,144,.15); color:#90cd90; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
-    .badge-changed { background:rgba(255,100,103,.15); color:#ff8082; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
+    .badge-changed { background:rgba(222, 58, 40,.15); color:#f07060; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
     .mig-note { font-size:11px; color:var(--txt-low); margin-top:3px; }
     .mig-section { font-size:11px; font-weight:600; color:var(--txt-reg); text-transform:uppercase; letter-spacing:.08em; padding:20px 12px 8px; background:var(--bg); }
     .mig-legend { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:32px; }
@@ -1333,14 +1333,14 @@
       <tr>
         <td><span class="mig-old">accentGreen500</span></td>
         <td><span class="mig-new">green-500</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#32a9a9;display:inline-block"></span><code style="font-size:10px;color:var(--txt-low)">#32a9a9</code></span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#63dbdb;display:inline-block"></span><code style="font-size:10px;color:var(--txt-low)">#63dbdb</code></span></td>
         <td><span class="badge-changed">changed</span></td>
         <td><div class="mig-note">"accentGreen" renamed — color is green, not green</div></td>
       </tr>
       <tr>
         <td><span class="mig-old">accentGreen600</span></td>
         <td><span class="mig-new">green-600</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#2c797a;display:inline-block"></span><code style="font-size:10px;color:var(--txt-low)">#2c797a</code></span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#1b8c8c;display:inline-block"></span><code style="font-size:10px;color:var(--txt-low)">#1b8c8c</code></span></td>
         <td><span class="badge-changed">changed</span></td>
         <td></td>
       </tr>
@@ -1386,7 +1386,7 @@
       <tr>
         <td><span class="mig-old">— (no red primitives)</span></td>
         <td><span class="mig-new-added">red-50 → red-950</span></td>
-        <td><code style="font-size:10px;color:var(--txt-low)">anchored to #ff6467</code></td>
+        <td><code style="font-size:10px;color:var(--txt-low)">anchored to #de3a28</code></td>
         <td><span class="badge-new">new</span></td>
         <td><div class="mig-note">Full scale derived — destructive had no primitive family</div></td>
       </tr>
@@ -1446,7 +1446,7 @@
       <tr>
         <td><span class="mig-old">primary ⚠️</span></td>
         <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#d9d9d9;border:1px solid var(--line-reg);display:inline-block"></span><code style="font-size:10px">#d9d9d9 (gray!)</code></span></td>
-        <td><span class="mig-new">green-500 · #32a9a9</span></td>
+        <td><span class="mig-new">green-500 · #63dbdb</span></td>
         <td><span class="badge-changed">changed</span></td>
         <td><div class="mig-note">Critical error — primary was set to gray, not Waldo's brand green</div></td>
       </tr>
@@ -1474,13 +1474,13 @@
       <tr>
         <td><span class="mig-old">ring ⚠️</span></td>
         <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#737373;border:1px solid var(--line-reg);display:inline-block"></span><code style="font-size:10px">#737373 (neutral)</code></span></td>
-        <td><span class="mig-new">green-500 · #32a9a9</span></td>
+        <td><span class="mig-new">green-500 · #63dbdb</span></td>
         <td><span class="badge-changed">changed</span></td>
         <td><div class="mig-note">Ring should match primary — green for focus states, not gray</div></td>
       </tr>
       <tr>
         <td><span class="mig-old">destructive</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#ff6467;display:inline-block"></span><code style="font-size:10px">#ff6467</code></span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#de3a28;display:inline-block"></span><code style="font-size:10px">#de3a28</code></span></td>
         <td><span class="mig-new">red-400</span></td>
         <td><span class="badge-exact">exact</span></td>
         <td></td>
@@ -1495,7 +1495,7 @@
       <tr>
         <td><span class="mig-old">sidebarPrimary ⚠️</span></td>
         <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#1447e6;display:inline-block"></span><code style="font-size:10px">#1447e6 (blue!)</code></span></td>
-        <td><span class="mig-new">green-500 · #32a9a9</span></td>
+        <td><span class="mig-new">green-500 · #63dbdb</span></td>
         <td><span class="badge-changed">changed</span></td>
         <td><div class="mig-note">Sidebar primary was set to blue (Shadcn default) — should be Waldo green</div></td>
       </tr>
@@ -1526,10 +1526,10 @@
   };
   const palette = {
     zinc:   {50:'#f8f8f9',100:'#f0f0f2',200:'#d2d3d3',300:'#b4b5b6',400:'#8f9091',500:'#636465',600:'#41454b',700:'#323539',800:'#27282b',900:'#202123',950:'#171819'},
-    green:   {50:'#edfafa',100:'#d5f3f3',200:'#a8e6e6',300:'#6dcece',400:'#4dbcbc',500:'#32a9a9',600:'#2c797a',700:'#2a6c6d',800:'#265152',900:'#223133',950:'#111e1f'},
+    green:   {50:'#edfafa',100:'#d5f3f3',200:'#a8e6e6',300:'#6dcece',400:'#2db4b4',500:'#63dbdb',600:'#1b8c8c',700:'#2a6c6d',800:'#265152',900:'#223133',950:'#111e1f'},
     yellow:  {50:'#fffbeb',100:'#fef3c7',200:'#fde68a',300:'#f7d371',400:'#f0c040',500:'#e5b020',600:'#d6ac32',700:'#b48a00',800:'#946f00',900:'#713d00',950:'#3d2100'},
     orange: {50:'#fff8f5',100:'#ffeed5',200:'#ffd4b0',300:'#cd917b',400:'#a95d41',500:'#e76638',600:'#c94e22',700:'#a83a18',800:'#86280f',900:'#5e1a08',950:'#380e03'},
-    red:    {50:'#fff0f0',100:'#ffe0e0',200:'#ffb8b9',300:'#ff8d8f',400:'#ff6467',500:'#f03638',600:'#d91b1d',700:'#b80000',800:'#920000',900:'#6b0000',950:'#400000'},
+    red:    {50:'#fff0f0',100:'#ffe0e0',200:'#ffb8b9',300:'#ff8d8f',400:'#de3a28',500:'#f03638',600:'#d91b1d',700:'#b80000',800:'#920000',900:'#6b0000',950:'#400000'},
     blue:   {50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',500:'#3b82f6',600:'#2563eb',700:'#1d4ed8',800:'#1e40af',900:'#1e3a8a',950:'#172554'}
   };
   const families = ['zinc','green','yellow','orange'];

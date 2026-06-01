@@ -115,11 +115,20 @@
   --green-500-20: rgba(50, 169, 169, 0.20);   /* brand subtle border */
   --green-500-25: rgba(50, 169, 169, 0.25);   /* brand ring / focus glow */
 
-  /* red alpha removed — destructive now uses orange */
+  /* ── coral alpha — destructive states ── */
+  --coral-500-10: rgba(222, 58, 40, 0.10); /* destructive bg subtle */
+  --coral-500-15: rgba(222, 58, 40, 0.15); /* destructive bg hover */
+  --coral-500-20: rgba(222, 58, 40, 0.20); /* destructive ring soft */
+  --coral-500-40: rgba(222, 58, 40, 0.40); /* destructive ring strong */
 
-  /* ── yellow alpha — warning states ── */
-  --yellow-300-10: rgba(247, 211, 113, 0.10); /* warning bg subtle */
-  --yellow-300-20: rgba(247, 211, 113, 0.20); /* warning bg hover */
+  /* ── orange alpha — warning states ── */
+  --orange-500-10: rgba(231, 102, 56, 0.10); /* warning bg subtle */
+  --orange-500-15: rgba(231, 102, 56, 0.15); /* warning bg hover */
+  --orange-500-20: rgba(231, 102, 56, 0.20); /* warning ring soft */
+
+  /* ── yellow alpha — highlight states ── */
+  --yellow-300-10: rgba(247, 211, 113, 0.10); /* highlight bg subtle */
+  --yellow-300-20: rgba(247, 211, 113, 0.20); /* highlight bg hover */
 }
 
 
@@ -151,7 +160,7 @@
     --accent:                 180 70% 96%;           /* green-50 */
     --accent-foreground:      180 54% 30%;           /* green-700 */
 
-    --destructive:            15 79% 47%;             /* orange-600 #c94e22 */
+    --destructive:            6 77% 41%;              /* coral-600 #ba2818 */
     --destructive-foreground: 0 0% 100%;
 
     --border:                 220 9% 88%;
@@ -199,7 +208,7 @@
     --accent:                 216 7% 27%;            /* zinc-600  #41454b */
     --accent-foreground:      180 1% 82%;
 
-    --destructive:            14 81% 56%;             /* orange-500 #e76638 */
+    --destructive:            6 73% 51%;              /* coral-500 #de3a28 */
     --destructive-foreground: 180 1% 82%;
 
     --border:                 180 1% 82% / 0.12;     /* zinc-200  12% */
