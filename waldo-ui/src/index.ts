@@ -13,9 +13,18 @@ export type { BadgeProps } from "./components/ui/badge";
 
 export { Avatar, AvatarImage, AvatarFallback, AvatarGroup } from "./components/ui/avatar";
 
-export { Checkbox } from "./components/ui/checkbox";
+export { Checkbox, CheckboxField } from "./components/ui/checkbox";
 
 export { Switch } from "./components/ui/switch";
+
+export { SegmentedControl } from "./components/ui/segmented-control";
+export type { SegmentedControlProps, SegmentedOption } from "./components/ui/segmented-control";
+
+export { Tag, TagInput, tagVariants } from "./components/ui/tag";
+
+export { FileInput } from "./components/ui/file-input";
+export type { FileInputProps, FileItem } from "./components/ui/file-input";
+export type { TagProps, TagInputProps } from "./components/ui/tag";
 
 export {
   Select, SelectGroup, SelectValue, SelectTrigger, SelectContent,

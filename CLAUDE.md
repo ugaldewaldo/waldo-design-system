@@ -94,12 +94,12 @@ Font: Inter. Weights: Regular, Medium, Semi Bold, Bold (Figma is picky — use n
 
 | File | What |
 |------|------|
-| `waldo.tokens.json` | Source of truth |
-| `waldo-shadcn-theme.css` | shadcn HSL CSS vars for product |
-| `index.html` | Live DS reference page (GitHub Pages) |
-| `waldo-design-system.html` | Legacy reference |
-| `waldo-ui/` | shadcn React kit |
-| `waldo-ui/src/globals.css` | shadcn vars for the React kit |
+| `figma/` | **Everything for Figma** — tokens JSON, CSS theme. See `figma/README.md` |
+| `figma/waldo.tokens.json` | Source of truth — Token Studio format |
+| `figma/waldo-shadcn-theme.css` | shadcn HSL CSS vars |
+| `waldo-ui/` | **Everything for shadcn/React** — components, CSS vars, Tailwind config. See `waldo-ui/README.md` |
+| `index.html` | Live DS reference + component library (GitHub Pages) |
+| `waldo-design-system.html` | Legacy DS reference |
 | `NOTES-FOR-STEVE.md` | Notes for the developer |
 
 ---
@@ -145,7 +145,7 @@ Plugin API in JS. Read context, bind variables, apply text styles, create/delete
 **Rules:**
 - Always audit before destructive ops
 - Use Figma version history as escape hatch
-- Skip `#9747FF`, `#522B2B`, `#D9D9D9`, `#444444` (Figma chrome / placeholders)
+- Skip `#9747FF`, `#8A38F5`, `#522B2B`, `#D9D9D9`, `#444444` (Figma chrome / placeholders)
 - For instance descendants: changing fills creates overrides — fix master instead
 
 ---

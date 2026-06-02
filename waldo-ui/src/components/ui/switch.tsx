@@ -2,6 +2,17 @@ import * as React from "react";
 import * as SwitchPrimitive from "@radix-ui/react-switch";
 import { cn } from "@/lib/utils";
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Waldo Switch — values from Figma DS (node 11406:98105)
+//
+// Size      → 32×18px
+// Shape     → pill (rounded-full)
+// ON track  → green-700 #1b8c8c
+// OFF track → zinc-800 #27282b
+// Thumb     → white circle, 14px
+// Disabled  → opacity-40
+// ─────────────────────────────────────────────────────────────────────────────
+
 const Switch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof SwitchPrimitive.Root>
@@ -9,23 +20,25 @@ const Switch = React.forwardRef<
   <SwitchPrimitive.Root
     ref={ref}
     className={cn(
-      "peer inline-flex h-4 w-7 shrink-0 cursor-pointer items-center rounded-full",
-      "border border-border/20 bg-secondary",
+      "peer inline-flex h-[18px] w-8 shrink-0 cursor-pointer items-center",
+      "rounded-full px-[3px] py-[2px]",
+      // OFF → zinc-800
+      "bg-[#27282b]",
+      // ON → green-700
+      "data-[state=checked]:bg-[#1b8c8c]",
       "transition-colors duration-150",
-      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/25",
+      "focus-visible:outline-none",
       "disabled:cursor-not-allowed disabled:opacity-40",
-      "data-[state=checked]:bg-primary data-[state=checked]:border-primary/50",
       className
     )}
     {...props}
   >
     <SwitchPrimitive.Thumb
       className={cn(
-        "pointer-events-none block h-3 w-3 rounded-full",
-        "bg-zinc-400 shadow-sm",
+        "pointer-events-none block h-3.5 w-3.5 rounded-full bg-white shadow-sm",
         "transition-transform duration-150",
-        "data-[state=checked]:translate-x-3.5 data-[state=unchecked]:translate-x-0.5",
-        "data-[state=checked]:bg-primary-foreground",
+        "data-[state=checked]:translate-x-[13px]",
+        "data-[state=unchecked]:translate-x-0",
       )}
     />
   </SwitchPrimitive.Root>

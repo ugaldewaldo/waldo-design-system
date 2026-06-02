@@ -2,18 +2,30 @@ import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
+// ── Badge color rules ──────────────────────────────────────────────────────
+// Active/brand → green-500 #63dbdb (NOT green-700 — that's for button fills only)
+// No border on most variants — Linear style: subtle bg tint is enough
+// ──────────────────────────────────────────────────────────────────────────
+// ── shadcn-aligned badge — text-xs/600, border always present ────────────────
 const badgeVariants = cva(
-  "inline-flex items-center gap-1 rounded font-medium transition-colors select-none",
+  "inline-flex items-center gap-1 rounded-full border font-semibold text-xs tracking-[-0.01em] transition-colors select-none whitespace-nowrap",
   {
     variants: {
       variant: {
-        default:     "bg-primary/10 text-primary border border-primary/20",
-        secondary:   "bg-secondary text-secondary-foreground border border-border/20",
-        outline:     "border border-border/20 text-foreground",
-        destructive: "bg-destructive/10 text-destructive border border-destructive/20",
-        warning:     "bg-[rgb(var(--accent-warning))/10] text-[rgb(var(--accent-warning))] border border-[rgb(var(--accent-warning))/20]",
-        highlight:   "bg-[rgb(var(--accent-highlight))/10] text-[rgb(var(--accent-highlight))] border border-[rgb(var(--accent-highlight))/20]",
-        success:     "bg-primary/10 text-primary border border-primary/20",
+        // green-500 tint
+        default:     "bg-[rgba(99,219,219,0.12)] text-[#63dbdb] border-[rgba(99,219,219,0.25)]",
+        // zinc neutral
+        secondary:   "bg-[rgba(210,211,211,0.08)] text-[rgba(210,211,211,0.65)] border-[rgba(210,211,211,0.15)]",
+        // border only
+        outline:     "bg-transparent text-[rgba(210,211,211,0.65)] border-[rgba(210,211,211,0.30)]",
+        // coral
+        destructive: "bg-[rgba(232,83,58,0.10)] text-[#e8533a] border-[rgba(232,83,58,0.25)]",
+        // orange
+        warning:     "bg-[rgba(231,102,56,0.10)] text-[#e76638] border-[rgba(231,102,56,0.25)]",
+        // yellow
+        highlight:   "bg-[rgba(253,224,71,0.10)] text-[#f7d371] border-[rgba(253,224,71,0.25)]",
+        // alias
+        success:     "bg-[rgba(99,219,219,0.12)] text-[#63dbdb] border-[rgba(99,219,219,0.25)]",
       },
       size: {
         sm:      "px-1.5 py-0 text-[10px] leading-5 rounded-[3px]",

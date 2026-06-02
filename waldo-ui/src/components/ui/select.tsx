@@ -70,8 +70,10 @@ const SelectContent = React.forwardRef<
     <SelectPrimitive.Content
       ref={ref}
       className={cn(
-        "relative z-50 min-w-[8rem] overflow-hidden rounded",
-        "bg-popover border border-border/20 text-popover-foreground shadow-lg",
+        "relative z-50 min-w-[8rem] overflow-hidden rounded-[20px]",
+        "bg-[#2d2f33] text-[rgba(210,211,211,0.70)]",
+        "shadow-[0px_4px_4px_rgba(0,0,0,0.25),0px_-3px_2px_rgba(0,0,0,0.18)]",
+        "py-3",
         "data-[state=open]:animate-fade-in",
         "data-[side=bottom]:animate-slide-in-top data-[side=top]:animate-slide-in-bottom",
         position === "popper" && [

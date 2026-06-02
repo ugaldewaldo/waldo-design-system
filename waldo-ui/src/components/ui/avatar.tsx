@@ -3,34 +3,50 @@ import * as AvatarPrimitive from "@radix-ui/react-avatar";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Waldo Avatar — values from Figma DS (node 77985:54005)
+//
+// Shapes:
+//   round  → rounded-full (circle) — people, users
+//   square → rounded-[4px]         — brands, logos
+//
+// Sizes (px):  16 · 24 · 32 · 40
+// Background:  zinc-950 #171819
+// ─────────────────────────────────────────────────────────────────────────────
+
 const avatarVariants = cva(
-  "relative flex shrink-0 overflow-hidden rounded-full",
+  "relative flex shrink-0 overflow-hidden bg-[#171819]",
   {
     variants: {
       size: {
-        xs:  "h-5 w-5 text-[10px]",
-        sm:  "h-6 w-6 text-xs",
-        md:  "h-8 w-8 text-sm",
-        lg:  "h-10 w-10 text-base",
-        xl:  "h-12 w-12 text-lg",
-        "2xl": "h-16 w-16 text-xl",
+        "16": "h-4 w-4 text-[8px]",
+        "24": "h-6 w-6 text-[10px]",
+        "32": "h-8 w-8 text-xs",
+        "40": "h-10 w-10 text-sm",
+      },
+      shape: {
+        round:  "rounded-full",   // people, users
+        square: "rounded-[4px]",  // brands, logos
       },
     },
-    defaultVariants: { size: "md" },
+    defaultVariants: {
+      size: "32",
+      shape: "round",
+    },
   }
 );
 
-interface AvatarProps
+export interface AvatarProps
   extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>,
     VariantProps<typeof avatarVariants> {}
 
 const Avatar = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Root>,
   AvatarProps
->(({ className, size, ...props }, ref) => (
+>(({ className, size, shape, ...props }, ref) => (
   <AvatarPrimitive.Root
     ref={ref}
-    className={cn(avatarVariants({ size }), className)}
+    className={cn(avatarVariants({ size, shape }), className)}
     {...props}
   />
 ));
@@ -55,8 +71,8 @@ const AvatarFallback = React.forwardRef<
   <AvatarPrimitive.Fallback
     ref={ref}
     className={cn(
-      "flex h-full w-full items-center justify-center rounded-full",
-      "bg-secondary text-muted-foreground font-medium",
+      "flex h-full w-full items-center justify-center",
+      "bg-[#242528] text-[rgba(210,211,211,0.70)] font-medium tracking-[-0.01em]",
       className
     )}
     {...props}
@@ -64,36 +80,36 @@ const AvatarFallback = React.forwardRef<
 ));
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
 
-// ── Avatar Group ──────────────────────────────────────────────────────────────
+// ── AvatarGroup — overlapping avatars with overflow count ─────────────────────
 
 interface AvatarGroupProps {
   children: React.ReactNode;
   max?: number;
-  size?: VariantProps<typeof avatarVariants>["size"];
+  size?: AvatarProps["size"];
+  shape?: AvatarProps["shape"];
   className?: string;
 }
 
-function AvatarGroup({ children, max, size = "sm", className }: AvatarGroupProps) {
+function AvatarGroup({ children, max, size = "32", shape = "round", className }: AvatarGroupProps) {
   const items = React.Children.toArray(children);
   const visible = max ? items.slice(0, max) : items;
   const overflow = max ? items.length - max : 0;
 
+  const ringClass = shape === "square" ? "ring-2 ring-[#171819] rounded-[4px]" : "ring-2 ring-[#171819] rounded-full";
+
   return (
     <div className={cn("flex items-center", className)}>
       {visible.map((child, i) => (
-        <div
-          key={i}
-          className="ring-2 ring-background rounded-full -ml-1.5 first:ml-0"
-        >
+        <div key={i} className={cn(ringClass, "-ml-1.5 first:ml-0")}>
           {React.isValidElement(child)
-            ? React.cloneElement(child as React.ReactElement<AvatarProps>, { size })
+            ? React.cloneElement(child as React.ReactElement<AvatarProps>, { size, shape })
             : child}
         </div>
       ))}
       {overflow > 0 && (
-        <div className="ring-2 ring-background rounded-full -ml-1.5">
-          <Avatar size={size}>
-            <AvatarFallback>+{overflow}</AvatarFallback>
+        <div className={cn(ringClass, "-ml-1.5")}>
+          <Avatar size={size} shape={shape}>
+            <AvatarFallback className="text-[10px]">+{overflow}</AvatarFallback>
           </Avatar>
         </div>
       )}

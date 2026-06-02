@@ -134,9 +134,9 @@
     .btn-link:hover  { text-decoration-color: #32a9a9; color: #4dbcbc; }
 
     /* destructive — Waldo style: tint (intentional divergence from Shadcn solid red) */
-    .btn-destructive       { background: rgba(222, 58, 40,.10); color: #de3a28; border-color: rgba(222, 58, 40,.20); }
-    .btn-destructive:hover { background: rgba(222, 58, 40,.20); }
-    .btn-destructive:focus-visible { box-shadow: 0 0 0 2px #171819, 0 0 0 4px #de3a28; }
+    .btn-destructive       { background: rgba(232,83,58,.10); color: #e8533a; border-color: rgba(232,83,58,.20); }
+    .btn-destructive:hover { background: rgba(232,83,58,.20); }
+    .btn-destructive:focus-visible { box-shadow: 0 0 0 2px #171819, 0 0 0 4px #e8533a; }
 
     /* ── WALDO EXTENSIONS (not in Shadcn core) ── */
 
@@ -159,7 +159,7 @@
     }
 
     /* Badge */
-    .badge { display: inline-flex; align-items: center; padding: 2px 9px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; letter-spacing: -0.01em; border: 1px solid transparent; white-space: nowrap; }
 
     /* Input */
     .inp { height: 32px; border-radius: var(--radius); padding: 0 12px; font-size: 13px; font-family: 'Inter',sans-serif; outline: none; width: 200px; background: transparent; border: 1px solid var(--line-reg); color: var(--txt-high); }
@@ -215,7 +215,7 @@
     .section{margin-bottom:36px;} .sub{font-size:11px;color:var(--txt-low);margin-top:6px;line-height:1.6;}
     --primary:#63dbdb; --primary-fg:#171819; --border:rgba(210,211,211,.12); --border-md:rgba(210,211,211,.2);
     --text:#d2d3d3; --text-sec:rgba(210,211,211,.65); --text-muted:#8f9091;
-    --destructive:#de3a28; --warning:#c94e22; --highlight:#f7d371;
+    --destructive:#e8533a; --warning:#e76638; --highlight:#f7d371;
     --elevated:#202123; --sunken:#27282b; --popover:#323539;
 
     /* comp styles */
@@ -297,18 +297,18 @@
 
 /* soft danger */
 .btn-destructive {
-  background: rgba(222, 58, 40,0.10); color: var(--destructive);
-  border: 1px solid rgba(222, 58, 40,0.20);
+  background: rgba(232,83,58,0.10); color: var(--destructive);
+  border: 1px solid rgba(232,83,58,0.20);
 }
-.btn-destructive:hover  { background: rgba(222, 58, 40,0.15); }
-.btn-destructive:active { background: rgba(222, 58, 40,0.20); }
+.btn-destructive:hover  { background: rgba(232,83,58,0.15); }
+.btn-destructive:active { background: rgba(232,83,58,0.20); }
 
 /* hard danger — confirmation dialogs only */
 .btn-destructive-solid {
   background: var(--destructive); color: #fff; border: none;
 }
-.btn-destructive-solid:hover  { background: rgba(222, 58, 40,0.90); }
-.btn-destructive-solid:active { background: rgba(222, 58, 40,0.80); }
+.btn-destructive-solid:hover  { background: rgba(232,83,58,0.90); }
+.btn-destructive-solid:active { background: rgba(232,83,58,0.80); }
 
 /* ── Sizes ── */
 .btn-sm      { height: 28px; padding: 0 12px; font-size: 13px; }
@@ -331,55 +331,65 @@
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ── Badge ───────────────────────────────────── */
-.badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 2px 7px; border-radius: 4px;
-  font-size: 11px; font-weight: 500; white-space: nowrap;
-}
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; letter-spacing: -0.01em; border: 1px solid transparent; white-space: nowrap; }
 .badge-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-.badge-default     { background: rgba(99,219,219,0.12); color: var(--primary); border: 1px solid rgba(99,219,219,0.2); }
-.badge-secondary   { background: var(--sunken); color: var(--text-sec); border: 1px solid var(--border); }
-.badge-outline     { background: transparent; color: var(--text-sec); border: 1px solid var(--border-md); }
-.badge-destructive { background: rgba(222, 58, 40,0.1); color: var(--destructive); border: 1px solid rgba(222, 58, 40,0.2); }
-.badge-warning     { background: rgba(201,78,34,0.1); color: var(--warning); border: 1px solid rgba(201,78,34,0.2); }
-.badge-highlight   { background: rgba(253,224,71,0.1); color: var(--highlight); border: 1px solid rgba(253,224,71,0.2); }
+/* Badges — Linear-style: subtle bg tint, no border on most variants
+   Active/brand uses green-500 (#63dbdb) for text — NOT green-700 (that's for buttons only) */
+/* shadcn-aligned badges — no borders except outline */
+.badge-default     { background: #27282b; color: #d2d3d3; border-color: transparent; }
+.badge-secondary   { background: rgba(210,211,211,0.08); color: rgba(210,211,211,0.60); border-color: transparent; }
+.badge-outline     { background: transparent; color: rgba(210,211,211,0.70); border-color: rgba(210,211,211,0.35); }
+.badge-ghost       { background: transparent; color: rgba(210,211,211,0.45); border-color: transparent; }
+.badge-destructive { background: rgba(232,83,58,0.18); color: #e8533a; border-color: transparent; }
+.badge-warning     { background: rgba(231,102,56,0.18); color: #e76638; border-color: transparent; }
+.badge-highlight   { background: rgba(253,224,71,0.15); color: #f7d371; border-color: transparent; }
+.badge-brand       { background: rgba(99,219,219,0.15); color: #63dbdb; border-color: transparent; }
 .badge-sm { padding: 1px 5px; font-size: 10px; border-radius: 3px; }
 .badge-lg { padding: 3px 10px; font-size: 12px; }
 
 /* ── Input ───────────────────────────────────── */
 .field { display: flex; flex-direction: column; gap: 5px; width: 100%; }
-.field-label { font-size: 11px; font-weight: 500; color: rgba(228,228,231,0.75); }
+.field-label { font-size: 14px; font-weight: 400; letter-spacing: -0.02em; color: #2db4b4; } /* green-600 — from Figma DS */
 .field-hint  { font-size: 11px; color: var(--text-muted); }
-.field-error { font-size: 11px; color: var(--destructive); }
+.field-error { font-size: 11px; color: #e8533a; } /* coral-500 — hardcoded */
 
+/* .input — pill shape, exact Figma DS values */
 .input {
-  height: 32px; width: 100%; border-radius: var(--radius);
-  background: var(--sunken); border: 1px solid var(--border-md);
-  padding: 0 10px; font-size: 13px; color: var(--text);
+  height: 40px; width: 100%;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid rgba(210,211,211,0.12);
+  padding: 0 16px;
+  font-size: 14px; font-weight: 400; letter-spacing: -0.02em; line-height: 20px;
+  color: #d2d3d3;
   font-family: 'Inter', sans-serif; outline: none;
-  transition: border-color 0.1s, box-shadow 0.1s;
+  transition: border-color 0.1s;
 }
-.input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(99,219,219,0.15); }
-.input::placeholder { color: var(--text-muted); }
-.input.error { border-color: var(--destructive); }
-.input.error:focus { box-shadow: 0 0 0 2px rgba(222, 58, 40,0.15); }
+.input:hover  { border-color: #265152; }
+.input:focus  { border-color: #265152; }
+.input::placeholder { color: rgba(210,211,211,0.50); }
+.input.error  { border-color: rgba(232,83,58,0.50); }
 .input:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .input-with-icon { position: relative; }
 .input-with-icon .input-icon {
-  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
-  color: var(--text-muted); pointer-events: none;
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  color: rgba(210,211,211,0.50); pointer-events: none;
   display: flex; align-items: center;
 }
-.input-with-icon .input { padding-left: 32px; }
+.input-with-icon .input { padding-left: 38px; }
 .input-with-icon .input-suffix {
-  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
-  color: var(--text-muted);
+  position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+  color: rgba(210,211,211,0.50);
   display: flex; align-items: center;
 }
-.input-with-icon .input.has-suffix { padding-right: 32px; }
+.input-with-icon .input.has-suffix { padding-right: 38px; }
 
-textarea.input { height: auto; min-height: 80px; padding: 8px 10px; resize: vertical; line-height: 1.5; }
+textarea.input {
+  height: auto; min-height: 88px;
+  border-radius: 20px;
+  padding: 12px 16px; resize: vertical; line-height: 1.5;
+}
 
 /* ── Checkbox ────────────────────────────────── */
 .checkbox-label { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
@@ -518,7 +528,7 @@ textarea.input { height: auto; min-height: 80px; padding: 8px 10px; resize: vert
 .dd-item:hover { background: rgba(228,228,231,0.07); }
 .dd-item.focused { background: rgba(228,228,231,0.07); }
 .dd-item.destructive { color: var(--destructive); }
-.dd-item.destructive:hover { background: rgba(222, 58, 40,0.08); }
+.dd-item.destructive:hover { background: rgba(232,83,58,0.08); }
 .dd-sep { height: 1px; background: var(--border); margin: 3px -4px; }
 .dd-label { padding: 5px 8px 2px; font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; }
 .dd-shortcut { margin-left: auto; font-size: 11px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
@@ -637,24 +647,26 @@ table.wui-table tbody tr.row-selected td { background: rgba(99,219,219,0.04); }
 <div id="wb-sidebar">
   <div class="sb-logo"><div class="sb-mark"><span>W</span></div><span class="sb-name">Waldo DS</span><span class="sb-ver">v1.0</span></div>
   <div class="sb-group">
-    <div class="sb-group-label">Foundation</div>
-    <button class="sb-item active" onclick="waldoGo('tab-colors',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Colors</button>
-    <button class="sb-item" onclick="waldoGo('tab-brand',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Brand Colors</button>
-    <button class="sb-item" onclick="waldoGo('tab-semantic',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>Semantic Tokens</button>
-    <button class="sb-item" onclick="waldoGo('tab-typography',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>Typography</button>
-    <button class="sb-item" onclick="waldoGo('tab-migration',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>Migration</button>
+    <div class="sb-group-label">Components</div>
+    <button class="sb-item active" onclick="waldoGo('comp-button',this)">Button</button>
+    <button class="sb-item" onclick="waldoGo('comp-badge',this)">Badge</button>
+    <button class="sb-item" onclick="waldoGo('comp-input',this)">Input / Field</button>
+    <button class="sb-item" onclick="waldoGo('comp-checkbox',this)">Checkbox · Switch</button>
+    <button class="sb-item" onclick="waldoGo('comp-segmented',this)">Segmented Control</button>
+    <button class="sb-item" onclick="waldoGo('comp-tag',this)">Tag · TagInput</button>
+    <button class="sb-item" onclick="waldoGo('comp-fileinput',this)">File Input</button>
+    <button class="sb-item" onclick="waldoGo('comp-avatar',this)">Avatar</button>
+    <button class="sb-item" onclick="waldoGo('comp-select',this)">Select / Dropdown</button>
+    <button class="sb-item" onclick="waldoGo('comp-dialog',this)">Dialog</button>
+    <button class="sb-item" onclick="waldoGo('comp-table',this)">Table</button>
   </div>
   <div class="sb-group">
-    <div class="sb-group-label">Components</div>
-    <button class="sb-item" onclick="waldoGo('comp-button',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="10" rx="3"/></svg>Button</button>
-    <button class="sb-item" onclick="waldoGo('comp-badge',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>Badge</button>
-    <button class="sb-item" onclick="waldoGo('comp-input',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/></svg>Input / Field</button>
-    <button class="sb-item" onclick="waldoGo('comp-checkbox',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Checkbox · Switch</button>
-    <button class="sb-item" onclick="waldoGo('comp-avatar',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Avatar</button>
-    <button class="sb-item" onclick="waldoGo('comp-select',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>Select</button>
-    <button class="sb-item" onclick="waldoGo('comp-dialog',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>Dialog</button>
-    <button class="sb-item" onclick="waldoGo('comp-dropdown',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/></svg>Dropdown</button>
-    <button class="sb-item" onclick="waldoGo('comp-table',this)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/></svg>Table</button>
+    <div class="sb-group-label">Foundation</div>
+    <button class="sb-item" onclick="waldoGo('tab-colors',this)">Colors</button>
+    <button class="sb-item" onclick="waldoGo('tab-brand',this)">Brand Colors</button>
+    <button class="sb-item" onclick="waldoGo('tab-semantic',this)">Semantic Tokens</button>
+    <button class="sb-item" onclick="waldoGo('tab-typography',this)">Typography</button>
+    <button class="sb-item" onclick="waldoGo('tab-migration',this)">Migration</button>
   </div>
   <div class="sb-footer">Shadcn/ui · Inter · Dark-first</div>
 </div>
@@ -803,9 +815,9 @@ table.wui-table tbody tr.row-selected td { background: rgba(99,219,219,0.04); }
       <div>
         <div class="alpha-family-label">coral-500 alpha — destructive</div>
         <div class="alpha-row">
-          <div class="alpha-chip" style="background:rgba(222, 58, 40,0.10)">10%</div>
-          <div class="alpha-chip" style="background:rgba(222, 58, 40,0.20)">20%</div>
-          <div class="alpha-chip" style="background:rgba(222, 58, 40,0.40)">40%</div>
+          <div class="alpha-chip" style="background:rgba(232,83,58,0.10)">10%</div>
+          <div class="alpha-chip" style="background:rgba(232,83,58,0.20)">20%</div>
+          <div class="alpha-chip" style="background:rgba(232,83,58,0.40)">40%</div>
         </div>
       </div>
       <div>
@@ -1009,7 +1021,7 @@ table.wui-table tbody tr.row-selected td { background: rgba(99,219,219,0.04); }
       <div class="token-grid">
         <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--primary</div><div class="token-src">#32a9a9 · green-500</div></div></div>
         <div class="token-card"><div class="token-dot" style="background:#171819"></div><div><div class="token-var">--primary-foreground</div><div class="token-src">#171819 · zinc-950</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#de3a28"></div><div><div class="token-var">--destructive</div><div class="token-src">#de3a28 · red-400</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#e8533a"></div><div><div class="token-var">--destructive</div><div class="token-src">#e8533a · coral-500</div></div></div>
         <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--ring</div><div class="token-src">#32a9a9 · green-500</div></div></div>
       </div>
     </div>
@@ -1279,7 +1291,7 @@ table.wui-table tbody tr.row-selected td { background: rgba(99,219,219,0.04); }
         <button class="btn btn-default" style="box-shadow:0 0 0 2px #171819,0 0 0 4px #4dbcbc">default</button>
         <button class="btn btn-secondary" style="box-shadow:0 0 0 2px #171819,0 0 0 4px #32a9a9">secondary</button>
         <button class="btn btn-outline" style="box-shadow:0 0 0 2px #171819,0 0 0 4px #32a9a9">outline</button>
-        <button class="btn btn-destructive" style="box-shadow:0 0 0 2px #171819,0 0 0 4px #de3a28">destructive</button>
+        <button class="btn btn-destructive" style="box-shadow:0 0 0 2px #171819,0 0 0 4px #e8533a">destructive</button>
       </div>
     </div>
   </div>
@@ -1375,7 +1387,7 @@ table.wui-table tbody tr.row-selected td { background: rgba(99,219,219,0.04); }
       <span class="badge" style="background:rgba(231,102,56,.15);color:#e76638">Warning</span>
       <span class="badge" style="background:rgba(215,102,149,.15);color:#d76695">Beta</span>
       <span class="badge" style="background:var(--fill-low);color:var(--txt-reg)">Default</span>
-      <span class="badge" style="background:rgba(222, 58, 40,.15);color:#de3a28">Error</span>
+      <span class="badge" style="background:rgba(232,83,58,.15);color:#e8533a">Error</span>
     </div>
   </div>
 
@@ -1450,7 +1462,7 @@ table.wui-table tbody tr.row-selected td { background: rgba(99,219,219,0.04); }
     .badge-exact   { background:rgba(50,169,169,.15); color:#4dbcbc; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
     .badge-close   { background:rgba(247,211,113,.15); color:#f7d371; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
     .badge-new     { background:rgba(144,205,144,.15); color:#90cd90; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
-    .badge-changed { background:rgba(222, 58, 40,.15); color:#ff8082; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
+    .badge-changed { background:rgba(232,83,58,.15); color:#ff8082; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
     .mig-note { font-size:11px; color:var(--txt-low); margin-top:3px; }
     .mig-section { font-size:11px; font-weight:600; color:var(--txt-reg); text-transform:uppercase; letter-spacing:.08em; padding:20px 12px 8px; background:var(--bg); }
     .mig-legend { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:32px; }
@@ -1861,7 +1873,7 @@ table.wui-table tbody tr.row-selected td { background: rgba(99,219,219,0.04); }
       <tr>
         <td><span class="mig-old">— (no red primitives)</span></td>
         <td><span class="mig-new-added">red-50 → red-950</span></td>
-        <td><code style="font-size:10px;color:var(--txt-low)">anchored to #de3a28</code></td>
+        <td><code style="font-size:10px;color:var(--txt-low)">anchored to #e8533a</code></td>
         <td><span class="badge-new">new</span></td>
         <td><div class="mig-note">Full scale derived — destructive had no primitive family</div></td>
       </tr>
@@ -1955,7 +1967,7 @@ table.wui-table tbody tr.row-selected td { background: rgba(99,219,219,0.04); }
       </tr>
       <tr>
         <td><span class="mig-old">destructive</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#de3a28;display:inline-block"></span><code style="font-size:10px">#de3a28</code></span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#e8533a;display:inline-block"></span><code style="font-size:10px">#e8533a</code></span></td>
         <td><span class="mig-new">red-400</span></td>
         <td><span class="badge-exact">exact</span></td>
         <td></td>
@@ -2004,7 +2016,7 @@ table.wui-table tbody tr.row-selected td { background: rgba(99,219,219,0.04); }
     green:   {50:'#edfafa',100:'#d5f3f3',200:'#a8e6e6',300:'#6dcece',400:'#4dbcbc',500:'#32a9a9',600:'#2c797a',700:'#2a6c6d',800:'#265152',900:'#223133',950:'#111e1f'},
     yellow:  {50:'#fffbeb',100:'#fef3c7',200:'#fde68a',300:'#f7d371',400:'#f0c040',500:'#e5b020',600:'#d6ac32',700:'#b48a00',800:'#946f00',900:'#713d00',950:'#3d2100'},
     orange: {50:'#fff8f5',100:'#ffeed5',200:'#ffd4b0',300:'#cd917b',400:'#a95d41',500:'#e76638',600:'#c94e22',700:'#a83a18',800:'#86280f',900:'#5e1a08',950:'#380e03'},
-    red:    {50:'#fff0f0',100:'#ffe0e0',200:'#ffb8b9',300:'#ff8d8f',400:'#de3a28',500:'#f03638',600:'#d91b1d',700:'#b80000',800:'#920000',900:'#6b0000',950:'#400000'},
+    red:    {50:'#fff0f0',100:'#ffe0e0',200:'#ffb8b9',300:'#ff8d8f',400:'#e8533a',500:'#f03638',600:'#d91b1d',700:'#b80000',800:'#920000',900:'#6b0000',950:'#400000'},
     blue:   {50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',500:'#3b82f6',600:'#2563eb',700:'#1d4ed8',800:'#1e40af',900:'#1e3a8a',950:'#172554'}
   };
   const families = ['zinc','green','yellow','orange'];
@@ -2181,6 +2193,41 @@ function showTab(id,el){waldoGo('tab-'+id,el);}
         </div>
       </div>
     </div>
+
+    <div class="section">
+      <div class="section-title">Filter button pattern</div>
+      <p class="sub" style="margin-bottom:10px">Composed from existing variants — no separate component needed. Use in filter bars, table toolbars, list views.</p>
+      <div class="demo-block">
+        <div class="demo-canvas" style="gap:8px;flex-wrap:wrap;align-items:center">
+          <!-- Simple: label + value + chevron -->
+          <button class="btn btn-solid btn-sm btn-dropdown" style="gap:5px">
+            <span style="color:rgba(210,211,211,0.5);font-size:13px">Creation date</span>
+            Any
+            <span class="chevron"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
+          </button>
+          <!-- With count badge -->
+          <button class="btn btn-solid btn-sm btn-dropdown" style="gap:5px">
+            <span style="color:rgba(210,211,211,0.5);font-size:13px">Creation date</span>
+            Any
+            <span style="background:rgba(210,211,211,0.15);color:#d2d3d3;font-size:10px;padding:1px 5px;border-radius:3px;font-weight:500">1</span>
+            <span class="chevron"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
+            <span style="opacity:0.4;display:flex;align-items:center;margin-left:1px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
+          </button>
+          <!-- Label only -->
+          <button class="btn btn-bare btn-sm btn-dropdown" style="gap:5px">
+            Creation date
+            <span class="chevron"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
+          </button>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">/* Composed — no separate component */
+&lt;Button variant="solid" size="sm"&gt;
+  &lt;span className="opacity-50"&gt;Creation date&lt;/span&gt; Any &lt;ChevronDown /&gt;
+&lt;/Button&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;Button variant=&quot;solid&quot; size=&quot;sm&quot;&gt;\n  &lt;span className=&quot;opacity-50&quot;&gt;Creation date&lt;/span&gt;\n  Any\n  &lt;ChevronDown className=&quot;h-3 w-3 opacity-50&quot; /&gt;\n&lt;/Button&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ── BADGE ── -->
@@ -2192,17 +2239,19 @@ function showTab(id,el){waldoGo('tab-'+id,el);}
     <div class="section">
       <div class="section-title">Variants</div>
       <div class="demo-block">
-        <div class="demo-canvas">
-          <span class="badge badge-default"><span class="badge-dot" style="background:var(--primary)"></span>Active</span>
-          <span class="badge badge-secondary">Draft</span>
+        <div class="demo-canvas" style="padding:12px 16px">
+          <span class="badge badge-default">Default</span>
+          <span class="badge badge-secondary">Secondary</span>
+          <span class="badge badge-destructive">Destructive</span>
           <span class="badge badge-outline">Outline</span>
-          <span class="badge badge-destructive"><span class="badge-dot" style="background:var(--destructive)"></span>Error</span>
+          <span class="badge badge-ghost">Ghost</span>
+          <span class="badge badge-brand">Active</span>
           <span class="badge badge-warning">Warning</span>
           <span class="badge badge-highlight">Pro</span>
         </div>
         <div class="demo-code-bar">
-          <span class="demo-code-label">&lt;Badge variant="default" dot&gt;Active&lt;/Badge&gt;</span>
-          <button class="copy-btn" onclick="copyCode(this, '&lt;Badge variant=&quot;default&quot; dot&gt;Active&lt;/Badge&gt;')">Copy</button>
+          <span class="demo-code-label">&lt;Badge variant="default | secondary | destructive | outline | ghost | brand | warning | highlight"&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this, '&lt;Badge variant=&quot;default&quot;&gt;Default&lt;/Badge&gt;')">Copy</button>
         </div>
       </div>
     </div>
@@ -2282,57 +2331,322 @@ function showTab(id,el){waldoGo('tab-'+id,el);}
   <div id="comp-checkbox" class="waldo-page">
     <div class="page-header">
       <div class="page-title">Checkbox · Switch</div>
-      <div class="page-desc">Binary selection controls.</div>
+      <div class="page-desc">Circular checkbox (two variants) · Switch 32×18px with green-700 ON state.</div>
     </div>
-    <div class="section">
-      <div class="section-title">Checkbox — states</div>
+
+    <style>
+      /* Checkbox — circular, from Figma DS */
+      /* ── File Input ── */
+      .wfile-zone { display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border-radius:24px;padding:24px 16px;background:#242528;cursor:pointer;user-select:none;transition:background .1s; }
+      .wfile-zone:hover { background:#27282b; }
+      .wfile-zone.drag  { background:#2d2f33;outline:1px solid #265152; }
+      .wfile-zone-label { font-size:14px;font-weight:400;letter-spacing:-0.02em;color:#2db4b4; }
+      .wfile-zone-opt   { font-size:14px;color:rgba(210,211,211,0.50); }
+      .wfile-list-label { font-size:14px;color:#2db4b4;padding:0 4px;margin-bottom:4px; }
+      .wfile-row { display:flex;align-items:center;gap:8px;padding:6px 4px;border-radius:6px;transition:color .1s; }
+      .wfile-row:hover .wfile-name { color:#2db4b4; }
+      .wfile-row:hover .wfile-icon { color:#2db4b4; }
+      .wfile-row:hover .wfile-del { opacity:1; }
+      .wfile-name { font-size:13px;color:rgba(210,211,211,0.70);white-space:nowrap;transition:color .1s; }
+      .wfile-del { opacity:0;background:none;border:none;cursor:pointer;color:rgba(210,211,211,0.40);padding:2px;border-radius:4px;transition:opacity .1s,color .1s;display:flex;align-items:center; }
+      .wfile-del:hover { color:rgba(210,211,211,0.80); }
+      .wfile-icon { color:rgba(210,211,211,0.40);flex-shrink:0;transition:color .1s; }
+
+      .wchk { display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none; }
+      .wchk input { display:none; }
+      .wchk-box {
+        width:16px;height:16px;border-radius:50%;flex-shrink:0;
+        border:1px solid rgba(210,211,211,0.30);background:transparent;
+        display:flex;align-items:center;justify-content:center;
+        transition:background .1s,border-color .1s;
+      }
+      .wchk input:checked + .wchk-box.green { background:#1b8c8c;border-color:#1b8c8c; }
+      .wchk input:checked + .wchk-box.mono  { background:rgba(210,211,211,0.70);border-color:rgba(210,211,211,0.70); }
+      .wchk-label { font-size:14px;font-weight:500;letter-spacing:-0.02em;color:rgba(210,211,211,0.70); }
+      .wchk.disabled { opacity:0.4;pointer-events:none; }
+      /* Switch — 32×18px, green-700 ON */
+      .wswitch { display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none; }
+      .wswitch input { display:none; }
+      .wswitch-track {
+        position:relative;width:32px;height:18px;border-radius:999px;
+        background:#27282b;padding:2px 3px;
+        transition:background .15s;flex-shrink:0;display:flex;align-items:center;
+      }
+      .wswitch-thumb {
+        width:14px;height:14px;border-radius:50%;background:#fff;
+        transition:transform .15s;flex-shrink:0;
+      }
+      .wswitch input:checked + .wswitch-track { background:#1b8c8c; }
+      .wswitch input:checked + .wswitch-track .wswitch-thumb { transform:translateX(13px); }
+      .wswitch.disabled { opacity:0.4;pointer-events:none; }
+    </style>
+
+    <div class="comp-section">
+      <div class="comp-section-title">Checkbox — green (brand)</div>
       <div class="demo-block">
-        <div class="demo-canvas" style="gap:16px">
-          <label class="checkbox-label">
+        <div class="demo-canvas" style="gap:20px">
+          <label class="wchk">
             <input type="checkbox" />
-            <div class="checkbox-box"><svg class="checkbox-check" width="9" height="9" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#09090b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <span>Unchecked</span>
+            <div class="wchk-box green"></div>
+            <span class="wchk-label">Unchecked</span>
           </label>
-          <label class="checkbox-label">
+          <label class="wchk">
             <input type="checkbox" checked />
-            <div class="checkbox-box"><svg class="checkbox-check" width="9" height="9" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#09090b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-            <span>Checked</span>
+            <div class="wchk-box green">
+              <svg width="8" height="8" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="wchk-label">Checked</span>
           </label>
-          <label class="checkbox-label" style="opacity:0.4;pointer-events:none">
+          <label class="wchk disabled">
             <input type="checkbox" disabled />
-            <div class="checkbox-box"></div>
-            <span>Disabled</span>
+            <div class="wchk-box green"></div>
+            <span class="wchk-label">Disabled</span>
           </label>
         </div>
         <div class="demo-code-bar">
-          <span class="demo-code-label">&lt;Checkbox checked /&gt;</span>
-          <button class="copy-btn" onclick="copyCode(this, '&lt;Checkbox checked onCheckedChange={setChecked} /&gt;')">Copy</button>
+          <span class="demo-code-label">&lt;Checkbox variant="green" checked /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;CheckboxField label=&quot;Label&quot; variant=&quot;green&quot; checked /&gt;')">Copy</button>
         </div>
       </div>
     </div>
-    <div class="section">
-      <div class="section-title">Switch — states</div>
+
+    <div class="comp-section">
+      <div class="comp-section-title">Checkbox — mono (muted)</div>
       <div class="demo-block">
         <div class="demo-canvas" style="gap:20px">
-          <label class="switch-label">
+          <label class="wchk">
             <input type="checkbox" />
-            <div class="switch-track"><div class="switch-thumb"></div></div>
-            <span>Off</span>
+            <div class="wchk-box mono"></div>
+            <span class="wchk-label">Unchecked</span>
           </label>
-          <label class="switch-label">
+          <label class="wchk">
             <input type="checkbox" checked />
-            <div class="switch-track"><div class="switch-thumb"></div></div>
-            <span>On</span>
-          </label>
-          <label class="switch-label" style="opacity:0.4;pointer-events:none">
-            <input type="checkbox" disabled />
-            <div class="switch-track"><div class="switch-thumb"></div></div>
-            <span>Disabled</span>
+            <div class="wchk-box mono">
+              <svg width="8" height="8" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#171819" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="wchk-label">Checked</span>
           </label>
         </div>
         <div class="demo-code-bar">
-          <span class="demo-code-label">&lt;Switch checked /&gt;</span>
-          <button class="copy-btn" onclick="copyCode(this, '&lt;Switch checked onCheckedChange={setEnabled} /&gt;')">Copy</button>
+          <span class="demo-code-label">&lt;Checkbox variant="mono" checked /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;Checkbox variant=&quot;mono&quot; checked /&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-section">
+      <div class="comp-section-title">Switch — 32×18px · green-700 ON</div>
+      <div class="demo-block">
+        <div class="demo-canvas" style="gap:24px">
+          <label class="wswitch">
+            <input type="checkbox" />
+            <div class="wswitch-track"><div class="wswitch-thumb"></div></div>
+            <span style="font-size:13px;color:rgba(210,211,211,0.65)">Off</span>
+          </label>
+          <label class="wswitch">
+            <input type="checkbox" checked />
+            <div class="wswitch-track"><div class="wswitch-thumb"></div></div>
+            <span style="font-size:13px;color:var(--txt-high)">On</span>
+          </label>
+          <label class="wswitch disabled">
+            <input type="checkbox" disabled />
+            <div class="wswitch-track"><div class="wswitch-thumb"></div></div>
+            <span style="font-size:13px;color:rgba(210,211,211,0.65)">Disabled</span>
+          </label>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;Switch checked onCheckedChange={setEnabled} /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;Switch checked onCheckedChange={setEnabled} /&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SEGMENTED CONTROL ── -->
+  <div id="comp-segmented" class="waldo-page" style="--demo-bg:#202123">
+    <div class="page-header">
+      <div class="page-title">Segmented Control</div>
+      <div class="page-desc">Two or more options in a pill container. One active at a time. Used for view toggles and mode selectors.</div>
+    </div>
+
+    <style>
+      .wseg { display:inline-flex;align-items:center;background:#171819;border-radius:999px;padding:0; }
+      .wseg-opt {
+        flex:1;display:flex;align-items:center;justify-content:center;
+        padding:6px 16px;border-radius:999px;border:none;cursor:pointer;
+        font-size:14px;font-weight:400;letter-spacing:-0.02em;line-height:20px;
+        font-family:'Inter',sans-serif;
+        transition:background .1s,color .1s;
+        white-space:nowrap;
+      }
+      .wseg-opt.active   { background:#27282b;color:#d2d3d3; }
+      .wseg-opt.inactive { background:transparent;color:rgba(210,211,211,0.70); }
+      .wseg.full { display:flex;width:100%; }
+    </style>
+
+    <div class="comp-section">
+      <div class="comp-section-title">Text options</div>
+      <div class="demo-block">
+        <div class="demo-canvas" style="gap:16px;flex-wrap:wrap">
+          <!-- Left active -->
+          <div class="wseg">
+            <button class="wseg-opt active">Visible</button>
+            <button class="wseg-opt inactive">Hidden</button>
+          </div>
+          <!-- Right active -->
+          <div class="wseg">
+            <button class="wseg-opt inactive">Visible</button>
+            <button class="wseg-opt active">Hidden</button>
+          </div>
+          <!-- 3 options -->
+          <div class="wseg">
+            <button class="wseg-opt active">Day</button>
+            <button class="wseg-opt inactive">Week</button>
+            <button class="wseg-opt inactive">Month</button>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;SegmentedControl options={[...]} value="visible" onChange={setValue} /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;SegmentedControl\n  options={[{label:&quot;Visible&quot;,value:&quot;visible&quot;},{label:&quot;Hidden&quot;,value:&quot;hidden&quot;}]}\n  value={view}\n  onChange={setView}\n/&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-section">
+      <div class="comp-section-title">Full width</div>
+      <div class="demo-block">
+        <div class="demo-canvas col" style="max-width:480px;gap:10px">
+          <div class="wseg full">
+            <button class="wseg-opt active">Specific emails</button>
+            <button class="wseg-opt inactive">Organization access</button>
+          </div>
+          <div class="wseg full">
+            <button class="wseg-opt inactive">Specific emails</button>
+            <button class="wseg-opt active">Organization access</button>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;SegmentedControl fullWidth ... /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;SegmentedControl fullWidth options={[...]} value={v} onChange={setV} /&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ── FILE INPUT ── -->
+  <div id="comp-fileinput" class="waldo-page">
+    <div class="page-header">
+      <div class="page-title">File Input</div>
+      <div class="page-desc">Drag & drop zone with file list. Click or drag to upload. Two sizes: default (68px) and slim (52px).</div>
+    </div>
+
+    <div class="comp-section">
+      <div class="comp-section-title">Default — 68px</div>
+      <div class="demo-block">
+        <div class="demo-canvas col" style="max-width:500px;gap:0">
+          <div class="wfile-zone" onclick="document.getElementById('wfInput1').click()"
+               ondragover="event.preventDefault();this.classList.add('drag')"
+               ondragleave="this.classList.remove('drag')"
+               ondrop="wfileDrop(event,'wfList1');this.classList.remove('drag')">
+            <span class="wfile-zone-label">Click to upload or drag and drop</span>
+            <span class="wfile-zone-opt">*Optional</span>
+            <input id="wfInput1" type="file" multiple style="display:none" onchange="wfileAdd(event,'wfList1')"/>
+          </div>
+          <div id="wfList1" style="margin-top:10px"></div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;FileInput optional onChange={setFiles} /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;FileInput optional onChange={setFiles} /&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-section">
+      <div class="comp-section-title">Slim — 52px</div>
+      <div class="demo-block">
+        <div class="demo-canvas col" style="max-width:500px;gap:0">
+          <div class="wfile-zone" style="style="border-radius:24px;padding:14px 16px;" onclick="document.getElementById('wfInput3').click()"
+               ondragover="event.preventDefault();this.classList.add('drag')"
+               ondragleave="this.classList.remove('drag')"
+               ondrop="wfileDrop(event,'wfList3');this.classList.remove('drag')">
+            <span class="wfile-zone-label">Drag and drop files here or click to browse.</span>
+            <span class="wfile-zone-opt">*Optional</span>
+            <input id="wfInput3" type="file" multiple style="display:none" onchange="wfileAdd(event,'wfList3')"/>
+          </div>
+          <div id="wfList3" style="margin-top:10px"></div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;FileInput size="slim" optional /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;FileInput size=&quot;slim&quot; optional onChange={setFiles} /&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-section">
+      <div class="comp-section-title">With files</div>
+      <div class="demo-block">
+        <div class="demo-canvas col" style="max-width:500px;gap:0">
+          <div class="wfile-zone" onclick="document.getElementById('wfInput2').click()"
+               ondragover="event.preventDefault();this.classList.add('drag')"
+               ondragleave="this.classList.remove('drag')"
+               ondrop="wfileDrop(event,'wfList2');this.classList.remove('drag')">
+            <span class="wfile-zone-label">Click to upload or drag and drop</span>
+            <input id="wfInput2" type="file" multiple style="display:none" onchange="wfileAdd(event,'wfList2')"/>
+          </div>
+          <div id="wfList2" style="margin-top:10px">
+            <div class="wfile-list-label">Files</div>
+            <div class="wfile-row">
+              <svg class="wfile-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span class="wfile-name">CampaignOverview_ChillAndThrill.pdf</span>
+              <button class="wfile-del" onclick="this.closest('.wfile-row').remove()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+            </div>
+            <div class="wfile-row">
+              <svg class="wfile-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span class="wfile-name">TargetAudienceAnalysis_BenJerry_Netflix.xlsx</span>
+              <button class="wfile-del" onclick="this.closest('.wfile-row').remove()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;FileInput value={files} onChange={setFiles} /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;FileInput value={files} onChange={setFiles} /&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-section">
+      <div class="comp-section-title">Error state</div>
+      <div class="demo-block">
+        <div class="demo-canvas col" style="max-width:500px;gap:0">
+          <div class="wfile-zone" onclick="document.getElementById('wfInput4').click()"
+               ondragover="event.preventDefault();this.classList.add('drag')"
+               ondragleave="this.classList.remove('drag')"
+               ondrop="wfileDrop(event,'wfList4');this.classList.remove('drag')">
+            <span class="wfile-zone-label">Click to upload or drag and drop</span>
+            <span class="wfile-zone-opt">*Optional</span>
+            <input id="wfInput4" type="file" multiple style="display:none" onchange="wfileAdd(event,'wfList4')"/>
+          </div>
+          <div id="wfList4" style="margin-top:10px">
+            <div class="wfile-list-label">Files</div>
+            <div class="wfile-row">
+              <svg class="wfile-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span class="wfile-name">CampaignOverview_ChillAndThrill.pdf</span>
+              <button class="wfile-del" onclick="this.closest('.wfile-row').remove()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+            </div>
+            <div class="wfile-row">
+              <svg class="wfile-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span class="wfile-name">CampaignOverview_ChillAndThrill.pdf</span>
+              <span style="font-size:13px;color:#e76638;flex-shrink:0">Unable to process</span>
+              <button class="wfile-del" style="opacity:1" onclick="this.closest('.wfile-row').remove()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">// FileItem with error: { file, id, error: "Unable to process" }</span>
+          <button class="copy-btn" onclick="copyCode(this,'// Add error to FileItem:
+const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</button>
         </div>
       </div>
     </div>
@@ -2342,44 +2656,110 @@ function showTab(id,el){waldoGo('tab-'+id,el);}
   <div id="comp-avatar" class="waldo-page">
     <div class="page-header">
       <div class="page-title">Avatar</div>
-      <div class="page-desc">User and brand representations. Six sizes, plus AvatarGroup with overflow.</div>
+      <div class="page-desc">Two shapes · four sizes · group with overflow. Round = people · Square = brands/logos.</div>
     </div>
-    <div class="section">
-      <div class="section-title">Sizes</div>
+
+    <style>
+      .wav { display:flex;align-items:center;justify-content:center;overflow:hidden;background:#171819;font-weight:500;letter-spacing:-0.01em;color:rgba(210,211,211,0.70);flex-shrink:0; }
+      .wav-round  { border-radius:999px; }
+      .wav-square { border-radius:4px; }
+      .wav-16 { width:16px;height:16px;font-size:8px; }
+      .wav-24 { width:24px;height:24px;font-size:10px; }
+      .wav-32 { width:32px;height:32px;font-size:12px; }
+      .wav-40 { width:40px;height:40px;font-size:14px; }
+      .wav img { width:100%;height:100%;object-fit:cover; }
+      .wav-group { display:flex;align-items:center; }
+      .wav-group .wav { box-shadow:0 0 0 2px #171819;margin-left:-5px; }
+      .wav-group .wav:first-child { margin-left:0; }
+    </style>
+
+    <div class="comp-section">
+      <div class="comp-section-title">Round — people · users</div>
       <div class="demo-block">
         <div class="demo-canvas" style="align-items:center;gap:12px">
-          <div class="avatar av-xs av-brand">W</div>
-          <div class="avatar av-sm av-brand">MU</div>
-          <div class="avatar av-md av-brand">MU</div>
-          <div class="avatar av-lg av-brand">MU</div>
-          <div class="avatar av-xl av-brand">MU</div>
-          <div class="avatar av-2xl av-brand">MU</div>
+          <div class="wav wav-round wav-16">M</div>
+          <div class="wav wav-round wav-24">MU</div>
+          <div class="wav wav-round wav-32" style="background:rgba(99,219,219,0.12);color:#63dbdb">MU</div>
+          <div class="wav wav-round wav-40" style="background:rgba(99,219,219,0.12);color:#63dbdb">MU</div>
         </div>
         <div class="demo-code-bar">
-          <span class="demo-code-label">&lt;Avatar size="lg"&gt;&lt;AvatarFallback&gt;MU&lt;/AvatarFallback&gt;&lt;/Avatar&gt;</span>
-          <button class="copy-btn" onclick="copyCode(this, '&lt;Avatar size=&quot;lg&quot;&gt;\n  &lt;AvatarImage src=&quot;…&quot; /&gt;\n  &lt;AvatarFallback&gt;MU&lt;/AvatarFallback&gt;\n&lt;/Avatar&gt;')">Copy</button>
+          <span class="demo-code-label">&lt;Avatar size="32" shape="round"&gt;&lt;AvatarFallback&gt;MU&lt;/AvatarFallback&gt;&lt;/Avatar&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;Avatar size=&quot;32&quot; shape=&quot;round&quot;&gt;\n  &lt;AvatarImage src=&quot;…&quot; /&gt;\n  &lt;AvatarFallback&gt;MU&lt;/AvatarFallback&gt;\n&lt;/Avatar&gt;')">Copy</button>
         </div>
       </div>
     </div>
-    <div class="section">
-      <div class="section-title">AvatarGroup</div>
+
+    <div class="comp-section">
+      <div class="comp-section-title">Square — brands · logos</div>
       <div class="demo-block">
-        <div class="demo-canvas" style="gap:20px;align-items:center">
-          <div class="avatar-group">
-            <div class="avatar av-sm" style="background:rgba(99,219,219,0.12);color:var(--primary)">A</div>
-            <div class="avatar av-sm" style="background:rgba(129,58,239,0.12);color:#ba91f7">B</div>
-            <div class="avatar av-sm" style="background:rgba(212,10,96,0.15);color:#f8589e">C</div>
+        <div class="demo-canvas" style="align-items:center;gap:12px">
+          <div class="wav wav-square wav-16">B</div>
+          <div class="wav wav-square wav-24">NI</div>
+          <div class="wav wav-square wav-32" style="background:#27282b">AD</div>
+          <div class="wav wav-square wav-40" style="background:#27282b">W</div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;Avatar size="32" shape="square"&gt;&lt;AvatarFallback&gt;NI&lt;/AvatarFallback&gt;&lt;/Avatar&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;Avatar size=&quot;32&quot; shape=&quot;square&quot;&gt;\n  &lt;AvatarImage src=&quot;logo.png&quot; /&gt;\n  &lt;AvatarFallback&gt;NI&lt;/AvatarFallback&gt;\n&lt;/Avatar&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-section">
+      <div class="comp-section-title">AvatarGroup — with overflow</div>
+      <div class="demo-block">
+        <div class="demo-canvas" style="gap:24px;align-items:center">
+          <div class="wav-group">
+            <div class="wav wav-round wav-24" style="background:rgba(99,219,219,0.12);color:#63dbdb">A</div>
+            <div class="wav wav-round wav-24" style="background:rgba(129,58,239,0.12);color:#ba91f7">B</div>
+            <div class="wav wav-round wav-24" style="background:rgba(212,10,96,0.15);color:#f8589e">C</div>
           </div>
-          <div class="avatar-group">
-            <div class="avatar av-md" style="background:rgba(99,219,219,0.12);color:var(--primary)">JD</div>
-            <div class="avatar av-md" style="background:rgba(129,58,239,0.12);color:#ba91f7">SA</div>
-            <div class="avatar av-md" style="background:rgba(250,192,52,0.12);color:#fac034">MU</div>
-            <div class="avatar av-md" style="background:var(--sunken);color:var(--text-muted)">+4</div>
+          <div class="wav-group">
+            <div class="wav wav-round wav-32" style="background:rgba(99,219,219,0.12);color:#63dbdb">JD</div>
+            <div class="wav wav-round wav-32" style="background:rgba(129,58,239,0.12);color:#ba91f7">SA</div>
+            <div class="wav wav-round wav-32" style="background:rgba(250,192,52,0.12);color:#fac034">MU</div>
+            <div class="wav wav-round wav-32" style="background:#242528;color:rgba(210,211,211,0.60)">+4</div>
+          </div>
+          <div class="wav-group">
+            <div class="wav wav-square wav-32" style="background:#27282b">NI</div>
+            <div class="wav wav-square wav-32" style="background:#27282b">AD</div>
+            <div class="wav wav-square wav-32" style="background:#27282b">+2</div>
           </div>
         </div>
         <div class="demo-code-bar">
-          <span class="demo-code-label">&lt;AvatarGroup max={3}&gt;…&lt;/AvatarGroup&gt;</span>
-          <button class="copy-btn" onclick="copyCode(this, '&lt;AvatarGroup max={3} size=&quot;sm&quot;&gt;\n  &lt;Avatar&gt;&lt;AvatarFallback&gt;A&lt;/AvatarFallback&gt;&lt;/Avatar&gt;\n&lt;/AvatarGroup&gt;')">Copy</button>
+          <span class="demo-code-label">&lt;AvatarGroup max={3} size="32"&gt;…&lt;/AvatarGroup&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;AvatarGroup max={3} size=&quot;32&quot; shape=&quot;round&quot;&gt;\n  &lt;Avatar&gt;&lt;AvatarFallback&gt;A&lt;/AvatarFallback&gt;&lt;/Avatar&gt;\n&lt;/AvatarGroup&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-section">
+      <div class="comp-section-title">Mixed — brand + person (SQR + ROUND)</div>
+      <p class="comp-sub" style="margin-bottom:10px">Used in Waldo to show a brand alongside the person associated with it.</p>
+      <div class="demo-block">
+        <div class="demo-canvas" style="gap:20px;align-items:center">
+          <!-- Square (brand) + Round (person) — 32px -->
+          <div class="wav-group">
+            <div class="wav wav-square wav-32" style="background:#27282b">NI</div>
+            <div class="wav wav-round wav-32" style="background:rgba(99,219,219,0.12);color:#63dbdb;margin-left:-8px">MU</div>
+          </div>
+          <!-- Round (person) + Square (brand) — 32px -->
+          <div class="wav-group">
+            <div class="wav wav-round wav-32" style="background:rgba(212,10,96,0.12);color:#f8589e">JD</div>
+            <div class="wav wav-square wav-32" style="background:#27282b;margin-left:-8px">AD</div>
+          </div>
+          <!-- 36px version -->
+          <div class="wav-group">
+            <div class="wav wav-square" style="width:36px;height:36px;font-size:12px;background:#27282b;border-radius:4px">W</div>
+            <div class="wav wav-round" style="width:36px;height:36px;font-size:12px;background:rgba(129,58,239,0.12);color:#ba91f7;margin-left:-8px;box-shadow:0 0 0 2px #171819;border-radius:999px">SA</div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">// Composed — brand (square) + person (round) in a group</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;AvatarGroup&gt;
+  &lt;Avatar shape=&quot;square&quot; size=&quot;32&quot;&gt;&lt;AvatarFallback&gt;NI&lt;/AvatarFallback&gt;&lt;/Avatar&gt;
+  &lt;Avatar shape=&quot;round&quot; size=&quot;32&quot;&gt;&lt;AvatarFallback&gt;MU&lt;/AvatarFallback&gt;&lt;/Avatar&gt;
+&lt;/AvatarGroup&gt;')">Copy</button>
         </div>
       </div>
     </div>
@@ -2388,33 +2768,132 @@ function showTab(id,el){waldoGo('tab-'+id,el);}
   <!-- ── SELECT ── -->
   <div id="comp-select" class="waldo-page">
     <div class="page-header">
-      <div class="page-title">Select</div>
-      <div class="page-desc">Native + Radix-based dropdown select. Groups, labels, and search in the extended version.</div>
+      <div class="page-title">Select · Dropdown</div>
+      <div class="page-desc">Container: zinc-750 · border-radius: 20px · shadow. Values from Figma DS.</div>
     </div>
-    <div class="section">
-      <div class="section-title">Examples</div>
+
+    <style>
+      .wdd { background:#2d2f33;border-radius:20px;padding:12px 0;width:256px;box-shadow:0 4px 4px rgba(0,0,0,.25),0 -3px 2px rgba(0,0,0,.18);display:flex;flex-direction:column;overflow:hidden; }
+      .wdd.wdd-has-search { padding-top:0; }
+      .wdd-search { background:#323539;display:flex;align-items:center;gap:8px;padding:10px 16px;flex-shrink:0; }
+      .wdd-search input { background:none;border:none;outline:none;font-size:14px;color:rgba(210,211,211,0.50);font-family:'Inter',sans-serif;width:100%;letter-spacing:-0.02em; }
+      .wdd-search svg { color:rgba(210,211,211,0.40);flex-shrink:0; }
+      .wdd-header { padding:8px 16px;font-size:14px;color:#63dbdb;letter-spacing:-0.02em; }
+      .wdd-item { display:flex;align-items:center;gap:8px;padding:6px 16px;height:32px;font-size:14px;font-weight:400;color:rgba(210,211,211,0.70);letter-spacing:-0.02em;cursor:pointer;transition:background .08s,color .08s;user-select:none; }
+      .wdd-item:hover { background:#323539;color:#d2d3d3; }
+      .wdd-item.wdd-active { color:#d2d3d3; }
+      .wdd-check { margin-left:auto;color:#63dbdb;opacity:0;flex-shrink:0; }
+      .wdd-active .wdd-check { opacity:1; }
+      .wdd-item.wdd-active { color:#d2d3d3; }
+      .wdd-radio { margin-left:auto;width:14px;height:14px;border-radius:50%;border:1px solid rgba(210,211,211,0.30);flex-shrink:0;transition:all .1s; }
+      .wdd-active .wdd-radio { background:#63dbdb;border-color:#63dbdb; }
+      .wdd-sep { height:1px;background:rgba(210,211,211,0.12);margin:0; }
+    </style>
+
+    <div class="comp-section">
+      <div class="comp-section-title">Simple list · Separator</div>
       <div class="demo-block">
-        <div class="demo-canvas" style="gap:12px">
-          <div class="select-wrap">
-            <select>
-              <option value="">Select brand…</option>
-              <option>Nike</option><option>Adidas</option><option>Puma</option>
-            </select>
+        <div class="demo-canvas" style="align-items:flex-start;gap:16px">
+          <!-- No icons, with selected -->
+          <div class="wdd">
+            <div class="wdd-item wdd-active">Today <span class="wdd-check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+            <div class="wdd-item">Yesterday</div>
+            <div class="wdd-item">Last week</div>
+            <div class="wdd-item">Last month</div>
+            <div class="wdd-item">Last 3 months</div>
+            <div class="wdd-sep"></div>
+            <div class="wdd-item">Custom…</div>
           </div>
-          <div class="select-wrap">
-            <select>
-              <option>Last 7 days</option><option>Last 30 days</option><option>Last 90 days</option><option>Custom range</option>
-            </select>
-          </div>
-          <div class="select-wrap">
-            <select disabled style="opacity:0.4;cursor:not-allowed">
-              <option>Disabled</option>
-            </select>
+          <!-- With icons + separator -->
+          <div class="wdd">
+            <div class="wdd-item wdd-active"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:rgba(210,211,211,0.50);flex-shrink:0"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>Today <span class="wdd-check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+            <div class="wdd-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:rgba(210,211,211,0.50);flex-shrink:0"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>Yesterday</div>
+            <div class="wdd-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:rgba(210,211,211,0.50);flex-shrink:0"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>Last week</div>
+            <div class="wdd-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:rgba(210,211,211,0.50);flex-shrink:0"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>Last month</div>
+            <div class="wdd-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:rgba(210,211,211,0.50);flex-shrink:0"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>Last 3 months</div>
+            <div class="wdd-sep"></div>
+            <div class="wdd-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color:rgba(210,211,211,0.50);flex-shrink:0"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>Custom...</div>
           </div>
         </div>
         <div class="demo-code-bar">
-          <span class="demo-code-label">&lt;Select&gt;&lt;SelectTrigger&gt;…&lt;/SelectTrigger&gt;&lt;/Select&gt;</span>
-          <button class="copy-btn" onclick="copyCode(this, '&lt;Select&gt;\n  &lt;SelectTrigger&gt;&lt;SelectValue placeholder=&quot;Select…&quot; /&gt;&lt;/SelectTrigger&gt;\n  &lt;SelectContent&gt;\n    &lt;SelectItem value=&quot;nike&quot;&gt;Nike&lt;/SelectItem&gt;\n  &lt;/SelectContent&gt;\n&lt;/Select&gt;')">Copy</button>
+          <span class="demo-code-label">&lt;DropdownMenuSeparator /&gt; — rgba(210,211,211,0.12) · 1px</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;DropdownMenuSeparator /&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-section">
+      <div class="comp-section-title">With search + brands / people</div>
+      <div class="demo-block">
+        <div class="demo-canvas" style="align-items:flex-start;gap:16px">
+          <div class="wdd wdd-has-search">
+          <div class="wdd-search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input placeholder="Search" /></div>
+            <div class="wdd-item"><div class="wav wav-square" style="width:16px;height:16px;font-size:7px;border-radius:3px;background:#27282b;flex-shrink:0">B</div>Ben & Jerry's</div>
+            <div class="wdd-item"><div class="wav wav-square" style="width:16px;height:16px;font-size:7px;border-radius:3px;background:#27282b;flex-shrink:0">N</div>Nestle</div>
+            <div class="wdd-item"><div class="wav wav-square" style="width:16px;height:16px;font-size:7px;border-radius:3px;background:#27282b;flex-shrink:0">P</div>Patagonia</div>
+            <div class="wdd-item"><div class="wav wav-square" style="width:16px;height:16px;font-size:7px;border-radius:3px;background:#e8533a;color:#fff;flex-shrink:0">R</div>Ray Ban</div>
+            <div class="wdd-item"><div class="wav wav-square" style="width:16px;height:16px;font-size:7px;border-radius:3px;background:#27282b;flex-shrink:0">U</div>Unilever</div>
+          </div>
+          <div class="wdd wdd-has-search">
+          <div class="wdd-search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input placeholder="Search" /></div>
+            <div class="wdd-item"><div class="wav wav-round" style="width:20px;height:20px;font-size:8px;background:rgba(99,219,219,0.12);color:#63dbdb;flex-shrink:0">M</div>Monica W.</div>
+            <div class="wdd-item"><div class="wav wav-round" style="width:20px;height:20px;font-size:8px;background:rgba(129,58,239,0.12);color:#ba91f7;flex-shrink:0">G</div>Gustavo D.</div>
+            <div class="wdd-item"><div class="wav wav-round" style="width:20px;height:20px;font-size:8px;background:rgba(212,10,96,0.12);color:#f8589e;flex-shrink:0">P</div>Pars F.</div>
+            <div class="wdd-item"><div class="wav wav-round" style="width:20px;height:20px;font-size:8px;background:rgba(250,192,52,0.12);color:#fac034;flex-shrink:0">D</div>Davide B.</div>
+            <div class="wdd-item" style="font-size:12px">john@patagonia.com</div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;DropdownMenuItem&gt;&lt;Avatar size="16" /&gt; Brand&lt;/DropdownMenuItem&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;DropdownMenuItem&gt;\n  &lt;Avatar size=&quot;16&quot; shape=&quot;square&quot;&gt;&lt;AvatarFallback&gt;B&lt;/AvatarFallback&gt;&lt;/Avatar&gt;\n  Brand name\n&lt;/DropdownMenuItem&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-section">
+      <div class="comp-section-title">Multi-select (checkmarks) · Single-select (radio)</div>
+      <div class="demo-block">
+        <div class="demo-canvas" style="align-items:flex-start;gap:16px">
+          <div class="wdd wdd-has-search">
+          <div class="wdd-search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input placeholder="Search" /></div>
+            <div class="wdd-item wdd-active">Social media<span class="wdd-check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+            <div class="wdd-item">Instagram</div>
+            <div class="wdd-item wdd-active">LinkedIn<span class="wdd-check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span></div>
+            <div class="wdd-item">TikTok</div>
+            <div class="wdd-item">Forbes</div>
+          </div>
+          <div class="wdd wdd-has-search">
+          <div class="wdd-search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input placeholder="Search" /></div>
+            <div class="wdd-item">Social media<span class="wdd-radio"></span></div>
+            <div class="wdd-item wdd-active">Instagram<span class="wdd-radio"></span></div>
+            <div class="wdd-item">LinkedIn<span class="wdd-radio"></span></div>
+            <div class="wdd-item">TikTok<span class="wdd-radio"></span></div>
+            <div class="wdd-item">Forbes<span class="wdd-radio"></span></div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;DropdownMenuCheckboxItem&gt; · &lt;DropdownMenuRadioItem&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;DropdownMenuRadioGroup value={v} onValueChange={setV}&gt;\n  &lt;DropdownMenuRadioItem value=&quot;instagram&quot;&gt;Instagram&lt;/DropdownMenuRadioItem&gt;\n&lt;/DropdownMenuRadioGroup&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-section">
+      <div class="comp-section-title">With header action</div>
+      <div class="demo-block">
+        <div class="demo-canvas" style="align-items:flex-start">
+          <div class="wdd">
+            <div class="wdd-header">Add new brand</div>
+            <div class="wdd-search"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><input placeholder="Search" /></div>
+            <div class="wdd-item">Patagonia</div>
+            <div class="wdd-item">Ben & Jerry's</div>
+            <div class="wdd-item">Ray-ban</div>
+            <div class="wdd-item">Cisco</div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;DropdownMenuLabel&gt;Add new brand&lt;/DropdownMenuLabel&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;DropdownMenuLabel&gt;Add new brand&lt;/DropdownMenuLabel&gt;')">Copy</button>
         </div>
       </div>
     </div>
@@ -2467,7 +2946,7 @@ function showTab(id,el){waldoGo('tab-'+id,el);}
   </div>
 
   <!-- ── DROPDOWN ── -->
-  <div id="comp-dropdown" class="waldo-page">
+  <div id="comp-dropdown" class="waldo-page" style="display:none!important">
     <div class="page-header">
       <div class="page-title">Dropdown Menu</div>
       <div class="page-desc">Contextual menus with items, labels, separators, keyboard shortcuts, and destructive variants.</div>
@@ -2701,7 +3180,7 @@ function showTab(id,el){waldoGo('tab-'+id,el);}
       <div class="section-title">Brand accents (product UI)</div>
       <div class="color-grid">
         <div class="color-swatch"><div class="swatch-color" style="background:#63dbdb"></div><div class="swatch-info"><div class="swatch-name">brand</div><div class="swatch-hex">#63dbdb</div></div></div>
-        <div class="color-swatch"><div class="swatch-color" style="background:#de3a28"></div><div class="swatch-info"><div class="swatch-name">destruct</div><div class="swatch-hex">#de3a28</div></div></div>
+        <div class="color-swatch"><div class="swatch-color" style="background:#e8533a"></div><div class="swatch-info"><div class="swatch-name">destruct</div><div class="swatch-hex">#e8533a</div></div></div>
         <div class="color-swatch"><div class="swatch-color" style="background:#e76638"></div><div class="swatch-info"><div class="swatch-name">warning</div><div class="swatch-hex">#e76638</div></div></div>
         <div class="color-swatch"><div class="swatch-color" style="background:#fde047"></div><div class="swatch-info"><div class="swatch-name">highlight</div><div class="swatch-hex">#fde047</div></div></div>
       </div>
@@ -2877,6 +3356,33 @@ function filterCmd() {
 }
 
 // ── Checkbox interactivity ────────────────────
+  // New circular checkbox interactivity
+  document.querySelectorAll('.wchk input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const box = cb.nextElementSibling;
+      const isGreen = box.classList.contains('green');
+      if (cb.checked) {
+        box.style.background = isGreen ? '#1b8c8c' : 'rgba(210,211,211,0.70)';
+        box.style.borderColor = isGreen ? '#1b8c8c' : 'rgba(210,211,211,0.70)';
+        box.innerHTML = '<svg width="8" height="8" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="' + (isGreen ? '#fff' : '#171819') + '" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      } else {
+        box.style.background = 'transparent';
+        box.style.borderColor = 'rgba(210,211,211,0.30)';
+        box.innerHTML = '';
+      }
+    });
+  });
+
+  // Segmented control interactivity
+  document.querySelectorAll('.wseg').forEach(seg => {
+    seg.querySelectorAll('.wseg-opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        seg.querySelectorAll('.wseg-opt').forEach(b => { b.classList.remove('active'); b.classList.add('inactive'); });
+        btn.classList.remove('inactive'); btn.classList.add('active');
+      });
+    });
+  });
+
 document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb => {
   cb.addEventListener('change', () => {
     const box = cb.nextElementSibling;
@@ -2890,7 +3396,169 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   });
 });
 
+
+
+  function wfileAdd(event, listId) {
+    const list = document.getElementById(listId);
+    const files = Array.from(event.target.files);
+    if (!files.length) return;
+    wfileRender(list, files);
+  }
+  function wfileDrop(event, listId) {
+    event.preventDefault();
+    const list = document.getElementById(listId);
+    const files = Array.from(event.dataTransfer.files);
+    wfileRender(list, files);
+  }
+  function wfileRender(list, files) {
+    if (!list.querySelector('.wfile-list-label')) {
+      const lbl = document.createElement('div');
+      lbl.className = 'wfile-list-label'; lbl.textContent = 'Files';
+      list.appendChild(lbl);
+    }
+    files.forEach(f => {
+      const row = document.createElement('div'); row.className = 'wfile-row';
+      row.innerHTML = '<svg class="wfile-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'
+        + '<span class="wfile-name">' + f.name + '</span>'
+        + '<button class="wfile-del" onclick="this.closest(\'.wfile-row\').remove()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg></button>';
+      list.appendChild(row);
+    });
+  }
+
+  function handleTagInput(e) {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      const val = e.target.value.trim();
+      if (!val) return;
+      const tag = document.createElement('span');
+      tag.className = 'wtag wtag-sm';
+      tag.innerHTML = val + '<span class="wtag-x" onclick="this.closest(\'.wtag\').remove()"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2l8 8M10 2l-8 8"/></svg></span>';
+      e.target.parentNode.insertBefore(tag, e.target);
+      e.target.value = '';
+    }
+    if (e.key === 'Backspace' && !e.target.value) {
+      const tags = e.target.parentNode.querySelectorAll('.wtag');
+      if (tags.length > 0) tags[tags.length-1].remove();
+    }
+  }
+
 </script>
+
+  <!-- ── TAG · TAGINPUT ── -->
+  <div id="comp-tag" class="waldo-page">
+    <div class="page-header">
+      <div class="page-title">Tag · TagInput</div>
+      <div class="page-desc">Tags are interactive removable pills. TagInput is a multi-value input that holds tags. Different from Badge (which is static/informational).</div>
+    </div>
+
+    <style>
+      .wtag {
+        display:inline-flex;align-items:center;gap:6px;
+        background:#2d2f33;border-radius:999px;
+        font-size:14px;font-weight:500;letter-spacing:-0.02em;line-height:20px;
+        color:#d2d3d3;white-space:nowrap;
+      }
+      .wtag-sm { height:28px;padding:0 12px;font-size:12px;gap:4px; }
+      .wtag-md { height:36px;padding:0 16px; }
+      .wtag-lg { height:44px;padding:0 20px; }
+      .wtag-muted { color:rgba(210,211,211,0.70); }
+      .wtag-x {
+        display:flex;align-items:center;justify-content:center;
+        width:14px;height:14px;border-radius:50%;
+        opacity:0.5;cursor:pointer;flex-shrink:0;
+        transition:opacity .1s;
+      }
+      .wtag-x:hover { opacity:1; }
+      .wtag-x svg { width:100%;height:100%; }
+
+      /* TagInput */
+      .wtag-input {
+        display:flex;flex-wrap:wrap;align-items:center;gap:6px;
+        min-height:40px;border-radius:20px;
+        border:1px solid rgba(210,211,211,0.12);background:transparent;
+        padding:8px 16px;cursor:text;
+        transition:border-color .1s;
+      }
+      .wtag-input:focus-within { border-color:#265152; }
+      .wtag-input input {
+        flex:1;min-width:80px;background:transparent;border:none;outline:none;
+        font-size:14px;font-weight:400;letter-spacing:-0.02em;color:#d2d3d3;
+        font-family:'Inter',sans-serif;
+      }
+      .wtag-input input::placeholder { color:rgba(210,211,211,0.50); }
+    </style>
+
+    <div class="comp-section">
+      <div class="comp-section-title">Sizes</div>
+      <div class="demo-block">
+        <div class="demo-canvas" style="gap:8px;align-items:center">
+          <span class="wtag wtag-sm">Small</span>
+          <span class="wtag wtag-md">Default</span>
+          <span class="wtag wtag-lg">Large</span>
+          <div class="demo-divider"></div>
+          <span class="wtag wtag-sm wtag-muted">Muted sm</span>
+          <span class="wtag wtag-md wtag-muted">Muted default</span>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;Tag size="sm | default | lg" textColor="high | muted"&gt;Label&lt;/Tag&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;Tag size=&quot;default&quot;&gt;Label&lt;/Tag&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-section">
+      <div class="comp-section-title">With remove (onRemove)</div>
+      <div class="demo-block">
+        <div class="demo-canvas" style="gap:8px;align-items:center">
+          <span class="wtag wtag-sm">
+            Nike
+            <span class="wtag-x" onclick="this.closest('.wtag').remove()"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2l8 8M10 2l-8 8"/></svg></span>
+          </span>
+          <span class="wtag wtag-md">
+            me@media.monks
+            <span class="wtag-x" onclick="this.closest('.wtag').remove()"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2l8 8M10 2l-8 8"/></svg></span>
+          </span>
+          <span class="wtag wtag-md">
+            Brand strategy
+            <span class="wtag-x" onclick="this.closest('.wtag').remove()"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2l8 8M10 2l-8 8"/></svg></span>
+          </span>
+          <span class="wtag wtag-lg">
+            Large tag
+            <span class="wtag-x" onclick="this.closest('.wtag').remove()"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2l8 8M10 2l-8 8"/></svg></span>
+          </span>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;Tag onRemove={() =&gt; remove(tag)}&gt;Nike&lt;/Tag&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;Tag onRemove={() =&gt; handleRemove(tag)}&gt;{tag}&lt;/Tag&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-section">
+      <div class="comp-section-title">TagInput — multi-value input</div>
+      <div class="demo-block">
+        <div class="demo-canvas col" style="max-width:440px;gap:12px">
+          <div class="wtag-input" id="tagInputDemo" onclick="document.getElementById('tagInputField').focus()">
+            <span class="wtag wtag-sm">me@media.monks<span class="wtag-x" onclick="this.closest('.wtag').remove()"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2l8 8M10 2l-8 8"/></svg></span></span>
+            <span class="wtag wtag-sm">miguel@waldo.fyi<span class="wtag-x" onclick="this.closest('.wtag').remove()"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2l8 8M10 2l-8 8"/></svg></span></span>
+            <input id="tagInputField" placeholder="Add more recipients…" onkeydown="handleTagInput(event)" />
+          </div>
+          <div class="wtag-input">
+            <input placeholder="Add keywords… (press Enter)" onkeydown="handleTagInput(event)" />
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;TagInput value={tags} onChange={setTags} placeholder="Add recipients…" /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;TagInput
+  value={recipients}
+  onChange={setRecipients}
+  placeholder=&quot;Add recipients…&quot;
+/&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 </body>
 </html>
