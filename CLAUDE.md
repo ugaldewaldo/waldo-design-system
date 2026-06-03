@@ -2,6 +2,78 @@
 
 **Authoritative reference.** Read before touching anything in this project — tokens, colors, typography, components, Figma.
 
+## ⛔ ABSOLUTE RULES — read before touching any file
+
+### 1. Zero hardcoded styles
+
+Never write hex, rgba, or color values directly in code:
+```
+❌  bg-[#2d2f33]  text-[#d2d3d3]  rgba(50,169,169,0.12)  style="color:#32a9a9"
+✅  bg-popover    text-foreground  bg-primary/12           text-primary
+```
+If a token doesn't exist → run `/ds-add-token`. Never hardcode as "temporary".
+
+### 2. Only foundational DS tokens — never legacy vars
+
+The ONLY allowed CSS variables are the DS semantic tokens:
+```
+✅  --foreground  --background  --card  --muted  --popover  --secondary  --accent
+✅  --primary  --destructive  --warning  --highlight  --border  --muted-foreground
+✅  --radius  --shadow-*
+```
+
+**NEVER use these — they don't exist in the DS:**
+```
+❌  --txt-high  --txt-med  --txt-reg  --txt-low
+❌  --fill-low  --fill-reg  --fill-menu  --fill-high
+❌  --bg  --bg-card  --bg-high  --elevated  --sunken
+❌  --line-low  --line-reg  --line-high  --green
+```
+
+### 3. No creating styles without authorization
+
+Forbidden to add colors, CSS variables, or classes not in the token system.
+If something doesn't exist → **ask Miguel first.**
+
+### 3. Usar componentes existentes — no recrearlos
+
+Antes de escribir HTML para algo visual, verificar si existe componente en `waldo-ui/src/components/ui/`.
+
+| Necesitas | Usa |
+|-----------|-----|
+| Estado / etiqueta | `Badge` (variant: active, destructive, warning, highlight, secondary) |
+| Fila de lista | `ListItem` + `ListView` |
+| Divisor | `Separator` |
+| Toggle | `Switch` |
+| Checkbox | `Checkbox` |
+| Menú contextual | `DropdownMenu` |
+| Campo de texto | `Input` + `Field` |
+| Pastilla removible | `Tag` |
+
+En `index.html` usar las clases CSS del sistema (`badge-active`, `badge-destructive`, etc.) — nunca inventar estilos equivalentes.
+
+### 4. Actualizar index.html siempre
+
+Todo componente creado o modificado en `waldo-ui/src/components/ui/` DEBE actualizarse en `index.html` en la misma sesión. No preguntes — hazlo siempre.
+
+---
+
+## Fallback de referencia — Linear
+
+Cuando algo no esté documentado en este DS (un patrón de interacción, un comportamiento de componente, un valor de spacing, una decisión de UX), **usa Linear como referencia canónica**.
+
+Waldo y Linear comparten el mismo ADN de diseño: dark-first, tool-aesthetic, alta densidad, zinc palette, Inter. Lo que hace Linear es casi siempre correcto para Waldo.
+
+**Cómo aplicarlo:**
+- ¿Cómo se comporta un table row en hover? → Linear
+- ¿Qué pasa con un input con error? → Linear
+- ¿Cómo se ve un card vacío? → Linear
+- ¿Qué typography usa un modal title? → Linear
+
+Radix UI Themes es el segundo fallback — especialmente para comportamientos de accesibilidad y estados de foco.
+
+**Nunca inventar** — si no está en Waldo DS y no está en Linear/Radix, pregunta a Miguel.
+
 ---
 
 ## What this is
@@ -162,7 +234,7 @@ Linear PRO-2461 tracks Tailwind config alignment with Steve.
 ## Git
 
 ```bash
-cd /Users/miguelugalde/Desktop/🧰\ WALDO\ DESIGN\ SYSTEM
+cd /Users/miguelugalde/Desktop/waldo-design-system
 git add -A && git commit -m "..." && git push
 ```
 
@@ -188,3 +260,26 @@ Always draft first, wait for "sí" before publishing. No exceptions.
 - Don't add red anywhere in product
 - Don't add top-level keys to `waldo.tokens.json` without planning the Figma collection
 - Don't push Tokens Studio with references in textStyles — resolve to literals first
+
+---
+
+## ⛔ English only — no exceptions
+
+All content in the Design System must be in English:
+- Section titles, descriptions, demo labels
+- Code comments
+- Variant names, prop names, state names
+- Example/placeholder content in demos
+
+Not a single word in any other language. Ever.
+
+## ⛔ SVG color values
+
+SVG presentation attributes (`stroke=""`, `fill=""`) do NOT resolve CSS variables.
+Always use `style=""` for color tokens on SVG elements:
+
+```html
+❌  <svg stroke="var(--primary)">
+✅  <svg style="stroke:var(--primary)">
+✅  <svg stroke="currentColor"> + parent color:var(--primary)
+```

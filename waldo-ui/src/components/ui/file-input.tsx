@@ -36,12 +36,12 @@ export interface FileInputProps {
 function getFileIcon(name: string) {
   const ext = name.split(".").pop()?.toLowerCase();
   if (["pdf"].includes(ext ?? ""))
-    return <FileText className="h-4 w-4 shrink-0 text-[rgba(210,211,211,0.50)]" />;
+    return <FileText className="h-4 w-4 shrink-0 text-foreground/50" />;
   if (["xls", "xlsx", "csv"].includes(ext ?? ""))
-    return <FileSpreadsheet className="h-4 w-4 shrink-0 text-[rgba(210,211,211,0.50)]" />;
+    return <FileSpreadsheet className="h-4 w-4 shrink-0 text-foreground/50" />;
   if (["png", "jpg", "jpeg", "gif", "webp", "svg"].includes(ext ?? ""))
-    return <FileImage className="h-4 w-4 shrink-0 text-[rgba(210,211,211,0.50)]" />;
-  return <File className="h-4 w-4 shrink-0 text-[rgba(210,211,211,0.50)]" />;
+    return <FileImage className="h-4 w-4 shrink-0 text-foreground/50" />;
+  return <File className="h-4 w-4 shrink-0 text-foreground/50" />;
 }
 
 function FileInput({
@@ -100,18 +100,18 @@ function FileInput({
         className={cn(
           "flex items-center justify-center gap-2 cursor-pointer select-none",
           size === "slim" ? "rounded-2xl px-4 py-3" : "rounded-2xl px-4 py-6",
-          "bg-[#242528]",
+          "bg-muted",
           "transition-colors duration-100",
           "focus-visible:outline-none",
-          isDragging && "bg-[#2d2f33] border border-[#265152]",
+          isDragging && "bg-secondary border border-waldo-green-800",
           disabled && "opacity-40 pointer-events-none",
         )}
       >
-        <span className="text-sm font-normal tracking-[-0.02em] text-[#2db4b4]">
+        <span className="text-sm font-normal tracking-[-0.02em] text-primary">
           {placeholder ?? (size === "slim" ? "Drag and drop files here or click to browse." : "Click to upload or drag and drop")}
         </span>
         {optional && (
-          <span className="text-sm text-[rgba(210,211,211,0.50)]">*Optional</span>
+          <span className="text-sm text-foreground/50">*Optional</span>
         )}
         <input
           ref={inputRef}
@@ -131,7 +131,7 @@ function FileInput({
       {/* File list */}
       {value.length > 0 && (
         <div className="flex flex-col gap-1">
-          <span className="text-sm font-normal tracking-[-0.02em] text-[#2db4b4] px-1">
+          <span className="text-sm font-normal tracking-[-0.02em] text-primary px-1">
             Files
           </span>
           <div className="flex flex-col gap-0.5">
@@ -143,25 +143,25 @@ function FileInput({
                 {/* icon + name turn teal on hover (unless error) */}
                 <span className={cn(
                   "transition-colors flex-shrink-0",
-                  error ? "text-[rgba(210,211,211,0.40)]" : "text-[rgba(210,211,211,0.40)] group-hover:text-[#2db4b4]"
+                  error ? "text-foreground/40" : "text-foreground/40 group-hover:text-primary"
                 )}>
                   {getFileIcon(file.name)}
                 </span>
                 <span className={cn(
                   "text-sm font-normal tracking-[-0.02em] whitespace-nowrap transition-colors",
-                  error ? "text-[rgba(210,211,211,0.70)]" : "text-[rgba(210,211,211,0.70)] group-hover:text-[#2db4b4]"
+                  error ? "text-foreground/70" : "text-foreground/70 group-hover:text-primary"
                 )}>
                   {file.name}
                 </span>
                 {error && (
-                  <span className="text-sm font-normal tracking-[-0.02em] text-[#e76638] shrink-0">
+                  <span className="text-sm font-normal tracking-[-0.02em] text-warning shrink-0">
                     {error}
                   </span>
                 )}
                 <button
                   type="button"
                   onClick={() => removeFile(id)}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded text-[rgba(210,211,211,0.40)] hover:text-[rgba(210,211,211,0.80)]"
+                  className="opacity-0 group-hover:opacity-100 transition-opacity p-0.5 rounded text-foreground/40 hover:text-foreground/80"
                   aria-label="Remove file"
                 >
                   <Trash2 className="h-3.5 w-3.5" />

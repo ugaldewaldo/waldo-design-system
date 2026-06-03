@@ -8,14 +8,14 @@ import { cn } from "@/lib/utils";
 //
 // Shapes:
 //   round  → rounded-full (circle) — people, users
-//   square → rounded-[4px]         — brands, logos
+//   square → rounded-sm         — brands, logos
 //
 // Sizes (px):  16 · 24 · 32 · 40
 // Background:  zinc-950 #171819
 // ─────────────────────────────────────────────────────────────────────────────
 
 const avatarVariants = cva(
-  "relative flex shrink-0 overflow-hidden bg-[#171819]",
+  "relative flex shrink-0 overflow-hidden bg-background",
   {
     variants: {
       size: {
@@ -26,7 +26,7 @@ const avatarVariants = cva(
       },
       shape: {
         round:  "rounded-full",   // people, users
-        square: "rounded-[4px]",  // brands, logos
+        square: "rounded-sm",  // brands, logos
       },
     },
     defaultVariants: {
@@ -72,7 +72,7 @@ const AvatarFallback = React.forwardRef<
     ref={ref}
     className={cn(
       "flex h-full w-full items-center justify-center",
-      "bg-[#242528] text-[rgba(210,211,211,0.70)] font-medium tracking-[-0.01em]",
+      "bg-muted text-foreground/70 font-medium tracking-[-0.01em]",
       className
     )}
     {...props}
@@ -95,7 +95,7 @@ function AvatarGroup({ children, max, size = "32", shape = "round", className }:
   const visible = max ? items.slice(0, max) : items;
   const overflow = max ? items.length - max : 0;
 
-  const ringClass = shape === "square" ? "ring-2 ring-[#171819] rounded-[4px]" : "ring-2 ring-[#171819] rounded-full";
+  const ringClass = shape === "square" ? "ring-2 ring-background rounded-sm" : "ring-2 ring-background rounded-full";
 
   return (
     <div className={cn("flex items-center", className)}>

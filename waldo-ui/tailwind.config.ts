@@ -49,6 +49,23 @@ const config: Config = {
           foreground: "rgb(var(--card-foreground) / <alpha-value>)",
         },
 
+        // Waldo semantic accent aliases
+        warning: {
+          DEFAULT:    "rgb(var(--accent-warning) / <alpha-value>)",
+        },
+        highlight: {
+          DEFAULT:    "rgb(var(--accent-highlight) / <alpha-value>)",
+        },
+
+        // Waldo product green scale (mapped to CSS vars — NOT for components, use semantic tokens)
+        // Only use these when no semantic token covers the need (e.g. input hover border)
+        "waldo-green": {
+          500: "rgb(var(--green-500) / <alpha-value>)",
+          600: "rgb(var(--green-600) / <alpha-value>)",
+          700: "rgb(var(--green-700) / <alpha-value>)",
+          800: "rgb(var(--green-800) / <alpha-value>)",
+        },
+
         // Waldo brand palette — marketing use only
         brand: {
           green:  { 700: "#1b8c8c", 600: "#2db4b4", 500: "#63dbdb", 300: "#8cfaf5", 100: "#dafffd" },
@@ -79,14 +96,23 @@ const config: Config = {
       // ── Border radius ──────────────────────────────────────────────
       // Tight radii — product/tool aesthetic (Linear-style)
       borderRadius: {
-        none: "0",
-        sm:   "calc(var(--radius) - 2px)",   // 4px
-        DEFAULT: "var(--radius)",            // 6px
-        md:   "var(--radius)",               // 6px
-        lg:   "calc(var(--radius) + 2px)",   // 8px
-        xl:   "calc(var(--radius) + 6px)",   // 12px
-        "2xl": "calc(var(--radius) + 10px)", // 16px
-        full: "9999px",
+        none:   "0",
+        sm:     "calc(var(--radius) - 2px)",   // 4px  → token radius.sm
+        DEFAULT: "var(--radius)",              // 6px  → token radius.md
+        md:     "var(--radius)",               // 6px  → token radius.md
+        lg:     "calc(var(--radius) + 2px)",   // 8px  → token radius.lg
+        xl:     "calc(var(--radius) + 6px)",   // 12px → token radius.xl
+        "2xl":  "calc(var(--radius) + 10px)", // 16px → token radius.2xl
+        "2-5xl":"calc(var(--radius) + 14px)", // 20px → token radius.2_5xl (dropdowns)
+        "4xl":  "calc(var(--radius) + 26px)", // 32px → token radius.4xl (file input)
+        full:   "9999px",                     //        token radius.full
+      },
+
+      // ── Shadows ────────────────────────────────────────────────────
+      boxShadow: {
+        popover: "var(--shadow-popover)",   // dropdowns, menus, select
+        surface: "var(--shadow-surface)",   // cards, panels
+        dialog:  "var(--shadow-dialog)",    // modals
       },
 
       // ── Typography ─────────────────────────────────────────────────

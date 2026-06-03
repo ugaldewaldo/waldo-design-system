@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 const tagVariants = cva(
   [
     "inline-flex items-center gap-1.5 rounded-full",
-    "bg-[#2d2f33]",
+    "bg-popover",
     "font-medium tracking-[-0.02em] leading-5",
     "select-none whitespace-nowrap",
     "transition-colors duration-100",
@@ -32,8 +32,8 @@ const tagVariants = cva(
         lg:      "h-11 px-5   text-sm",
       },
       textColor: {
-        high:  "text-[#d2d3d3]",                      // zinc-200 full
-        muted: "text-[rgba(210,211,211,0.70)]",        // zinc-200/70%
+        high:  "text-foreground",
+        muted: "text-foreground/70",
       },
     },
     defaultVariants: {
@@ -140,10 +140,10 @@ function TagInput({
     <div
       className={cn(
         "flex flex-wrap items-center gap-1.5 min-h-10",
-        "rounded-full border border-[rgba(210,211,211,0.12)] bg-transparent",
+        "rounded-full border border-foreground/[0.12] bg-transparent",
         "px-4 py-2 cursor-text",
         "transition-colors duration-100",
-        "focus-within:border-[#265152]",
+        "focus-within:border-waldo-green-800",
         disabled && "opacity-40 pointer-events-none",
         // When there are tags, switch to rounded-2xl for better wrapping
         value.length > 0 && "rounded-2xl",
@@ -166,8 +166,8 @@ function TagInput({
         disabled={disabled}
         className={cn(
           "flex-1 min-w-[80px] bg-transparent outline-none border-none",
-          "text-sm font-normal tracking-[-0.02em] text-[#d2d3d3]",
-          "placeholder:text-[rgba(210,211,211,0.50)]",
+          "text-sm font-normal tracking-[-0.02em] text-foreground",
+          "placeholder:text-foreground/50",
         )}
       />
     </div>

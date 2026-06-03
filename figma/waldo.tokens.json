@@ -23,7 +23,7 @@
       "200": {
         "value": "#d2d3d3",
         "type": "color",
-        "description": "ANCHOR \u2014 text50High"
+        "description": "ANCHOR — text50High"
       },
       "300": {
         "value": "#b4b5b6",
@@ -32,47 +32,47 @@
       "400": {
         "value": "#8f9091",
         "type": "color",
-        "description": "ANCHOR \u2014 text100Regular"
+        "description": "ANCHOR — text100Regular"
       },
       "500": {
         "value": "#636465",
         "type": "color",
-        "description": "ANCHOR \u2014 text200Low"
+        "description": "ANCHOR — text200Low"
       },
       "600": {
         "value": "#41454b",
         "type": "color",
-        "description": "ANCHOR \u2014 accent fills"
+        "description": "ANCHOR — accent fills"
       },
       "700": {
         "value": "#323539",
         "type": "color",
-        "description": "ANCHOR \u2014 popover"
+        "description": "ANCHOR — popover"
       },
       "750": {
         "value": "#2d2f33",
         "type": "color",
-        "description": "ANCHOR \u2014 secondary"
+        "description": "ANCHOR — secondary"
       },
       "800": {
         "value": "#27282b",
         "type": "color",
-        "description": "ANCHOR \u2014 sunken"
+        "description": "ANCHOR — sunken"
       },
       "850": {
         "value": "#242528",
         "type": "color",
-        "description": "ANCHOR \u2014 sidebar"
+        "description": "ANCHOR — sidebar"
       },
       "900": {
         "value": "#202123",
         "type": "color",
-        "description": "ANCHOR \u2014 card / elevated"
+        "description": "ANCHOR — card / elevated"
       },
       "950": {
         "value": "#171819",
         "type": "color",
-        "description": "ANCHOR \u2014 app background"
+        "description": "ANCHOR — app background"
       }
     },
     "green": {
@@ -99,7 +99,7 @@
       "500": {
         "value": "#32a9a9",
         "type": "color",
-        "description": "ANCHOR \u2014 primary brand"
+        "description": "ANCHOR — primary brand"
       },
       "600": {
         "value": "#2c797a",
@@ -138,7 +138,7 @@
       "300": {
         "value": "#f7d371",
         "type": "color",
-        "description": "ANCHOR \u2014 highlight"
+        "description": "ANCHOR — highlight"
       },
       "400": {
         "value": "#f0c040",
@@ -193,7 +193,7 @@
       "500": {
         "value": "#e76638",
         "type": "color",
-        "description": "ANCHOR \u2014 bright orange"
+        "description": "ANCHOR — bright orange"
       },
       "600": {
         "value": "#c94e22",
@@ -240,7 +240,7 @@
       "500": {
         "value": "#de3a28",
         "type": "color",
-        "description": "ANCHOR \u2014 destructive (red-leaning, hue 5\u00b0)"
+        "description": "ANCHOR — destructive (red-leaning, hue 5°)"
       },
       "600": {
         "value": "#ba2818",
@@ -383,7 +383,7 @@
       "500": {
         "value": "#63dbdb",
         "type": "color",
-        "description": "Main \u2014 brand-green-500"
+        "description": "Main — brand-green-500"
       },
       "600": {
         "value": "#2db4b4",
@@ -406,7 +406,7 @@
       "500": {
         "value": "#fac034",
         "type": "color",
-        "description": "Main \u2014 brand-yellow-500"
+        "description": "Main — brand-yellow-500"
       },
       "600": {
         "value": "#e3ac38",
@@ -429,7 +429,7 @@
       "500": {
         "value": "#d40a60",
         "type": "color",
-        "description": "Main \u2014 brand-pink-500"
+        "description": "Main — brand-pink-500"
       },
       "600": {
         "value": "#c10b59",
@@ -452,7 +452,7 @@
       "500": {
         "value": "#bdd8d8",
         "type": "color",
-        "description": "Main \u2014 brand-chrome-500"
+        "description": "Main — brand-chrome-500"
       },
       "600": {
         "value": "#a7d3d3",
@@ -475,7 +475,7 @@
       "500": {
         "value": "#813aef",
         "type": "color",
-        "description": "Main \u2014 brand-purple-500"
+        "description": "Main — brand-purple-500"
       },
       "600": {
         "value": "#6616de",
@@ -1190,6 +1190,44 @@
       "highlight": {
         "value": "{primitives.yellow.300}",
         "type": "color"
+      }
+    },
+    "shadow": {
+      "popover": {
+        "value": {
+          "x": "0",
+          "y": "4",
+          "blur": "4",
+          "spread": "0",
+          "color": "rgba(0,0,0,0.25)",
+          "type": "dropShadow"
+        },
+        "type": "boxShadow",
+        "description": "Dropdown menus, select, command palette"
+      },
+      "surface": {
+        "value": {
+          "x": "0",
+          "y": "2",
+          "blur": "8",
+          "spread": "0",
+          "color": "rgba(0,0,0,0.20)",
+          "type": "dropShadow"
+        },
+        "type": "boxShadow",
+        "description": "Cards, panels, elevated surfaces"
+      },
+      "dialog": {
+        "value": {
+          "x": "0",
+          "y": "8",
+          "blur": "32",
+          "spread": "0",
+          "color": "rgba(0,0,0,0.40)",
+          "type": "dropShadow"
+        },
+        "type": "boxShadow",
+        "description": "Modals, dialogs"
       }
     }
   },

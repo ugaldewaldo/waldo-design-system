@@ -7,9 +7,9 @@ import { cn } from "@/lib/utils";
 // Waldo Checkbox — values from Figma DS (node 74417:39312)
 //
 // Shape     → CIRCULAR (16px circle, not square)
-// Mono      → zinc-200/30% unchecked · zinc-200/70% checked (muted)
-// Green     → zinc-200/30% unchecked · green-700 #1b8c8c checked (brand)
-// Label     → font-semibold 14px zinc-200/70%
+// Mono      → foreground/30 unchecked · foreground/70 checked (muted)
+// Green     → foreground/30 unchecked · primary (green-500) checked (brand)
+// Label     → font-semibold 14px foreground/70
 //
 // Two visual variants controlled by `variant` prop:
 //   mono  — neutral/muted (default)
@@ -32,7 +32,7 @@ const Checkbox = React.forwardRef<
       // Circular — 16×16px
       "peer h-4 w-4 shrink-0 rounded-full",
       // Unchecked border
-      "border border-[rgba(210,211,211,0.30)]",
+      "border border-foreground/30",
       // Background
       "bg-transparent",
       "transition-colors duration-100",
@@ -40,8 +40,8 @@ const Checkbox = React.forwardRef<
       "disabled:cursor-not-allowed disabled:opacity-40",
       // Checked states per variant
       variant === "green"
-        ? "data-[state=checked]:bg-[#1b8c8c] data-[state=checked]:border-[#1b8c8c] data-[state=checked]:text-white"
-        : "data-[state=checked]:bg-[rgba(210,211,211,0.70)] data-[state=checked]:border-[rgba(210,211,211,0.70)] data-[state=checked]:text-[#171819]",
+        ? "data-[state=checked]:bg-primary data-[state=checked]:border-primary data-[state=checked]:text-primary-foreground"
+        : "data-[state=checked]:bg-foreground/70 data-[state=checked]:border-foreground/70 data-[state=checked]:text-background",
       className
     )}
     {...props}
@@ -86,8 +86,7 @@ function CheckboxField({
         onCheckedChange={onCheckedChange}
         disabled={disabled}
       />
-      {/* Label: font-semibold 14px zinc-200/70% */}
-      <span className="text-sm font-semibold tracking-[-0.02em] text-[rgba(210,211,211,0.70)]">
+      <span className="text-sm font-semibold tracking-[-0.02em] text-foreground/70">
         {label}
       </span>
     </label>

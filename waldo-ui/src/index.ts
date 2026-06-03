@@ -22,6 +22,11 @@ export type { SegmentedControlProps, SegmentedOption } from "./components/ui/seg
 
 export { Tag, TagInput, tagVariants } from "./components/ui/tag";
 
+export { ListItem, ListView } from "./components/ui/list-item";
+
+export { Separator } from "./components/ui/separator";
+export type { ListItemProps, ListViewProps } from "./components/ui/list-item";
+
 export { FileInput } from "./components/ui/file-input";
 export type { FileInputProps, FileItem } from "./components/ui/file-input";
 export type { TagProps, TagInputProps } from "./components/ui/tag";
@@ -52,6 +57,25 @@ export {
 } from "./components/ui/command";
 
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "./components/ui/tooltip";
+
+export { Toaster, toast } from "./components/ui/toast";
+
+export { Alert, AlertTitle, AlertDescription } from "./components/ui/alert";
+export { EmptyState } from "./components/ui/empty-state";
+export { Tabs, TabsList, TabsTrigger, TabsContent } from "./components/ui/tabs";
+export { Icon } from "./components/ui/icon";
+export type { IconProps, IconSize } from "./components/ui/icon";
+
+// Waldo custom icons — canvas 16px
+export {
+  IconRadioEmpty, IconCheckFilled, IconCheckboxChecked, IconCircleCheck,
+  IconTrash, IconForward, IconExport,
+  IconCircleChevronUp, IconCircleChevronDown,
+  IconSliders, IconUndo, IconRedo, IconRefresh, IconCycle,
+} from "./components/ui/icons/index";
+export type { TabsListProps, TabsTriggerProps } from "./components/ui/tabs";
+export type { EmptyStateProps } from "./components/ui/empty-state";
+export type { AlertProps } from "./components/ui/alert";
 
 // ── Data ───────────────────────────────────────────────────────────────────────
 export {

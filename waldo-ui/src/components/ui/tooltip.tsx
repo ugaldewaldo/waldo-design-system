@@ -15,16 +15,16 @@ const TooltipContent = React.forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        "z-50 overflow-hidden rounded px-2 py-1",
-        "bg-zinc-700 border border-border/20 text-foreground shadow-md",
-        "text-xs font-medium",
+        "z-50 overflow-hidden rounded-md px-2.5 py-1.5",
+        "bg-zinc-900 text-foreground shadow-surface",
+        "text-[12px] font-medium tracking-[-0.01em]",
         "animate-fade-in",
         className
       )}
       {...props}
     >
       {props.children}
-      <TooltipPrimitive.Arrow className="fill-zinc-700" />
+      <TooltipPrimitive.Arrow className="fill-zinc-900" />
     </TooltipPrimitive.Content>
   </TooltipPrimitive.Portal>
 ));

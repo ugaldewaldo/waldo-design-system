@@ -16,13 +16,9 @@ import { cn } from "@/lib/utils";
 // ── Base input class string ───────────────────────────────────────────────────
 
 // ── State border values (from Figma DS nodes 83865:55347–83865:55558) ──────────
-// Default:      border-foreground/[0.12]  zinc-200/12%
-// Hover:        border-[#265152]           green-800
-// Filled:       border-foreground/[0.12]  zinc-200/12%  (back to default)
-// Filled+Hover: border-[#265152]           green-800
-// Focus (active): keep green-800 + ring
-//
-// Label: green-600 (#2db4b4) — always, not zinc
+// Default:        border-foreground/[0.12]   zinc-200/12%
+// Hover/Focus:    border-waldo-green-800      green-800 (#265152)
+// Label:          text-primary               green-500
 
 const inputBase = [
   "flex h-10 w-full",
@@ -35,10 +31,8 @@ const inputBase = [
   // placeholder — zinc-200/50%
   "placeholder:text-foreground/50",
   "transition-colors duration-100",
-  // hover → green-800 border
-  "hover:border-[#265152]",
-  // focus → green-800 border only — no ring (single line)
-  "focus-visible:outline-none focus-visible:border-[#265152]",
+  "hover:border-waldo-green-800",
+  "focus-visible:outline-none focus-visible:border-waldo-green-800",
   "disabled:cursor-not-allowed disabled:opacity-40",
   "file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground",
 ].join(" ");
@@ -136,8 +130,7 @@ function Field({ label, hint, error, required, children, className }: FieldProps
   return (
     <div className={cn("flex flex-col gap-2", className)}>
       {label && (
-        // Label uses green-600 (#2db4b4) — from Figma DS
-        <label className="px-1 pb-0 text-sm font-normal leading-5 tracking-[-0.02em] text-[#2db4b4]">
+        <label className="px-1 pb-0 text-sm font-normal leading-5 tracking-[-0.02em] text-primary">
           {label}
           {required && (
             <span className="ml-2 text-foreground/50 font-normal" aria-hidden="true">*Optional</span>

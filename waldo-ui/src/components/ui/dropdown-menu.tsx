@@ -11,16 +11,14 @@ const DropdownMenuSub = DropdownMenuPrimitive.Sub;
 const DropdownMenuRadioGroup = DropdownMenuPrimitive.RadioGroup;
 
 // ── Dropdown values from Figma DS (node 62122:58381) ──────────────────────────
-// Container: zinc-750 #2d2f33 · border-radius: 20px · py-3
+// Container: zinc-750 (--popover) · border-radius: 20px · py-3
 // Shadow:    0px 4px 4px rgba(0,0,0,.25), 0px -3px 2px rgba(0,0,0,.18)
-// Item:      px-4 py-2 · text zinc-200/70% → zinc-200 on hover/active
-// Search bg: zinc-700 #323539 · h-10
-// Header:    green-500 #63dbdb text
+// Item:      px-4 py-2 · text foreground/70 → foreground on hover/active
 const contentStyles = cn(
   "z-50 min-w-[160px] overflow-hidden",
-  "rounded-[20px]",
-  "bg-[#2d2f33] text-[rgba(210,211,211,0.70)]",
-  "shadow-[0px_4px_4px_rgba(0,0,0,0.25),0px_-3px_2px_rgba(0,0,0,0.18)]",
+  "rounded-2-5xl",
+  "bg-popover text-popover-foreground/70",
+  "shadow-popover",
   "py-3",
   "data-[state=open]:animate-fade-in data-[state=open]:animate-slide-in-top"
 );
@@ -28,10 +26,10 @@ const contentStyles = cn(
 const itemStyles = cn(
   "relative flex cursor-default select-none items-center gap-2",
   "px-4 py-2 text-sm font-normal tracking-[-0.02em]",
-  "text-[rgba(210,211,211,0.70)] outline-none",
+  "text-popover-foreground/70 outline-none",
   "transition-colors duration-100",
-  "hover:text-[#d2d3d3] hover:bg-[rgba(210,211,211,0.05)]",
-  "focus:text-[#d2d3d3] focus:bg-[rgba(210,211,211,0.05)]",
+  "hover:text-foreground hover:bg-foreground/5",
+  "focus:text-foreground focus:bg-foreground/5",
   "data-[disabled]:pointer-events-none data-[disabled]:opacity-40"
 );
 
@@ -154,7 +152,7 @@ const DropdownMenuSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Separator
     ref={ref}
-    className={cn("h-px bg-[rgba(210,211,211,0.12)] my-0 mx-0", className)}
+    className={cn("h-px bg-foreground/[0.12] my-1 -mx-1", className)}
     {...props}
   />
 ));

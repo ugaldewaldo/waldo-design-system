@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils";
 //
 // Size      → 32×18px
 // Shape     → pill (rounded-full)
-// ON track  → green-700 #1b8c8c
-// OFF track → zinc-800 #27282b
+// ON track  → primary (green-500)
+// OFF track → muted (zinc-800)
 // Thumb     → white circle, 14px
 // Disabled  → opacity-40
 // ─────────────────────────────────────────────────────────────────────────────
@@ -22,10 +22,8 @@ const Switch = React.forwardRef<
     className={cn(
       "peer inline-flex h-[18px] w-8 shrink-0 cursor-pointer items-center",
       "rounded-full px-[3px] py-[2px]",
-      // OFF → zinc-800
-      "bg-[#27282b]",
-      // ON → green-700
-      "data-[state=checked]:bg-[#1b8c8c]",
+      "bg-muted",
+      "data-[state=checked]:bg-primary",
       "transition-colors duration-150",
       "focus-visible:outline-none",
       "disabled:cursor-not-allowed disabled:opacity-40",
