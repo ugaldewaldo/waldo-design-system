@@ -674,6 +674,7 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
     <button class="sb-item" onclick="waldoGo('comp-icons',this)">Icons</button>
     <button class="sb-item" onclick="waldoGo('comp-radio',this)">Radio Group</button>
     <button class="sb-item" onclick="waldoGo('comp-slider',this)">Slider</button>
+    <button class="sb-item" onclick="waldoGo('comp-loader',this)">Loader</button>
   </div>
   <div class="sb-group">
     <div class="sb-group-label">Foundation</div>
@@ -5066,6 +5067,119 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     document.addEventListener('mouseup', onUp);
   }
   </script>
+
+  <!-- ── LOADER ── -->
+  <div id="comp-loader" class="waldo-page">
+    <div class="page-header">
+      <div class="page-title">Loader</div>
+      <div class="page-desc">Two patterns: <strong>Dots</strong> — three pulsing dots, 2 sizes. <strong>Text cursor</strong> — Claude-style blinking cursor for streaming / AI generation states.</div>
+    </div>
+
+    <style>
+      @keyframes wdot-pulse {
+        0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+        40%            { transform: scale(1);   opacity: 1;   }
+      }
+      @keyframes wcursor-blink {
+        0%, 100% { opacity: 1; }
+        50%      { opacity: 0; }
+      }
+      .wdot { border-radius:50%; background:var(--muted-foreground); display:inline-block; }
+      .wdot-sm      { width:4px; height:4px; }
+      .wdot-default { width:6px; height:6px; }
+      .wdot:nth-child(1) { animation: wdot-pulse 900ms ease-in-out 0ms   infinite; }
+      .wdot:nth-child(2) { animation: wdot-pulse 900ms ease-in-out 160ms  infinite; }
+      .wdot:nth-child(3) { animation: wdot-pulse 900ms ease-in-out 320ms  infinite; }
+      .wdots-sm      { display:inline-flex;align-items:center;gap:4px; }
+      .wdots-default { display:inline-flex;align-items:center;gap:6px; }
+
+      .wcursor {
+        display:inline-block;width:2px;border-radius:1px;
+        vertical-align:middle;
+        animation: wcursor-blink 1s ease-in-out infinite;
+      }
+      .wcursor-zinc  { background:color-mix(in srgb, var(--foreground) 60%, transparent); }
+      .wcursor-green { background:var(--primary); }
+    </style>
+
+    <!-- Type A: Dots -->
+    <div class="comp-section">
+      <div class="comp-section-title">Type A — Three dots · 2 sizes</div>
+      <div class="demo-block">
+        <div class="demo-canvas" style="gap:32px;align-items:center">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+            <div class="wdots-sm">
+              <div class="wdot wdot-sm"></div>
+              <div class="wdot wdot-sm"></div>
+              <div class="wdot wdot-sm"></div>
+            </div>
+            <span style="font-size:11px;color:var(--muted-foreground)">sm</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+            <div class="wdots-default">
+              <div class="wdot wdot-default"></div>
+              <div class="wdot wdot-default"></div>
+              <div class="wdot wdot-default"></div>
+            </div>
+            <span style="font-size:11px;color:var(--muted-foreground)">default</span>
+          </div>
+          <div style="width:1px;height:32px;background:var(--border)"></div>
+          <!-- In context -->
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--card);border-radius:8px">
+            <span style="font-size:13px;color:var(--muted-foreground)">Analyzing signals</span>
+            <div class="wdots-sm">
+              <div class="wdot wdot-sm"></div>
+              <div class="wdot wdot-sm"></div>
+              <div class="wdot wdot-sm"></div>
+            </div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;DotsLoader size="sm | default" /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;DotsLoader size=&quot;default&quot; /&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Type B: Text cursor -->
+    <div class="comp-section">
+      <div class="comp-section-title">Type B — Text cursor · Claude-style</div>
+      <div class="demo-block">
+        <div class="demo-canvas col" style="gap:16px;align-items:flex-start">
+
+          <!-- Zinc -->
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <span style="font-size:11px;color:var(--muted-foreground)">zinc — neutral</span>
+            <div style="font-size:14px;color:var(--foreground);letter-spacing:-0.02em">
+              Generating brand report<span class="wcursor wcursor-zinc" style="height:0.9em;margin-left:2px"></span>
+            </div>
+            <div style="font-size:13px;color:var(--muted-foreground);letter-spacing:-0.02em">
+              Analyzing 1,204 signals across social and media<span class="wcursor wcursor-zinc" style="height:0.85em;margin-left:2px"></span>
+            </div>
+          </div>
+
+          <div style="width:100%;height:1px;background:var(--border)"></div>
+
+          <!-- Green -->
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <span style="font-size:11px;color:var(--muted-foreground)">green — active / brand</span>
+            <div style="font-size:14px;color:var(--foreground);letter-spacing:-0.02em">
+              Generating brand report<span class="wcursor wcursor-green" style="height:0.9em;margin-left:2px"></span>
+            </div>
+            <div style="font-size:13px;color:var(--muted-foreground);letter-spacing:-0.02em">
+              Analyzing 1,204 signals across social and media<span class="wcursor wcursor-green" style="height:0.85em;margin-left:2px"></span>
+            </div>
+          </div>
+
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;StreamingText variant="zinc | green"&gt;Generating report&lt;/StreamingText&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;StreamingText variant=&quot;green&quot;&gt;\n  Generating brand report\n&lt;/StreamingText&gt;\n\n// or separately:\n&lt;span&gt;Generating report&lt;/span&gt;&lt;TextCursor variant=&quot;green&quot; /&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
 
 </div>
 </body>
