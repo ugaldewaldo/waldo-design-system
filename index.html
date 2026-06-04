@@ -5179,6 +5179,51 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       </div>
     </div>
 
+    <!-- Type C: Spinner -->
+    <div class="comp-section">
+      <div class="comp-section-title">Type C — Spinner · zinc & green</div>
+      <div class="demo-block">
+        <div class="demo-canvas" style="gap:32px;align-items:center">
+
+          <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+            <span style="font-size:11px;color:var(--muted-foreground)">zinc</span>
+            <div style="display:flex;align-items:center;gap:14px">
+              <div style="width:14px;height:14px;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--muted-foreground);border-right-color:color-mix(in srgb,var(--muted-foreground) 25%,transparent);animation:spin .7s linear infinite"></div>
+              <div style="width:16px;height:16px;border-radius:50%;border:2px solid transparent;border-top-color:var(--muted-foreground);border-right-color:color-mix(in srgb,var(--muted-foreground) 25%,transparent);animation:spin .7s linear infinite"></div>
+              <div style="width:20px;height:20px;border-radius:50%;border:2px solid transparent;border-top-color:var(--muted-foreground);border-right-color:color-mix(in srgb,var(--muted-foreground) 25%,transparent);animation:spin .7s linear infinite"></div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
+            <span style="font-size:11px;color:var(--muted-foreground)">green</span>
+            <div style="display:flex;align-items:center;gap:14px">
+              <div style="width:14px;height:14px;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--primary);border-right-color:color-mix(in srgb,var(--primary) 25%,transparent);animation:spin .7s linear infinite"></div>
+              <div style="width:16px;height:16px;border-radius:50%;border:2px solid transparent;border-top-color:var(--primary);border-right-color:color-mix(in srgb,var(--primary) 25%,transparent);animation:spin .7s linear infinite"></div>
+              <div style="width:20px;height:20px;border-radius:50%;border:2px solid transparent;border-top-color:var(--primary);border-right-color:color-mix(in srgb,var(--primary) 25%,transparent);animation:spin .7s linear infinite"></div>
+            </div>
+          </div>
+
+          <div style="width:1px;height:40px;background:var(--border)"></div>
+
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <button class="btn btn-default" style="display:flex;align-items:center;gap:8px;pointer-events:none">
+              <div style="width:14px;height:14px;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--primary-foreground);border-right-color:color-mix(in srgb,var(--primary-foreground) 25%,transparent);animation:spin .7s linear infinite;flex-shrink:0"></div>
+              Saving...
+            </button>
+            <button class="btn btn-secondary" style="display:flex;align-items:center;gap:8px;pointer-events:none">
+              <div style="width:14px;height:14px;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--muted-foreground);border-right-color:color-mix(in srgb,var(--muted-foreground) 25%,transparent);animation:spin .7s linear infinite;flex-shrink:0"></div>
+              Loading
+            </button>
+          </div>
+
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;Spinner variant="zinc | green" size="sm | default | lg" /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;Spinner variant=&quot;green&quot; size=&quot;default&quot; /&gt;\n\n// In a button:\n&lt;Button disabled&gt;\n  &lt;Spinner size=&quot;sm&quot; /&gt; Saving...\n&lt;/Button&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 </div>

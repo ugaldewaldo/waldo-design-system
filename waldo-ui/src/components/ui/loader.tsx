@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 //   Staggered pulse animation. Use for: async loading states, waiting.
 //
 // Type B — Text cursor  |   (Claude-style blinking cursor)
+//
+// Type C — Spinner  ◌   (circular, zinc or green)
 //   Blinking block cursor. Use for: streaming text, AI generation, typing.
 //   Variants: zinc (neutral) · green (brand/active)
 // ─────────────────────────────────────────────────────────────────────────────
@@ -80,5 +82,37 @@ export function StreamingText({ children, variant = "zinc", className }: Streami
       {children}
       <TextCursor variant={variant} />
     </span>
+  );
+}
+
+// ── Type C — Spinner ─────────────────────────────────────────────────────────
+
+interface SpinnerProps {
+  size?: "sm" | "default" | "lg";
+  variant?: "zinc" | "green";
+  className?: string;
+}
+
+const spinnerSize = {
+  sm:      "h-3.5 w-3.5 border-[1.5px]",
+  default: "h-4   w-4   border-2",
+  lg:      "h-5   w-5   border-2",
+};
+
+export function Spinner({ size = "default", variant = "green", className }: SpinnerProps) {
+  return (
+    <span
+      className={cn(
+        "inline-block rounded-full animate-spin",
+        "border-transparent",
+        spinnerSize[size],
+        variant === "green"
+          ? "border-t-primary border-r-primary/30"
+          : "border-t-muted-foreground border-r-muted-foreground/30",
+        className
+      )}
+      role="status"
+      aria-label="Loading"
+    />
   );
 }
