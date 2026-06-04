@@ -5,8 +5,8 @@ import { cn } from "@/lib/utils";
 // ─────────────────────────────────────────────────────────────────────────────
 // Waldo Alert — inline contextual feedback
 //
-// Diferente al Toast (efímero, esquina) — el Alert vive dentro de la página:
-// form errors, límites de plan, banners de onboarding, estados de info.
+// Different from Toast (ephemeral, corner) — Alert lives inside the page:
+// form errors, plan limits, onboarding states, contextual info.
 //
 // Variants (Linear / Radix Themes pattern):
 //   info        → brand teal tint     — neutral informational

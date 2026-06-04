@@ -10,7 +10,7 @@ Añade o actualiza un token en el Waldo Design System manteniendo todas las capa
 
 **Lee esto antes de tocar nada:**
 
-!`cat "/Users/miguelugalde/Desktop/waldo-design-system/CLAUDE.md"`
+!`cat "CLAUDE.md"`
 
 ---
 

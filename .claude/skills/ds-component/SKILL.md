@@ -10,9 +10,9 @@ Implementa o corrige un componente del Waldo Design System con valores exactos d
 
 **Lee esto antes de tocar nada:**
 
-!`cat "/Users/miguelugalde/Desktop/waldo-design-system/CLAUDE.md"`
-!`cat "/Users/miguelugalde/Desktop/waldo-design-system/STATUS.md"`
-!`cat "/Users/miguelugalde/Desktop/waldo-design-system/waldo-ui/CLAUDE.md"`
+!`cat "CLAUDE.md"`
+!`cat "STATUS.md"`
+!`cat "waldo-ui/CLAUDE.md"`
 
 ---
 
@@ -177,20 +177,6 @@ NO colores brand.* en producto → son marketing
 ---
 
 ## ⛔ ABSOLUTE PROHIBITIONS
-
-
-
-### 0. Only foundational DS tokens
-
-The ONLY allowed CSS variables are DS semantic tokens:
-
-
-NEVER use legacy vars — they don't exist in the DS:
-
-
-SVG colors: never use presentation attributes for CSS vars:
-
-
 
 ### 0. Only foundational DS tokens
 

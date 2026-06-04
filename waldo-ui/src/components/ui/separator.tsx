@@ -3,7 +3,7 @@ import * as SeparatorPrimitive from "@radix-ui/react-separator";
 import { cn } from "@/lib/utils";
 
 // ── Separator — border-subtle = zinc-200/12% ──────────────────────────────────
-// Token: border-subtle = rgba(210,211,211,0.12) = zinc-200 / 12%
+// Token: border-subtle = foreground/12
 
 const Separator = React.forwardRef<
   React.ElementRef<typeof SeparatorPrimitive.Root>,
@@ -14,7 +14,7 @@ const Separator = React.forwardRef<
     decorative={decorative}
     orientation={orientation}
     className={cn(
-      "shrink-0 bg-[rgba(210,211,211,0.12)]",
+      "shrink-0 bg-foreground/[0.12]",
       orientation === "horizontal" ? "h-px w-full" : "h-full w-px",
       className
     )}

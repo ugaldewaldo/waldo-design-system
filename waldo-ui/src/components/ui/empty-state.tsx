@@ -4,10 +4,10 @@ import { cn } from "@/lib/utils";
 // ─────────────────────────────────────────────────────────────────────────────
 // Waldo Empty State
 //
-// Tres usos principales (Linear pattern):
-//   page    → full-page, centered, para vistas sin datos
-//   section → dentro de un panel, tabla o card
-//   inline  → dentro de un dropdown, combobox, search result
+// Three main uses (Linear pattern):
+//   page    → full-page, centered, for views with no data
+//   section → inside a panel, table or card
+//   inline  → inside a dropdown, combobox, search result
 //
 // Anatomía:
 //   [icon] — opcional, 32px, muted-foreground

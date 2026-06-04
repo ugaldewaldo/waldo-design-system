@@ -98,7 +98,7 @@ const Textarea = React.forwardRef<
       "px-4 py-3 text-sm font-normal tracking-[-0.02em] text-foreground",
       "placeholder:text-foreground/50",
       "transition-colors duration-100",
-      "focus-visible:outline-none focus-visible:border-foreground/30 focus-visible:ring-2 focus-visible:ring-ring/20",
+      "focus-visible:outline-none focus-visible:border-waldo-green-800",
       "disabled:cursor-not-allowed disabled:opacity-40",
       className
     )}
@@ -133,7 +133,7 @@ function Field({ label, hint, error, required, children, className }: FieldProps
         <label className="px-1 pb-0 text-sm font-normal leading-5 tracking-[-0.02em] text-primary">
           {label}
           {required && (
-            <span className="ml-2 text-foreground/50 font-normal" aria-hidden="true">*Optional</span>
+            <span className="ml-1 text-foreground/50 font-normal" aria-hidden="true">*</span>
           )}
         </label>
       )}
