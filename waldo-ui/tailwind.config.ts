@@ -155,6 +155,11 @@ const config: Config = {
           "0%, 100%": { opacity: "1" },
           "50%":       { opacity: "0" },
         },
+        "scale-in": {
+          "0%":   { transform: "scale(0)", opacity: "0" },
+          "70%":  { transform: "scale(1.2)" },
+          "100%": { transform: "scale(1)",  opacity: "1" },
+        },
         "shimmer": {
           "0%":   { backgroundPosition: "-200% center" },
           "100%": { backgroundPosition:  "200% center" },
@@ -182,6 +187,7 @@ const config: Config = {
       },
       animation: {
         "blink":            "blink 1s ease-in-out infinite",
+        "scale-in":         "scale-in 0.15s ease-out forwards",
         "shimmer":          "shimmer 2s linear infinite",
         "accordion-down":   "accordion-down 0.2s ease-out",
         "accordion-up":     "accordion-up 0.2s ease-out",

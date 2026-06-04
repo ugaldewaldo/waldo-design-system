@@ -5258,6 +5258,29 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   </div>
 
   <script>
+  function triggerSpinner(status) {
+    var el = document.getElementById('live-spinner');
+    if (!el) return;
+    el.className = 'wspinner ' + status;
+    if (status !== 'loading') {
+      var icons = {
+        success: '<path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>',
+        error:   '<path d="M2 2l8 8M10 2l-8 8" stroke="white" stroke-width="1.8" stroke-linecap="round"/>',
+        warning: '<path d="M6 2v4M6 8.5v.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/>'
+      };
+      el.innerHTML = '<div class="wspinner-icon"><svg width="8" height="8" viewBox="0 0 12 12" fill="none">' + icons[status] + '</svg></div>';
+    } else {
+      el.innerHTML = '';
+    }
+  }
+
+  function triggerFileSpinner() {
+    var el = document.getElementById('file-spinner');
+    if (!el) return;
+    el.className = 'wspinner success';
+    el.innerHTML = '<div class="wspinner-icon"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>';
+  }
+
   function switchTab(groupId, btn, contentPrefix) {
     const group = document.getElementById(groupId);
     if (!group) return;
@@ -5657,10 +5680,25 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   <div id="comp-loader" class="waldo-page">
     <div class="page-header">
       <div class="page-title">Loader</div>
-      <div class="page-desc">Two patterns: <strong>Dots</strong> — three pulsing dots, 2 sizes. <strong>Text cursor</strong> — Claude-style blinking cursor for streaming / AI generation states.</div>
+      <div class="page-desc">Three patterns: <strong>Status Spinner</strong> — morphs to success/error/warning on completion. <strong>Dots</strong> — three pulsing dots. <strong>Text shimmer</strong> — Claude-style gradient for streaming states.</div>
     </div>
 
     <style>
+      /* StatusSpinner */
+      @keyframes wspinner-spin { to { transform: rotate(360deg); } }
+      @keyframes wspinner-pop  { 0%{transform:scale(0);opacity:0} 70%{transform:scale(1.25)} 100%{transform:scale(1);opacity:1} }
+      .wspinner {
+        display:inline-flex;align-items:center;justify-content:center;
+        width:14px;height:14px;border-radius:50%;
+        border:1.5px solid;
+        transition:background .25s,border-color .25s,transform .25s;
+      }
+      .wspinner.loading { border-color:rgba(210,211,211,0.20);border-top-color:rgba(210,211,211,0.65);animation:wspinner-spin .65s linear infinite; }
+      .wspinner.success { border-color:var(--primary);background:var(--primary);transform:scale(1.05); }
+      .wspinner.error   { border-color:var(--destructive);background:var(--destructive);transform:scale(1.05); }
+      .wspinner.warning { border-color:var(--warning);background:var(--warning);transform:scale(1.05); }
+      .wspinner-icon { animation:wspinner-pop .15s ease-out forwards;display:flex;align-items:center;justify-content:center; }
+
       @keyframes wdot-pulse {
         0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
         40%            { transform: scale(1);   opacity: 1;   }
@@ -5688,6 +5726,63 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </style>
 
     <!-- Type A: Dots -->
+    <div class="comp-section">
+      <div class="comp-section-title">Status Spinner — loading → success · error · warning</div>
+      <div class="demo-block">
+        <div class="demo-canvas" style="gap:32px;align-items:center;flex-wrap:wrap">
+
+          <!-- States static -->
+          <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+            <span style="font-size:11px;color:var(--muted-foreground)">loading</span>
+            <div class="wspinner loading"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+            <span style="font-size:11px;color:var(--muted-foreground)">success</span>
+            <div class="wspinner success"><div class="wspinner-icon"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+            <span style="font-size:11px;color:var(--muted-foreground)">error</span>
+            <div class="wspinner error"><div class="wspinner-icon"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg></div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+            <span style="font-size:11px;color:var(--muted-foreground)">warning</span>
+            <div class="wspinner warning"><div class="wspinner-icon"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><path d="M6 2v4M6 8.5v.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg></div></div>
+          </div>
+
+          <div style="width:1px;height:40px;background:var(--border)"></div>
+
+          <!-- Live demo -->
+          <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+            <span style="font-size:11px;color:var(--muted-foreground)">live</span>
+            <div class="wspinner loading" id="live-spinner"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <button class="btn btn-secondary" style="height:28px;font-size:12px;padding:0 10px" onclick="triggerSpinner('success')">→ success</button>
+            <button class="btn btn-secondary" style="height:28px;font-size:12px;padding:0 10px" onclick="triggerSpinner('error')">→ error</button>
+            <button class="btn btn-secondary" style="height:28px;font-size:12px;padding:0 10px" onclick="triggerSpinner('warning')">→ warning</button>
+            <button class="btn btn-ghost" style="height:28px;font-size:12px;padding:0 10px" onclick="triggerSpinner('loading')">reset</button>
+          </div>
+
+          <div style="width:1px;height:40px;background:var(--border)"></div>
+
+          <!-- In context: file upload row -->
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:11px;color:var(--muted-foreground)">in context — file row</span>
+            <div style="display:flex;align-items:center;gap:8px;padding:6px 0">
+              <div class="wspinner loading" id="file-spinner"></div>
+              <span style="font-size:13px;color:var(--foreground)">brand-guidelines.pdf</span>
+              <button class="btn btn-ghost" style="height:22px;font-size:11px;padding:0 8px;margin-left:auto" onclick="triggerFileSpinner()">finish</button>
+            </div>
+          </div>
+
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;StatusSpinner status="loading | success | error | warning" /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'import { StatusSpinner } from &quot;@waldo/ui&quot;\n\nconst [status, setStatus] = useState&lt;SpinnerStatus&gt;(&quot;loading&quot;)\n\n// after upload:\nsetStatus(&quot;success&quot;) // or &quot;error&quot; | &quot;warning&quot;\n\n&lt;StatusSpinner status={status} /&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
     <div class="comp-section">
       <div class="comp-section-title">Type A — Three dots · 2 sizes</div>
       <div class="demo-block">

@@ -67,6 +67,8 @@ export { EmptyState } from "./components/ui/empty-state";
 export { Tabs, TabsList, TabsTrigger, TabsContent } from "./components/ui/tabs";
 export { RadioGroup, RadioGroupItem, RadioGroupField } from "./components/ui/radio-group";
 export { DotsLoader, ShimmerText, TextCursor } from "./components/ui/loader";
+export { StatusSpinner } from "./components/ui/status-spinner";
+export type { SpinnerStatus } from "./components/ui/status-spinner";
 export type { RadioGroupItemProps } from "./components/ui/radio-group";
 export { Slider } from "./components/ui/slider";
 export { Icon } from "./components/ui/icon";
