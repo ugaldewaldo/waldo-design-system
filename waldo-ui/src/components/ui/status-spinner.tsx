@@ -28,6 +28,8 @@ const statusConfig = {
     bg: "transparent",
     icon: null,
   },
+  // Note: stroke="white" is intentional — icon contrast on solid colored backgrounds.
+  // Not a semantic color — it is a pure contrast utility (8px icon on 14px pill).
   success: {
     ring: "border-primary",
     bg: "bg-primary",

@@ -5693,7 +5693,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         border:1.5px solid;
         transition:background .25s,border-color .25s,transform .25s;
       }
-      .wspinner.loading { border-color:rgba(210,211,211,0.20);border-top-color:rgba(210,211,211,0.65);animation:wspinner-spin .65s linear infinite; }
+      .wspinner.loading { border-color:color-mix(in srgb,var(--foreground) 20%,transparent);border-top-color:color-mix(in srgb,var(--foreground) 65%,transparent);animation:wspinner-spin .65s linear infinite; }
       .wspinner.success { border-color:var(--primary);background:var(--primary);transform:scale(1.05); }
       .wspinner.error   { border-color:var(--destructive);background:var(--destructive);transform:scale(1.05); }
       .wspinner.warning { border-color:var(--warning);background:var(--warning);transform:scale(1.05); }
