@@ -76,12 +76,26 @@ const DialogContent = React.forwardRef<
 ));
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
-function DialogHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+interface DialogHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Optional square brand icon — 24px, shown left of title */
+  icon?: React.ReactNode;
+}
+
+function DialogHeader({ className, icon, children, ...props }: DialogHeaderProps) {
   return (
     <div
-      className={cn("flex flex-col gap-1 px-8 pt-7 pb-5", className)}
+      className={cn("px-8 pt-7 pb-5", className)}
       {...props}
-    />
+    >
+      {icon ? (
+        <div className="flex items-center gap-2.5 mb-1">
+          <span className="shrink-0">{icon}</span>
+          <div>{children}</div>
+        </div>
+      ) : (
+        children
+      )}
+    </div>
   );
 }
 
