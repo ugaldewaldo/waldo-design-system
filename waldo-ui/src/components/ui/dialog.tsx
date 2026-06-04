@@ -31,10 +31,10 @@ interface DialogContentProps
 }
 
 const sizeMap = {
-  sm: "max-w-sm",
-  md: "max-w-lg",
-  lg: "max-w-2xl",
-  xl: "max-w-4xl",
+  sm: "max-w-[560px]",
+  md: "max-w-[720px]",
+  lg: "max-w-[960px]",
+  xl: "max-w-[1200px]",
 };
 
 const DialogContent = React.forwardRef<
@@ -102,7 +102,7 @@ function DialogHeader({ className, icon, children, ...props }: DialogHeaderProps
 function DialogFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("flex items-center justify-end gap-2 px-8 py-5 pb-7 border-t border-foreground/[0.06]", className)}
+      className={cn("flex items-center justify-end gap-2 px-8 py-5 pb-7", className)}
       {...props}
     />
   );
