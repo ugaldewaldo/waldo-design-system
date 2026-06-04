@@ -18,12 +18,14 @@ import { cn } from "@/lib/utils";
 
 interface DotsLoaderProps {
   size?: "sm" | "default";
+  variant?: "zinc" | "green";
   className?: string;
 }
 
-export function DotsLoader({ size = "default", className }: DotsLoaderProps) {
+export function DotsLoader({ size = "default", variant = "zinc", className }: DotsLoaderProps) {
   const dot = size === "sm" ? "h-1 w-1" : "h-1.5 w-1.5";
   const gap = size === "sm" ? "gap-1" : "gap-1.5";
+  const color = variant === "green" ? "bg-primary" : "bg-muted-foreground";
 
   return (
     <span
@@ -34,11 +36,7 @@ export function DotsLoader({ size = "default", className }: DotsLoaderProps) {
       {[0, 1, 2].map((i) => (
         <span
           key={i}
-          className={cn(
-            "rounded-full bg-muted-foreground",
-            dot,
-            "animate-pulse"
-          )}
+          className={cn("rounded-full", color, dot, "animate-pulse")}
           style={{ animationDelay: `${i * 160}ms`, animationDuration: "900ms" }}
         />
       ))}
@@ -82,38 +80,6 @@ export function TextCursor({ variant = "zinc", className }: { variant?: "zinc" |
         className
       )}
       aria-hidden="true"
-    />
-  );
-}
-
-// ── Type C — Spinner ─────────────────────────────────────────────────────────
-
-interface SpinnerProps {
-  size?: "sm" | "default" | "lg";
-  variant?: "zinc" | "green";
-  className?: string;
-}
-
-const spinnerSize = {
-  sm:      "h-3.5 w-3.5 border-[1.5px]",
-  default: "h-4   w-4   border-2",
-  lg:      "h-5   w-5   border-2",
-};
-
-export function Spinner({ size = "default", variant = "green", className }: SpinnerProps) {
-  return (
-    <span
-      className={cn(
-        "inline-block rounded-full animate-spin",
-        "border-transparent",
-        spinnerSize[size],
-        variant === "green"
-          ? "border-t-primary border-r-primary/30"
-          : "border-t-muted-foreground border-r-muted-foreground/30",
-        className
-      )}
-      role="status"
-      aria-label="Loading"
     />
   );
 }

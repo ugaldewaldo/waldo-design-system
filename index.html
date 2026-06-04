@@ -5106,37 +5106,44 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="comp-section">
       <div class="comp-section-title">Type A — Three dots · 2 sizes</div>
       <div class="demo-block">
+        <style>
+          .wdot-green { background:var(--primary) !important; }
+        </style>
         <div class="demo-canvas" style="gap:32px;align-items:center">
+          <!-- zinc -->
           <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
-            <div class="wdots-sm">
-              <div class="wdot wdot-sm"></div>
-              <div class="wdot wdot-sm"></div>
-              <div class="wdot wdot-sm"></div>
+            <span style="font-size:11px;color:var(--muted-foreground)">zinc</span>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <div class="wdots-sm"><div class="wdot wdot-sm"></div><div class="wdot wdot-sm"></div><div class="wdot wdot-sm"></div></div>
+              <div class="wdots-default"><div class="wdot wdot-default"></div><div class="wdot wdot-default"></div><div class="wdot wdot-default"></div></div>
             </div>
-            <span style="font-size:11px;color:var(--muted-foreground)">sm</span>
+            <div style="display:flex;gap:16px"><span style="font-size:11px;color:var(--muted-foreground)">sm</span><span style="font-size:11px;color:var(--muted-foreground)">default</span></div>
           </div>
+          <!-- green -->
           <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
-            <div class="wdots-default">
-              <div class="wdot wdot-default"></div>
-              <div class="wdot wdot-default"></div>
-              <div class="wdot wdot-default"></div>
+            <span style="font-size:11px;color:var(--muted-foreground)">green</span>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <div class="wdots-sm"><div class="wdot wdot-sm wdot-green"></div><div class="wdot wdot-sm wdot-green"></div><div class="wdot wdot-sm wdot-green"></div></div>
+              <div class="wdots-default"><div class="wdot wdot-default wdot-green"></div><div class="wdot wdot-default wdot-green"></div><div class="wdot wdot-default wdot-green"></div></div>
             </div>
-            <span style="font-size:11px;color:var(--muted-foreground)">default</span>
+            <div style="display:flex;gap:16px"><span style="font-size:11px;color:var(--muted-foreground)">sm</span><span style="font-size:11px;color:var(--muted-foreground)">default</span></div>
           </div>
-          <div style="width:1px;height:32px;background:var(--border)"></div>
-          <!-- In context -->
-          <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--card);border-radius:8px">
-            <span style="font-size:13px;color:var(--muted-foreground)">Analyzing signals</span>
-            <div class="wdots-sm">
-              <div class="wdot wdot-sm"></div>
-              <div class="wdot wdot-sm"></div>
-              <div class="wdot wdot-sm"></div>
+          <div style="width:1px;height:40px;background:var(--border)"></div>
+          <!-- in context -->
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--card);border-radius:8px">
+              <span style="font-size:13px;color:var(--muted-foreground)">Analyzing signals</span>
+              <div class="wdots-sm"><div class="wdot wdot-sm"></div><div class="wdot wdot-sm"></div><div class="wdot wdot-sm"></div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--card);border-radius:8px">
+              <span style="font-size:13px;color:var(--muted-foreground)">Running agent</span>
+              <div class="wdots-sm"><div class="wdot wdot-sm wdot-green"></div><div class="wdot wdot-sm wdot-green"></div><div class="wdot wdot-sm wdot-green"></div></div>
             </div>
           </div>
         </div>
         <div class="demo-code-bar">
-          <span class="demo-code-label">&lt;DotsLoader size="sm | default" /&gt;</span>
-          <button class="copy-btn" onclick="copyCode(this,'&lt;DotsLoader size=&quot;default&quot; /&gt;')">Copy</button>
+          <span class="demo-code-label">&lt;DotsLoader size="sm | default" variant="zinc | green" /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;DotsLoader variant=&quot;green&quot; size=&quot;sm&quot; /&gt;')">Copy</button>
         </div>
       </div>
     </div>
@@ -5213,50 +5220,6 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       </div>
     </div>
 
-    <!-- Type C: Spinner -->
-    <div class="comp-section">
-      <div class="comp-section-title">Type C — Spinner · zinc & green</div>
-      <div class="demo-block">
-        <div class="demo-canvas" style="gap:32px;align-items:center">
-
-          <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
-            <span style="font-size:11px;color:var(--muted-foreground)">zinc</span>
-            <div style="display:flex;align-items:center;gap:14px">
-              <div style="width:14px;height:14px;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--muted-foreground);border-right-color:color-mix(in srgb,var(--muted-foreground) 25%,transparent);animation:spin .7s linear infinite"></div>
-              <div style="width:16px;height:16px;border-radius:50%;border:2px solid transparent;border-top-color:var(--muted-foreground);border-right-color:color-mix(in srgb,var(--muted-foreground) 25%,transparent);animation:spin .7s linear infinite"></div>
-              <div style="width:20px;height:20px;border-radius:50%;border:2px solid transparent;border-top-color:var(--muted-foreground);border-right-color:color-mix(in srgb,var(--muted-foreground) 25%,transparent);animation:spin .7s linear infinite"></div>
-            </div>
-          </div>
-
-          <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
-            <span style="font-size:11px;color:var(--muted-foreground)">green</span>
-            <div style="display:flex;align-items:center;gap:14px">
-              <div style="width:14px;height:14px;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--primary);border-right-color:color-mix(in srgb,var(--primary) 25%,transparent);animation:spin .7s linear infinite"></div>
-              <div style="width:16px;height:16px;border-radius:50%;border:2px solid transparent;border-top-color:var(--primary);border-right-color:color-mix(in srgb,var(--primary) 25%,transparent);animation:spin .7s linear infinite"></div>
-              <div style="width:20px;height:20px;border-radius:50%;border:2px solid transparent;border-top-color:var(--primary);border-right-color:color-mix(in srgb,var(--primary) 25%,transparent);animation:spin .7s linear infinite"></div>
-            </div>
-          </div>
-
-          <div style="width:1px;height:40px;background:var(--border)"></div>
-
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <button class="btn btn-default" style="display:flex;align-items:center;gap:8px;pointer-events:none">
-              <div style="width:14px;height:14px;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--primary-foreground);border-right-color:color-mix(in srgb,var(--primary-foreground) 25%,transparent);animation:spin .7s linear infinite;flex-shrink:0"></div>
-              Saving...
-            </button>
-            <button class="btn btn-secondary" style="display:flex;align-items:center;gap:8px;pointer-events:none">
-              <div style="width:14px;height:14px;border-radius:50%;border:1.5px solid transparent;border-top-color:var(--muted-foreground);border-right-color:color-mix(in srgb,var(--muted-foreground) 25%,transparent);animation:spin .7s linear infinite;flex-shrink:0"></div>
-              Loading
-            </button>
-          </div>
-
-        </div>
-        <div class="demo-code-bar">
-          <span class="demo-code-label">&lt;Spinner variant="zinc | green" size="sm | default | lg" /&gt;</span>
-          <button class="copy-btn" onclick="copyCode(this,'&lt;Spinner variant=&quot;green&quot; size=&quot;default&quot; /&gt;\n\n// In a button:\n&lt;Button disabled&gt;\n  &lt;Spinner size=&quot;sm&quot; /&gt; Saving...\n&lt;/Button&gt;')">Copy</button>
-        </div>
-      </div>
-    </div>
 
   </div>
 
