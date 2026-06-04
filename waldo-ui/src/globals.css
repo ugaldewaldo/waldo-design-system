@@ -44,6 +44,14 @@
     --orange-500: 231 102  56; /* warning */
     --yellow-300: 247 211 113; /* highlight */
 
+    /* ── Brand palette (marketing only — never in product UI) ── */
+    --brand-green-500:  99 219 219;
+    --brand-green-700:  27 140 140;
+    --brand-yellow-500: 250 192  52;
+    --brand-pink-500:   212  10  96;
+    --brand-chrome-500: 189 216 216;
+    --brand-purple-500: 129  58 239;
+
     /* ── Semantic → shadcn mapping ─────────── */
 
     /* shadcn: background = app surface */

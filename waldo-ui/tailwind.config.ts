@@ -66,13 +66,13 @@ const config: Config = {
           800: "rgb(var(--green-800) / <alpha-value>)",
         },
 
-        // Waldo brand palette — marketing use only
+        // Waldo brand palette — marketing only, mapped to CSS vars
         brand: {
-          green:  { 700: "#1b8c8c", 600: "#2db4b4", 500: "#63dbdb", 300: "#8cfaf5", 100: "#dafffd" },
-          yellow: { 700: "#de8d13", 600: "#e3ac38", 500: "#fac034", 300: "#f7d372", 100: "#ffedc0" },
-          pink:   { 700: "#9a164e", 600: "#c10b59", 500: "#d40a60", 300: "#f8589e", 100: "#fdc9df" },
-          chrome: { 700: "#7a9fa0", 600: "#a7d3d3", 500: "#bdd8d8", 300: "#d5e9e9", 100: "#ecfbfb" },
-          purple: { 700: "#4d12a5", 600: "#6616de", 500: "#813aef", 300: "#ba91f7", 100: "#f0e7fe" },
+          green:  { 500: "rgb(var(--brand-green-500)  / <alpha-value>)", 700: "rgb(var(--brand-green-700)  / <alpha-value>)" },
+          yellow: { 500: "rgb(var(--brand-yellow-500) / <alpha-value>)" },
+          pink:   { 500: "rgb(var(--brand-pink-500)   / <alpha-value>)" },
+          chrome: { 500: "rgb(var(--brand-chrome-500) / <alpha-value>)" },
+          purple: { 500: "rgb(var(--brand-purple-500) / <alpha-value>)" },
         },
 
         // Zinc custom steps (Waldo-specific)
