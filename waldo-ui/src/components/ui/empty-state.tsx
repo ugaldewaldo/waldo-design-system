@@ -9,11 +9,11 @@ import { cn } from "@/lib/utils";
 //   section → inside a panel, table or card
 //   inline  → inside a dropdown, combobox, search result
 //
-// Anatomía:
-//   [icon] — opcional, 32px, muted-foreground
+// Structure:
+//   [icon] — optional, 32px, muted-foreground
 //   title  — required, font-medium
-//   desc   — opcional, muted-foreground
-//   action — opcional, Button o link
+//   desc   — optional, muted-foreground
+//   action — optional, Button o link
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface EmptyStateProps extends React.HTMLAttributes<HTMLDivElement> {
