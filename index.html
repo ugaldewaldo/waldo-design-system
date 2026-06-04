@@ -665,6 +665,7 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
     <button class="sb-item" onclick="waldoGo('comp-select',this)">Select / Dropdown</button>
     <button class="sb-item" onclick="waldoGo('comp-dialog',this)">Dialog</button>
     <button class="sb-item" onclick="waldoGo('comp-wizard',this)">Wizard Dialog</button>
+    <button class="sb-item" onclick="waldoGo('comp-nav',this)">Nav Item</button>
     <button class="sb-item" onclick="waldoGo('comp-table',this)">Table</button>
     <button class="sb-item" onclick="waldoGo('comp-listitem',this)">List Item</button>
     <button class="sb-item" onclick="waldoGo('comp-separator',this)">Separator</button>
@@ -6139,6 +6140,138 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         <div class="demo-code-bar">
           <span class="demo-code-label">&lt;WizardProgress step={2} totalSteps={3} /&gt;</span>
           <button class="copy-btn" onclick="copyCode(this,'&lt;WizardProgress step={step} totalSteps={3} /&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── NAV ITEM ── -->
+  <div id="comp-nav" class="waldo-page">
+    <div class="page-header">
+      <div class="page-title">Nav Item</div>
+      <div class="page-desc">Navigation items used across sidebars, settings panels, filter panels, and report builders. Height 32px · icon 14px trailing · active = bg-muted.</div>
+    </div>
+
+    <style>
+      .wnav-panel {
+        background:var(--card);border-radius:12px;padding:8px 0;
+        width:220px;display:flex;flex-direction:column;
+        border:1px solid var(--border);
+      }
+      .wnav-section { padding:10px 12px 3px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted-foreground);user-select:none; }
+      .wnav-sep { height:1px;background:color-mix(in srgb,var(--foreground) 6%,transparent);margin:4px 0; }
+      .wnav-item {
+        display:flex;align-items:center;gap:6px;
+        height:32px;padding:0 8px;margin:0 4px;
+        border-radius:6px;cursor:pointer;
+        font-size:13px;letter-spacing:-0.01em;
+        color:color-mix(in srgb,var(--foreground) 70%,transparent);
+        transition:background .08s,color .08s;
+        user-select:none;position:relative;
+      }
+      .wnav-item:hover { background:color-mix(in srgb,var(--foreground) 6%,transparent);color:var(--foreground); }
+      .wnav-item:hover .wnav-action { opacity:1; }
+      .wnav-item.active { background:var(--muted);color:var(--foreground);font-weight:500; }
+      .wnav-item.sub { padding-left:22px; }
+      .wnav-label { flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
+      .wnav-count { font-size:11px;font-weight:600;color:var(--primary);min-width:18px;text-align:center;flex-shrink:0; }
+      .wnav-icon  { flex-shrink:0;color:var(--muted-foreground);display:flex; }
+      .wnav-action { flex-shrink:0;opacity:0;transition:opacity .1s;display:flex; }
+      .wnav-badge { background:color-mix(in srgb,var(--primary) 15%,transparent);color:var(--primary);border-radius:999px;padding:0 6px;font-size:10px;font-weight:600;flex-shrink:0; }
+    </style>
+
+    <!-- Settings panel -->
+    <div class="comp-section">
+      <div class="comp-section-title">Settings panel — label + trailing icon + active state + sub-items</div>
+      <div class="demo-block">
+        <div class="demo-canvas" style="align-items:flex-start;gap:24px">
+          <div class="wnav-panel">
+            <div class="wnav-section">Settings</div>
+            <div class="wnav-item"><span class="wnav-label">Brand</span><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></div>
+            <div class="wnav-sep"></div>
+            <div class="wnav-item"><span class="wnav-label">Ideas</span><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a7 7 0 017 7c0 3-1.5 5-3.5 6.5V18a2 2 0 01-2 2h-3a2 2 0 01-2-2v-2.5C6.5 14 5 12 5 9a7 7 0 017-7z"/></svg></span></div>
+            <div class="wnav-item"><span class="wnav-label">Alerts</span><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg></span></div>
+            <div class="wnav-item"><span class="wnav-label">Data sources</span><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="18 15 12 9 6 15"/></svg></span></div>
+            <div class="wnav-item active"><span class="wnav-label">Management</span><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></span></div>
+            <div class="wnav-item sub"><span class="wnav-label">Audience sources</span></div>
+            <div class="wnav-item sub"><span class="wnav-label">Owned media</span></div>
+            <div class="wnav-sep"></div>
+            <div class="wnav-item"><span class="wnav-label">Notifications</span><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span></div>
+            <div class="wnav-item"><span class="wnav-label">Collaborators & Guests</span><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span></div>
+          </div>
+
+          <!-- Signals panel with count badges -->
+          <div class="wnav-panel">
+            <div class="wnav-section">Signals</div>
+            <div class="wnav-item"><span class="wnav-count">28</span><span class="wnav-label">Brand mentions</span></div>
+            <div class="wnav-item active"><span class="wnav-count">15</span><span class="wnav-label">Audience convos</span></div>
+            <div class="wnav-item"><span class="wnav-count">10</span><span class="wnav-label">Market trends</span></div>
+            <div class="wnav-item"><span class="wnav-count">7</span><span class="wnav-label">About Management</span></div>
+            <div class="wnav-item"><span class="wnav-count">12</span><span class="wnav-label">Cultural moments</span></div>
+            <div class="wnav-item"><span class="wnav-count">6</span><span class="wnav-label">From Management</span></div>
+            <div class="wnav-sep"></div>
+            <div class="wnav-item" style="color:var(--primary)">
+              <span class="wnav-label">+ Custom signal</span>
+            </div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;NavItem label="Management" active icon={&lt;TableIcon /&gt;} /&gt; · &lt;NavItem label="Audience" count={28} /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'// NavPanel with sections and items:\n&lt;NavPanel&gt;\n  &lt;NavGroup label=&quot;Settings&quot;&gt;\n    &lt;NavItem label=&quot;Ideas&quot; icon={&lt;LightbulbIcon /&gt;} onClick={fn} /&gt;\n    &lt;NavItem label=&quot;Management&quot; active icon={&lt;TableIcon /&gt;} /&gt;\n    &lt;NavItem label=&quot;Audience sources&quot; sub /&gt;\n  &lt;/NavGroup&gt;\n  &lt;NavSeparator /&gt;\n  &lt;NavItem label=&quot;Notifications&quot; icon={&lt;BellIcon /&gt;} /&gt;\n&lt;/NavPanel&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- With action button on hover -->
+    <div class="comp-section">
+      <div class="comp-section-title">With action on hover · + button</div>
+      <div class="demo-block">
+        <div class="demo-canvas" style="align-items:flex-start">
+          <div class="wnav-panel">
+            <div class="wnav-section">Signals</div>
+            <div class="wnav-item">
+              <span class="wnav-label">Brand mentions</span>
+              <span class="wnav-action"><button class="wli-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></span>
+            </div>
+            <div class="wnav-item active">
+              <span class="wnav-label">Audience convos</span>
+              <span class="wnav-action" style="opacity:1"><button class="wli-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></span>
+            </div>
+            <div class="wnav-item">
+              <span class="wnav-label">Market trends</span>
+              <span class="wnav-action"><button class="wli-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></span>
+            </div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;NavItem label="Brand mentions" action={&lt;PlusButton /&gt;} /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;NavItem\n  label=&quot;Brand mentions&quot;\n  action={\n    &lt;Button variant=&quot;ghost&quot; size=&quot;icon-sm&quot; onClick={addSignal}&gt;\n      &lt;Plus className=&quot;h-3.5 w-3.5&quot; /&gt;\n    &lt;/Button&gt;\n  }\n/&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Report builder with checkboxes -->
+    <div class="comp-section">
+      <div class="comp-section-title">Report builder · label + badge count right</div>
+      <div class="demo-block">
+        <div class="demo-canvas" style="align-items:flex-start">
+          <div class="wnav-panel" style="width:240px">
+            <div class="wnav-section">Report Builder</div>
+            <div class="wnav-item active"><span class="wnav-label">Week Summary</span><span class="wnav-badge">4</span></div>
+            <div class="wnav-item"><span class="wnav-label">Brand mentions</span><span class="wnav-badge" style="background:transparent;color:var(--muted-foreground)">M</span></div>
+            <div class="wnav-item"><span class="wnav-label">Audience canvas</span><span class="wnav-badge" style="background:transparent;color:var(--muted-foreground)">A</span></div>
+            <div class="wnav-item"><span class="wnav-label">Market trends</span><span class="wnav-badge" style="background:transparent;color:var(--muted-foreground)">0</span></div>
+            <div class="wnav-sep"></div>
+            <div class="wnav-section">Client Sync</div>
+            <div class="wnav-item"><span class="wnav-icon" style="color:var(--primary)"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.5"/></svg></span><span class="wnav-label">Sentiment analysis</span></div>
+            <div class="wnav-item"><span class="wnav-icon" style="color:var(--primary)"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="wnav-label">Creative sync</span></div>
+            <div class="wnav-item"><span class="wnav-icon" style="color:var(--primary)"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="wnav-label">Competitors</span></div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;NavItem label="Week Summary" active /&gt; · supports badge, status dot, checkmark indicators</span>
+          <button class="copy-btn" onclick="copyCode(this,'// NavGroup with status indicators:\n&lt;NavGroup label=&quot;Report Builder&quot;&gt;\n  &lt;NavItem label=&quot;Week Summary&quot; active /&gt;\n  &lt;NavItem label=&quot;Sentiment analysis&quot; icon={&lt;CheckCircle /&gt;} /&gt;\n&lt;/NavGroup&gt;')">Copy</button>
         </div>
       </div>
     </div>
