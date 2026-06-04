@@ -3099,6 +3099,59 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
       </div>
     </div>
 
+    <!-- Recipe: Share / Invite -->
+    <div class="comp-section">
+      <div class="comp-section-title">Recipe — Share / Invite</div>
+      <div class="demo-block">
+        <div class="demo-canvas col" style="align-items:center">
+          <div class="wdialog wdialog-md">
+            <div class="wdialog-header">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div style="display:flex">
+                  <div style="width:20px;height:20px;border-radius:50%;background:var(--primary);font-size:8px;color:#171819;display:flex;align-items:center;justify-content:center;font-weight:600">MU</div>
+                  <div style="width:20px;height:20px;border-radius:50%;background:var(--secondary);font-size:8px;color:var(--foreground);display:flex;align-items:center;justify-content:center;font-weight:600;margin-left:-5px;border:1.5px solid var(--card)">SR</div>
+                </div>
+                <span class="wdialog-title">Share · 2 members</span>
+              </div>
+              <button class="wdialog-close"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="wdialog-body" style="display:flex;flex-direction:column;gap:12px">
+              <input placeholder="Add people by email…" style="height:36px;border-radius:999px;border:1px solid var(--border);background:transparent;padding:0 14px;font-size:13px;color:var(--foreground);outline:none;font-family:inherit" />
+              <div style="display:flex;flex-direction:column">
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div style="width:28px;height:28px;border-radius:50%;background:var(--primary);font-size:10px;color:#171819;display:flex;align-items:center;justify-content:center;font-weight:600">MU</div>
+                    <div>
+                      <div style="font-size:13px;color:var(--foreground)">Miguel Ugalde</div>
+                      <div style="font-size:11px;color:var(--muted-foreground)">miguel@waldo.fyi</div>
+                    </div>
+                  </div>
+                  <span style="font-size:12px;color:var(--muted-foreground)">Owner</span>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <div style="width:28px;height:28px;border-radius:50%;background:var(--secondary);font-size:10px;color:var(--foreground);display:flex;align-items:center;justify-content:center;font-weight:600">SR</div>
+                    <div>
+                      <div style="font-size:13px;color:var(--foreground)">Steve R.</div>
+                      <div style="font-size:11px;color:var(--muted-foreground)">steve@waldo.fyi</div>
+                    </div>
+                  </div>
+                  <span class="badge badge-active badge-sm">Editor</span>
+                </div>
+              </div>
+            </div>
+            <div class="wdialog-footer">
+              <button class="btn btn-default" style="height:32px;font-size:13px">Done</button>
+            </div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">size="md" · email input + member list + avatar stack in header</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;DialogContent size=&quot;md&quot;&gt;\n  &lt;DialogHeader&gt;\n    &lt;div className=&quot;flex items-center gap-2&quot;&gt;\n      &lt;AvatarGroup /&gt;\n      &lt;DialogTitle&gt;Share&lt;/DialogTitle&gt;\n    &lt;/div&gt;\n  &lt;/DialogHeader&gt;\n  &lt;DialogBody className=&quot;flex flex-col gap-3&quot;&gt;\n    &lt;Input placeholder=&quot;Add people by email...&quot; /&gt;\n    &lt;!-- ListItem members --&gt;\n  &lt;/DialogBody&gt;\n  &lt;DialogFooter&gt;&lt;Button&gt;Done&lt;/Button&gt;&lt;/DialogFooter&gt;\n&lt;/DialogContent&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- ── DROPDOWN ── -->
