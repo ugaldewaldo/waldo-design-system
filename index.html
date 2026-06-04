@@ -3122,7 +3122,7 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
             <div class="wdialog-body" style="display:flex;flex-direction:column;gap:12px">
               <input placeholder="Add people by email…" class="input" style="width:100%" />
               <div style="display:flex;flex-direction:column">
-                <div class="wli" style="border-top:1px solid var(--border)">
+                <div class="wli">
                   <div class="wli-av" style="background:var(--primary);color:#171819">MU</div>
                   <div class="wli-body"><span class="wli-name">Miguel Ugalde</span><span class="wli-sep">·</span><span class="wli-sub">miguel@waldo.fyi</span></div>
                   <span class="wli-meta">Owner</span>
@@ -3171,7 +3171,7 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
               <input class="input" placeholder="Search" style="width:100%;margin-bottom:12px" />
               <!-- Members -->
               <div style="display:flex;flex-direction:column">
-                <div class="wli" style="border-top:1px solid var(--border)"><div class="wli-av" style="background:var(--primary);color:#171819">MC</div><div class="wli-body"><span class="wli-name">M. McLindon</span><span class="wli-sep">·</span><span class="wli-sub">mlyndon@media.monks</span></div><label class="wswitch" style="margin:0"><input type="checkbox" onchange=""/><div class="wswitch-track"><div class="wswitch-thumb"></div></div></label></div>
+                <div class="wli"><div class="wli-av" style="background:var(--primary);color:#171819">MC</div><div class="wli-body"><span class="wli-name">M. McLindon</span><span class="wli-sep">·</span><span class="wli-sub">mlyndon@media.monks</span></div><label class="wswitch" style="margin:0"><input type="checkbox" onchange=""/><div class="wswitch-track"><div class="wswitch-thumb"></div></div></label></div>
                 <div class="wli"><div class="wli-av">PO</div><div class="wli-body"><span class="wli-name">P. O'Connell</span><span class="wli-sep">·</span><span class="wli-sub">p.oconnell@media.monks</span></div><label class="wswitch" style="margin:0"><input type="checkbox" checked onchange=""/><div class="wswitch-track"><div class="wswitch-thumb"></div></div></label></div>
                 <div class="wli"><div class="wli-av">JH</div><div class="wli-body"><span class="wli-name">J. Harper</span><span class="wli-sep">·</span><span class="wli-sub">j.harper@media.monks</span></div><label class="wswitch" style="margin:0"><input type="checkbox" onchange=""/><div class="wswitch-track"><div class="wswitch-thumb"></div></div></label></div>
               </div>
@@ -4027,6 +4027,9 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       .wli:hover .wli-act { opacity:1; }
       .wli.wli-sel { background:var(--muted); }
       .wli:last-child { border-bottom:none; }
+      /* No top border when list follows an input */
+      .input + div > .wli:first-child,
+      .input ~ div > .wli:first-child { border-top:none; }
 
       /* ── Status dot (Linear-style left indicator) ── */
       .wli-dot { width:8px;height:8px;border-radius:50%;flex-shrink:0; }
