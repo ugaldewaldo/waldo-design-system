@@ -43,7 +43,7 @@ const Slider = React.forwardRef<
       <SliderPrimitive.Thumb
         key={i}
         className={cn(
-          "block h-4 w-4 rounded-full",
+          "block h-2.5 w-2.5 rounded-full",
           "bg-primary",
           "shadow-surface",
           "transition-colors duration-100",
