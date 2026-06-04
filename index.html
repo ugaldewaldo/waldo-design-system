@@ -664,6 +664,7 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
     <button class="sb-item" onclick="waldoGo('comp-avatar',this)">Avatar</button>
     <button class="sb-item" onclick="waldoGo('comp-select',this)">Select / Dropdown</button>
     <button class="sb-item" onclick="waldoGo('comp-dialog',this)">Dialog</button>
+    <button class="sb-item" onclick="waldoGo('comp-wizard',this)">Wizard Dialog</button>
     <button class="sb-item" onclick="waldoGo('comp-table',this)">Table</button>
     <button class="sb-item" onclick="waldoGo('comp-listitem',this)">List Item</button>
     <button class="sb-item" onclick="waldoGo('comp-separator',this)">Separator</button>
@@ -5804,6 +5805,248 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       </div>
     </div>
 
+
+  </div>
+
+  <!-- ── WIZARD DIALOG ── -->
+  <div id="comp-wizard" class="waldo-page">
+    <div class="page-header">
+      <div class="page-title">Wizard Dialog</div>
+      <div class="page-desc">Multi-step onboarding modal. Split layout — left: form content, right: dark image panel. Steps tracked in header. Back/Next navigation in footer.</div>
+    </div>
+
+    <style>
+      .wwizard {
+        background:var(--card);border:1px solid rgba(210,211,211,0.08);
+        border-radius:32px;box-shadow:var(--shadow-dialog);
+        display:flex;overflow:hidden;width:100%;max-width:800px;
+      }
+      .wwizard-left { display:flex;flex-direction:column;flex:1;min-width:0; }
+      .wwizard-header { display:flex;align-items:center;justify-content:space-between;padding:28px 32px 0; }
+      .wwizard-step-label { font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted-foreground); }
+      .wwizard-title { font-size:20px;font-weight:500;letter-spacing:-0.01em;color:var(--foreground);padding:16px 32px 0; }
+      .wwizard-body { flex:1;padding:16px 32px 24px;overflow-y:auto; }
+      .wwizard-footer { display:flex;align-items:center;justify-content:space-between;padding:12px 32px 28px; }
+      .wwizard-back { display:flex;align-items:center;gap:4px;font-size:13px;color:var(--muted-foreground);border:none;background:transparent;cursor:pointer;font-family:inherit;transition:color .1s; }
+      .wwizard-back:hover { color:var(--foreground); }
+      .wwizard-next { height:44px;padding:0 32px;border-radius:999px;background:var(--foreground);color:var(--background);font-size:13px;font-weight:500;border:none;cursor:pointer;font-family:inherit;transition:opacity .1s; }
+      .wwizard-next:hover { opacity:.9; }
+
+      /* Right image panel */
+      .wwizard-image { width:260px;flex-shrink:0;background:var(--zinc-900);display:flex;align-items:center;justify-content:center;overflow:hidden; }
+      .wwizard-image-placeholder { width:100%;height:100%;background:linear-gradient(160deg,var(--zinc-900) 0%,var(--zinc-800) 100%);display:flex;align-items:center;justify-content:center;padding:24px; }
+
+      /* Progress dots */
+      .wwizard-progress { display:flex;align-items:center;gap:5px; }
+      .wwizard-dot { height:6px;border-radius:999px;transition:all .2s; }
+      .wwizard-dot.active { width:16px;background:var(--primary); }
+      .wwizard-dot.done   { width:6px;background:color-mix(in srgb,var(--primary) 50%,transparent); }
+      .wwizard-dot.future { width:6px;background:color-mix(in srgb,var(--foreground) 20%,transparent); }
+    </style>
+
+    <!-- Anatomy -->
+    <div class="comp-section">
+      <div class="comp-section-title">Anatomy — split layout</div>
+      <div class="demo-block">
+        <div class="demo-canvas col" style="align-items:center">
+          <div class="wwizard">
+            <div class="wwizard-left">
+              <div class="wwizard-header">
+                <span class="wwizard-step-label">Step 1 of 3</span>
+                <button class="wdialog-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+              </div>
+              <div class="wwizard-title">What brands are you working on?</div>
+              <div class="wwizard-body">
+                <div style="height:80px;border:1px dashed var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted-foreground)">Step content</div>
+              </div>
+              <div class="wwizard-footer">
+                <div class="wwizard-progress">
+                  <div class="wwizard-dot active"></div>
+                  <div class="wwizard-dot future"></div>
+                  <div class="wwizard-dot future"></div>
+                </div>
+                <button class="wwizard-next">Continue</button>
+              </div>
+            </div>
+            <div class="wwizard-image">
+              <div class="wwizard-image-placeholder">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(210,211,211,0.15)" stroke-width="1"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;WizardDialogContent step={1} totalSteps={3} title="…" image={…} onNext={fn}&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;WizardDialog open={open} onOpenChange={setOpen}&gt;\n  &lt;WizardDialogContent\n    step={step}\n    totalSteps={3}\n    title=&quot;What brands are you working on?&quot;\n    image={&lt;img src=&quot;/preview.png&quot; /&gt;}\n    onBack={step &gt; 1 ? handleBack : undefined}\n    onNext={handleNext}\n    nextLabel=&quot;Continue&quot;\n  &gt;\n    {/* step content */}\n  &lt;/WizardDialogContent&gt;\n&lt;/WizardDialog&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 1: Brands -->
+    <div class="comp-section">
+      <div class="comp-section-title">Step 1 — Brand setup · input + relationship tags</div>
+      <div class="demo-block">
+        <div class="demo-canvas col" style="align-items:center">
+          <div class="wwizard">
+            <div class="wwizard-left">
+              <div class="wwizard-header">
+                <span class="wwizard-step-label">Add brands</span>
+                <button class="wdialog-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+              </div>
+              <div class="wwizard-title">What brands are you working on?</div>
+              <div class="wwizard-body" style="display:flex;flex-direction:column;gap:12px">
+                <input class="input" placeholder="Type a brand name" style="width:100%" />
+                <div style="display:flex;flex-direction:column;gap:4px">
+                  <label style="font-size:12px;color:var(--muted-foreground);padding:0 4px">Relationship</label>
+                  <div class="wtabs-pill" id="wiz-rel" style="width:fit-content">
+                    <button class="wtab-pill active" onclick="switchTab('wiz-rel',this)">My brand</button>
+                    <button class="wtab-pill" onclick="switchTab('wiz-rel',this)">Prospect</button>
+                    <button class="wtab-pill" onclick="switchTab('wiz-rel',this)">Client</button>
+                    <button class="wtab-pill" onclick="switchTab('wiz-rel',this)">Partner</button>
+                  </div>
+                </div>
+              </div>
+              <div class="wwizard-footer">
+                <div class="wwizard-progress">
+                  <div class="wwizard-dot active"></div>
+                  <div class="wwizard-dot future"></div>
+                  <div class="wwizard-dot future"></div>
+                </div>
+                <button class="wwizard-next">Continue</button>
+              </div>
+            </div>
+            <div class="wwizard-image"><div class="wwizard-image-placeholder"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(210,211,211,0.12)" stroke-width="1"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div></div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">Input + SegmentedControl (pill) for relationship type</span>
+          <button class="copy-btn" onclick="copyCode(this,'// Step 1 content:\n&lt;Input placeholder=&quot;Type a brand name&quot; /&gt;\n&lt;TabsList variant=&quot;pill&quot;&gt;\n  &lt;TabsTrigger value=&quot;my-brand&quot;&gt;My brand&lt;/TabsTrigger&gt;\n  &lt;TabsTrigger value=&quot;prospect&quot;&gt;Prospect&lt;/TabsTrigger&gt;\n&lt;/TabsList&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Goals -->
+    <div class="comp-section">
+      <div class="comp-section-title">Step 2 — Goals · radio choices</div>
+      <div class="demo-block">
+        <div class="demo-canvas col" style="align-items:center">
+          <div class="wwizard">
+            <div class="wwizard-left">
+              <div class="wwizard-header">
+                <span class="wwizard-step-label">Step 2 of 3</span>
+                <button class="wdialog-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+              </div>
+              <div class="wwizard-title">How would you like to use this space?</div>
+              <div class="wwizard-body" style="display:flex;flex-direction:column;gap:4px">
+                <div class="wli" style="height:auto;padding:12px 0;align-items:flex-start;gap:10px">
+                  <div class="wli-av" style="background:var(--primary);color:#171819;margin-top:2px">✓</div>
+                  <div class="wli-body" style="flex-direction:column;align-items:flex-start">
+                    <span class="wli-name">Generate idea blah</span>
+                    <span class="wli-sub">Find concepts, trends and ideas for your next campaign</span>
+                  </div>
+                  <label class="wswitch" style="margin:0;margin-top:2px"><input type="checkbox" checked onchange=""/><div class="wswitch-track"><div class="wswitch-thumb"></div></div></label>
+                </div>
+                <div class="wli" style="height:auto;padding:12px 0;align-items:flex-start;gap:10px">
+                  <div class="wli-av" style="margin-top:2px">A</div>
+                  <div class="wli-body" style="flex-direction:column;align-items:flex-start">
+                    <span class="wli-name">Get alerts when things change</span>
+                    <span class="wli-sub">Track competitors, clients, mentions across the web</span>
+                  </div>
+                  <label class="wswitch" style="margin:0;margin-top:2px"><input type="checkbox" onchange=""/><div class="wswitch-track"><div class="wswitch-thumb"></div></div></label>
+                </div>
+                <div class="wli" style="height:auto;padding:12px 0;border-bottom:none;align-items:flex-start;gap:10px">
+                  <div class="wli-av" style="margin-top:2px">R</div>
+                  <div class="wli-body" style="flex-direction:column;align-items:flex-start">
+                    <span class="wli-name">Prep for a recurring activity</span>
+                    <span class="wli-sub">Automate weekly reports, boards, or briefing docs</span>
+                  </div>
+                  <label class="wswitch" style="margin:0;margin-top:2px"><input type="checkbox" checked onchange=""/><div class="wswitch-track"><div class="wswitch-thumb"></div></div></label>
+                </div>
+              </div>
+              <div class="wwizard-footer">
+                <div class="wwizard-progress">
+                  <div class="wwizard-dot done"></div>
+                  <div class="wwizard-dot active"></div>
+                  <div class="wwizard-dot future"></div>
+                </div>
+                <button class="wwizard-next">Next</button>
+              </div>
+            </div>
+            <div class="wwizard-image"><div class="wwizard-image-placeholder"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(210,211,211,0.12)" stroke-width="1"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div></div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">ListItem (tall) + Switch per goal option · progress dot advances</span>
+          <button class="copy-btn" onclick="copyCode(this,'// Step 2 content — goal selection:\n{goals.map(g =&gt; (\n  &lt;ListItem\n    key={g.id}\n    avatar={&lt;Avatar&gt;{g.icon}&lt;/Avatar&gt;}\n    label={g.title}\n    sublabel={g.description}\n    actions={&lt;Switch checked={g.selected} /&gt;}\n  /&gt;\n))}')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3: Team -->
+    <div class="comp-section">
+      <div class="comp-section-title">Step 3 — Add collaborators · member list + invite</div>
+      <div class="demo-block">
+        <div class="demo-canvas col" style="align-items:center">
+          <div class="wwizard">
+            <div class="wwizard-left">
+              <div class="wwizard-header">
+                <span class="wwizard-step-label">Step 3 of 3</span>
+                <button class="wdialog-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+              </div>
+              <div class="wwizard-title">Add all your collaborators</div>
+              <div class="wwizard-body" style="display:flex;flex-direction:column;gap:10px">
+                <p style="font-size:13px;color:var(--muted-foreground)">Invite your team — they'll see brand insights and can collaborate with you here.</p>
+                <input class="input" placeholder="luna@patagonia.com, steve@waldo.fyi..." style="width:100%" />
+                <div class="wtabs-pill" id="wiz-scope" style="width:100%">
+                  <button class="wtab-pill" style="flex:1;text-align:center" onclick="switchTab('wiz-scope',this)">Everyone at Media.Monks</button>
+                  <button class="wtab-pill active" style="flex:1;text-align:center" onclick="switchTab('wiz-scope',this)">Only selected members</button>
+                </div>
+                <div class="wli"><div class="wli-av" style="background:var(--primary);color:#171819">MM</div><div class="wli-body"><span class="wli-name">M. McLindon</span><span class="wli-sep">·</span><span class="wli-sub">mlyndon@media.monks</span></div><label class="wswitch" style="margin:0"><input type="checkbox" checked onchange=""/><div class="wswitch-track"><div class="wswitch-thumb"></div></div></label></div>
+                <div class="wli"><div class="wli-av">PO</div><div class="wli-body"><span class="wli-name">P. O'Connell</span><span class="wli-sep">·</span><span class="wli-sub">p.oconnell@media.monks</span></div><label class="wswitch" style="margin:0"><input type="checkbox" onchange=""/><div class="wswitch-track"><div class="wswitch-thumb"></div></div></label></div>
+                <div class="wli" style="border-bottom:none"><div class="wli-av">JH</div><div class="wli-body"><span class="wli-name">J. Harper</span><span class="wli-sep">·</span><span class="wli-sub">j.harper@media.monks</span></div><label class="wswitch" style="margin:0"><input type="checkbox" onchange=""/><div class="wswitch-track"><div class="wswitch-thumb"></div></div></label></div>
+              </div>
+              <div class="wwizard-footer">
+                <button class="wwizard-back" onclick="">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                  Back
+                </button>
+                <button class="wwizard-next">Done</button>
+              </div>
+            </div>
+            <div class="wwizard-image"><div class="wwizard-image-placeholder"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="rgba(210,211,211,0.12)" stroke-width="1"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div></div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">Input + SegmentedControl + ListItem + Switch · Back button visible</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;WizardDialogContent\n  step={3}\n  totalSteps={3}\n  title=&quot;Add all your collaborators&quot;\n  onBack={handleBack}\n  onNext={handleDone}\n  nextLabel=&quot;Done&quot;\n&gt;\n  &lt;Input placeholder=&quot;Emails...&quot; /&gt;\n  &lt;TabsList variant=&quot;pill&quot;&gt;...&lt;/TabsList&gt;\n  {members.map(m =&gt; &lt;ListItem actions={&lt;Switch /&gt;} /&gt;)}\n&lt;/WizardDialogContent&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress component -->
+    <div class="comp-section">
+      <div class="comp-section-title">WizardProgress — step indicator</div>
+      <div class="demo-block">
+        <div class="demo-canvas" style="gap:32px">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+            <div class="wwizard-progress"><div class="wwizard-dot active"></div><div class="wwizard-dot future"></div><div class="wwizard-dot future"></div></div>
+            <span style="font-size:11px;color:var(--muted-foreground)">Step 1</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+            <div class="wwizard-progress"><div class="wwizard-dot done"></div><div class="wwizard-dot active"></div><div class="wwizard-dot future"></div></div>
+            <span style="font-size:11px;color:var(--muted-foreground)">Step 2</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+            <div class="wwizard-progress"><div class="wwizard-dot done"></div><div class="wwizard-dot done"></div><div class="wwizard-dot active"></div></div>
+            <span style="font-size:11px;color:var(--muted-foreground)">Step 3</span>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;WizardProgress step={2} totalSteps={3} /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;WizardProgress step={step} totalSteps={3} /&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
 
   </div>
 

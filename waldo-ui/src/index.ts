@@ -59,6 +59,8 @@ export {
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "./components/ui/tooltip";
 
 export { Toaster, toast } from "./components/ui/toast";
+export { WizardDialog, WizardDialogTrigger, WizardDialogContent, WizardProgress } from "./components/ui/wizard-dialog";
+export type { WizardDialogContentProps } from "./components/ui/wizard-dialog";
 
 export { Alert, AlertTitle, AlertDescription } from "./components/ui/alert";
 export { EmptyState } from "./components/ui/empty-state";
