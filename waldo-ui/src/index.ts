@@ -63,6 +63,9 @@ export { Toaster, toast } from "./components/ui/toast";
 export { Alert, AlertTitle, AlertDescription } from "./components/ui/alert";
 export { EmptyState } from "./components/ui/empty-state";
 export { Tabs, TabsList, TabsTrigger, TabsContent } from "./components/ui/tabs";
+export { RadioGroup, RadioGroupItem, RadioGroupField } from "./components/ui/radio-group";
+export type { RadioGroupItemProps } from "./components/ui/radio-group";
+export { Slider } from "./components/ui/slider";
 export { Icon } from "./components/ui/icon";
 export type { IconProps, IconSize } from "./components/ui/icon";
 

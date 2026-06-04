@@ -672,6 +672,8 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
     <button class="sb-item" onclick="waldoGo('comp-empty',this)">Empty State</button>
     <button class="sb-item" onclick="waldoGo('comp-tabs',this)">Tabs</button>
     <button class="sb-item" onclick="waldoGo('comp-icons',this)">Icons</button>
+    <button class="sb-item" onclick="waldoGo('comp-radio',this)">Radio Group</button>
+    <button class="sb-item" onclick="waldoGo('comp-slider',this)">Slider</button>
   </div>
   <div class="sb-group">
     <div class="sb-group-label">Foundation</div>
@@ -4852,6 +4854,217 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       lib.appendChild(grid);
     });
   })();
+  </script>
+
+  <!-- ── RADIO GROUP ── -->
+  <div id="comp-radio" class="waldo-page">
+    <div class="page-header">
+      <div class="page-title">Radio Group</div>
+      <div class="page-desc">Single-select from a set of options. Two variants: <strong>green</strong> (brand, default) and <strong>mono</strong> (neutral). Circular 16px, consistent with Checkbox.</div>
+    </div>
+
+    <style>
+      .wradio-group { display:flex;flex-direction:column;gap:8px; }
+      .wradio-field { display:flex;align-items:flex-start;gap:10px;cursor:pointer;user-select:none; }
+      .wradio-field input { display:none; }
+      .wradio {
+        width:16px;height:16px;border-radius:50%;flex-shrink:0;
+        border:1px solid var(--border-strong, rgba(210,211,211,0.30));
+        background:transparent;display:flex;align-items:center;justify-content:center;
+        transition:border-color .1s;margin-top:2px;
+      }
+      .wradio-dot { width:8px;height:8px;border-radius:50%;opacity:0;transition:opacity .1s; }
+      .wradio-field input:checked + .wradio.green { border-color:var(--primary); }
+      .wradio-field input:checked + .wradio.green .wradio-dot { background:var(--primary);opacity:1; }
+      .wradio-field input:checked + .wradio.mono { border-color:rgba(210,211,211,0.70); }
+      .wradio-field input:checked + .wradio.mono .wradio-dot { background:rgba(210,211,211,0.70);opacity:1; }
+      .wradio-label { display:flex;flex-direction:column;gap:2px; }
+      .wradio-text { font-size:13px;font-weight:500;letter-spacing:-0.02em;color:var(--foreground); }
+      .wradio-desc { font-size:12px;color:var(--muted-foreground);line-height:1.4; }
+      .wradio-field.disabled { opacity:.4;pointer-events:none; }
+    </style>
+
+    <div class="comp-section">
+      <div class="comp-section-title">Green variant (default)</div>
+      <div class="demo-block">
+        <div class="demo-canvas" style="gap:32px;align-items:flex-start">
+          <div class="wradio-group" id="rg-green">
+            <label class="wradio-field" onclick="selectRadio('rg-green',0)">
+              <input type="radio" name="rg-green" /><div class="wradio green"><div class="wradio-dot"></div></div>
+              <div class="wradio-label"><span class="wradio-text">Option one</span></div>
+            </label>
+            <label class="wradio-field" onclick="selectRadio('rg-green',1)">
+              <input type="radio" name="rg-green" checked /><div class="wradio green"><div class="wradio-dot"></div></div>
+              <div class="wradio-label"><span class="wradio-text">Option two</span></div>
+            </label>
+            <label class="wradio-field" onclick="selectRadio('rg-green',2)">
+              <input type="radio" name="rg-green" /><div class="wradio green"><div class="wradio-dot"></div></div>
+              <div class="wradio-label"><span class="wradio-text">Option three</span></div>
+            </label>
+            <label class="wradio-field disabled">
+              <input type="radio" name="rg-green" disabled /><div class="wradio green"><div class="wradio-dot"></div></div>
+              <div class="wradio-label"><span class="wradio-text">Disabled</span></div>
+            </label>
+          </div>
+
+          <div class="wradio-group" id="rg-green-desc">
+            <label class="wradio-field" onclick="selectRadio('rg-green-desc',0)">
+              <input type="radio" name="rg-green-desc" checked /><div class="wradio green"><div class="wradio-dot"></div></div>
+              <div class="wradio-label"><span class="wradio-text">Brand monitoring</span><span class="wradio-desc">Track mentions and sentiment in real-time</span></div>
+            </label>
+            <label class="wradio-field" onclick="selectRadio('rg-green-desc',1)">
+              <input type="radio" name="rg-green-desc" /><div class="wradio green"><div class="wradio-dot"></div></div>
+              <div class="wradio-label"><span class="wradio-text">Competitive intel</span><span class="wradio-desc">Monitor competitors across all channels</span></div>
+            </label>
+            <label class="wradio-field" onclick="selectRadio('rg-green-desc',2)">
+              <input type="radio" name="rg-green-desc" /><div class="wradio green"><div class="wradio-dot"></div></div>
+              <div class="wradio-label"><span class="wradio-text">Audience insights</span><span class="wradio-desc">Understand who's talking and why</span></div>
+            </label>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;RadioGroup value={v} onValueChange={setV}&gt;&lt;RadioGroupField value="a" label="Option" /&gt;&lt;/RadioGroup&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;RadioGroup value={value} onValueChange={setValue}&gt;\n  &lt;RadioGroupField value=&quot;a&quot; label=&quot;Option one&quot; /&gt;\n  &lt;RadioGroupField value=&quot;b&quot; label=&quot;Option two&quot; description=&quot;With description&quot; /&gt;\n&lt;/RadioGroup&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-section">
+      <div class="comp-section-title">Mono variant</div>
+      <div class="demo-block">
+        <div class="demo-canvas" style="gap:32px;align-items:flex-start">
+          <div class="wradio-group" id="rg-mono">
+            <label class="wradio-field" onclick="selectRadio('rg-mono',0)">
+              <input type="radio" name="rg-mono" /><div class="wradio mono"><div class="wradio-dot"></div></div>
+              <div class="wradio-label"><span class="wradio-text">Option one</span></div>
+            </label>
+            <label class="wradio-field" onclick="selectRadio('rg-mono',1)">
+              <input type="radio" name="rg-mono" checked /><div class="wradio mono"><div class="wradio-dot"></div></div>
+              <div class="wradio-label"><span class="wradio-text">Option two</span></div>
+            </label>
+            <label class="wradio-field" onclick="selectRadio('rg-mono',2)">
+              <input type="radio" name="rg-mono" /><div class="wradio mono"><div class="wradio-dot"></div></div>
+              <div class="wradio-label"><span class="wradio-text">Option three</span></div>
+            </label>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;RadioGroupItem variant="mono" /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;RadioGroupField variant=&quot;mono&quot; value=&quot;a&quot; label=&quot;Option&quot; /&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SLIDER ── -->
+  <div id="comp-slider" class="waldo-page">
+    <div class="page-header">
+      <div class="page-title">Slider</div>
+      <div class="page-desc">Single value or range. Track is <code>bg-muted</code>, range fill and thumb use <code>bg-primary</code>.</div>
+    </div>
+
+    <style>
+      .wslider-wrap { display:flex;align-items:center;gap:12px;width:100%;max-width:360px; }
+      .wslider { position:relative;display:flex;align-items:center;flex:1;height:20px;cursor:pointer; }
+      .wslider-track { position:relative;height:4px;width:100%;background:var(--muted);border-radius:999px;overflow:hidden; }
+      .wslider-range { position:absolute;height:100%;background:var(--primary);border-radius:999px; }
+      .wslider-thumb {
+        position:absolute;width:16px;height:16px;border-radius:50%;
+        background:var(--primary);
+        transform:translateX(-50%);
+        transition:transform .1s;
+        cursor:grab;box-shadow:0 1px 3px rgba(0,0,0,0.3);
+      }
+      .wslider-thumb:hover { transform:translateX(-50%) scale(1.15); }
+      .wslider-thumb:active { cursor:grabbing; }
+      .wslider-value { font-size:12px;color:var(--muted-foreground);font-family:'JetBrains Mono',monospace;min-width:28px;text-align:right; }
+    </style>
+
+    <div class="comp-section">
+      <div class="comp-section-title">Single value</div>
+      <div class="demo-block">
+        <div class="demo-canvas col" style="gap:20px;max-width:400px">
+          <div class="wslider-wrap">
+            <div class="wslider" id="sl1" onmousedown="startDrag(event,'sl1')">
+              <div class="wslider-track"><div class="wslider-range" style="width:40%"></div></div>
+              <div class="wslider-thumb" style="left:40%"></div>
+            </div>
+            <span class="wslider-value" id="sl1-val">40</span>
+          </div>
+          <div class="wslider-wrap">
+            <div class="wslider" id="sl2" onmousedown="startDrag(event,'sl2')">
+              <div class="wslider-track"><div class="wslider-range" style="width:70%"></div></div>
+              <div class="wslider-thumb" style="left:70%"></div>
+            </div>
+            <span class="wslider-value" id="sl2-val">70</span>
+          </div>
+          <div class="wslider-wrap" style="opacity:.4;pointer-events:none">
+            <div class="wslider">
+              <div class="wslider-track"><div class="wslider-range" style="width:30%"></div></div>
+              <div class="wslider-thumb" style="left:30%"></div>
+            </div>
+            <span class="wslider-value">30</span>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;Slider value={[40]} onValueChange={([v]) => setValue(v)} min={0} max={100} /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;Slider\n  value={[value]}\n  onValueChange={([v]) => setValue(v)}\n  min={0}\n  max={100}\n  step={1}\n/&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="comp-section">
+      <div class="comp-section-title">Range (two thumbs)</div>
+      <div class="demo-block">
+        <div class="demo-canvas col" style="gap:20px;max-width:400px">
+          <div class="wslider-wrap">
+            <div class="wslider">
+              <div class="wslider-track">
+                <div class="wslider-range" style="left:20%;width:45%"></div>
+              </div>
+              <div class="wslider-thumb" style="left:20%"></div>
+              <div class="wslider-thumb" style="left:65%"></div>
+            </div>
+            <span class="wslider-value" style="min-width:48px">20–65</span>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;Slider value={[20, 65]} onValueChange={setRange} /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;Slider value={range} onValueChange={setRange} min={0} max={100} /&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  function selectRadio(groupId, index) {
+    var group = document.getElementById(groupId);
+    if (!group) return;
+    group.querySelectorAll('input[type=radio]').forEach(function(inp, i) {
+      inp.checked = i === index;
+    });
+  }
+
+  function startDrag(e, sliderId) {
+    var slider = document.getElementById(sliderId);
+    var track = slider.querySelector('.wslider-track');
+    var range = slider.querySelector('.wslider-range');
+    var thumb = slider.querySelector('.wslider-thumb');
+    var valEl = document.getElementById(sliderId + '-val');
+    function update(clientX) {
+      var rect = track.getBoundingClientRect();
+      var pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+      var val = Math.round(pct * 100);
+      range.style.width = (pct * 100) + '%';
+      thumb.style.left = (pct * 100) + '%';
+      if (valEl) valEl.textContent = val;
+    }
+    update(e.clientX);
+    function onMove(e) { update(e.clientX); }
+    function onUp() { document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); }
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  }
   </script>
 
 </div>
