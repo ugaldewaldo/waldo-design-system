@@ -10,6 +10,48 @@ This requires two things working together:
 
 ---
 
+## What we've built so far
+
+In approximately **1 week of work**, we went from zero to a production-ready design system foundation. Here's what exists today.
+
+### The infrastructure
+
+- **`waldo-ui/`** — A fully installable React package (`@waldo/ui`) with 30+ components, Tailwind v3, Radix primitives, CVA, and Sonner. Steve can install it today with a single `file:` dependency.
+- **`figma/waldo.tokens.json`** — Single source of truth for all design tokens in Tokens Studio format, synced bidirectionally with Figma.
+- **`waldo-ui/src/globals.css`** — 3-layer CSS variable architecture (primitives → semantic → shadcn) that makes every Tailwind opacity modifier work correctly across all components.
+- **`index.html`** — Live documentation site (published at [ugaldewaldo.github.io/waldo-design-system](https://ugaldewaldo.github.io/waldo-design-system/)) with interactive demos, copy-paste code, and recipes for every component.
+
+### The quality system
+
+- **DS verification script** (`.claude/hooks/verify-component.sh`) — Runs automatically on every file edit. Catches hardcoded hex, rgba, legacy CSS vars, wrong fonts, and raw HTML inputs before they reach a commit.
+- **PostToolUse hook** — Wired into Claude Code settings so verification is automatic, not manual.
+- **`/ds-verify` skill** — Manual audit command with a 7-point checklist.
+- **`/ds-component` skill** — Step-by-step protocol for implementing any component from Figma with correct tokens.
+- **`/ds-add-token` skill** — Protocol for adding new tokens across all 4 layers (JSON → CSS → Tailwind → component) in sync.
+- **Steve audit (ENG-11390)** — External developer review confirmed the architecture is solid. All findings addressed: zinc CSS vars, CLAUDE.md rewrite, hardcoded values, skill deduplication, absolute paths, Spanish comments.
+
+### Components shipped
+
+**Atomic (22 components):**
+Button · Input / Field · Textarea · Badge · Avatar / AvatarGroup · Checkbox · Switch · Select · SegmentedControl · Tag / TagInput · FileInput · Tooltip · Separator · Table · Tabs · Toast · Alert · Empty State · ListItem / ListView · RadioGroup · Slider · Loader (DotsLoader + ShimmerText)
+
+**Icons:**
+Lucide wrapper with 2-canvas sizing system (16px / 24px) · 14 custom Waldo icons from Figma (exported, optimized, converted to React components with `currentColor`)
+
+**Modular (2 components + 15 recipes):**
+Dialog (shell · anatomy · sizes · 15 documented recipes covering every Figma modal pattern) · WizardDialog (split layout · progress dots · step navigation)
+
+### Documentation quality
+
+The `index.html` reference site covers every component with:
+- Live interactive demos
+- States (hover, active, disabled, error)
+- DS token references (no hardcoded values anywhere)
+- Copy-paste React code for every recipe
+- All English, all correct token usage
+
+---
+
 ## Phase 1 — Foundation ✅ Complete
 
 Token architecture, CSS variables, Tailwind config.
