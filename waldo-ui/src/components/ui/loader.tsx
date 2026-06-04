@@ -46,42 +46,43 @@ export function DotsLoader({ size = "default", className }: DotsLoaderProps) {
   );
 }
 
-// ── Type B — Text Cursor (Claude-style) ───────────────────────────────────────
+// ── Type B — Shimmer Text (Claude-style) ──────────────────────────────────────
+// Moving gradient wave through text — zinc (neutral) or green (brand)
 
-interface TextCursorProps {
-  variant?: "zinc" | "green";
-  className?: string;
-}
-
-export function TextCursor({ variant = "zinc", className }: TextCursorProps) {
-  return (
-    <span
-      className={cn(
-        "inline-block w-0.5 align-middle",
-        "animate-[blink_1s_ease-in-out_infinite]",
-        variant === "green"
-          ? "bg-primary h-[1em]"
-          : "bg-foreground/60 h-[1em]",
-        className
-      )}
-      aria-hidden="true"
-    />
-  );
-}
-
-// Convenience: text + cursor together
-interface StreamingTextProps {
+interface ShimmerTextProps {
   children: React.ReactNode;
   variant?: "zinc" | "green";
   className?: string;
 }
 
-export function StreamingText({ children, variant = "zinc", className }: StreamingTextProps) {
+export function ShimmerText({ children, variant = "zinc", className }: ShimmerTextProps) {
   return (
-    <span className={cn("inline-flex items-baseline gap-0.5", className)}>
+    <span
+      className={cn(
+        "inline-block bg-clip-text text-transparent",
+        "animate-[shimmer_2s_linear_infinite]",
+        "bg-[length:200%_auto]",
+        variant === "green"
+          ? "bg-[linear-gradient(90deg,color-mix(in_srgb,var(--primary)_40%,transparent)_0%,var(--primary)_50%,color-mix(in_srgb,var(--primary)_40%,transparent)_100%)]"
+          : "bg-[linear-gradient(90deg,color-mix(in_srgb,var(--foreground)_35%,transparent)_0%,color-mix(in_srgb,var(--foreground)_75%,transparent)_50%,color-mix(in_srgb,var(--foreground)_35%,transparent)_100%)]",
+        className
+      )}
+    >
       {children}
-      <TextCursor variant={variant} />
     </span>
+  );
+}
+
+// Keep TextCursor as a simple utility for cases where cursor is needed
+export function TextCursor({ variant = "zinc", className }: { variant?: "zinc" | "green"; className?: string }) {
+  return (
+    <span
+      className={cn("inline-block w-0.5 align-middle animate-[blink_1s_ease-in-out_infinite]",
+        variant === "green" ? "bg-primary h-[1em]" : "bg-foreground/60 h-[1em]",
+        className
+      )}
+      aria-hidden="true"
+    />
   );
 }
 

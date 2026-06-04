@@ -155,6 +155,10 @@ const config: Config = {
           "0%, 100%": { opacity: "1" },
           "50%":       { opacity: "0" },
         },
+        "shimmer": {
+          "0%":   { backgroundPosition: "-200% center" },
+          "100%": { backgroundPosition:  "200% center" },
+        },
         "accordion-down": {
           from: { height: "0" },
           to:   { height: "var(--radix-accordion-content-height)" },
@@ -178,6 +182,7 @@ const config: Config = {
       },
       animation: {
         "blink":            "blink 1s ease-in-out infinite",
+        "shimmer":          "shimmer 2s linear infinite",
         "accordion-down":   "accordion-down 0.2s ease-out",
         "accordion-up":     "accordion-up 0.2s ease-out",
         "fade-in":          "fade-in 0.15s ease-out",
