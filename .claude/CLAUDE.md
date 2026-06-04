@@ -1,25 +1,41 @@
 # Waldo Design System — Claude Code Config
 
-## Skills disponibles
+## Skills
 
-- `/ds-add-token` — Añadir o actualizar un token manteniendo JSON + CSS + Tailwind + componentes sincronizados
-- `/ds-component` — Implementar o corregir un componente desde Figma con tokens correctos
+- `/ds-add-token` — Add or update a token keeping all 4 layers in sync
+- `/ds-component` — Implement or fix a component from Figma
+- `/ds-verify` — Audit a component for DS violations (run before finishing ANY component)
 
-**Usar siempre una skill antes de tocar tokens o componentes.**
+**Always use a skill before touching tokens or components.**
 
-## Reglas críticas
-
-Ver `CLAUDE.md` en la raíz del proyecto para las reglas completas.
-
-Resumen ejecutivo:
-- **Fuente de verdad**: `figma/waldo.tokens.json`
-- **Nunca hardcodear hex en componentes** — siempre clases Tailwind o CSS vars
-- **Nunca usar brand.* en producto** — son solo para marketing
-- **Las 4 capas van juntas**: JSON → globals.css → tailwind.config.ts → componentes
-
-## Flujo de trabajo estándar
+## Mandatory workflow — NO EXCEPTIONS
 
 ```
-Token nuevo o cambiado → /ds-add-token
-Componente nuevo o corregir → /ds-component
+1. Implement component          → /ds-component
+2. ⛔ VERIFY before finishing   → /ds-verify <filename>
+3. Fix all violations           → repeat until clean
+4. Update index.html demo       → required
+5. Commit                       → only after verification passes
 ```
+
+**Never deliver a component that hasn't passed /ds-verify.**
+
+## What /ds-verify checks
+
+1. No hardcoded hex (`#xxxxxx`, `bg-[#...]`, `text-[#...]`)
+2. No hardcoded rgba (except inside SVG paths)
+3. No wrong fonts (only Inter — no JetBrains Mono, SF Mono, etc. in UI)
+4. No legacy CSS vars (`--txt-high`, `--fill-low`, `--bg`, `--line-low` etc.)
+5. No hardcoded px radii when token exists (`rounded-[20px]` → `rounded-2-5xl`)
+6. No recreating atoms that already exist (Badge, Separator, Icon, Button etc.)
+
+## Critical rules
+
+See root `CLAUDE.md` for full token rules.
+
+- **Single source of truth**: `figma/waldo.tokens.json`
+- **Never hardcode anything** — tokens only
+- **Never use brand.* in product** — marketing only
+- **4 layers always in sync**: JSON → globals.css → tailwind.config.ts → components
+- **English only** — no Spanish in any DS file
+- **Inter only** — no other fonts in UI components

@@ -4969,15 +4969,15 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       .wslider-track { position:relative;height:2px;width:100%;background:var(--muted);border-radius:999px;overflow:hidden; }
       .wslider-range { position:absolute;height:100%;background:var(--primary);border-radius:999px; }
       .wslider-thumb {
-        position:absolute;width:16px;height:16px;border-radius:50%;
+        position:absolute;width:10px;height:10px;border-radius:50%;
         background:var(--primary);
         transform:translateX(-50%);
         transition:transform .1s;
-        cursor:grab;box-shadow:0 1px 3px rgba(0,0,0,0.3);
+        cursor:grab;box-shadow:var(--shadow-surface);
       }
       .wslider-thumb:hover { transform:translateX(-50%) scale(1.15); }
       .wslider-thumb:active { cursor:grabbing; }
-      .wslider-value { font-size:12px;color:var(--muted-foreground);font-family:'JetBrains Mono',monospace;min-width:28px;text-align:right; }
+      .wslider-value { font-size:12px;color:var(--muted-foreground);min-width:28px;text-align:right; }
     </style>
 
     <div class="comp-section">

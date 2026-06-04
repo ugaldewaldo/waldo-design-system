@@ -283,3 +283,22 @@ Always use `style=""` for color tokens on SVG elements:
 ✅  <svg style="stroke:var(--primary)">
 ✅  <svg stroke="currentColor"> + parent color:var(--primary)
 ```
+
+---
+
+## ⛔ Typography — Inter only, no exceptions
+
+The DS has exactly **one UI font: Inter**.
+
+Monospace (`JetBrains Mono`, `SF Mono`, etc.) is ONLY allowed for:
+- Code snippets / demo code bars
+- Keyboard shortcuts (⌘K, ⌃S)
+- Hex color values in palette swatches
+- Token names in documentation
+
+**Never use monospace for:**
+- Numbers, values, labels in components
+- Slider values, counts, percentages
+- Any regular UI text
+
+If you find yourself adding `font-family: 'JetBrains Mono'` to a component — stop. Use Inter (default, no font-family needed).
