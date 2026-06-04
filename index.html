@@ -3156,6 +3156,168 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
       </div>
     </div>
 
+    <!-- Recipe: Select your team -->
+    <div class="comp-section">
+      <div class="comp-section-title">Recipe — Select your team · ListItem + Switch</div>
+      <div class="demo-block">
+        <div class="demo-canvas col" style="align-items:center">
+          <div class="wdialog wdialog-md">
+            <div class="wdialog-header">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:24px;height:24px;border-radius:6px;background:var(--primary);flex-shrink:0;display:flex;align-items:center;justify-content:center">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#171819" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                </div>
+                <span class="wdialog-title">Select your team</span>
+              </div>
+              <button class="wdialog-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="wdialog-body" style="padding-top:0">
+              <!-- Tabs -->
+              <div style="display:flex;gap:4px;margin-bottom:16px">
+                <div style="flex:1;padding:8px 12px;background:var(--muted);border-radius:8px;font-size:13px;color:var(--foreground);font-weight:500;text-align:center;cursor:pointer">Everyone at Waldo</div>
+                <div style="flex:1;padding:8px 12px;background:var(--primary);border-radius:8px;font-size:13px;color:#171819;font-weight:500;text-align:center;cursor:pointer">Only selected <span style="margin-left:4px">✓</span></div>
+              </div>
+              <!-- Search -->
+              <input class="input" placeholder="Search" style="width:100%;margin-bottom:12px" />
+              <!-- Members -->
+              <div style="display:flex;flex-direction:column">
+                <div class="wli" style="border-top:1px solid var(--border)"><div class="wli-av" style="background:var(--primary);color:#171819">MC</div><div class="wli-body"><span class="wli-name">M. McLindon</span><span class="wli-sep">·</span><span class="wli-sub">mlyndon@media.monks</span></div><label class="wswitch" style="margin:0"><input type="checkbox" onchange=""/><div class="wswitch-track"><div class="wswitch-thumb"></div></div></label></div>
+                <div class="wli"><div class="wli-av">PO</div><div class="wli-body"><span class="wli-name">P. O'Connell</span><span class="wli-sep">·</span><span class="wli-sub">p.oconnell@media.monks</span></div><label class="wswitch" style="margin:0"><input type="checkbox" checked onchange=""/><div class="wswitch-track"><div class="wswitch-thumb"></div></div></label></div>
+                <div class="wli"><div class="wli-av">JH</div><div class="wli-body"><span class="wli-name">J. Harper</span><span class="wli-sep">·</span><span class="wli-sub">j.harper@media.monks</span></div><label class="wswitch" style="margin:0"><input type="checkbox" onchange=""/><div class="wswitch-track"><div class="wswitch-thumb"></div></div></label></div>
+              </div>
+              <!-- Invite -->
+              <div style="padding-top:12px;border-top:1px solid var(--border);margin-top:8px">
+                <div style="font-size:12px;color:var(--primary);margin-bottom:6px">Invite</div>
+                <input class="input" placeholder="Add emails to invite separated by commas" style="width:100%" />
+                <div style="margin-top:8px;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--primary);cursor:pointer">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                  Invite using link
+                </div>
+              </div>
+            </div>
+            <div class="wdialog-footer">
+              <button class="btn btn-white" style="height:44px;width:192px">Continue</button>
+            </div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">Dialog + Tabs + Input + ListItem + Switch + invite section</span>
+          <button class="copy-btn" onclick="copyCode(this,'// Uses: Dialog, SegmentedControl, Input, ListItem, Switch\n&lt;DialogContent size=&quot;md&quot;&gt;\n  &lt;DialogHeader icon={&lt;Avatar /&gt;}&gt;&lt;DialogTitle&gt;Select your team&lt;/DialogTitle&gt;&lt;/DialogHeader&gt;\n  &lt;DialogBody&gt;\n    &lt;SegmentedControl options={[...]} /&gt;\n    &lt;Input placeholder=&quot;Search&quot; /&gt;\n    &lt;ListView&gt;{members.map(m =&gt; &lt;ListItem ... actions={&lt;Switch /&gt;} /&gt;)}&lt;/ListView&gt;\n  &lt;/DialogBody&gt;\n  &lt;DialogFooter&gt;&lt;Button style=&quot;width:192px&quot;&gt;Continue&lt;/Button&gt;&lt;/DialogFooter&gt;\n&lt;/DialogContent&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recipe: Add a signal -->
+    <div class="comp-section">
+      <div class="comp-section-title">Recipe — Add a signal · checklist + toggles</div>
+      <div class="demo-block">
+        <div class="demo-canvas col" style="align-items:center">
+          <div class="wdialog wdialog-md">
+            <div class="wdialog-header">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:24px;height:24px;border-radius:6px;background:var(--primary);flex-shrink:0;display:flex;align-items:center;justify-content:center">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#171819" stroke-width="2"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+                </div>
+                <span class="wdialog-title">Add a signal</span>
+              </div>
+              <button class="wdialog-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="wdialog-body" style="padding-top:0">
+              <p style="font-size:13px;color:var(--muted-foreground);margin-bottom:12px">Tell us what to track — choose keywords, topics, or phrases.</p>
+              <div style="font-size:12px;color:var(--primary);margin-bottom:6px">What to monitor</div>
+              <input class="input" placeholder="Keywords, topics, or phrases (e.g. 'Patagonia fever')" style="width:100%;margin-bottom:4px"/>
+              <div style="font-size:12px;color:var(--primary);margin:12px 0 8px;cursor:pointer">+ Add another topic or keyword</div>
+              <div style="font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted-foreground);margin-bottom:8px">Sources</div>
+              <div style="display:flex;flex-direction:column;gap:2px">
+                <div class="wli" style="height:36px"><div class="wli-body"><span class="wli-name" style="font-size:13px">Web search</span></div><label class="wswitch" style="margin:0"><input type="checkbox" checked onchange=""/><div class="wswitch-track"><div class="wswitch-thumb"></div></div></label></div>
+                <div class="wli" style="height:36px"><div class="wli-body"><span class="wli-name" style="font-size:13px">Social search</span></div><label class="wswitch" style="margin:0"><input type="checkbox" checked onchange=""/><div class="wswitch-track"><div class="wswitch-thumb"></div></div></label></div>
+                <div class="wli" style="height:36px"><div class="wli-body"><span class="wli-name" style="font-size:13px">Image search</span></div><label class="wswitch" style="margin:0"><input type="checkbox" onchange=""/><div class="wswitch-track"><div class="wswitch-thumb"></div></div></label></div>
+                <div class="wli" style="height:36px"><div class="wli-body"><span class="wli-name" style="font-size:13px">RSS</span></div><label class="wswitch" style="margin:0"><input type="checkbox" onchange=""/><div class="wswitch-track"><div class="wswitch-thumb"></div></div></label></div>
+              </div>
+            </div>
+            <div class="wdialog-footer">
+              <button class="btn btn-ghost" style="height:44px;width:192px">Cancel</button>
+              <button class="btn btn-white" style="height:44px;width:192px">Add signal</button>
+            </div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">Dialog + Input + ListItem (label + Switch) per source</span>
+          <button class="copy-btn" onclick="copyCode(this,'// Uses: Dialog, Input, ListItem + Switch\n&lt;DialogContent size=&quot;md&quot;&gt;\n  &lt;DialogHeader&gt;&lt;DialogTitle&gt;Add a signal&lt;/DialogTitle&gt;&lt;/DialogHeader&gt;\n  &lt;DialogBody&gt;\n    &lt;Input placeholder=&quot;Keywords...&quot; /&gt;\n    {sources.map(s =&gt; &lt;ListItem label={s.name} actions={&lt;Switch /&gt;} /&gt;)}\n  &lt;/DialogBody&gt;\n&lt;/DialogContent&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recipe: Upload file -->
+    <div class="comp-section">
+      <div class="comp-section-title">Recipe — Upload file · FileInput inside dialog</div>
+      <div class="demo-block">
+        <div class="demo-canvas col" style="align-items:center">
+          <div class="wdialog wdialog-md">
+            <div class="wdialog-header">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:24px;height:24px;border-radius:6px;background:var(--primary);flex-shrink:0;display:flex;align-items:center;justify-content:center">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#171819" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                </div>
+                <span class="wdialog-title">Upload file</span>
+              </div>
+              <button class="wdialog-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="wdialog-body" style="padding-top:0">
+              <p style="font-size:13px;color:var(--muted-foreground);margin-bottom:16px">Add any files of your brand like strategies, campaigns, and place them in the correct terms to help.</p>
+              <!-- FileInput zone -->
+              <div class="wfile-zone" style="border-radius:24px;padding:20px 16px;margin-bottom:12px">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <span class="wfile-zone-label">Click to upload or drag and drop</span>
+              </div>
+              <!-- File list -->
+              <div style="display:flex;flex-direction:column;gap:4px">
+                <div class="wfile-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="wfile-name">Brand-guidelines.pdf</span></div>
+                <div class="wfile-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="wfile-name">Campaign-overview-2024.pdf</span><span class="badge badge-warning badge-sm" style="margin-left:auto">Processing</span></div>
+              </div>
+            </div>
+            <div class="wdialog-footer">
+              <button class="btn btn-white" style="height:44px;width:192px">Done</button>
+            </div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">Dialog + FileInput component</span>
+          <button class="copy-btn" onclick="copyCode(this,'// Uses: Dialog, FileInput\n&lt;DialogContent size=&quot;md&quot;&gt;\n  &lt;DialogHeader&gt;&lt;DialogTitle&gt;Upload file&lt;/DialogTitle&gt;&lt;/DialogHeader&gt;\n  &lt;DialogBody&gt;\n    &lt;FileInput multiple accept=&quot;.pdf,.doc&quot; /&gt;\n  &lt;/DialogBody&gt;\n  &lt;DialogFooter&gt;&lt;Button style=&quot;width:192px&quot;&gt;Done&lt;/Button&gt;&lt;/DialogFooter&gt;\n&lt;/DialogContent&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recipe: Shareable link -->
+    <div class="comp-section">
+      <div class="comp-section-title">Recipe — Shareable link · URL + copy + toggle</div>
+      <div class="demo-block">
+        <div class="demo-canvas col" style="align-items:center">
+          <div class="wdialog wdialog-sm">
+            <div class="wdialog-header">
+              <span class="wdialog-title">Shareable link</span>
+              <button class="wdialog-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+            </div>
+            <div class="wdialog-body" style="padding-top:0;display:flex;flex-direction:column;gap:12px">
+              <p style="font-size:13px;color:var(--muted-foreground)">Anyone with the link can access this space.</p>
+              <div style="display:flex;align-items:center;gap:8px">
+                <input class="input" value="https://waldo.fyi/s/Bd9xKqT8aL" readonly style="flex:1;color:var(--muted-foreground);font-size:12px"/>
+                <button class="btn btn-secondary" style="height:40px;padding:0 14px;font-size:13px;flex-shrink:0">Copy</button>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <span style="font-size:13px;color:var(--foreground)">Show icon</span>
+                <label class="wswitch" style="margin:0"><input type="checkbox" checked onchange=""/><div class="wswitch-track"><div class="wswitch-thumb"></div></div></label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">size="sm" · Input readonly + copy button + Switch toggle · no footer</span>
+          <button class="copy-btn" onclick="copyCode(this,'// Uses: Dialog, Input (readonly), Button, Switch\n&lt;DialogContent size=&quot;sm&quot;&gt;\n  &lt;DialogHeader&gt;&lt;DialogTitle&gt;Shareable link&lt;/DialogTitle&gt;&lt;/DialogHeader&gt;\n  &lt;DialogBody&gt;\n    &lt;div className=&quot;flex gap-2&quot;&gt;\n      &lt;Input value={url} readOnly /&gt;\n      &lt;Button variant=&quot;secondary&quot;&gt;Copy&lt;/Button&gt;\n    &lt;/div&gt;\n    &lt;div className=&quot;flex justify-between&quot;&gt;\n      &lt;span&gt;Show icon&lt;/span&gt;\n      &lt;Switch checked={show} onCheckedChange={setShow} /&gt;\n    &lt;/div&gt;\n  &lt;/DialogBody&gt;\n&lt;/DialogContent&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- ── DROPDOWN ── -->
