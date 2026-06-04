@@ -67,3 +67,14 @@ The component passes verification when:
 - [ ] English only — no Spanish in comments or labels
 
 **If any check fails → fix it. Do not commit.**
+
+### 7. No hardcoded HTML in demos
+
+In `index.html` component demos, NEVER use raw `<input>` / `<button>` / `<select>` with inline styles.
+Always use the DS classes:
+- Input fields → class="input"
+- Buttons → class="btn btn-default | btn-ghost | btn-white | btn-destructive"
+- Labels → class="field-label"
+- Badges → class="badge badge-active | badge-secondary …"
+
+If a DS class doesn't exist for the element → create the component first, then use its class.
