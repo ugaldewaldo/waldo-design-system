@@ -4869,7 +4869,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       .wtab-text.active { color:var(--foreground);font-weight:500; }
 
       /* Pill tabs */
-      .wtabs-pill { display:inline-flex;align-items:center;gap:4px; }
+      .wtabs-pill { display:inline-flex;align-items:center;gap:2px;padding:4px;background:color-mix(in srgb,var(--foreground) 7%,transparent);border-radius:999px; }
       .wtab-pill {
         padding:4px 12px;border-radius:999px;
         font-size:13px;font-weight:400;letter-spacing:-0.02em;
@@ -4878,7 +4878,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         font-family:inherit;
       }
       .wtab-pill:hover { color:var(--foreground); }
-      .wtab-pill.active { background:var(--secondary);color:var(--foreground);font-weight:500; }
+      .wtab-pill.active { background:color-mix(in srgb,var(--foreground) 14%,transparent);color:var(--foreground);font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,0.2); }
 
       /* Content area */
       .wtab-content { display:none;padding:16px 0; }

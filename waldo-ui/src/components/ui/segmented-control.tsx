@@ -47,7 +47,7 @@ function SegmentedControl({
     <div
       className={cn(
         // Container — background pill
-        "inline-flex items-center rounded-full bg-background p-0",
+        "inline-flex items-center rounded-full bg-foreground/[0.07] p-1",
         fullWidth && "flex w-full",
         disabled && "opacity-40 pointer-events-none",
         className
@@ -73,8 +73,8 @@ function SegmentedControl({
               "transition-colors duration-100 cursor-pointer select-none",
               // States
               isActive
-                ? "bg-muted text-foreground"
-                : "bg-transparent text-foreground/70",
+                ? "bg-foreground/[0.14] text-foreground shadow-sm"
+                : "bg-transparent text-foreground/60",
             )}
           >
             {opt.icon ?? opt.label}
