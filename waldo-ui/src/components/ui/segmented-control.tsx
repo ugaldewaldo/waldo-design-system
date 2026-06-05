@@ -47,7 +47,7 @@ function SegmentedControl({
     <div
       className={cn(
         // Container — background pill
-        "inline-flex items-center rounded-full bg-foreground/[0.07] p-1",
+        "inline-flex items-center rounded-full bg-background/[0.5] p-1",
         fullWidth && "flex w-full",
         disabled && "opacity-40 pointer-events-none",
         className
