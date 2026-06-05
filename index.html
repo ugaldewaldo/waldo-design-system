@@ -4300,9 +4300,18 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       .wli:hover .wli-act { opacity:1; }
       .wli.wli-sel { background:var(--muted); }
       .wli:last-child { border-bottom:none; }
-      .wli.wli-ghost { height:40px;padding:0 12px;margin:0 4px;border-radius:8px;border-bottom:none !important; }
-      .wli.wli-ghost:hover { background:color-mix(in srgb,var(--foreground) 7%,transparent); }
-      .wli.wli-ghost.wli-sel,.wli.wli-ghost.active { background:color-mix(in srgb,var(--foreground) 7%,transparent); }
+      .wli.wli-ghost,
+      .wdialog .wli,
+      .wwizard .wli { 
+        height:40px;padding:0 10px;margin:1px 4px;
+        border-radius:999px;border-bottom:none !important;
+      }
+      .wli.wli-ghost:hover,
+      .wdialog .wli:hover,
+      .wwizard .wli:hover { background:color-mix(in srgb,var(--foreground) 7%,transparent); }
+      .wli.wli-ghost.wli-sel,.wli.wli-ghost.active,
+      .wdialog .wli.wli-sel,.wdialog .wli.active,
+      .wwizard .wli.wli-sel,.wwizard .wli.active { background:color-mix(in srgb,var(--foreground) 7%,transparent); }
       /* No top border when list follows an input */
       .input + div > .wli:first-child,
       .input ~ div > .wli:first-child { border-top:none; }
