@@ -90,8 +90,10 @@ components:
       - Simple single-file button upload — use a Button instead
     notes: |
       Two sizes: default (68px drop zone, py-6) and slim (36px drop zone, py-2).
-      Slim is identical in behavior to default — same file list, same drag-and-drop,
-      only the drop zone height differs. Use slim when vertical space is tight (dialogs).
+      Slim is functionally identical to default — same file list, same drag-and-drop,
+      same error states. Only the drop zone height differs.
+      Use slim inside dialogs where vertical space is limited.
+      Both sizes show the uploaded file list below the drop zone.
       Hover state: bg-secondary. Drag-over: bg-secondary + teal border.
       Error state per file uses text-warning inline.
       Zone text is text-primary (teal). Optional label uses foreground/50.
