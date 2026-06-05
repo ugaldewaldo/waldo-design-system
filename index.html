@@ -3161,9 +3161,9 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
             </div>
             <div class="wdialog-body" style="padding-top:0">
               <!-- Segmented Control -->
-              <div class="wtabs-pill" style="width:100%;margin-bottom:16px" id="team-tabs">
-                <button class="wtab-pill active" style="flex:1;text-align:center" onclick="switchTab('team-tabs',this)">Everyone at Waldo</button>
-                <button class="wtab-pill" style="flex:1;text-align:center" onclick="switchTab('team-tabs',this)">Only selected</button>
+              <div class="wseg full" style="margin-bottom:16px" id="team-tabs">
+                <button class="wseg-opt active" onclick="switchSegTab('team-tabs',this)">Everyone at Waldo</button>
+                <button class="wseg-opt inactive" onclick="switchSegTab('team-tabs',this)">Only selected</button>
               </div>
               <!-- Search -->
               <input class="input" placeholder="Search" style="width:100%;margin-bottom:12px" />
@@ -3550,12 +3550,12 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
               <!-- Time range tabs -->
               <div style="display:flex;flex-direction:column;gap:8px">
                 <label style="font-size:12px;color:var(--muted-foreground);padding:0 4px">Frequency</label>
-                <div class="wtabs-pill" id="report-tabs" style="width:fit-content">
-                  <button class="wtab-pill" onclick="switchTab('report-tabs',this)">One time</button>
-                  <button class="wtab-pill active" onclick="switchTab('report-tabs',this)">Daily</button>
-                  <button class="wtab-pill" onclick="switchTab('report-tabs',this)">Weekly</button>
-                  <button class="wtab-pill" onclick="switchTab('report-tabs',this)">Monthly</button>
-                  <button class="wtab-pill" onclick="switchTab('report-tabs',this)">Quarterly</button>
+                <div class="wseg" id="report-tabs">
+                  <button class="wseg-opt inactive" onclick="switchSegTab('report-tabs',this)">One time</button>
+                  <button class="wseg-opt active" onclick="switchSegTab('report-tabs',this)">Daily</button>
+                  <button class="wseg-opt inactive" onclick="switchSegTab('report-tabs',this)">Weekly</button>
+                  <button class="wseg-opt inactive" onclick="switchSegTab('report-tabs',this)">Monthly</button>
+                  <button class="wseg-opt inactive" onclick="switchSegTab('report-tabs',this)">Quarterly</button>
                 </div>
               </div>
               <!-- Date range -->
@@ -6000,11 +6000,11 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
                 <input class="input" placeholder="Type a brand name" style="width:100%" />
                 <div style="display:flex;flex-direction:column;gap:4px">
                   <label style="font-size:12px;color:var(--muted-foreground);padding:0 4px">Relationship</label>
-                  <div class="wtabs-pill" id="wiz-rel" style="width:fit-content">
-                    <button class="wtab-pill active" onclick="switchTab('wiz-rel',this)">My brand</button>
-                    <button class="wtab-pill" onclick="switchTab('wiz-rel',this)">Prospect</button>
-                    <button class="wtab-pill" onclick="switchTab('wiz-rel',this)">Client</button>
-                    <button class="wtab-pill" onclick="switchTab('wiz-rel',this)">Partner</button>
+                  <div class="wseg" id="wiz-rel">
+                    <button class="wseg-opt active" onclick="switchSegTab('wiz-rel',this)">My brand</button>
+                    <button class="wseg-opt inactive" onclick="switchSegTab('wiz-rel',this)">Prospect</button>
+                    <button class="wseg-opt inactive" onclick="switchSegTab('wiz-rel',this)">Client</button>
+                    <button class="wseg-opt inactive" onclick="switchSegTab('wiz-rel',this)">Partner</button>
                   </div>
                 </div>
               </div>
@@ -6099,9 +6099,9 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <div class="wwizard-body" style="display:flex;flex-direction:column;gap:10px">
                 <p style="font-size:13px;color:var(--muted-foreground)">Invite your team — they'll see brand insights and can collaborate with you here.</p>
                 <input class="input" placeholder="luna@patagonia.com, steve@waldo.fyi..." style="width:100%" />
-                <div class="wtabs-pill" id="wiz-scope" style="width:100%">
-                  <button class="wtab-pill" style="flex:1;text-align:center" onclick="switchTab('wiz-scope',this)">Everyone at Media.Monks</button>
-                  <button class="wtab-pill active" style="flex:1;text-align:center" onclick="switchTab('wiz-scope',this)">Only selected members</button>
+                <div class="wseg full" id="wiz-scope">
+                  <button class="wseg-opt inactive" onclick="switchSegTab('wiz-scope',this)">Everyone at Media.Monks</button>
+                  <button class="wseg-opt active" onclick="switchSegTab('wiz-scope',this)">Only selected members</button>
                 </div>
                 <div class="wli"><div class="wli-av" style="background:var(--primary);color:#171819">MM</div><div class="wli-body"><span class="wli-name">M. McLindon</span><span class="wli-sep">·</span><span class="wli-sub">mlyndon@media.monks</span></div><label class="wswitch" style="margin:0"><input type="checkbox" checked onchange=""/><div class="wswitch-track"><div class="wswitch-thumb"></div></div></label></div>
                 <div class="wli wli-ghost"><div class="wli-av">PO</div><div class="wli-body"><span class="wli-name">P. O'Connell</span><span class="wli-sep">·</span><span class="wli-sub">p.oconnell@media.monks</span></div><label class="wswitch" style="margin:0"><input type="checkbox" onchange=""/><div class="wswitch-track"><div class="wswitch-thumb"></div></div></label></div>
