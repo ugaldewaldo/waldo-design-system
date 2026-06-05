@@ -99,7 +99,7 @@ function FileInput({
         onDrop={onDrop}
         className={cn(
           "flex items-center justify-center gap-2 cursor-pointer select-none",
-          size === "slim" ? "rounded-2xl px-4 py-3" : "rounded-2xl px-4 py-6",
+          size === "slim" ? "rounded-2xl px-4 py-2" : "rounded-2xl px-4 py-6",
           "bg-muted hover:bg-secondary",
           "transition-colors duration-100",
           "focus-visible:outline-none",
