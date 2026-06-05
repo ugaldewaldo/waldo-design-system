@@ -199,13 +199,50 @@ components:
       - Actions that need focus and shouldn't navigate away
       - Forms, confirmations, sharing, configuration
     dont_use_when:
-      - Simple confirmations without context — use AlertDialog
       - Large panels with navigation — use Sheet/Drawer
+      - Purely informational content — use Toast or Alert
     notes: |
-      sm (560px) for confirmations and simple forms.
-      md (720px) for share, invite, upload, add signal.
-      lg (960px) for report builder, select team, complex forms.
-      32px padding. No header/footer border. White buttons 44px x 192px.
+      SIZES:
+        sm (560px) — confirmations, warnings, simple single-field forms, success states.
+        md (720px) — share/invite, upload file, add signal, ask to collaborate, form + list.
+        lg (960px) — report builder, select team, multi-field complex forms.
+
+      STRUCTURE:
+        Header: title (text-xl font-medium) + optional icon avatar (40px) + close button.
+        Body: 32px padding, no top padding when following header. gap-16px between elements.
+        Footer: space-between layout. Primary CTA = btn-white 44px × 192px (right).
+          Secondary footer actions use btn-ghost (with border) or btn-bare (no border).
+          AdvancedSection always goes at the bottom of the body, before the footer.
+
+      COMPONENTS USED INSIDE DIALOGS:
+        - SegmentedControl (wseg) for view mode toggles — NOT wtabs-pill (that's Tabs)
+        - ListItem ghost variant (no borders, pill hover) for entity lists
+        - Switch for toggles in list rows
+        - CopyLink for shareable URLs
+        - FileInput slim for upload zones (space-efficient)
+        - AdvancedSection for collapsible optional fields
+        - Input / Field for text entry
+        - RadioGroup for exclusive choice with description
+
+      ROLES & LABELS:
+        User roles (Owner, Editor, etc.) use wli-meta text — NOT badges.
+
+      RECIPES AVAILABLE (15):
+        1. Confirmation/Warning — sm, ghost + destructive buttons
+        2. Success/Completion — sm, no header, centered body, single CTA
+        3. Form — sm, field components + cancel/primary
+        4. Share/Invite — md, email input + member list + CopyLink
+        5. Select your team — md, SegmentedControl + Input + ListItem + Switch
+        6. Add a signal — md, checklist + toggles
+        7. Upload file — md, FileInput slim
+        8. Shareable link — sm, CopyLink + Switch toggle
+        9. Ask to collaborate — sm, email Input + single CTA
+        10. Audience — md, info + CopyLink
+        11. Competitors — md, list + checkbox
+        12. Add persona — md, multi-field form
+        13. Invite collaborators & guests — md, Tabs + Input + RadioGroup + CopyLink
+        14. Brand Audit — md, form fields + FileInput slim + AdvancedSection + split footer
+        15. Report builder — lg, SegmentedControl + date Fields
 
   - component: WizardDialog
     use_when:
