@@ -46,8 +46,8 @@ function SegmentedControl({
   return (
     <div
       className={cn(
-        // Container — background pill
-        "inline-flex items-center rounded-full bg-background/[0.5] p-1",
+        // Container — solid zinc-950 pill (Figma node 83872:2208)
+        "inline-flex items-center rounded-full bg-background p-0",
         fullWidth && "flex w-full",
         disabled && "opacity-40 pointer-events-none",
         className
@@ -73,8 +73,8 @@ function SegmentedControl({
               "transition-colors duration-100 cursor-pointer select-none",
               // States
               isActive
-                ? "bg-foreground/[0.14] text-foreground shadow-sm"
-                : "bg-transparent text-foreground/60",
+                ? "bg-muted text-foreground font-medium"
+                : "bg-muted text-foreground/70",
             )}
           >
             {opt.icon ?? opt.label}
