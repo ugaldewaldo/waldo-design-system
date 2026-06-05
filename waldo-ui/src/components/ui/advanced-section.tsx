@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ChevronRight, ChevronDown } from "lucide-react";
+import { IconCircleChevronDown, IconCircleChevronUp } from "./icons";
 import { cn } from "@/lib/utils";
 
 // AdvancedSection — Figma node 84009:174707
@@ -35,8 +35,8 @@ export function AdvancedSection({
         )}
       >
         {open
-          ? <ChevronDown className="h-3.5 w-3.5 shrink-0" />
-          : <ChevronRight className="h-3.5 w-3.5 shrink-0" />
+          ? <IconCircleChevronUp className="h-3.5 w-3.5 shrink-0" />
+          : <IconCircleChevronDown className="h-3.5 w-3.5 shrink-0" />
         }
         {label}
       </button>

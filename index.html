@@ -3549,8 +3549,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
             <input class="input" placeholder="Brand name" style="width:100%" />
             <input class="input" placeholder="Category" style="width:100%" />
             <div>
-              <button class="wadv-toggle" onclick="wadvToggle(this)">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              <button class="wadv-toggle" onclick="wadvToggle(this)" data-open="false">
+                <svg class="wadv-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 1C11.866 1 15 4.13401 15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8C1 4.13401 4.13401 1 8 1ZM7.85352 9.14648L4.70703 6L4 6.70703L7.85352 10.5605L11.707 6.70703L11 6L7.85352 9.14648Z" fill="currentColor"/></svg>
                 Advanced
               </button>
               <div class="wadv-body" style="display:none">
@@ -5325,11 +5325,15 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
   function wadvToggle(btn) {
     const body = btn.nextElementSibling;
-    const open = body.style.display !== 'none';
+    const open = btn.dataset.open === 'true';
+    btn.dataset.open = !open;
     body.style.display = open ? 'none' : 'flex';
-    btn.querySelector('svg').innerHTML = open
-      ? '<polyline points="9 18 15 12 9 6"/>'
-      : '<polyline points="6 9 12 15 18 9"/>';
+    const icon = btn.querySelector('.wadv-icon');
+    if (open) {
+      icon.innerHTML = '<path d="M8 1C11.866 1 15 4.13401 15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8C1 4.13401 4.13401 1 8 1ZM7.85352 9.14648L4.70703 6L4 6.70703L7.85352 10.5605L11.707 6.70703L11 6L7.85352 9.14648Z" fill="currentColor"/>';
+    } else {
+      icon.innerHTML = '<path d="M8.00003 15C4.13403 15 1.00003 11.866 1.00003 7.99996C1.00003 4.13397 4.13403 0.99996 8.00003 0.99996C11.866 0.99996 15 4.13397 15 7.99996C15 11.866 11.866 15 8.00003 15ZM8.14651 6.85348L11.293 9.99996L12 9.29293L8.14651 5.43941L4.293 9.29293L5.00003 9.99996L8.14651 6.85348Z" fill="currentColor"/>';
+    }
   }
 
   function copyLinkClick(el, url) {
