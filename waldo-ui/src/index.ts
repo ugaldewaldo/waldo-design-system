@@ -81,7 +81,7 @@ export {
   IconRadioEmpty, IconCheckFilled, IconCheckboxChecked, IconCircleCheck,
   IconTrash, IconForward, IconExport,
   IconCircleChevronUp, IconCircleChevronDown,
-  IconSliders, IconUndo, IconRedo, IconRefresh, IconCycle,
+  IconSliders, IconUndo, IconRedo, IconRefresh, IconCycle, IconFilter,
 } from "./components/ui/icons/index";
 export type { TabsListProps, TabsTriggerProps } from "./components/ui/tabs";
 export type { EmptyStateProps } from "./components/ui/empty-state";

@@ -15,3 +15,4 @@ export { IconUndo } from "./undo";
 export { IconRedo } from "./redo";
 export { IconRefresh } from "./refresh";
 export { IconCycle } from "./cycle";
+export { IconFilter } from "./filter";
