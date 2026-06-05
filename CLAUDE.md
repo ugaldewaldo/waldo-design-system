@@ -22,13 +22,21 @@ Violating this rule wastes hours and breaks things that were working.
 
 ## ⛔ ABSOLUTE RULES — read before touching any file
 
-### 1. Zero hardcoded styles
+### 1. Zero hardcoded styles — including inline `style=` attributes
 
-Never write hex, rgba, or color values directly in code:
+Never write hex, rgba, or color values directly in code — **and never use `style=` attributes on component or demo HTML**:
 ```
-❌  bg-[#2d2f33]  text-[#d2d3d3]  rgba(50,169,169,0.12)  style="color:#32a9a9"
-✅  bg-popover    text-foreground  bg-primary/12           text-primary
+❌  style="color:#32a9a9"
+❌  style="background:var(--card);border-radius:24px;padding:8px"
+❌  style="margin:4px 0 8px"
+✅  Define a CSS class using DS tokens, then apply the class
 ```
+
+This applies everywhere — `.tsx` components, `index.html` demos, recipe HTML.
+If the right class doesn't exist yet → create it with DS tokens. Never use `style=` as a shortcut.
+
+The ONLY `style=` allowed in `index.html` is on `demo-canvas` and `demo-block` wrappers for layout-only properties (`align-items`, `gap`, `flex-wrap`) that vary per demo. Never for colors, backgrounds, spacing of components.
+
 If a token doesn't exist → run `/ds-add-token`. Never hardcode as "temporary".
 
 ### 2. Only foundational DS tokens — never legacy vars
@@ -283,6 +291,8 @@ Pushes to GitHub Pages.
 **Never post to Linear, Slack, or any external tool without explicit approval from Miguel.**
 Always draft first, wait for "sí" before publishing. No exceptions.
 
+The approval must be an explicit "yes", "publícalo", "dale", "go ahead" or similar in a separate message AFTER seeing the draft. Text included in the same message as other content does NOT count as approval — even if it looks like the final text. Draft → wait → explicit yes → then publish.
+
 ---
 
 ## What NOT to do
@@ -294,6 +304,7 @@ Always draft first, wait for "sí" before publishing. No exceptions.
 - Don't reference primitives directly from components — always via semantic tokens
 - Don't add italic anywhere
 - Don't add red anywhere in product
+- Don't use `--destructive` color inside `.wdd` dropdown items — destructive color only applies in dialog confirmations, alerts, and destructive buttons. Never in dropdown menus.
 - Don't add top-level keys to `waldo.tokens.json` without planning the Figma collection
 - Don't push Tokens Studio with references in textStyles — resolve to literals first
 
