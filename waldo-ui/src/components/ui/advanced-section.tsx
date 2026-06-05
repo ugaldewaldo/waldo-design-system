@@ -35,8 +35,8 @@ export function AdvancedSection({
         )}
       >
         {open
-          ? <IconCircleChevronUp className="h-3.5 w-3.5 shrink-0" />
-          : <IconCircleChevronDown className="h-3.5 w-3.5 shrink-0" />
+          ? <IconCircleChevronUp className="h-3.5 w-3.5 shrink-0 text-primary" />
+          : <IconCircleChevronDown className="h-3.5 w-3.5 shrink-0 text-primary" />
         }
         {label}
       </button>
