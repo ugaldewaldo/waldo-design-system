@@ -1,0 +1,259 @@
+# Waldo Component Usage Doctrine
+# Machine-readable "when to use X" for every component in waldo-ui.
+# Read by the design-system skill. Update when components change — never let this drift.
+# PRO-2528
+
+components:
+
+  - component: Button
+    use_when:
+      - Primary action in a view (one per screen max for default variant)
+      - Form submission, dialog confirmation, CTA
+    dont_use_when:
+      - Navigation between pages — use a link instead
+      - Destructive first-touch actions — use destructive variant only for confirmation
+    prefer_over:
+      - Link: when the action causes a side effect (not navigation)
+    notes: |
+      white variant for dialog footers (44px, 192px wide).
+      ghost variant for secondary actions paired with a primary.
+      destructive-solid only in confirmation dialogs, never as first-touch.
+
+  - component: Input / Field
+    use_when:
+      - Single-line text entry
+      - Search, email, URL, name fields
+    dont_use_when:
+      - Multi-line content — use Textarea
+      - Selection from a list — use Select or Combobox
+    notes: |
+      Always pill shape (rounded-full). Label uses text-primary.
+      Hover/focus border: border-waldo-green-800. No ring.
+
+  - component: Select / Dropdown
+    use_when:
+      - Choosing one option from a known list (5+ options)
+      - Filter controls
+    dont_use_when:
+      - 2-3 options — use SegmentedControl or RadioGroup instead
+      - Free-text search needed — use Combobox
+
+  - component: Checkbox
+    use_when:
+      - Multi-select from a list
+      - Boolean toggle that needs a label
+      - Settings that apply independently
+    dont_use_when:
+      - Mutually exclusive options — use RadioGroup
+      - Immediate action toggle — use Switch
+    notes: Circular shape (not square). green variant for brand, mono for neutral.
+
+  - component: Switch
+    use_when:
+      - Immediate on/off toggle (takes effect instantly without Save)
+      - Feature flags, notification settings, per-item enable/disable
+    dont_use_when:
+      - Options that need a Save action — use Checkbox + Button instead
+      - Multi-select — use Checkbox
+
+  - component: Badge
+    use_when:
+      - Status labels (Active, Paused, Error, Draft)
+      - Counts and metadata tags
+      - Category labels on cards
+    dont_use_when:
+      - Interactive actions — use Button
+      - Long text — badges are single-word or short phrase only
+    prefer_over:
+      - Tag: when the item is not removable by the user
+
+  - component: Avatar
+    use_when:
+      - Representing a person (round shape)
+      - Representing a brand/company/logo (square shape)
+      - Member lists, author attribution, team displays
+    notes: round = people, square = brands. Sizes 16/24/32/40px.
+
+  - component: Tag / TagInput
+    use_when:
+      - User-entered removable labels (emails, keywords, filters)
+      - Multi-value inputs where items can be added and removed
+    dont_use_when:
+      - Static labels — use Badge
+      - Single selection — use Select
+
+  - component: FileInput
+    use_when:
+      - File upload with drag-and-drop zone
+      - Showing uploaded file list with status
+    notes: Zone radius 32px. Error state uses text-warning.
+
+  - component: SegmentedControl
+    use_when:
+      - 2-4 mutually exclusive view modes (List/Grid, Day/Week/Month)
+      - Compact filter tabs within a panel
+    dont_use_when:
+      - More than 4 options — use Tabs or Select
+      - Options with descriptions — use RadioGroup
+    prefer_over:
+      - Tabs: when the options are toggles within the same view (not navigation)
+
+  - component: Tooltip
+    use_when:
+      - Explaining icon-only buttons
+      - Showing keyboard shortcuts
+      - Non-essential supplementary info
+    dont_use_when:
+      - Required information — put it in the UI, not a tooltip
+      - Long text — use Popover
+
+  - component: Table
+    use_when:
+      - Structured data with multiple columns and rows
+      - Sortable, filterable data sets
+    dont_use_when:
+      - Simple lists — use ListItem/ListView
+      - 1-2 columns — use a list layout
+
+  - component: Tabs
+    use_when:
+      - Navigation between distinct sections of a page
+      - Switching between related views (text variant for page nav, pill for inline filters)
+    dont_use_when:
+      - 2-3 toggle options — use SegmentedControl
+      - Deeply nested navigation — use sidebar
+
+  - component: Alert
+    use_when:
+      - Inline feedback within a page (form errors, plan limits, info)
+      - Persistent contextual messages that live in the content
+    dont_use_when:
+      - Ephemeral feedback after an action — use Toast
+      - Blocking actions — use AlertDialog
+    prefer_over:
+      - Toast: when the message is permanent and related to the current view
+
+  - component: Toast
+    use_when:
+      - Ephemeral feedback after user actions (saved, uploaded, error)
+      - System alerts that appear in the corner and auto-dismiss
+    dont_use_when:
+      - Persistent warnings — use Alert
+      - Blocking confirmations — use AlertDialog
+    notes: |
+      notification pattern for user actions.
+      banner pattern for system-level alerts (limits, connectivity).
+
+  - component: Separator
+    use_when:
+      - Grouping related items in menus, dropdowns, settings panels
+      - Visual division between sections
+    dont_use_when:
+      - Adding space — use padding/margin instead
+
+  - component: ListItem / ListView
+    use_when:
+      - Rows in a list (people, brands, entities) with avatar + label + actions
+      - Any interactive row that isn't a table
+    dont_use_when:
+      - Tabular data with multiple columns — use Table
+      - Navigation items — use NavItem
+    notes: 40px height. Actions appear on hover. Avatar round=people, square=brands.
+
+  - component: EmptyState
+    use_when:
+      - Page, section, or inline area with no data yet
+      - After filtering returns zero results
+    notes: |
+      page (80px padding) for full-view empty.
+      section (48px) inside tables/panels.
+      inline (24px) inside dropdowns/search.
+
+  - component: RadioGroup
+    use_when:
+      - Mutually exclusive options where user must pick exactly one
+      - Settings choices (e.g. "Share only / Comment / Full access")
+    dont_use_when:
+      - Independent toggles — use Switch or Checkbox
+      - 2 options that are view toggles — use SegmentedControl
+
+  - component: Slider
+    use_when:
+      - Continuous value selection (volume, opacity, price range)
+      - Range selection with two thumbs
+    dont_use_when:
+      - Precise numeric input — use Input with type=number
+
+  - component: Dialog / Modal
+    use_when:
+      - Actions that need focus and shouldn't navigate away
+      - Forms, confirmations, sharing, configuration
+    dont_use_when:
+      - Simple confirmations without context — use AlertDialog
+      - Large panels with navigation — use Sheet/Drawer
+    notes: |
+      sm (560px) for confirmations and simple forms.
+      md (720px) for share, invite, upload, add signal.
+      lg (960px) for report builder, select team, complex forms.
+      32px padding. No header/footer border. White buttons 44px x 192px.
+
+  - component: WizardDialog
+    use_when:
+      - Multi-step onboarding flows
+      - Setup flows that need contextual images/previews on the right
+    dont_use_when:
+      - Single-step forms — use Dialog
+      - Settings — use Dialog with tabs
+
+  - component: StatusSpinner
+    use_when:
+      - File upload row status
+      - Any async operation that resolves to success/error/warning
+    dont_use_when:
+      - Page-level loading — use Skeleton
+      - Button loading state — use DotsLoader or built-in Button loading prop
+    notes: Canvas 16px. Morphs to success/error/warning with animation.
+
+  - component: NavItem
+    use_when:
+      - Settings panel items (label + trailing icon)
+      - Signal/feed sidebar items (count badge + label)
+      - Report builder items (label + status indicator)
+      - Any navigable list item that is NOT a row of data
+    dont_use_when:
+      - Data rows — use ListItem
+      - Tabular data — use Table
+    notes: |
+      32px height. Icon 14px trailing (canvas 16).
+      Active = bg-muted + font-medium.
+      Section headers use NavSection (ALL CAPS, 11px).
+      Use NavPanel as the scrollable container.
+
+component_choice_logic:
+
+  dialog_vs_drawer:
+    dialog: Focused action, relatively compact, needs user's full attention
+    drawer: Large contextual panel, settings with navigation, doesn't block the full screen
+
+  switch_vs_checkbox_vs_radio:
+    switch: Immediate effect toggle, no Save needed
+    checkbox: Multi-select, or boolean that requires Save
+    radio: Mutually exclusive single choice
+
+  toast_vs_alert_vs_dialog:
+    toast: Ephemeral, auto-dismisses, corner of screen
+    alert: Persistent, lives in the content, related to current view
+    dialog: Requires user action/acknowledgment, blocks interaction
+
+  badge_vs_tag:
+    badge: Static, non-removable status label
+    tag: User-created, removable, part of input
+
+  tabs_vs_segmented_control:
+    tabs: Navigation between distinct page sections
+    segmented_control: Toggle between view modes within the same data
+
+  listitem_vs_navitem_vs_table:
+    listitem: Entity rows (people, brands) with avatar + rich content
+    navitem: Navigation/settings items, compact, with trailing icon
+    table: Multi-column structured data, sortable

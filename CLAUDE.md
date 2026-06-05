@@ -56,6 +56,24 @@ En `index.html` usar las clases CSS del sistema (`badge-active`, `badge-destruct
 
 Todo componente creado o modificado en `waldo-ui/src/components/ui/` DEBE actualizarse en `index.html` en la misma sesión. No preguntes — hazlo siempre.
 
+### 5. Component-usage doctrine (PRO-2528) — mandatory on every component close
+
+When a component is finished and verified, you MUST add its entry to `docs/usage-doctrine.yaml`.
+
+For each component, document:
+```yaml
+- component: ComponentName
+  use_when:
+    - Short description of the right context
+  dont_use_when:
+    - Short description of the wrong context
+  prefer_over:
+    - OtherComponent: reason
+  notes: Optional contextual styling rules or density notes
+```
+
+This is machine-readable data for the design-system skill. It must never drift from reality — update it when the component changes. Do not skip this step.
+
 ---
 
 ## Fallback de referencia — Linear
