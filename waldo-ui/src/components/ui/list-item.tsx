@@ -2,96 +2,98 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Waldo ListItem — values from Figma DS (node 62783:68372, ROWS / BORDER)
+// Waldo ListItem — two variants from Figma DS
 //
-// Height    → 56px
-// Padding   → px-4
-// Border    → border-b rgba(210,211,211,0.12) (bottom only)
-// Hover bg  → zinc-800 #27282b
-// Avatar    → 24px · round for people · square (4px) for brands
-// Label     → zinc-200/100% · text-sm-normal
-// Sublabel  → zinc-200/50%
+// default (node 62783:68372) — with border-bottom separator
+//   Height 56px · border-b foreground/12 · hover bg-muted
+//   Use in: standalone lists, member lists, brand lists
 //
-// Variants seen in Figma:
-//   MASTER        → avatar + label + sublabel + dropdown + toggle + actions
-//   PRODUCT       → brand avatar (square) + label + actions
-//   MEMBERS       → person avatar (round) + name + email + toggle
-//   SEARCH        → search icon + placeholder + bulk actions
-//   ACATARTEXT    → brand avatar + text + toggle
-//   TEXT          → brand avatar + text + icon + toggle
-//
-// Code approach: composable — pass avatar, label, sublabel, actions as props
-// instead of hardcoding the 7 variants. More flexible, same visual system.
+// ghost (node 71921:131866) — no borders, rounded hover pill
+//   Height 40px · no border · hover rounded-lg bg-foreground/7
+//   Use in: inside modals/dialogs, settings panels, filter lists
 // ─────────────────────────────────────────────────────────────────────────────
 
 export interface ListItemProps {
-  /** Leading avatar or icon — 24px, use Avatar component */
+  /** Leading avatar or icon */
   avatar?: React.ReactNode;
   /** Primary label text */
   label: string;
-  /** Secondary / muted text (email, description, metadata) */
+  /** Secondary / muted text */
   sublabel?: string;
-  /** Right-side actions (toggle, buttons, dropdown) */
+  /** Right-side actions */
   actions?: React.ReactNode;
-  /** Middle metadata (shown between label and actions) */
+  /** Middle metadata */
   meta?: React.ReactNode;
-  /** Show hover state by default (for selected/active) */
+  /** Active / selected state */
   active?: boolean;
+  /** ghost = no borders, rounded hover (for use inside modals/panels) */
+  variant?: "default" | "ghost";
   className?: string;
   onClick?: () => void;
 }
 
 const ListItem = React.forwardRef<HTMLDivElement, ListItemProps>(
-  ({ avatar, label, sublabel, actions, meta, active, className, onClick }, ref) => (
-    <div
-      ref={ref}
-      onClick={onClick}
-      className={cn(
-        "flex h-14 items-center gap-2.5 px-4",
-        "border-b border-foreground/[0.12]",
-        "transition-colors duration-100",
-        "hover:bg-muted",
-        active && "bg-muted",
-        onClick && "cursor-pointer",
-        className
-      )}
-    >
-      {/* Leading avatar */}
-      {avatar && (
-        <div className="shrink-0">{avatar}</div>
-      )}
+  ({ avatar, label, sublabel, actions, meta, active, variant = "default", className, onClick }, ref) => {
+    const isGhost = variant === "ghost";
 
-      {/* Label area — flex-1 */}
-      <div className="flex flex-1 min-w-0 items-center gap-2.5 h-full">
-        <div className="flex flex-1 min-w-0 flex-col justify-center">
-          <span className="text-sm font-normal tracking-[-0.02em] text-foreground truncate">
-            {label}
-          </span>
-          {sublabel && (
-            <span className="text-sm font-normal tracking-[-0.02em] text-foreground/50 truncate">
-              {sublabel}
+    return (
+      <div
+        ref={ref}
+        onClick={onClick}
+        className={cn(
+          "flex items-center gap-2.5",
+          "transition-colors duration-100",
+          onClick && "cursor-pointer",
+          // default variant
+          !isGhost && [
+            "h-14 px-4",
+            "border-b border-foreground/[0.12]",
+            "hover:bg-muted",
+            active && "bg-muted",
+          ],
+          // ghost variant — used inside modals/panels
+          isGhost && [
+            "h-10 px-3 mx-1 rounded-lg",
+            "hover:bg-foreground/[0.07]",
+            active && "bg-foreground/[0.07]",
+          ],
+          className
+        )}
+      >
+        {avatar && <div className="shrink-0">{avatar}</div>}
+
+        <div className="flex flex-1 min-w-0 items-center gap-2.5 h-full">
+          <div className="flex flex-1 min-w-0 flex-col justify-center">
+            <span className={cn(
+              "font-normal tracking-[-0.02em] text-foreground truncate",
+              isGhost ? "text-sm" : "text-sm"
+            )}>
+              {label}
             </span>
+            {sublabel && (
+              <span className="text-sm font-normal tracking-[-0.02em] text-foreground/50 truncate">
+                {sublabel}
+              </span>
+            )}
+          </div>
+          {meta && (
+            <div className="shrink-0 text-sm text-foreground/50">{meta}</div>
           )}
         </div>
-        {meta && (
-          <div className="shrink-0 text-sm text-foreground/50">{meta}</div>
+
+        {actions && (
+          <div className="shrink-0 flex items-center gap-4">{actions}</div>
         )}
       </div>
-
-      {/* Right actions */}
-      {actions && (
-        <div className="shrink-0 flex items-center gap-4">{actions}</div>
-      )}
-    </div>
-  )
+    );
+  }
 );
 ListItem.displayName = "ListItem";
 
-// ── ListView — wraps ListItems with optional header ───────────────────────────
+// ── ListView ──────────────────────────────────────────────────────────────────
 
 export interface ListViewProps {
   children: React.ReactNode;
-  /** Section header label */
   header?: React.ReactNode;
   className?: string;
 }
