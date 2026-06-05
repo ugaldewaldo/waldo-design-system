@@ -2487,40 +2487,22 @@ function showTab(id,el){waldoGo('tab-'+id,el);}
       <div class="page-desc">Two or more options in a pill container. One active at a time. Used for view toggles and mode selectors.</div>
     </div>
 
-    <style>
-      .wseg { display:inline-flex;align-items:center;background:color-mix(in srgb,var(--background) 50%,transparent);border-radius:999px;padding:4px; }
-      .wseg-opt {
-        flex:1;display:flex;align-items:center;justify-content:center;
-        padding:6px 16px;border-radius:999px;border:none;cursor:pointer;
-        font-size:14px;font-weight:400;letter-spacing:-0.02em;line-height:20px;
-        font-family:'Inter',sans-serif;
-        transition:background .1s,color .1s;
-        white-space:nowrap;
-      }
-      .wseg-opt.active   { background:color-mix(in srgb,var(--foreground) 14%,transparent);color:var(--foreground); }
-      .wseg-opt.inactive { background:transparent;color:color-mix(in srgb,var(--foreground) 60%,transparent); }
-      .wseg.full { display:flex;width:100%; }
-    </style>
-
     <div class="comp-section">
       <div class="comp-section-title">Text options</div>
       <div class="demo-block">
         <div class="demo-canvas" style="gap:16px;flex-wrap:wrap">
-          <!-- Left active -->
-          <div class="wseg">
-            <button class="wseg-opt active">Visible</button>
-            <button class="wseg-opt inactive">Hidden</button>
+          <div class="wtabs-pill" id="seg-demo-1">
+            <button class="wtab-pill active" onclick="switchTab('seg-demo-1',this)">Visible</button>
+            <button class="wtab-pill" onclick="switchTab('seg-demo-1',this)">Hidden</button>
           </div>
-          <!-- Right active -->
-          <div class="wseg">
-            <button class="wseg-opt inactive">Visible</button>
-            <button class="wseg-opt active">Hidden</button>
+          <div class="wtabs-pill" id="seg-demo-2">
+            <button class="wtab-pill" onclick="switchTab('seg-demo-2',this)">Visible</button>
+            <button class="wtab-pill active" onclick="switchTab('seg-demo-2',this)">Hidden</button>
           </div>
-          <!-- 3 options -->
-          <div class="wseg">
-            <button class="wseg-opt active">Day</button>
-            <button class="wseg-opt inactive">Week</button>
-            <button class="wseg-opt inactive">Month</button>
+          <div class="wtabs-pill" id="seg-demo-3">
+            <button class="wtab-pill active" onclick="switchTab('seg-demo-3',this)">Day</button>
+            <button class="wtab-pill" onclick="switchTab('seg-demo-3',this)">Week</button>
+            <button class="wtab-pill" onclick="switchTab('seg-demo-3',this)">Month</button>
           </div>
         </div>
         <div class="demo-code-bar">
@@ -2534,13 +2516,13 @@ function showTab(id,el){waldoGo('tab-'+id,el);}
       <div class="comp-section-title">Full width</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="max-width:480px;gap:10px">
-          <div class="wseg full">
-            <button class="wseg-opt active">Specific emails</button>
-            <button class="wseg-opt inactive">Organization access</button>
+          <div class="wtabs-pill" id="seg-demo-4" style="width:100%">
+            <button class="wtab-pill active" style="flex:1;text-align:center" onclick="switchTab('seg-demo-4',this)">Specific emails</button>
+            <button class="wtab-pill" style="flex:1;text-align:center" onclick="switchTab('seg-demo-4',this)">Organization access</button>
           </div>
-          <div class="wseg full">
-            <button class="wseg-opt inactive">Specific emails</button>
-            <button class="wseg-opt active">Organization access</button>
+          <div class="wtabs-pill" id="seg-demo-5" style="width:100%">
+            <button class="wtab-pill" style="flex:1;text-align:center" onclick="switchTab('seg-demo-5',this)">Specific emails</button>
+            <button class="wtab-pill active" style="flex:1;text-align:center" onclick="switchTab('seg-demo-5',this)">Organization access</button>
           </div>
         </div>
         <div class="demo-code-bar">
@@ -4095,15 +4077,6 @@ function filterCmd() {
     });
   });
 
-  // Segmented control interactivity
-  document.querySelectorAll('.wseg').forEach(seg => {
-    seg.querySelectorAll('.wseg-opt').forEach(btn => {
-      btn.addEventListener('click', () => {
-        seg.querySelectorAll('.wseg-opt').forEach(b => { b.classList.remove('active'); b.classList.add('inactive'); });
-        btn.classList.remove('inactive'); btn.classList.add('active');
-      });
-    });
-  });
 
 document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb => {
   cb.addEventListener('change', () => {
