@@ -73,6 +73,8 @@ export type { NavItemProps } from "./components/ui/nav-item";
 export type { SpinnerStatus } from "./components/ui/status-spinner";
 export type { RadioGroupItemProps } from "./components/ui/radio-group";
 export { Slider } from "./components/ui/slider";
+export { CopyLink } from "./components/ui/copy-link";
+export type { CopyLinkProps } from "./components/ui/copy-link";
 export { Icon } from "./components/ui/icon";
 export type { IconProps, IconSize } from "./components/ui/icon";
 

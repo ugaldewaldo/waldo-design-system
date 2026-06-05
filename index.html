@@ -2355,6 +2355,13 @@ function showTab(id,el){waldoGo('tab-'+id,el);}
     <style>
       /* Checkbox — circular, from Figma DS */
       /* ── File Input ── */
+      /* CopyLink — Figma node 83966:356556 */
+      .wcopy-link { display:flex;align-items:center;gap:10px;padding:8px 16px;border-radius:16px;background:var(--secondary);cursor:pointer;user-select:none;transition:background .1s; }
+      .wcopy-link:hover { background:color-mix(in srgb,var(--secondary) 80%,transparent); }
+      .wcopy-link-url { flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:400;letter-spacing:-0.02em;color:var(--primary);font-family:inherit; }
+      .wcopy-link-icon { flex-shrink:0;color:var(--muted-foreground);transition:color .1s; }
+      .wcopy-link.copied .wcopy-link-icon { color:var(--primary); }
+
       .wfile-zone { display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border-radius:24px;padding:24px 16px;background:var(--muted);cursor:pointer;user-select:none;transition:background .1s; }
       .wfile-zone:hover { background:var(--secondary); }
       .wfile-zone.drag  { background:var(--secondary);outline:1px solid #265152; }
@@ -3288,9 +3295,9 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
             </div>
             <div class="wdialog-body" style="padding-top:0;display:flex;flex-direction:column;gap:12px">
               <p style="font-size:13px;color:var(--muted-foreground)">Anyone with the link can access this space.</p>
-              <div style="display:flex;align-items:center;gap:8px">
-                <input class="input" value="https://waldo.fyi/s/Bd9xKqT8aL" readonly style="flex:1;color:var(--muted-foreground);font-size:12px"/>
-                <button class="btn btn-secondary" style="height:40px;padding:0 14px;font-size:13px;flex-shrink:0">Copy</button>
+              <div class="wcopy-link" onclick="copyLinkClick(this,'https://waldo.fyi/s/Bd9xKqT8aL')">
+                <span class="wcopy-link-url">https://waldo.fyi/s/Bd9xKqT8aL</span>
+                <span class="wcopy-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></span>
               </div>
               <div style="display:flex;align-items:center;justify-content:space-between">
                 <span style="font-size:13px;color:var(--foreground)">Show icon</span>
@@ -3468,7 +3475,10 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
                   <span style="font-size:13px;color:var(--muted-foreground)">Full access</span>
                 </label>
               </div>
-              <input class="input" placeholder="http://localhost:3001/spaces/team" style="width:100%;font-size:12px;color:var(--muted-foreground)" />
+              <div class="wcopy-link" onclick="copyLinkClick(this,'http://localhost:3001/spaces/team')">
+                <span class="wcopy-link-url">http://localhost:3001/spaces/team</span>
+                <span class="wcopy-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></span>
+              </div>
             </div>
             <div class="wdialog-footer">
               <button class="btn btn-white" style="height:44px;width:192px">Send invitations</button>
@@ -5278,6 +5288,17 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     if (!group) return;
     group.querySelectorAll('button').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
+  }
+
+  function copyLinkClick(el, url) {
+    navigator.clipboard.writeText(url).catch(() => {});
+    el.classList.add('copied');
+    const icon = el.querySelector('.wcopy-link-icon');
+    if (icon) icon.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+    setTimeout(() => {
+      el.classList.remove('copied');
+      if (icon) icon.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+    }, 2000);
   }
 
   function switchSegTab(groupId, btn) {
