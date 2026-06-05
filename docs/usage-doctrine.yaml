@@ -229,6 +229,45 @@ components:
       Section headers use NavSection (ALL CAPS, 11px).
       Use NavPanel as the scrollable container.
 
+  - component: CopyLink
+    use_when:
+      - Displaying a shareable URL the user should copy (invite link, share link, public URL)
+      - Inside dialog bodies where a link needs to be copied with one click
+    dont_use_when:
+      - Editable URL fields — use Input instead
+      - Multiple links in a list — use ListItem instead
+    notes: |
+      bg-secondary container, rounded-2xl, teal URL text (text-primary).
+      Click copies to clipboard and swaps copy icon → check icon for 2s.
+      Figma node 83966:356556.
+
+  - component: AdvancedSection
+    use_when:
+      - Hiding optional/advanced fields in a dialog that most users don't need
+      - Reducing cognitive load by collapsing secondary form fields
+    dont_use_when:
+      - Required fields — never hide mandatory inputs
+      - Content that most users will need — show it directly
+    prefer_over:
+      - Accordion: when the collapsible is specifically for "advanced" settings in a form context
+    notes: |
+      Toggle row is 48px. Icon = IconCircleChevronDown/Up (green, text-primary).
+      Label default is "Advanced" but accepts any string via label prop.
+      Children rendered as flex-col gap-4 when open.
+      Figma node 84009:174707.
+
+  - component: IconFilter
+    use_when:
+      - Filter action buttons (paired with btn-secondary or btn-ghost)
+      - Any UI that triggers a filter panel or filter state
+    dont_use_when:
+      - Sorting — use a sort icon instead
+      - Search — use the Search icon
+    notes: |
+      Canvas 16px. Always 14px rendered (h-3.5 w-3.5). Uses currentColor.
+      3 horizontal lines of decreasing width.
+      Figma node 84009:176113.
+
 component_choice_logic:
 
   dialog_vs_drawer:
