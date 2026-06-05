@@ -100,7 +100,7 @@ function FileInput({
         className={cn(
           "flex items-center justify-center gap-2 cursor-pointer select-none",
           size === "slim" ? "rounded-2xl px-4 py-3" : "rounded-2xl px-4 py-6",
-          "bg-muted",
+          "bg-muted hover:bg-secondary",
           "transition-colors duration-100",
           "focus-visible:outline-none",
           isDragging && "bg-secondary border border-waldo-green-800",
