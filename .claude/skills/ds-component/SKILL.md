@@ -176,6 +176,19 @@ NO colores brand.* en producto → son marketing
 
 ---
 
+## ⛔ GOLDEN RULE
+
+### NEVER touch an atomic component without Miguel's explicit approval
+
+Atomic components = every `.tsx` in `waldo-ui/src/components/ui/` + every canonical CSS class in `index.html`.
+
+If a demo or recipe looks wrong → fix the demo/recipe, NOT the component.
+The demo adapts to the component. Never the reverse.
+
+Only valid reason to open a component file: Miguel said "fix this component" or "change this component."
+
+---
+
 ## ⛔ ABSOLUTE PROHIBITIONS
 
 ### 0. Only foundational DS tokens

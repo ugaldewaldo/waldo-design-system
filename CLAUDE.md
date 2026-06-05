@@ -2,6 +2,24 @@
 
 **Authoritative reference.** Read before touching anything in this project — tokens, colors, typography, components, Figma.
 
+## ⛔ GOLDEN RULE — above everything else
+
+### 0. NEVER touch an atomic component without explicit approval
+
+Atomic components are: every `.tsx` file in `waldo-ui/src/components/ui/` and every canonical CSS class in `index.html` (`.wli`, `.wtabs-pill`, `.wdialog`, `.wseg`, `.wswitch`, etc.).
+
+**These files are FROZEN unless Miguel explicitly says "fix this component" or "change this component".**
+
+If a demo looks wrong → fix the demo HTML.
+If a dialog recipe looks wrong → fix the recipe HTML.
+If a CSS class looks wrong → ask Miguel before touching it.
+
+NEVER open a `.tsx` component file to make it "match" a demo or recipe. The demo adapts to the component. Never the reverse.
+
+Violating this rule wastes hours and breaks things that were working.
+
+---
+
 ## ⛔ ABSOLUTE RULES — read before touching any file
 
 ### 1. Zero hardcoded styles
