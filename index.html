@@ -2355,6 +2355,12 @@ function showTab(id,el){waldoGo('tab-'+id,el);}
     <style>
       /* Checkbox — circular, from Figma DS */
       /* ── File Input ── */
+      /* AdvancedSection — Figma node 84009:174707 */
+      .wadv-toggle { display:flex;align-items:center;gap:6px;height:48px;cursor:pointer;background:none;border:none;padding:0;font-size:14px;font-weight:400;letter-spacing:-0.02em;color:color-mix(in srgb,var(--foreground) 70%,transparent);font-family:inherit;transition:color .1s; }
+      .wadv-toggle:hover { color:var(--foreground); }
+      .wadv-toggle svg { flex-shrink:0; }
+      .wadv-body { display:flex;flex-direction:column;gap:16px; }
+
       /* CopyLink — Figma node 83966:356556 */
       .wcopy-link { display:flex;align-items:center;gap:10px;padding:8px 16px;border-radius:16px;background:var(--secondary);cursor:pointer;user-select:none;transition:background .1s; }
       .wcopy-link:hover { background:color-mix(in srgb,var(--secondary) 80%,transparent); }
@@ -3530,6 +3536,33 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
         <div class="demo-code-bar">
           <span class="demo-code-label">size="md" · ListItem rows + FileInput + split footer</span>
           <button class="copy-btn" onclick="copyCode(this,'// Uses: Dialog, ListItem (label+value), FileInput, split footer\n&lt;DialogContent size=&quot;md&quot;&gt;\n  &lt;DialogHeader icon={...}&gt;&lt;DialogTitle&gt;Brand Audit&lt;/DialogTitle&gt;&lt;/DialogHeader&gt;\n  &lt;DialogBody&gt;\n    &lt;ListItem label=&quot;Brand&quot; /&gt;\n    &lt;FileInput /&gt;\n  &lt;/DialogBody&gt;\n  &lt;DialogFooter className=&quot;justify-between&quot;&gt;\n    &lt;div&gt;filters&lt;/div&gt;\n    &lt;Button style=&quot;width:192px&quot;&gt;Launch&lt;/Button&gt;\n  &lt;/DialogFooter&gt;\n&lt;/DialogContent&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pattern: Advanced Section -->
+    <div class="comp-section">
+      <div class="comp-section-title">Pattern — Advanced section · collapsible fields</div>
+      <div class="demo-block">
+        <div class="demo-canvas col" style="max-width:560px;gap:0">
+          <div class="wdialog" style="width:100%;padding:32px;gap:16px;display:flex;flex-direction:column">
+            <input class="input" placeholder="Brand name" style="width:100%" />
+            <input class="input" placeholder="Category" style="width:100%" />
+            <div>
+              <button class="wadv-toggle" onclick="wadvToggle(this)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                Advanced
+              </button>
+              <div class="wadv-body" style="display:none">
+                <input class="input" placeholder="Primary color" style="width:100%" />
+                <input class="input" placeholder="Logo URL" style="width:100%" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;AdvancedSection label="Advanced"&gt;&lt;Input /&gt;&lt;/AdvancedSection&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;AdvancedSection label=&quot;Advanced&quot;&gt;\n  &lt;Input placeholder=&quot;Primary color&quot; /&gt;\n  &lt;Input placeholder=&quot;Logo URL&quot; /&gt;\n&lt;/AdvancedSection&gt;')">Copy</button>
         </div>
       </div>
     </div>
@@ -5288,6 +5321,15 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     if (!group) return;
     group.querySelectorAll('button').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
+  }
+
+  function wadvToggle(btn) {
+    const body = btn.nextElementSibling;
+    const open = body.style.display !== 'none';
+    body.style.display = open ? 'none' : 'flex';
+    btn.querySelector('svg').innerHTML = open
+      ? '<polyline points="9 18 15 12 9 6"/>'
+      : '<polyline points="6 9 12 15 18 9"/>';
   }
 
   function copyLinkClick(el, url) {
