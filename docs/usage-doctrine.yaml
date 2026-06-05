@@ -100,13 +100,20 @@ components:
 
   - component: SegmentedControl
     use_when:
-      - 2-4 mutually exclusive view modes (List/Grid, Day/Week/Month)
-      - Compact filter tabs within a panel
+      - 2–4 mutually exclusive view modes or toggles (Everyone/Only selected, Day/Week/Month)
+      - Inside dialog body to switch between modes or filter scope
     dont_use_when:
       - More than 4 options — use Tabs or Select
       - Options with descriptions — use RadioGroup
+      - Navigation between distinct sections — use Tabs (wtabs-pill)
+      - Dialog footer or header — always in the body
     prefer_over:
-      - Tabs: when the options are toggles within the same view (not navigation)
+      - Tabs: when the options toggle within the same view, not navigate to a new section
+    notes: |
+      Max 4 options. Generally 2–3 in practice.
+      Full width (fullWidth prop) when inside a dialog body spanning the content area.
+      CSS class: wseg / wseg-opt (NOT wtabs-pill — that is the Tabs component).
+      Tabs (wtabs-pill) = navigation. SegmentedControl (wseg) = mode toggle. Never mix.
 
   - component: Tooltip
     use_when:
@@ -261,6 +268,23 @@ components:
       - Button loading state — use DotsLoader or built-in Button loading prop
     notes: Canvas 16px. Morphs to success/error/warning with animation.
 
+  - component: FilterTrigger
+    use_when:
+      - Inline filter selector inside a filter panel (bare label + chevron, opens a dropdown)
+      - Anywhere a filter has a label + optional current value displayed inline
+    dont_use_when:
+      - Navigation — use NavItem instead
+      - Pill-shaped filter chips — use Tag or Button ghost
+      - Full-width row items — use NavItem
+    prefer_over:
+      - NavItem: when the item opens a dropdown to change a filter value, not navigate
+      - Button: when the control is bare/inline with no background
+    notes: |
+      No background, no pill. Pure inline: label [value?] chevron.
+      Active state (value set): label muted + value foreground + font-medium.
+      Sits inside NavPanel at px-8 (32px) from panel edge.
+      Figma node 84014-277810 (PANEL / INSIGHTS).
+
   - component: NavItem
     use_when:
       - Settings panel items (label + trailing icon)
@@ -347,3 +371,7 @@ component_choice_logic:
     listitem: Entity rows (people, brands) with avatar + rich content
     navitem: Navigation/settings items, compact, with trailing icon
     table: Multi-column structured data, sortable
+
+  navitem_vs_filtertrigger:
+    navitem: Navigates or selects a view — full-width, pill shape, active bg
+    filtertrigger: Opens a dropdown to set a filter value — bare inline, no bg
