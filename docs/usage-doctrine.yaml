@@ -84,9 +84,17 @@ components:
 
   - component: FileInput
     use_when:
-      - File upload with drag-and-drop zone
-      - Showing uploaded file list with status
-    notes: Zone radius 32px. Error state uses text-warning.
+      - File upload with drag-and-drop zone inside dialogs or forms
+      - Showing uploaded file list with remove action
+    dont_use_when:
+      - Simple single-file button upload — use a Button instead
+    notes: |
+      Two sizes: default (68px drop zone, py-6) and slim (36px drop zone, py-2).
+      Slim is identical in behavior to default — same file list, same drag-and-drop,
+      only the drop zone height differs. Use slim when vertical space is tight (dialogs).
+      Hover state: bg-secondary. Drag-over: bg-secondary + teal border.
+      Error state per file uses text-warning inline.
+      Zone text is text-primary (teal). Optional label uses foreground/50.
 
   - component: SegmentedControl
     use_when:
@@ -237,7 +245,9 @@ components:
       - Editable URL fields — use Input instead
       - Multiple links in a list — use ListItem instead
     notes: |
-      bg-secondary container, rounded-2xl, teal URL text (text-primary).
+      URL text is always text-primary (teal) — not muted, not foreground.
+      Always full width of its container (no fit-content).
+      bg-secondary container, rounded-2xl.
       Click copies to clipboard and swaps copy icon → check icon for 2s.
       Figma node 83966:356556.
 
@@ -246,14 +256,16 @@ components:
       - Hiding optional/advanced fields in a dialog that most users don't need
       - Reducing cognitive load by collapsing secondary form fields
     dont_use_when:
-      - Required fields — never hide mandatory inputs
+      - Required fields — fields inside AdvancedSection are ALWAYS optional
       - Content that most users will need — show it directly
     prefer_over:
       - Accordion: when the collapsible is specifically for "advanced" settings in a form context
     notes: |
-      Toggle row is 48px. Icon = IconCircleChevronDown/Up (green, text-primary).
-      Label default is "Advanced" but accepts any string via label prop.
-      Children rendered as flex-col gap-4 when open.
+      Always positioned at the bottom of the form body, immediately before the dialog footer.
+      Fields inside are always optional — never required.
+      Toggle should animate open/close (smooth height transition).
+      Toggle row is 48px. Icon = IconCircleChevronDown (collapsed) / IconCircleChevronUp (expanded), color text-primary (green).
+      Label default is "Advanced" — can be overridden via label prop.
       Figma node 84009:174707.
 
   - component: IconFilter
