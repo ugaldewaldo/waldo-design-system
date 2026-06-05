@@ -41,11 +41,18 @@ export function AdvancedSection({
         {label}
       </button>
 
-      {open && (
-        <div className="flex flex-col gap-4">
-          {children}
+      <div
+        className={cn(
+          "grid transition-all duration-200 ease-in-out",
+          open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+        )}
+      >
+        <div className="overflow-hidden">
+          <div className="flex flex-col gap-4 pb-1">
+            {children}
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

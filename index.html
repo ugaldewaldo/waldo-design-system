@@ -2359,7 +2359,10 @@ function showTab(id,el){waldoGo('tab-'+id,el);}
       .wadv-toggle { display:flex;align-items:center;gap:6px;height:48px;cursor:pointer;background:none;border:none;padding:0;font-size:14px;font-weight:400;letter-spacing:-0.02em;color:color-mix(in srgb,var(--foreground) 70%,transparent);font-family:inherit;transition:color .1s; }
       .wadv-toggle:hover { color:var(--foreground); }
       .wadv-toggle svg { flex-shrink:0;color:var(--primary); }
-      .wadv-body { display:flex;flex-direction:column;gap:16px; }
+      .wadv-body-wrap { display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .2s ease,opacity .2s ease; }
+      .wadv-body-wrap.open { grid-template-rows:1fr;opacity:1; }
+      .wadv-body-wrap > div { overflow:hidden; }
+      .wadv-body { display:flex;flex-direction:column;gap:16px;padding-bottom:4px; }
 
       /* CopyLink — Figma node 83966:356556 */
       .wcopy-link { display:flex;align-items:center;gap:10px;padding:8px 16px;border-radius:16px;background:var(--secondary);cursor:pointer;user-select:none;transition:background .1s; }
@@ -3553,9 +3556,13 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
                 <svg class="wadv-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 1C11.866 1 15 4.13401 15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8C1 4.13401 4.13401 1 8 1ZM7.85352 9.14648L4.70703 6L4 6.70703L7.85352 10.5605L11.707 6.70703L11 6L7.85352 9.14648Z" fill="currentColor"/></svg>
                 Advanced
               </button>
-              <div class="wadv-body" style="display:none">
-                <input class="input" placeholder="Primary color" style="width:100%" />
-                <input class="input" placeholder="Logo URL" style="width:100%" />
+              <div class="wadv-body-wrap">
+                <div>
+                  <div class="wadv-body">
+                    <input class="input" placeholder="Primary color" style="width:100%" />
+                    <input class="input" placeholder="Logo URL" style="width:100%" />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -5324,10 +5331,10 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   }
 
   function wadvToggle(btn) {
-    const body = btn.nextElementSibling;
+    const wrap = btn.nextElementSibling;
     const open = btn.dataset.open === 'true';
     btn.dataset.open = !open;
-    body.style.display = open ? 'none' : 'flex';
+    wrap.classList.toggle('open', !open);
     const icon = btn.querySelector('.wadv-icon');
     if (open) {
       icon.innerHTML = '<path d="M8 1C11.866 1 15 4.13401 15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8C1 4.13401 4.13401 1 8 1ZM7.85352 9.14648L4.70703 6L4 6.70703L7.85352 10.5605L11.707 6.70703L11 6L7.85352 9.14648Z" fill="currentColor"/>';
