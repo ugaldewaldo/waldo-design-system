@@ -232,6 +232,10 @@ components:
       - Large panels with navigation — use Sheet/Drawer
       - Purely informational content — use Toast or Alert
     notes: |
+      WALDO EXTENSIONS (not in shadcn — intentional additions):
+        DialogBody     — wraps the scrollable content area between header and footer. Adds consistent padding and gap.
+        size prop      — "sm" | "md" | "lg" | "xl" controls max-width. shadcn DialogContent has no size.
+
       SIZES:
         sm (560px) — confirmations, warnings, simple single-field forms, success states.
         md (720px) — share/invite, upload file, add signal, ask to collaborate, form + list.
