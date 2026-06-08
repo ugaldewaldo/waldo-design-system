@@ -35,13 +35,13 @@ RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
 
 export interface RadioGroupItemProps
   extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> {
-  variant?: "green" | "mono";
+  colorScheme?: "brand" | "mono";
 }
 
 const RadioGroupItem = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Item>,
   RadioGroupItemProps
->(({ className, variant = "green", ...props }, ref) => (
+>(({ className, colorScheme = "brand", ...props }, ref) => (
   <RadioGroupPrimitive.Item
     ref={ref}
     className={cn(
@@ -52,7 +52,7 @@ const RadioGroupItem = React.forwardRef<
       "focus-visible:outline-none",
       "disabled:cursor-not-allowed disabled:opacity-40",
       // Checked state per variant
-      variant === "green"
+      colorScheme === "brand"
         ? "data-[state=checked]:border-primary data-[state=checked]:bg-transparent"
         : "data-[state=checked]:border-foreground/70 data-[state=checked]:bg-transparent",
       className
@@ -63,7 +63,7 @@ const RadioGroupItem = React.forwardRef<
       <span
         className={cn(
           "block h-2 w-2 rounded-full",
-          variant === "green" ? "bg-primary" : "bg-foreground/70"
+          colorScheme === "brand" ? "bg-primary" : "bg-foreground/70"
         )}
       />
     </RadioGroupPrimitive.Indicator>
@@ -78,7 +78,7 @@ interface RadioGroupFieldProps {
   label: string;
   description?: string;
   disabled?: boolean;
-  variant?: "green" | "mono";
+  colorScheme?: "brand" | "mono";
   className?: string;
 }
 
@@ -87,7 +87,7 @@ function RadioGroupField({
   label,
   description,
   disabled,
-  variant = "green",
+  colorScheme = "brand",
   className,
 }: RadioGroupFieldProps) {
   return (
@@ -100,7 +100,7 @@ function RadioGroupField({
     >
       <RadioGroupItem
         value={value}
-        variant={variant}
+        colorScheme={colorScheme}
         disabled={disabled}
         className="mt-0.5 shrink-0"
       />

@@ -74,6 +74,15 @@ components:
       - Long text — badges are single-word or short phrase only
     prefer_over:
       - Tag: when the item is not removable by the user
+    notes: |
+      shadcn variants: default | secondary | destructive | outline
+      Waldo extensions (no shadcn equivalent):
+        active      — teal tint, entity is live/running (same visual as default)
+        success     — teal tint, operation completed
+        warning     — orange tint, needs attention
+        highlight   — yellow tint, decorative/Pro tag
+      Checkbox and RadioGroup use colorScheme="brand|mono" (not variant) to avoid
+      future conflicts with shadcn variant additions.
 
   - component: Avatar
     use_when:

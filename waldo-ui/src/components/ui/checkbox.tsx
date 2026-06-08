@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 // Green     → foreground/30 unchecked · primary (green-500) checked (brand)
 // Label     → font-semibold 14px foreground/70
 //
-// Two visual variants controlled by `variant` prop:
+// Two visual colorSchemes controlled by `colorScheme` prop:
 //   mono  — neutral/muted (default)
 //   green — brand teal
 // ─────────────────────────────────────────────────────────────────────────────
@@ -19,13 +19,13 @@ import { cn } from "@/lib/utils";
 export interface CheckboxProps
   extends React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> {
   /** mono = neutral muted · green = brand teal (default: green) */
-  variant?: "mono" | "green";
+  colorScheme?: "brand" | "mono";
 }
 
 const Checkbox = React.forwardRef<
   React.ElementRef<typeof CheckboxPrimitive.Root>,
   CheckboxProps
->(({ className, variant = "green", ...props }, ref) => (
+>(({ className, colorScheme = "brand", ...props }, ref) => (
   <CheckboxPrimitive.Root
     ref={ref}
     className={cn(
@@ -38,8 +38,8 @@ const Checkbox = React.forwardRef<
       "transition-colors duration-100",
       "focus-visible:outline-none",
       "disabled:cursor-not-allowed disabled:opacity-40",
-      // Checked states per variant
-      variant === "green"
+      // Checked states per colorScheme
+      colorScheme === "brand"
         ? "data-[state=checked]:bg-primary data-[state=checked]:border-primary data-[state=checked]:text-primary-foreground"
         : "data-[state=checked]:bg-foreground/70 data-[state=checked]:border-foreground/70 data-[state=checked]:text-background",
       className
@@ -59,7 +59,7 @@ interface CheckboxFieldProps {
   label: string;
   checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
-  variant?: "mono" | "green";
+  colorScheme?: "brand" | "mono";
   disabled?: boolean;
   className?: string;
 }
@@ -68,7 +68,7 @@ function CheckboxField({
   label,
   checked,
   onCheckedChange,
-  variant = "green",
+  colorScheme = "brand",
   disabled,
   className,
 }: CheckboxFieldProps) {
@@ -81,7 +81,7 @@ function CheckboxField({
       )}
     >
       <Checkbox
-        variant={variant}
+        colorScheme={colorScheme}
         checked={checked}
         onCheckedChange={onCheckedChange}
         disabled={disabled}
