@@ -4919,12 +4919,12 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       .walert-info    { background:rgba(50,169,169,.07); border-color:rgba(50,169,169,.25); color:var(--foreground); }
       .walert-success { background:rgba(50,169,169,.07); border-color:rgba(50,169,169,.25); color:var(--foreground); }
       .walert-warning { background:rgba(201,78,34,.08);  border-color:rgba(201,78,34,.25);  color:var(--foreground); }
-      .walert-error   { background:rgba(222,58,40,.08);  border-color:rgba(222,58,40,.25);  color:var(--foreground); }
+      .walert-destructive   { background:rgba(222,58,40,.08);  border-color:rgba(222,58,40,.25);  color:var(--foreground); }
 
       .walert-icon { flex-shrink:0;margin-top:1px; }
       .walert-info    .walert-icon, .walert-success .walert-icon { color:var(--primary); }
       .walert-warning .walert-icon { color:var(--warning); }
-      .walert-error   .walert-icon { color:var(--destructive); }
+      .walert-destructive   .walert-icon { color:var(--destructive); }
 
       .walert-body { flex:1;min-width:0; }
       .walert-title { font-weight:500;letter-spacing:-.01em;margin-bottom:2px; }
@@ -4964,7 +4964,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             </div>
           </div>
 
-          <div class="walert walert-error">
+          <div class="walert walert-destructive">
             <div class="walert-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
             <div class="walert-body">
               <div class="walert-title">Could not connect to the data source</div>
@@ -4986,7 +4986,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="comp-section-title">Size sm — inline, form hints, field-level errors</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="gap:6px;width:100%;max-width:440px">
-          <div class="walert walert-sm walert-error">
+          <div class="walert walert-sm walert-destructive">
             <div class="walert-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
             <div class="walert-body">This email is already in use.</div>
           </div>
@@ -5000,7 +5000,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
           </div>
         </div>
         <div class="demo-code-bar">
-          <span class="demo-code-label">&lt;Alert variant="error" size="sm"&gt;This email is already in use.&lt;/Alert&gt;</span>
+          <span class="demo-code-label">&lt;Alert variant="destructive" size="sm"&gt;This email is already in use.&lt;/Alert&gt;</span>
           <button class="copy-btn" onclick="copyCode(this,'&lt;Alert variant=&quot;error&quot; size=&quot;sm&quot;&gt;This email is already in use.&lt;/Alert&gt;')">Copy</button>
         </div>
       </div>

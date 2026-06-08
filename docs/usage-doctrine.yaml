@@ -158,11 +158,11 @@ components:
     prefer_over:
       - Toast: when the message is permanent and related to the current view
     notes: |
-      MIGRATION NOTE — variant names changed from shadcn defaults:
-        ❌ variant="destructive"  →  ✅ variant="error"
-        Waldo DS uses: info | success | warning | error
-        The old shadcn "destructive" variant does not exist in this DS.
-        When adopting the DS on labs or web, do a find-replace on variant="destructive" → variant="error".
+      Variants (shadcn-aligned + Waldo extensions):
+        destructive → coral tint, error state (shadcn standard name)
+        info        → teal tint, neutral informational (Waldo extension)
+        success     → teal tint, completed/confirmed (Waldo extension)
+        warning     → orange tint, caution non-blocking (Waldo extension)
 
   - component: Toast
     use_when:

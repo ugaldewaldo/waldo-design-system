@@ -6,13 +6,13 @@ import { cn } from "@/lib/utils";
 // Waldo Alert — inline contextual feedback
 //
 // Different from Toast (ephemeral, corner) — Alert lives inside the page:
-// form errors, plan limits, onboarding states, contextual info.
+// form destructives, plan limits, onboarding states, contextual info.
 //
 // Variants (Linear / Radix Themes pattern):
 //   info        → brand teal tint     — neutral informational
 //   success     → green tint          — completed, confirmed
 //   warning     → orange tint         — caution, non-blocking
-//   error       → coral tint          — something failed
+//   destructive       → coral tint          — something failed
 //
 // Sizes:
 //   sm          → compact 1-line, for inline form hints
@@ -30,7 +30,7 @@ const alertVariants = cva(
         info:    "bg-primary/[0.07]    text-foreground",
         success: "bg-primary/[0.07]    text-foreground",
         warning: "bg-warning/[0.08]    text-foreground",
-        error:   "bg-destructive/[0.08] text-foreground",
+        destructive:   "bg-destructive/[0.08] text-foreground",
       },
       size: {
         sm:      "py-2 px-3 text-xs gap-2",
@@ -48,7 +48,7 @@ const iconColor: Record<string, string> = {
   info:    "text-primary",
   success: "text-primary",
   warning: "text-warning",
-  error:   "text-destructive",
+  destructive:   "text-destructive",
 };
 
 // ── Default icons per variant ──────────────────────────────────────────────
@@ -85,7 +85,7 @@ function ErrorIcon({ className }: { className?: string }) {
   );
 }
 
-const defaultIcons = { info: InfoIcon, success: SuccessIcon, warning: WarningIcon, error: ErrorIcon };
+const defaultIcons = { info: InfoIcon, success: SuccessIcon, warning: WarningIcon, destructive: ErrorIcon };
 
 // ── Alert ──────────────────────────────────────────────────────────────────
 
