@@ -183,6 +183,9 @@ components:
     notes: |
       notification pattern for user actions.
       banner pattern for system-level alerts (limits, connectivity).
+      Powered by Sonner — intentionally simpler than shadcn Toast.
+      Exports: toast (function) + Toaster (component). No useToast hook.
+      Use: toast("message") / toast.success() / toast.error() / toast.warning()
 
   - component: Separator
     use_when:
