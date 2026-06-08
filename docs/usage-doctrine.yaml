@@ -149,6 +149,12 @@ components:
       - Blocking actions — use AlertDialog
     prefer_over:
       - Toast: when the message is permanent and related to the current view
+    notes: |
+      MIGRATION NOTE — variant names changed from shadcn defaults:
+        ❌ variant="destructive"  →  ✅ variant="error"
+        Waldo DS uses: info | success | warning | error
+        The old shadcn "destructive" variant does not exist in this DS.
+        When adopting the DS on labs or web, do a find-replace on variant="destructive" → variant="error".
 
   - component: Toast
     use_when:
