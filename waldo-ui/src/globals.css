@@ -68,7 +68,7 @@
 
     /* shadcn: primary = brand CTA */
     --primary:           50 169 169;        /* green-500 — product brand */
-    --primary-foreground: 23  24  25;       /* zinc-950 — dark text on teal */
+    --primary-foreground: 255 255 255;      /* white — Figma shows white text on teal in all modes */
 
     /* shadcn: secondary = subtle interactive */
     --secondary:         45 47 51;          /* zinc-750 */
@@ -85,6 +85,10 @@
     /* shadcn: destructive */
     --destructive:      222  58  40;        /* coral-500 */
     --destructive-foreground: 210 211 211;
+
+    /* shadcn: warning — orange-500 */
+    --warning:          231 102  56;
+    --warning-foreground: 210 211 211;
 
     /* shadcn: border / input / ring */
     --border:           210 211 211;        /* zinc-200 — applied via opacity-12 in components */

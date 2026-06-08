@@ -39,26 +39,29 @@ const inputBase = [
 
 // ── Input ─────────────────────────────────────────────────────────────────────
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  /** Leading icon or element */
-  prefix?: React.ReactNode;
+export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "prefix"> {
+  /** Leading icon or element (renamed from prefix to avoid DOM clash) */
+  leadingIcon?: React.ReactNode;
   /** Trailing icon or element */
   suffix?: React.ReactNode;
+  /** @deprecated use leadingIcon */
+  prefix?: React.ReactNode;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, prefix, suffix, ...props }, ref) => {
-    if (prefix || suffix) {
+  ({ className, type, leadingIcon, prefix, suffix, ...props }, ref) => {
+    const leading = leadingIcon ?? prefix;
+    if (leading || suffix) {
       return (
         <div className="relative flex items-center">
-          {prefix && (
+          {leading && (
             <div className="pointer-events-none absolute left-4 flex items-center text-foreground/50">
-              {prefix}
+              {leading}
             </div>
           )}
           <input
             type={type}
-            className={cn(inputBase, prefix && "pl-10", suffix && "pr-10", className)}
+            className={cn(inputBase, leading && "pl-10", suffix && "pr-10", className)}
             ref={ref}
             {...props}
           />
