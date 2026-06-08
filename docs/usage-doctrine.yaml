@@ -148,6 +148,11 @@ components:
     dont_use_when:
       - Simple lists — use ListItem/ListView
       - 1-2 columns — use a list layout
+    notes: |
+      stickyHeader prop — keeps thead fixed on scroll, bg-muted (zinc-800) header background.
+      Linear pattern: slightly lighter than card surface, no shadow. Use maxHeight prop to
+      constrain the scroll container (default 400px).
+      Waldo extension: shadcn Table has no stickyHeader.
 
   - component: Tabs
     use_when:
