@@ -82,7 +82,25 @@ En `index.html` usar las clases CSS del sistema (`badge-active`, `badge-destruct
 
 Todo componente creado o modificado en `waldo-ui/src/components/ui/` DEBE actualizarse en `index.html` en la misma sesión. No preguntes — hazlo siempre.
 
-### 5. Component-usage doctrine (PRO-2528) — mandatory on every component close
+### 5. shadcn nomenclature check — mandatory on every component create or modify
+
+Before finishing any component, verify it follows shadcn/ui naming conventions:
+
+**Checklist:**
+- [ ] Variant names match shadcn (`destructive` not `error`, `outline` not `ghost` for bordered, `ghost` not `bare` for borderless)
+- [ ] Prop names don't clash with DOM attributes (e.g. avoid `prefix`, `label`, `size` with non-standard types)
+- [ ] Sub-component names match shadcn (e.g. `DialogHeader` not `DialogHead`)
+- [ ] Export names match shadcn exactly if the component exists in shadcn
+
+**If the component is a Waldo extension** (no shadcn equivalent):
+- Name it clearly as a Waldo pattern (e.g. `CopyLink`, `AdvancedSection`)
+- Document it in `docs/usage-doctrine.yaml` with a note: "Waldo extension — no shadcn equivalent"
+
+⚠️ **Flag warnings before committing** — if any variant/prop name diverges from shadcn without explicit justification, stop and ask Miguel before proceeding.
+
+---
+
+### 6. Component-usage doctrine (PRO-2528) — mandatory on every component close
 
 When a component is finished and verified, you MUST add its entry to `docs/usage-doctrine.yaml`.
 
