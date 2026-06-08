@@ -19,13 +19,13 @@ components:
       ghost variant for secondary actions paired with a primary.
       destructive-solid only in confirmation dialogs, never as first-touch.
 
-      MIGRATION NOTE — variant names changed from shadcn defaults:
-        ❌ variant="outline"      →  ✅ variant="ghost"       (bordered, no fill)
-        ❌ variant="ghost"        →  ✅ variant="bare"         (no border, no fill)
-        ❌ variant="destructive"  →  ✅ variant="destructive"  (soft, red fill at 10%)
-                                     variant="destructive-solid" (hard, full red fill)
-        When adopting the DS on labs or web, run a codemod:
-          outline → ghost, ghost → bare. ~390 call-sites expected.
+      Variants aligned with shadcn naming conventions:
+        outline           → bordered, no fill (shadcn standard)
+        ghost             → no border, no fill (shadcn standard)
+        destructive       → soft danger (coral/10% fill+border)
+        destructive-solid → hard danger (coral fill, confirmation dialogs only)
+        solid             → zinc-800 fill (dropdowns, contextual)
+        white             → inverse (over images/color backgrounds)
 
   - component: Input / Field
     use_when:

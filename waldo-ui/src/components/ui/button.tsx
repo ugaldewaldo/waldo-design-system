@@ -10,11 +10,11 @@ import { cn } from "@/lib/utils";
 // Colors   → new DS tokens                  (ugaldewaldo.github.io/waldo-design-system)
 // Type     → Inter Medium 500, 14px/-0.02em (Figma: text-sm-medium)
 //
-// Variant taxonomy:
+// Variant taxonomy (shadcn-aligned naming):
 //   default           Brand CTA          green-500 fill · zinc-950 text
 //   secondary         Subtle fill        zinc-200/5% fill · zinc-200/70% text
-//   ghost             Bordered           zinc-200/20% border · zinc-200 text
-//   bare              Minimal            no fill · no border · zinc-200/70% text
+//   outline           Bordered           zinc-200/20% border · zinc-200 text  (shadcn: outline)
+//   ghost             Minimal            no fill · no border · zinc-200/70% text (shadcn: ghost)
 //   solid             Dark fill          zinc-800 fill · zinc-200 text (dropdowns, contextual)
 //   white             Inverse            zinc-200 fill · zinc-950 text (over images/color bg)
 //   destructive       Soft danger        coral/10% fill+border · coral text
@@ -60,12 +60,12 @@ const buttonVariants = cva(
 
         // zinc-200/20% border / zinc-200 text / no fill.
         // Pairs with default (Save / Cancel row).
-        ghost:
+        outline:
           "border border-foreground/20 bg-transparent text-foreground hover:bg-foreground/[0.07] hover:border-foreground/30 active:bg-foreground/10",
 
         // No fill, no border / zinc-200/70% text.
         // Tertiary actions, icon+text in dense lists.
-        bare:
+        ghost:
           "bg-transparent text-foreground/70 hover:text-foreground hover:bg-foreground/[0.07] active:bg-foreground/10",
 
         // zinc-800 fill / zinc-200 text.

@@ -273,20 +273,20 @@
 .btn-secondary:hover  { background: rgba(228,228,231,0.10); color: var(--foreground); }
 .btn-secondary:active { background: rgba(228,228,231,0.14); }
 
-/* zinc-200/20% border, no fill */
-.btn-ghost {
+/* zinc-200/20% border, no fill — shadcn: outline */
+.btn-outline {
   background: transparent; color: var(--foreground);
   border: 1px solid rgba(228,228,231,0.20);
 }
-.btn-ghost:hover  { background: rgba(228,228,231,0.07); border-color: rgba(228,228,231,0.30); }
-.btn-ghost:active { background: rgba(228,228,231,0.11); }
+.btn-outline:hover  { background: rgba(228,228,231,0.07); border-color: rgba(228,228,231,0.30); }
+.btn-outline:active { background: rgba(228,228,231,0.11); }
 
-/* no fill, no border, /70% text */
-.btn-bare {
+/* no fill, no border, /70% text — shadcn: ghost */
+.btn-ghost {
   background: transparent; color: rgba(228,228,231,0.65); border: none;
 }
-.btn-bare:hover  { background: rgba(228,228,231,0.07); color: var(--foreground); }
-.btn-bare:active { background: rgba(228,228,231,0.11); }
+.btn-ghost:hover  { background: rgba(228,228,231,0.07); color: var(--foreground); }
+.btn-ghost:active { background: rgba(228,228,231,0.11); }
 
 /* zinc-800 (#27282b) fill — dropdowns, contextual, filter triggers */
 .btn-solid {
@@ -1228,10 +1228,10 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
     <div class="btn-grid">
       <div class="btn-grid-label"><code>ghost</code><small>no bg · no border · hover overlay</small></div>
       <div class="btn-grid-row">
-        <button class="btn btn-ghost btn-sm"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M10 4L6 8l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button>
-        <button class="btn btn-ghost">Edit</button>
-        <button class="btn btn-ghost btn-lg">Settings</button>
-        <button class="btn btn-ghost btn-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM8 6.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM8 11a1.5 1.5 0 110 3 1.5 1.5 0 010-3z" fill="currentColor"/></svg></button>
+        <button class="btn btn-outline btn-sm"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M10 4L6 8l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Back</button>
+        <button class="btn btn-outline">Edit</button>
+        <button class="btn btn-outline btn-lg">Settings</button>
+        <button class="btn btn-outline btn-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M8 2a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM8 6.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM8 11a1.5 1.5 0 110 3 1.5 1.5 0 010-3z" fill="currentColor"/></svg></button>
       </div>
     </div>
 
@@ -1299,7 +1299,7 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
         <button class="btn btn-secondary" disabled>Button</button>
         <button class="btn btn-default" disabled>Button</button>
         <button class="btn btn-outline" disabled>Button</button>
-        <button class="btn btn-ghost" disabled>Button</button>
+        <button class="btn btn-outline" disabled>Button</button>
       </div>
     </div>
 
@@ -1425,7 +1425,7 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
         <p>A short description of what this agent does.</p>
         <div class="card-footer">
           <button class="btn btn-primary btn-sm">Launch</button>
-          <button class="btn btn-ghost btn-sm">Edit</button>
+          <button class="btn btn-outline btn-sm">Edit</button>
         </div>
       </div>
       <div class="card" style="width:240px;border-color:var(--primary);box-shadow:0 0 0 1px rgba(50,169,169,.25)">
@@ -2090,8 +2090,8 @@ function showTab(id,el){waldoGo('tab-'+id,el);}
         <div class="demo-canvas" style="flex-wrap:wrap;gap:8px">
           <button class="btn btn-default">Run briefing</button>
           <button class="btn btn-secondary">Secondary</button>
-          <button class="btn btn-ghost">Ghost</button>
-          <button class="btn btn-bare">Bare</button>
+          <button class="btn btn-outline">Ghost</button>
+          <button class="btn btn-ghost">Bare</button>
           <button class="btn btn-solid">Solid</button>
           <button class="btn btn-white">White</button>
           <button class="btn btn-destructive">Delete</button>
@@ -2120,9 +2120,9 @@ function showTab(id,el){waldoGo('tab-'+id,el);}
           <button class="btn btn-default">Default</button>
           <button class="btn btn-default btn-lg">Large</button>
           <div class="demo-divider"></div>
-          <button class="btn btn-ghost btn-sm">Small</button>
-          <button class="btn btn-ghost">Default</button>
-          <button class="btn btn-ghost btn-lg">Large</button>
+          <button class="btn btn-outline btn-sm">Small</button>
+          <button class="btn btn-outline">Default</button>
+          <button class="btn btn-outline btn-lg">Large</button>
         </div>
         <div class="demo-code-bar">
           <span class="demo-code-label">&lt;Button size="sm"&gt;Small&lt;/Button&gt;</span>
@@ -2139,7 +2139,7 @@ function showTab(id,el){waldoGo('tab-'+id,el);}
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
             Run briefing
           </button>
-          <button class="btn btn-ghost">
+          <button class="btn btn-outline">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             New space
           </button>
@@ -2190,10 +2190,10 @@ function showTab(id,el){waldoGo('tab-'+id,el);}
           <button class="btn btn-secondary btn-icon-sm">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
           </button>
-          <button class="btn btn-ghost btn-icon">
+          <button class="btn btn-outline btn-icon">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </button>
-          <button class="btn btn-bare btn-icon">
+          <button class="btn btn-ghost btn-icon">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
           </button>
           <div class="demo-divider"></div>
@@ -2202,7 +2202,7 @@ function showTab(id,el){waldoGo('tab-'+id,el);}
           </button>
           <div class="demo-divider"></div>
           <button class="btn btn-default disabled">Disabled</button>
-          <button class="btn btn-ghost disabled">Disabled</button>
+          <button class="btn btn-outline disabled">Disabled</button>
           <button class="btn btn-secondary disabled">Disabled</button>
         </div>
         <div class="demo-code-bar">
@@ -2232,7 +2232,7 @@ function showTab(id,el){waldoGo('tab-'+id,el);}
             <span style="opacity:0.4;display:flex;align-items:center;margin-left:1px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></span>
           </button>
           <!-- Label only -->
-          <button class="btn btn-bare btn-sm btn-dropdown" style="gap:5px">
+          <button class="btn btn-ghost btn-sm btn-dropdown" style="gap:5px">
             Creation date
             <span class="chevron"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></span>
           </button>
@@ -3002,7 +3002,7 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
               <div style="height:56px;border:1px dashed var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted-foreground)">Body content</div>
             </div>
             <div class="wdialog-footer">
-              <button class="btn btn-ghost" style="height:44px;font-size:13px;width:192px">Cancel</button>
+              <button class="btn btn-outline" style="height:44px;font-size:13px;width:192px">Cancel</button>
               <button class="btn btn-white" style="height:44px;font-size:13px;width:192px">Continue</button>
             </div>
           </div>
@@ -3045,7 +3045,7 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
               <p style="font-size:13px;color:var(--muted-foreground);line-height:1.5">All existing settings and triggers will be removed permanently. This action cannot be undone.</p>
             </div>
             <div class="wdialog-footer">
-              <button class="btn btn-ghost" style="height:44px;font-size:13px;width:192px">Cancel</button>
+              <button class="btn btn-outline" style="height:44px;font-size:13px;width:192px">Cancel</button>
               <button class="btn btn-destructive" style="height:44px;font-size:13px;width:192px">Proceed anyway</button>
             </div>
           </div>
@@ -3106,7 +3106,7 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
               </div>
             </div>
             <div class="wdialog-footer">
-              <button class="btn btn-ghost" style="height:44px;font-size:13px;width:192px">Cancel</button>
+              <button class="btn btn-outline" style="height:44px;font-size:13px;width:192px">Cancel</button>
               <button class="btn btn-white" style="height:44px;font-size:13px;width:192px">Add</button>
             </div>
           </div>
@@ -3240,7 +3240,7 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
               </div>
             </div>
             <div class="wdialog-footer">
-              <button class="btn btn-ghost" style="height:44px;width:192px">Cancel</button>
+              <button class="btn btn-outline" style="height:44px;width:192px">Cancel</button>
               <button class="btn btn-white" style="height:44px;width:192px">Add signal</button>
             </div>
           </div>
@@ -3399,7 +3399,7 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
               <div class="wli"><div class="wli-body"><span class="wli-name">REI</span></div><label class="wchk"><input type="checkbox" /><div class="wchk-box green"></div></label></div>
             </div>
             <div class="wdialog-footer">
-              <button class="btn btn-ghost" style="height:44px;width:192px">Cancel</button>
+              <button class="btn btn-outline" style="height:44px;width:192px">Cancel</button>
               <button class="btn btn-white" style="height:44px;width:192px">Apply</button>
             </div>
           </div>
@@ -3436,7 +3436,7 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
               <div style="display:flex;flex-direction:column;gap:5px"><label style="font-size:12px;color:var(--primary);padding:0 4px">Description</label><textarea class="input" rows="3" placeholder="Describe this persona's goals, frustrations, and behaviors..." style="width:100%;border-radius:16px;resize:none;padding:12px 14px;height:auto"></textarea></div>
             </div>
             <div class="wdialog-footer">
-              <button class="btn btn-ghost" style="height:44px;width:192px">Cancel</button>
+              <button class="btn btn-outline" style="height:44px;width:192px">Cancel</button>
               <button class="btn btn-white" style="height:44px;width:192px">Add</button>
             </div>
           </div>
@@ -3530,7 +3530,7 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
             <div class="wdialog-footer" style="justify-content:space-between">
               <div style="display:flex;align-items:center;gap:8px">
                 <button class="btn btn-secondary btn-sm" style="gap:6px"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="1" y1="4" x2="15" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="3.5" y1="8" x2="12.5" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="6" y1="12" x2="10" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Filters</button>
-                <button class="btn btn-bare btn-sm">Email report to: Me ↓</button>
+                <button class="btn btn-ghost btn-sm">Email report to: Me ↓</button>
               </div>
               <button class="btn btn-white" style="height:44px;width:192px">Launch</button>
             </div>
@@ -3662,7 +3662,7 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
           </div>
 
           <div class="dropdown-root" id="dd2">
-            <button class="btn btn-ghost btn-icon" onclick="toggleDropdown('dd2')">
+            <button class="btn btn-outline btn-icon" onclick="toggleDropdown('dd2')">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
             </button>
             <div class="dropdown-menu">
@@ -3753,13 +3753,13 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
             <div class="tooltip-tip">Generates a brand intelligence brief<div class="tip-arrow"></div></div>
           </div>
           <div class="tooltip-wrap">
-            <button class="btn btn-ghost btn-icon">
+            <button class="btn btn-outline btn-icon">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
             </button>
             <div class="tooltip-tip">Search ⌘K<div class="tip-arrow"></div></div>
           </div>
           <div class="tooltip-wrap">
-            <button class="btn btn-ghost btn-icon">
+            <button class="btn btn-outline btn-icon">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             </button>
             <div class="tooltip-tip">New space ⌘N<div class="tip-arrow"></div></div>
@@ -3804,7 +3804,7 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
                   <td><span class="badge badge-active badge-sm">Active</span></td>
                   <td style="color:color-mix(in srgb, var(--foreground) 65%, transparent)">1,204</td>
                   <td style="color:var(--muted-foreground)">2 min ago</td>
-                  <td><button class="btn btn-ghost" style="height:24px;width:24px;padding:0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></td>
+                  <td><button class="btn btn-outline" style="height:24px;width:24px;padding:0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></td>
                 </tr>
                 <tr data-selected="false">
                   <td style="padding-left:14px"><div class="row-check" style="width:13px;height:13px;border-radius:3px;border:1px solid var(--border-strong);background:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center" onclick="toggleRow(this)"></div></td>
@@ -3812,7 +3812,7 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
                   <td><span class="badge badge-secondary badge-sm">Paused</span></td>
                   <td style="color:color-mix(in srgb, var(--foreground) 65%, transparent)">847</td>
                   <td style="color:var(--muted-foreground)">1 hr ago</td>
-                  <td><button class="btn btn-ghost" style="height:24px;width:24px;padding:0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></td>
+                  <td><button class="btn btn-outline" style="height:24px;width:24px;padding:0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></td>
                 </tr>
                 <tr data-selected="false">
                   <td style="padding-left:14px"><div class="row-check" style="width:13px;height:13px;border-radius:3px;border:1px solid var(--border-strong);background:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center" onclick="toggleRow(this)"></div></td>
@@ -3820,7 +3820,7 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
                   <td><span class="badge badge-destructive badge-sm">Error</span></td>
                   <td style="color:var(--muted-foreground)">—</td>
                   <td style="color:var(--muted-foreground)">3 days ago</td>
-                  <td><button class="btn btn-ghost" style="height:24px;width:24px;padding:0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></td>
+                  <td><button class="btn btn-outline" style="height:24px;width:24px;padding:0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></td>
                 </tr>
               </tbody>
             </table>
@@ -3846,11 +3846,11 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
               <span style="color:var(--foreground);font-weight:500">2 selected</span>
             </div>
             <div style="width:1px;height:16px;background:var(--border);margin:0 4px"></div>
-            <button class="btn btn-ghost" style="height:28px;font-size:12px;padding:0 10px">Enable</button>
-            <button class="btn btn-ghost" style="height:28px;font-size:12px;padding:0 10px">Pause</button>
+            <button class="btn btn-outline" style="height:28px;font-size:12px;padding:0 10px">Enable</button>
+            <button class="btn btn-outline" style="height:28px;font-size:12px;padding:0 10px">Pause</button>
             <button class="btn btn-destructive" style="height:28px;font-size:12px;padding:0 10px">Delete</button>
             <div style="margin-left:auto">
-              <button class="btn btn-ghost" style="height:28px;font-size:12px;padding:0 10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">Unselect</button>
+              <button class="btn btn-outline" style="height:28px;font-size:12px;padding:0 10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">Unselect</button>
             </div>
           </div>
           <table class="wui-table">
@@ -3861,7 +3861,7 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
                 <td><span class="badge badge-active badge-sm">Active</span></td>
                 <td style="color:color-mix(in srgb, var(--foreground) 65%, transparent)">1,204</td>
                 <td style="color:var(--muted-foreground)">2 min ago</td>
-                <td><button class="btn btn-ghost" style="height:24px;width:24px;padding:0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></td>
+                <td><button class="btn btn-outline" style="height:24px;width:24px;padding:0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></td>
               </tr>
               <tr data-selected="true" style="background:rgba(50,169,169,0.06)">
                 <td style="padding-left:14px"><div style="width:13px;height:13px;border-radius:3px;background:var(--primary);border:1px solid var(--primary);display:flex;align-items:center;justify-content:center"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg></div></td>
@@ -3869,7 +3869,7 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
                 <td><span class="badge badge-secondary badge-sm">Paused</span></td>
                 <td style="color:color-mix(in srgb, var(--foreground) 65%, transparent)">847</td>
                 <td style="color:var(--muted-foreground)">1 hr ago</td>
-                <td><button class="btn btn-ghost" style="height:24px;width:24px;padding:0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></td>
+                <td><button class="btn btn-outline" style="height:24px;width:24px;padding:0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></td>
               </tr>
               <tr>
                 <td style="padding-left:14px"><div class="row-check" style="width:13px;height:13px;border-radius:3px;border:1px solid var(--border-strong);background:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center"></div></td>
@@ -3877,7 +3877,7 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
                 <td><span class="badge badge-destructive badge-sm">Error</span></td>
                 <td style="color:var(--muted-foreground)">—</td>
                 <td style="color:var(--muted-foreground)">3 days ago</td>
-                <td><button class="btn btn-ghost" style="height:24px;width:24px;padding:0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></td>
+                <td><button class="btn btn-outline" style="height:24px;width:24px;padding:0"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></td>
               </tr>
             </tbody>
           </table>
@@ -5834,7 +5834,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <button class="btn btn-secondary" style="height:28px;font-size:12px;padding:0 10px" onclick="triggerSpinner('success')">→ success</button>
             <button class="btn btn-secondary" style="height:28px;font-size:12px;padding:0 10px" onclick="triggerSpinner('error')">→ error</button>
             <button class="btn btn-secondary" style="height:28px;font-size:12px;padding:0 10px" onclick="triggerSpinner('warning')">→ warning</button>
-            <button class="btn btn-ghost" style="height:28px;font-size:12px;padding:0 10px" onclick="triggerSpinner('loading')">reset</button>
+            <button class="btn btn-outline" style="height:28px;font-size:12px;padding:0 10px" onclick="triggerSpinner('loading')">reset</button>
           </div>
 
           <div style="width:1px;height:40px;background:var(--border)"></div>
@@ -5845,7 +5845,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <div style="display:flex;align-items:center;gap:8px;padding:6px 0">
               <div class="wspinner loading" id="file-spinner"></div>
               <span style="font-size:13px;color:var(--foreground)">brand-guidelines.pdf</span>
-              <button class="btn btn-ghost" style="height:22px;font-size:11px;padding:0 8px;margin-left:auto" onclick="triggerFileSpinner()">finish</button>
+              <button class="btn btn-outline" style="height:22px;font-size:11px;padding:0 8px;margin-left:auto" onclick="triggerFileSpinner()">finish</button>
             </div>
           </div>
 
