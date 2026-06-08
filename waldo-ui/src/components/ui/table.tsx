@@ -3,12 +3,26 @@ import { cn } from "@/lib/utils";
 
 // ── Root ──────────────────────────────────────────────────────────────────────
 
-const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
-  ({ className, ...props }, ref) => (
-    <div className="w-full overflow-x-auto">
+interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
+  /** Sticky header — thead stays fixed on scroll. Linear-style: bg-muted header, no shadow. */
+  stickyHeader?: boolean;
+  /** Max height for the scroll container when stickyHeader is true */
+  maxHeight?: string;
+}
+
+const Table = React.forwardRef<HTMLTableElement, TableProps>(
+  ({ className, stickyHeader, maxHeight = "400px", ...props }, ref) => (
+    <div
+      className={cn(
+        "w-full overflow-x-auto",
+        stickyHeader && "overflow-y-auto"
+      )}
+      style={stickyHeader ? { maxHeight } : undefined}
+    >
       <table
         ref={ref}
         className={cn("w-full caption-bottom text-sm border-collapse", className)}
+        data-sticky={stickyHeader || undefined}
         {...props}
       />
     </div>
@@ -22,7 +36,16 @@ const TableHeader = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <thead ref={ref} className={cn("border-b border-foreground/[0.08]", className)} {...props} />
+  <thead
+    ref={ref}
+    className={cn(
+      "border-b border-foreground/[0.08]",
+      // sticky: bg-muted (zinc-800) — slightly lighter than card (zinc-900), Linear pattern
+      "[table[data-sticky]_&]:sticky [table[data-sticky]_&]:top-0 [table[data-sticky]_&]:z-10",
+      className
+    )}
+    {...props}
+  />
 ));
 TableHeader.displayName = "TableHeader";
 
@@ -92,6 +115,8 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
         "h-8 px-3 text-left align-middle",
         "text-[11px] font-medium text-foreground/50 uppercase tracking-wider",
         "whitespace-nowrap",
+        // bg-muted needed so sticky header covers scrolled rows (Linear pattern)
+        "[table[data-sticky]_&]:bg-muted",
         sortable && "cursor-pointer select-none hover:text-foreground transition-colors",
         className
       )}
