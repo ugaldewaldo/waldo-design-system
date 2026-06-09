@@ -37,6 +37,8 @@ const sizeMap = {
   xl: "max-w-[1200px]",
 };
 
+// DialogContent has no padding — wrap content in DialogHeader, DialogBody, and/or DialogFooter.
+// Omitting DialogBody will render content flush against the dialog edges.
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   DialogContentProps

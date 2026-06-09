@@ -6,12 +6,12 @@ import { cn } from "@/lib/utils";
 interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
   /** Sticky header — thead stays fixed on scroll. Linear-style: bg-muted header, no shadow. */
   stickyHeader?: boolean;
-  /** Max height for the scroll container when stickyHeader is true */
+  /** Max height for the scroll container when stickyHeader is true. If omitted, the page controls scrolling. */
   maxHeight?: string;
 }
 
 const Table = React.forwardRef<HTMLTableElement, TableProps>(
-  ({ className, stickyHeader, maxHeight = "400px", ...props }, ref) => (
+  ({ className, stickyHeader, maxHeight, ...props }, ref) => (
     <div
       className={cn(
         "w-full overflow-x-auto",

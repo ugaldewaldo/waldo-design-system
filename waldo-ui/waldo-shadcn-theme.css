@@ -378,3 +378,98 @@ h6 { font-size: var(--text-base); line-height: var(--text-base--line-height); le
 
 /* Mono — for code, tags, technical labels */
 code, kbd, samp, pre { font-family: var(--font-mono); }
+
+
+/* ══════════════════════════════════════════════════════
+   TAILWIND v4 @theme block
+   Registers Waldo primitives + design tokens as Tailwind
+   utilities so bg-zinc-800, shadow-popover, animate-blink
+   etc. resolve to Waldo values in v4 consumers.
+
+   v3 users: mirror these in tailwind.config.js →
+   theme.extend.colors / boxShadow / borderRadius / keyframes
+   ══════════════════════════════════════════════════════ */
+@theme {
+  /* ── Color scale ── */
+  --color-zinc-50:  rgb(248 248 249);
+  --color-zinc-100: rgb(240 240 242);
+  --color-zinc-200: rgb(210 211 211);
+  --color-zinc-300: rgb(180 181 182);
+  --color-zinc-400: rgb(143 144 145);
+  --color-zinc-500: rgb(99 100 101);
+  --color-zinc-600: rgb(65 69 75);
+  --color-zinc-700: rgb(50 53 57);
+  --color-zinc-750: rgb(45 47 51);
+  --color-zinc-800: rgb(39 40 43);
+  --color-zinc-850: rgb(36 37 40);
+  --color-zinc-900: rgb(32 33 35);
+  --color-zinc-950: rgb(23 24 25);
+
+  --color-green-400: rgb(77 188 188);
+  --color-green-500: rgb(50 169 169);
+  --color-green-600: rgb(44 121 122);
+  --color-green-700: rgb(42 108 109);
+  --color-green-800: rgb(38 81 82);
+
+  --color-coral-500:  rgb(222 58 40);
+  --color-orange-500: rgb(231 102 56);
+  --color-yellow-300: rgb(247 211 113);
+
+  /* ── Border radius ── */
+  --radius-sm:    calc(var(--radius) - 2px);   /* 4px  */
+  --radius-md:    var(--radius);               /* 6px  */
+  --radius-lg:    calc(var(--radius) + 2px);   /* 8px  */
+  --radius-xl:    calc(var(--radius) + 6px);   /* 12px */
+  --radius-2xl:   calc(var(--radius) + 10px);  /* 16px */
+  --radius-2-5xl: calc(var(--radius) + 14px);  /* 20px — dropdowns */
+  --radius-4xl:   calc(var(--radius) + 26px);  /* 32px — file input */
+
+  /* ── Shadows ── */
+  --shadow-popover: 0px 4px 6px -1px rgba(0,0,0,0.35), 0px 2px 4px -2px rgba(0,0,0,0.25), 0px -2px 3px rgba(0,0,0,0.15);
+  --shadow-surface: 0px 1px 3px rgba(0,0,0,0.30), 0px 2px 4px -1px rgba(0,0,0,0.20);
+  --shadow-dialog:  0px 20px 40px -10px rgba(0,0,0,0.60), 0px 8px 20px rgba(0,0,0,0.30);
+
+  /* ── Animations ── */
+  --animate-blink:           blink 1s ease-in-out infinite;
+  --animate-scale-in:        scale-in 0.15s ease-out forwards;
+  --animate-shimmer:         shimmer 2s linear infinite;
+  --animate-accordion-down:  accordion-down 0.2s ease-out;
+  --animate-accordion-up:    accordion-up 0.2s ease-out;
+  --animate-fade-in:         fade-in 0.15s ease-out;
+  --animate-slide-in-top:    slide-in-from-top 0.15s ease-out;
+  --animate-slide-in-bottom: slide-in-from-bottom 0.15s ease-out;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+@keyframes scale-in {
+  0%   { transform: scale(0);   opacity: 0; }
+  70%  { transform: scale(1.2); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+@keyframes accordion-down {
+  from { height: 0; }
+  to   { height: var(--radix-accordion-content-height); }
+}
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to   { height: 0; }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slide-in-from-top {
+  from { transform: translateY(-4px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@keyframes slide-in-from-bottom {
+  from { transform: translateY(4px); opacity: 0; }
+  to   { transform: translateY(0);   opacity: 1; }
+}
