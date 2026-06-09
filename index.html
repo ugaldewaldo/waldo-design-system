@@ -686,11 +686,12 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
 
 <!-- ── Top bar ── -->
 <header id="wb-topbar">
-  <svg width="56" height="14" viewBox="0 0 70 18" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--foreground)">
-    <path d="M0 1.5H3.5L7 12.5L10.5 1.5H14L17.5 12.5L21 1.5H24.5L19.5 16.5H15.5L12.25 6.5L9 16.5H5L0 1.5Z" fill="currentColor"/>
-    <path d="M27 16.5V1.5H30.5V13.5H39V16.5H27Z" fill="currentColor"/>
-    <path d="M41.5 16.5L48 1.5H52L58.5 16.5H54.5L53.2 13H46.8L45.5 16.5H41.5ZM48 10H52L50 4.5L48 10Z" fill="currentColor"/>
-    <path d="M61 1.5H67C70.5 1.5 73 4 73 9C73 14 70.5 16.5 67 16.5H61V1.5ZM64.5 4.5V13.5H67C68.5 13.5 69.5 12 69.5 9C69.5 6 68.5 4.5 67 4.5H64.5Z" fill="currentColor"/>
+  <svg width="63" height="14" viewBox="0 0 450 90" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="color:var(--foreground)">
+    <path d="M0 5H17.5L35 62.5L52.5 5H70L87.5 62.5L105 5H122.5L97.5 82.5H77.5L61.25 32.5L45 82.5H25L0 5Z"/>
+    <path d="M135 82.5V5H152.5V67.5H195V82.5H135Z"/>
+    <path d="M207.5 82.5L240 5H260L292.5 82.5H272.5L266 65H234L227.5 82.5H207.5ZM240 50H260L250 22.5L240 50Z"/>
+    <path d="M305 5H335C351.5 5 365 20 365 45C365 70 351.5 82.5 335 82.5H305V5ZM322.5 22.5V67.5H335C342.5 67.5 347.5 60 347.5 45C347.5 30 342.5 22.5 335 22.5H322.5Z"/>
+    <path d="M375 45C375 20 390 3 412.5 3C435 3 450 20 450 45C450 70 435 87 412.5 87C390 87 375 70 375 45ZM392.5 45C392.5 61 401 70 412.5 70C424 70 432.5 61 432.5 45C432.5 29 424 20 412.5 20C401 20 392.5 29 392.5 45Z"/>
   </svg>
   <nav id="wb-topbar-nav">
     <button class="tb-tab active" onclick="switchTopTab('components',this)">Components</button>
@@ -794,453 +795,6 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
 </nav>
 
 
-<!-- ══ COLORS ══ -->
-<section id="tab-colors" class="waldo-page active">
-  <h2 class="section-title">Color Palette</h2>
-  <p class="section-sub">Full 50–950 scale · 7 families · ◉ Figma anchor · ○ derived</p>
-  <div style="overflow-x:auto">
-    <table style="border-collapse:separate;border-spacing:4px;min-width:900px">
-      <thead>
-        <tr>
-          <th style="width:44px"></th>
-          <th style="font-size:11px;font-weight:500;color:var(--muted-foreground);text-align:center;padding-bottom:10px">Zinc</th>
-          <th style="font-size:11px;font-weight:500;color:var(--muted-foreground);text-align:center;padding-bottom:10px">Green</th>
-          <th style="font-size:11px;font-weight:500;color:var(--muted-foreground);text-align:center;padding-bottom:10px">Yellow</th>
-          <th style="font-size:11px;font-weight:500;color:var(--muted-foreground);text-align:center;padding-bottom:10px">Orange</th>        </tr>
-      </thead>
-      <tbody id="palette-body"></tbody>
-    </table>
-  </div>
-
-  <div style="margin-top:40px;padding-top:32px;border-top:1px solid var(--border)">
-    <p style="font-size:13px;font-weight:500;margin-bottom:16px;color:color-mix(in srgb, var(--foreground) 68%, transparent)">Zinc custom steps</p>
-    <div style="display:flex;gap:16px;flex-wrap:wrap">
-      <div style="display:flex;align-items:center;gap:10px">
-        <div style="width:36px;height:36px;border-radius:4px;background:var(--popover);border:1px solid var(--border)"></div>
-        <div><div style="font-size:12px;font-weight:500;color:var(--foreground)">zinc-700</div><div style="font-size:11px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#323539 · fill600Menu</div></div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <div style="width:36px;height:36px;border-radius:4px;background:var(--secondary);border:1px solid var(--border)"></div>
-        <div><div style="font-size:12px;font-weight:500;color:var(--foreground)">zinc-750</div><div style="font-size:11px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#2d2f33 · fill700Regular</div></div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <div style="width:36px;height:36px;border-radius:4px;background:var(--muted);border:1px solid var(--border)"></div>
-        <div><div style="font-size:12px;font-weight:500;color:var(--foreground)">zinc-850</div><div style="font-size:11px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#242528 · bg850High</div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Alpha scale -->
-  <div style="margin-top:48px">
-    <h3 class="section-title" style="font-size:16px;margin-bottom:4px">Alpha Scale</h3>
-    <p class="section-sub" style="margin-bottom:28px">Semi-transparent variants — adapt automatically to any background depth.</p>
-
-    <style>
-      .alpha-row { display:flex; gap:0; margin-bottom:24px; }
-      .alpha-chip { flex:1; height:40px; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:600; font-family:monospace; color:rgba(255,255,255,.7); letter-spacing:.02em; position:relative; cursor:default; }
-      .alpha-chip:first-child { border-radius:4px 0 0 4px; }
-      .alpha-chip:last-child  { border-radius:0 4px 4px 0; }
-      .alpha-family-label { font-size:11px; font-weight:600; color:var(--muted-foreground); text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px; }
-      .alpha-demo-row { display:flex; gap:8px; align-items:stretch; margin-top:20px; }
-      .alpha-demo-bg { flex:1; border-radius:6px; padding:12px; display:flex; flex-direction:column; gap:6px; }
-    </style>
-
-    <!-- zinc-200 alpha -->
-    <div style="margin-bottom:28px">
-      <div class="alpha-family-label">zinc-200 alpha — text & borders on dark</div>
-      <div class="alpha-row">
-        <div class="alpha-chip" style="background:rgba(210,211,211,0.05)">5%</div>
-        <div class="alpha-chip" style="background:rgba(210,211,211,0.10)">10%</div>
-        <div class="alpha-chip" style="background:var(--border)">12%</div>
-        <div class="alpha-chip" style="background:var(--border-md)">20%</div>
-        <div class="alpha-chip" style="background:var(--border-strong)">30%</div>
-        <div class="alpha-chip" style="background:rgba(210,211,211,0.50)">50%</div>
-        <div class="alpha-chip" style="background:rgba(210,211,211,0.70);color:#171819">70%</div>
-      </div>
-      <!-- Demo: same tokens on 3 different background depths -->
-      <div class="alpha-demo-row">
-        <div class="alpha-demo-bg" style="background:var(--background);border:1px solid var(--border)">
-          <div style="font-size:9px;color:rgba(210,211,211,.4);margin-bottom:4px">ON zinc-950</div>
-          <div style="font-size:13px;color:rgba(210,211,211,1.0);font-weight:600">Primary text</div>
-          <div style="font-size:12px;color:color-mix(in srgb, var(--foreground) 68%, transparent)">Secondary text /70</div>
-          <div style="font-size:11px;color:color-mix(in srgb, var(--foreground) 50%, transparent)">Disabled text /50</div>
-          <div style="height:1px;background:var(--border-md);margin:2px 0"></div>
-          <div style="height:24px;background:rgba(210,211,211,0.10);border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:10px;color:rgba(210,211,211,.5)">fill /10</div>
-        </div>
-        <div class="alpha-demo-bg" style="background:var(--card);border:1px solid var(--border)">
-          <div style="font-size:9px;color:rgba(210,211,211,.4);margin-bottom:4px">ON zinc-900</div>
-          <div style="font-size:13px;color:rgba(210,211,211,1.0);font-weight:600">Primary text</div>
-          <div style="font-size:12px;color:color-mix(in srgb, var(--foreground) 68%, transparent)">Secondary text /70</div>
-          <div style="font-size:11px;color:color-mix(in srgb, var(--foreground) 50%, transparent)">Disabled text /50</div>
-          <div style="height:1px;background:var(--border-md);margin:2px 0"></div>
-          <div style="height:24px;background:rgba(210,211,211,0.10);border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:10px;color:rgba(210,211,211,.5)">fill /10</div>
-        </div>
-        <div class="alpha-demo-bg" style="background:var(--muted);border:1px solid var(--border)">
-          <div style="font-size:9px;color:rgba(210,211,211,.4);margin-bottom:4px">ON zinc-800</div>
-          <div style="font-size:13px;color:rgba(210,211,211,1.0);font-weight:600">Primary text</div>
-          <div style="font-size:12px;color:color-mix(in srgb, var(--foreground) 68%, transparent)">Secondary text /70</div>
-          <div style="font-size:11px;color:color-mix(in srgb, var(--foreground) 50%, transparent)">Disabled text /50</div>
-          <div style="height:1px;background:var(--border-md);margin:2px 0"></div>
-          <div style="height:24px;background:rgba(210,211,211,0.10);border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:10px;color:rgba(210,211,211,.5)">fill /10</div>
-        </div>
-      </div>
-      <p style="font-size:11px;color:color-mix(in srgb, var(--foreground) 45%, transparent);margin-top:8px">↑ Same tokens, 3 different backgrounds — text and borders adapt without separate definitions.</p>
-    </div>
-
-    <!-- zinc-950 alpha -->
-    <div style="margin-bottom:28px">
-      <div class="alpha-family-label">zinc-950 alpha — dark overlays & widget fills</div>
-      <div class="alpha-row" style="background:repeating-linear-gradient(45deg,#636465 0,#636465 1px,transparent 0,transparent 50%) center/6px 6px;border-radius:4px">
-        <div class="alpha-chip" style="background:rgba(23,24,25,0.40)">40%</div>
-        <div class="alpha-chip" style="background:rgba(23,24,25,0.50)">50%</div>
-        <div class="alpha-chip" style="background:rgba(23,24,25,0.80)">80%</div>
-      </div>
-    </div>
-
-    <!-- Brand + State alphas -->
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
-      <div>
-        <div class="alpha-family-label">green-500 alpha — brand tints</div>
-        <div class="alpha-row">
-          <div class="alpha-chip" style="background:rgba(50,169,169,0.10)">10%</div>
-          <div class="alpha-chip" style="background:rgba(50,169,169,0.15)">15%</div>
-          <div class="alpha-chip" style="background:rgba(50,169,169,0.20)">20%</div>
-          <div class="alpha-chip" style="background:rgba(50,169,169,0.25)">25%</div>
-        </div>
-      </div>
-      <div>
-        <div class="alpha-family-label">coral-500 alpha — destructive</div>
-        <div class="alpha-row">
-          <div class="alpha-chip" style="background:rgba(222,58,40,0.10)">10%</div>
-          <div class="alpha-chip" style="background:rgba(222,58,40,0.20)">20%</div>
-          <div class="alpha-chip" style="background:rgba(222,58,40,0.40)">40%</div>
-        </div>
-      </div>
-      <div>
-        <div class="alpha-family-label">yellow-300 alpha — warning</div>
-        <div class="alpha-row">
-          <div class="alpha-chip" style="background:rgba(247,211,113,0.10)">10%</div>
-          <div class="alpha-chip" style="background:rgba(247,211,113,0.20)">20%</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ══ BRAND COLORS ══ -->
-<section id="tab-brand" class="waldo-page">
-  <h2 class="section-title">Brand Colors</h2>
-  <p class="section-sub">5 families · 5 steps each · marketing website only (packages/web) · Tailwind: <code style="font-family:'SF Mono','Fira Code',monospace;background:var(--muted);padding:1px 6px;border-radius:3px;font-size:12px">brand-[family]-[step]</code></p>
-
-  <style>
-    .brand-grid { display: grid; grid-template-columns: 100px repeat(5, 1fr); gap: 6px; align-items: center; margin-bottom: 8px; }
-    .brand-label { font-size: 13px; font-weight: 600; color: var(--foreground); letter-spacing: -0.01em; }
-    .brand-step-head { font-size: 11px; font-weight: 500; color: var(--muted-foreground); text-align: center; padding-bottom: 8px; }
-    .brand-swatch {
-      width: 100%; height: 44px; border-radius: 24px; position: relative; cursor: default;
-      transition: transform .1s, box-shadow .1s;
-    }
-    .brand-swatch:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.4); z-index: 2; }
-    .brand-swatch-tip {
-      display: none; position: absolute; bottom: calc(100% + 8px); left: 50%;
-      transform: translateX(-50%); background: var(--popover); color: var(--foreground);
-      border: 1px solid var(--border-md); border-radius: 6px; padding: 6px 10px;
-      font-size: 10px; white-space: nowrap; z-index: 10; line-height: 1.6;
-      box-shadow: 0 4px 12px rgba(0,0,0,.4);
-    }
-    .brand-swatch:hover .brand-swatch-tip { display: block; }
-    .brand-swatch-tip code { font-family: 'SF Mono','Fira Code',monospace; color: var(--primary); display: block; }
-    .brand-main-dot { position: absolute; bottom: 6px; right: 6px; width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.5); }
-    .brand-section-divider { height: 1px; background: var(--border); margin: 32px 0; }
-    .brand-notice { display: inline-flex; align-items: center; gap: 6px; background: rgba(129,58,239,.1); color: #ba91f7; border: 1px solid rgba(129,58,239,.2); border-radius: 20px; padding: 3px 12px; font-size: 11px; font-weight: 500; margin-bottom: 32px; }
-  </style>
-
-  <div class="brand-notice">⚡ These colors are flashy by design — use in marketing, not in the product UI</div>
-
-  <!-- Header row -->
-  <div class="brand-grid" style="margin-bottom:4px">
-    <div></div>
-    <div class="brand-step-head">700</div>
-    <div class="brand-step-head">600</div>
-    <div class="brand-step-head">500 ★</div>
-    <div class="brand-step-head">300</div>
-    <div class="brand-step-head">100</div>
-  </div>
-
-  <!-- Green -->
-  <div class="brand-grid">
-    <div class="brand-label">Green</div>
-    <div class="brand-swatch" style="background:#1b8c8c">
-      <div class="brand-swatch-tip"><code>brand-green-700</code>#1b8c8c</div>
-    </div>
-    <div class="brand-swatch" style="background:#2db4b4">
-      <div class="brand-swatch-tip"><code>brand-green-600</code>#2db4b4</div>
-    </div>
-    <div class="brand-swatch" style="background:#63dbdb">
-      <div class="brand-main-dot"></div>
-      <div class="brand-swatch-tip"><code>brand-green-500</code>#63dbdb · main</div>
-    </div>
-    <div class="brand-swatch" style="background:#8cfaf5">
-      <div class="brand-swatch-tip"><code>brand-green-300</code>#8cfaf5</div>
-    </div>
-    <div class="brand-swatch" style="background:#dafffd;border:1px solid var(--border)">
-      <div class="brand-swatch-tip"><code>brand-green-100</code>#dafffd</div>
-    </div>
-  </div>
-
-  <!-- Yellow -->
-  <div class="brand-grid">
-    <div class="brand-label">Yellow</div>
-    <div class="brand-swatch" style="background:#de8d13">
-      <div class="brand-swatch-tip"><code>brand-yellow-700</code>#de8d13</div>
-    </div>
-    <div class="brand-swatch" style="background:#e3ac38">
-      <div class="brand-swatch-tip"><code>brand-yellow-600</code>#e3ac38</div>
-    </div>
-    <div class="brand-swatch" style="background:#fac034">
-      <div class="brand-main-dot"></div>
-      <div class="brand-swatch-tip"><code>brand-yellow-500</code>#fac034 · main</div>
-    </div>
-    <div class="brand-swatch" style="background:#f7d372">
-      <div class="brand-swatch-tip"><code>brand-yellow-300</code>#f7d372</div>
-    </div>
-    <div class="brand-swatch" style="background:#ffedc0;border:1px solid var(--border)">
-      <div class="brand-swatch-tip"><code>brand-yellow-100</code>#ffedc0</div>
-    </div>
-  </div>
-
-  <!-- Pink -->
-  <div class="brand-grid">
-    <div class="brand-label">Pink</div>
-    <div class="brand-swatch" style="background:#9a164e">
-      <div class="brand-swatch-tip"><code>brand-pink-700</code>#9a164e</div>
-    </div>
-    <div class="brand-swatch" style="background:#c10b59">
-      <div class="brand-swatch-tip"><code>brand-pink-600</code>#c10b59</div>
-    </div>
-    <div class="brand-swatch" style="background:#d40a60">
-      <div class="brand-main-dot"></div>
-      <div class="brand-swatch-tip"><code>brand-pink-500</code>#d40a60 · main</div>
-    </div>
-    <div class="brand-swatch" style="background:#f8589e">
-      <div class="brand-swatch-tip"><code>brand-pink-300</code>#f8589e</div>
-    </div>
-    <div class="brand-swatch" style="background:#fdc9df;border:1px solid var(--border)">
-      <div class="brand-swatch-tip"><code>brand-pink-100</code>#fdc9df</div>
-    </div>
-  </div>
-
-  <!-- Chrome -->
-  <div class="brand-grid">
-    <div class="brand-label">Chrome</div>
-    <div class="brand-swatch" style="background:#7a9fa0">
-      <div class="brand-swatch-tip"><code>brand-chrome-700</code>#7a9fa0</div>
-    </div>
-    <div class="brand-swatch" style="background:#a7d3d3">
-      <div class="brand-swatch-tip"><code>brand-chrome-600</code>#a7d3d3</div>
-    </div>
-    <div class="brand-swatch" style="background:#bdd8d8">
-      <div class="brand-main-dot" style="background:rgba(0,0,0,.2)"></div>
-      <div class="brand-swatch-tip"><code>brand-chrome-500</code>#bdd8d8 · main</div>
-    </div>
-    <div class="brand-swatch" style="background:#d5e9e9;border:1px solid var(--border)">
-      <div class="brand-swatch-tip"><code>brand-chrome-300</code>#d5e9e9</div>
-    </div>
-    <div class="brand-swatch" style="background:#ecfbfb;border:1px solid var(--border)">
-      <div class="brand-swatch-tip"><code>brand-chrome-100</code>#ecfbfb</div>
-    </div>
-  </div>
-
-  <!-- Purple -->
-  <div class="brand-grid">
-    <div class="brand-label">Purple</div>
-    <div class="brand-swatch" style="background:#4d12a5">
-      <div class="brand-swatch-tip"><code>brand-purple-700</code>#4d12a5</div>
-    </div>
-    <div class="brand-swatch" style="background:#6616de">
-      <div class="brand-swatch-tip"><code>brand-purple-600</code>#6616de</div>
-    </div>
-    <div class="brand-swatch" style="background:#813aef">
-      <div class="brand-main-dot"></div>
-      <div class="brand-swatch-tip"><code>brand-purple-500</code>#813aef · main</div>
-    </div>
-    <div class="brand-swatch" style="background:#ba91f7">
-      <div class="brand-swatch-tip"><code>brand-purple-300</code>#ba91f7</div>
-    </div>
-    <div class="brand-swatch" style="background:#f0e7fe;border:1px solid var(--border)">
-      <div class="brand-swatch-tip"><code>brand-purple-100</code>#f0e7fe</div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ══ SEMANTIC ══ -->
-<section id="tab-semantic" class="waldo-page">
-  <h2 class="section-title">Semantic Tokens</h2>
-  <p class="section-sub">Shadcn/ui CSS variables — referencing Waldo primitives.</p>
-
-  <div class="mode-toggle">
-    <button class="mode-btn active" onclick="showMode('dark',this)">Dark</button>
-    <button class="mode-btn" onclick="showMode('light',this)">Light</button>
-  </div>
-
-  <div id="mode-dark">
-    <div class="token-section">
-      <div class="token-group-title">Backgrounds</div>
-      <div class="token-grid">
-        <div class="token-card"><div class="token-dot" style="background:var(--background)"></div><div><div class="token-var">--background</div><div class="token-src">#171819 · zinc-950</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:var(--card)"></div><div><div class="token-var">--card</div><div class="token-src">#202123 · zinc-900</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:var(--popover)"></div><div><div class="token-var">--popover</div><div class="token-src">#323539 · zinc-700</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:var(--muted)"></div><div><div class="token-var">--sidebar-background</div><div class="token-src">#242528 · zinc-850</div></div></div>
-      </div>
-    </div>
-    <div class="token-section">
-      <div class="token-group-title">Foregrounds</div>
-      <div class="token-grid">
-        <div class="token-card"><div class="token-dot" style="background:#d2d3d3;border:1px solid var(--border)"></div><div><div class="token-var">--foreground</div><div class="token-src">#d2d3d3 · zinc-200</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#8f9091"></div><div><div class="token-var">--muted-foreground</div><div class="token-src">#8f9091 · zinc-400</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#d2d3d3;border:1px solid var(--border)"></div><div><div class="token-var">--card-foreground</div><div class="token-src">#d2d3d3 · zinc-200</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#d2d3d3;border:1px solid var(--border)"></div><div><div class="token-var">--popover-foreground</div><div class="token-src">#d2d3d3 · zinc-200</div></div></div>
-      </div>
-    </div>
-    <div class="token-section">
-      <div class="token-group-title">Interactive surfaces</div>
-      <div class="token-grid">
-        <div class="token-card"><div class="token-dot" style="background:var(--secondary)"></div><div><div class="token-var">--secondary</div><div class="token-src">#2d2f33 · zinc-750</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:var(--muted)"></div><div><div class="token-var">--muted</div><div class="token-src">#27282b · zinc-800</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#41454b"></div><div><div class="token-var">--accent</div><div class="token-src">#41454b · zinc-600</div></div></div>
-      </div>
-    </div>
-    <div class="token-section">
-      <div class="token-group-title">Brand & status</div>
-      <div class="token-grid">
-        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--primary</div><div class="token-src">#32a9a9 · green-500</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:var(--background)"></div><div><div class="token-var">--primary-foreground</div><div class="token-src">#171819 · zinc-950</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#de3a28"></div><div><div class="token-var">--destructive</div><div class="token-src">#de3a28 · coral-500</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--ring</div><div class="token-src">#32a9a9 · green-500</div></div></div>
-      </div>
-    </div>
-    <div class="token-section">
-      <div class="token-group-title">Borders</div>
-      <div class="token-grid">
-        <div class="token-card"><div class="token-dot" style="background:rgba(210,211,211,.12)"></div><div><div class="token-var">--border</div><div class="token-src">zinc-200 / 12%</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:rgba(210,211,211,.20)"></div><div><div class="token-var">--input</div><div class="token-src">zinc-200 / 20%</div></div></div>
-      </div>
-    </div>
-    <div class="token-section">
-      <div class="token-group-title">Charts</div>
-      <div class="token-grid">
-        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--chart-1</div><div class="token-src">green-500</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#d6ac32"></div><div><div class="token-var">--chart-2</div><div class="token-src">yellow-600</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#e76638"></div><div><div class="token-var">--chart-3</div><div class="token-src">orange-500</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#d76695"></div><div><div class="token-var">--chart-4</div><div class="token-src">pink-600</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#3b82f6"></div><div><div class="token-var">--chart-5</div><div class="token-src">blue-500</div></div></div>
-      </div>
-    </div>
-  </div>
-
-  <div id="mode-light" style="display:none">
-    <div class="token-section">
-      <div class="token-group-title">Backgrounds</div>
-      <div class="token-grid" style="--bg-card:#fff;--line-low:rgba(0,0,0,.08)">
-        <div class="token-card" style="background:#fff;border-color:rgba(0,0,0,.1)"><div class="token-dot" style="background:#fff;border:1px solid #d0d0d2"></div><div><div class="token-var" style="color:#0f0f10">--background</div><div class="token-src">#ffffff</div></div></div>
-        <div class="token-card" style="background:#fff;border-color:rgba(0,0,0,.1)"><div class="token-dot" style="background:#fafafa;border:1px solid #d0d0d2"></div><div><div class="token-var" style="color:#0f0f10">--card</div><div class="token-src">#fafafa</div></div></div>
-        <div class="token-card" style="background:#fff;border-color:rgba(0,0,0,.1)"><div class="token-dot" style="background:#f8fafc;border:1px solid #d0d0d2"></div><div><div class="token-var" style="color:#0f0f10">--sidebar-background</div><div class="token-src">#f8fafc · zinc-50</div></div></div>
-      </div>
-    </div>
-    <div class="token-section">
-      <div class="token-group-title">Brand & status</div>
-      <div class="token-grid">
-        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--primary</div><div class="token-src">#32a9a9 · green-500</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#d91b1d"></div><div><div class="token-var">--destructive</div><div class="token-src">#d91b1d · red-600</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#636465"></div><div><div class="token-var">--muted-foreground</div><div class="token-src">#636465 · zinc-500</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#edfafa;border:1px solid var(--border)"></div><div><div class="token-var">--accent</div><div class="token-src">#edfafa · green-50</div></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<!-- ══ TYPOGRAPHY ══ -->
-<section id="tab-typography" class="waldo-page">
-  <h2 class="section-title">Typography</h2>
-  <p class="section-sub">Inter · two-track scale (Linear-style) · weights 400 / 500 / 600 / 700 + italic</p>
-
-  <!-- Two-track explainer -->
-  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:32px;">
-    <div style="padding:16px; background:var(--muted); border-radius:8px; border:1px solid var(--border);">
-      <p style="font-size:11px;font-weight:600;color:var(--muted-foreground);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase">text-* track</p>
-      <p style="font-size:14px;color:var(--foreground);font-weight:500;margin-bottom:6px">UI, body, product surfaces</p>
-      <p style="font-size:13px;color:color-mix(in srgb, var(--foreground) 68%, transparent);line-height:1.5">Tailwind standard scale 12→48. Default tracking <span style="font-family:'SF Mono','Fira Code',monospace;font-size:12px;background:var(--popover);padding:1px 6px;border-radius:3px;color:var(--foreground)">-0.02em</span> (-2%).</p>
-    </div>
-    <div style="padding:16px; background:var(--muted); border-radius:8px; border:1px solid var(--border);">
-      <p style="font-size:11px;font-weight:600;color:var(--primary);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase">text-display-* track</p>
-      <p style="font-size:14px;color:var(--foreground);font-weight:500;margin-bottom:6px">Marketing heros + section headings</p>
-      <p style="font-size:13px;color:color-mix(in srgb, var(--foreground) 68%, transparent);line-height:1.5">Custom scale 24 / 32 / 40 / 56 / 72 / 96. Default tracking <span style="font-family:'SF Mono','Fira Code',monospace;font-size:12px;background:var(--popover);padding:1px 6px;border-radius:3px;color:var(--foreground)">-0.04em</span> (-4%). Tailwind-native: utility class is <span style="font-family:'SF Mono','Fira Code',monospace;font-size:12px;background:var(--popover);padding:1px 6px;border-radius:3px;color:var(--primary)">text-display-md</span>.</p>
-    </div>
-  </div>
-
-  <!-- ── TEXT TRACK ── -->
-  <p style="font-size:11px;font-weight:600;color:var(--muted-foreground);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">Text track</p>
-
-  <div class="type-head"><span>Class</span><span>Specimen</span><span>Specs</span></div>
-
-  <div class="type-row"><span class="type-tag">text-xs · normal</span>    <span style="font-size:12px;line-height:16px;font-weight:400;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>12/16</span><span>400</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-xs · medium</span>    <span style="font-size:12px;line-height:16px;font-weight:500;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>12/16</span><span>500</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-sm · normal</span>    <span style="font-size:14px;line-height:20px;font-weight:400;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>14/20</span><span>400</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-sm · medium</span>    <span style="font-size:14px;line-height:20px;font-weight:500;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>14/20</span><span>500</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-sm · semibold</span>  <span style="font-size:14px;line-height:20px;font-weight:600;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>14/20</span><span>600</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-base · normal</span>  <span style="font-size:16px;line-height:24px;font-weight:400;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span class="anchor">16/24 — default</span><span>400</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-base · italic</span>  <span style="font-size:16px;line-height:24px;font-weight:400;font-style:italic;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>16/24</span><span>400 italic</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-base · medium</span>  <span style="font-size:16px;line-height:24px;font-weight:500;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>16/24</span><span>500</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-base · semibold</span><span style="font-size:16px;line-height:24px;font-weight:600;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>16/24</span><span>600</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-lg · normal</span>    <span style="font-size:18px;line-height:28px;font-weight:400;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>18/28</span><span>400</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-lg · medium</span>    <span style="font-size:18px;line-height:28px;font-weight:500;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>18/28</span><span>500</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-lg · semibold</span>  <span style="font-size:18px;line-height:28px;font-weight:600;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>18/28</span><span>600</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-xl · normal</span>    <span style="font-size:20px;line-height:28px;font-weight:400;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps</span><div class="type-meta"><span>20/28</span><span>400</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-xl · medium</span>    <span style="font-size:20px;line-height:28px;font-weight:500;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps</span><div class="type-meta"><span>20/28</span><span>500</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-xl · semibold</span>  <span style="font-size:20px;line-height:28px;font-weight:600;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps</span><div class="type-meta"><span>20/28</span><span>600</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-2xl · medium</span>   <span style="font-size:24px;line-height:32px;font-weight:500;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox</span><div class="type-meta"><span>24/32</span><span>500</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-2xl · semibold</span> <span style="font-size:24px;line-height:32px;font-weight:600;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox</span><div class="type-meta"><span>24/32</span><span>600</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-3xl · normal</span>   <span style="font-size:30px;line-height:36px;font-weight:400;letter-spacing:-.02em;color:var(--foreground)">Waldo Agents</span><div class="type-meta"><span>30/36</span><span>400</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-3xl · medium</span>   <span style="font-size:30px;line-height:36px;font-weight:500;letter-spacing:-.02em;color:var(--foreground)">Waldo Agents</span><div class="type-meta"><span>30/36</span><span>500</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-3xl · semibold</span> <span style="font-size:30px;line-height:36px;font-weight:600;letter-spacing:-.02em;color:var(--foreground)">Waldo Agents</span><div class="type-meta"><span>30/36</span><span>600</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-4xl · normal</span>   <span style="font-size:36px;line-height:40px;font-weight:400;letter-spacing:-.02em;color:var(--foreground)">Waldo</span><div class="type-meta"><span>36/40</span><span>400</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-4xl · medium</span>   <span style="font-size:36px;line-height:40px;font-weight:500;letter-spacing:-.02em;color:var(--foreground)">Waldo</span><div class="type-meta"><span>36/40</span><span>500</span><span>-0.02em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-4xl · semibold</span> <span style="font-size:36px;line-height:40px;font-weight:600;letter-spacing:-.02em;color:var(--foreground)">Waldo</span><div class="type-meta"><span>36/40</span><span>600</span><span>-0.02em</span></div></div>
-
-  <!-- ── DISPLAY TRACK ── -->
-  <p style="font-size:11px;font-weight:600;color:var(--primary);text-transform:uppercase;letter-spacing:.08em;margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)">text-display-* track — marketing only</p>
-
-  <div class="type-head"><span>Class</span><span>Specimen</span><span>Specs</span></div>
-
-  <div class="type-row"><span class="type-tag">text-display-xs · regular</span>   <span style="font-size:24px;line-height:32px;font-weight:400;letter-spacing:-.04em;color:var(--foreground)">Briefed before you ask</span><div class="type-meta"><span>24/32</span><span>400</span><span>-0.04em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-display-xs · medium</span>    <span style="font-size:24px;line-height:32px;font-weight:500;letter-spacing:-.04em;color:var(--foreground)">Getting smart on a brand, fast</span><div class="type-meta"><span>24/32</span><span>500</span><span>-0.04em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-display-sm · regular</span>   <span style="font-size:32px;line-height:40px;font-weight:400;letter-spacing:-.04em;color:var(--foreground)">Why strategists never go back</span><div class="type-meta"><span>32/40</span><span>400</span><span>-0.04em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-display-sm · semibold</span>  <span style="font-size:32px;line-height:40px;font-weight:600;letter-spacing:-.04em;color:var(--foreground)">Connect and go.</span><div class="type-meta"><span>32/40</span><span>600</span><span>-0.04em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-display-md · regular</span>   <span style="font-size:40px;line-height:48px;font-weight:400;letter-spacing:-.04em;color:var(--foreground)">Get everything you need</span><div class="type-meta"><span class="anchor">40/48 — hero default</span><span>400</span><span>-0.04em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-display-md · semibold</span>  <span style="font-size:40px;line-height:48px;font-weight:600;letter-spacing:-.04em;color:var(--foreground)">A built-in strategist</span><div class="type-meta"><span>40/48</span><span>600</span><span>-0.04em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-display-lg · regular</span>   <span style="font-size:56px;line-height:64px;font-weight:400;letter-spacing:-.04em;color:var(--foreground)">Move first.</span><div class="type-meta"><span>56/64</span><span>400</span><span>-0.04em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-display-lg · semibold</span>  <span style="font-size:56px;line-height:64px;font-weight:600;letter-spacing:-.04em;color:var(--foreground)">Move first.</span><div class="type-meta"><span>56/64</span><span>600</span><span>-0.04em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-display-xl · semibold</span>  <span style="font-size:72px;line-height:80px;font-weight:600;letter-spacing:-.04em;color:var(--foreground)">Waldo</span><div class="type-meta"><span>72/80</span><span>600</span><span>-0.04em</span></div></div>
-  <div class="type-row"><span class="type-tag">text-display-2xl · semibold</span> <span style="font-size:96px;line-height:100px;font-weight:600;letter-spacing:-.04em;color:var(--foreground)">Waldo</span><div class="type-meta"><span>96/100</span><span>600</span><span>-0.04em</span></div></div>
-
-  <!-- ── Notes ── -->
-  <p style="font-size:11px;font-weight:600;color:var(--muted-foreground);text-transform:uppercase;letter-spacing:.08em;margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)">Mono &amp; rules of thumb</p>
-
-  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:20px;">
-    <div style="padding:16px; background:var(--muted); border-radius:8px; border:1px solid var(--border);">
-      <p style="font-size:11px;font-weight:600;color:var(--muted-foreground);margin-bottom:6px;letter-spacing:.08em;text-transform:uppercase">--font-mono</p>
-      <p style="font-family:'SF Mono','Fira Code',ui-monospace,monospace;font-size:13px;color:var(--foreground);margin-bottom:4px">const briefing = waldo.scan();</p>
-      <p style="font-size:12px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace</p>
-    </div>
-    <div style="padding:16px; background:var(--muted); border-radius:8px; border:1px solid var(--border);">
-      <p style="font-size:11px;font-weight:600;color:var(--muted-foreground);margin-bottom:6px;letter-spacing:.08em;text-transform:uppercase">When to pick which track</p>
-      <p style="font-size:12px;color:color-mix(in srgb, var(--foreground) 68%, transparent);line-height:1.6">Anything inside the <strong style="color:var(--foreground)">product UI</strong> → <code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--popover);padding:1px 5px;border-radius:3px;color:var(--foreground)">text-*</code><br>Anything that's a <strong style="color:var(--foreground)">marketing hero or section title</strong> → <code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--popover);padding:1px 5px;border-radius:3px;color:var(--primary)">text-display-*</code></p>
-    </div>
-  </div>
-</section>
 
 
 <!-- ══ COMPONENTS ══ -->
@@ -1542,561 +1096,6 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
 </footer>
 
 
-<!-- ══ MIGRATION ══ -->
-<section id="tab-migration" class="waldo-page">
-  <h2 class="section-title">Migration Map</h2>
-  <p class="section-sub">Waldo original styles → Shadcn/Tailwind standard. Exact matches, closest equivalents, and new additions.</p>
-
-  <style>
-    .mig-table { width:100%; border-collapse:collapse; font-size:12px; }
-    .mig-table th { font-size:10px; font-weight:600; color:var(--muted-foreground); text-transform:uppercase; letter-spacing:.08em; padding:8px 12px; border-bottom:2px solid var(--border); text-align:left; }
-    .mig-table td { padding:12px 12px; border-bottom:1px solid var(--border); vertical-align:middle; }
-    .mig-table tr:last-child td { border-bottom:none; }
-    .mig-old  { font-family:'SF Mono','Fira Code',monospace; background:var(--muted); border-radius:4px; padding:2px 7px; color:var(--muted-foreground); display:inline-block; }
-    .mig-new  { font-family:'SF Mono','Fira Code',monospace; background:rgba(50,169,169,.1); border-radius:4px; padding:2px 7px; color:var(--primary); display:inline-block; }
-    .mig-new-added { font-family:'SF Mono','Fira Code',monospace; background:rgba(247,211,113,.1); border-radius:4px; padding:2px 7px; color:#f7d371; display:inline-block; }
-    .badge-exact   { background:rgba(50,169,169,.15); color:#4dbcbc; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
-    .badge-close   { background:rgba(247,211,113,.15); color:#f7d371; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
-    .badge-new     { background:rgba(144,205,144,.15); color:#90cd90; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
-    .badge-changed { background:rgba(222,58,40,.15); color:#ff8082; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
-    .mig-note { font-size:11px; color:color-mix(in srgb, var(--foreground) 45%, transparent); margin-top:3px; }
-    .mig-section { font-size:11px; font-weight:600; color:var(--muted-foreground); text-transform:uppercase; letter-spacing:.08em; padding:20px 12px 8px; background:var(--background); }
-    .mig-legend { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:32px; }
-    .mig-legend-item { display:flex; align-items:center; gap:7px; font-size:12px; color:var(--muted-foreground); }
-  </style>
-
-  <div class="mig-legend">
-    <div class="mig-legend-item"><span class="badge-exact">exact</span> Pixel-perfect match</div>
-    <div class="mig-legend-item"><span class="badge-close">closest</span> Best equivalent — slight difference</div>
-    <div class="mig-legend-item"><span class="badge-changed">changed</span> Size or weight updated to standard</div>
-    <div class="mig-legend-item"><span class="badge-new">new</span> Added — no old equivalent</div>
-  </div>
-
-  <!-- FONT WEIGHTS -->
-  <table class="mig-table">
-    <thead>
-      <tr>
-        <th style="width:220px">Old Name</th>
-        <th style="width:220px">New Name</th>
-        <th style="width:80px">Value</th>
-        <th>Status</th>
-        <th>Notes</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td colspan="5" class="mig-section">Font Weights</td></tr>
-      <tr>
-        <td><span class="mig-old">fontWeight.regular</span></td>
-        <td><span class="mig-new">font-normal</span></td>
-        <td style="color:var(--muted-foreground)">400</td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">"regular" is not a Tailwind name — renamed to "normal"</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">fontWeight.medium</span></td>
-        <td><span class="mig-new">font-medium</span></td>
-        <td style="color:var(--muted-foreground)">500</td>
-        <td><span class="badge-exact">exact</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">fontWeight.semibold</span></td>
-        <td><span class="mig-new">font-semibold</span></td>
-        <td style="color:var(--muted-foreground)">600</td>
-        <td><span class="badge-exact">exact</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">—</span></td>
-        <td><span class="mig-new-added">font-bold</span></td>
-        <td style="color:var(--muted-foreground)">700</td>
-        <td><span class="badge-new">new</span></td>
-        <td><div class="mig-note">Added for display sizes (text-4xl, text-5xl)</div></td>
-      </tr>
-
-      <tr><td colspan="5" class="mig-section">Font Sizes</td></tr>
-      <tr>
-        <td><span class="mig-old">fontSize.xs · 12px</span></td>
-        <td><span class="mig-new">text-xs</span></td>
-        <td style="color:var(--muted-foreground)">12px</td>
-        <td><span class="badge-exact">exact</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">fontSize.sm · 13px</span></td>
-        <td><span class="mig-new">text-sm</span></td>
-        <td style="color:var(--muted-foreground)">14px</td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">+1px — Tailwind standard is 14px</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">fontSize.base · 14px</span></td>
-        <td><span class="mig-new">text-base</span></td>
-        <td style="color:var(--muted-foreground)">16px</td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">+2px — Tailwind standard is 16px</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">fontSize.lg · 16px</span></td>
-        <td><span class="mig-new">text-lg</span></td>
-        <td style="color:var(--muted-foreground)">18px</td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">+2px — Tailwind standard is 18px</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">fontSize.xl · 20px</span></td>
-        <td><span class="mig-new">text-xl</span></td>
-        <td style="color:var(--muted-foreground)">20px</td>
-        <td><span class="badge-exact">exact</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">fontSize.2xl · 24px</span></td>
-        <td><span class="mig-new">text-2xl</span></td>
-        <td style="color:var(--muted-foreground)">24px</td>
-        <td><span class="badge-exact">exact</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">fontSize.3xl · 28px</span></td>
-        <td><span class="mig-new">text-3xl</span></td>
-        <td style="color:var(--muted-foreground)">30px</td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">+2px — Tailwind standard is 30px</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">fontSize.4xl · 40px</span></td>
-        <td><span class="mig-new">text-4xl</span></td>
-        <td style="color:var(--muted-foreground)">36px</td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">−4px — Tailwind standard is 36px</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">fontSize.5xl · 48px</span></td>
-        <td><span class="mig-new">text-5xl</span></td>
-        <td style="color:var(--muted-foreground)">48px</td>
-        <td><span class="badge-exact">exact</span></td>
-        <td></td>
-      </tr>
-
-      <tr><td colspan="5" class="mig-section">Letter Spacing</td></tr>
-      <tr>
-        <td><span class="mig-old">letterSpacing.normal · 0%</span></td>
-        <td><span class="mig-new">tracking-normal</span></td>
-        <td style="color:var(--muted-foreground)">0em</td>
-        <td><span class="badge-exact">exact</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">letterSpacing.tight · -2%</span></td>
-        <td><span class="mig-new">tracking-tight</span></td>
-        <td style="color:var(--muted-foreground)">-0.025em</td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">−2% → −2.5% — Tailwind standard</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">letterSpacing.tighter · -4%</span></td>
-        <td><span class="mig-new">tracking-tighter</span></td>
-        <td style="color:var(--muted-foreground)">-0.05em</td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">−4% → −5% — Tailwind standard</div></td>
-      </tr>
-
-      <tr><td colspan="5" class="mig-section">Text Styles</td></tr>
-      <tr>
-        <td><span class="mig-old">—</span></td>
-        <td><span class="mig-new-added">text-xs · normal</span></td>
-        <td style="color:var(--muted-foreground)">12/400</td>
-        <td><span class="badge-new">new</span></td>
-        <td><div class="mig-note">Added — caption base weight</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">text-xs · medium</span></td>
-        <td><span class="mig-new">text-xs · medium</span></td>
-        <td style="color:var(--muted-foreground)">12/500</td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">Tracking: −0.02em → 0 (standard for 12px)</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">text-sm · regular</span></td>
-        <td><span class="mig-new">text-sm · normal</span></td>
-        <td style="color:var(--muted-foreground)">14/400</td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">13px → 14px · "regular" → "normal"</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">—</span></td>
-        <td><span class="mig-new-added">text-sm · medium</span></td>
-        <td style="color:var(--muted-foreground)">14/500</td>
-        <td><span class="badge-new">new</span></td>
-        <td><div class="mig-note">Added — common in nav, badges, labels</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">text-sm · semibold</span></td>
-        <td><span class="mig-new">text-sm · semibold</span></td>
-        <td style="color:var(--muted-foreground)">14/600</td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">13px → 14px</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">text-base · regular</span></td>
-        <td><span class="mig-new">text-base · normal</span></td>
-        <td style="color:var(--muted-foreground)">16/400</td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">14px → 16px · "regular" → "normal"</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">—</span></td>
-        <td><span class="mig-new-added">text-base · medium</span></td>
-        <td style="color:var(--muted-foreground)">16/500</td>
-        <td><span class="badge-new">new</span></td>
-        <td><div class="mig-note">Added — form labels, emphasized body</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">text-base · semibold</span></td>
-        <td><span class="mig-new">text-base · semibold</span></td>
-        <td style="color:var(--muted-foreground)">16/600</td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">14px → 16px</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">text-lg · regular</span></td>
-        <td><span class="mig-new">text-lg · normal</span></td>
-        <td style="color:var(--muted-foreground)">18/400</td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">16px → 18px · "regular" → "normal"</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">text-lg · semibold</span></td>
-        <td><span class="mig-new">text-lg · semibold</span></td>
-        <td style="color:var(--muted-foreground)">18/600</td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">16px → 18px</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">text-xl · semibold</span></td>
-        <td><span class="mig-new">text-xl · semibold</span></td>
-        <td style="color:var(--muted-foreground)">20/600</td>
-        <td><span class="badge-exact">exact</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">text-2xl · semibold</span></td>
-        <td><span class="mig-new">text-2xl · semibold</span></td>
-        <td style="color:var(--muted-foreground)">24/600</td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">Tracking: −0.04em → −0.025em</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">text-3xl · semibold · 28px</span></td>
-        <td><span class="mig-new">text-3xl · semibold</span></td>
-        <td style="color:var(--muted-foreground)">30/600</td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">28px → 30px</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">text-4xl · semibold · 40px</span></td>
-        <td><span class="mig-new">text-4xl · bold</span></td>
-        <td style="color:var(--muted-foreground)">36/700</td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">40px → 36px · semibold → bold (display weight)</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">text-5xl · semibold · 48px</span></td>
-        <td><span class="mig-new">text-5xl · bold</span></td>
-        <td style="color:var(--muted-foreground)">48/700</td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">semibold → bold (display weight)</div></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- COLOR MIGRATION -->
-  <div style="margin-top:56px;margin-bottom:8px;font-size:20px;font-weight:600;color:var(--foreground);letter-spacing:-0.025em">Color Primitives</div>
-  <p style="font-size:13px;color:var(--muted-foreground);margin-bottom:24px">Old Waldo Figma variable names → new Tailwind scale tokens</p>
-
-  <table class="mig-table">
-    <thead>
-      <tr>
-        <th style="width:220px">Old Figma Name</th>
-        <th style="width:160px">New Token</th>
-        <th style="width:100px">Hex</th>
-        <th style="width:80px">Status</th>
-        <th>Notes</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td colspan="5" class="mig-section">Zinc — Neutrals</td></tr>
-      <tr>
-        <td><span class="mig-old">bg950Low</span></td>
-        <td><span class="mig-new">zinc-950</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:var(--background);border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#171819</code></span></td>
-        <td><span class="badge-exact">exact</span></td>
-        <td><div class="mig-note">App background</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">bg900Regular</span></td>
-        <td><span class="mig-new">zinc-900</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:var(--card);border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#202123</code></span></td>
-        <td><span class="badge-exact">exact</span></td>
-        <td><div class="mig-note">Page sections</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">bg850High</span></td>
-        <td><span class="mig-new">zinc-850</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:var(--muted);border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#242528</code></span></td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">Custom step — no Tailwind equivalent, kept as zinc-850</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">fill800Low</span></td>
-        <td><span class="mig-new">zinc-800</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:var(--muted);border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#27282b</code></span></td>
-        <td><span class="badge-exact">exact</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">fill700Regular</span></td>
-        <td><span class="mig-new">zinc-750</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:var(--secondary);border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#2d2f33</code></span></td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">Custom step — kept as zinc-750</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">fill600Menu / fill600HighMenus</span></td>
-        <td><span class="mig-new">zinc-700</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:var(--popover);border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#323539</code></span></td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">Two aliases merged into one token</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">fill500Highest</span></td>
-        <td><span class="mig-new">zinc-600</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#41454b;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#41454b</code></span></td>
-        <td><span class="badge-exact">exact</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">text200Low</span></td>
-        <td><span class="mig-new">zinc-500</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#636465;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#636465</code></span></td>
-        <td><span class="badge-exact">exact</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">text100Regular</span></td>
-        <td><span class="mig-new">zinc-400</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#8f9091;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#8f9091</code></span></td>
-        <td><span class="badge-exact">exact</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">text50High</span></td>
-        <td><span class="mig-new">zinc-200</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#d2d3d3;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#d2d3d3</code></span></td>
-        <td><span class="badge-exact">exact</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">text50Med / text50Disabled</span></td>
-        <td><span class="mig-new">zinc-200/70 · /50</span></td>
-        <td><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#d2d3d3ad · 77</code></td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">Alpha variants — now expressed as opacity modifiers</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">line400High / line600Reg / line700Low</span></td>
-        <td><span class="mig-new">zinc-200/28 · /20 · /12</span></td>
-        <td><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#d2d3d3 + alpha</code></td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">Border alpha variants → border / input / muted tokens</div></td>
-      </tr>
-
-      <tr><td colspan="5" class="mig-section">Green — Brand Primary</td></tr>
-      <tr>
-        <td><span class="mig-old">accentGreen500</span></td>
-        <td><span class="mig-new">green-500</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#32a9a9;display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#32a9a9</code></span></td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">"accentGreen" renamed — color is green, not green</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">accentGreen600</span></td>
-        <td><span class="mig-new">green-600</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#2c797a;display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#2c797a</code></span></td>
-        <td><span class="badge-changed">changed</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">accentGreen700 · 800 · 900</span></td>
-        <td><span class="mig-new">green-700 · 800 · 900</span></td>
-        <td><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#2a6c6d · #265152 · #223133</code></td>
-        <td><span class="badge-changed">changed</span></td>
-        <td></td>
-      </tr>
-
-      <tr><td colspan="5" class="mig-section">Yellow — Yellow Accent</td></tr>
-      <tr>
-        <td><span class="mig-old">accentYellow300</span></td>
-        <td><span class="mig-new">yellow-300</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#f7d371;display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#f7d371</code></span></td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">"accentYellow" → "yellow" (Tailwind family name)</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">accentYellow600 · 700 · 800</span></td>
-        <td><span class="mig-new">yellow-600 · 700 · 800</span></td>
-        <td><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#d6ac32 · #b48a00 · #946f00</code></td>
-        <td><span class="badge-changed">changed</span></td>
-        <td></td>
-      </tr>
-
-      <tr><td colspan="5" class="mig-section">Orange / Pink — Accents</td></tr>
-      <tr>
-        <td><span class="mig-old">accentOrange300 · 400 · 500</span></td>
-        <td><span class="mig-new">orange-300 · 400 · 500</span></td>
-        <td><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#cd917b · #a95d41 · #e76638</code></td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">"accentOrange" → "orange"</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">accentPink500 · 600 · 700 · 800 · 900</span></td>
-        <td><span class="mig-new">pink-500 · 600 · 700 · 800 · 900</span></td>
-        <td><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#ffabd0 · #d76695 · #bd005e …</code></td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">"accentPink" → "pink"</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">— (no red primitives)</span></td>
-        <td><span class="mig-new-added">red-50 → red-950</span></td>
-        <td><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">anchored to #e8533a</code></td>
-        <td><span class="badge-new">new</span></td>
-        <td><div class="mig-note">Full scale derived — destructive had no primitive family</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">— (no blue primitives)</span></td>
-        <td><span class="mig-new-added">blue-50 → blue-950</span></td>
-        <td><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">Tailwind blue</code></td>
-        <td><span class="badge-new">new</span></td>
-        <td><div class="mig-note">Added for info states, links, sidebar primary</div></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- SEMANTIC TOKENS -->
-  <div style="margin-top:56px;margin-bottom:8px;font-size:20px;font-weight:600;color:var(--foreground);letter-spacing:-0.025em">Semantic Tokens</div>
-  <p style="font-size:13px;color:var(--muted-foreground);margin-bottom:24px">Designer's <code style="font-size:11px;background:var(--muted);padding:1px 5px;border-radius:3px">darkWaldo</code> mapping vs. corrected Shadcn values</p>
-
-  <table class="mig-table">
-    <thead>
-      <tr>
-        <th style="width:180px">Token</th>
-        <th style="width:180px">Designer's value</th>
-        <th style="width:180px">Corrected value</th>
-        <th style="width:90px">Status</th>
-        <th>Issue</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="mig-old">background</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:var(--background);border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px">#171819</code></span></td>
-        <td><span class="mig-new">zinc-950</span></td>
-        <td><span class="badge-exact">exact</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">foreground</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#d2d3d3;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px">#d2d3d3</code></span></td>
-        <td><span class="mig-new">zinc-200</span></td>
-        <td><span class="badge-exact">exact</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">card</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#171717;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px">#171717</code></span></td>
-        <td><span class="mig-new">zinc-900 · #202123</span></td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">#171717 is not a Waldo zinc value — replaced with zinc-900</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">popover</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#262626;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px">#262626</code></span></td>
-        <td><span class="mig-new">zinc-750 · #2d2f33</span></td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">#262626 is not a Waldo zinc — replaced with zinc-750 (menus)</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">primary ⚠️</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#d9d9d9;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px">#d9d9d9 (gray!)</code></span></td>
-        <td><span class="mig-new">green-500 · #32a9a9</span></td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">Critical error — primary was set to gray, not Waldo's brand green</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">secondary</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:var(--muted);border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px">#242528</code></span></td>
-        <td><span class="mig-new">zinc-850</span></td>
-        <td><span class="badge-exact">exact</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">accent</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#404040;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px">#404040</code></span></td>
-        <td><span class="mig-new">zinc-600 · #41454b</span></td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">#404040 is not a Waldo zinc — replaced with closest zinc-600</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">muted</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#262626;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px">#262626</code></span></td>
-        <td><span class="mig-new">zinc-800 · #27282b</span></td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">#262626 is not a Waldo zinc — replaced with zinc-800</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">ring ⚠️</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#737373;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px">#737373 (neutral)</code></span></td>
-        <td><span class="mig-new">green-500 · #32a9a9</span></td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">Ring should match primary — green for focus states, not gray</div></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">destructive</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#e8533a;display:inline-block"></span><code style="font-size:10px">#e8533a</code></span></td>
-        <td><span class="mig-new">red-400</span></td>
-        <td><span class="badge-exact">exact</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">border / input</span></td>
-        <td><code style="font-size:10px">#ffffff19 / #d2d3d31e</code></td>
-        <td><span class="mig-new">zinc-200/10 · /12</span></td>
-        <td><span class="badge-exact">exact</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="mig-old">sidebarPrimary ⚠️</span></td>
-        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#1447e6;display:inline-block"></span><code style="font-size:10px">#1447e6 (blue!)</code></span></td>
-        <td><span class="mig-new">green-500 · #32a9a9</span></td>
-        <td><span class="badge-changed">changed</span></td>
-        <td><div class="mig-note">Sidebar primary was set to blue (Shadcn default) — should be Waldo green</div></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div style="margin-top:40px;padding:16px 20px;background:var(--card);border-radius:var(--radius)">
-    <div style="font-size:11px;font-weight:600;color:var(--muted-foreground);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Summary</div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
-      <div style="text-align:center"><div style="font-size:24px;font-weight:700;color:var(--primary)">5</div><div style="font-size:11px;color:color-mix(in srgb, var(--foreground) 45%, transparent);margin-top:2px">Exact match</div></div>
-      <div style="text-align:center"><div style="font-size:24px;font-weight:700;color:#f7d371">12</div><div style="font-size:11px;color:color-mix(in srgb, var(--foreground) 45%, transparent);margin-top:2px">Updated to standard</div></div>
-      <div style="text-align:center"><div style="font-size:24px;font-weight:700;color:#90cd90">4</div><div style="font-size:11px;color:color-mix(in srgb, var(--foreground) 45%, transparent);margin-top:2px">New additions</div></div>
-      <div style="text-align:center"><div style="font-size:24px;font-weight:700;color:var(--foreground)">21</div><div style="font-size:11px;color:color-mix(in srgb, var(--foreground) 45%, transparent);margin-top:2px">Total tokens</div></div>
-    </div>
-  </div>
-</section>
-
-
 <script>
   const steps = [50,100,200,300,400,500,600,700,800,900,950];
   const anchors = {
@@ -2156,15 +1155,9 @@ function switchTopTab(name, el) {
   document.querySelectorAll('.tb-panel').forEach(function(p){p.classList.remove('active');});
   var panel = document.getElementById('tb-panel-'+name);
   if(panel) panel.classList.add('active');
-  // when switching to foundations, move foundation pages into foundations main area
+  // when switching to foundations, activate first foundation page if none active
   if(name === 'foundations') {
-    var foundMain = document.getElementById('wb-foundations-main');
     var pages = ['tab-colors','tab-brand','tab-semantic','tab-typography','tab-migration'];
-    pages.forEach(function(pid){
-      var pg = document.getElementById(pid);
-      if(pg && pg.parentNode !== foundMain) foundMain.appendChild(pg);
-    });
-    // activate first foundation page if none active
     var anyActive = pages.some(function(pid){ var p=document.getElementById(pid); return p && p.classList.contains('active'); });
     if(!anyActive) {
       document.querySelectorAll('#wb-foundations-sidebar .sb-item').forEach(function(a){a.classList.remove('active');});
@@ -2173,14 +1166,6 @@ function switchTopTab(name, el) {
       var firstBtn = document.querySelector('#wb-foundations-sidebar .sb-item');
       if(firstBtn) firstBtn.classList.add('active');
     }
-  } else if(name === 'components') {
-    // move foundation pages back to wb-main if they were moved
-    var wbMain = document.getElementById('wb-main');
-    var pages = ['tab-colors','tab-brand','tab-semantic','tab-typography','tab-migration'];
-    pages.forEach(function(pid){
-      var pg = document.getElementById(pid);
-      if(pg && pg.parentNode !== wbMain) wbMain.appendChild(pg);
-    });
   }
 }
 
@@ -7489,7 +6474,1008 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
   </div>
   <div id="wb-foundations-main" style="flex:1;overflow-y:auto;padding:48px 52px 100px;">
-    <!-- Foundation pages are already in the DOM; switchTab will show them here -->
+<!-- ══ COLORS ══ -->
+<section id="tab-colors" class="waldo-page">
+  <h2 class="section-title">Color Palette</h2>
+  <p class="section-sub">Full 50–950 scale · 7 families · ◉ Figma anchor · ○ derived</p>
+  <div style="overflow-x:auto">
+    <table style="border-collapse:separate;border-spacing:4px;min-width:900px">
+      <thead>
+        <tr>
+          <th style="width:44px"></th>
+          <th style="font-size:11px;font-weight:500;color:var(--muted-foreground);text-align:center;padding-bottom:10px">Zinc</th>
+          <th style="font-size:11px;font-weight:500;color:var(--muted-foreground);text-align:center;padding-bottom:10px">Green</th>
+          <th style="font-size:11px;font-weight:500;color:var(--muted-foreground);text-align:center;padding-bottom:10px">Yellow</th>
+          <th style="font-size:11px;font-weight:500;color:var(--muted-foreground);text-align:center;padding-bottom:10px">Orange</th>        </tr>
+      </thead>
+      <tbody id="palette-body"></tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:40px;padding-top:32px;border-top:1px solid var(--border)">
+    <p style="font-size:13px;font-weight:500;margin-bottom:16px;color:color-mix(in srgb, var(--foreground) 68%, transparent)">Zinc custom steps</p>
+    <div style="display:flex;gap:16px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:4px;background:var(--popover);border:1px solid var(--border)"></div>
+        <div><div style="font-size:12px;font-weight:500;color:var(--foreground)">zinc-700</div><div style="font-size:11px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#323539 · fill600Menu</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:4px;background:var(--secondary);border:1px solid var(--border)"></div>
+        <div><div style="font-size:12px;font-weight:500;color:var(--foreground)">zinc-750</div><div style="font-size:11px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#2d2f33 · fill700Regular</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:36px;height:36px;border-radius:4px;background:var(--muted);border:1px solid var(--border)"></div>
+        <div><div style="font-size:12px;font-weight:500;color:var(--foreground)">zinc-850</div><div style="font-size:11px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#242528 · bg850High</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alpha scale -->
+  <div style="margin-top:48px">
+    <h3 class="section-title" style="font-size:16px;margin-bottom:4px">Alpha Scale</h3>
+    <p class="section-sub" style="margin-bottom:28px">Semi-transparent variants — adapt automatically to any background depth.</p>
+
+    <style>
+      .alpha-row { display:flex; gap:0; margin-bottom:24px; }
+      .alpha-chip { flex:1; height:40px; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:600; font-family:monospace; color:rgba(255,255,255,.7); letter-spacing:.02em; position:relative; cursor:default; }
+      .alpha-chip:first-child { border-radius:4px 0 0 4px; }
+      .alpha-chip:last-child  { border-radius:0 4px 4px 0; }
+      .alpha-family-label { font-size:11px; font-weight:600; color:var(--muted-foreground); text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px; }
+      .alpha-demo-row { display:flex; gap:8px; align-items:stretch; margin-top:20px; }
+      .alpha-demo-bg { flex:1; border-radius:6px; padding:12px; display:flex; flex-direction:column; gap:6px; }
+    </style>
+
+    <!-- zinc-200 alpha -->
+    <div style="margin-bottom:28px">
+      <div class="alpha-family-label">zinc-200 alpha — text & borders on dark</div>
+      <div class="alpha-row">
+        <div class="alpha-chip" style="background:rgba(210,211,211,0.05)">5%</div>
+        <div class="alpha-chip" style="background:rgba(210,211,211,0.10)">10%</div>
+        <div class="alpha-chip" style="background:var(--border)">12%</div>
+        <div class="alpha-chip" style="background:var(--border-md)">20%</div>
+        <div class="alpha-chip" style="background:var(--border-strong)">30%</div>
+        <div class="alpha-chip" style="background:rgba(210,211,211,0.50)">50%</div>
+        <div class="alpha-chip" style="background:rgba(210,211,211,0.70);color:#171819">70%</div>
+      </div>
+      <!-- Demo: same tokens on 3 different background depths -->
+      <div class="alpha-demo-row">
+        <div class="alpha-demo-bg" style="background:var(--background);border:1px solid var(--border)">
+          <div style="font-size:9px;color:rgba(210,211,211,.4);margin-bottom:4px">ON zinc-950</div>
+          <div style="font-size:13px;color:rgba(210,211,211,1.0);font-weight:600">Primary text</div>
+          <div style="font-size:12px;color:color-mix(in srgb, var(--foreground) 68%, transparent)">Secondary text /70</div>
+          <div style="font-size:11px;color:color-mix(in srgb, var(--foreground) 50%, transparent)">Disabled text /50</div>
+          <div style="height:1px;background:var(--border-md);margin:2px 0"></div>
+          <div style="height:24px;background:rgba(210,211,211,0.10);border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:10px;color:rgba(210,211,211,.5)">fill /10</div>
+        </div>
+        <div class="alpha-demo-bg" style="background:var(--card);border:1px solid var(--border)">
+          <div style="font-size:9px;color:rgba(210,211,211,.4);margin-bottom:4px">ON zinc-900</div>
+          <div style="font-size:13px;color:rgba(210,211,211,1.0);font-weight:600">Primary text</div>
+          <div style="font-size:12px;color:color-mix(in srgb, var(--foreground) 68%, transparent)">Secondary text /70</div>
+          <div style="font-size:11px;color:color-mix(in srgb, var(--foreground) 50%, transparent)">Disabled text /50</div>
+          <div style="height:1px;background:var(--border-md);margin:2px 0"></div>
+          <div style="height:24px;background:rgba(210,211,211,0.10);border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:10px;color:rgba(210,211,211,.5)">fill /10</div>
+        </div>
+        <div class="alpha-demo-bg" style="background:var(--muted);border:1px solid var(--border)">
+          <div style="font-size:9px;color:rgba(210,211,211,.4);margin-bottom:4px">ON zinc-800</div>
+          <div style="font-size:13px;color:rgba(210,211,211,1.0);font-weight:600">Primary text</div>
+          <div style="font-size:12px;color:color-mix(in srgb, var(--foreground) 68%, transparent)">Secondary text /70</div>
+          <div style="font-size:11px;color:color-mix(in srgb, var(--foreground) 50%, transparent)">Disabled text /50</div>
+          <div style="height:1px;background:var(--border-md);margin:2px 0"></div>
+          <div style="height:24px;background:rgba(210,211,211,0.10);border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:10px;color:rgba(210,211,211,.5)">fill /10</div>
+        </div>
+      </div>
+      <p style="font-size:11px;color:color-mix(in srgb, var(--foreground) 45%, transparent);margin-top:8px">↑ Same tokens, 3 different backgrounds — text and borders adapt without separate definitions.</p>
+    </div>
+
+    <!-- zinc-950 alpha -->
+    <div style="margin-bottom:28px">
+      <div class="alpha-family-label">zinc-950 alpha — dark overlays & widget fills</div>
+      <div class="alpha-row" style="background:repeating-linear-gradient(45deg,#636465 0,#636465 1px,transparent 0,transparent 50%) center/6px 6px;border-radius:4px">
+        <div class="alpha-chip" style="background:rgba(23,24,25,0.40)">40%</div>
+        <div class="alpha-chip" style="background:rgba(23,24,25,0.50)">50%</div>
+        <div class="alpha-chip" style="background:rgba(23,24,25,0.80)">80%</div>
+      </div>
+    </div>
+
+    <!-- Brand + State alphas -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
+      <div>
+        <div class="alpha-family-label">green-500 alpha — brand tints</div>
+        <div class="alpha-row">
+          <div class="alpha-chip" style="background:rgba(50,169,169,0.10)">10%</div>
+          <div class="alpha-chip" style="background:rgba(50,169,169,0.15)">15%</div>
+          <div class="alpha-chip" style="background:rgba(50,169,169,0.20)">20%</div>
+          <div class="alpha-chip" style="background:rgba(50,169,169,0.25)">25%</div>
+        </div>
+      </div>
+      <div>
+        <div class="alpha-family-label">coral-500 alpha — destructive</div>
+        <div class="alpha-row">
+          <div class="alpha-chip" style="background:rgba(222,58,40,0.10)">10%</div>
+          <div class="alpha-chip" style="background:rgba(222,58,40,0.20)">20%</div>
+          <div class="alpha-chip" style="background:rgba(222,58,40,0.40)">40%</div>
+        </div>
+      </div>
+      <div>
+        <div class="alpha-family-label">yellow-300 alpha — warning</div>
+        <div class="alpha-row">
+          <div class="alpha-chip" style="background:rgba(247,211,113,0.10)">10%</div>
+          <div class="alpha-chip" style="background:rgba(247,211,113,0.20)">20%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ BRAND COLORS ══ -->
+<section id="tab-brand" class="waldo-page">
+  <h2 class="section-title">Brand Colors</h2>
+  <p class="section-sub">5 families · 5 steps each · marketing website only (packages/web) · Tailwind: <code style="font-family:'SF Mono','Fira Code',monospace;background:var(--muted);padding:1px 6px;border-radius:3px;font-size:12px">brand-[family]-[step]</code></p>
+
+  <style>
+    .brand-grid { display: grid; grid-template-columns: 100px repeat(5, 1fr); gap: 6px; align-items: center; margin-bottom: 8px; }
+    .brand-label { font-size: 13px; font-weight: 600; color: var(--foreground); letter-spacing: -0.01em; }
+    .brand-step-head { font-size: 11px; font-weight: 500; color: var(--muted-foreground); text-align: center; padding-bottom: 8px; }
+    .brand-swatch {
+      width: 100%; height: 44px; border-radius: 24px; position: relative; cursor: default;
+      transition: transform .1s, box-shadow .1s;
+    }
+    .brand-swatch:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.4); z-index: 2; }
+    .brand-swatch-tip {
+      display: none; position: absolute; bottom: calc(100% + 8px); left: 50%;
+      transform: translateX(-50%); background: var(--popover); color: var(--foreground);
+      border: 1px solid var(--border-md); border-radius: 6px; padding: 6px 10px;
+      font-size: 10px; white-space: nowrap; z-index: 10; line-height: 1.6;
+      box-shadow: 0 4px 12px rgba(0,0,0,.4);
+    }
+    .brand-swatch:hover .brand-swatch-tip { display: block; }
+    .brand-swatch-tip code { font-family: 'SF Mono','Fira Code',monospace; color: var(--primary); display: block; }
+    .brand-main-dot { position: absolute; bottom: 6px; right: 6px; width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.5); }
+    .brand-section-divider { height: 1px; background: var(--border); margin: 32px 0; }
+    .brand-notice { display: inline-flex; align-items: center; gap: 6px; background: rgba(129,58,239,.1); color: #ba91f7; border: 1px solid rgba(129,58,239,.2); border-radius: 20px; padding: 3px 12px; font-size: 11px; font-weight: 500; margin-bottom: 32px; }
+  </style>
+
+  <div class="brand-notice">⚡ These colors are flashy by design — use in marketing, not in the product UI</div>
+
+  <!-- Header row -->
+  <div class="brand-grid" style="margin-bottom:4px">
+    <div></div>
+    <div class="brand-step-head">700</div>
+    <div class="brand-step-head">600</div>
+    <div class="brand-step-head">500 ★</div>
+    <div class="brand-step-head">300</div>
+    <div class="brand-step-head">100</div>
+  </div>
+
+  <!-- Green -->
+  <div class="brand-grid">
+    <div class="brand-label">Green</div>
+    <div class="brand-swatch" style="background:#1b8c8c">
+      <div class="brand-swatch-tip"><code>brand-green-700</code>#1b8c8c</div>
+    </div>
+    <div class="brand-swatch" style="background:#2db4b4">
+      <div class="brand-swatch-tip"><code>brand-green-600</code>#2db4b4</div>
+    </div>
+    <div class="brand-swatch" style="background:#63dbdb">
+      <div class="brand-main-dot"></div>
+      <div class="brand-swatch-tip"><code>brand-green-500</code>#63dbdb · main</div>
+    </div>
+    <div class="brand-swatch" style="background:#8cfaf5">
+      <div class="brand-swatch-tip"><code>brand-green-300</code>#8cfaf5</div>
+    </div>
+    <div class="brand-swatch" style="background:#dafffd;border:1px solid var(--border)">
+      <div class="brand-swatch-tip"><code>brand-green-100</code>#dafffd</div>
+    </div>
+  </div>
+
+  <!-- Yellow -->
+  <div class="brand-grid">
+    <div class="brand-label">Yellow</div>
+    <div class="brand-swatch" style="background:#de8d13">
+      <div class="brand-swatch-tip"><code>brand-yellow-700</code>#de8d13</div>
+    </div>
+    <div class="brand-swatch" style="background:#e3ac38">
+      <div class="brand-swatch-tip"><code>brand-yellow-600</code>#e3ac38</div>
+    </div>
+    <div class="brand-swatch" style="background:#fac034">
+      <div class="brand-main-dot"></div>
+      <div class="brand-swatch-tip"><code>brand-yellow-500</code>#fac034 · main</div>
+    </div>
+    <div class="brand-swatch" style="background:#f7d372">
+      <div class="brand-swatch-tip"><code>brand-yellow-300</code>#f7d372</div>
+    </div>
+    <div class="brand-swatch" style="background:#ffedc0;border:1px solid var(--border)">
+      <div class="brand-swatch-tip"><code>brand-yellow-100</code>#ffedc0</div>
+    </div>
+  </div>
+
+  <!-- Pink -->
+  <div class="brand-grid">
+    <div class="brand-label">Pink</div>
+    <div class="brand-swatch" style="background:#9a164e">
+      <div class="brand-swatch-tip"><code>brand-pink-700</code>#9a164e</div>
+    </div>
+    <div class="brand-swatch" style="background:#c10b59">
+      <div class="brand-swatch-tip"><code>brand-pink-600</code>#c10b59</div>
+    </div>
+    <div class="brand-swatch" style="background:#d40a60">
+      <div class="brand-main-dot"></div>
+      <div class="brand-swatch-tip"><code>brand-pink-500</code>#d40a60 · main</div>
+    </div>
+    <div class="brand-swatch" style="background:#f8589e">
+      <div class="brand-swatch-tip"><code>brand-pink-300</code>#f8589e</div>
+    </div>
+    <div class="brand-swatch" style="background:#fdc9df;border:1px solid var(--border)">
+      <div class="brand-swatch-tip"><code>brand-pink-100</code>#fdc9df</div>
+    </div>
+  </div>
+
+  <!-- Chrome -->
+  <div class="brand-grid">
+    <div class="brand-label">Chrome</div>
+    <div class="brand-swatch" style="background:#7a9fa0">
+      <div class="brand-swatch-tip"><code>brand-chrome-700</code>#7a9fa0</div>
+    </div>
+    <div class="brand-swatch" style="background:#a7d3d3">
+      <div class="brand-swatch-tip"><code>brand-chrome-600</code>#a7d3d3</div>
+    </div>
+    <div class="brand-swatch" style="background:#bdd8d8">
+      <div class="brand-main-dot" style="background:rgba(0,0,0,.2)"></div>
+      <div class="brand-swatch-tip"><code>brand-chrome-500</code>#bdd8d8 · main</div>
+    </div>
+    <div class="brand-swatch" style="background:#d5e9e9;border:1px solid var(--border)">
+      <div class="brand-swatch-tip"><code>brand-chrome-300</code>#d5e9e9</div>
+    </div>
+    <div class="brand-swatch" style="background:#ecfbfb;border:1px solid var(--border)">
+      <div class="brand-swatch-tip"><code>brand-chrome-100</code>#ecfbfb</div>
+    </div>
+  </div>
+
+  <!-- Purple -->
+  <div class="brand-grid">
+    <div class="brand-label">Purple</div>
+    <div class="brand-swatch" style="background:#4d12a5">
+      <div class="brand-swatch-tip"><code>brand-purple-700</code>#4d12a5</div>
+    </div>
+    <div class="brand-swatch" style="background:#6616de">
+      <div class="brand-swatch-tip"><code>brand-purple-600</code>#6616de</div>
+    </div>
+    <div class="brand-swatch" style="background:#813aef">
+      <div class="brand-main-dot"></div>
+      <div class="brand-swatch-tip"><code>brand-purple-500</code>#813aef · main</div>
+    </div>
+    <div class="brand-swatch" style="background:#ba91f7">
+      <div class="brand-swatch-tip"><code>brand-purple-300</code>#ba91f7</div>
+    </div>
+    <div class="brand-swatch" style="background:#f0e7fe;border:1px solid var(--border)">
+      <div class="brand-swatch-tip"><code>brand-purple-100</code>#f0e7fe</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ SEMANTIC ══ -->
+<section id="tab-semantic" class="waldo-page">
+  <h2 class="section-title">Semantic Tokens</h2>
+  <p class="section-sub">Shadcn/ui CSS variables — referencing Waldo primitives.</p>
+
+  <div class="mode-toggle">
+    <button class="mode-btn active" onclick="showMode('dark',this)">Dark</button>
+    <button class="mode-btn" onclick="showMode('light',this)">Light</button>
+  </div>
+
+  <div id="mode-dark">
+    <div class="token-section">
+      <div class="token-group-title">Backgrounds</div>
+      <div class="token-grid">
+        <div class="token-card"><div class="token-dot" style="background:var(--background)"></div><div><div class="token-var">--background</div><div class="token-src">#171819 · zinc-950</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:var(--card)"></div><div><div class="token-var">--card</div><div class="token-src">#202123 · zinc-900</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:var(--popover)"></div><div><div class="token-var">--popover</div><div class="token-src">#323539 · zinc-700</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:var(--muted)"></div><div><div class="token-var">--sidebar-background</div><div class="token-src">#242528 · zinc-850</div></div></div>
+      </div>
+    </div>
+    <div class="token-section">
+      <div class="token-group-title">Foregrounds</div>
+      <div class="token-grid">
+        <div class="token-card"><div class="token-dot" style="background:#d2d3d3;border:1px solid var(--border)"></div><div><div class="token-var">--foreground</div><div class="token-src">#d2d3d3 · zinc-200</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#8f9091"></div><div><div class="token-var">--muted-foreground</div><div class="token-src">#8f9091 · zinc-400</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#d2d3d3;border:1px solid var(--border)"></div><div><div class="token-var">--card-foreground</div><div class="token-src">#d2d3d3 · zinc-200</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#d2d3d3;border:1px solid var(--border)"></div><div><div class="token-var">--popover-foreground</div><div class="token-src">#d2d3d3 · zinc-200</div></div></div>
+      </div>
+    </div>
+    <div class="token-section">
+      <div class="token-group-title">Interactive surfaces</div>
+      <div class="token-grid">
+        <div class="token-card"><div class="token-dot" style="background:var(--secondary)"></div><div><div class="token-var">--secondary</div><div class="token-src">#2d2f33 · zinc-750</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:var(--muted)"></div><div><div class="token-var">--muted</div><div class="token-src">#27282b · zinc-800</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#41454b"></div><div><div class="token-var">--accent</div><div class="token-src">#41454b · zinc-600</div></div></div>
+      </div>
+    </div>
+    <div class="token-section">
+      <div class="token-group-title">Brand & status</div>
+      <div class="token-grid">
+        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--primary</div><div class="token-src">#32a9a9 · green-500</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:var(--background)"></div><div><div class="token-var">--primary-foreground</div><div class="token-src">#171819 · zinc-950</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#de3a28"></div><div><div class="token-var">--destructive</div><div class="token-src">#de3a28 · coral-500</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--ring</div><div class="token-src">#32a9a9 · green-500</div></div></div>
+      </div>
+    </div>
+    <div class="token-section">
+      <div class="token-group-title">Borders</div>
+      <div class="token-grid">
+        <div class="token-card"><div class="token-dot" style="background:rgba(210,211,211,.12)"></div><div><div class="token-var">--border</div><div class="token-src">zinc-200 / 12%</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:rgba(210,211,211,.20)"></div><div><div class="token-var">--input</div><div class="token-src">zinc-200 / 20%</div></div></div>
+      </div>
+    </div>
+    <div class="token-section">
+      <div class="token-group-title">Charts</div>
+      <div class="token-grid">
+        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--chart-1</div><div class="token-src">green-500</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#d6ac32"></div><div><div class="token-var">--chart-2</div><div class="token-src">yellow-600</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#e76638"></div><div><div class="token-var">--chart-3</div><div class="token-src">orange-500</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#d76695"></div><div><div class="token-var">--chart-4</div><div class="token-src">pink-600</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#3b82f6"></div><div><div class="token-var">--chart-5</div><div class="token-src">blue-500</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="mode-light" style="display:none">
+    <div class="token-section">
+      <div class="token-group-title">Backgrounds</div>
+      <div class="token-grid" style="--bg-card:#fff;--line-low:rgba(0,0,0,.08)">
+        <div class="token-card" style="background:#fff;border-color:rgba(0,0,0,.1)"><div class="token-dot" style="background:#fff;border:1px solid #d0d0d2"></div><div><div class="token-var" style="color:#0f0f10">--background</div><div class="token-src">#ffffff</div></div></div>
+        <div class="token-card" style="background:#fff;border-color:rgba(0,0,0,.1)"><div class="token-dot" style="background:#fafafa;border:1px solid #d0d0d2"></div><div><div class="token-var" style="color:#0f0f10">--card</div><div class="token-src">#fafafa</div></div></div>
+        <div class="token-card" style="background:#fff;border-color:rgba(0,0,0,.1)"><div class="token-dot" style="background:#f8fafc;border:1px solid #d0d0d2"></div><div><div class="token-var" style="color:#0f0f10">--sidebar-background</div><div class="token-src">#f8fafc · zinc-50</div></div></div>
+      </div>
+    </div>
+    <div class="token-section">
+      <div class="token-group-title">Brand & status</div>
+      <div class="token-grid">
+        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--primary</div><div class="token-src">#32a9a9 · green-500</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#d91b1d"></div><div><div class="token-var">--destructive</div><div class="token-src">#d91b1d · red-600</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#636465"></div><div><div class="token-var">--muted-foreground</div><div class="token-src">#636465 · zinc-500</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#edfafa;border:1px solid var(--border)"></div><div><div class="token-var">--accent</div><div class="token-src">#edfafa · green-50</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ TYPOGRAPHY ══ -->
+<section id="tab-typography" class="waldo-page">
+  <h2 class="section-title">Typography</h2>
+  <p class="section-sub">Inter · two-track scale (Linear-style) · weights 400 / 500 / 600 / 700 + italic</p>
+
+  <!-- Two-track explainer -->
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:32px;">
+    <div style="padding:16px; background:var(--muted); border-radius:8px; border:1px solid var(--border);">
+      <p style="font-size:11px;font-weight:600;color:var(--muted-foreground);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase">text-* track</p>
+      <p style="font-size:14px;color:var(--foreground);font-weight:500;margin-bottom:6px">UI, body, product surfaces</p>
+      <p style="font-size:13px;color:color-mix(in srgb, var(--foreground) 68%, transparent);line-height:1.5">Tailwind standard scale 12→48. Default tracking <span style="font-family:'SF Mono','Fira Code',monospace;font-size:12px;background:var(--popover);padding:1px 6px;border-radius:3px;color:var(--foreground)">-0.02em</span> (-2%).</p>
+    </div>
+    <div style="padding:16px; background:var(--muted); border-radius:8px; border:1px solid var(--border);">
+      <p style="font-size:11px;font-weight:600;color:var(--primary);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase">text-display-* track</p>
+      <p style="font-size:14px;color:var(--foreground);font-weight:500;margin-bottom:6px">Marketing heros + section headings</p>
+      <p style="font-size:13px;color:color-mix(in srgb, var(--foreground) 68%, transparent);line-height:1.5">Custom scale 24 / 32 / 40 / 56 / 72 / 96. Default tracking <span style="font-family:'SF Mono','Fira Code',monospace;font-size:12px;background:var(--popover);padding:1px 6px;border-radius:3px;color:var(--foreground)">-0.04em</span> (-4%). Tailwind-native: utility class is <span style="font-family:'SF Mono','Fira Code',monospace;font-size:12px;background:var(--popover);padding:1px 6px;border-radius:3px;color:var(--primary)">text-display-md</span>.</p>
+    </div>
+  </div>
+
+  <!-- ── TEXT TRACK ── -->
+  <p style="font-size:11px;font-weight:600;color:var(--muted-foreground);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)">Text track</p>
+
+  <div class="type-head"><span>Class</span><span>Specimen</span><span>Specs</span></div>
+
+  <div class="type-row"><span class="type-tag">text-xs · normal</span>    <span style="font-size:12px;line-height:16px;font-weight:400;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>12/16</span><span>400</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-xs · medium</span>    <span style="font-size:12px;line-height:16px;font-weight:500;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>12/16</span><span>500</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-sm · normal</span>    <span style="font-size:14px;line-height:20px;font-weight:400;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>14/20</span><span>400</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-sm · medium</span>    <span style="font-size:14px;line-height:20px;font-weight:500;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>14/20</span><span>500</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-sm · semibold</span>  <span style="font-size:14px;line-height:20px;font-weight:600;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>14/20</span><span>600</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-base · normal</span>  <span style="font-size:16px;line-height:24px;font-weight:400;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span class="anchor">16/24 — default</span><span>400</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-base · italic</span>  <span style="font-size:16px;line-height:24px;font-weight:400;font-style:italic;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>16/24</span><span>400 italic</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-base · medium</span>  <span style="font-size:16px;line-height:24px;font-weight:500;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>16/24</span><span>500</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-base · semibold</span><span style="font-size:16px;line-height:24px;font-weight:600;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>16/24</span><span>600</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-lg · normal</span>    <span style="font-size:18px;line-height:28px;font-weight:400;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>18/28</span><span>400</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-lg · medium</span>    <span style="font-size:18px;line-height:28px;font-weight:500;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>18/28</span><span>500</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-lg · semibold</span>  <span style="font-size:18px;line-height:28px;font-weight:600;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps over the lazy dog</span><div class="type-meta"><span>18/28</span><span>600</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-xl · normal</span>    <span style="font-size:20px;line-height:28px;font-weight:400;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps</span><div class="type-meta"><span>20/28</span><span>400</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-xl · medium</span>    <span style="font-size:20px;line-height:28px;font-weight:500;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps</span><div class="type-meta"><span>20/28</span><span>500</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-xl · semibold</span>  <span style="font-size:20px;line-height:28px;font-weight:600;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox jumps</span><div class="type-meta"><span>20/28</span><span>600</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-2xl · medium</span>   <span style="font-size:24px;line-height:32px;font-weight:500;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox</span><div class="type-meta"><span>24/32</span><span>500</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-2xl · semibold</span> <span style="font-size:24px;line-height:32px;font-weight:600;letter-spacing:-.02em;color:var(--foreground)">The quick brown fox</span><div class="type-meta"><span>24/32</span><span>600</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-3xl · normal</span>   <span style="font-size:30px;line-height:36px;font-weight:400;letter-spacing:-.02em;color:var(--foreground)">Waldo Agents</span><div class="type-meta"><span>30/36</span><span>400</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-3xl · medium</span>   <span style="font-size:30px;line-height:36px;font-weight:500;letter-spacing:-.02em;color:var(--foreground)">Waldo Agents</span><div class="type-meta"><span>30/36</span><span>500</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-3xl · semibold</span> <span style="font-size:30px;line-height:36px;font-weight:600;letter-spacing:-.02em;color:var(--foreground)">Waldo Agents</span><div class="type-meta"><span>30/36</span><span>600</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-4xl · normal</span>   <span style="font-size:36px;line-height:40px;font-weight:400;letter-spacing:-.02em;color:var(--foreground)">Waldo</span><div class="type-meta"><span>36/40</span><span>400</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-4xl · medium</span>   <span style="font-size:36px;line-height:40px;font-weight:500;letter-spacing:-.02em;color:var(--foreground)">Waldo</span><div class="type-meta"><span>36/40</span><span>500</span><span>-0.02em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-4xl · semibold</span> <span style="font-size:36px;line-height:40px;font-weight:600;letter-spacing:-.02em;color:var(--foreground)">Waldo</span><div class="type-meta"><span>36/40</span><span>600</span><span>-0.02em</span></div></div>
+
+  <!-- ── DISPLAY TRACK ── -->
+  <p style="font-size:11px;font-weight:600;color:var(--primary);text-transform:uppercase;letter-spacing:.08em;margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)">text-display-* track — marketing only</p>
+
+  <div class="type-head"><span>Class</span><span>Specimen</span><span>Specs</span></div>
+
+  <div class="type-row"><span class="type-tag">text-display-xs · regular</span>   <span style="font-size:24px;line-height:32px;font-weight:400;letter-spacing:-.04em;color:var(--foreground)">Briefed before you ask</span><div class="type-meta"><span>24/32</span><span>400</span><span>-0.04em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-display-xs · medium</span>    <span style="font-size:24px;line-height:32px;font-weight:500;letter-spacing:-.04em;color:var(--foreground)">Getting smart on a brand, fast</span><div class="type-meta"><span>24/32</span><span>500</span><span>-0.04em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-display-sm · regular</span>   <span style="font-size:32px;line-height:40px;font-weight:400;letter-spacing:-.04em;color:var(--foreground)">Why strategists never go back</span><div class="type-meta"><span>32/40</span><span>400</span><span>-0.04em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-display-sm · semibold</span>  <span style="font-size:32px;line-height:40px;font-weight:600;letter-spacing:-.04em;color:var(--foreground)">Connect and go.</span><div class="type-meta"><span>32/40</span><span>600</span><span>-0.04em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-display-md · regular</span>   <span style="font-size:40px;line-height:48px;font-weight:400;letter-spacing:-.04em;color:var(--foreground)">Get everything you need</span><div class="type-meta"><span class="anchor">40/48 — hero default</span><span>400</span><span>-0.04em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-display-md · semibold</span>  <span style="font-size:40px;line-height:48px;font-weight:600;letter-spacing:-.04em;color:var(--foreground)">A built-in strategist</span><div class="type-meta"><span>40/48</span><span>600</span><span>-0.04em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-display-lg · regular</span>   <span style="font-size:56px;line-height:64px;font-weight:400;letter-spacing:-.04em;color:var(--foreground)">Move first.</span><div class="type-meta"><span>56/64</span><span>400</span><span>-0.04em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-display-lg · semibold</span>  <span style="font-size:56px;line-height:64px;font-weight:600;letter-spacing:-.04em;color:var(--foreground)">Move first.</span><div class="type-meta"><span>56/64</span><span>600</span><span>-0.04em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-display-xl · semibold</span>  <span style="font-size:72px;line-height:80px;font-weight:600;letter-spacing:-.04em;color:var(--foreground)">Waldo</span><div class="type-meta"><span>72/80</span><span>600</span><span>-0.04em</span></div></div>
+  <div class="type-row"><span class="type-tag">text-display-2xl · semibold</span> <span style="font-size:96px;line-height:100px;font-weight:600;letter-spacing:-.04em;color:var(--foreground)">Waldo</span><div class="type-meta"><span>96/100</span><span>600</span><span>-0.04em</span></div></div>
+
+  <!-- ── Notes ── -->
+  <p style="font-size:11px;font-weight:600;color:var(--muted-foreground);text-transform:uppercase;letter-spacing:.08em;margin:32px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border)">Mono &amp; rules of thumb</p>
+
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:20px;">
+    <div style="padding:16px; background:var(--muted); border-radius:8px; border:1px solid var(--border);">
+      <p style="font-size:11px;font-weight:600;color:var(--muted-foreground);margin-bottom:6px;letter-spacing:.08em;text-transform:uppercase">--font-mono</p>
+      <p style="font-family:'SF Mono','Fira Code',ui-monospace,monospace;font-size:13px;color:var(--foreground);margin-bottom:4px">const briefing = waldo.scan();</p>
+      <p style="font-size:12px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace</p>
+    </div>
+    <div style="padding:16px; background:var(--muted); border-radius:8px; border:1px solid var(--border);">
+      <p style="font-size:11px;font-weight:600;color:var(--muted-foreground);margin-bottom:6px;letter-spacing:.08em;text-transform:uppercase">When to pick which track</p>
+      <p style="font-size:12px;color:color-mix(in srgb, var(--foreground) 68%, transparent);line-height:1.6">Anything inside the <strong style="color:var(--foreground)">product UI</strong> → <code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--popover);padding:1px 5px;border-radius:3px;color:var(--foreground)">text-*</code><br>Anything that's a <strong style="color:var(--foreground)">marketing hero or section title</strong> → <code style="font-family:'SF Mono',monospace;font-size:11px;background:var(--popover);padding:1px 5px;border-radius:3px;color:var(--primary)">text-display-*</code></p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══ MIGRATION ══ -->
+<section id="tab-migration" class="waldo-page">
+  <h2 class="section-title">Migration Map</h2>
+  <p class="section-sub">Waldo original styles → Shadcn/Tailwind standard. Exact matches, closest equivalents, and new additions.</p>
+
+  <style>
+    .mig-table { width:100%; border-collapse:collapse; font-size:12px; }
+    .mig-table th { font-size:10px; font-weight:600; color:var(--muted-foreground); text-transform:uppercase; letter-spacing:.08em; padding:8px 12px; border-bottom:2px solid var(--border); text-align:left; }
+    .mig-table td { padding:12px 12px; border-bottom:1px solid var(--border); vertical-align:middle; }
+    .mig-table tr:last-child td { border-bottom:none; }
+    .mig-old  { font-family:'SF Mono','Fira Code',monospace; background:var(--muted); border-radius:4px; padding:2px 7px; color:var(--muted-foreground); display:inline-block; }
+    .mig-new  { font-family:'SF Mono','Fira Code',monospace; background:rgba(50,169,169,.1); border-radius:4px; padding:2px 7px; color:var(--primary); display:inline-block; }
+    .mig-new-added { font-family:'SF Mono','Fira Code',monospace; background:rgba(247,211,113,.1); border-radius:4px; padding:2px 7px; color:#f7d371; display:inline-block; }
+    .badge-exact   { background:rgba(50,169,169,.15); color:#4dbcbc; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
+    .badge-close   { background:rgba(247,211,113,.15); color:#f7d371; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
+    .badge-new     { background:rgba(144,205,144,.15); color:#90cd90; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
+    .badge-changed { background:rgba(222,58,40,.15); color:#ff8082; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
+    .mig-note { font-size:11px; color:color-mix(in srgb, var(--foreground) 45%, transparent); margin-top:3px; }
+    .mig-section { font-size:11px; font-weight:600; color:var(--muted-foreground); text-transform:uppercase; letter-spacing:.08em; padding:20px 12px 8px; background:var(--background); }
+    .mig-legend { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:32px; }
+    .mig-legend-item { display:flex; align-items:center; gap:7px; font-size:12px; color:var(--muted-foreground); }
+  </style>
+
+  <div class="mig-legend">
+    <div class="mig-legend-item"><span class="badge-exact">exact</span> Pixel-perfect match</div>
+    <div class="mig-legend-item"><span class="badge-close">closest</span> Best equivalent — slight difference</div>
+    <div class="mig-legend-item"><span class="badge-changed">changed</span> Size or weight updated to standard</div>
+    <div class="mig-legend-item"><span class="badge-new">new</span> Added — no old equivalent</div>
+  </div>
+
+  <!-- FONT WEIGHTS -->
+  <table class="mig-table">
+    <thead>
+      <tr>
+        <th style="width:220px">Old Name</th>
+        <th style="width:220px">New Name</th>
+        <th style="width:80px">Value</th>
+        <th>Status</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td colspan="5" class="mig-section">Font Weights</td></tr>
+      <tr>
+        <td><span class="mig-old">fontWeight.regular</span></td>
+        <td><span class="mig-new">font-normal</span></td>
+        <td style="color:var(--muted-foreground)">400</td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">"regular" is not a Tailwind name — renamed to "normal"</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">fontWeight.medium</span></td>
+        <td><span class="mig-new">font-medium</span></td>
+        <td style="color:var(--muted-foreground)">500</td>
+        <td><span class="badge-exact">exact</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">fontWeight.semibold</span></td>
+        <td><span class="mig-new">font-semibold</span></td>
+        <td style="color:var(--muted-foreground)">600</td>
+        <td><span class="badge-exact">exact</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">—</span></td>
+        <td><span class="mig-new-added">font-bold</span></td>
+        <td style="color:var(--muted-foreground)">700</td>
+        <td><span class="badge-new">new</span></td>
+        <td><div class="mig-note">Added for display sizes (text-4xl, text-5xl)</div></td>
+      </tr>
+
+      <tr><td colspan="5" class="mig-section">Font Sizes</td></tr>
+      <tr>
+        <td><span class="mig-old">fontSize.xs · 12px</span></td>
+        <td><span class="mig-new">text-xs</span></td>
+        <td style="color:var(--muted-foreground)">12px</td>
+        <td><span class="badge-exact">exact</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">fontSize.sm · 13px</span></td>
+        <td><span class="mig-new">text-sm</span></td>
+        <td style="color:var(--muted-foreground)">14px</td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">+1px — Tailwind standard is 14px</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">fontSize.base · 14px</span></td>
+        <td><span class="mig-new">text-base</span></td>
+        <td style="color:var(--muted-foreground)">16px</td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">+2px — Tailwind standard is 16px</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">fontSize.lg · 16px</span></td>
+        <td><span class="mig-new">text-lg</span></td>
+        <td style="color:var(--muted-foreground)">18px</td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">+2px — Tailwind standard is 18px</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">fontSize.xl · 20px</span></td>
+        <td><span class="mig-new">text-xl</span></td>
+        <td style="color:var(--muted-foreground)">20px</td>
+        <td><span class="badge-exact">exact</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">fontSize.2xl · 24px</span></td>
+        <td><span class="mig-new">text-2xl</span></td>
+        <td style="color:var(--muted-foreground)">24px</td>
+        <td><span class="badge-exact">exact</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">fontSize.3xl · 28px</span></td>
+        <td><span class="mig-new">text-3xl</span></td>
+        <td style="color:var(--muted-foreground)">30px</td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">+2px — Tailwind standard is 30px</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">fontSize.4xl · 40px</span></td>
+        <td><span class="mig-new">text-4xl</span></td>
+        <td style="color:var(--muted-foreground)">36px</td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">−4px — Tailwind standard is 36px</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">fontSize.5xl · 48px</span></td>
+        <td><span class="mig-new">text-5xl</span></td>
+        <td style="color:var(--muted-foreground)">48px</td>
+        <td><span class="badge-exact">exact</span></td>
+        <td></td>
+      </tr>
+
+      <tr><td colspan="5" class="mig-section">Letter Spacing</td></tr>
+      <tr>
+        <td><span class="mig-old">letterSpacing.normal · 0%</span></td>
+        <td><span class="mig-new">tracking-normal</span></td>
+        <td style="color:var(--muted-foreground)">0em</td>
+        <td><span class="badge-exact">exact</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">letterSpacing.tight · -2%</span></td>
+        <td><span class="mig-new">tracking-tight</span></td>
+        <td style="color:var(--muted-foreground)">-0.025em</td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">−2% → −2.5% — Tailwind standard</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">letterSpacing.tighter · -4%</span></td>
+        <td><span class="mig-new">tracking-tighter</span></td>
+        <td style="color:var(--muted-foreground)">-0.05em</td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">−4% → −5% — Tailwind standard</div></td>
+      </tr>
+
+      <tr><td colspan="5" class="mig-section">Text Styles</td></tr>
+      <tr>
+        <td><span class="mig-old">—</span></td>
+        <td><span class="mig-new-added">text-xs · normal</span></td>
+        <td style="color:var(--muted-foreground)">12/400</td>
+        <td><span class="badge-new">new</span></td>
+        <td><div class="mig-note">Added — caption base weight</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">text-xs · medium</span></td>
+        <td><span class="mig-new">text-xs · medium</span></td>
+        <td style="color:var(--muted-foreground)">12/500</td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">Tracking: −0.02em → 0 (standard for 12px)</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">text-sm · regular</span></td>
+        <td><span class="mig-new">text-sm · normal</span></td>
+        <td style="color:var(--muted-foreground)">14/400</td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">13px → 14px · "regular" → "normal"</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">—</span></td>
+        <td><span class="mig-new-added">text-sm · medium</span></td>
+        <td style="color:var(--muted-foreground)">14/500</td>
+        <td><span class="badge-new">new</span></td>
+        <td><div class="mig-note">Added — common in nav, badges, labels</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">text-sm · semibold</span></td>
+        <td><span class="mig-new">text-sm · semibold</span></td>
+        <td style="color:var(--muted-foreground)">14/600</td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">13px → 14px</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">text-base · regular</span></td>
+        <td><span class="mig-new">text-base · normal</span></td>
+        <td style="color:var(--muted-foreground)">16/400</td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">14px → 16px · "regular" → "normal"</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">—</span></td>
+        <td><span class="mig-new-added">text-base · medium</span></td>
+        <td style="color:var(--muted-foreground)">16/500</td>
+        <td><span class="badge-new">new</span></td>
+        <td><div class="mig-note">Added — form labels, emphasized body</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">text-base · semibold</span></td>
+        <td><span class="mig-new">text-base · semibold</span></td>
+        <td style="color:var(--muted-foreground)">16/600</td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">14px → 16px</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">text-lg · regular</span></td>
+        <td><span class="mig-new">text-lg · normal</span></td>
+        <td style="color:var(--muted-foreground)">18/400</td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">16px → 18px · "regular" → "normal"</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">text-lg · semibold</span></td>
+        <td><span class="mig-new">text-lg · semibold</span></td>
+        <td style="color:var(--muted-foreground)">18/600</td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">16px → 18px</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">text-xl · semibold</span></td>
+        <td><span class="mig-new">text-xl · semibold</span></td>
+        <td style="color:var(--muted-foreground)">20/600</td>
+        <td><span class="badge-exact">exact</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">text-2xl · semibold</span></td>
+        <td><span class="mig-new">text-2xl · semibold</span></td>
+        <td style="color:var(--muted-foreground)">24/600</td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">Tracking: −0.04em → −0.025em</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">text-3xl · semibold · 28px</span></td>
+        <td><span class="mig-new">text-3xl · semibold</span></td>
+        <td style="color:var(--muted-foreground)">30/600</td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">28px → 30px</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">text-4xl · semibold · 40px</span></td>
+        <td><span class="mig-new">text-4xl · bold</span></td>
+        <td style="color:var(--muted-foreground)">36/700</td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">40px → 36px · semibold → bold (display weight)</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">text-5xl · semibold · 48px</span></td>
+        <td><span class="mig-new">text-5xl · bold</span></td>
+        <td style="color:var(--muted-foreground)">48/700</td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">semibold → bold (display weight)</div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- COLOR MIGRATION -->
+  <div style="margin-top:56px;margin-bottom:8px;font-size:20px;font-weight:600;color:var(--foreground);letter-spacing:-0.025em">Color Primitives</div>
+  <p style="font-size:13px;color:var(--muted-foreground);margin-bottom:24px">Old Waldo Figma variable names → new Tailwind scale tokens</p>
+
+  <table class="mig-table">
+    <thead>
+      <tr>
+        <th style="width:220px">Old Figma Name</th>
+        <th style="width:160px">New Token</th>
+        <th style="width:100px">Hex</th>
+        <th style="width:80px">Status</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td colspan="5" class="mig-section">Zinc — Neutrals</td></tr>
+      <tr>
+        <td><span class="mig-old">bg950Low</span></td>
+        <td><span class="mig-new">zinc-950</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:var(--background);border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#171819</code></span></td>
+        <td><span class="badge-exact">exact</span></td>
+        <td><div class="mig-note">App background</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">bg900Regular</span></td>
+        <td><span class="mig-new">zinc-900</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:var(--card);border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#202123</code></span></td>
+        <td><span class="badge-exact">exact</span></td>
+        <td><div class="mig-note">Page sections</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">bg850High</span></td>
+        <td><span class="mig-new">zinc-850</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:var(--muted);border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#242528</code></span></td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">Custom step — no Tailwind equivalent, kept as zinc-850</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">fill800Low</span></td>
+        <td><span class="mig-new">zinc-800</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:var(--muted);border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#27282b</code></span></td>
+        <td><span class="badge-exact">exact</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">fill700Regular</span></td>
+        <td><span class="mig-new">zinc-750</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:var(--secondary);border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#2d2f33</code></span></td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">Custom step — kept as zinc-750</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">fill600Menu / fill600HighMenus</span></td>
+        <td><span class="mig-new">zinc-700</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:var(--popover);border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#323539</code></span></td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">Two aliases merged into one token</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">fill500Highest</span></td>
+        <td><span class="mig-new">zinc-600</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#41454b;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#41454b</code></span></td>
+        <td><span class="badge-exact">exact</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">text200Low</span></td>
+        <td><span class="mig-new">zinc-500</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#636465;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#636465</code></span></td>
+        <td><span class="badge-exact">exact</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">text100Regular</span></td>
+        <td><span class="mig-new">zinc-400</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#8f9091;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#8f9091</code></span></td>
+        <td><span class="badge-exact">exact</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">text50High</span></td>
+        <td><span class="mig-new">zinc-200</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#d2d3d3;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#d2d3d3</code></span></td>
+        <td><span class="badge-exact">exact</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">text50Med / text50Disabled</span></td>
+        <td><span class="mig-new">zinc-200/70 · /50</span></td>
+        <td><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#d2d3d3ad · 77</code></td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">Alpha variants — now expressed as opacity modifiers</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">line400High / line600Reg / line700Low</span></td>
+        <td><span class="mig-new">zinc-200/28 · /20 · /12</span></td>
+        <td><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#d2d3d3 + alpha</code></td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">Border alpha variants → border / input / muted tokens</div></td>
+      </tr>
+
+      <tr><td colspan="5" class="mig-section">Green — Brand Primary</td></tr>
+      <tr>
+        <td><span class="mig-old">accentGreen500</span></td>
+        <td><span class="mig-new">green-500</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#32a9a9;display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#32a9a9</code></span></td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">"accentGreen" renamed — color is green, not green</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">accentGreen600</span></td>
+        <td><span class="mig-new">green-600</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#2c797a;display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#2c797a</code></span></td>
+        <td><span class="badge-changed">changed</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">accentGreen700 · 800 · 900</span></td>
+        <td><span class="mig-new">green-700 · 800 · 900</span></td>
+        <td><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#2a6c6d · #265152 · #223133</code></td>
+        <td><span class="badge-changed">changed</span></td>
+        <td></td>
+      </tr>
+
+      <tr><td colspan="5" class="mig-section">Yellow — Yellow Accent</td></tr>
+      <tr>
+        <td><span class="mig-old">accentYellow300</span></td>
+        <td><span class="mig-new">yellow-300</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:2px;background:#f7d371;display:inline-block"></span><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#f7d371</code></span></td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">"accentYellow" → "yellow" (Tailwind family name)</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">accentYellow600 · 700 · 800</span></td>
+        <td><span class="mig-new">yellow-600 · 700 · 800</span></td>
+        <td><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#d6ac32 · #b48a00 · #946f00</code></td>
+        <td><span class="badge-changed">changed</span></td>
+        <td></td>
+      </tr>
+
+      <tr><td colspan="5" class="mig-section">Orange / Pink — Accents</td></tr>
+      <tr>
+        <td><span class="mig-old">accentOrange300 · 400 · 500</span></td>
+        <td><span class="mig-new">orange-300 · 400 · 500</span></td>
+        <td><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#cd917b · #a95d41 · #e76638</code></td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">"accentOrange" → "orange"</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">accentPink500 · 600 · 700 · 800 · 900</span></td>
+        <td><span class="mig-new">pink-500 · 600 · 700 · 800 · 900</span></td>
+        <td><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">#ffabd0 · #d76695 · #bd005e …</code></td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">"accentPink" → "pink"</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">— (no red primitives)</span></td>
+        <td><span class="mig-new-added">red-50 → red-950</span></td>
+        <td><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">anchored to #e8533a</code></td>
+        <td><span class="badge-new">new</span></td>
+        <td><div class="mig-note">Full scale derived — destructive had no primitive family</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">— (no blue primitives)</span></td>
+        <td><span class="mig-new-added">blue-50 → blue-950</span></td>
+        <td><code style="font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent)">Tailwind blue</code></td>
+        <td><span class="badge-new">new</span></td>
+        <td><div class="mig-note">Added for info states, links, sidebar primary</div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SEMANTIC TOKENS -->
+  <div style="margin-top:56px;margin-bottom:8px;font-size:20px;font-weight:600;color:var(--foreground);letter-spacing:-0.025em">Semantic Tokens</div>
+  <p style="font-size:13px;color:var(--muted-foreground);margin-bottom:24px">Designer's <code style="font-size:11px;background:var(--muted);padding:1px 5px;border-radius:3px">darkWaldo</code> mapping vs. corrected Shadcn values</p>
+
+  <table class="mig-table">
+    <thead>
+      <tr>
+        <th style="width:180px">Token</th>
+        <th style="width:180px">Designer's value</th>
+        <th style="width:180px">Corrected value</th>
+        <th style="width:90px">Status</th>
+        <th>Issue</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="mig-old">background</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:var(--background);border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px">#171819</code></span></td>
+        <td><span class="mig-new">zinc-950</span></td>
+        <td><span class="badge-exact">exact</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">foreground</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#d2d3d3;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px">#d2d3d3</code></span></td>
+        <td><span class="mig-new">zinc-200</span></td>
+        <td><span class="badge-exact">exact</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">card</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#171717;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px">#171717</code></span></td>
+        <td><span class="mig-new">zinc-900 · #202123</span></td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">#171717 is not a Waldo zinc value — replaced with zinc-900</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">popover</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#262626;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px">#262626</code></span></td>
+        <td><span class="mig-new">zinc-750 · #2d2f33</span></td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">#262626 is not a Waldo zinc — replaced with zinc-750 (menus)</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">primary ⚠️</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#d9d9d9;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px">#d9d9d9 (gray!)</code></span></td>
+        <td><span class="mig-new">green-500 · #32a9a9</span></td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">Critical error — primary was set to gray, not Waldo's brand green</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">secondary</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:var(--muted);border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px">#242528</code></span></td>
+        <td><span class="mig-new">zinc-850</span></td>
+        <td><span class="badge-exact">exact</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">accent</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#404040;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px">#404040</code></span></td>
+        <td><span class="mig-new">zinc-600 · #41454b</span></td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">#404040 is not a Waldo zinc — replaced with closest zinc-600</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">muted</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#262626;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px">#262626</code></span></td>
+        <td><span class="mig-new">zinc-800 · #27282b</span></td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">#262626 is not a Waldo zinc — replaced with zinc-800</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">ring ⚠️</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#737373;border:1px solid var(--border-md);display:inline-block"></span><code style="font-size:10px">#737373 (neutral)</code></span></td>
+        <td><span class="mig-new">green-500 · #32a9a9</span></td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">Ring should match primary — green for focus states, not gray</div></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">destructive</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#e8533a;display:inline-block"></span><code style="font-size:10px">#e8533a</code></span></td>
+        <td><span class="mig-new">red-400</span></td>
+        <td><span class="badge-exact">exact</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">border / input</span></td>
+        <td><code style="font-size:10px">#ffffff19 / #d2d3d31e</code></td>
+        <td><span class="mig-new">zinc-200/10 · /12</span></td>
+        <td><span class="badge-exact">exact</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="mig-old">sidebarPrimary ⚠️</span></td>
+        <td><span style="display:inline-flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#1447e6;display:inline-block"></span><code style="font-size:10px">#1447e6 (blue!)</code></span></td>
+        <td><span class="mig-new">green-500 · #32a9a9</span></td>
+        <td><span class="badge-changed">changed</span></td>
+        <td><div class="mig-note">Sidebar primary was set to blue (Shadcn default) — should be Waldo green</div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:40px;padding:16px 20px;background:var(--card);border-radius:var(--radius)">
+    <div style="font-size:11px;font-weight:600;color:var(--muted-foreground);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">Summary</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+      <div style="text-align:center"><div style="font-size:24px;font-weight:700;color:var(--primary)">5</div><div style="font-size:11px;color:color-mix(in srgb, var(--foreground) 45%, transparent);margin-top:2px">Exact match</div></div>
+      <div style="text-align:center"><div style="font-size:24px;font-weight:700;color:#f7d371">12</div><div style="font-size:11px;color:color-mix(in srgb, var(--foreground) 45%, transparent);margin-top:2px">Updated to standard</div></div>
+      <div style="text-align:center"><div style="font-size:24px;font-weight:700;color:#90cd90">4</div><div style="font-size:11px;color:color-mix(in srgb, var(--foreground) 45%, transparent);margin-top:2px">New additions</div></div>
+      <div style="text-align:center"><div style="font-size:24px;font-weight:700;color:var(--foreground)">21</div><div style="font-size:11px;color:color-mix(in srgb, var(--foreground) 45%, transparent);margin-top:2px">Total tokens</div></div>
+    </div>
+  </div>
+</section>
   </div>
 </div>
 
