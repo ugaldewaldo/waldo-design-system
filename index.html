@@ -5424,7 +5424,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       .wnav-sep { height:1px;background:color-mix(in srgb,var(--foreground) 6%,transparent);margin:4px 0; }
       .wnav-item {
         display:flex;align-items:center;gap:6px;
-        height:32px;padding:0 8px;margin:0 4px;
+        height:32px;padding:0 12px;margin:0 4px;
         border-radius:6px;cursor:pointer;
         font-size:13px;letter-spacing:-0.01em;
         color:color-mix(in srgb,var(--foreground) 70%,transparent);
@@ -5435,6 +5435,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       .wnav-item:hover .wnav-action { opacity:1; }
       .wnav-item.active { background:var(--muted);color:var(--foreground);font-weight:500; }
       .wnav-item.sub { padding-left:22px; }
+      .wnav-item.pill { border-radius:9999px;height:36px;padding:0 16px; }
+      .wnav-item.pill.active { background:var(--secondary); }
       .wnav-label { flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
       .wnav-count { font-size:11px;font-weight:600;color:var(--primary);min-width:18px;text-align:center;flex-shrink:0; }
       .wnav-icon  { flex-shrink:0;color:var(--muted-foreground);display:flex; }
@@ -5449,31 +5451,31 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         <div class="demo-canvas" style="align-items:flex-start">
           <div class="wnav-panel" style="width:240px">
             <div class="wnav-section">Workflows</div>
-            <div class="wnav-item active">
+            <div class="wnav-item pill active">
               <span class="wnav-label">Brand Social Sentiment</span>
               <span class="wnav-action" style="opacity:1"><button class="wli-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></span>
             </div>
-            <div class="wnav-item">
+            <div class="wnav-item pill">
               <span class="wnav-label">Benchmark Campaign Finder</span>
               <span class="wnav-action"><button class="wli-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></span>
             </div>
-            <div class="wnav-item">
+            <div class="wnav-item pill">
               <span class="wnav-label">Audience Deep-Dive</span>
               <span class="wnav-action"><button class="wli-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></span>
             </div>
-            <div class="wnav-item">
+            <div class="wnav-item pill">
               <span class="wnav-label">Four C's</span>
               <span class="wnav-action"><button class="wli-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></span>
             </div>
-            <div class="wnav-item">
+            <div class="wnav-item pill">
               <span class="wnav-label">Buyer Persona</span>
               <span class="wnav-action"><button class="wli-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></span>
             </div>
-            <div class="wnav-item">
+            <div class="wnav-item pill">
               <span class="wnav-label">Find Audiences</span>
               <span class="wnav-action"><button class="wli-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></span>
             </div>
-            <div class="wnav-item">
+            <div class="wnav-item pill">
               <span class="wnav-label">Messaging Strategy</span>
               <span class="wnav-action"><button class="wli-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></span>
             </div>
