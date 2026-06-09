@@ -202,7 +202,6 @@
     #wb-topbar {
       height: 80px; min-height: 80px;
       background: var(--background);
-      border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 40px;
       flex-shrink: 0;
@@ -230,7 +229,7 @@
     .tb-empty-icon { opacity: .35; margin-bottom: 4px; }
     .tb-empty h3 { font-size: 14px; font-weight: 500; color: color-mix(in srgb, var(--foreground) 60%, transparent); }
     .tb-empty p  { font-size: 13px; }
-    #wb-sidebar{width:220px;min-width:220px;height:100vh;position:sticky;top:0;border-right:1px solid var(--border);background:var(--card);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;}
+    #wb-sidebar{width:220px;min-width:220px;height:100vh;position:sticky;top:0;display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;}
     #wb-sidebar::-webkit-scrollbar{width:4px;}#wb-sidebar::-webkit-scrollbar-thumb{background:var(--secondary);border-radius:99px;}
     #wb-main{flex:1;overflow-y:auto;padding:48px 52px 100px;}
     #wb-main::-webkit-scrollbar{width:5px;}#wb-main::-webkit-scrollbar-thumb{background:var(--secondary);border-radius:99px;}
@@ -6462,7 +6461,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
 <!-- Foundations panel -->
 <div id="tb-panel-foundations" class="tb-panel">
-  <div id="wb-foundations-sidebar" style="width:220px;min-width:220px;height:100%;border-right:1px solid var(--border);background:var(--card);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;">
+  <div id="wb-foundations-sidebar" style="width:220px;min-width:220px;height:100%;display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;">
     <div class="sb-group">
       <div class="sb-group-label">Foundation</div>
       <button class="sb-item" onclick="waldoGo('tab-colors',this)">Colors</button>
