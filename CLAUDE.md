@@ -302,6 +302,21 @@ git add -A && git commit -m "..." && git push
 
 Pushes to GitHub Pages.
 
+## ⛔ VERIFICAR VISUALMENTE ANTES DE REPORTAR CUALQUIER CAMBIO
+
+**NUNCA pedir a Miguel que revise un resultado visual sin haberlo revisado tú primero.**
+
+Tengo acceso a herramientas de preview (Claude Preview MCP, Chrome MCP). Antes de terminar cualquier tarea visual:
+1. Arrancar el servidor con `preview_start`
+2. Navegar a la sección modificada con `preview_eval` (llamar las funciones JS si hace falta)
+3. Tomar screenshot con `preview_screenshot` y verificar que se ve correcto
+4. Si hay error visual → arreglarlo ANTES de reportar a Miguel
+5. Solo cuando esté verificado visualmente → commit, push, y reportar
+
+**No hay excusas.** Si el preview muestra un error, el trabajo no está terminado.
+
+---
+
 ## ⛔ COMMIT AND PUSH BEFORE ANY DESTRUCTIVE OPERATION
 
 **NEVER run `git checkout -- <file>`, `git reset --hard`, or any command that discards local changes WITHOUT first committing everything.**
