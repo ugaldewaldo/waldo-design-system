@@ -1111,24 +1111,26 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
     blue:   {50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',300:'#93c5fd',400:'#60a5fa',500:'#3b82f6',600:'#2563eb',700:'#1d4ed8',800:'#1e40af',900:'#1e3a8a',950:'#172554'}
   };
   const families = ['zinc','green','yellow','orange'];
-  const tbody = document.getElementById('palette-body');
-
-  steps.forEach(step => {
-    const tr = document.createElement('tr');
-    const tdL = document.createElement('td');
-    tdL.style.cssText = 'font-size:11px;color:color-mix(in srgb, var(--foreground) 45%, transparent);text-align:right;padding-right:8px;padding-bottom:4px;vertical-align:middle;width:44px;white-space:nowrap';
-    tdL.textContent = step;
-    tr.appendChild(tdL);
-    families.forEach(fam => {
-      const hex = palette[fam][step];
-      const isA = anchors[fam][step];
-      const td = document.createElement('td');
-      td.style.cssText = 'padding:2px;min-width:90px';
-      td.innerHTML = `<div class="chip" style="background:${hex}">${isA?'<div class="anchor-dot"></div>':''}<div class="chip-tip">${fam}-${step} · ${hex}${isA?' ◉':' ○'}</div></div>`;
-      tr.appendChild(td);
+  function buildPalette() {
+    const tbody = document.getElementById('palette-body');
+    if(!tbody) return;
+    steps.forEach(step => {
+      const tr = document.createElement('tr');
+      const tdL = document.createElement('td');
+      tdL.style.cssText = 'font-size:11px;color:color-mix(in srgb, var(--foreground) 45%, transparent);text-align:right;padding-right:8px;padding-bottom:4px;vertical-align:middle;width:44px;white-space:nowrap';
+      tdL.textContent = step;
+      tr.appendChild(tdL);
+      families.forEach(fam => {
+        const hex = palette[fam][step];
+        const isA = anchors[fam][step];
+        const td = document.createElement('td');
+        td.style.cssText = 'padding:2px;min-width:90px';
+        td.innerHTML = `<div class="chip" style="background:${hex}">${isA?'<div class="anchor-dot"></div>':''}<div class="chip-tip">${fam}-${step} · ${hex}${isA?' ◉':' ○'}</div></div>`;
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
     });
-    tbody.appendChild(tr);
-  });
+  }
 
 
 function waldoGo(id,el){
@@ -7486,6 +7488,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     var p = document.getElementById(id);
     if(p && p.parentElement !== wb) wb.appendChild(p);
   });
+  // Build color palette now that DOM is fully parsed
+  buildPalette();
 })();
 </script>
 </body>
