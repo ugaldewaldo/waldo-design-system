@@ -302,6 +302,17 @@ git add -A && git commit -m "..." && git push
 
 Pushes to GitHub Pages.
 
+## ⛔ COMMIT AND PUSH BEFORE ANY DESTRUCTIVE OPERATION
+
+**NEVER run `git checkout -- <file>`, `git reset --hard`, or any command that discards local changes WITHOUT first committing everything.**
+
+Before ANY git operation that could discard local work:
+1. Run `git status` to check for uncommitted changes
+2. If there are changes → `git add -A && git commit -m "wip: save before [operation]" && git push`
+3. Only then proceed
+
+No exceptions. Local changes = work that can be lost. Always commit first.
+
 ---
 
 ## Linear / external communication
