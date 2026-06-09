@@ -221,8 +221,8 @@
     .tb-tab.active { background: var(--muted); color: var(--foreground); font-weight: 500; }
 
     /* ── Tab panels ── */
-    #wb-body { flex: 1; display: flex; overflow: hidden; }
-    .tb-panel { display: none; flex: 1; overflow: hidden; }
+    #wb-body { flex: 1; position: relative; overflow: hidden; }
+    .tb-panel { display: none; position: absolute; inset: 0; }
     .tb-panel.active { display: flex; }
 
     /* empty state panel */
