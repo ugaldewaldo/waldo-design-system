@@ -1153,15 +1153,16 @@ function switchTopTab(name, el) {
   if(panel) panel.classList.add('active');
   // when switching to foundations, activate first foundation page if none active
   if(name === 'foundations') {
-    var pages = ['tab-colors','tab-brand','tab-semantic','tab-typography','tab-migration'];
-    var anyActive = pages.some(function(pid){ var p=document.getElementById(pid); return p && p.classList.contains('active'); });
-    if(!anyActive) {
-      document.querySelectorAll('#wb-foundations-sidebar .sb-item').forEach(function(a){a.classList.remove('active');});
-      var first = document.getElementById('tab-colors');
-      if(first) first.classList.add('active');
-      var firstBtn = document.querySelector('#wb-foundations-sidebar .sb-item');
-      if(firstBtn) firstBtn.classList.add('active');
-    }
+    document.querySelectorAll('#wb-foundations-sidebar .sb-item').forEach(function(a){a.classList.remove('active');});
+    var firstBtn = document.querySelector('#wb-foundations-sidebar .sb-item');
+    if(firstBtn) firstBtn.classList.add('active');
+    var foundMain = document.getElementById('wb-foundations-main');
+    if(foundMain) foundMain.scrollTop = 0;
+    var foundSidebar = document.getElementById('wb-foundations-sidebar');
+    if(foundSidebar) foundSidebar.scrollTop = 0;
+    document.querySelectorAll('#wb-foundations-main .waldo-page').forEach(function(p){ p.classList.remove('active'); });
+    var firstPage = document.getElementById('tab-colors');
+    if(firstPage) firstPage.classList.add('active');
   }
 }
 
@@ -7476,5 +7477,16 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 </div>
 
 </div><!-- /#wb-body -->
+
+<script>
+// Move orphaned tb-panels into #wb-body (HTML parser closes wb-body early due to div imbalance)
+(function() {
+  var wb = document.getElementById('wb-body');
+  ['tb-panel-graphs','tb-panel-blocks','tb-panel-docs','tb-panel-foundations'].forEach(function(id) {
+    var p = document.getElementById(id);
+    if(p && p.parentElement !== wb) wb.appendChild(p);
+  });
+})();
+</script>
 </body>
 </html>
