@@ -410,3 +410,34 @@ component_choice_logic:
   navitem_vs_filtertrigger:
     navitem: Navigates or selects a view — full-width, pill shape, active bg
     filtertrigger: Opens a dropdown to set a filter value — bare inline, no bg
+
+- component: NavItem
+  use_when:
+    - Navigation between views, sections, or settings pages
+    - Sidebar panels (Signals, Settings, Report Builder, Insights)
+    - Any item that changes the active view on click
+  dont_use_when:
+    - Opening a dropdown or filtering data (use FilterTrigger)
+    - Displaying a row of entity data (use ListItem)
+    - Multi-column structured data (use Table)
+  prefer_over:
+    - ListItem: when the item navigates rather than displays entity data
+  notes: >
+    Height 36px, padding 0 16px, border-radius 9999px (pill), inside wnav-items-wrap (padding 0 16px).
+    Icon is leading (left). Items with nested children use wnav-parent + chevron left.
+    Active state = bg var(--muted). wnav-section header is uppercase, padding-top 24px.
+
+- component: FilterTrigger
+  use_when:
+    - Inline filter selector inside a nav panel or search header
+    - Opening a wdd dropdown to set a filter value
+    - Insights panel filter rows (Saved searches, Recent, Any source, etc.)
+  dont_use_when:
+    - Navigating between views (use NavItem)
+    - Items that expand sub-navigation (use wnav-parent with left chevron)
+  prefer_over:
+    - Select: when the trigger must be bare/inline with no pill background
+  notes: >
+    No background, no pill. Chevron is trailing (right). wft-active = foreground color.
+    wft-default = 70% foreground. Wrap multiple triggers in wnav-filters (gap 16px, padding 0 32px 12px).
+    Click opens a wdd dropdown positioned below the trigger.

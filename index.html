@@ -435,6 +435,10 @@
 .input::placeholder { color: rgba(210,211,211,0.50); }
 .input.error  { border-color: rgba(222,58,40,0.50); }
 .input:disabled { opacity: 0.4; cursor: not-allowed; }
+/* Ghost variant — filled with card bg, no border. Used in panel search inputs. */
+.input--ghost { background: var(--card); border-color: transparent; height: 36px; }
+.input--ghost:hover { border-color: transparent; }
+.input--ghost:focus { border-color: transparent; }
 
 .input-with-icon { position: relative; }
 .input-with-icon .input-icon {
@@ -1487,7 +1491,7 @@ function switchChartPage(pageId, el) {
       .wcopy-link-icon { flex-shrink:0;color:var(--muted-foreground);transition:color .1s; }
       .wcopy-link.copied .wcopy-link-icon { color:var(--primary); }
 
-      .wfile-zone { display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border-radius:24px;padding:24px 16px;background:var(--muted);cursor:pointer;user-select:none;transition:background .1s; }
+      .wfile-zone { display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border-radius:24px;height:36px;padding:0 16px;background:var(--muted);cursor:pointer;user-select:none;transition:background .1s; }
       .wfile-zone:hover { background:var(--secondary); }
       .wfile-zone.drag  { background:var(--secondary);outline:1px solid #265152; }
       .wfile-zone-label { font-size:14px;font-weight:400;letter-spacing:-0.02em;color:var(--primary); }
@@ -4155,7 +4159,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       }
       .wempty-page    { padding:80px 24px; }
       .wempty-section { padding:48px 24px; }
-      .wempty-inline  { padding:24px 16px; }
+      .wempty-inline  { height:36px;padding:0 16px; }
 
       .wempty-icon { color:color-mix(in srgb, var(--muted-foreground) 50%, transparent);margin-bottom:12px; }
       .wempty-page    .wempty-icon { width:40px;height:40px; }
@@ -5381,21 +5385,25 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         <div class="demo-canvas" style="align-items:flex-start">
           <div class="wnav-panel" style="width:220px;padding:8px 0">
             <!-- Search -->
-            <div style="padding:4px 8px 6px">
-              <div style="display:flex;align-items:center;gap:6px;background:var(--muted);border-radius:6px;padding:5px 10px;">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--muted-foreground);flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <span style="font-size:13px;color:var(--muted-foreground)">Search insights</span>
+            <div class="wnav-search">
+              <div class="input-with-icon">
+                <div class="input-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+                <input class="input input--ghost" placeholder="Search insights" />
               </div>
             </div>
             <!-- Filter triggers as rows -->
-            <div class="wft-row"><span class="wft wft-active"><span>Saved searches</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span></div>
-            <div class="wft-row"><span class="wft wft-active"><span>Recent</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span></div>
-            <div class="wft-row"><span class="wft wft-active"><span>All ideas</span><span class="wft-value" style="font-size:13px">All ideas</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span></div>
-            <div class="wft-row"><span class="wft wft-default"><span>Any source</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span></div>
-            <div class="wft-row"><span class="wft wft-default"><span>Any tags</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span></div>
-            <div class="wft-row"><span class="wft wft-default"><span>Team reactions</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span></div>
-            <div class="wnav-sep" style="margin:4px 8px"></div>
+            <div class="wnav-filters">
+              <span class="wft wft-default"><span>Saved searches</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span>
+              <span class="wft wft-default"><span>Recent</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span>
+              <span class="wft wft-default"><span>All ideas</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span>
+              <span class="wft wft-default"><span>Any source</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span>
+              <span class="wft wft-default"><span>Any tags</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span>
+              <span class="wft wft-default"><span>Team reactions</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span>
+            </div>
+            <div class="wnav-sep"></div>
+            <div class="wnav-items-wrap">
             <div class="wnav-item"><span class="wnav-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="3 9 21 9"/><polyline points="9 21 9 9"/></svg></span><span class="wnav-label">All Archive</span></div>
+            </div>
           </div>
         </div>
         <div class="demo-code-bar">
@@ -5411,16 +5419,16 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   <div id="comp-nav" class="waldo-page">
     <div class="page-header">
       <div class="page-title">Nav Item</div>
-      <div class="page-desc">Navigation items used across sidebars, settings panels, filter panels, and report builders. Height 32px · icon 14px trailing · active = bg-muted.</div>
+      <div class="page-desc">Navigation items used across sidebars, settings panels, filter panels, and report builders. Height 36px · padding 0 16px · border-radius 9999px · active = bg-muted.</div>
     </div>
 
     <style>
       .wnav-panel {
-        background:var(--popover);border-radius:24px;padding:8px 0;
+        background:var(--popover);border-radius:24px;padding:24px 0;
         width:288px;display:flex;flex-direction:column;
       }
       .wnav-items-wrap { padding:0 16px; }
-      .wnav-section { padding:8px 24px 12px;font-size:12px;font-weight:500;letter-spacing:-.02em;color:color-mix(in srgb,var(--foreground) 30%,transparent);user-select:none; }
+      .wnav-section { padding:24px 24px 12px;font-size:12px;font-weight:500;letter-spacing:-.02em;text-transform:uppercase;color:color-mix(in srgb,var(--foreground) 30%,transparent);user-select:none; }
       .wnav-sep { height:1px;background:color-mix(in srgb,var(--foreground) 6%,transparent);margin:4px 0; }
       .wnav-item {
         display:flex;align-items:center;gap:6px;
@@ -5448,6 +5456,15 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       .wft-opt { font-size:13px;letter-spacing:-0.01em;padding:5px 10px;color:color-mix(in srgb,var(--foreground) 60%,transparent);cursor:pointer; }
       .wft-opt:hover { color:var(--foreground); }
       .wft-opt.active { color:var(--foreground);font-weight:500; }
+      /* Search input inside nav panel */
+      .wnav-search { padding:8px 20px 12px; }
+      /* Filter rows */
+      .wnav-filters { display:flex;flex-direction:column;gap:16px;padding:0 32px 12px; }
+      .wnav-subitems { overflow:hidden;transition:max-height .15s ease; }
+      .wnav-subitems.collapsed { max-height:0; }
+      .wnav-chevron { transition:transform .15s ease; }
+      .wnav-parent:not(.open) .wnav-chevron svg { transform:rotate(180deg); }
+      .wnav-parent:not(.open).active { background:none; font-weight:normal; color:color-mix(in srgb,var(--foreground) 70%,transparent); }
     </style>
 
     <!-- Pill items — Workflows pattern -->
@@ -5460,8 +5477,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <span class="wnav-section">Workflows</span>
               <span class="wnav-section-add"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
             </div>
-            <div class="wnav-item active">
-              <span class="wnav-label">Brand Social Sentiment</span>
+            <div class="wnav-items-wrap">
+            <div class="wnav-item active"><span class="wnav-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="3 9 21 9"/><polyline points="9 21 9 9"/></svg></span><span class="wnav-label">Brand Social Sentiment</span>
               <span class="wnav-action" style="opacity:1"><button class="wli-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></span>
             </div>
             <div class="wnav-item">
@@ -5500,6 +5517,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <span class="wnav-label">Messaging Strategy</span>
               <span class="wnav-action"><button class="wli-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></span>
             </div>
+            </div>
           </div>
         </div>
         <div class="demo-code-bar">
@@ -5516,51 +5534,25 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         <div class="demo-canvas" style="align-items:flex-start;gap:24px">
           <!-- Default state -->
           <div class="wnav-panel">
-            <div style="padding:4px 8px 6px">
-              <div style="display:flex;align-items:center;gap:6px;background:var(--muted);border-radius:6px;padding:5px 10px;">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--muted-foreground);flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <span style="font-size:13px;color:var(--muted-foreground)">Search insights</span>
+            <div class="wnav-search">
+              <div class="input-with-icon">
+                <div class="input-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+                <input class="input input--ghost" placeholder="Search insights" />
               </div>
             </div>
-            <div class="wft-row"><span class="wft wft-active"><span>Saved searches</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span></div>
-            <div class="wft-row"><span class="wft wft-active"><span>Recent</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span></div>
-            <div class="wft-row"><span class="wft wft-default"><span>All ideas</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span></div>
-            <div class="wft-row"><span class="wft wft-default"><span>Any source</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span></div>
-            <div class="wft-row"><span class="wft wft-default"><span>Any tags</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span></div>
-            <div class="wft-row"><span class="wft wft-default"><span>Team reactions</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span></div>
-            <div class="wnav-sep" style="margin:4px 8px"></div>
-            <div class="wnav-item"><span class="wnav-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="3 9 21 9"/><polyline points="9 21 9 9"/></svg></span><span class="wnav-label">All Archive</span></div>
-          </div>
-          <!-- Recent filter expanded -->
-          <div class="wnav-panel">
-            <div style="padding:4px 8px 6px">
-              <div style="display:flex;align-items:center;gap:6px;background:var(--muted);border-radius:6px;padding:5px 10px;">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--muted-foreground);flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <span style="font-size:13px;color:var(--muted-foreground)">Search insights</span>
-              </div>
+            <div class="wnav-filters">
+              <span class="wft wft-default"><span>Saved searches</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span>
+              <span class="wft wft-default"><span>Recent</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span>
+              <span class="wft wft-default"><span>All ideas</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span>
+              <span class="wft wft-default"><span>Any source</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span>
+              <span class="wft wft-default"><span>Any tags</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span>
+              <span class="wft wft-default"><span>Team reactions</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span>
             </div>
-            <div class="wft-row"><span class="wft wft-active"><span>Saved searches</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span></div>
-            <div class="wft-row"><span class="wft wft-active"><span>Recent</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 15 12 9 18 15"/></svg></span></span></div>
-            <div class="wft-subopts">
-              <div class="wft-opt">Today</div>
-              <div class="wft-opt active">Yesterday</div>
-              <div class="wft-opt">Last week</div>
-              <div class="wft-opt">Last month</div>
-              <div class="wft-opt">Last 3 months</div>
-              <div class="wft-opt">Custom...</div>
-            </div>
-            <div class="wft-row"><span class="wft wft-default"><span>All ideas</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span></div>
-            <div class="wft-row"><span class="wft wft-default"><span>Any source</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span></div>
-            <div class="wft-row"><span class="wft wft-default"><span>Any tags</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span></div>
-            <div class="wft-row"><span class="wft wft-default"><span>Team reactions</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span></div>
-            <div class="wnav-sep" style="margin:4px 8px"></div>
+            <div class="wnav-sep"></div>
+            <div class="wnav-items-wrap">
             <div class="wnav-item"><span class="wnav-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="3 9 21 9"/><polyline points="9 21 9 9"/></svg></span><span class="wnav-label">All Archive</span></div>
+            </div>
           </div>
-        </div>
-        <div class="demo-code-bar">
-          <span class="demo-code-label">&lt;NavPanel&gt; · &lt;FilterTrigger /&gt; rows · &lt;NavSeparator /&gt; · &lt;NavItem /&gt;</span>
-          <button class="copy-btn" onclick="copyCode(this,'&lt;NavPanel&gt;\n  &lt;FilterTrigger label=&quot;Saved searches&quot; /&gt;\n  &lt;FilterTrigger label=&quot;Ideas&quot; value=&quot;All ideas&quot; /&gt;\n  &lt;FilterTrigger label=&quot;Any source&quot; /&gt;\n  &lt;NavSeparator /&gt;\n  &lt;NavItem label=&quot;All Archive&quot; icon={&lt;ArchiveIcon /&gt;} /&gt;\n&lt;/NavPanel&gt;')">Copy</button>
-        </div>
       </div>
     </div>
 
@@ -5571,31 +5563,35 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         <div class="demo-canvas" style="align-items:flex-start;gap:24px">
           <div class="wnav-panel">
             <div class="wnav-section">Settings</div>
-            <div class="wnav-item"><span class="wnav-label">Brand</span><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></div>
+            <div class="wnav-items-wrap">
+            <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span><span class="wnav-label">Brand</span></div>
             <div class="wnav-sep"></div>
-            <div class="wnav-item"><span class="wnav-label">Ideas</span><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a7 7 0 017 7c0 3-1.5 5-3.5 6.5V18a2 2 0 01-2 2h-3a2 2 0 01-2-2v-2.5C6.5 14 5 12 5 9a7 7 0 017-7z"/></svg></span></div>
-            <div class="wnav-item"><span class="wnav-label">Alerts</span><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg></span></div>
-            <div class="wnav-item"><span class="wnav-label">Data sources</span><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="18 15 12 9 6 15"/></svg></span></div>
-            <div class="wnav-item active"><span class="wnav-label">Management</span><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></span></div>
+            <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a7 7 0 017 7c0 3-1.5 5-3.5 6.5V18a2 2 0 01-2 2h-3a2 2 0 01-2-2v-2.5C6.5 14 5 12 5 9a7 7 0 017-7z"/></svg></span><span class="wnav-label">Ideas</span></div>
+            <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg></span><span class="wnav-label">Alerts</span></div>
+            <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></span><span class="wnav-label">Data sources</span></div>
+            <div class="wnav-item wnav-parent open active" onclick="navToggle(this)"><span class="wnav-icon wnav-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 15 12 9 18 15"/></svg></span><span class="wnav-label">Management</span></div>
+            <div class="wnav-subitems">
             <div class="wnav-item sub"><span class="wnav-label">Audience sources</span></div>
             <div class="wnav-item sub"><span class="wnav-label">Owned media</span></div>
+            </div>
             <div class="wnav-sep"></div>
-            <div class="wnav-item"><span class="wnav-label">Notifications</span><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span></div>
-            <div class="wnav-item"><span class="wnav-label">Collaborators & Guests</span><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span></div>
+            <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span><span class="wnav-label">Notifications</span></div>
+            <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span><span class="wnav-label">Collaborators & Guests</span></div>
+            </div>
           </div>
 
           <!-- Signals panel with count badges -->
           <div class="wnav-panel">
             <div class="wnav-section">Signals</div>
-            <div class="wnav-item"><span class="wnav-count">28</span><span class="wnav-label">Brand mentions</span></div>
-            <div class="wnav-item active"><span class="wnav-count">15</span><span class="wnav-label">Audience convos</span></div>
-            <div class="wnav-item"><span class="wnav-count">10</span><span class="wnav-label">Market trends</span></div>
-            <div class="wnav-item"><span class="wnav-count">7</span><span class="wnav-label">About Management</span></div>
-            <div class="wnav-item"><span class="wnav-count">12</span><span class="wnav-label">Cultural moments</span></div>
-            <div class="wnav-item"><span class="wnav-count">6</span><span class="wnav-label">From Management</span></div>
+            <div class="wnav-items-wrap">
+            <div class="wnav-item"><span class="wnav-icon"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.5"/></svg></span><span class="wnav-label">Brand mentions</span><span class="wnav-count">28</span></div>
+            <div class="wnav-item active"><span class="wnav-label">Audience convos</span><span class="wnav-count">15</span></div>
+            <div class="wnav-item"><span class="wnav-label">Market trends</span><span class="wnav-count">10</span></div>
+            <div class="wnav-item"><span class="wnav-label">About Management</span><span class="wnav-count">7</span></div>
+            <div class="wnav-item"><span class="wnav-label">Cultural moments</span><span class="wnav-count">12</span></div>
+            <div class="wnav-item"><span class="wnav-label">From Management</span><span class="wnav-count">6</span></div>
             <div class="wnav-sep"></div>
-            <div class="wnav-item" style="color:var(--primary)">
-              <span class="wnav-label">+ Custom signal</span>
+            <div class="wnav-item wnav-item--primary"><span class="wnav-label">+ Custom signal</span></div>
             </div>
           </div>
         </div>
@@ -5613,6 +5609,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         <div class="demo-canvas" style="align-items:flex-start">
           <div class="wnav-panel">
             <div class="wnav-section">Signals</div>
+            <div class="wnav-items-wrap">
             <div class="wnav-item">
               <span class="wnav-label">Brand mentions</span>
               <span class="wnav-action"><button class="wli-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></span>
@@ -5624,6 +5621,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <div class="wnav-item">
               <span class="wnav-label">Market trends</span>
               <span class="wnav-action"><button class="wli-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button></span>
+            </div>
             </div>
           </div>
         </div>
@@ -5641,15 +5639,17 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         <div class="demo-canvas" style="align-items:flex-start">
           <div class="wnav-panel">
             <div class="wnav-section">Report Builder</div>
+            <div class="wnav-items-wrap">
             <div class="wnav-item active"><span class="wnav-label">Week Summary</span><span class="wnav-badge">4</span></div>
             <div class="wnav-item"><span class="wnav-label">Brand mentions</span><span class="wnav-badge" style="background:transparent;color:var(--muted-foreground)">M</span></div>
             <div class="wnav-item"><span class="wnav-label">Audience canvas</span><span class="wnav-badge" style="background:transparent;color:var(--muted-foreground)">A</span></div>
             <div class="wnav-item"><span class="wnav-label">Market trends</span><span class="wnav-badge" style="background:transparent;color:var(--muted-foreground)">0</span></div>
             <div class="wnav-sep"></div>
             <div class="wnav-section">Client Sync</div>
-            <div class="wnav-item"><span class="wnav-icon" style="color:var(--primary)"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.5"/></svg></span><span class="wnav-label">Sentiment analysis</span></div>
-            <div class="wnav-item"><span class="wnav-icon" style="color:var(--primary)"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="wnav-label">Creative sync</span></div>
-            <div class="wnav-item"><span class="wnav-icon" style="color:var(--primary)"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="wnav-label">Competitors</span></div>
+            <div class="wnav-item"><span class="wnav-icon"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.5"/></svg></span><span class="wnav-label">Sentiment analysis</span></div>
+            <div class="wnav-item"><span class="wnav-icon"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="wnav-label">Creative sync</span></div>
+            <div class="wnav-item wnav-icon--primary"><span class="wnav-icon"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="wnav-label">Competitors</span></div>
+            </div>
           </div>
         </div>
         <div class="demo-code-bar">
@@ -9651,5 +9651,88 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   buildPalette();
 })();
 </script>
-</body>
+
+<script>
+function navToggle(el) {
+  const isOpen = el.classList.toggle('open');
+  const subs = el.nextElementSibling;
+  if (subs && subs.classList.contains('wnav-subitems')) {
+    subs.classList.toggle('collapsed', !isOpen);
+  }
+  const chevron = el.querySelector('.wnav-chevron svg');
+  if (chevron) chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
+  // Remove active bg from parent when collapsed
+  el.classList.toggle('active', isOpen && el.classList.contains('active'));
+}
+// Init: collapse closed parents
+document.querySelectorAll('.wnav-parent:not(.open) + .wnav-subitems').forEach(s => s.classList.add('collapsed'));
+</script>
 </html>
+
+<script>
+(function(){
+  const OPTIONS = {
+    'Saved searches': ['Brand health Q2','Competitor watch','Weekly digest','Audience pulse'],
+    'Recent':         ['Today','Yesterday','Last week','Last month','Last 3 months','Custom…'],
+    'All ideas':      ['All ideas','My ideas','Shared with me','Archived'],
+    'Any source':     ['Any source','Twitter / X','LinkedIn','Reddit','News','Blogs'],
+    'Source':         ['Twitter / X','LinkedIn','Reddit','News','Blogs'],
+    'Any tags':       ['Any tags','Brand','Product','Competitor','Trend','Campaign'],
+    'Team reactions': ['Any reaction','👍 Liked','⭐ Starred','💡 Insights','🔥 Trending'],
+  };
+
+  let activeDD = null;
+
+  function closeDD() {
+    if (activeDD) { activeDD.remove(); activeDD = null; }
+  }
+
+  document.addEventListener('click', function(e) {
+    const trigger = e.target.closest('.wft');
+    if (!trigger) { closeDD(); return; }
+
+    const label = trigger.querySelector('span:first-child')?.textContent.trim();
+    const opts  = OPTIONS[label];
+    if (!opts) return;
+
+    // toggle
+    if (activeDD && activeDD._trigger === trigger) { closeDD(); return; }
+    closeDD();
+
+    const dd = document.createElement('div');
+    dd.className = 'wdd';
+    dd._trigger  = trigger;
+    dd.style.cssText = 'position:fixed;z-index:9999;min-width:180px;';
+
+    opts.forEach((o, i) => {
+      const item = document.createElement('div');
+      item.className = 'wdd-item' + (i === 0 ? ' wdd-active' : '');
+      item.innerHTML = o + (i === 0 ? ' <span class="wdd-check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>' : '');
+      item.addEventListener('click', function(ev) {
+        ev.stopPropagation();
+        dd.querySelectorAll('.wdd-item').forEach(x => x.classList.remove('wdd-active'));
+        dd.querySelectorAll('.wdd-check').forEach(x => x.remove());
+        this.classList.add('wdd-active');
+        const chk = document.createElement('span');
+        chk.className = 'wdd-check';
+        chk.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
+        this.appendChild(chk);
+        trigger.querySelector('span:first-child').textContent = this.textContent.trim();
+        setTimeout(closeDD, 120);
+      });
+      dd.appendChild(item);
+    });
+
+    document.body.appendChild(dd);
+    activeDD = dd;
+
+    const r = trigger.getBoundingClientRect();
+    const ddH = dd.offsetHeight;
+    const spaceBelow = window.innerHeight - r.bottom;
+    const top = spaceBelow > ddH + 8 ? r.bottom + 4 : r.top - ddH - 4;
+    dd.style.left = r.left + 'px';
+    dd.style.top  = top + 'px';
+  });
+})();
+</script>
+</body>
