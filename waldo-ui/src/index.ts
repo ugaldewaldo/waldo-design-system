@@ -96,3 +96,121 @@ export {
   Table, TableHeader, TableBody, TableFooter,
   TableHead, TableRow, TableCell, TableCaption,
 } from "./components/ui/table";
+
+// ── shadcn additions ───────────────────────────────────────────────────────────
+export { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "./components/ui/accordion";
+
+export {
+  AlertDialog, AlertDialogTrigger, AlertDialogPortal, AlertDialogOverlay,
+  AlertDialogContent, AlertDialogHeader, AlertDialogFooter, AlertDialogTitle,
+  AlertDialogDescription, AlertDialogMedia, AlertDialogAction, AlertDialogCancel,
+} from "./components/ui/alert-dialog";
+
+export { AspectRatio } from "./components/ui/aspect-ratio";
+
+export {
+  Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink,
+  BreadcrumbPage, BreadcrumbSeparator, BreadcrumbEllipsis,
+} from "./components/ui/breadcrumb";
+
+export { Calendar, CalendarDayButton } from "./components/ui/calendar";
+
+export {
+  Card, CardHeader, CardFooter, CardTitle, CardAction, CardDescription, CardContent,
+} from "./components/ui/card";
+
+export {
+  type CarouselApi, Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext,
+} from "./components/ui/carousel";
+
+export {
+  type ChartConfig,
+  ChartContainer, ChartTooltip, ChartTooltipContent,
+  ChartLegend, ChartLegendContent, ChartStyle,
+} from "./components/ui/chart";
+
+export { Collapsible, CollapsibleTrigger, CollapsibleContent } from "./components/ui/collapsible";
+
+export {
+  Combobox, ComboboxInput, ComboboxContent, ComboboxList, ComboboxItem,
+  ComboboxGroup, ComboboxLabel, ComboboxEmpty, ComboboxSeparator,
+  ComboboxTrigger, ComboboxValue,
+} from "./components/ui/combobox";
+
+export {
+  ContextMenu, ContextMenuTrigger, ContextMenuContent, ContextMenuItem,
+  ContextMenuCheckboxItem, ContextMenuRadioItem, ContextMenuLabel, ContextMenuSeparator,
+  ContextMenuShortcut, ContextMenuGroup, ContextMenuPortal, ContextMenuSub,
+  ContextMenuSubContent, ContextMenuSubTrigger, ContextMenuRadioGroup,
+} from "./components/ui/context-menu";
+
+export {
+  Drawer, DrawerPortal, DrawerOverlay, DrawerTrigger, DrawerClose,
+  DrawerContent, DrawerHeader, DrawerFooter, DrawerTitle, DrawerDescription,
+} from "./components/ui/drawer";
+
+export {
+  useFormField, Form, FormItem, FormLabel, FormControl,
+  FormDescription, FormMessage, FormField,
+} from "./components/ui/form";
+
+export { HoverCard, HoverCardTrigger, HoverCardContent } from "./components/ui/hover-card";
+
+export { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from "./components/ui/input-otp";
+
+export { Kbd, KbdGroup } from "./components/ui/kbd";
+
+export { Label } from "./components/ui/label";
+
+export {
+  Menubar, MenubarPortal, MenubarMenu, MenubarTrigger, MenubarContent,
+  MenubarGroup, MenubarSeparator, MenubarLabel, MenubarItem, MenubarShortcut,
+  MenubarCheckboxItem, MenubarRadioGroup, MenubarRadioItem,
+  MenubarSub, MenubarSubTrigger, MenubarSubContent,
+} from "./components/ui/menubar";
+
+export {
+  NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuContent,
+  NavigationMenuTrigger, NavigationMenuLink, NavigationMenuIndicator,
+  NavigationMenuViewport, navigationMenuTriggerStyle,
+} from "./components/ui/navigation-menu";
+
+export {
+  Pagination, PaginationContent, PaginationLink, PaginationItem,
+  PaginationPrevious, PaginationNext, PaginationEllipsis,
+} from "./components/ui/pagination";
+
+export {
+  Popover, PopoverTrigger, PopoverContent, PopoverAnchor,
+  PopoverHeader, PopoverTitle, PopoverDescription,
+} from "./components/ui/popover";
+
+export { Progress } from "./components/ui/progress";
+
+export { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "./components/ui/resizable";
+
+export { ScrollArea, ScrollBar } from "./components/ui/scroll-area";
+
+export {
+  Sheet, SheetTrigger, SheetClose, SheetContent,
+  SheetHeader, SheetFooter, SheetTitle, SheetDescription,
+} from "./components/ui/sheet";
+
+export {
+  Sidebar, SidebarContent, SidebarFooter, SidebarGroup,
+  SidebarGroupAction, SidebarGroupContent, SidebarGroupLabel,
+  SidebarHeader, SidebarInput, SidebarInset, SidebarMenu,
+  SidebarMenuAction, SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem,
+  SidebarMenuSkeleton, SidebarMenuSub, SidebarMenuSubButton, SidebarMenuSubItem,
+  SidebarProvider, SidebarRail, SidebarSeparator, SidebarTrigger, useSidebar,
+} from "./components/ui/sidebar";
+
+export { Skeleton } from "./components/ui/skeleton";
+
+export { Toaster as SonnerToaster } from "./components/ui/sonner";
+
+export { Toggle, toggleVariants } from "./components/ui/toggle";
+
+export { ToggleGroup, ToggleGroupItem } from "./components/ui/toggle-group";
+
+export { useIsMobile } from "./hooks/use-mobile";

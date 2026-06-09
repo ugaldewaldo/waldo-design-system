@@ -1,4 +1,3 @@
-import * as React from "react";
 import { type LucideIcon, type LucideProps } from "lucide-react";
 import { cn } from "@/lib/utils";
 

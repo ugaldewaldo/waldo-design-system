@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 // Waldo NavItem — Figma DS node 83995-111644
 //
 // Used in: settings panels, sidebar navigation, filter panels, report builder.
-// Height 32px · icon 14px right · active = bg-muted + font-medium
+// Height 36px · icon 14px right · active = bg-muted + font-medium
 //
 // Variants:
 //   default       → label [+ trailing icon]
@@ -32,9 +32,9 @@ export function NavSection({ label, className }: NavSectionProps) {
   return (
     <div
       className={cn(
-        "px-3 pb-1 pt-3",
-        "text-[11px] font-semibold uppercase tracking-[0.05em]",
-        "text-muted-foreground select-none",
+        "px-6 pb-3 pt-2",
+        "text-xs font-medium uppercase tracking-[-0.02em]",
+        "text-foreground/30 select-none",
         className
       )}
     >
@@ -105,11 +105,11 @@ export function NavItem({
         aria-expanded={collapsible ? expanded : undefined}
         onClick={handleClick}
         className={cn(
-          "group relative flex h-8 items-center gap-1.5",
-          "rounded-md px-2 mx-1",
-          "text-sm tracking-[-0.01em]",
+          "group relative flex h-9 items-center gap-1.5",
+          "rounded-full px-4",
+          "text-sm tracking-[-0.02em]",
           "transition-colors duration-100 select-none",
-          sub ? "pl-6" : "pl-2",
+          sub ? "pl-8" : "",
           active
             ? "bg-muted text-foreground font-medium"
             : "text-foreground/70 hover:bg-foreground/[0.06] hover:text-foreground",
@@ -118,15 +118,15 @@ export function NavItem({
           className
         )}
       >
-        {/* Count badge — left */}
+        {/* Label */}
+        <span className="flex-1 truncate">{label}</span>
+
+        {/* Count badge — right */}
         {count !== undefined && (
           <span className="min-w-[18px] text-center text-[11px] font-medium text-primary shrink-0">
             {count}
           </span>
         )}
-
-        {/* Label */}
-        <span className="flex-1 truncate">{label}</span>
 
         {/* Action — visible on hover */}
         {action && (
@@ -181,12 +181,12 @@ interface NavPanelProps {
   width?: string;
 }
 
-export function NavPanel({ children, className, width = "w-[220px]" }: NavPanelProps) {
+export function NavPanel({ children, className, width = "w-[288px]" }: NavPanelProps) {
   return (
     <nav
       className={cn(
         "flex flex-col h-full overflow-y-auto",
-        "bg-card py-2",
+        "bg-popover py-2 rounded-3xl",
         width,
         className
       )}
