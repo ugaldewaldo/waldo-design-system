@@ -200,25 +200,25 @@
 
     /* ── Top header bar ── */
     #wb-topbar {
-      height: 48px; min-height: 48px;
+      height: 80px; min-height: 80px;
       background: var(--background);
       border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 16px;
+      padding: 0 40px;
       flex-shrink: 0;
       z-index: 100;
     }
-    #wb-topbar-nav { display: flex; align-items: center; gap: 2px; }
+    #wb-topbar-nav { display: flex; align-items: center; gap: 24px; }
     .tb-tab {
-      display: inline-flex; align-items: center; justify-content: center;
-      height: 32px; border-radius: 6px; padding: 0 8px;
-      font-family: 'Inter', sans-serif; font-size: 13px; letter-spacing: -0.01em;
-      color: color-mix(in srgb, var(--foreground) 70%, transparent);
+      display: inline-flex; align-items: center;
+      height: auto; border-radius: 0; padding: 0;
+      font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; letter-spacing: -0.02em;
+      color: color-mix(in srgb, var(--foreground) 55%, transparent);
       background: transparent; border: none; cursor: pointer;
-      transition: background .1s, color .1s;
+      transition: color .1s;
     }
-    .tb-tab:hover { background: color-mix(in srgb, var(--foreground) 6%, transparent); color: var(--foreground); }
-    .tb-tab.active { background: var(--muted); color: var(--foreground); font-weight: 500; }
+    .tb-tab:hover { background: transparent; color: color-mix(in srgb, var(--foreground) 80%, transparent); }
+    .tb-tab.active { background: transparent; color: var(--foreground); font-weight: 500; }
 
     /* ── Tab panels ── */
     #wb-body { flex: 1; position: relative; overflow: hidden; }
