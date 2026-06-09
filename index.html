@@ -244,12 +244,28 @@
     .sb-item svg{flex-shrink:0;opacity:.5;} .sb-item.active svg{opacity:1;}
     .sb-footer{margin-top:auto;padding:10px 14px;border-top:1px solid var(--border);font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent);}
     .waldo-page{display:none;} .waldo-page.active{display:block;overflow-y:auto;height:100%;}
-    #tb-panel-charts{overflow-y:auto;padding:32px 40px;}
-.chart-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:16px;}
-    .chart-variant-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
-    .chart-variant-preview{padding:16px;min-height:160px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border);}
-    .chart-variant-footer{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;}
-    .chart-variant-name{font-size:12px;font-weight:500;color:var(--foreground);}
+    #tb-panel-charts{display:flex;position:absolute;inset:0;}
+    #wb-charts-sidebar{width:220px;min-width:220px;height:100%;display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;border-right:none;}
+    #wb-charts-sidebar::-webkit-scrollbar{width:0;}#wb-charts-sidebar{scrollbar-width:none;}
+    #wb-charts-main{flex:1;overflow-y:auto;padding:32px 40px;}
+    .chart-page{display:none;} .chart-page.active{display:block;}
+    .chart-page-header{margin-bottom:28px;padding-bottom:18px;border-bottom:1px solid var(--border);}
+    .chart-page-title{font-size:20px;font-weight:600;letter-spacing:-0.02em;margin-bottom:4px;}
+    .chart-page-desc{font-size:13px;color:var(--muted-foreground);}
+    .chart-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;}
+    .chart-card-featured{margin-bottom:24px;}
+    .chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+    .chart-card-topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--border);}
+    .chart-card-label{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted-foreground);}
+    .chart-view-code-btn{font-size:11px;font-weight:500;padding:3px 10px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--foreground);cursor:pointer;}
+    .chart-view-code-btn:hover{background:var(--muted);}
+    .chart-card-inner{padding:20px;}
+    .chart-card-title{font-size:14px;font-weight:600;margin-bottom:2px;}
+    .chart-card-subtitle{font-size:12px;color:var(--muted-foreground);margin-bottom:16px;}
+    .chart-card-body{margin-bottom:16px;min-height:160px;display:flex;align-items:center;justify-content:center;}
+    .chart-card-footer{border-top:1px solid var(--border);padding-top:12px;display:flex;flex-direction:column;gap:2px;}
+    .chart-card-trend{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;}
+    .chart-card-period{font-size:11px;color:var(--muted-foreground);}
     .nav{display:none!important;}
     .page-header{margin-bottom:28px;padding-bottom:18px;border-bottom:1px solid var(--border);}
     .page-title{font-size:20px;font-weight:600;letter-spacing:-.02em;margin-bottom:4px;}
@@ -1169,6 +1185,14 @@ function switchTopTab(name, el) {
     var firstPage = document.getElementById('tab-colors');
     if(firstPage) firstPage.classList.add('active');
   }
+}
+
+function switchChartPage(pageId, el) {
+  document.querySelectorAll('#wb-charts-sidebar .sb-item').forEach(function(i){i.classList.remove('active');});
+  el.classList.add('active');
+  document.querySelectorAll('#wb-charts-main .chart-page').forEach(function(p){p.classList.remove('active');});
+  var p = document.getElementById(pageId);
+  if(p) { p.classList.add('active'); document.getElementById('wb-charts-main').scrollTop = 0; }
 }
 
   function showMode(mode, el) {
@@ -5674,72 +5698,147 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
 <!-- ══ CHARTS PANEL ══ -->
 <div id="tb-panel-charts" class="tb-panel">
-  <div class="page-header">
-    <div class="page-title">Chart</div>
-    <div class="page-desc">Built on Recharts. Compose with <code style="font-size:11px;background:var(--muted);padding:1px 5px;border-radius:4px">ChartContainer</code>, <code style="font-size:11px;background:var(--muted);padding:1px 5px;border-radius:4px">ChartTooltip</code>, and <code style="font-size:11px;background:var(--muted);padding:1px 5px;border-radius:4px">ChartLegend</code> with Recharts primitives.</div>
+<div id="wb-charts-sidebar">
+  <div class="sb-group">
+    <div class="sb-group-label">Charts</div>
+    <button class="sb-item active" onclick="switchChartPage('chart-page-area',this)">Area Charts</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-bar',this)">Bar Charts</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-line',this)">Line Charts</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-pie',this)">Pie Charts</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-radar',this)">Radar Charts</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-radial',this)">Radial Charts</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-tooltip',this)">Tooltip</button>
+  </div>
+</div>
+<div id="wb-charts-main">
+
+<!-- ══ AREA PAGE ══ -->
+<div id="chart-page-area" class="chart-page active">
+  <div class="chart-page-header">
+    <div class="chart-page-title">Area Charts</div>
+    <div class="chart-page-desc">Built on Recharts. Smooth, step, stacked and interactive area chart variants.</div>
   </div>
 
+  <!-- featured -->
+  <div class="chart-card chart-card-featured">
+    <div class="chart-card-topbar">
+      <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Area Chart</div>
+      <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartAreaDefault } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+    </div>
+    <div class="chart-card-inner">
+      <div class="chart-card-title">Area Chart</div>
+      <div class="chart-card-subtitle">Showing total visitors for the last 6 months</div>
+      <div class="chart-card-body">
+        <svg viewBox="0 0 520 200" width="100%" height="200">
+          <defs><linearGradient id="fag1" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#32a9a9" stop-opacity="0.4"/><stop offset="95%" stop-color="#32a9a9" stop-opacity="0.05"/></linearGradient></defs>
+          <line x1="40" y1="20" x2="40" y2="170" stroke="var(--border)" stroke-width="1"/>
+          <line x1="40" y1="170" x2="500" y2="170" stroke="var(--border)" stroke-width="1"/>
+          <line x1="40" y1="120" x2="500" y2="120" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="4,4"/>
+          <line x1="40" y1="70" x2="500" y2="70" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="4,4"/>
+          <polyline points="40,140 135,100 230,120 325,50 415,85 500,35" fill="none" stroke="#32a9a9" stroke-width="2.5"/>
+          <polygon points="40,140 135,100 230,120 325,50 415,85 500,35 500,170 40,170" fill="url(#fag1)"/>
+          <text x="40" y="188" font-size="10" fill="var(--muted-foreground)" text-anchor="middle">Jan</text>
+          <text x="135" y="188" font-size="10" fill="var(--muted-foreground)" text-anchor="middle">Feb</text>
+          <text x="230" y="188" font-size="10" fill="var(--muted-foreground)" text-anchor="middle">Mar</text>
+          <text x="325" y="188" font-size="10" fill="var(--muted-foreground)" text-anchor="middle">Apr</text>
+          <text x="415" y="188" font-size="10" fill="var(--muted-foreground)" text-anchor="middle">May</text>
+          <text x="500" y="188" font-size="10" fill="var(--muted-foreground)" text-anchor="middle">Jun</text>
+        </svg>
+      </div>
+      <div class="chart-card-footer">
+        <div class="chart-card-trend">Trending up by 5.2% this month <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#32a9a9" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+        <div class="chart-card-period">January – June 2024</div>
+      </div>
+    </div>
+  </div>
 
-  <!-- ══ AREA CHARTS ══ -->
-  <div class="section">
-    <div class="section-title">Area Charts</div>
-    <div class="chart-grid">
+  <div class="chart-cards-grid">
 
-      <!-- Area Chart — Default -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
-            <defs><linearGradient id="ag1" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#32a9a9" stop-opacity="0.4"/><stop offset="95%" stop-color="#32a9a9" stop-opacity="0.05"/></linearGradient></defs>
-            <line x1="20" y1="10" x2="20" y2="100" stroke="var(--border)" stroke-width="1"/>
-            <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
-            <polyline points="20,80 60,60 100,70 140,30 180,50 220,20" fill="none" stroke="#32a9a9" stroke-width="2"/>
-            <polygon points="20,80 60,60 100,70 140,30 180,50 220,20 220,100 20,100" fill="url(#ag1)"/>
-          </svg>
+      <!-- Area Chart — Default (already shown as featured, keep as card too) -->
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Area Chart</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartAreaDefault } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
         </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Area Chart — Default</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartAreaDefault } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Area Chart</div>
+          <div class="chart-card-subtitle">Showing total visitors for the last 6 months</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
+              <defs><linearGradient id="ag1" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#32a9a9" stop-opacity="0.4"/><stop offset="95%" stop-color="#32a9a9" stop-opacity="0.05"/></linearGradient></defs>
+              <line x1="20" y1="10" x2="20" y2="100" stroke="var(--border)" stroke-width="1"/>
+              <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
+              <polyline points="20,80 60,60 100,70 140,30 180,50 220,20" fill="none" stroke="#32a9a9" stroke-width="2"/>
+              <polygon points="20,80 60,60 100,70 140,30 180,50 220,20 220,100 20,100" fill="url(#ag1)"/>
+            </svg>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">Trending up by 5.2% this month</div>
+            <div class="chart-card-period">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Area Chart — Linear -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
-            <defs><linearGradient id="ag2" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#32a9a9" stop-opacity="0.4"/><stop offset="95%" stop-color="#32a9a9" stop-opacity="0.05"/></linearGradient></defs>
-            <line x1="20" y1="10" x2="20" y2="100" stroke="var(--border)" stroke-width="1"/>
-            <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
-            <polyline points="20,75 60,55 100,65 140,35 180,55 220,25" fill="none" stroke="#32a9a9" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
-            <polygon points="20,75 60,55 100,65 140,35 180,55 220,25 220,100 20,100" fill="url(#ag2)"/>
-          </svg>
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Area Chart — Linear</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartAreaLinear } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
         </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Area Chart — Linear</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartAreaLinear } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Area Chart – Linear</div>
+          <div class="chart-card-subtitle">Smooth curved lines with gradient fill</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
+              <defs><linearGradient id="ag2" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#32a9a9" stop-opacity="0.4"/><stop offset="95%" stop-color="#32a9a9" stop-opacity="0.05"/></linearGradient></defs>
+              <line x1="20" y1="10" x2="20" y2="100" stroke="var(--border)" stroke-width="1"/>
+              <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
+              <polyline points="20,75 60,55 100,65 140,35 180,55 220,25" fill="none" stroke="#32a9a9" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+              <polygon points="20,75 60,55 100,65 140,35 180,55 220,25 220,100 20,100" fill="url(#ag2)"/>
+            </svg>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">Trending up by 5.2% this month</div>
+            <div class="chart-card-period">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Area Chart — Step -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Area Chart — Step</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartAreaStep } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Area Chart — Step</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <defs><linearGradient id="ag3" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#32a9a9" stop-opacity="0.4"/><stop offset="95%" stop-color="#32a9a9" stop-opacity="0.05"/></linearGradient></defs>
             <line x1="20" y1="10" x2="20" y2="100" stroke="var(--border)" stroke-width="1"/>
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,80 60,80 60,55 100,55 100,65 140,65 140,30 180,30 180,50 220,50 220,22" fill="none" stroke="#32a9a9" stroke-width="2"/>
             <polygon points="20,80 60,80 60,55 100,55 100,65 140,65 140,30 180,30 180,50 220,50 220,22 220,100 20,100" fill="url(#ag3)"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Area Chart — Step</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartAreaStep } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Area Chart — Stacked -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Area Chart — Stacked</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartAreaStacked } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Area Chart — Stacked</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <defs>
               <linearGradient id="ag4a" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#32a9a9" stop-opacity="0.5"/><stop offset="95%" stop-color="#32a9a9" stop-opacity="0.1"/></linearGradient>
               <linearGradient id="ag4b" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#2a6c6d" stop-opacity="0.5"/><stop offset="95%" stop-color="#2a6c6d" stop-opacity="0.1"/></linearGradient>
@@ -5750,17 +5849,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <polyline points="20,85 60,75 100,78 140,65 180,70 220,55" fill="none" stroke="#2a6c6d" stroke-width="1.5"/>
             <polyline points="20,70 60,55 100,60 140,40 180,50 220,30" fill="none" stroke="#32a9a9" stroke-width="1.5"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Area Chart — Stacked</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartAreaStacked } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Area Chart — Stacked Expand -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Area Chart — Stacked Expand</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartAreaStackedExpand } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Area Chart — Stacked Expand</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <defs>
               <linearGradient id="ag5a" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#32a9a9" stop-opacity="0.6"/><stop offset="95%" stop-color="#32a9a9" stop-opacity="0.2"/></linearGradient>
               <linearGradient id="ag5b" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#2a6c6d" stop-opacity="0.6"/><stop offset="95%" stop-color="#2a6c6d" stop-opacity="0.2"/></linearGradient>
@@ -5771,17 +5877,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <polygon points="20,10 60,15 100,18 140,12 180,20 220,10 220,55 180,50 140,48 100,52 60,50 20,50" fill="url(#ag5b)"/>
             <polyline points="20,50 60,50 100,52 140,48 180,50 220,55" fill="none" stroke="#2a6c6d" stroke-width="1.5"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Area Chart — Stacked Expand</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartAreaStackedExpand } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Area Chart — Legend -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Area Chart — Legend</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartAreaLegend } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Area Chart — Legend</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <defs><linearGradient id="ag6" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#32a9a9" stop-opacity="0.4"/><stop offset="95%" stop-color="#32a9a9" stop-opacity="0.05"/></linearGradient></defs>
             <line x1="20" y1="10" x2="20" y2="95" stroke="var(--border)" stroke-width="1"/>
             <line x1="20" y1="95" x2="230" y2="95" stroke="var(--border)" stroke-width="1"/>
@@ -5792,17 +5905,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <rect x="100" y="105" width="8" height="6" rx="2" fill="#2a6c6d"/>
             <text x="112" y="111" font-size="8" fill="var(--muted-foreground)">Mobile</text>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Area Chart — Legend</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartAreaLegend } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Area Chart — Icons -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Area Chart — Icons</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartAreaIcons } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Area Chart — Icons</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <defs><linearGradient id="ag7" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#32a9a9" stop-opacity="0.4"/><stop offset="95%" stop-color="#32a9a9" stop-opacity="0.05"/></linearGradient></defs>
             <line x1="20" y1="10" x2="20" y2="95" stroke="var(--border)" stroke-width="1"/>
             <line x1="20" y1="95" x2="230" y2="95" stroke="var(--border)" stroke-width="1"/>
@@ -5813,34 +5933,48 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <circle cx="105" cy="107" r="5" fill="none" stroke="#2a6c6d" stroke-width="1.5"/>
             <text x="113" y="111" font-size="8" fill="var(--muted-foreground)">Mobile</text>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Area Chart — Icons</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartAreaIcons } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Area Chart — Gradient -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Area Chart — Gradient</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartAreaGradient } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Area Chart — Gradient</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <defs><linearGradient id="ag8" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#32a9a9" stop-opacity="0.8"/><stop offset="100%" stop-color="#32a9a9" stop-opacity="0"/></linearGradient></defs>
             <line x1="20" y1="10" x2="20" y2="100" stroke="var(--border)" stroke-width="1"/>
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polygon points="20,80 60,55 100,68 140,28 180,48 220,18 220,100 20,100" fill="url(#ag8)"/>
             <polyline points="20,80 60,55 100,68 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Area Chart — Gradient</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartAreaGradient } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Area Chart — Axes -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Area Chart — Axes</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartAreaAxes } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Area Chart — Axes</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <defs><linearGradient id="ag9" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#32a9a9" stop-opacity="0.4"/><stop offset="95%" stop-color="#32a9a9" stop-opacity="0.05"/></linearGradient></defs>
             <line x1="35" y1="10" x2="35" y2="95" stroke="var(--border)" stroke-width="1"/>
             <line x1="35" y1="95" x2="230" y2="95" stroke="var(--border)" stroke-width="1"/>
@@ -5852,17 +5986,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <polyline points="35,78 75,58 115,68 155,33 195,52 228,22" fill="none" stroke="#32a9a9" stroke-width="2"/>
             <polygon points="35,78 75,58 115,68 155,33 195,52 228,22 228,95 35,95" fill="url(#ag9)"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Area Chart — Axes</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartAreaAxes } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Area Chart — Interactive -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Area Chart — Interactive</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartAreaInteractive } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Area Chart — Interactive</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <defs>
               <linearGradient id="ag10a" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#32a9a9" stop-opacity="0.4"/><stop offset="95%" stop-color="#32a9a9" stop-opacity="0.05"/></linearGradient>
               <linearGradient id="ag10b" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#2a6c6d" stop-opacity="0.4"/><stop offset="95%" stop-color="#2a6c6d" stop-opacity="0.05"/></linearGradient>
@@ -5877,25 +6018,35 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <circle cx="140" cy="30" r="3" fill="#32a9a9"/>
             <circle cx="140" cy="52" r="3" fill="#2a6c6d"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Area Chart — Interactive</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartAreaInteractive } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
-    </div>
   </div>
+</div>
 
-  <!-- ══ BAR CHARTS ══ -->
-  <div class="section">
-    <div class="section-title">Bar Charts</div>
-    <div class="chart-grid">
+<!-- ══ BAR PAGE ══ -->
+<div id="chart-page-bar" class="chart-page">
+  <div class="chart-page-header">
+    <div class="chart-page-title">Bar Charts</div>
+    <div class="chart-page-desc">Vertical, horizontal, stacked, multiple and interactive bar chart variants.</div>
+  </div>
+  <div class="chart-cards-grid">
 
       <!-- Bar Chart — Default -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Bar Chart — Default</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartBarDefault } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Bar Chart — Default</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="10" x2="20" y2="100" stroke="var(--border)" stroke-width="1"/>
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <rect x="28" y="45" width="22" height="55" rx="2" fill="#32a9a9"/>
@@ -5905,17 +6056,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <rect x="164" y="30" width="22" height="70" rx="2" fill="#32a9a9"/>
             <rect x="198" y="28" width="22" height="72" rx="2" fill="#32a9a9"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Bar Chart — Default</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartBarDefault } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Bar Chart — Horizontal -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Bar Chart — Horizontal</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartBarHorizontal } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Bar Chart — Horizontal</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="10" x2="20" y2="110" stroke="var(--border)" stroke-width="1"/>
             <line x1="20" y1="110" x2="230" y2="110" stroke="var(--border)" stroke-width="1"/>
             <rect x="21" y="15" width="80" height="14" rx="2" fill="#32a9a9"/>
@@ -5924,17 +6082,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <rect x="21" y="75" width="40" height="14" rx="2" fill="#32a9a9"/>
             <rect x="21" y="95" width="110" height="14" rx="2" fill="#32a9a9"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Bar Chart — Horizontal</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartBarHorizontal } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Bar Chart — Multiple -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Bar Chart — Multiple</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartBarMultiple } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Bar Chart — Multiple</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="10" x2="20" y2="100" stroke="var(--border)" stroke-width="1"/>
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <rect x="27" y="45" width="14" height="55" rx="1" fill="#32a9a9"/>
@@ -5948,17 +6113,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <rect x="175" y="30" width="14" height="70" rx="1" fill="#32a9a9"/>
             <rect x="191" y="45" width="14" height="55" rx="1" fill="#2a6c6d"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Bar Chart — Multiple</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartBarMultiple } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Bar Chart — Label -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Bar Chart — Label</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartBarLabel } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Bar Chart — Label</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="10" x2="20" y2="100" stroke="var(--border)" stroke-width="1"/>
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <rect x="28" y="45" width="22" height="55" rx="2" fill="#32a9a9"/>
@@ -5974,17 +6146,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <rect x="198" y="28" width="22" height="72" rx="2" fill="#32a9a9"/>
             <text x="209" y="24" font-size="8" fill="var(--muted-foreground)" text-anchor="middle">214</text>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Bar Chart — Label</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartBarLabel } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Bar Chart — Label Custom -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Bar Chart — Label Custom</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartBarLabelCustom } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Bar Chart — Label Custom</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <rect x="28" y="45" width="22" height="55" rx="2" fill="#32a9a9"/>
             <rect x="28" y="38" width="22" height="10" rx="2" fill="#2a6c6d"/>
@@ -5999,17 +6178,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <rect x="198" y="28" width="22" height="72" rx="2" fill="#32a9a9"/>
             <rect x="198" y="21" width="22" height="10" rx="2" fill="#2a6c6d"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Bar Chart — Label Custom</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartBarLabelCustom } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Bar Chart — Mixed -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Bar Chart — Mixed</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartBarMixed } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Bar Chart — Mixed</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <rect x="28" y="45" width="22" height="55" rx="2" fill="#32a9a9"/>
             <rect x="62" y="20" width="22" height="80" rx="2" fill="#2a6c6d"/>
@@ -6018,17 +6204,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <rect x="164" y="30" width="22" height="70" rx="2" fill="#32a9a9"/>
             <rect x="198" y="28" width="22" height="72" rx="2" fill="#2a6c6d"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Bar Chart — Mixed</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartBarMixed } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Bar Chart — Stacked -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Bar Chart — Stacked</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartBarStacked } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Bar Chart — Stacked</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <rect x="28" y="65" width="22" height="35" rx="1" fill="#32a9a9"/>
             <rect x="28" y="45" width="22" height="20" rx="1" fill="#2a6c6d"/>
@@ -6043,17 +6236,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <rect x="198" y="42" width="22" height="58" rx="1" fill="#32a9a9"/>
             <rect x="198" y="22" width="22" height="20" rx="1" fill="#2a6c6d"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Bar Chart — Stacked</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartBarStacked } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Bar Chart — Active -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Bar Chart — Active</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartBarActive } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Bar Chart — Active</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <rect x="28" y="45" width="22" height="55" rx="2" fill="#32a9a9" opacity="0.4"/>
             <rect x="62" y="20" width="22" height="80" rx="2" fill="#32a9a9"/>
@@ -6062,17 +6262,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <rect x="164" y="30" width="22" height="70" rx="2" fill="#32a9a9" opacity="0.4"/>
             <rect x="198" y="28" width="22" height="72" rx="2" fill="#32a9a9" opacity="0.4"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Bar Chart — Active</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartBarActive } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Bar Chart — Negative -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Bar Chart — Negative</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartBarNegative } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Bar Chart — Negative</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="60" x2="230" y2="60" stroke="var(--border)" stroke-width="1"/>
             <rect x="28" y="30" width="22" height="30" rx="2" fill="#32a9a9"/>
             <rect x="62" y="60" width="22" height="40" rx="2" fill="#2a6c6d" opacity="0.7"/>
@@ -6081,17 +6288,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <rect x="164" y="35" width="22" height="25" rx="2" fill="#32a9a9"/>
             <rect x="198" y="60" width="22" height="35" rx="2" fill="#2a6c6d" opacity="0.7"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Bar Chart — Negative</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartBarNegative } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Bar Chart — Interactive -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Bar Chart — Interactive</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartBarInteractive } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Bar Chart — Interactive</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <rect x="28" y="45" width="14" height="55" rx="1" fill="#32a9a9"/>
             <rect x="44" y="60" width="14" height="40" rx="1" fill="#2a6c6d"/>
@@ -6107,85 +6321,123 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <rect x="55" y="5" width="50" height="22" rx="3" fill="var(--card)" stroke="var(--border)" stroke-width="0.5"/>
             <text x="80" y="20" font-size="7" fill="var(--foreground)" text-anchor="middle">305 / 265</text>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Bar Chart — Interactive</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartBarInteractive } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
-    </div>
   </div>
+</div>
 
-  <!-- ══ LINE CHARTS ══ -->
-  <div class="section">
-    <div class="section-title">Line Charts</div>
-    <div class="chart-grid">
+<!-- ══ LINE PAGE ══ -->
+<div id="chart-page-line" class="chart-page">
+  <div class="chart-page-header">
+    <div class="chart-page-title">Line Charts</div>
+    <div class="chart-page-desc">Default, step, multiple, dots, labels and interactive line chart variants.</div>
+  </div>
+  <div class="chart-cards-grid">
 
       <!-- Line Chart — Default -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Line Chart — Default</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartLineDefault } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Line Chart — Default</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="10" x2="20" y2="100" stroke="var(--border)" stroke-width="1"/>
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Line Chart — Default</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartLineDefault } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Line Chart — Linear -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Line Chart — Linear</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartLineLinear } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Line Chart — Linear</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="10" x2="20" y2="100" stroke="var(--border)" stroke-width="1"/>
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Line Chart — Linear</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartLineLinear } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Line Chart — Step -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Line Chart — Step</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartLineStep } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Line Chart — Step</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="10" x2="20" y2="100" stroke="var(--border)" stroke-width="1"/>
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,75 60,55 100,55 100,65 140,65 140,28 180,28 180,48 220,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Line Chart — Step</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartLineStep } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Line Chart — Multiple -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Line Chart — Multiple</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartLineMultiple } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Line Chart — Multiple</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
             <polyline points="20,85 60,68 100,74 140,52 180,62 220,42" fill="none" stroke="#2a6c6d" stroke-width="2"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Line Chart — Multiple</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartLineMultiple } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Line Chart — Dots -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Line Chart — Dots</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartLineDots } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Line Chart — Dots</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
             <circle cx="20" cy="75" r="3.5" fill="#32a9a9"/>
@@ -6195,17 +6447,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <circle cx="180" cy="48" r="3.5" fill="#32a9a9"/>
             <circle cx="220" cy="18" r="3.5" fill="#32a9a9"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Line Chart — Dots</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartLineDots } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Line Chart — Dots Custom -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Line Chart — Dots Custom</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartLineDotsCustom } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Line Chart — Dots Custom</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
             <circle cx="20" cy="75" r="5" fill="var(--background)" stroke="#32a9a9" stroke-width="2"/>
@@ -6215,34 +6474,48 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <circle cx="180" cy="48" r="5" fill="var(--background)" stroke="#32a9a9" stroke-width="2"/>
             <circle cx="220" cy="18" r="5" fill="var(--background)" stroke="#32a9a9" stroke-width="2"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Line Chart — Dots Custom</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartLineDotsCustom } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Line Chart — Label -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Line Chart — Label</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartLineLabel } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Line Chart — Label</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
             <circle cx="140" cy="28" r="3" fill="#32a9a9"/>
             <rect x="126" y="12" width="28" height="12" rx="2" fill="#32a9a9"/>
             <text x="140" y="21" font-size="7" fill="white" text-anchor="middle">305</text>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Line Chart — Label</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartLineLabel } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Line Chart — Label Custom -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Line Chart — Label Custom</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartLineLabelCustom } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Line Chart — Label Custom</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
             <circle cx="60" cy="55" r="3" fill="#32a9a9"/>
@@ -6252,17 +6525,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <rect x="204" y="4" width="32" height="12" rx="3" fill="var(--card)" stroke="var(--border)" stroke-width="0.5"/>
             <text x="220" y="13" font-size="7" fill="var(--foreground)" text-anchor="middle">214</text>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Line Chart — Label Custom</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartLineLabelCustom } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Line Chart — Dots Colors -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Line Chart — Dots Colors</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartLineDotsColors } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Line Chart — Dots Colors</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
             <circle cx="20" cy="75" r="4" fill="#2a6c6d"/>
@@ -6272,17 +6552,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <circle cx="180" cy="48" r="4" fill="#32a9a9"/>
             <circle cx="220" cy="18" r="4" fill="#6dcece"/>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Line Chart — Dots Colors</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartLineDotsColors } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Line Chart — Interactive -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Line Chart — Interactive</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartLineInteractive } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Line Chart — Interactive</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
             <polyline points="20,85 60,68 100,74 140,52 180,62 220,42" fill="none" stroke="#2a6c6d" stroke-width="2"/>
@@ -6292,42 +6579,59 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <rect x="108" y="55" width="44" height="22" rx="3" fill="var(--card)" stroke="var(--border)" stroke-width="0.5"/>
             <text x="130" y="66" font-size="7" fill="var(--foreground)" text-anchor="middle">237 / 190</text>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Line Chart — Interactive</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartLineInteractive } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
-    </div>
   </div>
+</div>
 
-  <!-- ══ PIE CHARTS ══ -->
-  <div class="section">
-    <div class="section-title">Pie Charts</div>
-    <div class="chart-grid">
+<!-- ══ PIE PAGE ══ -->
+<div id="chart-page-pie" class="chart-page">
+  <div class="chart-page-header">
+    <div class="chart-page-title">Pie Charts</div>
+    <div class="chart-page-desc">Simple, labeled, donut, stacked and interactive pie chart variants.</div>
+  </div>
+  <div class="chart-cards-grid">
 
       <!-- Pie Chart — Simple -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Pie Chart — Simple</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartPieSimple } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Pie Chart — Simple</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,60)">
               <path d="M0,-48 A48,48 0 0,1 41.6,23 L0,0 Z" fill="#32a9a9"/>
               <path d="M41.6,23 A48,48 0 0,1 -41.6,23 L0,0 Z" fill="#2a6c6d"/>
               <path d="M-41.6,23 A48,48 0 0,1 0,-48 L0,0 Z" fill="#4dbcbc"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Pie Chart — Simple</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartPieSimple } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Pie Chart — Label -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Pie Chart — Label</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartPieLabel } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Pie Chart — Label</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,60)">
               <path d="M0,-44 A44,44 0 0,1 38.1,22 L0,0 Z" fill="#32a9a9"/>
               <path d="M38.1,22 A44,44 0 0,1 -38.1,22 L0,0 Z" fill="#2a6c6d"/>
@@ -6337,17 +6641,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <text x="-22" y="-8" font-size="8" fill="var(--foreground)" text-anchor="middle">25%</text>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Pie Chart — Label</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartPieLabel } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Pie Chart — Label Custom -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Pie Chart — Label Custom</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartPieLabelCustom } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Pie Chart — Label Custom</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,60)">
               <path d="M0,-44 A44,44 0 0,1 38.1,22 L0,0 Z" fill="#32a9a9"/>
               <path d="M38.1,22 A44,44 0 0,1 -38.1,22 L0,0 Z" fill="#2a6c6d"/>
@@ -6358,17 +6669,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <text x="54" y="47" font-size="7" fill="var(--muted-foreground)">Safari</text>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Pie Chart — Label Custom</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartPieLabelCustom } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Pie Chart — Label List -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Pie Chart — Label List</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartPieLabelList } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Pie Chart — Label List</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(85,60)">
               <path d="M0,-44 A44,44 0 0,1 38.1,22 L0,0 Z" fill="#32a9a9"/>
               <path d="M38.1,22 A44,44 0 0,1 -38.1,22 L0,0 Z" fill="#2a6c6d"/>
@@ -6384,17 +6702,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <text x="157" y="79" font-size="8" fill="var(--foreground)">Firefox</text>
             <text x="157" y="88" font-size="7" fill="var(--muted-foreground)">25%</text>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Pie Chart — Label List</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartPieLabelList } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Pie Chart — Legend -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Pie Chart — Legend</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartPieLegend } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Pie Chart — Legend</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,55)">
               <path d="M0,-44 A44,44 0 0,1 38.1,22 L0,0 Z" fill="#32a9a9"/>
               <path d="M38.1,22 A44,44 0 0,1 -38.1,22 L0,0 Z" fill="#2a6c6d"/>
@@ -6407,68 +6732,96 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <rect x="178" y="107" width="8" height="6" rx="1" fill="#4dbcbc"/>
             <text x="190" y="113" font-size="7" fill="var(--muted-foreground)">FF</text>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Pie Chart — Legend</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartPieLegend } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Pie Chart — Separator None -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Pie Chart — Separator None</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartPieSeparatorNone } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Pie Chart — Separator None</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,60)">
               <path d="M0,-48 A48,48 0 0,1 41.6,23 L0,0 Z" fill="#32a9a9"/>
               <path d="M41.6,23 A48,48 0 0,1 -41.6,23 L0,0 Z" fill="#2a6c6d"/>
               <path d="M-41.6,23 A48,48 0 0,1 0,-48 L0,0 Z" fill="#4dbcbc"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Pie Chart — Separator None</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartPieSeparatorNone } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Pie Chart — Donut -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Pie Chart — Donut</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartPieDonut } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Pie Chart — Donut</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,60)">
               <path d="M0,-48 A48,48 0 0,1 41.6,23 L24,13 A28,28 0 0,0 0,-28 Z" fill="#32a9a9"/>
               <path d="M41.6,23 A48,48 0 0,1 -41.6,23 L-24,13 A28,28 0 0,0 24,13 Z" fill="#2a6c6d"/>
               <path d="M-41.6,23 A48,48 0 0,1 0,-48 L0,-28 A28,28 0 0,0 -24,13 Z" fill="#4dbcbc"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Pie Chart — Donut</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartPieDonut } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Pie Chart — Donut Active -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Pie Chart — Donut Active</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartPieDonutActive } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Pie Chart — Donut Active</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,60)">
               <path d="M0,-52 A52,52 0 0,1 45,26 L26,15 A30,30 0 0,0 0,-30 Z" fill="#32a9a9"/>
               <path d="M41.6,23 A48,48 0 0,1 -41.6,23 L-24,13 A28,28 0 0,0 24,13 Z" fill="#2a6c6d" opacity="0.7"/>
               <path d="M-41.6,23 A48,48 0 0,1 0,-48 L0,-28 A28,28 0 0,0 -24,13 Z" fill="#4dbcbc" opacity="0.7"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Pie Chart — Donut Active</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartPieDonutActive } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Pie Chart — Donut Text -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Pie Chart — Donut Text</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartPieDonutText } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Pie Chart — Donut Text</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,60)">
               <path d="M0,-48 A48,48 0 0,1 41.6,23 L24,13 A28,28 0 0,0 0,-28 Z" fill="#32a9a9"/>
               <path d="M41.6,23 A48,48 0 0,1 -41.6,23 L-24,13 A28,28 0 0,0 24,13 Z" fill="#2a6c6d"/>
@@ -6477,17 +6830,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <text x="0" y="9" font-size="8" fill="var(--muted-foreground)" text-anchor="middle">Visitors</text>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Pie Chart — Donut Text</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartPieDonutText } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Pie Chart — Stacked -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Pie Chart — Stacked</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartPieStacked } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Pie Chart — Stacked</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(90,60)">
               <path d="M0,-42 A42,42 0 0,1 36.4,21 L21,12 A24,24 0 0,0 0,-24 Z" fill="#32a9a9"/>
               <path d="M36.4,21 A42,42 0 0,1 -36.4,21 L-21,12 A24,24 0 0,0 21,12 Z" fill="#2a6c6d"/>
@@ -6499,17 +6859,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <path d="M-32.9,19 A38,38 0 0,1 0,-38 L0,-20 A20,20 0 0,0 -18,11 Z" fill="#6dcece" opacity="0.7"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Pie Chart — Stacked</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartPieStacked } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Pie Chart — Interactive -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Pie Chart — Interactive</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartPieInteractive } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Pie Chart — Interactive</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,60)">
               <path d="M0,-52 A52,52 0 0,1 45,26 L26,15 A30,30 0 0,0 0,-30 Z" fill="#32a9a9"/>
               <path d="M41.6,23 A48,48 0 0,1 -41.6,23 L-24,13 A28,28 0 0,0 24,13 Z" fill="#2a6c6d"/>
@@ -6518,25 +6885,35 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <text x="0" y="9" font-size="7" fill="var(--muted-foreground)" text-anchor="middle">Chrome</text>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Pie Chart — Interactive</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartPieInteractive } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
-    </div>
   </div>
+</div>
 
-  <!-- ══ RADAR CHARTS ══ -->
-  <div class="section">
-    <div class="section-title">Radar Charts</div>
-    <div class="chart-grid">
+<!-- ══ RADAR PAGE ══ -->
+<div id="chart-page-radar" class="chart-page">
+  <div class="chart-page-header">
+    <div class="chart-page-title">Radar Charts</div>
+    <div class="chart-page-desc">Default, dots, multiple, grid and legend radar chart variants.</div>
+  </div>
+  <div class="chart-cards-grid">
 
       <!-- Radar Chart — Default -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Radar Chart — Default</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartRadarDefault } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Radar Chart — Default</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,62)">
               <polygon points="0,-50 47,-15 29,40 -29,40 -47,-15" fill="none" stroke="var(--border)" stroke-width="1"/>
               <polygon points="0,-35 33,-11 20,28 -20,28 -33,-11" fill="none" stroke="var(--border)" stroke-width="0.5"/>
@@ -6544,17 +6921,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <polygon points="0,-42 38,-8 18,35 -25,32 -40,-10" fill="#32a9a9" fill-opacity="0.25" stroke="#32a9a9" stroke-width="1.5"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Radar Chart — Default</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartRadarDefault } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Radar Chart — Dots -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Radar Chart — Dots</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartRadarDots } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Radar Chart — Dots</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,62)">
               <polygon points="0,-50 47,-15 29,40 -29,40 -47,-15" fill="none" stroke="var(--border)" stroke-width="1"/>
               <polygon points="0,-35 33,-11 20,28 -20,28 -33,-11" fill="none" stroke="var(--border)" stroke-width="0.5"/>
@@ -6566,17 +6950,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <circle cx="-40" cy="-10" r="3" fill="#32a9a9"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Radar Chart — Dots</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartRadarDots } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Radar Chart — Multiple -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Radar Chart — Multiple</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartRadarMultiple } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Radar Chart — Multiple</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,62)">
               <polygon points="0,-50 47,-15 29,40 -29,40 -47,-15" fill="none" stroke="var(--border)" stroke-width="1"/>
               <polygon points="0,-35 33,-11 20,28 -20,28 -33,-11" fill="none" stroke="var(--border)" stroke-width="0.5"/>
@@ -6584,34 +6975,48 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <polygon points="0,-30 30,-12 22,28 -22,25 -35,-5" fill="#2a6c6d" fill-opacity="0.2" stroke="#2a6c6d" stroke-width="1.5"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Radar Chart — Multiple</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartRadarMultiple } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Radar Chart — Lines Only -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Radar Chart — Lines Only</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartRadarLinesOnly } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Radar Chart — Lines Only</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,62)">
               <polygon points="0,-50 47,-15 29,40 -29,40 -47,-15" fill="none" stroke="var(--border)" stroke-width="1"/>
               <polygon points="0,-35 33,-11 20,28 -20,28 -33,-11" fill="none" stroke="var(--border)" stroke-width="0.5"/>
               <polygon points="0,-42 38,-8 18,35 -25,32 -40,-10" fill="none" stroke="#32a9a9" stroke-width="2"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Radar Chart — Lines Only</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartRadarLinesOnly } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Radar Chart — Label Custom -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Radar Chart — Label Custom</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartRadarLabelCustom } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Radar Chart — Label Custom</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,62)">
               <polygon points="0,-50 47,-15 29,40 -29,40 -47,-15" fill="none" stroke="var(--border)" stroke-width="1"/>
               <polygon points="0,-42 38,-8 18,35 -25,32 -40,-10" fill="#32a9a9" fill-opacity="0.2" stroke="#32a9a9" stroke-width="1.5"/>
@@ -6622,17 +7027,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <text x="-56" y="-13" font-size="7" fill="var(--muted-foreground)" text-anchor="end">May</text>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Radar Chart — Label Custom</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartRadarLabelCustom } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Radar Chart — Radius -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Radar Chart — Radius</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartRadarRadius } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Radar Chart — Radius</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,62)">
               <polygon points="0,-50 47,-15 29,40 -29,40 -47,-15" fill="none" stroke="var(--border)" stroke-width="1"/>
               <polygon points="0,-35 33,-11 20,28 -20,28 -33,-11" fill="none" stroke="var(--border)" stroke-width="0.5"/>
@@ -6641,17 +7053,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <line x1="47" y1="-15" x2="-47" y2="-15" stroke="var(--border)" stroke-width="0.5"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Radar Chart — Radius</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartRadarRadius } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Radar Chart — Icons -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Radar Chart — Icons</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartRadarIcons } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Radar Chart — Icons</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,62)">
               <polygon points="0,-50 47,-15 29,40 -29,40 -47,-15" fill="none" stroke="var(--border)" stroke-width="1"/>
               <polygon points="0,-42 38,-8 18,35 -25,32 -40,-10" fill="#32a9a9" fill-opacity="0.2" stroke="#32a9a9" stroke-width="1.5"/>
@@ -6662,17 +7081,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <circle cx="-56" cy="-13" r="6" fill="var(--muted)" stroke="var(--border)" stroke-width="0.5"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Radar Chart — Icons</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartRadarIcons } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Radar Chart — Grid Circle -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Radar Chart — Grid Circle</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartRadarGridCircle } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Radar Chart — Grid Circle</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,62)">
               <circle cx="0" cy="0" r="50" fill="none" stroke="var(--border)" stroke-width="1"/>
               <circle cx="0" cy="0" r="35" fill="none" stroke="var(--border)" stroke-width="0.5"/>
@@ -6680,17 +7106,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <polygon points="0,-42 38,-8 18,35 -25,32 -40,-10" fill="#32a9a9" fill-opacity="0.2" stroke="#32a9a9" stroke-width="1.5"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Radar Chart — Grid Circle</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartRadarGridCircle } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Radar Chart — Grid Circle No Lines -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Radar Chart — Grid Circle No Lines</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartRadarGridCircleNoLines } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Radar Chart — Grid Circle No Lines</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,62)">
               <circle cx="0" cy="0" r="50" fill="none" stroke="var(--border)" stroke-width="1"/>
               <circle cx="0" cy="0" r="35" fill="none" stroke="var(--border)" stroke-width="0.5"/>
@@ -6698,17 +7131,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <polygon points="0,-42 38,-8 18,35 -25,32 -40,-10" fill="#32a9a9" fill-opacity="0.25" stroke="#32a9a9" stroke-width="1.5"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Radar Chart — Grid Circle No Lines</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartRadarGridCircleNoLines } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Radar Chart — Grid Circle Fill -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Radar Chart — Grid Circle Fill</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartRadarGridCircleFill } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Radar Chart — Grid Circle Fill</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,62)">
               <circle cx="0" cy="0" r="50" fill="var(--muted)" fill-opacity="0.3" stroke="var(--border)" stroke-width="1"/>
               <circle cx="0" cy="0" r="35" fill="var(--background)" fill-opacity="0.5" stroke="var(--border)" stroke-width="0.5"/>
@@ -6716,66 +7156,94 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <polygon points="0,-42 38,-8 18,35 -25,32 -40,-10" fill="#32a9a9" fill-opacity="0.3" stroke="#32a9a9" stroke-width="1.5"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Radar Chart — Grid Circle Fill</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartRadarGridCircleFill } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Radar Chart — Grid Custom -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Radar Chart — Grid Custom</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartRadarGridCustom } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Radar Chart — Grid Custom</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,62)">
               <polygon points="0,-50 47,-15 29,40 -29,40 -47,-15" fill="none" stroke="var(--border)" stroke-width="1" stroke-dasharray="4,2"/>
               <polygon points="0,-35 33,-11 20,28 -20,28 -33,-11" fill="none" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="4,2"/>
               <polygon points="0,-42 38,-8 18,35 -25,32 -40,-10" fill="#32a9a9" fill-opacity="0.2" stroke="#32a9a9" stroke-width="1.5"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Radar Chart — Grid Custom</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartRadarGridCustom } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Radar Chart — Grid Fill -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Radar Chart — Grid Fill</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartRadarGridFill } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Radar Chart — Grid Fill</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,62)">
               <polygon points="0,-50 47,-15 29,40 -29,40 -47,-15" fill="var(--muted)" fill-opacity="0.3" stroke="var(--border)" stroke-width="1"/>
               <polygon points="0,-35 33,-11 20,28 -20,28 -33,-11" fill="var(--background)" fill-opacity="0.5" stroke="var(--border)" stroke-width="0.5"/>
               <polygon points="0,-42 38,-8 18,35 -25,32 -40,-10" fill="#32a9a9" fill-opacity="0.3" stroke="#32a9a9" stroke-width="1.5"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Radar Chart — Grid Fill</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartRadarGridFill } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Radar Chart — Grid None -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Radar Chart — Grid None</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartRadarGridNone } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Radar Chart — Grid None</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,62)">
               <polygon points="0,-42 38,-8 18,35 -25,32 -40,-10" fill="#32a9a9" fill-opacity="0.25" stroke="#32a9a9" stroke-width="2"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Radar Chart — Grid None</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartRadarGridNone } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Radar Chart — Legend -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Radar Chart — Legend</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartRadarLegend } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Radar Chart — Legend</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,55)">
               <polygon points="0,-50 47,-15 29,40 -29,40 -47,-15" fill="none" stroke="var(--border)" stroke-width="1"/>
               <polygon points="0,-42 38,-8 18,35 -25,32 -40,-10" fill="#32a9a9" fill-opacity="0.2" stroke="#32a9a9" stroke-width="1.5"/>
@@ -6786,41 +7254,58 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <rect x="130" y="108" width="8" height="6" rx="1" fill="#2a6c6d"/>
             <text x="142" y="114" font-size="7" fill="var(--muted-foreground)">Mobile</text>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Radar Chart — Legend</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartRadarLegend } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
-    </div>
   </div>
+</div>
 
-  <!-- ══ RADIAL CHARTS ══ -->
-  <div class="section">
-    <div class="section-title">Radial Charts</div>
-    <div class="chart-grid">
+<!-- ══ RADIAL PAGE ══ -->
+<div id="chart-page-radial" class="chart-page">
+  <div class="chart-page-header">
+    <div class="chart-page-title">Radial Charts</div>
+    <div class="chart-page-desc">Simple, grid, text, shape, stacked and label radial chart variants.</div>
+  </div>
+  <div class="chart-cards-grid">
 
       <!-- Radial Chart — Simple -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Radial Chart — Simple</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartRadialSimple } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Radial Chart — Simple</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,70)">
               <path d="M-50,0 A50,50 0 0,1 25,-43" fill="none" stroke="var(--border)" stroke-width="10" stroke-linecap="round"/>
               <path d="M-50,0 A50,50 0 0,1 25,-43" fill="none" stroke="#32a9a9" stroke-width="10" stroke-linecap="round" stroke-dasharray="110 157" stroke-dashoffset="0"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Radial Chart — Simple</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartRadialSimple } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Radial Chart — Grid -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Radial Chart — Grid</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartRadialGrid } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Radial Chart — Grid</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,70)">
               <circle cx="0" cy="0" r="50" fill="none" stroke="var(--border)" stroke-width="0.5"/>
               <circle cx="0" cy="0" r="38" fill="none" stroke="var(--border)" stroke-width="0.5"/>
@@ -6829,17 +7314,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <path d="M-38,0 A38,38 0 0,1 19,-33" fill="none" stroke="#2a6c6d" stroke-width="8" stroke-linecap="round"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Radial Chart — Grid</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartRadialGrid } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Radial Chart — Text -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Radial Chart — Text</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartRadialText } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Radial Chart — Text</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,68)">
               <circle cx="0" cy="0" r="50" fill="none" stroke="var(--border)" stroke-width="10"/>
               <path d="M0,-50 A50,50 0 1,1 -48,10" fill="none" stroke="#32a9a9" stroke-width="10" stroke-linecap="round"/>
@@ -6847,17 +7339,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <text x="0" y="10" font-size="8" fill="var(--muted-foreground)" text-anchor="middle">Goal</text>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Radial Chart — Text</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartRadialText } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Radial Chart — Shape -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Radial Chart — Shape</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartRadialShape } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Radial Chart — Shape</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,68)">
               <path d="M0,-50 A50,50 0 0,1 50,0 L35,0 A35,35 0 0,0 0,-35 Z" fill="#32a9a9" fill-opacity="0.8"/>
               <path d="M50,0 A50,50 0 0,1 0,50 L0,35 A35,35 0 0,0 35,0 Z" fill="#2a6c6d" fill-opacity="0.8"/>
@@ -6865,17 +7364,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <path d="M-50,0 A50,50 0 0,1 0,-50 L0,-35 A35,35 0 0,0 -35,0 Z" fill="#6dcece" fill-opacity="0.8"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Radial Chart — Shape</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartRadialShape } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Radial Chart — Stacked -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Radial Chart — Stacked</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartRadialStacked } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Radial Chart — Stacked</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,68)">
               <circle cx="0" cy="0" r="50" fill="none" stroke="var(--border)" stroke-width="8"/>
               <path d="M0,-50 A50,50 0 1,1 -48,10" fill="none" stroke="#32a9a9" stroke-width="8" stroke-linecap="round"/>
@@ -6885,17 +7391,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <path d="M0,-26 A26,26 0 0,1 13,22" fill="none" stroke="#4dbcbc" stroke-width="8" stroke-linecap="round"/>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Radial Chart — Stacked</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartRadialStacked } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Radial Chart — Label -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Radial Chart — Label</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartRadialLabel } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Radial Chart — Label</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,68)">
               <circle cx="0" cy="0" r="50" fill="none" stroke="var(--border)" stroke-width="10"/>
               <path d="M0,-50 A50,50 0 1,1 -30,40" fill="none" stroke="#32a9a9" stroke-width="10" stroke-linecap="round"/>
@@ -6903,25 +7416,35 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <text x="0" y="10" font-size="8" fill="var(--muted-foreground)" text-anchor="middle">Visitors</text>
             </g>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Radial Chart — Label</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartRadialLabel } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
-    </div>
   </div>
+</div>
 
-  <!-- ══ TOOLTIP ══ -->
-  <div class="section">
-    <div class="section-title">Tooltip</div>
-    <div class="chart-grid">
+<!-- ══ TOOLTIP PAGE ══ -->
+<div id="chart-page-tooltip" class="chart-page">
+  <div class="chart-page-header">
+    <div class="chart-page-title">Tooltip</div>
+    <div class="chart-page-desc">Default, indicator, label, icons, formatter and advanced tooltip variants.</div>
+  </div>
+  <div class="chart-cards-grid">
 
       <!-- Tooltip — Default -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Tooltip — Default</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartTooltipDefault } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Tooltip — Default</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
             <line x1="100" y1="15" x2="100" y2="100" stroke="var(--muted-foreground)" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
@@ -6930,17 +7453,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <rect x="114" y="57" width="6" height="6" rx="1" fill="#32a9a9"/>
             <text x="124" y="63" font-size="7" fill="var(--muted-foreground)">Desktop: 237</text>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Tooltip — Default</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartTooltipDefault } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Tooltip — Indicator Line -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Tooltip — Indicator Line</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartTooltipIndicatorLine } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Tooltip — Indicator Line</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
             <polyline points="20,85 60,68 100,74 140,52 180,62 220,42" fill="none" stroke="#2a6c6d" stroke-width="2"/>
@@ -6952,17 +7482,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <line x1="154" y1="40" x2="154" y2="54" stroke="#2a6c6d" stroke-width="2"/>
             <text x="159" y="49" font-size="7" fill="var(--muted-foreground)">Mobile: 65</text>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Tooltip — Indicator Line</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartTooltipIndicatorLine } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Tooltip — Indicator None -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Tooltip — Indicator None</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartTooltipIndicatorNone } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Tooltip — Indicator None</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
             <line x1="60" y1="15" x2="60" y2="100" stroke="var(--muted-foreground)" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
@@ -6970,17 +7507,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <text x="97" y="46" font-size="7" font-weight="600" fill="var(--foreground)" text-anchor="middle">February</text>
             <text x="97" y="56" font-size="7" fill="var(--muted-foreground)" text-anchor="middle">305 visitors</text>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Tooltip — Indicator None</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartTooltipIndicatorNone } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Tooltip — Label None -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Tooltip — Label None</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartTooltipLabelNone } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Tooltip — Label None</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
             <line x1="180" y1="15" x2="180" y2="100" stroke="var(--muted-foreground)" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
@@ -6988,17 +7532,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <rect x="124" y="35" width="6" height="6" rx="1" fill="#32a9a9"/>
             <text x="133" y="41" font-size="7" fill="var(--foreground)">Desktop: 209</text>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Tooltip — Label None</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartTooltipLabelNone } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Tooltip — Label Custom -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Tooltip — Label Custom</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartTooltipLabelCustom } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Tooltip — Label Custom</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
             <line x1="100" y1="15" x2="100" y2="100" stroke="var(--muted-foreground)" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
@@ -7008,17 +7559,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <text x="124" y="57" font-size="7" fill="var(--muted-foreground)">Visitors: 237</text>
             <text x="144" y="67" font-size="7" fill="var(--muted-foreground)" text-anchor="middle">+12.5%</text>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Tooltip — Label Custom</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartTooltipLabelCustom } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Tooltip — Label Formatter -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Tooltip — Label Formatter</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartTooltipLabelFormatter } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Tooltip — Label Formatter</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <rect x="28" y="45" width="22" height="55" rx="2" fill="#32a9a9"/>
             <rect x="62" y="20" width="22" height="80" rx="2" fill="#32a9a9"/>
@@ -7030,17 +7588,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <rect x="68" y="17" width="6" height="6" rx="1" fill="#32a9a9"/>
             <text x="77" y="23" font-size="7" fill="var(--muted-foreground)">305 visits</text>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Tooltip — Label Formatter</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartTooltipLabelFormatter } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Tooltip — Icons -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Tooltip — Icons</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartTooltipIcons } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Tooltip — Icons</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
             <line x1="140" y1="15" x2="140" y2="100" stroke="var(--muted-foreground)" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
@@ -7049,17 +7614,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <circle cx="154" cy="37" r="4" fill="none" stroke="#32a9a9" stroke-width="1.5"/>
             <text x="162" y="40" font-size="7" fill="var(--muted-foreground)">73 visits</text>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Tooltip — Icons</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartTooltipIcons } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Tooltip — Formatter -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Tooltip — Formatter</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartTooltipFormatter } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Tooltip — Formatter</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
             <polyline points="20,85 60,68 100,74 140,52 180,62 220,42" fill="none" stroke="#2a6c6d" stroke-width="2"/>
@@ -7073,17 +7645,24 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <text x="83" y="61" font-size="7" fill="var(--foreground)">265</text>
             <text x="110" y="61" font-size="7" fill="var(--muted-foreground)" text-anchor="end">+15%</text>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Tooltip — Formatter</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartTooltipFormatter } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
       <!-- Tooltip — Advanced -->
-      <div class="chart-variant-card">
-        <div class="chart-variant-preview">
-          <svg viewBox="0 0 240 120" width="240" height="120">
+      <div class="chart-card">
+        <div class="chart-card-topbar">
+          <div class="chart-card-label"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> Tooltip — Advanced</div>
+          <div style="display:flex;gap:6px"><button class="copy-btn" onclick="copyCode(this,'import { ChartTooltipAdvanced } from &quot;@waldo/ui/charts&quot;')">Copy</button><button class="chart-view-code-btn">View Code</button></div>
+        </div>
+        <div class="chart-card-inner">
+          <div class="chart-card-title">Tooltip — Advanced</div>
+          <div class="chart-card-subtitle">Chart variant</div>
+          <div class="chart-card-body">
+            <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
             <line x1="180" y1="15" x2="180" y2="100" stroke="var(--muted-foreground)" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
@@ -7100,16 +7679,18 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <text x="101" y="63" font-size="7" fill="var(--muted-foreground)">Total</text>
             <text x="158" y="63" font-size="7" font-weight="600" fill="var(--foreground)" text-anchor="end">391</text>
           </svg>
-        </div>
-        <div class="chart-variant-footer">
-          <span class="chart-variant-name">Tooltip — Advanced</span>
-          <button class="copy-btn" onclick="copyCode(this, 'import { ChartTooltipAdvanced } from &quot;@waldo/ui/charts&quot;')">Copy</button>
+          </div>
+          <div class="chart-card-footer">
+            <div class="chart-card-trend">January – June 2024</div>
+          </div>
         </div>
       </div>
 
-    </div>
   </div>
+</div>
 
+</div><!-- /#wb-charts-main -->
+</div><!-- /#tb-panel-charts -->
 
 <!-- ══ COLLAPSIBLE ══ -->
 <div id="comp-collapsible" class="waldo-page">
