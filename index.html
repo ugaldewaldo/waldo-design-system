@@ -677,6 +677,36 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
     <button class="sb-item" onclick="waldoGo('comp-radio',this)">Radio Group</button>
     <button class="sb-item" onclick="waldoGo('comp-slider',this)">Slider</button>
     <button class="sb-item" onclick="waldoGo('comp-loader',this)">Loader</button>
+    <button class="sb-item" onclick="waldoGo('comp-accordion',this)">Accordion</button>
+    <button class="sb-item" onclick="waldoGo('comp-alert-dialog',this)">Alert Dialog</button>
+    <button class="sb-item" onclick="waldoGo('comp-aspect-ratio',this)">Aspect Ratio</button>
+    <button class="sb-item" onclick="waldoGo('comp-breadcrumb',this)">Breadcrumb</button>
+    <button class="sb-item" onclick="waldoGo('comp-calendar',this)">Calendar</button>
+    <button class="sb-item" onclick="waldoGo('comp-card',this)">Card</button>
+    <button class="sb-item" onclick="waldoGo('comp-carousel',this)">Carousel</button>
+    <button class="sb-item" onclick="waldoGo('comp-chart',this)">Chart</button>
+    <button class="sb-item" onclick="waldoGo('comp-collapsible',this)">Collapsible</button>
+    <button class="sb-item" onclick="waldoGo('comp-combobox',this)">Combobox</button>
+    <button class="sb-item" onclick="waldoGo('comp-context-menu',this)">Context Menu</button>
+    <button class="sb-item" onclick="waldoGo('comp-drawer',this)">Drawer</button>
+    <button class="sb-item" onclick="waldoGo('comp-form',this)">Form</button>
+    <button class="sb-item" onclick="waldoGo('comp-hover-card',this)">Hover Card</button>
+    <button class="sb-item" onclick="waldoGo('comp-input-otp',this)">Input OTP</button>
+    <button class="sb-item" onclick="waldoGo('comp-kbd',this)">Kbd</button>
+    <button class="sb-item" onclick="waldoGo('comp-label',this)">Label</button>
+    <button class="sb-item" onclick="waldoGo('comp-menubar',this)">Menubar</button>
+    <button class="sb-item" onclick="waldoGo('comp-navigation-menu',this)">Navigation Menu</button>
+    <button class="sb-item" onclick="waldoGo('comp-pagination',this)">Pagination</button>
+    <button class="sb-item" onclick="waldoGo('comp-popover',this)">Popover</button>
+    <button class="sb-item" onclick="waldoGo('comp-progress',this)">Progress</button>
+    <button class="sb-item" onclick="waldoGo('comp-resizable',this)">Resizable</button>
+    <button class="sb-item" onclick="waldoGo('comp-scroll-area',this)">Scroll Area</button>
+    <button class="sb-item" onclick="waldoGo('comp-sheet',this)">Sheet</button>
+    <button class="sb-item" onclick="waldoGo('comp-sidebar',this)">Sidebar</button>
+    <button class="sb-item" onclick="waldoGo('comp-skeleton',this)">Skeleton</button>
+    <button class="sb-item" onclick="waldoGo('comp-sonner',this)">Sonner</button>
+    <button class="sb-item" onclick="waldoGo('comp-toggle',this)">Toggle</button>
+    <button class="sb-item" onclick="waldoGo('comp-toggle-group',this)">Toggle Group</button>
   </div>
   <div class="sb-group">
     <div class="sb-group-label">Foundation</div>
@@ -6350,6 +6380,985 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
   </div>
+
+</div>
+
+<!-- ══ ACCORDION ══ -->
+<div id="comp-accordion" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Accordion</div>
+    <div class="page-desc">A vertically stacked set of interactive headings that each reveal a section of content.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="width:400px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+          <details style="border-bottom:1px solid var(--border)" open>
+            <summary style="padding:14px 16px;cursor:pointer;font-size:14px;font-weight:500;color:var(--foreground);list-style:none;display:flex;justify-content:space-between;align-items:center;background:var(--card)">What is Waldo? <span style="color:var(--muted-foreground)">▲</span></summary>
+            <div style="padding:0 16px 14px;font-size:13px;color:var(--muted-foreground);background:var(--card)">Waldo is an AI-powered brand intelligence platform that helps marketing teams track, analyze, and act on brand signals in real time.</div>
+          </details>
+          <details style="border-bottom:1px solid var(--border)">
+            <summary style="padding:14px 16px;cursor:pointer;font-size:14px;font-weight:500;color:var(--foreground);list-style:none;display:flex;justify-content:space-between;align-items:center;background:var(--card)">Is it accessible? <span style="color:var(--muted-foreground)">▼</span></summary>
+            <div style="padding:0 16px 14px;font-size:13px;color:var(--muted-foreground);background:var(--card)">Yes. The accordion follows WAI-ARIA design patterns for disclosure widgets.</div>
+          </details>
+          <details>
+            <summary style="padding:14px 16px;cursor:pointer;font-size:14px;font-weight:500;color:var(--foreground);list-style:none;display:flex;justify-content:space-between;align-items:center;background:var(--card)">Can I use it in a form? <span style="color:var(--muted-foreground)">▼</span></summary>
+            <div style="padding:0 16px 14px;font-size:13px;color:var(--muted-foreground);background:var(--card)">Yes. Accordion items can contain any form elements including inputs, selects, and checkboxes.</div>
+          </details>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;Accordion type="single" collapsible /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Accordion type=&quot;single&quot; collapsible&gt;\n  &lt;AccordionItem value=&quot;item-1&quot;&gt;\n    &lt;AccordionTrigger&gt;What is Waldo?&lt;/AccordionTrigger&gt;\n    &lt;AccordionContent&gt;Waldo is an AI-powered brand intelligence platform.&lt;/AccordionContent&gt;\n  &lt;/AccordionItem&gt;\n&lt;/Accordion&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ALERT DIALOG ══ -->
+<div id="comp-alert-dialog" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Alert Dialog</div>
+    <div class="page-desc">A modal dialog that interrupts the user with important content and expects a response.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="position:relative;width:420px">
+          <div style="position:relative;background:var(--background);opacity:0.4;width:420px;height:160px;border-radius:var(--radius)"></div>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+            <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;width:380px;box-shadow:0 8px 32px rgba(0,0,0,0.4)">
+              <div style="font-size:15px;font-weight:600;color:var(--foreground);margin-bottom:8px">Are you absolutely sure?</div>
+              <div style="font-size:13px;color:var(--muted-foreground);margin-bottom:20px">This action cannot be undone. This will permanently delete your account and remove your data from our servers.</div>
+              <div style="display:flex;gap:8px;justify-content:flex-end">
+                <button style="padding:7px 14px;border-radius:var(--radius);border:1px solid var(--border);background:transparent;color:var(--foreground);font-size:13px;cursor:pointer">Cancel</button>
+                <button style="padding:7px 14px;border-radius:var(--radius);border:none;background:var(--destructive);color:#fff;font-size:13px;cursor:pointer">Delete Account</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;AlertDialog /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;AlertDialog&gt;\n  &lt;AlertDialogTrigger&gt;Delete&lt;/AlertDialogTrigger&gt;\n  &lt;AlertDialogContent&gt;\n    &lt;AlertDialogTitle&gt;Are you absolutely sure?&lt;/AlertDialogTitle&gt;\n    &lt;AlertDialogDescription&gt;This action cannot be undone.&lt;/AlertDialogDescription&gt;\n    &lt;AlertDialogCancel&gt;Cancel&lt;/AlertDialogCancel&gt;\n    &lt;AlertDialogAction&gt;Delete Account&lt;/AlertDialogAction&gt;\n  &lt;/AlertDialogContent&gt;\n&lt;/AlertDialog&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ASPECT RATIO ══ -->
+<div id="comp-aspect-ratio" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Aspect Ratio</div>
+    <div class="page-desc">Displays content within a desired ratio, preventing layout shift.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">16 / 9</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="width:400px">
+          <div style="position:relative;width:100%;padding-top:56.25%;background:var(--muted);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted-foreground);font-size:13px">16 : 9</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;AspectRatio ratio={16 / 9} /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;AspectRatio ratio={16 / 9} className=&quot;bg-muted&quot;&gt;\n  &lt;img src=&quot;...&quot; alt=&quot;Image&quot; className=&quot;object-cover&quot; /&gt;\n&lt;/AspectRatio&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BREADCRUMB ══ -->
+<div id="comp-breadcrumb" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Breadcrumb</div>
+    <div class="page-desc">Displays the path to the current resource using a hierarchy of links.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <nav style="display:flex;align-items:center;gap:6px;font-size:13px">
+          <a href="#" style="color:var(--muted-foreground);text-decoration:none" onclick="return false">Home</a>
+          <span style="color:var(--muted-foreground)">/</span>
+          <a href="#" style="color:var(--muted-foreground);text-decoration:none" onclick="return false">Docs</a>
+          <span style="color:var(--muted-foreground)">/</span>
+          <span style="color:var(--foreground);font-weight:500">Components</span>
+        </nav>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;Breadcrumb /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Breadcrumb&gt;\n  &lt;BreadcrumbList&gt;\n    &lt;BreadcrumbItem&gt;&lt;BreadcrumbLink href=&quot;/&quot;&gt;Home&lt;/BreadcrumbLink&gt;&lt;/BreadcrumbItem&gt;\n    &lt;BreadcrumbSeparator /&gt;\n    &lt;BreadcrumbItem&gt;&lt;BreadcrumbLink href=&quot;/docs&quot;&gt;Docs&lt;/BreadcrumbLink&gt;&lt;/BreadcrumbItem&gt;\n    &lt;BreadcrumbSeparator /&gt;\n    &lt;BreadcrumbItem&gt;&lt;BreadcrumbPage&gt;Components&lt;/BreadcrumbPage&gt;&lt;/BreadcrumbItem&gt;\n  &lt;/BreadcrumbList&gt;\n&lt;/Breadcrumb&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CALENDAR ══ -->
+<div id="comp-calendar" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Calendar</div>
+    <div class="page-desc">A date field component that allows users to enter and edit date.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;width:260px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <button style="background:transparent;border:1px solid var(--border);border-radius:var(--radius);padding:4px 8px;color:var(--foreground);cursor:pointer;font-size:12px">‹</button>
+            <span style="font-size:13px;font-weight:600;color:var(--foreground)">June 2026</span>
+            <button style="background:transparent;border:1px solid var(--border);border-radius:var(--radius);padding:4px 8px;color:var(--foreground);cursor:pointer;font-size:12px">›</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:11px;color:var(--muted-foreground);margin-bottom:4px">
+            <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:12px">
+            <span></span><span></span><span style="padding:5px;color:var(--muted-foreground)">1</span><span style="padding:5px;color:var(--foreground)">2</span><span style="padding:5px;color:var(--foreground)">3</span><span style="padding:5px;color:var(--foreground)">4</span><span style="padding:5px;color:var(--foreground)">5</span>
+            <span style="padding:5px;color:var(--foreground)">6</span><span style="padding:5px;color:var(--foreground)">7</span><span style="padding:5px;color:var(--foreground)">8</span><span style="padding:5px;background:var(--primary);color:#fff;border-radius:50%">9</span><span style="padding:5px;background:var(--accent);color:var(--foreground);border-radius:50%">10</span><span style="padding:5px;color:var(--foreground)">11</span><span style="padding:5px;color:var(--foreground)">12</span>
+            <span style="padding:5px;color:var(--foreground)">13</span><span style="padding:5px;color:var(--foreground)">14</span><span style="padding:5px;color:var(--foreground)">15</span><span style="padding:5px;color:var(--foreground)">16</span><span style="padding:5px;color:var(--foreground)">17</span><span style="padding:5px;color:var(--foreground)">18</span><span style="padding:5px;color:var(--foreground)">19</span>
+            <span style="padding:5px;color:var(--foreground)">20</span><span style="padding:5px;color:var(--foreground)">21</span><span style="padding:5px;color:var(--foreground)">22</span><span style="padding:5px;color:var(--foreground)">23</span><span style="padding:5px;color:var(--foreground)">24</span><span style="padding:5px;color:var(--foreground)">25</span><span style="padding:5px;color:var(--foreground)">26</span>
+            <span style="padding:5px;color:var(--foreground)">27</span><span style="padding:5px;color:var(--foreground)">28</span><span style="padding:5px;color:var(--foreground)">29</span><span style="padding:5px;color:var(--foreground)">30</span>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;Calendar mode="single" /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Calendar mode=&quot;single&quot; selected={date} onSelect={setDate} /&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CARD ══ -->
+<div id="comp-card" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Card</div>
+    <div class="page-desc">Displays a card with header, content, and footer.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);width:320px;overflow:hidden">
+          <div style="padding:20px 20px 0">
+            <div style="font-size:15px;font-weight:600;color:var(--foreground);margin-bottom:4px">Brand Summary</div>
+            <div style="font-size:13px;color:var(--muted-foreground)">Week of June 9, 2026</div>
+          </div>
+          <div style="padding:16px 20px;font-size:13px;color:var(--foreground);line-height:1.6">Your brand mentions increased 14% this week. Sentiment is trending positive across all monitored channels.</div>
+          <div style="padding:0 20px 20px;display:flex;justify-content:flex-end">
+            <button style="padding:7px 16px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius);font-size:13px;cursor:pointer">View Report</button>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;Card /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Card&gt;\n  &lt;CardHeader&gt;\n    &lt;CardTitle&gt;Brand Summary&lt;/CardTitle&gt;\n    &lt;CardDescription&gt;Week of June 9, 2026&lt;/CardDescription&gt;\n  &lt;/CardHeader&gt;\n  &lt;CardContent&gt;Your brand mentions increased 14% this week.&lt;/CardContent&gt;\n  &lt;CardFooter&gt;&lt;Button&gt;View Report&lt;/Button&gt;&lt;/CardFooter&gt;\n&lt;/Card&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CAROUSEL ══ -->
+<div id="comp-carousel" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Carousel</div>
+    <div class="page-desc">A carousel with motion and swipe built using Embla Carousel.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="display:flex;align-items:center;gap:8px;width:400px">
+          <button style="background:var(--card);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--foreground);flex-shrink:0">‹</button>
+          <div style="flex:1;overflow:hidden;border-radius:var(--radius)">
+            <div style="display:flex;gap:12px">
+              <div style="min-width:100%;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;text-align:center">
+                <div style="font-size:28px;font-weight:700;color:var(--foreground)">1</div>
+                <div style="font-size:12px;color:var(--muted-foreground);margin-top:4px">Slide one</div>
+              </div>
+            </div>
+          </div>
+          <button style="background:var(--card);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--foreground);flex-shrink:0">›</button>
+        </div>
+        <div style="display:flex;gap:6px;justify-content:center;margin-top:12px">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--primary)"></span>
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--border)"></span>
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--border)"></span>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;Carousel /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Carousel&gt;\n  &lt;CarouselContent&gt;\n    &lt;CarouselItem&gt;Slide 1&lt;/CarouselItem&gt;\n    &lt;CarouselItem&gt;Slide 2&lt;/CarouselItem&gt;\n    &lt;CarouselItem&gt;Slide 3&lt;/CarouselItem&gt;\n  &lt;/CarouselContent&gt;\n  &lt;CarouselPrevious /&gt;\n  &lt;CarouselNext /&gt;\n&lt;/Carousel&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CHART ══ -->
+<div id="comp-chart" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Chart</div>
+    <div class="page-desc">Beautiful charts built using Recharts with Waldo design tokens.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Bar Chart</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;width:380px">
+          <div style="font-size:13px;font-weight:600;color:var(--foreground);margin-bottom:16px">Brand Mentions — Last 6 Months</div>
+          <div style="display:flex;align-items:flex-end;gap:10px;height:100px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1">
+              <div style="width:100%;background:var(--primary);opacity:0.6;border-radius:3px 3px 0 0;height:48px"></div>
+              <span style="font-size:10px;color:var(--muted-foreground)">Jan</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1">
+              <div style="width:100%;background:var(--primary);opacity:0.7;border-radius:3px 3px 0 0;height:62px"></div>
+              <span style="font-size:10px;color:var(--muted-foreground)">Feb</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1">
+              <div style="width:100%;background:var(--primary);opacity:0.8;border-radius:3px 3px 0 0;height:55px"></div>
+              <span style="font-size:10px;color:var(--muted-foreground)">Mar</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1">
+              <div style="width:100%;background:var(--primary);opacity:0.9;border-radius:3px 3px 0 0;height:78px"></div>
+              <span style="font-size:10px;color:var(--muted-foreground)">Apr</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1">
+              <div style="width:100%;background:var(--primary);border-radius:3px 3px 0 0;height:90px"></div>
+              <span style="font-size:10px;color:var(--muted-foreground)">May</span>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1">
+              <div style="width:100%;background:var(--primary);border-radius:3px 3px 0 0;height:100px"></div>
+              <span style="font-size:10px;color:var(--muted-foreground)">Jun</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;ChartContainer /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;ChartContainer config={chartConfig}&gt;\n  &lt;BarChart data={data}&gt;\n    &lt;Bar dataKey=&quot;mentions&quot; fill=&quot;var(--color-mentions)&quot; /&gt;\n  &lt;/BarChart&gt;\n&lt;/ChartContainer&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ COLLAPSIBLE ══ -->
+<div id="comp-collapsible" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Collapsible</div>
+    <div class="page-desc">An interactive component which expands/collapses a panel.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="width:320px">
+          <details style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden" open>
+            <summary style="padding:12px 16px;cursor:pointer;font-size:13px;font-weight:500;color:var(--foreground);list-style:none;display:flex;justify-content:space-between;align-items:center">
+              @waldo/ui repositories
+              <span style="font-size:11px;background:var(--muted);border-radius:4px;padding:2px 6px;color:var(--muted-foreground)">Toggle</span>
+            </summary>
+            <div style="padding:0 16px 12px;display:flex;flex-direction:column;gap:6px">
+              <div style="padding:8px 10px;background:var(--muted);border-radius:var(--radius);font-size:12px;color:var(--foreground)">@waldo/ui</div>
+              <div style="padding:8px 10px;background:var(--muted);border-radius:var(--radius);font-size:12px;color:var(--foreground)">@waldo/icons</div>
+              <div style="padding:8px 10px;background:var(--muted);border-radius:var(--radius);font-size:12px;color:var(--foreground)">@waldo/tokens</div>
+            </div>
+          </details>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;Collapsible /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Collapsible open={isOpen} onOpenChange={setIsOpen}&gt;\n  &lt;CollapsibleTrigger&gt;Toggle&lt;/CollapsibleTrigger&gt;\n  &lt;CollapsibleContent&gt;Content here&lt;/CollapsibleContent&gt;\n&lt;/Collapsible&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ COMBOBOX ══ -->
+<div id="comp-combobox" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Combobox</div>
+    <div class="page-desc">Autocomplete input and command palette with a list of suggestions.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="position:relative;width:240px">
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);font-size:13px;color:var(--foreground)">
+            <span style="flex:1">Select framework…</span>
+            <span style="color:var(--muted-foreground);font-size:10px">⌄</span>
+          </div>
+          <div style="position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--popover);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;z-index:10;box-shadow:0 4px 16px rgba(0,0,0,0.3)">
+            <div style="padding:6px 8px;border-bottom:1px solid var(--border)">
+              <input style="width:100%;background:transparent;border:none;outline:none;font-size:12px;color:var(--foreground)" placeholder="Search framework…" />
+            </div>
+            <div style="padding:4px">
+              <div style="padding:6px 8px;border-radius:4px;font-size:12px;background:var(--accent);color:var(--foreground)">Next.js ✓</div>
+              <div style="padding:6px 8px;border-radius:4px;font-size:12px;color:var(--foreground)">SvelteKit</div>
+              <div style="padding:6px 8px;border-radius:4px;font-size:12px;color:var(--foreground)">Nuxt.js</div>
+              <div style="padding:6px 8px;border-radius:4px;font-size:12px;color:var(--foreground)">Remix</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;Combobox /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Popover open={open} onOpenChange={setOpen}&gt;\n  &lt;PopoverTrigger asChild&gt;\n    &lt;Button variant=&quot;outline&quot;&gt;Select framework…&lt;/Button&gt;\n  &lt;/PopoverTrigger&gt;\n  &lt;PopoverContent&gt;\n    &lt;Command&gt;\n      &lt;CommandInput placeholder=&quot;Search…&quot; /&gt;\n      &lt;CommandList&gt;\n        &lt;CommandItem&gt;Next.js&lt;/CommandItem&gt;\n      &lt;/CommandList&gt;\n    &lt;/Command&gt;\n  &lt;/PopoverContent&gt;\n&lt;/Popover&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONTEXT MENU ══ -->
+<div id="comp-context-menu" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Context Menu</div>
+    <div class="page-desc">Displays a menu to the user — such as a set of actions or functions — triggered by a right-click.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="position:relative;display:inline-block">
+          <div style="padding:40px 60px;background:var(--muted);border:1px dashed var(--border);border-radius:var(--radius);font-size:12px;color:var(--muted-foreground);text-align:center">Right click here</div>
+          <div style="position:absolute;top:20px;left:80px;background:var(--popover);border:1px solid var(--border);border-radius:var(--radius);min-width:160px;box-shadow:0 4px 16px rgba(0,0,0,0.3);overflow:hidden;z-index:10">
+            <div style="padding:4px">
+              <div style="padding:6px 10px;font-size:12px;color:var(--foreground);border-radius:4px">Back</div>
+              <div style="padding:6px 10px;font-size:12px;color:var(--foreground);border-radius:4px;opacity:0.4">Forward</div>
+              <div style="padding:6px 10px;font-size:12px;color:var(--foreground);border-radius:4px">Reload</div>
+              <div style="height:1px;background:var(--border);margin:4px 0"></div>
+              <div style="padding:6px 10px;font-size:12px;color:var(--foreground);border-radius:4px">Save Page As…</div>
+              <div style="padding:6px 10px;font-size:12px;color:var(--foreground);background:var(--accent);border-radius:4px">Inspect</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;ContextMenu /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;ContextMenu&gt;\n  &lt;ContextMenuTrigger&gt;Right click here&lt;/ContextMenuTrigger&gt;\n  &lt;ContextMenuContent&gt;\n    &lt;ContextMenuItem&gt;Back&lt;/ContextMenuItem&gt;\n    &lt;ContextMenuSeparator /&gt;\n    &lt;ContextMenuItem&gt;Inspect&lt;/ContextMenuItem&gt;\n  &lt;/ContextMenuContent&gt;\n&lt;/ContextMenu&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ DRAWER ══ -->
+<div id="comp-drawer" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Drawer</div>
+    <div class="page-desc">A drawer component for React, built on top of Vaul.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Bottom Drawer</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="position:relative;width:380px;height:220px;background:var(--background);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)">
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.3;font-size:12px;color:var(--foreground)">Page content</div>
+          <div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);border-radius:12px 12px 0 0;padding:16px">
+            <div style="width:40px;height:4px;background:var(--muted-foreground);border-radius:2px;margin:0 auto 16px;opacity:0.4"></div>
+            <div style="font-size:14px;font-weight:600;color:var(--foreground);margin-bottom:6px">Move Goal</div>
+            <div style="font-size:12px;color:var(--muted-foreground);margin-bottom:12px">Adjust your daily activity goal.</div>
+            <button style="width:100%;padding:8px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius);font-size:13px;cursor:pointer">Submit</button>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;Drawer /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Drawer&gt;\n  &lt;DrawerTrigger&gt;Open&lt;/DrawerTrigger&gt;\n  &lt;DrawerContent&gt;\n    &lt;DrawerHeader&gt;\n      &lt;DrawerTitle&gt;Move Goal&lt;/DrawerTitle&gt;\n    &lt;/DrawerHeader&gt;\n    &lt;DrawerFooter&gt;\n      &lt;Button&gt;Submit&lt;/Button&gt;\n    &lt;/DrawerFooter&gt;\n  &lt;/DrawerContent&gt;\n&lt;/Drawer&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FORM ══ -->
+<div id="comp-form" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Form</div>
+    <div class="page-desc">Building forms with React Hook Form and Zod schema validation.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <form style="width:320px;display:flex;flex-direction:column;gap:16px" onsubmit="return false">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label style="font-size:13px;font-weight:500;color:var(--foreground)">Name</label>
+            <input style="padding:8px 12px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);font-size:13px;outline:none" placeholder="Miguel Ugalde" />
+            <span style="font-size:11px;color:var(--muted-foreground)">Your full display name.</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label style="font-size:13px;font-weight:500;color:var(--foreground)">Email</label>
+            <input type="email" style="padding:8px 12px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);font-size:13px;outline:none" placeholder="miguel@waldo.fyi" />
+          </div>
+          <button style="padding:9px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius);font-size:13px;font-weight:500;cursor:pointer">Submit</button>
+        </form>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;Form /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Form {...form}&gt;\n  &lt;FormField name=&quot;name&quot; render={({ field }) =&gt; (\n    &lt;FormItem&gt;\n      &lt;FormLabel&gt;Name&lt;/FormLabel&gt;\n      &lt;FormControl&gt;&lt;Input {...field} /&gt;&lt;/FormControl&gt;\n      &lt;FormDescription&gt;Your full display name.&lt;/FormDescription&gt;\n    &lt;/FormItem&gt;\n  )} /&gt;\n&lt;/Form&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HOVER CARD ══ -->
+<div id="comp-hover-card" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Hover Card</div>
+    <div class="page-desc">For sighted users to preview content available behind a link.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+          <a href="#" style="color:var(--primary);font-size:13px;font-weight:500;text-decoration:underline" onclick="return false">@waldo_fyi</a>
+          <div style="background:var(--popover);border:1px solid var(--border);border-radius:var(--radius);padding:16px;width:280px;box-shadow:0 4px 16px rgba(0,0,0,0.3)">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+              <div style="width:36px;height:36px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700">W</div>
+              <div>
+                <div style="font-size:13px;font-weight:600;color:var(--foreground)">Waldo</div>
+                <div style="font-size:11px;color:var(--muted-foreground)">@waldo_fyi</div>
+              </div>
+            </div>
+            <div style="font-size:12px;color:var(--foreground);line-height:1.5">AI-powered brand intelligence for modern marketing teams.</div>
+            <div style="display:flex;gap:16px;margin-top:10px;font-size:11px;color:var(--muted-foreground)">
+              <span><strong style="color:var(--foreground)">2.4k</strong> Following</span>
+              <span><strong style="color:var(--foreground)">18k</strong> Followers</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;HoverCard /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;HoverCard&gt;\n  &lt;HoverCardTrigger&gt;@waldo_fyi&lt;/HoverCardTrigger&gt;\n  &lt;HoverCardContent&gt;\n    Profile info here\n  &lt;/HoverCardContent&gt;\n&lt;/HoverCard&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ INPUT OTP ══ -->
+<div id="comp-input-otp" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Input OTP</div>
+    <div class="page-desc">Accessible one-time password component with copy paste functionality.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="display:flex;gap:8px;align-items:center">
+          <input maxlength="1" style="width:40px;height:48px;text-align:center;font-size:18px;font-weight:600;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);outline:none" value="1" />
+          <input maxlength="1" style="width:40px;height:48px;text-align:center;font-size:18px;font-weight:600;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);outline:none" value="2" />
+          <input maxlength="1" style="width:40px;height:48px;text-align:center;font-size:18px;font-weight:600;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);outline:none" value="3" />
+          <span style="color:var(--muted-foreground)">—</span>
+          <input maxlength="1" style="width:40px;height:48px;text-align:center;font-size:18px;font-weight:600;background:var(--background);border:2px solid var(--primary);border-radius:var(--radius);color:var(--foreground);outline:none" value="" />
+          <input maxlength="1" style="width:40px;height:48px;text-align:center;font-size:18px;font-weight:600;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);outline:none" value="" />
+          <input maxlength="1" style="width:40px;height:48px;text-align:center;font-size:18px;font-weight:600;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);outline:none" value="" />
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;InputOTP maxLength={6} /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;InputOTP maxLength={6}&gt;\n  &lt;InputOTPGroup&gt;\n    &lt;InputOTPSlot index={0} /&gt;\n    &lt;InputOTPSlot index={1} /&gt;\n    &lt;InputOTPSlot index={2} /&gt;\n  &lt;/InputOTPGroup&gt;\n  &lt;InputOTPSeparator /&gt;\n  &lt;InputOTPGroup&gt;\n    &lt;InputOTPSlot index={3} /&gt;\n    &lt;InputOTPSlot index={4} /&gt;\n    &lt;InputOTPSlot index={5} /&gt;\n  &lt;/InputOTPGroup&gt;\n&lt;/InputOTP&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ KBD ══ -->
+<div id="comp-kbd" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Kbd</div>
+    <div class="page-desc">Keyboard key indicators used to represent keyboard shortcuts and inputs.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+          <kbd style="display:inline-flex;align-items:center;gap:4px;padding:4px 8px;background:var(--muted);border:1px solid var(--border);border-radius:6px;font-size:12px;font-family:monospace;color:var(--foreground);box-shadow:0 2px 0 var(--border)">⌘K</kbd>
+          <kbd style="display:inline-flex;align-items:center;gap:4px;padding:4px 8px;background:var(--muted);border:1px solid var(--border);border-radius:6px;font-size:12px;font-family:monospace;color:var(--foreground);box-shadow:0 2px 0 var(--border)">Ctrl+C</kbd>
+          <kbd style="display:inline-flex;align-items:center;gap:4px;padding:4px 8px;background:var(--muted);border:1px solid var(--border);border-radius:6px;font-size:12px;font-family:monospace;color:var(--foreground);box-shadow:0 2px 0 var(--border)">Enter</kbd>
+          <kbd style="display:inline-flex;align-items:center;gap:4px;padding:4px 8px;background:var(--muted);border:1px solid var(--border);border-radius:6px;font-size:12px;font-family:monospace;color:var(--foreground);box-shadow:0 2px 0 var(--border)">⇧⌘P</kbd>
+          <kbd style="display:inline-flex;align-items:center;gap:4px;padding:4px 8px;background:var(--muted);border:1px solid var(--border);border-radius:6px;font-size:12px;font-family:monospace;color:var(--foreground);box-shadow:0 2px 0 var(--border)">Esc</kbd>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;Kbd /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Kbd&gt;⌘K&lt;/Kbd&gt;\n&lt;Kbd&gt;Ctrl+C&lt;/Kbd&gt;\n&lt;Kbd&gt;Enter&lt;/Kbd&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LABEL ══ -->
+<div id="comp-label" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Label</div>
+    <div class="page-desc">Renders an accessible label associated with controls.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label style="font-size:13px;font-weight:500;color:var(--foreground)">Email address</label>
+            <input type="email" style="padding:8px 12px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);font-size:13px;outline:none;width:260px" placeholder="name@example.com" />
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <input type="checkbox" id="lbl-check" style="width:14px;height:14px;accent-color:var(--primary)" />
+            <label for="lbl-check" style="font-size:13px;font-weight:500;color:var(--foreground);cursor:pointer">Accept terms and conditions</label>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;Label htmlFor="email" /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Label htmlFor=&quot;email&quot;&gt;Email address&lt;/Label&gt;\n&lt;Input id=&quot;email&quot; type=&quot;email&quot; /&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MENUBAR ══ -->
+<div id="comp-menubar" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Menubar</div>
+    <div class="page-desc">A visually persistent menu common in desktop applications.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="display:flex;gap:2px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);padding:4px;width:fit-content">
+          <div style="position:relative">
+            <button style="padding:5px 10px;border-radius:4px;background:var(--accent);border:none;color:var(--foreground);font-size:13px;cursor:pointer">File</button>
+            <div style="position:absolute;top:calc(100% + 4px);left:0;background:var(--popover);border:1px solid var(--border);border-radius:var(--radius);min-width:140px;box-shadow:0 4px 16px rgba(0,0,0,0.3);padding:4px;z-index:10">
+              <div style="padding:5px 8px;font-size:12px;color:var(--foreground);border-radius:4px;display:flex;justify-content:space-between">New Tab <kbd style="font-size:10px;background:var(--muted);padding:1px 4px;border-radius:3px">⌘T</kbd></div>
+              <div style="padding:5px 8px;font-size:12px;color:var(--foreground);border-radius:4px;display:flex;justify-content:space-between">New Window <kbd style="font-size:10px;background:var(--muted);padding:1px 4px;border-radius:3px">⌘N</kbd></div>
+              <div style="height:1px;background:var(--border);margin:4px 0"></div>
+              <div style="padding:5px 8px;font-size:12px;color:var(--foreground);border-radius:4px">Share</div>
+              <div style="padding:5px 8px;font-size:12px;color:var(--foreground);border-radius:4px">Print…</div>
+            </div>
+          </div>
+          <button style="padding:5px 10px;border-radius:4px;background:transparent;border:none;color:var(--foreground);font-size:13px;cursor:pointer">Edit</button>
+          <button style="padding:5px 10px;border-radius:4px;background:transparent;border:none;color:var(--foreground);font-size:13px;cursor:pointer">View</button>
+          <button style="padding:5px 10px;border-radius:4px;background:transparent;border:none;color:var(--foreground);font-size:13px;cursor:pointer">Help</button>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;Menubar /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Menubar&gt;\n  &lt;MenubarMenu&gt;\n    &lt;MenubarTrigger&gt;File&lt;/MenubarTrigger&gt;\n    &lt;MenubarContent&gt;\n      &lt;MenubarItem&gt;New Tab&lt;/MenubarItem&gt;\n      &lt;MenubarSeparator /&gt;\n      &lt;MenubarItem&gt;Print…&lt;/MenubarItem&gt;\n    &lt;/MenubarContent&gt;\n  &lt;/MenubarMenu&gt;\n&lt;/Menubar&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ NAVIGATION MENU ══ -->
+<div id="comp-navigation-menu" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Navigation Menu</div>
+    <div class="page-desc">A collection of links for navigating websites, with dropdown support.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="display:flex;flex-direction:column;gap:0">
+          <div style="display:flex;gap:4px;align-items:center;padding:4px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius) var(--radius) 0 0;border-bottom:none">
+            <button style="padding:6px 12px;border-radius:4px;background:var(--accent);border:none;color:var(--foreground);font-size:13px;cursor:pointer">Getting Started ▾</button>
+            <button style="padding:6px 12px;border-radius:4px;background:transparent;border:none;color:var(--foreground);font-size:13px;cursor:pointer">Components ▾</button>
+            <button style="padding:6px 12px;border-radius:4px;background:transparent;border:none;color:var(--foreground);font-size:13px;cursor:pointer">Docs</button>
+          </div>
+          <div style="background:var(--popover);border:1px solid var(--border);border-radius:0 var(--radius) var(--radius) var(--radius);padding:16px;width:360px;box-shadow:0 4px 16px rgba(0,0,0,0.2)">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <div style="padding:10px;background:var(--muted);border-radius:var(--radius)">
+                <div style="font-size:12px;font-weight:600;color:var(--foreground);margin-bottom:4px">Introduction</div>
+                <div style="font-size:11px;color:var(--muted-foreground)">Re-usable components built with Radix UI.</div>
+              </div>
+              <div style="padding:10px;background:var(--muted);border-radius:var(--radius)">
+                <div style="font-size:12px;font-weight:600;color:var(--foreground);margin-bottom:4px">Installation</div>
+                <div style="font-size:11px;color:var(--muted-foreground)">How to install dependencies.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;NavigationMenu /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;NavigationMenu&gt;\n  &lt;NavigationMenuList&gt;\n    &lt;NavigationMenuItem&gt;\n      &lt;NavigationMenuTrigger&gt;Getting Started&lt;/NavigationMenuTrigger&gt;\n      &lt;NavigationMenuContent&gt;…&lt;/NavigationMenuContent&gt;\n    &lt;/NavigationMenuItem&gt;\n  &lt;/NavigationMenuList&gt;\n&lt;/NavigationMenu&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGINATION ══ -->
+<div id="comp-pagination" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Pagination</div>
+    <div class="page-desc">Pagination with page navigation, next and previous links.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <nav style="display:flex;align-items:center;gap:4px;font-size:13px">
+          <button style="padding:6px 10px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);cursor:pointer">←</button>
+          <button style="padding:6px 10px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);cursor:pointer">1</button>
+          <button style="padding:6px 10px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);cursor:pointer">2</button>
+          <button style="padding:6px 10px;background:var(--primary);border:1px solid var(--primary);border-radius:var(--radius);color:#fff;cursor:pointer">3</button>
+          <button style="padding:6px 10px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--muted-foreground);cursor:pointer">…</button>
+          <button style="padding:6px 10px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);cursor:pointer">8</button>
+          <button style="padding:6px 10px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);cursor:pointer">9</button>
+          <button style="padding:6px 10px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);cursor:pointer">→</button>
+        </nav>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;Pagination /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Pagination&gt;\n  &lt;PaginationContent&gt;\n    &lt;PaginationPrevious /&gt;\n    &lt;PaginationItem&gt;&lt;PaginationLink&gt;1&lt;/PaginationLink&gt;&lt;/PaginationItem&gt;\n    &lt;PaginationEllipsis /&gt;\n    &lt;PaginationNext /&gt;\n  &lt;/PaginationContent&gt;\n&lt;/Pagination&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ POPOVER ══ -->
+<div id="comp-popover" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Popover</div>
+    <div class="page-desc">Displays rich content in a portal, triggered by a button.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="display:flex;flex-direction:column;align-items:flex-start;gap:8px">
+          <button style="padding:8px 16px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);font-size:13px;cursor:pointer">Open popover</button>
+          <div style="background:var(--popover);border:1px solid var(--border);border-radius:var(--radius);padding:16px;width:280px;box-shadow:0 4px 16px rgba(0,0,0,0.3)">
+            <div style="font-size:13px;font-weight:600;color:var(--foreground);margin-bottom:4px">Dimensions</div>
+            <div style="font-size:12px;color:var(--muted-foreground);margin-bottom:12px">Set the dimensions for the layer.</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <div>
+                <label style="font-size:11px;color:var(--muted-foreground)">Width</label>
+                <input style="width:100%;margin-top:4px;padding:6px 8px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);font-size:12px;color:var(--foreground);outline:none;box-sizing:border-box" value="100%" />
+              </div>
+              <div>
+                <label style="font-size:11px;color:var(--muted-foreground)">Height</label>
+                <input style="width:100%;margin-top:4px;padding:6px 8px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);font-size:12px;color:var(--foreground);outline:none;box-sizing:border-box" value="25px" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;Popover /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Popover&gt;\n  &lt;PopoverTrigger asChild&gt;\n    &lt;Button&gt;Open popover&lt;/Button&gt;\n  &lt;/PopoverTrigger&gt;\n  &lt;PopoverContent&gt;\n    Content here\n  &lt;/PopoverContent&gt;\n&lt;/Popover&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PROGRESS ══ -->
+<div id="comp-progress" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Progress</div>
+    <div class="page-desc">Displays an indicator showing the completion progress of a task.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="width:320px;display:flex;flex-direction:column;gap:16px">
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted-foreground);margin-bottom:6px"><span>Uploading…</span><span>25%</span></div>
+            <div style="height:8px;background:var(--muted);border-radius:999px;overflow:hidden">
+              <div style="width:25%;height:100%;background:var(--primary);border-radius:999px"></div>
+            </div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted-foreground);margin-bottom:6px"><span>Processing…</span><span>60%</span></div>
+            <div style="height:8px;background:var(--muted);border-radius:999px;overflow:hidden">
+              <div style="width:60%;height:100%;background:var(--primary);border-radius:999px"></div>
+            </div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted-foreground);margin-bottom:6px"><span>Almost done</span><span>90%</span></div>
+            <div style="height:8px;background:var(--muted);border-radius:999px;overflow:hidden">
+              <div style="width:90%;height:100%;background:var(--primary);border-radius:999px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;Progress value={60} /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Progress value={60} /&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ RESIZABLE ══ -->
+<div id="comp-resizable" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Resizable</div>
+    <div class="page-desc">Accessible resizable panel groups and layouts with keyboard support.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Horizontal</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="display:flex;width:400px;height:140px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+          <div style="flex:0 0 200px;background:var(--card);padding:16px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted-foreground)">Panel One</div>
+          <div style="width:4px;background:var(--border);cursor:col-resize;display:flex;align-items:center;justify-content:center">
+            <div style="width:2px;height:24px;background:var(--muted-foreground);border-radius:1px;opacity:0.5"></div>
+          </div>
+          <div style="flex:1;background:var(--card);padding:16px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted-foreground)">Panel Two</div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;ResizablePanelGroup /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;ResizablePanelGroup direction=&quot;horizontal&quot;&gt;\n  &lt;ResizablePanel defaultSize={50}&gt;Panel One&lt;/ResizablePanel&gt;\n  &lt;ResizableHandle /&gt;\n  &lt;ResizablePanel defaultSize={50}&gt;Panel Two&lt;/ResizablePanel&gt;\n&lt;/ResizablePanelGroup&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCROLL AREA ══ -->
+<div id="comp-scroll-area" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Scroll Area</div>
+    <div class="page-desc">Augments native scroll functionality for custom, cross-browser styling.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="width:240px;height:200px;border:1px solid var(--border);border-radius:var(--radius);overflow-y:auto;background:var(--card)">
+          <div style="padding:12px;display:flex;flex-direction:column;gap:1px">
+            <div style="font-size:11px;font-weight:600;color:var(--muted-foreground);padding:4px 0;text-transform:uppercase;letter-spacing:.05em">Tags</div>
+            <div style="padding:8px 10px;font-size:13px;color:var(--foreground);border-radius:4px">v1.0.0-alpha</div>
+            <div style="padding:8px 10px;font-size:13px;color:var(--foreground);border-radius:4px">v1.0.0-beta</div>
+            <div style="padding:8px 10px;font-size:13px;color:var(--foreground);border-radius:4px;background:var(--accent)">v1.0.0</div>
+            <div style="padding:8px 10px;font-size:13px;color:var(--foreground);border-radius:4px">v1.1.0</div>
+            <div style="padding:8px 10px;font-size:13px;color:var(--foreground);border-radius:4px">v1.2.0</div>
+            <div style="padding:8px 10px;font-size:13px;color:var(--foreground);border-radius:4px">v2.0.0</div>
+            <div style="padding:8px 10px;font-size:13px;color:var(--foreground);border-radius:4px">v2.1.0</div>
+            <div style="padding:8px 10px;font-size:13px;color:var(--foreground);border-radius:4px">v2.2.0</div>
+            <div style="padding:8px 10px;font-size:13px;color:var(--foreground);border-radius:4px">v3.0.0</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;ScrollArea /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;ScrollArea className=&quot;h-48 w-60 rounded-md border&quot;&gt;\n  {tags.map((tag) => &lt;div key={tag}&gt;{tag}&lt;/div&gt;)}\n&lt;/ScrollArea&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SHEET ══ -->
+<div id="comp-sheet" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Sheet</div>
+    <div class="page-desc">Extends the Dialog component to display content that complements the main content.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Right Side Panel</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="position:relative;width:420px;height:240px;background:var(--background);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)">
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted-foreground);opacity:0.4">Page content</div>
+          <div style="position:absolute;top:0;right:0;bottom:0;width:240px;background:var(--card);border-left:1px solid var(--border);padding:20px">
+            <div style="font-size:14px;font-weight:600;color:var(--foreground);margin-bottom:4px">Edit Profile</div>
+            <div style="font-size:12px;color:var(--muted-foreground);margin-bottom:16px">Make changes to your profile here.</div>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div>
+                <label style="font-size:11px;color:var(--muted-foreground)">Name</label>
+                <input style="width:100%;margin-top:4px;padding:6px 8px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);font-size:12px;color:var(--foreground);outline:none;box-sizing:border-box" value="Miguel Ugalde" />
+              </div>
+              <div>
+                <label style="font-size:11px;color:var(--muted-foreground)">Username</label>
+                <input style="width:100%;margin-top:4px;padding:6px 8px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);font-size:12px;color:var(--foreground);outline:none;box-sizing:border-box" value="@miguel" />
+              </div>
+            </div>
+            <button style="margin-top:16px;width:100%;padding:7px;background:var(--primary);color:#fff;border:none;border-radius:var(--radius);font-size:12px;cursor:pointer">Save changes</button>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;Sheet side="right" /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Sheet&gt;\n  &lt;SheetTrigger&gt;Open&lt;/SheetTrigger&gt;\n  &lt;SheetContent side=&quot;right&quot;&gt;\n    &lt;SheetHeader&gt;\n      &lt;SheetTitle&gt;Edit Profile&lt;/SheetTitle&gt;\n    &lt;/SheetHeader&gt;\n  &lt;/SheetContent&gt;\n&lt;/Sheet&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SIDEBAR ══ -->
+<div id="comp-sidebar" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Sidebar</div>
+    <div class="page-desc">A composable, themeable sidebar component with collapsible support.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="display:flex;width:380px;height:260px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+          <div style="width:180px;background:var(--card);border-right:1px solid var(--border);padding:12px;display:flex;flex-direction:column;gap:2px">
+            <div style="font-size:10px;font-weight:600;color:var(--muted-foreground);padding:4px 8px;text-transform:uppercase;letter-spacing:.06em">Platform</div>
+            <div style="padding:6px 8px;border-radius:4px;font-size:12px;color:var(--foreground);background:var(--accent);display:flex;align-items:center;gap:6px"><span>◉</span> Dashboard</div>
+            <div style="padding:6px 8px;border-radius:4px;font-size:12px;color:var(--muted-foreground);display:flex;align-items:center;gap:6px"><span>◎</span> Analytics</div>
+            <div style="padding:6px 8px;border-radius:4px;font-size:12px;color:var(--muted-foreground);display:flex;align-items:center;gap:6px"><span>◎</span> Reports</div>
+            <div style="height:1px;background:var(--border);margin:6px 0"></div>
+            <div style="font-size:10px;font-weight:600;color:var(--muted-foreground);padding:4px 8px;text-transform:uppercase;letter-spacing:.06em">Settings</div>
+            <div style="padding:6px 8px;border-radius:4px;font-size:12px;color:var(--muted-foreground);display:flex;align-items:center;gap:6px"><span>◎</span> Profile</div>
+            <div style="padding:6px 8px;border-radius:4px;font-size:12px;color:var(--muted-foreground);display:flex;align-items:center;gap:6px"><span>◎</span> Billing</div>
+          </div>
+          <div style="flex:1;background:var(--background);padding:16px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted-foreground)">Main content</div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;SidebarProvider /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;SidebarProvider&gt;\n  &lt;AppSidebar /&gt;\n  &lt;SidebarInset&gt;\n    &lt;main&gt;Main content&lt;/main&gt;\n  &lt;/SidebarInset&gt;\n&lt;/SidebarProvider&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SKELETON ══ -->
+<div id="comp-skeleton" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Skeleton</div>
+    <div class="page-desc">Use to show a placeholder while content is loading.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="display:flex;flex-direction:column;gap:12px;width:300px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:40px;height:40px;border-radius:50%;background:var(--muted);animation:pulse 1.5s ease-in-out infinite"></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+              <div style="height:12px;background:var(--muted);border-radius:4px;width:80%;animation:pulse 1.5s ease-in-out infinite"></div>
+              <div style="height:10px;background:var(--muted);border-radius:4px;width:60%;animation:pulse 1.5s ease-in-out infinite"></div>
+            </div>
+          </div>
+          <div style="height:12px;background:var(--muted);border-radius:4px;animation:pulse 1.5s ease-in-out infinite"></div>
+          <div style="height:12px;background:var(--muted);border-radius:4px;width:90%;animation:pulse 1.5s ease-in-out infinite"></div>
+          <div style="height:12px;background:var(--muted);border-radius:4px;width:75%;animation:pulse 1.5s ease-in-out infinite"></div>
+        </div>
+        <style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}</style>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;Skeleton /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;div className=&quot;flex items-center space-x-4&quot;&gt;\n  &lt;Skeleton className=&quot;h-10 w-10 rounded-full&quot; /&gt;\n  &lt;div className=&quot;space-y-2&quot;&gt;\n    &lt;Skeleton className=&quot;h-4 w-48&quot; /&gt;\n    &lt;Skeleton className=&quot;h-4 w-36&quot; /&gt;\n  &lt;/div&gt;\n&lt;/div&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SONNER ══ -->
+<div id="comp-sonner" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Sonner</div>
+    <div class="page-desc">An opinionated toast component for React, built on top of Sonner.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="display:flex;flex-direction:column;gap:8px;width:320px">
+          <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 2px 8px rgba(0,0,0,0.3)">
+            <span style="font-size:14px">✓</span>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:500;color:var(--foreground)">Report exported</div>
+              <div style="font-size:11px;color:var(--muted-foreground)">Your brand report has been saved.</div>
+            </div>
+            <button style="background:transparent;border:none;color:var(--muted-foreground);cursor:pointer;font-size:14px">×</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 2px 8px rgba(0,0,0,0.3);opacity:0.8;transform:scale(0.97)">
+            <span style="font-size:14px">⚠</span>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:500;color:var(--foreground)">Rate limit reached</div>
+              <div style="font-size:11px;color:var(--muted-foreground)">Try again in 60 seconds.</div>
+            </div>
+            <button style="background:transparent;border:none;color:var(--muted-foreground);cursor:pointer;font-size:14px">×</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 2px 8px rgba(0,0,0,0.3);opacity:0.6;transform:scale(0.94)">
+            <span style="font-size:14px">ℹ</span>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:500;color:var(--foreground)">New signals available</div>
+            </div>
+            <button style="background:transparent;border:none;color:var(--muted-foreground);cursor:pointer;font-size:14px">×</button>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;Toaster /&gt; + toast()</span>
+        <button class="copy-btn" onclick="copyCode(this, &quot;import { toast } from 'sonner'\n\ntoast('Report exported')\ntoast.error('Rate limit reached')\ntoast.info('New signals available')\n\n// In your app root:\n&lt;Toaster /&gt;&quot;)">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TOGGLE ══ -->
+<div id="comp-toggle" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Toggle</div>
+    <div class="page-desc">A two-state button that can be either on or off.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="display:flex;gap:4px">
+          <button style="padding:8px 14px;border-radius:var(--radius);border:1px solid var(--border);background:var(--accent);color:var(--foreground);font-size:13px;font-weight:700;cursor:pointer">B</button>
+          <button style="padding:8px 14px;border-radius:var(--radius);border:1px solid transparent;background:transparent;color:var(--muted-foreground);font-size:13px;font-style:italic;cursor:pointer">I</button>
+          <button style="padding:8px 14px;border-radius:var(--radius);border:1px solid transparent;background:transparent;color:var(--muted-foreground);font-size:13px;text-decoration:underline;cursor:pointer">U</button>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;Toggle /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Toggle pressed={bold} onPressedChange={setBold}&gt;\n  &lt;Bold className=&quot;h-4 w-4&quot; /&gt;\n&lt;/Toggle&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TOGGLE GROUP ══ -->
+<div id="comp-toggle-group" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Toggle Group</div>
+    <div class="page-desc">A set of two-state buttons that can be toggled on or off.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Text Alignment</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="display:flex;flex-direction:column;gap:16px;align-items:flex-start">
+          <div style="display:flex;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+            <button style="padding:8px 16px;background:var(--accent);border:none;border-right:1px solid var(--border);color:var(--foreground);font-size:12px;cursor:pointer" title="Align Left">⬛ Left</button>
+            <button style="padding:8px 16px;background:transparent;border:none;border-right:1px solid var(--border);color:var(--muted-foreground);font-size:12px;cursor:pointer" title="Align Center">⬛ Center</button>
+            <button style="padding:8px 16px;background:transparent;border:none;color:var(--muted-foreground);font-size:12px;cursor:pointer" title="Align Right">⬛ Right</button>
+          </div>
+          <div style="display:flex;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+            <button style="padding:7px 14px;background:var(--accent);border:none;border-right:1px solid var(--border);color:var(--foreground);font-size:13px;font-weight:700;cursor:pointer">B</button>
+            <button style="padding:7px 14px;background:var(--accent);border:none;border-right:1px solid var(--border);color:var(--foreground);font-size:13px;font-style:italic;cursor:pointer">I</button>
+            <button style="padding:7px 14px;background:transparent;border:none;color:var(--muted-foreground);font-size:13px;text-decoration:underline;cursor:pointer">U</button>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;ToggleGroup type="single" /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;ToggleGroup type=&quot;single&quot; value={align} onValueChange={setAlign}&gt;\n  &lt;ToggleGroupItem value=&quot;left&quot;&gt;&lt;AlignLeft /&gt;&lt;/ToggleGroupItem&gt;\n  &lt;ToggleGroupItem value=&quot;center&quot;&gt;&lt;AlignCenter /&gt;&lt;/ToggleGroupItem&gt;\n  &lt;ToggleGroupItem value=&quot;right&quot;&gt;&lt;AlignRight /&gt;&lt;/ToggleGroupItem&gt;\n&lt;/ToggleGroup&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 </div>
 </body>
