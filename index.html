@@ -244,7 +244,8 @@
     .sb-item svg{flex-shrink:0;opacity:.5;} .sb-item.active svg{opacity:1;}
     .sb-footer{margin-top:auto;padding:10px 14px;border-top:1px solid var(--border);font-size:10px;color:color-mix(in srgb, var(--foreground) 45%, transparent);}
     .waldo-page{display:none;} .waldo-page.active{display:block;overflow-y:auto;height:100%;}
-    .chart-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:16px;}
+    #tb-panel-charts{overflow-y:auto;padding:32px 40px;}
+.chart-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:16px;}
     .chart-variant-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
     .chart-variant-preview{padding:16px;min-height:160px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--border);}
     .chart-variant-footer{padding:10px 14px;display:flex;align-items:center;justify-content:space-between;}
@@ -695,6 +696,7 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
   </svg>
   <nav id="wb-topbar-nav">
     <button class="tb-tab active" onclick="switchTopTab('components',this)">Components</button>
+    <button class="tb-tab" onclick="switchTopTab('charts',this)">Charts</button>
     <button class="tb-tab" onclick="switchTopTab('graphs',this)">Graphs</button>
     <button class="tb-tab" onclick="switchTopTab('blocks',this)">Blocks</button>
     <button class="tb-tab" onclick="switchTopTab('docs',this)">Docs</button>
@@ -740,7 +742,6 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
     <button class="sb-item" onclick="waldoGo('comp-calendar',this)">Calendar</button>
     <button class="sb-item" onclick="waldoGo('comp-card',this)">Card</button>
     <button class="sb-item" onclick="waldoGo('comp-carousel',this)">Carousel</button>
-    <button class="sb-item" onclick="waldoGo('comp-chart',this)">Chart</button>
     <button class="sb-item" onclick="waldoGo('comp-collapsible',this)">Collapsible</button>
     <button class="sb-item" onclick="waldoGo('comp-combobox',this)">Combobox</button>
     <button class="sb-item" onclick="waldoGo('comp-context-menu',this)">Context Menu</button>
@@ -5672,8 +5673,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   </div>
 </div>
 
-<!-- ══ CHART ══ -->
-<div id="comp-chart" class="waldo-page">
+<!-- ══ CHARTS PANEL ══ -->
+<div id="tb-panel-charts" class="tb-panel">
   <div class="page-header">
     <div class="page-title">Chart</div>
     <div class="page-desc">Built on Recharts. Compose with <code style="font-size:11px;background:var(--muted);padding:1px 5px;border-radius:4px">ChartContainer</code>, <code style="font-size:11px;background:var(--muted);padding:1px 5px;border-radius:4px">ChartTooltip</code>, and <code style="font-size:11px;background:var(--muted);padding:1px 5px;border-radius:4px">ChartLegend</code> with Recharts primitives.</div>
@@ -8878,7 +8879,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 // Move orphaned tb-panels into #wb-body (HTML parser closes wb-body early due to div imbalance)
 (function() {
   var wb = document.getElementById('wb-body');
-  ['tb-panel-graphs','tb-panel-blocks','tb-panel-docs','tb-panel-foundations'].forEach(function(id) {
+  ['tb-panel-charts','tb-panel-graphs','tb-panel-blocks','tb-panel-docs','tb-panel-foundations'].forEach(function(id) {
     var p = document.getElementById(id);
     if(p && p.parentElement !== wb) wb.appendChild(p);
   });
