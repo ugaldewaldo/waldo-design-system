@@ -5478,7 +5478,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <span class="wnav-section-add"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
             </div>
             <div class="wnav-items-wrap">
-            <div class="wnav-item active"><span class="wnav-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="3 9 21 9"/><polyline points="9 21 9 9"/></svg></span><span class="wnav-label">Brand Social Sentiment</span>
+            <div class="wnav-item active">
+              <span class="wnav-label">Brand Social Sentiment</span>
               <span class="wnav-action" style="opacity:1"><button class="wli-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></span>
             </div>
             <div class="wnav-item">
@@ -5553,6 +5554,39 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <div class="wnav-item"><span class="wnav-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="3 9 21 9"/><polyline points="9 21 9 9"/></svg></span><span class="wnav-label">All Archive</span></div>
             </div>
           </div>
+          <!-- Recent expanded -->
+          <div class="wnav-panel">
+            <div class="wnav-search">
+              <div class="input-with-icon">
+                <div class="input-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+                <input class="input input--ghost" placeholder="Search insights" />
+              </div>
+            </div>
+            <div class="wnav-filters">
+              <span class="wft wft-default"><span>Saved searches</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span>
+              <span class="wft wft-active"><span>Recent</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 15 12 9 18 15"/></svg></span></span>
+              <div class="wft-subopts">
+                <div class="wft-opt">Today</div>
+                <div class="wft-opt active">Yesterday</div>
+                <div class="wft-opt">Last week</div>
+                <div class="wft-opt">Last month</div>
+                <div class="wft-opt">Last 3 months</div>
+                <div class="wft-opt">Custom...</div>
+              </div>
+              <span class="wft wft-default"><span>All ideas</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span>
+              <span class="wft wft-default"><span>Any source</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span>
+              <span class="wft wft-default"><span>Any tags</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span>
+              <span class="wft wft-default"><span>Team reactions</span><span class="wft-chevron"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></span></span>
+            </div>
+            <div class="wnav-sep"></div>
+            <div class="wnav-items-wrap">
+              <div class="wnav-item"><span class="wnav-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="3 9 21 9"/><polyline points="9 21 9 9"/></svg></span><span class="wnav-label">All Archive</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;NavPanel&gt; · &lt;FilterTrigger /&gt; rows · &lt;NavSeparator /&gt; · &lt;NavItem /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;NavPanel&gt;\n  &lt;FilterTrigger label=&quot;Saved searches&quot; /&gt;\n  &lt;FilterTrigger label=&quot;Recent&quot; expanded /&gt;\n  &lt;NavSeparator /&gt;\n  &lt;NavItem label=&quot;All Archive&quot; icon={&lt;ArchiveIcon /&gt;} /&gt;\n&lt;/NavPanel&gt;')">Copy</button>
       </div>
     </div>
 
