@@ -15,9 +15,9 @@ const Table = React.forwardRef<HTMLTableElement, TableProps>(
     <div
       className={cn(
         "w-full overflow-x-auto",
-        stickyHeader && "overflow-y-auto"
+        stickyHeader && maxHeight && "overflow-y-auto"
       )}
-      style={stickyHeader ? { maxHeight } : undefined}
+      style={stickyHeader && maxHeight ? { maxHeight } : undefined}
     >
       <table
         ref={ref}
