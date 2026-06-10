@@ -71,13 +71,13 @@ const ListItem = React.forwardRef<HTMLDivElement, ListItemProps>(
               {label}
             </span>
             {sublabel && (
-              <span className="text-sm font-normal tracking-[-0.02em] text-foreground/50 truncate">
+              <span className="text-sm font-normal tracking-[-0.02em] text-muted-foreground truncate">
                 {sublabel}
               </span>
             )}
           </div>
           {meta && (
-            <div className="shrink-0 text-sm text-foreground/50">{meta}</div>
+            <div className="shrink-0 text-sm text-muted-foreground">{meta}</div>
           )}
         </div>
 
@@ -104,7 +104,7 @@ function ListView({ children, header, className }: ListViewProps) {
       {header && (
         <div className="flex items-center h-9 px-4 border-b border-foreground/[0.12]">
           {typeof header === "string" ? (
-            <span className="text-xs font-semibold tracking-[0.04em] uppercase text-foreground/50">
+            <span className="text-xs font-semibold tracking-[0.04em] uppercase text-muted-foreground">
               {header}
             </span>
           ) : header}

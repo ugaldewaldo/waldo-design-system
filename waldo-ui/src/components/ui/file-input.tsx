@@ -36,12 +36,12 @@ export interface FileInputProps {
 function getFileIcon(name: string) {
   const ext = name.split(".").pop()?.toLowerCase();
   if (["pdf"].includes(ext ?? ""))
-    return <FileText className="h-4 w-4 shrink-0 text-foreground/50" />;
+    return <FileText className="h-4 w-4 shrink-0 text-muted-foreground" />;
   if (["xls", "xlsx", "csv"].includes(ext ?? ""))
-    return <FileSpreadsheet className="h-4 w-4 shrink-0 text-foreground/50" />;
+    return <FileSpreadsheet className="h-4 w-4 shrink-0 text-muted-foreground" />;
   if (["png", "jpg", "jpeg", "gif", "webp", "svg"].includes(ext ?? ""))
-    return <FileImage className="h-4 w-4 shrink-0 text-foreground/50" />;
-  return <File className="h-4 w-4 shrink-0 text-foreground/50" />;
+    return <FileImage className="h-4 w-4 shrink-0 text-muted-foreground" />;
+  return <File className="h-4 w-4 shrink-0 text-muted-foreground" />;
 }
 
 function FileInput({
@@ -111,7 +111,7 @@ function FileInput({
           {placeholder ?? (size === "slim" ? "Drag and drop files here or click to browse." : "Click to upload or drag and drop")}
         </span>
         {optional && (
-          <span className="text-sm text-foreground/50">*Optional</span>
+          <span className="text-sm text-muted-foreground">*Optional</span>
         )}
         <input
           ref={inputRef}

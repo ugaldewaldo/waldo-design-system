@@ -167,7 +167,7 @@ function TagInput({
         className={cn(
           "flex-1 min-w-[80px] bg-transparent outline-none border-none",
           "text-sm font-normal tracking-[-0.02em] text-foreground",
-          "placeholder:text-foreground/50",
+          "placeholder:text-muted-foreground",
         )}
       />
     </div>

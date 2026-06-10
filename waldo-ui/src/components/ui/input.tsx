@@ -29,7 +29,7 @@ const inputBase = [
   // typography — text-sm-normal: 14px / 400 / -0.02em
   "px-4 py-2.5 text-sm font-normal tracking-[-0.02em] text-foreground",
   // placeholder — zinc-200/50%
-  "placeholder:text-foreground/50",
+  "placeholder:text-muted-foreground",
   "transition-colors duration-100",
   "hover:border-waldo-green-800",
   "focus-visible:outline-none focus-visible:border-waldo-green-800",
@@ -55,7 +55,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       return (
         <div className="relative flex items-center">
           {leading && (
-            <div className="pointer-events-none absolute left-4 flex items-center text-foreground/50">
+            <div className="pointer-events-none absolute left-4 flex items-center text-muted-foreground">
               {leading}
             </div>
           )}
@@ -66,7 +66,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {suffix && (
-            <div className="absolute right-4 flex items-center text-foreground/50">
+            <div className="absolute right-4 flex items-center text-muted-foreground">
               {suffix}
             </div>
           )}
@@ -99,7 +99,7 @@ const Textarea = React.forwardRef<
       "rounded-3xl",           // large radius for textarea (consistent with pill)
       "border border-foreground/[0.12] bg-transparent",
       "px-4 py-3 text-sm font-normal tracking-[-0.02em] text-foreground",
-      "placeholder:text-foreground/50",
+      "placeholder:text-muted-foreground",
       "transition-colors duration-100",
       "focus-visible:outline-none focus-visible:border-waldo-green-800",
       "disabled:cursor-not-allowed disabled:opacity-40",
@@ -136,7 +136,7 @@ function Field({ label, hint, error, required, children, className }: FieldProps
         <label className="px-1 pb-0 text-sm font-normal leading-5 tracking-[-0.02em] text-primary">
           {label}
           {required && (
-            <span className="ml-1 text-foreground/50 font-normal" aria-hidden="true">*</span>
+            <span className="ml-1 text-muted-foreground font-normal" aria-hidden="true">*</span>
           )}
         </label>
       )}

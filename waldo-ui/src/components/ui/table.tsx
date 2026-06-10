@@ -113,7 +113,7 @@ const TableHead = React.forwardRef<HTMLTableCellElement, TableHeadProps>(
       ref={ref}
       className={cn(
         "h-8 px-3 text-left align-middle",
-        "text-[11px] font-medium text-foreground/50 uppercase tracking-wider",
+        "text-[11px] font-medium text-muted-foreground uppercase tracking-wider",
         "whitespace-nowrap",
         // bg-muted needed so sticky header covers scrolled rows (Linear pattern)
         "[table[data-sticky]_&]:bg-muted",
