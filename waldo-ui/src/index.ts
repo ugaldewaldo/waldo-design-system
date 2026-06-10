@@ -22,6 +22,9 @@ export type { SegmentedControlProps, SegmentedOption } from "./components/ui/seg
 
 export { Tag, TagInput, tagVariants } from "./components/ui/tag";
 
+export { FilterChip } from "./components/ui/filter-chip";
+export type { FilterChipProps } from "./components/ui/filter-chip";
+
 export { ListItem, ListView } from "./components/ui/list-item";
 
 export { Separator } from "./components/ui/separator";
