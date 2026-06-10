@@ -29,10 +29,11 @@ All values come from `globals.css` → `tailwind.config.ts`. Use Tailwind classe
 | Highlight | `bg-highlight` / `text-highlight` |
 | Primary text | `text-foreground` |
 | Secondary text | `text-foreground/70` |
-| Tertiary text | `text-muted-foreground` |
-| Placeholder | `text-foreground/50` |
-| Border subtle | `border-foreground/[0.12]` |
-| Border default | `border-foreground/20` |
+| Tertiary / placeholder / icons | `text-muted-foreground` |
+| Hover fill | `bg-foreground/[0.04]` |
+| Active / pressed fill | `bg-foreground/10` |
+| Border subtle | `border-foreground/[0.08]` |
+| Border default | `border-foreground/[0.12]` |
 | Input hover/focus border | `border-waldo-green-800` |
 | Focus ring | `ring-ring` |
 | Zinc scale | `bg-zinc-700` … `bg-zinc-950` (mapped to globals.css via CSS vars) |
@@ -89,6 +90,7 @@ Skeleton, Sheet/Drawer, Card/ResultCard, DataTable, Combobox, Popover, DatePicke
 - Canvas 16px → `h-3.5 w-3.5` (14px) — inline, table, button-sm
 - Canvas 24px → `h-4 w-4` (16px) or `h-[18px] w-[18px]` — default buttons, nav
 - strokeWidth: always `1.5`
+- Color: always one tone below the accompanying text — if text is `text-foreground`, icon is `text-muted-foreground`. Never match the text color exactly.
 
 ---
 

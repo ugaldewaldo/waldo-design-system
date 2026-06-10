@@ -54,7 +54,7 @@ const ListItem = React.forwardRef<HTMLDivElement, ListItemProps>(
           // ghost variant — used inside modals/panels
           isGhost && [
             "h-10 px-3 mx-1 rounded-lg",
-            "hover:bg-foreground/[0.07]",
+            "hover:bg-foreground/[0.04]",
             active && "bg-foreground/[0.07]",
           ],
           className

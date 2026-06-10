@@ -100,7 +100,7 @@ const WizardDialogContent = React.forwardRef<
           <span className="text-xs text-muted-foreground font-medium tracking-[0.04em] uppercase">
             {stepLabel ?? `Step ${step} of ${totalSteps}`}
           </span>
-          <DialogPrimitive.Close className="flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-foreground/[0.07] transition-colors">
+          <DialogPrimitive.Close className="flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-foreground/[0.04] transition-colors">
             <X className="h-3.5 w-3.5" strokeWidth={2} />
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>

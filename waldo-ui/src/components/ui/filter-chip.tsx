@@ -33,16 +33,19 @@ const FilterChip = React.forwardRef<HTMLButtonElement, FilterChipProps>(
       type={type}
       data-active={active || undefined}
       className={cn(
-        "inline-flex h-9 items-center gap-2 rounded-full border px-3",
+        "inline-flex h-9 items-center gap-2 rounded-full border pl-3",
+        showChevron ? "pr-2" : "pr-4",
         "text-sm font-medium tracking-[-0.02em] whitespace-nowrap select-none",
-        "border-foreground/20 bg-transparent text-foreground",
+        "border-foreground/[0.12] bg-transparent text-foreground/70",
+        "data-[active]:text-foreground",
         "transition-colors duration-100 cursor-pointer",
-        "hover:bg-foreground/[0.07] hover:border-foreground/30",
+        "hover:bg-foreground/[0.04]",
         "active:bg-foreground/10",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         "disabled:pointer-events-none disabled:opacity-40",
-        "data-[active]:bg-foreground/10 data-[active]:border-foreground/30",
-        "[&_svg]:size-4 [&_svg]:shrink-0",
+        "data-[active]:bg-foreground/10 data-[active]:border-transparent",
+        "[&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-foreground/40",
+        "data-[active]:[&_svg]:text-muted-foreground",
         className
       )}
       {...props}

@@ -61,12 +61,12 @@ const buttonVariants = cva(
         // zinc-200/20% border / zinc-200 text / no fill.
         // Pairs with default (Save / Cancel row).
         outline:
-          "border border-foreground/20 bg-transparent text-foreground hover:bg-foreground/[0.07] hover:border-foreground/30 active:bg-foreground/10",
+          "border border-foreground/[0.12] bg-transparent text-foreground hover:bg-foreground/[0.04] active:bg-foreground/10",
 
         // No fill, no border / zinc-200/70% text.
         // Tertiary actions, icon+text in dense lists.
         ghost:
-          "bg-transparent text-foreground/70 hover:text-foreground hover:bg-foreground/[0.07] active:bg-foreground/10",
+          "bg-transparent text-foreground/70 hover:text-foreground hover:bg-foreground/[0.04] active:bg-foreground/10",
 
         // zinc-800 fill / zinc-200 text.
         // Dropdown triggers, contextual menus, filter buttons on dark backgrounds.

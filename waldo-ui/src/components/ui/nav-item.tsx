@@ -112,7 +112,7 @@ export function NavItem({
           sub ? "pl-8" : "",
           active
             ? "bg-muted text-foreground font-medium"
-            : "text-foreground/70 hover:bg-foreground/[0.06] hover:text-foreground",
+            : "text-foreground/70 hover:bg-foreground/[0.04] hover:text-foreground",
           disabled && "opacity-40 pointer-events-none",
           (collapsible || onClick) && "cursor-pointer",
           className
