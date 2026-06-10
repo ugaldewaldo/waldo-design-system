@@ -43,7 +43,7 @@ All values come from `globals.css` → `tailwind.config.ts`. Use Tailwind classe
 ## Component status
 
 ### ✅ Atomic
-Button, Input/Field, Badge, Avatar, Checkbox, Switch, Select, SegmentedControl, Tag/TagInput, FileInput, Separator, Tooltip, Table, Tabs, Toast, Alert, EmptyState, Icon, ListItem/ListView
+Button, Input/Field, Badge, Avatar, Checkbox, Switch, Select, SegmentedControl, Tag/TagInput, FilterChip, FileInput, Separator, Tooltip, Table, Tabs, Toast, Alert, EmptyState, Icon, ListItem/ListView
 
 ### ✅ Overlay
 Dialog, DropdownMenu, Command
@@ -74,7 +74,7 @@ Skeleton, Sheet/Drawer, Card/ResultCard, DataTable, Combobox, Popover, DatePicke
 ### Select / Dropdown
 - Container: `bg-popover` · `rounded-2-5xl` (20px) · `shadow-popover`
 - Search bar: `bg-muted` · flush top
-- Item hover: `bg-foreground/[0.07]`
+- Item hover: `bg-foreground/[0.04]`
 - Separator: `bg-foreground/[0.12]`
 
 ### Avatar
@@ -85,6 +85,14 @@ Skeleton, Sheet/Drawer, Card/ResultCard, DataTable, Combobox, Popover, DatePicke
 - Zone radius: `rounded-4xl` (32px) — NOT larger
 - Zone bg: `bg-muted`
 - Error text: `text-warning`
+
+### FilterChip
+- Shape: `rounded-full` (pill), `h-9` (36px)
+- Default: text `foreground/70`, icon `foreground/40`, border `foreground/[0.12]`
+- Hover: static border (no change) + fill `foreground/[0.04]`
+- Active: text `foreground`, icon `muted-foreground`, no border (`border-transparent`), fill `foreground/10`
+- Optical padding: `pl-3 pr-4` without chevron, `pl-3 pr-2` with chevron — compensates for chevron visual weight
+- Composes under `<PopoverTrigger asChild>` for dropdown variants
 
 ### Icon
 - Canvas 16px → `h-3.5 w-3.5` (14px) — inline, table, button-sm
