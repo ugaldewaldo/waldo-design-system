@@ -225,13 +225,12 @@
     .tb-panel.active { display: flex; }
 
     /* empty state panel */
-    .tb-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: color-mix(in srgb, var(--foreground) 45%, transparent); }
-    .tb-empty-icon { opacity: .35; margin-bottom: 4px; }
-    .tb-empty h3 { font-size: 14px; font-weight: 500; color: color-mix(in srgb, var(--foreground) 60%, transparent); }
-    .tb-empty p  { font-size: 13px; }
-    #wb-sidebar{width:288px;min-width:288px;height:100vh;position:sticky;top:0;display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;}
+    .tb-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+    .tb-empty h3 { font-size: 14px; font-weight: 500; letter-spacing: -0.02em; color: var(--foreground); }
+    .tb-empty p  { font-size: 13px; letter-spacing: -0.02em; color: var(--muted-foreground); }
+    #wb-sidebar{width:288px;min-width:288px;height:100vh;position:sticky;top:0;display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;border-right:1px solid var(--border);}
     #wb-sidebar::-webkit-scrollbar{width:0;}#wb-sidebar { scrollbar-width: none; }
-    #wb-main{flex:1;overflow-y:auto;padding:48px 52px 100px 40px;}
+    #wb-main{flex:1;overflow-y:auto;padding:48px 52px 100px 52px;}
     #wb-main::-webkit-scrollbar{width:5px;}#wb-main::-webkit-scrollbar-thumb{background:var(--secondary);border-radius:99px;}
     .sb-logo{padding:14px 14px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
     .sb-mark{width:22px;height:22px;background:var(--primary);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
@@ -243,7 +242,7 @@
     .sb-item.sb-hidden{display:none;}
     .sb-no-results{display:none;padding:8px 16px;font-size:13px;color:color-mix(in srgb,var(--foreground) 35%,transparent);}
     .sb-no-results.visible{display:block;}
-    .sb-items-wrap{padding:0 8px;}
+    .sb-items-wrap{padding:0 12px;}
     .sb-item{display:flex;align-items:center;gap:6px;height:36px;padding:0 16px;border-radius:9999px;font-size:14px;letter-spacing:-0.02em;color:color-mix(in srgb,var(--foreground) 70%,transparent);cursor:pointer;transition:background .08s,color .08s;border:none;background:none;width:100%;text-align:left;font-family:'Inter',sans-serif;user-select:none;}
     .sb-item:hover{background:color-mix(in srgb,var(--foreground) 6%,transparent);color:var(--foreground);}
     .sb-item.active{background:var(--muted);color:var(--foreground);font-weight:500;}
@@ -257,7 +256,29 @@
     .home-title { font-size: 32px; font-weight: 500; letter-spacing: -0.04em; color: var(--foreground); text-align: center; }
     .home-sub { font-size: 16px; font-weight: 500; letter-spacing: -0.02em; color: var(--muted-foreground); text-align: center; margin-top: 8px; }
     .home-sub .home-version { color: var(--primary); }
-    #wb-charts-sidebar{width:220px;min-width:220px;height:100%;display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;border-right:none;}
+    #wb-charts-sidebar{width:288px;min-width:288px;height:100%;display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;border-right:none;}
+
+    /* ── Docs pages ── */
+    .doc-page { display:none; max-width: 720px; }
+    .doc-page.active { display:block; }
+    .doc-section { margin-bottom: 40px; }
+    .doc-section-title { font-size: 13px; font-weight: 600; letter-spacing: -0.02em; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .doc-p { font-size: 14px; letter-spacing: -0.02em; color: var(--foreground); line-height: 1.6; margin-bottom: 10px; }
+    .doc-p strong { font-weight: 600; color: var(--foreground); }
+    .doc-warn { color: color-mix(in srgb, var(--warning) 90%, transparent); }
+    .doc-link { color: var(--primary); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, var(--primary) 40%, transparent); }
+    .doc-link:hover { text-decoration-color: var(--primary); }
+    .doc-code { font-family: 'SF Mono','Fira Code',monospace; font-size: 12px; background: var(--muted); border-radius: 4px; padding: 2px 6px; color: var(--foreground); }
+    .doc-pre { font-family: 'SF Mono','Fira Code',monospace; font-size: 12px; background: var(--muted); border-radius: 8px; padding: 14px 16px; color: var(--foreground); line-height: 1.6; overflow-x: auto; margin: 0 0 10px; white-space: pre; }
+    .doc-pre-danger { color: color-mix(in srgb, var(--foreground) 70%, transparent); }
+    .doc-table-wrap { overflow-x: auto; margin-bottom: 10px; }
+    .doc-table { width: 100%; border-collapse: collapse; font-size: 13px; letter-spacing: -0.02em; }
+    .doc-table th { text-align: left; padding: 8px 12px; font-weight: 500; color: var(--muted-foreground); border-bottom: 1px solid var(--border); font-size: 12px; }
+    .doc-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: var(--foreground); vertical-align: top; line-height: 1.5; }
+    .doc-table tr:last-child td { border-bottom: none; }
+    .doc-table tr:hover td { background: var(--foreground)/[0.02]; }
+    .doc-hex { font-family: 'SF Mono','Fira Code',monospace; font-size: 11px; color: var(--muted-foreground); }
+    .doc-danger .doc-section-title { color: color-mix(in srgb, var(--destructive) 80%, transparent); border-color: color-mix(in srgb, var(--destructive) 20%, transparent); }
     #wb-charts-sidebar::-webkit-scrollbar{width:0;}#wb-charts-sidebar{scrollbar-width:none;}
     #wb-charts-main{flex:1;overflow-y:auto;padding:32px 40px;}
     .chart-page{display:none;} .chart-page.active{display:block;}
@@ -750,7 +771,7 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
 
 <!-- Components panel -->
 <div id="tb-panel-components" class="tb-panel">
-<div id="wb-sidebar" class="wnav-panel" style="margin:8px;height:calc(100vh - 16px);border-radius:24px;padding:8px 0;">
+<div id="wb-sidebar" class="wnav-panel" style="margin:8px 8px 8px 40px;height:calc(100vh - 16px);border-radius:24px;padding:8px 0;">
   <div class="wnav-search">
     <div class="input-with-icon">
       <div class="input-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
@@ -1174,27 +1195,29 @@ function sbSearch(q){
   if(noRes)noRes.classList.toggle('visible',count===0&&v.length>0);
   if(label)label.style.display=v.length>0?'none':'';
 }
-function waldoGo(id,el){
+function waldoGo(id,el,skipHash){
   document.querySelectorAll('.waldo-page').forEach(function(p){p.classList.remove('active');});
   document.querySelectorAll('section').forEach(function(s){s.classList.remove('active');});
   document.querySelectorAll('.sb-item').forEach(function(a){a.classList.remove('active');});
   var p=document.getElementById(id);if(p)p.classList.add('active');
   if(el)el.classList.add('active');
-  // scroll whichever main panel is visible
   var m=document.getElementById('wb-main');if(m)m.scrollTop=0;
   var f=document.getElementById('wb-foundations-main');if(f)f.scrollTop=0;
+  if(!skipHash) history.replaceState(null,'','#'+id);
 }
 function showTab(id,el){waldoGo('tab-'+id,el);}
 
-function switchTopTab(name, el) {
-  // update top-bar tab active state
+function switchTopTab(name, el, skipHash) {
   document.querySelectorAll('.tb-tab').forEach(function(t){t.classList.remove('active');});
   if(el) el.classList.add('active');
-  // show correct panel
+  else {
+    document.querySelectorAll('.tb-tab').forEach(function(t){
+      if(t.getAttribute('onclick') && t.getAttribute('onclick').indexOf("'"+name+"'")>-1) t.classList.add('active');
+    });
+  }
   document.querySelectorAll('.tb-panel').forEach(function(p){p.classList.remove('active');});
   var panel = document.getElementById('tb-panel-'+name);
   if(panel) panel.classList.add('active');
-  // when switching to foundations, activate first foundation page if none active
   if(name === 'foundations') {
     document.querySelectorAll('#wb-foundations-sidebar .sb-item').forEach(function(a){a.classList.remove('active');});
     var firstBtn = document.querySelector('#wb-foundations-sidebar .sb-item');
@@ -1207,15 +1230,81 @@ function switchTopTab(name, el) {
     var firstPage = document.getElementById('tab-colors');
     if(firstPage) firstPage.classList.add('active');
   }
+  if(!skipHash) history.replaceState(null,'','#'+name);
 }
 
-function switchChartPage(pageId, el) {
+function switchChartPage(pageId, el, skipHash) {
   document.querySelectorAll('#wb-charts-sidebar .sb-item').forEach(function(i){i.classList.remove('active');});
-  el.classList.add('active');
+  if(el) el.classList.add('active');
+  else {
+    document.querySelectorAll('#wb-charts-sidebar .sb-item').forEach(function(i){
+      if(i.getAttribute('onclick') && i.getAttribute('onclick').indexOf("'"+pageId+"'")>-1) i.classList.add('active');
+    });
+  }
   document.querySelectorAll('#wb-charts-main .chart-page').forEach(function(p){p.classList.remove('active');});
   var p = document.getElementById(pageId);
   if(p) { p.classList.add('active'); document.getElementById('wb-charts-main').scrollTop = 0; }
+  if(!skipHash) history.replaceState(null,'','#'+pageId);
 }
+
+function switchDocsPage(pageId, el, skipHash) {
+  document.querySelectorAll('#wb-docs-sidebar .sb-item').forEach(function(i){i.classList.remove('active');});
+  if(el) el.classList.add('active');
+  else {
+    document.querySelectorAll('#wb-docs-sidebar .sb-item').forEach(function(i){
+      if(i.getAttribute('onclick') && i.getAttribute('onclick').indexOf("'"+pageId+"'")>-1) i.classList.add('active');
+    });
+  }
+  document.querySelectorAll('#wb-docs-main .doc-page').forEach(function(p){p.classList.remove('active');});
+  var p = document.getElementById(pageId);
+  if(p) { p.classList.add('active'); document.getElementById('wb-docs-main').scrollTop = 0; }
+  if(pageId==='doc-page-il-doctrine') loadILDoctrine();
+  if(pageId==='doc-page-il-catalog') loadILCatalog();
+  if(!skipHash) history.replaceState(null,'','#'+pageId);
+}
+
+function navigateToHash(hash) {
+  if(!hash) return;
+  var id = hash.replace(/^#/,'');
+  // top-level tabs
+  if(['home','components','charts','blocks','docs','foundations'].indexOf(id)>-1) {
+    switchTopTab(id, null, true);
+    return;
+  }
+  // component pages: comp-*
+  if(id.indexOf('comp-')===0) {
+    switchTopTab('components', null, true);
+    var btn = document.querySelector('#wb-sidebar .sb-item[onclick*="\''+id+'\'"]');
+    waldoGo(id, btn, true);
+    return;
+  }
+  // foundation pages: tab-*
+  if(id.indexOf('tab-')===0) {
+    switchTopTab('foundations', null, true);
+    var btn = document.querySelector('#wb-foundations-sidebar .sb-item[onclick*="\''+id+'\'"]');
+    waldoGo(id, btn, true);
+    return;
+  }
+  // chart pages: chart-page-*
+  if(id.indexOf('chart-page-')===0) {
+    switchTopTab('charts', null, true);
+    switchChartPage(id, null, true);
+    return;
+  }
+  // doc pages: doc-page-*
+  if(id.indexOf('doc-page-')===0) {
+    switchTopTab('docs', null, true);
+    switchDocsPage(id, null, true);
+    return;
+  }
+}
+
+window.addEventListener('load', function(){
+  var hash = window.location.hash;
+  if(hash && hash.length > 1) {
+    navigateToHash(hash);
+  }
+});
 
   function showMode(mode, el) {
     document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
@@ -6663,7 +6752,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
 <!-- ══ CHARTS PANEL ══ -->
 <div id="tb-panel-charts" class="tb-panel">
-<div id="wb-charts-sidebar">
+<div id="wb-charts-sidebar" class="wnav-panel" style="margin:8px 8px 8px 40px;height:calc(100vh - 16px);border-radius:24px;padding:8px 0;">
   <div class="sb-group">
     <div class="sb-group-label">Charts</div>
     <div class="sb-items-wrap">
@@ -8662,7 +8751,6 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 <!-- Graphs panel -->
 <div id="tb-panel-graphs" class="tb-panel">
   <div class="tb-empty">
-    <svg class="tb-empty-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
     <h3>Nothing to show yet</h3>
     <p>Graph components coming soon</p>
   </div>
@@ -8671,7 +8759,6 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 <!-- Blocks panel -->
 <div id="tb-panel-blocks" class="tb-panel">
   <div class="tb-empty">
-    <svg class="tb-empty-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
     <h3>Nothing to show yet</h3>
     <p>Block components coming soon</p>
   </div>
@@ -8679,16 +8766,342 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
 <!-- Docs panel -->
 <div id="tb-panel-docs" class="tb-panel">
-  <div class="tb-empty">
-    <svg class="tb-empty-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-    <h3>Nothing to show yet</h3>
-    <p>Documentation coming soon</p>
+  <!-- Docs sidebar -->
+  <div id="wb-docs-sidebar" class="wnav-panel" style="margin:8px 8px 8px 40px;height:calc(100vh - 16px);border-radius:24px;padding:8px 0;width:288px;min-width:288px;flex-shrink:0;display:flex;flex-direction:column;overflow-y:auto;scrollbar-width:none;">
+    <div class="sb-group">
+      <div class="sb-group-label">Documentation</div>
+      <div class="sb-items-wrap">
+        <button class="sb-item active" onclick="switchDocsPage('doc-page-overview',this)">Overview</button>
+        <button class="sb-item" onclick="switchDocsPage('doc-page-install',this)">Installation</button>
+        <button class="sb-item" onclick="switchDocsPage('doc-page-components',this)">Component Rules</button>
+        <button class="sb-item" onclick="switchDocsPage('doc-page-figma',this)">Figma</button>
+      </div>
+    </div>
+    <div class="sb-group">
+      <div class="sb-group-label">Intelligence Layer</div>
+      <div class="sb-items-wrap">
+        <button class="sb-item" onclick="switchDocsPage('doc-page-il-overview',this)">Overview</button>
+        <button class="sb-item" onclick="switchDocsPage('doc-page-il-skills',this)">Skills</button>
+        <button class="sb-item" onclick="switchDocsPage('doc-page-il-doctrine',this)">Doctrine</button>
+        <button class="sb-item" onclick="switchDocsPage('doc-page-il-catalog',this)">Token Catalog</button>
+        <button class="sb-item" onclick="switchDocsPage('doc-page-il-validators',this)">Validators</button>
+      </div>
+    </div>
   </div>
-</div>
+
+  <!-- Docs main -->
+  <div id="wb-docs-main" style="flex:1;overflow-y:auto;padding:48px 52px 100px;">
+
+    <!-- Overview -->
+    <div id="doc-page-overview" class="doc-page active">
+      <div class="page-header">
+        <div class="page-title">Waldo Design System</div>
+        <div class="page-desc">Dark-first product UI. Built on shadcn/ui · Tailwind v3 · Radix primitives · React + TypeScript.</div>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">What this is</div>
+        <p class="doc-p">A component library and token system for Waldo's product surfaces. All components live in <code class="doc-code">waldo-ui/src/components/ui/</code> and are exported from <code class="doc-code">@waldo/ui</code>.</p>
+        <p class="doc-p">Source of truth: <code class="doc-code">waldo.tokens.json</code> (Tokens Studio format) drives CSS, HTML, and Figma.</p>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Repositories</div>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead><tr><th>File / Folder</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><code class="doc-code">waldo-ui/</code></td><td>Component library — components, CSS vars, Tailwind config</td></tr>
+              <tr><td><code class="doc-code">figma/waldo.tokens.json</code></td><td>Token source of truth (Tokens Studio format)</td></tr>
+              <tr><td><code class="doc-code">figma/waldo-shadcn-theme.css</code></td><td>shadcn HSL CSS variables</td></tr>
+              <tr><td><code class="doc-code">index.html</code></td><td>This file — live DS reference on GitHub Pages</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Design reference</div>
+        <p class="doc-p">Figma DS: <a class="doc-link" href="https://www.figma.com/design/bgyz7RmoeEbnsqybjQveUy" target="_blank">figma.com/design/bgyz7RmoeEbnsqybjQveUy</a></p>
+        <p class="doc-p">When something is undocumented, use <strong>Linear</strong> as canonical reference. Waldo and Linear share the same design DNA — dark-first, tool-aesthetic, high density, zinc palette, Inter.</p>
+      </div>
+    </div>
+
+    <!-- Installation -->
+    <div id="doc-page-install" class="doc-page">
+      <div class="page-header">
+        <div class="page-title">Installation</div>
+        <div class="page-desc">How to add <code class="doc-code">@waldo/ui</code> to a project.</div>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Add dependency</div>
+        <pre class="doc-pre">// package.json
+"dependencies": {
+  "@waldo/ui": "file:../waldo-ui"
+}</pre>
+        <pre class="doc-pre">npm install</pre>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Import</div>
+        <pre class="doc-pre">import { Button, Badge, Input, Field, Avatar } from '@waldo/ui'
+import '@waldo/ui/globals.css'</pre>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Tailwind config</div>
+        <pre class="doc-pre">// tailwind.config.js
+export default {
+  content: ["./src/**/*.{ts,tsx}", "../waldo-ui/src/**/*.{ts,tsx}"],
+  presets: [require("../waldo-ui/tailwind.config.ts")],
+}</pre>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Playground (visual testing)</div>
+        <pre class="doc-pre">cd playground
+npm run dev   # runs on :4502</pre>
+        <p class="doc-p doc-warn">⚠ The playground is READ-ONLY for components. Never edit <code class="doc-code">.tsx</code> source files from here. All changes go to <code class="doc-code">waldo-ui/src/components/ui/</code>.</p>
+      </div>
+    </div>
+
+    <!-- Component Rules -->
+    <div id="doc-page-components" class="doc-page">
+      <div class="page-header">
+        <div class="page-title">Component Rules</div>
+        <div class="page-desc">Conventions that apply to every component in the library.</div>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Golden rule — atomic components are immutable</div>
+        <p class="doc-p">Atomic components (<code class="doc-code">waldo-ui/src/components/ui/*.tsx</code>) are frozen unless explicitly approved for change. The demo adapts to the component — never the reverse.</p>
+        <pre class="doc-pre">✅ Fix the demo HTML to match the component
+❌ Change the component to match the demo</pre>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Zero hardcoded styles</div>
+        <p class="doc-p">Never write hex, rgba, or raw CSS variables in component code or demo HTML. Always use Tailwind classes that map to DS tokens.</p>
+        <pre class="doc-pre">❌ style="color:#32a9a9"
+❌ className="text-[#32a9a9]"
+✅ className="text-primary"</pre>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Audit protocol</div>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead><tr><th>Step</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td>0</td><td>Visual review — show in playground, get approval before touching code</td></tr>
+              <tr><td>1</td><td>Update component tokens / styles in <code class="doc-code">waldo-ui/src/components/ui/</code></td></tr>
+              <tr><td>2</td><td>Add to <code class="doc-code">index.ts</code> (new components only)</td></tr>
+              <tr><td>3</td><td>Doctrine — document only non-obvious rules</td></tr>
+              <tr><td>4</td><td>Verify shadcn compatibility — no breaking API changes</td></tr>
+              <tr><td>5</td><td>Push to git</td></tr>
+              <tr><td>6</td><td>Mark Linear card as Shipped</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Key component rules</div>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead><tr><th>Component</th><th>Rule</th></tr></thead>
+            <tbody>
+              <tr><td>Button</td><td><code class="doc-code">rounded-full</code> pill. <code class="doc-code">font-medium</code> only — never <code class="doc-code">font-semibold</code>. Heights: sm=28 · default=36 · lg=44px.</td></tr>
+              <tr><td>Input / Field</td><td><code class="doc-code">rounded-full</code> pill. Hover/focus border: <code class="doc-code">border-waldo-green-800</code>. No box-shadow ring.</td></tr>
+              <tr><td>Checkbox</td><td><strong>Circular</strong> (<code class="doc-code">rounded-full</code>) — never square.</td></tr>
+              <tr><td>Avatar</td><td>Round (<code class="doc-code">rounded-full</code>) for people. Square (<code class="doc-code">rounded-sm</code>) for brands/logos.</td></tr>
+              <tr><td>Icon</td><td>Always <code class="doc-code">strokeWidth={1.5}</code>. Color: one tone below accompanying text.</td></tr>
+              <tr><td>Empty State</td><td>No icons. Text only: title in <code class="doc-code">text-foreground</code>, description in <code class="doc-code">text-muted-foreground</code>.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Figma -->
+    <div id="doc-page-figma" class="doc-page">
+      <div class="page-header">
+        <div class="page-title">Figma</div>
+        <div class="page-desc">How to keep Figma in sync with the token source of truth.</div>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Tokens Studio push workflow</div>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead><tr><th>Step</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Open Tokens Studio plugin in Figma</td></tr>
+              <tr><td>2</td><td>Verify 4 sets enabled: <code class="doc-code">primitives · brand · typography · semantic</code></td></tr>
+              <tr><td>3</td><td>Push → Variables: Color ✓ String ✓ Number ✓ Boolean ✓ · Styles: Typography ✓</td></tr>
+              <tr><td>4</td><td>⚠ "Remove without connection" must be <strong>OFF</strong> — enabling it wipes everything</td></tr>
+              <tr><td>5</td><td>Verify exactly 4 collections in Figma. More = something duplicated.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Tokens Studio gotchas</div>
+        <p class="doc-p">References do <strong>not</strong> resolve in composite textStyles — use literal values (<code class="doc-code">Inter</code>, <code class="doc-code">"Regular"</code>, <code class="doc-code">"14"</code>, <code class="doc-code">"-2%"</code>), not token references.</p>
+        <p class="doc-p">Font weights are named strings: <code class="doc-code">"Semi Bold"</code> with space — not <code class="doc-code">"600"</code> or <code class="doc-code">"SemiBold"</code>.</p>
+        <p class="doc-p">Top-level JSON keys become Figma collections — don't add new ones without planning the full Figma collection structure.</p>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Figma DS link</div>
+        <p class="doc-p"><a class="doc-link" href="https://www.figma.com/design/bgyz7RmoeEbnsqybjQveUy" target="_blank">figma.com/design/bgyz7RmoeEbnsqybjQveUy</a></p>
+      </div>
+    </div>
+
+    <!-- ══ INTELLIGENCE LAYER ══ -->
+
+    <!-- IL Overview -->
+    <div id="doc-page-il-overview" class="doc-page">
+      <div class="page-header">
+        <div class="page-title">Intelligence Layer</div>
+        <div class="page-desc">The machine-readable layer that lets AI agents design with the Waldo DS without guessing.</div>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">What this is</div>
+        <p class="doc-p">Four kinds of artifacts work together so that any agent — Claude Code, Cursor, or a production agent — produces DS-compliant UI by default:</p>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead><tr><th>Piece</th><th>Question it answers</th><th>Lives in</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Token Catalog</strong></td><td>"What token is this value?"</td><td><code class="doc-code">docs/token-catalog.yaml</code></td></tr>
+              <tr><td><strong>Usage Doctrine</strong></td><td>"Which component do I use here?"</td><td><code class="doc-code">docs/usage-doctrine.yaml</code></td></tr>
+              <tr><td><strong>Skills</strong></td><td>"How do I run this workflow correctly?"</td><td><code class="doc-code">.claude/skills/</code></td></tr>
+              <tr><td><strong>Validators</strong></td><td>"Did I violate anything?"</td><td><code class="doc-code">.claude/hooks/</code> + <code class="doc-code">/ds-verify</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Reading order for agents</div>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead><tr><th>#</th><th>File</th><th>Why</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td><code class="doc-code">CLAUDE.md</code></td><td>The law — golden rules, colors, typography, what not to do</td></tr>
+              <tr><td>2</td><td><code class="doc-code">docs/token-catalog.yaml</code></td><td>Value lookup — hex → primitive → semantic → class</td></tr>
+              <tr><td>3</td><td><code class="doc-code">docs/usage-doctrine.yaml</code></td><td>Component choice — use_when / dont_use_when / prefer_over</td></tr>
+              <tr><td>4</td><td><code class="doc-code">.claude/skills/*</code></td><td>Step-by-step workflow for the task at hand</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Working rules (AI / Claude)</div>
+        <p class="doc-p"><strong>Verify visually before reporting.</strong> Never ask for review of a visual result without checking it with preview tools first. If the preview shows an error, the work is not done.</p>
+        <p class="doc-p"><strong>Commit before destructive ops.</strong> Before any <code class="doc-code">git checkout</code> or <code class="doc-code">git reset --hard</code>, commit everything first.</p>
+        <p class="doc-p"><strong>External comms need approval.</strong> Never post to Linear, Slack, or any external tool without explicit approval. Draft → wait → publish.</p>
+        <p class="doc-p"><strong>Language.</strong> Chat with Miguel in Spanish. All DS content (code, docs, Linear) in English, always.</p>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">shadcn compatibility checklist</div>
+        <pre class="doc-pre">[ ] Variant names match shadcn (destructive not error, outline not ghost-bordered)
+[ ] Prop names don't clash with DOM attributes
+[ ] Sub-component names match shadcn (DialogHeader not DialogHead)
+[ ] Export names match shadcn exactly if the component exists in shadcn</pre>
+      </div>
+    </div>
+
+    <!-- IL Skills -->
+    <div id="doc-page-il-skills" class="doc-page">
+      <div class="page-header">
+        <div class="page-title">Skills</div>
+        <div class="page-desc">Installable workflows in <code class="doc-code">.claude/skills/</code> — each encodes a DS process an agent must follow exactly.</div>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">/ds-component</div>
+        <p class="doc-p">Implement or fix a DS component with exact values from Figma. Forces the right order: read CLAUDE.md + STATUS.md first, pull the Figma node values (background, border, radius, padding, typography, states) before writing any code, then update the <code class="doc-code">.tsx</code> component, the <code class="doc-code">index.html</code> demo, and the usage doctrine in the same session.</p>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">/ds-add-token</div>
+        <p class="doc-p">Add or update a token keeping all 4 layers in sync — a token does not exist until it exists everywhere:</p>
+        <pre class="doc-pre">figma/waldo.tokens.json      ← source of truth (Tokens Studio)
+waldo-ui/src/globals.css     ← CSS variables
+waldo-ui/tailwind.config.ts  ← utility classes
+index.html                   ← live reference (this site)</pre>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">/ds-verify</div>
+        <p class="doc-p">Audit a file for DS violations before finishing. Mandatory before any commit. See <a class="doc-link" href="#doc-page-il-validators" onclick="switchDocsPage('doc-page-il-validators');return false;">Validators</a> for the full check list.</p>
+      </div>
+    </div>
+
+    <!-- IL Doctrine -->
+    <div id="doc-page-il-doctrine" class="doc-page">
+      <div class="page-header">
+        <div class="page-title">Usage Doctrine</div>
+        <div class="page-desc">When to use each component — and when not to. Rendered live from <code class="doc-code">docs/usage-doctrine.yaml</code>, the same file agents consume. One source of truth, zero drift.</div>
+      </div>
+      <div id="il-doctrine-render"><p class="doc-p">Loading doctrine…</p></div>
+    </div>
+
+    <!-- IL Token Catalog -->
+    <div id="doc-page-il-catalog" class="doc-page">
+      <div class="page-header">
+        <div class="page-title">Token Catalog</div>
+        <div class="page-desc">The full chain for every value: hex → primitive → semantic → CSS var → Tailwind class. Rendered live from <code class="doc-code">docs/token-catalog.yaml</code>, the same file agents consume.</div>
+      </div>
+      <div id="il-catalog-render"><p class="doc-p">Loading catalog…</p></div>
+    </div>
+
+    <!-- IL Validators -->
+    <div id="doc-page-il-validators" class="doc-page">
+      <div class="page-header">
+        <div class="page-title">Validators</div>
+        <div class="page-desc">Automated checks that catch DS violations — and the anti-pattern rules they enforce.</div>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Edit hook — verify-component.sh</div>
+        <p class="doc-p"><code class="doc-code">.claude/hooks/verify-component.sh</code> runs automatically after every edit to <code class="doc-code">waldo-ui/src/components/</code> files and <code class="doc-code">index.html</code>. Checks: hardcoded hex colors, wrong fonts, orphan styles, raw HTML in demos.</p>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">/ds-verify — manual audit before commit</div>
+        <pre class="doc-pre">1. Hardcoded colors — zero tolerance     grep hex, rgba(, bg-[#…]
+2. Wrong fonts — Inter only              grep font-family
+3. Legacy vars — must not exist          grep --txt-*, --fill-*, --line-*, --bg
+4. Inline style= for colors/spacing      layout-only props allowed on demo wrappers
+5. shadcn naming compliance              variants, props, sub-components, exports</pre>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Planned — standalone detector</div>
+        <p class="doc-p">A runnable script (no LLM) that scans any HTML/TSX file or URL for Waldo violations and outputs JSON — usable in CI and on the Brand API prototypes. Modeled on Impeccable's <code class="doc-code">detect</code> command, but enforcing Waldo's rules from the token catalog.</p>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Anti-patterns — Colors</div>
+        <pre class="doc-pre doc-pre-danger">❌ Don't use green-500 as button fill with white text — contrast fails
+❌ Don't use #ff6467 — that's shadcn's default red, not Waldo's coral (#de3a28)
+❌ Don't use brand-* tokens in product UI — marketing only
+❌ Don't use --destructive inside dropdown items — only in dialogs, alerts, destructive buttons
+❌ Don't add red anywhere in product</pre>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Anti-patterns — Typography</div>
+        <pre class="doc-pre doc-pre-danger">❌ Don't use display-* typography inside product — UI track only
+❌ Don't add italic anywhere
+❌ Don't use monospace for numbers, values, labels in components
+❌ Missing tracking-[-0.02em] on any UI text element</pre>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Anti-patterns — Components</div>
+        <pre class="doc-pre doc-pre-danger">❌ Don't use square checkboxes — always rounded-full
+❌ Don't add font-semibold to buttons
+❌ Don't add box-shadow ring to inputs
+❌ Don't reference primitives directly from components — always via semantic tokens
+❌ Don't add top-level keys to waldo.tokens.json without planning the Figma collection
+❌ Don't push Tokens Studio with references in textStyles — resolve to literals first</pre>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Anti-patterns — SVG</div>
+        <pre class="doc-pre doc-pre-danger">❌ &lt;svg stroke="var(--primary)"&gt;  — CSS vars don't resolve in SVG attributes
+
+✅ &lt;svg style="stroke:var(--primary)"&gt;
+✅ &lt;svg stroke="currentColor"&gt; + parent color:var(--primary)</pre>
+      </div>
+    </div>
+
+  </div><!-- /#wb-docs-main -->
+</div><!-- /#tb-panel-docs -->
 
 <!-- Foundations panel -->
 <div id="tb-panel-foundations" class="tb-panel">
-  <div id="wb-foundations-sidebar" style="width:220px;min-width:220px;height:100%;display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;">
+  <div id="wb-foundations-sidebar" class="wnav-panel" style="margin:8px 8px 8px 40px;height:calc(100vh - 16px);border-radius:24px;padding:8px 0;">
     <div class="sb-group">
       <div class="sb-group-label">Foundation</div>
       <div class="sb-items-wrap">
@@ -9806,5 +10219,134 @@ document.querySelectorAll('.wnav-parent:not(.open) + .wnav-subitems').forEach(s 
     dd.style.top  = Math.max(8, top) + 'px';
   });
 })();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+<script>
+/* ── Intelligence Layer — live YAML renderers ── */
+var ilLoaded = { doctrine: false, catalog: false };
+function ilEsc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function ilBr(s){ return ilEsc(s).replace(/\n/g,'<br>'); }
+function ilList(v){
+  if(!v) return '';
+  return v.map(function(x){
+    if(x && typeof x === 'object'){ var k = Object.keys(x)[0]; return '<strong>'+ilEsc(k)+'</strong> — '+ilEsc(x[k]); }
+    return ilEsc(x);
+  }).join('<br>');
+}
+function ilRow(label, html){ return html ? '<tr><td><strong>'+label+'</strong></td><td>'+html+'</td></tr>' : ''; }
+function ilCode(v){ return v ? '<code class="doc-code">'+ilEsc(v)+'</code>' : ''; }
+function ilFail(el, file){
+  el.innerHTML = '<div class="doc-section"><p class="doc-p">Could not load <code class="doc-code">'+file+'</code>. This page renders the YAML live and needs http(s) — open the site on GitHub Pages or a local server (fetch is blocked on file://).</p></div>';
+}
+function ilFetchYaml(file, ok, fail){
+  if (typeof jsyaml === 'undefined') { fail(); return; }
+  fetch(file).then(function(r){ if(!r.ok) throw new Error(r.status); return r.text(); })
+    .then(function(txt){ ok(jsyaml.load(txt)); })
+    .catch(function(){ fail(); });
+}
+function loadILDoctrine(){
+  if (ilLoaded.doctrine) return;
+  var el = document.getElementById('il-doctrine-render'); if(!el) return;
+  ilFetchYaml('docs/usage-doctrine.yaml', function(d){
+    ilLoaded.doctrine = true;
+    var h = '';
+    (d.components||[]).forEach(function(c){
+      h += '<div class="doc-section"><div class="doc-section-title">'+ilEsc(c.component)+'</div>';
+      h += '<div class="doc-table-wrap"><table class="doc-table"><tbody>';
+      h += ilRow('Use when', ilList(c.use_when));
+      h += ilRow("Don't use when", ilList(c.dont_use_when));
+      h += ilRow('Prefer over', ilList(c.prefer_over));
+      h += ilRow('Notes', ilBr(typeof c.notes==='string' ? c.notes.trim() : c.notes));
+      h += '</tbody></table></div></div>';
+    });
+    var logic = d.component_choice_logic;
+    if (logic) {
+      h += '<div class="doc-section"><div class="doc-section-title">Component choice logic</div>';
+      Object.keys(logic).forEach(function(k){
+        var title = k.replace(/_vs_/g, ' vs ').replace(/_/g, ' ');
+        h += '<div class="doc-table-wrap"><table class="doc-table"><thead><tr><th colspan="2">'+ilEsc(title)+'</th></tr></thead><tbody>';
+        Object.keys(logic[k]).forEach(function(opt){
+          h += '<tr><td><code class="doc-code">'+ilEsc(opt)+'</code></td><td>'+ilEsc(logic[k][opt])+'</td></tr>';
+        });
+        h += '</tbody></table></div>';
+      });
+      h += '</div>';
+    }
+    el.innerHTML = h;
+  }, function(){ ilFail(el, 'docs/usage-doctrine.yaml'); });
+}
+function loadILCatalog(){
+  if (ilLoaded.catalog) return;
+  var el = document.getElementById('il-catalog-render'); if(!el) return;
+  ilFetchYaml('docs/token-catalog.yaml', function(d){
+    ilLoaded.catalog = true;
+    var h = '';
+    h += '<div class="doc-section"><div class="doc-section-title">Colors</div><div class="doc-table-wrap"><table class="doc-table">';
+    h += '<thead><tr><th></th><th>Value</th><th>Primitive</th><th>Semantic</th><th>Tailwind</th><th>Vanilla var</th><th>Use</th></tr></thead><tbody>';
+    (d.colors||[]).forEach(function(c){
+      var v = c.hex || '';
+      var sw = (v.indexOf('#')===0 || v.indexOf('rgba')===0) ? '<div class="token-dot" style="background:'+ilEsc(v)+'"></div>' : '';
+      h += '<tr><td>'+sw+'</td><td class="doc-hex">'+ilEsc(v)+'</td><td>'+ilEsc(c.primitive)+'</td><td>'+ilEsc(c.semantic)+'</td><td>'+ilCode(c.tailwind)+'</td><td>'+ilCode(c.vanilla_var)+'</td><td>'+ilBr(typeof c.use==='string'?c.use.trim():c.use)+'</td></tr>';
+    });
+    h += '</tbody></table></div></div>';
+    if (d.brand_marketing_only) {
+      h += '<div class="doc-section"><div class="doc-section-title">Brand palette — marketing only</div>';
+      h += '<p class="doc-p">'+ilEsc(d.brand_marketing_only.warning)+'</p><div class="doc-table-wrap"><table class="doc-table"><tbody>';
+      (d.brand_marketing_only.colors||[]).forEach(function(c){
+        h += '<tr><td><div class="token-dot" style="background:'+ilEsc(c.hex)+'"></div></td><td class="doc-hex">'+ilEsc(c.hex)+'</td><td>'+ilEsc(c.name)+'</td><td><code class="doc-code">'+ilEsc(c.tailwind)+'</code></td></tr>';
+      });
+      h += '</tbody></table></div></div>';
+    }
+    if (d.radius && d.radius.steps) {
+      h += '<div class="doc-section"><div class="doc-section-title">Radius</div><p class="doc-p">'+ilEsc(d.radius.rule)+'</p>';
+      h += '<div class="doc-table-wrap"><table class="doc-table"><thead><tr><th>px</th><th>Token</th><th>Tailwind</th><th>Use</th></tr></thead><tbody>';
+      d.radius.steps.forEach(function(r){
+        h += '<tr><td class="doc-hex">'+ilEsc(r.px)+'</td><td>'+ilEsc(r.token)+'</td><td><code class="doc-code">'+ilEsc(r.tailwind)+'</code></td><td>'+ilEsc(r.use)+'</td></tr>';
+      });
+      h += '</tbody></table></div></div>';
+    }
+    if (d.shadows) {
+      h += '<div class="doc-section"><div class="doc-section-title">Shadows</div><div class="doc-table-wrap"><table class="doc-table"><thead><tr><th>CSS var</th><th>Tailwind</th><th>Use</th></tr></thead><tbody>';
+      d.shadows.forEach(function(s){
+        h += '<tr><td>'+ilCode(s['var'])+'</td><td>'+ilCode(s.tailwind)+'</td><td>'+ilEsc(s.use)+'</td></tr>';
+      });
+      h += '</tbody></table></div></div>';
+    }
+    if (d.forbidden) {
+      h += '<div class="doc-section"><div class="doc-section-title">Forbidden — colors</div><div class="doc-table-wrap"><table class="doc-table"><thead><tr><th>Wrong</th><th>Why</th><th>Use instead</th></tr></thead><tbody>';
+      (d.forbidden.colors||[]).forEach(function(f){
+        h += '<tr><td class="doc-hex">'+ilEsc(f.wrong)+'</td><td>'+ilEsc(f.why)+'</td><td><code class="doc-code">'+ilEsc(f.use_instead)+'</code></td></tr>';
+      });
+      h += '</tbody></table></div>';
+      var lv = d.forbidden.legacy_vars;
+      if (lv && lv.items) {
+        h += '</div><div class="doc-section"><div class="doc-section-title">Forbidden — legacy variables</div><p class="doc-p">'+ilEsc(lv.note)+'</p>';
+        h += '<div class="doc-table-wrap"><table class="doc-table"><thead><tr><th>Wrong</th><th>Use instead</th></tr></thead><tbody>';
+        lv.items.forEach(function(f){
+          h += '<tr><td class="doc-hex">'+ilEsc(f.wrong)+'</td><td><code class="doc-code">'+ilEsc(f.use_instead)+'</code></td></tr>';
+        });
+        h += '</tbody></table></div>';
+      }
+      if (d.forbidden.patterns) {
+        h += '</div><div class="doc-section"><div class="doc-section-title">Forbidden — patterns</div>';
+        h += '<pre class="doc-pre doc-pre-danger">'+d.forbidden.patterns.map(function(p){return '❌ '+ilEsc(p);}).join('\n')+'</pre>';
+      }
+      h += '</div>';
+    }
+    if (d.known_discrepancies) {
+      h += '<div class="doc-section"><div class="doc-section-title">Known discrepancies — pending decision</div>';
+      d.known_discrepancies.forEach(function(k){
+        var rows = '';
+        Object.keys(k).forEach(function(key){
+          if (key==='id') return;
+          rows += '<tr><td><strong>'+ilEsc(key)+'</strong></td><td>'+ilEsc(k[key])+'</td></tr>';
+        });
+        h += '<div class="doc-table-wrap"><table class="doc-table"><thead><tr><th colspan="2">'+ilEsc(k.id)+'</th></tr></thead><tbody>'+rows+'</tbody></table></div>';
+      });
+      h += '</div>';
+    }
+    el.innerHTML = h;
+  }, function(){ ilFail(el, 'docs/token-catalog.yaml'); });
+}
 </script>
 </body>

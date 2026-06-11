@@ -232,6 +232,8 @@ Font: Inter. Weights: Regular, Medium, Semi Bold, Bold (Figma is picky — use n
 | `figma/waldo.tokens.json` | Source of truth — Token Studio format |
 | `figma/waldo-shadcn-theme.css` | shadcn HSL CSS vars |
 | `waldo-ui/` | **Everything for shadcn/React** — components, CSS vars, Tailwind config. See `waldo-ui/README.md` |
+| `docs/token-catalog.yaml` | **Machine-readable token lookup** — hex → primitive → semantic → CSS var → Tailwind class. Check here before using any color value |
+| `docs/usage-doctrine.yaml` | **Machine-readable component usage rules** — use_when / dont_use_when / prefer_over per component |
 | `index.html` | Live DS reference + component library (GitHub Pages) |
 | `waldo-design-system.html` | Legacy DS reference |
 | `NOTES-FOR-STEVE.md` | Notes for the developer |

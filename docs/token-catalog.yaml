@@ -1,0 +1,425 @@
+# Waldo Token Catalog
+# Machine-readable lookup table: hex → primitive → semantic → CSS var → Tailwind class.
+# Read by AI agents to map any color/value to the correct token without guessing.
+#
+# SOURCE OF TRUTH: figma/waldo.tokens.json — this file is DERIVED from it.
+# When tokens change, update this catalog in the same session. Never let it drift.
+#
+# Companion to docs/usage-doctrine.yaml (which covers component choice; this covers values).
+
+meta:
+  sources:
+    tokens_json: figma/waldo.tokens.json          # absolute source of truth
+    react_css: waldo-ui/src/globals.css           # CSS vars for React/shadcn consumers
+    tailwind: waldo-ui/tailwind.config.ts         # utility classes
+    vanilla_css: "index.html :root block"         # CSS vars for vanilla HTML (docs site, prototypes)
+  how_to_use: |
+    Given any hex value (from Figma, a screenshot, or legacy code), look it up in `colors:`.
+    - React components → use the `tailwind` class.
+    - Vanilla HTML (prototypes, index.html demos) → use the `vanilla_var` CSS variable.
+    If a hex is not in this catalog, it is NOT a Waldo color: check `forbidden:` for known
+    offenders with their corrections, otherwise ask Miguel before using it.
+  alpha_convention: |
+    React vars store raw RGB channels ("210 211 211") so Tailwind can apply opacity
+    via the slash modifier: text-foreground/70, bg-primary/12.
+    Vanilla vars in index.html store final values: --border is ALREADY the 12% alpha.
+
+# ────────────────────────────────────────────────────────────────────
+# COLORS
+# ────────────────────────────────────────────────────────────────────
+
+colors:
+
+  # ── Zinc surfaces ──────────────────────────────────────────────────
+  - hex: "#171819"
+    primitive: zinc-950
+    semantic: surface-default
+    react_var: --background
+    vanilla_var: --background
+    tailwind: bg-background
+    use: App background
+
+  - hex: "#202123"
+    primitive: zinc-900
+    semantic: surface-elevated
+    react_var: --card
+    vanilla_var: --card
+    tailwind: bg-card
+    use: Cards, panels
+
+  - hex: "#242528"
+    primitive: zinc-850
+    semantic: surface-elevated-alt
+    react_var: --zinc-850
+    vanilla_var: null   # no dedicated vanilla var — used via component classes
+    tailwind: bg-zinc-850
+    use: Sidebar background, file input background
+
+  - hex: "#27282b"
+    primitive: zinc-800
+    semantic: surface-sunken
+    react_var: --muted
+    vanilla_var: --muted
+    tailwind: bg-muted
+    use: Inputs, code blocks, sunken areas, sticky table headers, active nav items
+
+  - hex: "#2d2f33"
+    primitive: zinc-750
+    semantic: secondary / popover (as implemented — see known_discrepancies)
+    react_var: --secondary, --popover
+    vanilla_var: --secondary, --popover
+    tailwind: bg-secondary, bg-popover
+    use: Secondary button bg, tag bg, dropdowns/menus/selects (20px radius)
+
+  - hex: "#323539"
+    primitive: zinc-700
+    semantic: surface-popover (per tokens.json — see known_discrepancies)
+    react_var: --surface-popover
+    vanilla_var: null
+    tailwind: bg-zinc-700
+    use: Scrollbar thumb; tokens.json assigns popover here but implementations use zinc-750
+
+  - hex: "#41454b"
+    primitive: zinc-600
+    semantic: accent
+    react_var: --accent
+    vanilla_var: --accent
+    tailwind: bg-accent
+    use: Menu item hover/selected state
+
+  # ── Zinc text ──────────────────────────────────────────────────────
+  - hex: "#d2d3d3"
+    primitive: zinc-200
+    semantic: text-primary
+    react_var: --foreground
+    vanilla_var: --foreground
+    tailwind: text-foreground
+    use: Primary text. Also the base channel for all border alphas.
+
+  - hex: "rgba(210,211,211,0.70)"
+    primitive: alpha.zinc-200.70
+    semantic: text-secondary
+    react_var: --foreground + /70
+    vanilla_var: "color-mix or rgba(210,211,211,0.70) via component class"
+    tailwind: text-foreground/70
+    use: Secondary text
+
+  - hex: "#8f9091"
+    primitive: zinc-400
+    semantic: text-tertiary
+    react_var: --muted-foreground
+    vanilla_var: --muted-foreground
+    tailwind: text-muted-foreground
+    use: Tertiary text, meta info, captions
+
+  - hex: "rgba(210,211,211,0.50)"
+    primitive: alpha.zinc-200.50
+    semantic: text-disabled
+    react_var: --foreground + /50
+    vanilla_var: "rgba via component class"
+    tailwind: text-foreground/50
+    use: Disabled text, placeholders, optional field labels
+
+  - hex: "#b4b5b6"
+    primitive: zinc-300
+    semantic: null
+    react_var: --zinc-300
+    vanilla_var: null
+    tailwind: text-zinc-300
+    use: Primitive only — no semantic role. Prefer a semantic token.
+
+  - hex: "#636465"
+    primitive: zinc-500
+    semantic: null
+    react_var: --zinc-500
+    vanilla_var: null
+    tailwind: text-zinc-500
+    use: Primitive only. Light-mode muted-foreground.
+
+  # ── Product green ──────────────────────────────────────────────────
+  - hex: "#32a9a9"
+    primitive: green-500
+    semantic: accent-brand / text-brand / border-focus
+    react_var: --primary, --ring
+    vanilla_var: --primary
+    tailwind: bg-primary, text-primary, border-primary, ring-ring
+    use: CTA fill, field labels, focus rings, copy-link URLs, selected states
+
+  - hex: "#2c797a"
+    primitive: green-600
+    semantic: "(no semantic role — hover step)"
+    react_var: --green-600
+    vanilla_var: null
+    tailwind: bg-waldo-green-600
+    use: Hover state of primary fills
+
+  - hex: "#2a6c6d"
+    primitive: green-700
+    semantic: "(no semantic role — darker brand step)"
+    react_var: --green-700
+    vanilla_var: null
+    tailwind: bg-waldo-green-700
+    use: Switch ON state, darker green fills
+
+  - hex: "#265152"
+    primitive: green-800
+    semantic: "(no semantic role — input interaction border)"
+    react_var: --green-800
+    vanilla_var: null
+    tailwind: border-waldo-green-800
+    use: Input hover/focus border — single border, never a box-shadow ring
+
+  - hex: "#4dbcbc"
+    primitive: green-400
+    semantic: accent-info
+    react_var: --green-400
+    vanilla_var: null
+    tailwind: text-zinc? — no dedicated class; used via alert info styles
+    use: Info states (Alert info variant)
+
+  - hex: "rgba(50,169,169,0.15)"
+    primitive: alpha.green-500.15
+    semantic: interactive-selected
+    react_var: --primary + /15
+    vanilla_var: "rgba via component class"
+    tailwind: bg-primary/15
+    use: Selected row/item tint
+
+  - hex: "rgba(50,169,169,0.25)"
+    primitive: alpha.green-500.25
+    semantic: ring-focus
+    react_var: --ring + /25
+    vanilla_var: "rgba via component class"
+    tailwind: ring-ring/25
+    use: Focus ring alpha
+
+  # ── Status colors ──────────────────────────────────────────────────
+  - hex: "#de3a28"
+    primitive: coral-500
+    semantic: accent-destructive
+    react_var: --destructive
+    vanilla_var: --destructive
+    tailwind: bg-destructive, text-destructive, border-destructive
+    use: |
+      Destructive actions, error states. "Not red. Not pink. Not #ff6467. Coral."
+      Soft danger = coral at /10 fill + border. Hard danger (confirm dialogs only) = solid fill.
+      NEVER inside .wdd dropdown items.
+
+  - hex: "#c94e22"
+    primitive: orange-600
+    semantic: accent-warning (per tokens.json + index.html — see known_discrepancies)
+    react_var: null (globals.css ships orange-500 instead)
+    vanilla_var: --warning
+    tailwind: null
+    use: Warning states (vanilla layer)
+
+  - hex: "#e76638"
+    primitive: orange-500
+    semantic: accent-warning (as shipped in globals.css — see known_discrepancies)
+    react_var: --warning, --accent-warning
+    vanilla_var: null
+    tailwind: bg-warning, text-warning
+    use: Warning states (React layer), per-file upload errors
+
+  - hex: "#f7d371"
+    primitive: yellow-300
+    semantic: accent-highlight
+    react_var: --accent-highlight
+    vanilla_var: --highlight
+    tailwind: bg-highlight, text-highlight
+    use: Decorative highlight, "Pro" badges. No urgency meaning.
+
+  # ── Borders (alpha over zinc-200) ──────────────────────────────────
+  - hex: "rgba(210,211,211,0.12)"
+    primitive: alpha.zinc-200.12
+    semantic: border-subtle
+    react_var: --border + /[0.12]
+    vanilla_var: --border
+    tailwind: border-foreground/[0.12]
+    use: Default input border, separators, card borders, dropdown separators
+
+  - hex: "rgba(210,211,211,0.20)"
+    primitive: alpha.zinc-200.20
+    semantic: border-default
+    react_var: --border + /20
+    vanilla_var: --border-md
+    tailwind: border-foreground/20
+    use: Default border strength
+
+  - hex: "rgba(210,211,211,0.30)"
+    primitive: alpha.zinc-200.30
+    semantic: border-strong
+    react_var: --border + /30
+    vanilla_var: --border-strong (index.html ships 0.28 — see known_discrepancies)
+    tailwind: border-foreground/30
+    use: Strong border
+
+  # ── Interactive states ─────────────────────────────────────────────
+  - hex: "rgba(210,211,211,0.05)"
+    primitive: alpha.zinc-200.5
+    semantic: interactive-hover
+    tailwind: bg-foreground/5
+    use: Row/item hover tint
+
+  - hex: "rgba(210,211,211,0.10)"
+    primitive: alpha.zinc-200.10
+    semantic: interactive-pressed
+    tailwind: bg-foreground/10
+    use: Pressed state tint
+
+  - hex: "rgba(23,24,25,0.80)"
+    primitive: alpha.zinc-950.80
+    semantic: scrim-modal
+    tailwind: bg-background/80
+    use: Modal overlay scrim
+
+  - hex: "rgba(23,24,25,0.40)"
+    primitive: alpha.zinc-950.40
+    semantic: surface-frosted
+    tailwind: bg-background/40
+    use: Frosted glass surfaces (0.50 on hover)
+
+# ── Brand palette — MARKETING ONLY, never in product UI ─────────────
+brand_marketing_only:
+  warning: Using any of these in product UI is a violation. Marketing surfaces only.
+  colors:
+    - { hex: "#63dbdb", name: brand-green-500,  tailwind: bg-brand-green-500 }
+    - { hex: "#1b8c8c", name: brand-green-700,  tailwind: bg-brand-green-700 }
+    - { hex: "#fac034", name: brand-yellow-500, tailwind: bg-brand-yellow-500 }
+    - { hex: "#d40a60", name: brand-pink-500,   tailwind: bg-brand-pink-500 }
+    - { hex: "#bdd8d8", name: brand-chrome-500, tailwind: bg-brand-chrome-500 }
+    - { hex: "#813aef", name: brand-purple-500, tailwind: bg-brand-purple-500 }
+
+# ────────────────────────────────────────────────────────────────────
+# RADIUS — closed collection, never add steps
+# ────────────────────────────────────────────────────────────────────
+radius:
+  rule: NEVER rounded-[Xpx] arbitrary values — always the token class.
+  steps:
+    - { px: 4,    token: radius.sm,    tailwind: rounded-sm,    use: "square avatars" }
+    - { px: 6,    token: radius.md,    tailwind: rounded-md,    use: "cards, menu items, tables (base --radius)" }
+    - { px: 8,    token: radius.lg,    tailwind: rounded-lg,    use: "—" }
+    - { px: 12,   token: radius.xl,    tailwind: rounded-xl,    use: "—" }
+    - { px: 16,   token: radius.2xl,   tailwind: rounded-2xl,   use: "copy-link container" }
+    - { px: 20,   token: radius.2_5xl, tailwind: rounded-2-5xl, use: "dropdowns, selects, command palettes" }
+    - { px: 24,   token: radius.3xl,   tailwind: rounded-3xl,   use: "file input (per STATUS.md), nav panels" }
+    - { px: 32,   token: radius.4xl,   tailwind: rounded-4xl,   use: "—" }
+    - { px: 9999, token: radius.full,  tailwind: rounded-full,  use: "buttons, inputs, badges, tags, checkboxes (circular!), switches, pills" }
+
+# ────────────────────────────────────────────────────────────────────
+# SPACING — Tailwind scale IS the token (1=4px, 2=8px, 3=12px, 4=16px…)
+# ────────────────────────────────────────────────────────────────────
+spacing:
+  rule: Use Tailwind utilities directly (px-4, gap-3). NEVER px-[16px] or inline style padding.
+  scale: { 1: 4, 1_5: 6, 2: 8, 2_5: 10, 3: 12, 4: 16, 5: 20, 6: 24, 8: 32, 10: 40, 12: 48, 14: 56, 16: 64, 20: 80, 24: 96 }
+
+# ────────────────────────────────────────────────────────────────────
+# SHADOWS — dark-first, never hardcode shadow values
+# ────────────────────────────────────────────────────────────────────
+shadows:
+  - { var: --shadow-popover, tailwind: shadow-popover, use: "dropdowns, selects, menus, command palettes" }
+  - { var: --shadow-surface, tailwind: shadow-surface, use: "cards, panels, tooltips" }
+  - { var: --shadow-dialog,  tailwind: shadow-dialog,  use: "modals, dialogs" }
+  - { var: null,             tailwind: shadow-sm,      use: "small elevated elements (switch thumb)" }
+
+# ────────────────────────────────────────────────────────────────────
+# TYPOGRAPHY
+# ────────────────────────────────────────────────────────────────────
+typography:
+  font: Inter — the ONLY UI font. No italic anywhere.
+  mono_allowed_only_for: [code snippets, keyboard shortcuts, hex swatches, token names in docs]
+  weights: { normal: Regular, medium: Medium, semibold: "Semi Bold", bold: Bold }
+  tracks:
+    ui:      { sizes: "text-xs … text-4xl (12–36px)", tracking: "-0.02em", use: "all product surfaces" }
+    display: { sizes: "text-display-xs … text-display-2xl (24–96px)", tracking: "-0.04em", use: "marketing heroes ONLY — never in product" }
+  common_recipes:
+    ui_standard: "text-sm font-medium tracking-[-0.02em]"   # buttons, labels
+    ui_body:     "text-sm font-normal tracking-[-0.02em]"   # body, inputs
+    ui_meta:     "text-xs tracking-[-0.01em]"               # badges, meta
+  rule: Buttons are font-medium, NEVER font-semibold.
+
+# ────────────────────────────────────────────────────────────────────
+# VANILLA HTML CLASSES — for static prototypes (waldo-labs) and index.html demos
+# ────────────────────────────────────────────────────────────────────
+vanilla_classes:
+  note: |
+    Static HTML consumers (Brand API prototypes) cannot use the React library.
+    They use the canonical CSS classes defined in index.html instead. These classes
+    are atomic components — FROZEN, never modify them to fit a demo.
+  families:
+    buttons: [btn, btn-default, btn-secondary, btn-ghost, btn-outline, btn-white, btn-destructive, btn-destructive-solid, btn-solid, btn-link, btn-sm, btn-lg, btn-icon]
+    badges: [badge, badge-default, badge-active, badge-secondary, badge-destructive, badge-warning, badge-highlight, badge-outline, badge-ghost, badge-sm, badge-lg]
+    forms: [input, input-icon, field, field-label, field-hint, field-error, tag]
+    list_nav: [wli (list item), wnav (nav panel/items), wft (filter trigger), wtabs-pill (tabs), wseg (segmented control)]
+    overlays: [wdd (dropdown), wdialog (dialog sm/md/lg), walert (alert variants), wtoast]
+    misc: [wswitch, wcopy-link, wadv (advanced section), wfile (file input), wempty (empty states), wsep]
+  rule: Before writing custom HTML/CSS, check if a canonical class exists. Never recreate atoms.
+
+# ────────────────────────────────────────────────────────────────────
+# FORBIDDEN — known offenders and their corrections
+# ────────────────────────────────────────────────────────────────────
+forbidden:
+  colors:
+    - { wrong: "#ff6467", why: "shadcn default red — not Waldo", use_instead: "--destructive (#de3a28 coral)" }
+    - { wrong: "any pure red", why: "no red anywhere in product", use_instead: "coral --destructive" }
+    - { wrong: "brand-* colors in product UI", why: "marketing only", use_instead: "semantic product tokens" }
+  legacy_vars:
+    note: These variables DO NOT EXIST in the DS. Zero tolerance.
+    items:
+      - { wrong: "--txt-high",  use_instead: "--foreground" }
+      - { wrong: "--txt-med",   use_instead: "text-foreground/70" }
+      - { wrong: "--txt-reg",   use_instead: "text-foreground/70 or --foreground (pick by role)" }
+      - { wrong: "--txt-low",   use_instead: "--muted-foreground" }
+      - { wrong: "--fill-low",  use_instead: "--muted (zinc-800)" }
+      - { wrong: "--fill-reg / --fill-menu / --fill-high", use_instead: "surface token by role (--card, --popover, --accent)" }
+      - { wrong: "--bg",        use_instead: "--background" }
+      - { wrong: "--bg-card / --bg-high / --elevated", use_instead: "--card" }
+      - { wrong: "--sunken",    use_instead: "--muted" }
+      - { wrong: "--line-low",  use_instead: "--border (12% alpha)" }
+      - { wrong: "--line-reg / --line-high", use_instead: "border-foreground/20 or /30" }
+      - { wrong: "--green",     use_instead: "--primary" }
+  patterns:
+    - "Inline style= attributes for colors/backgrounds/spacing — define a class with tokens instead"
+    - "SVG stroke=\"var(--x)\" — presentation attributes don't resolve CSS vars; use style=\"stroke:var(--x)\" or currentColor"
+    - "box-shadow focus ring on inputs — single border only (border-waldo-green-800)"
+    - "font-semibold on buttons — font-medium always"
+    - "italic — anywhere"
+    - "monospace for UI text/numbers/values — Inter only"
+    - "rounded-[Xpx] arbitrary radii — token classes only"
+    - "--destructive color inside .wdd dropdown items — destructive only in dialogs/alerts/buttons"
+    - "display-* typography in product UI — marketing heroes only"
+    - "text-green-500 / bg-zinc-800 raw Tailwind palette classes — use semantic (text-primary, bg-muted)"
+    - "referencing primitives directly from components — always via semantic tokens"
+
+# ────────────────────────────────────────────────────────────────────
+# KNOWN DISCREPANCIES — found 2026-06-10 while building this catalog.
+# Documented, NOT resolved. Resolving any of these = Miguel's decision.
+# ────────────────────────────────────────────────────────────────────
+known_discrepancies:
+  - id: warning-color
+    issue: accent-warning differs between layers
+    tokens_json: "orange-600 #c94e22"
+    index_html: "--warning: #c94e22 (agrees with tokens.json)"
+    globals_css: "--warning: #e76638 (orange-500)"
+    status_md: "says orange-500 #e76638"
+    impact: React components and vanilla HTML render different warning colors.
+
+  - id: popover-surface
+    issue: popover surface differs between tokens.json and implementations
+    tokens_json: "semantic.surface.popover = zinc-700 #323539"
+    implementations: "globals.css --popover AND index.html --popover = zinc-750 #2d2f33"
+    status_md: "says zinc-750 (agrees with implementations)"
+    impact: tokens.json (Figma source of truth) disagrees with both shipped layers.
+
+  - id: primary-foreground
+    issue: text color on primary (teal) fills differs
+    globals_css: "--primary-foreground: white (comment: 'Figma shows white text on teal')"
+    index_html: "--primary-foreground: #171819 (dark)"
+    claude_md: "'Don't use green-500 as a button fill with white text — contrast fails'"
+    impact: React buttons show white-on-teal; vanilla buttons show dark-on-teal.
+
+  - id: border-strong-alpha
+    issue: strong border alpha differs
+    tokens_json: "alpha.zinc-200.30 (0.30)"
+    index_html: "--border-strong: rgba(210,211,211,0.28)"
+    impact: minor visual difference; one of the two is stale.

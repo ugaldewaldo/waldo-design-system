@@ -305,23 +305,31 @@ components:
 
   - component: FilterTrigger
     use_when:
-      - Inline filter selector inside a filter panel (bare label + chevron, opens a dropdown)
+      - Inline filter selector inside a filter panel or search header (bare label + chevron, opens a dropdown)
       - Anywhere a filter has a label + optional current value displayed inline
+      - Insights panel filter rows (Saved searches, Recent, Any source, etc.)
     dont_use_when:
       - Navigation — use NavItem instead
       - Pill-shaped filter chips — use Tag or Button ghost
       - Full-width row items — use NavItem
+      - Items that expand sub-navigation — use wnav-parent with left chevron
     prefer_over:
       - NavItem: when the item opens a dropdown to change a filter value, not navigate
       - Button: when the control is bare/inline with no background
+      - Select: when the trigger must be bare/inline with no pill background
     notes: |
-      No background, no pill. Pure inline: label [value?] chevron.
+      No background, no pill. Pure inline: label [value?] chevron (trailing, right).
       Active state (value set): label muted + value foreground + font-medium.
-      Sits inside NavPanel at px-8 (32px) from panel edge.
+      Vanilla classes: wft-active = foreground color, wft-default = 70% foreground.
+      Sits inside NavPanel at px-8 (32px) from panel edge; wrap multiple triggers
+      in wnav-filters (gap 16px, padding 0 32px 12px).
+      Click opens a wdd dropdown positioned below the trigger.
       Figma node 84014-277810 (PANEL / INSIGHTS).
 
   - component: NavItem
     use_when:
+      - Navigation between views, sections, or settings pages
+      - Sidebar panels (Signals, Settings, Report Builder, Insights)
       - Settings panel items (label + trailing icon)
       - Signal/feed sidebar items (count badge + label)
       - Report builder items (label + status indicator)
@@ -329,11 +337,15 @@ components:
     dont_use_when:
       - Data rows — use ListItem
       - Tabular data — use Table
+      - Opening a dropdown or filtering data — use FilterTrigger
+    prefer_over:
+      - ListItem: when the item navigates rather than displays entity data
     notes: |
-      32px height. Icon 14px trailing (canvas 16).
-      Active = bg-muted + font-medium.
-      Section headers use NavSection (ALL CAPS, 11px).
-      Use NavPanel as the scrollable container.
+      Height 36px, padding 0 16px, border-radius 9999px (pill), active = bg-muted + font-medium.
+      Nav items use a leading icon; settings items use a trailing icon (canvas 16, icon 14px).
+      Items with nested children use wnav-parent + left chevron.
+      Section headers use NavSection / wnav-section (ALL CAPS, 11px, padding-top 24px).
+      Use NavPanel (wnav-items-wrap, padding 0 16px) as the scrollable container.
 
   - component: CopyLink
     use_when:
@@ -410,34 +422,3 @@ component_choice_logic:
   navitem_vs_filtertrigger:
     navitem: Navigates or selects a view — full-width, pill shape, active bg
     filtertrigger: Opens a dropdown to set a filter value — bare inline, no bg
-
-- component: NavItem
-  use_when:
-    - Navigation between views, sections, or settings pages
-    - Sidebar panels (Signals, Settings, Report Builder, Insights)
-    - Any item that changes the active view on click
-  dont_use_when:
-    - Opening a dropdown or filtering data (use FilterTrigger)
-    - Displaying a row of entity data (use ListItem)
-    - Multi-column structured data (use Table)
-  prefer_over:
-    - ListItem: when the item navigates rather than displays entity data
-  notes: >
-    Height 36px, padding 0 16px, border-radius 9999px (pill), inside wnav-items-wrap (padding 0 16px).
-    Icon is leading (left). Items with nested children use wnav-parent + chevron left.
-    Active state = bg var(--muted). wnav-section header is uppercase, padding-top 24px.
-
-- component: FilterTrigger
-  use_when:
-    - Inline filter selector inside a nav panel or search header
-    - Opening a wdd dropdown to set a filter value
-    - Insights panel filter rows (Saved searches, Recent, Any source, etc.)
-  dont_use_when:
-    - Navigating between views (use NavItem)
-    - Items that expand sub-navigation (use wnav-parent with left chevron)
-  prefer_over:
-    - Select: when the trigger must be bare/inline with no pill background
-  notes: >
-    No background, no pill. Chevron is trailing (right). wft-active = foreground color.
-    wft-default = 70% foreground. Wrap multiple triggers in wnav-filters (gap 16px, padding 0 32px 12px).
-    Click opens a wdd dropdown positioned below the trigger.
