@@ -37,7 +37,7 @@ import { cn } from "@/lib/utils";
 const buttonVariants = cva(
   [
     "inline-flex items-center justify-center gap-1.5",
-    "whitespace-nowrap select-none",
+    "whitespace-nowrap select-none cursor-pointer",
     // pill shape
     "rounded-full",
     // DS text-sm-medium: 14px / 20px / -0.02em / weight 500
