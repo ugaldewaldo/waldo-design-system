@@ -64,11 +64,11 @@ Building a shadcn/ui component library (`waldo-ui/`) + a live docs site (`index.
 ## Non-negotiable rules (burn these in)
 
 ```
-Button fill       → primary (green-500 #32a9a9) — use bg-primary, NOT hardcoded hex
+Button fill       → green-700 #2a6c6d + white text — use bg-waldo-green-700 text-white (white on green-500 fails AA)
 Field label       → primary (green-500 #32a9a9) — use text-primary, NOT hardcoded hex
 Input hover       → waldo-green-800 (#265152) — use border-waldo-green-800, NO box-shadow ring
 Destructive       → coral-500 #de3a28 — use text-destructive / bg-destructive, NOT hardcoded hex
-Warning           → orange-500 #e76638 — use text-warning / bg-warning
+Warning           → orange-600 #c94e22 — use text-warning / bg-warning
 Dropdown bg       → popover (zinc-750 #2d2f33) — use bg-popover, NOT hardcoded hex
 Dropdown radius   → 20px
 FileInput radius  → 24px (NOT 32px)

@@ -49,9 +49,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // green-500 fill / zinc-950 text. One per view max.
+        // green-700 fill / white text (6.06:1 AA). One per view max.
+        // Never green-500 + white (2.84:1 fails) — text color is married to the fill.
         default:
-          "bg-primary text-primary-foreground hover:bg-primary/88 active:bg-primary/75",
+          "bg-waldo-green-700 text-white hover:bg-waldo-green-700/88 active:bg-waldo-green-700/75",
 
         // zinc-200/5% fill / zinc-200/70% text. No border.
         // Filter chips, toolbar, secondary actions.

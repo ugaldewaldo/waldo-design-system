@@ -23,7 +23,7 @@
 
   /* ── Brand ── */
   --primary:            #32a9a9;
-  --primary-foreground: #171819;
+  --primary-foreground: #ffffff;
 
   /* ── Status ── */
   --destructive:        #de3a28;
@@ -33,7 +33,7 @@
   /* ── Borders ── */
   --border:             rgba(210,211,211,0.12);
   --border-md:          rgba(210,211,211,0.20);
-  --border-strong:      rgba(210,211,211,0.28);
+  --border-strong:      rgba(210,211,211,0.30);
 
   /* ── Radius ── */
   --radius:             6px;
@@ -123,8 +123,8 @@
     /* ── SHADCN CORE VARIANTS ── */
 
     /* default — brand primary CTA */
-    .btn-default       { background: #32a9a9; color: #171819; border-color: #32a9a9; }
-    .btn-default:hover { background: #2c797a; border-color: #2c797a; }
+    .btn-default       { background: #2a6c6d; color: #ffffff; border-color: #2a6c6d; }
+    .btn-default:hover { background: rgba(42,108,109,0.88); border-color: rgba(42,108,109,0.88); }
     .btn-default:focus-visible { box-shadow: 0 0 0 2px #171819, 0 0 0 4px #4dbcbc; }
 
     /* secondary — main fill action (zinc-600, from Figma FILL/500) */
@@ -348,10 +348,10 @@
 /* font-weight: 500 (Medium) — Figma: text-sm-medium */
 
 .btn-default {
-  background: #1b8c8c; color: #ffffff;
+  background: #2a6c6d; color: #ffffff;
 }
-.btn-default:hover  { background: rgba(27,140,140,0.88); }
-.btn-default:active { background: rgba(27,140,140,0.75); }
+.btn-default:hover  { background: rgba(42,108,109,0.88); }
+.btn-default:active { background: rgba(42,108,109,0.75); }
 
 /* zinc-200/5% fill, /70% text — no border */
 .btn-secondary {

@@ -65,19 +65,19 @@ colors:
 
   - hex: "#2d2f33"
     primitive: zinc-750
-    semantic: secondary / popover (as implemented — see known_discrepancies)
-    react_var: --secondary, --popover
+    semantic: secondary / surface-popover
+    react_var: --secondary, --popover, --surface-popover
     vanilla_var: --secondary, --popover
     tailwind: bg-secondary, bg-popover
     use: Secondary button bg, tag bg, dropdowns/menus/selects (20px radius)
 
   - hex: "#323539"
     primitive: zinc-700
-    semantic: surface-popover (per tokens.json — see known_discrepancies)
-    react_var: --surface-popover
+    semantic: "(no semantic role)"
+    react_var: --zinc-700
     vanilla_var: null
     tailwind: bg-zinc-700
-    use: Scrollbar thumb; tokens.json assigns popover here but implementations use zinc-750
+    use: Scrollbar thumb. Prefer a semantic token for anything user-facing.
 
   - hex: "#41454b"
     primitive: zinc-600
@@ -143,7 +143,10 @@ colors:
     react_var: --primary, --ring
     vanilla_var: --primary
     tailwind: bg-primary, text-primary, border-primary, ring-ring
-    use: CTA fill, field labels, focus rings, copy-link URLs, selected states
+    use: |
+      Field labels, focus rings, copy-link URLs, selected states, accents.
+      As a FILL it takes dark text #171819 (6.25:1) — NEVER white (2.84:1 fails AA).
+      Not the default button fill — that is green-700.
 
   - hex: "#2c797a"
     primitive: green-600
@@ -155,11 +158,13 @@ colors:
 
   - hex: "#2a6c6d"
     primitive: green-700
-    semantic: "(no semantic role — darker brand step)"
+    semantic: "(button default fill)"
     react_var: --green-700
     vanilla_var: null
     tailwind: bg-waldo-green-700
-    use: Switch ON state, darker green fills
+    use: |
+      DEFAULT BUTTON FILL — always with white text (6.06:1 AA), never dark text (2.93:1 fails).
+      Also switch ON state and darker green fills.
 
   - hex: "#265152"
     primitive: green-800
@@ -207,19 +212,19 @@ colors:
 
   - hex: "#c94e22"
     primitive: orange-600
-    semantic: accent-warning (per tokens.json + index.html — see known_discrepancies)
-    react_var: null (globals.css ships orange-500 instead)
+    semantic: accent-warning
+    react_var: --warning, --accent-warning
     vanilla_var: --warning
-    tailwind: null
-    use: Warning states (vanilla layer)
+    tailwind: bg-warning, text-warning
+    use: Warning states
 
   - hex: "#e76638"
     primitive: orange-500
-    semantic: accent-warning (as shipped in globals.css — see known_discrepancies)
-    react_var: --warning, --accent-warning
+    semantic: "(no semantic role)"
+    react_var: --orange-500
     vanilla_var: null
-    tailwind: bg-warning, text-warning
-    use: Warning states (React layer), per-file upload errors
+    tailwind: null
+    use: Primitive only — warning is orange-600. Prefer the semantic token.
 
   - hex: "#f7d371"
     primitive: yellow-300
@@ -250,7 +255,7 @@ colors:
     primitive: alpha.zinc-200.30
     semantic: border-strong
     react_var: --border + /30
-    vanilla_var: --border-strong (index.html ships 0.28 — see known_discrepancies)
+    vanilla_var: --border-strong
     tailwind: border-foreground/30
     use: Strong border
 
@@ -379,6 +384,9 @@ forbidden:
       - { wrong: "--line-reg / --line-high", use_instead: "border-foreground/20 or /30" }
       - { wrong: "--green",     use_instead: "--primary" }
   patterns:
+    - "White text on green-500 fill — 2.84:1 fails AA. Default button = green-700 + white"
+    - "Dark text on green-700 fill — 2.93:1 fails AA. Text color is married to the fill"
+    - "#1b8c8c (brand-green-700) as product button fill — brand palette is marketing-only AND white on it fails AA (4.06:1)"
     - "Inline style= attributes for colors/backgrounds/spacing — define a class with tokens instead"
     - "SVG stroke=\"var(--x)\" — presentation attributes don't resolve CSS vars; use style=\"stroke:var(--x)\" or currentColor"
     - "box-shadow focus ring on inputs — single border only (border-waldo-green-800)"
@@ -396,30 +404,12 @@ forbidden:
 # Documented, NOT resolved. Resolving any of these = Miguel's decision.
 # ────────────────────────────────────────────────────────────────────
 known_discrepancies:
-  - id: warning-color
-    issue: accent-warning differs between layers
-    tokens_json: "orange-600 #c94e22"
-    index_html: "--warning: #c94e22 (agrees with tokens.json)"
-    globals_css: "--warning: #e76638 (orange-500)"
-    status_md: "says orange-500 #e76638"
-    impact: React components and vanilla HTML render different warning colors.
+  # RESOLVED 2026-06-11 (Miguel): warning-color → orange-600 #c94e22 everywhere.
+  # RESOLVED 2026-06-11 (Miguel): popover-surface → zinc-750 #2d2f33 everywhere.
+  #   Figma still needs a Tokens Studio push to pick up semantic.surface.popover.
+  # RESOLVED 2026-06-11 (Miguel): border-strong-alpha -> 0.30 everywhere.
 
-  - id: popover-surface
-    issue: popover surface differs between tokens.json and implementations
-    tokens_json: "semantic.surface.popover = zinc-700 #323539"
-    implementations: "globals.css --popover AND index.html --popover = zinc-750 #2d2f33"
-    status_md: "says zinc-750 (agrees with implementations)"
-    impact: tokens.json (Figma source of truth) disagrees with both shipped layers.
+  # RESOLVED 2026-06-11 (Miguel): primary-foreground -> default button is green-700
+  #   fill + white text (6.06:1 AA). Crossed combos forbidden (see forbidden.patterns).
+  #   Figma needs updating: its button fill was #1b8c8c (brand-green-700, 4.06:1 with white).
 
-  - id: primary-foreground
-    issue: text color on primary (teal) fills differs
-    globals_css: "--primary-foreground: white (comment: 'Figma shows white text on teal')"
-    index_html: "--primary-foreground: #171819 (dark)"
-    claude_md: "'Don't use green-500 as a button fill with white text — contrast fails'"
-    impact: React buttons show white-on-teal; vanilla buttons show dark-on-teal.
-
-  - id: border-strong-alpha
-    issue: strong border alpha differs
-    tokens_json: "alpha.zinc-200.30 (0.30)"
-    index_html: "--border-strong: rgba(210,211,211,0.28)"
-    impact: minor visual difference; one of the two is stale.

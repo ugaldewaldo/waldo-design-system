@@ -167,9 +167,14 @@ Components reference **semantic tokens only** — never primitives directly.
 ## Colors — non-negotiable rules
 
 ### Brand green (product)
-- `green-700: #2a6c6d` → darker green
-- `green-500: #32a9a9` → primary brand · `accent-brand` · CTA fill · focus rings
-- `green-600: #2c797a` → hover state
+- `green-700: #2a6c6d` → **default button fill + white text** (6.06:1 AA)
+- `green-500: #32a9a9` → primary brand · `accent-brand` · field labels · focus rings · accents
+- `green-600: #2c797a` → hover state of green-500 fills
+
+**Text is married to the fill — never cross them:**
+- green-500 fill → dark text `#171819` (6.25:1 ✓) · white fails (2.84:1 ✗)
+- green-700 fill → white text (6.06:1 ✓) · dark fails (2.93:1 ✗)
+- `#1b8c8c` (brand-green-700) is NOT a product button fill — it's marketing AND white on it fails AA (4.06:1)
 
 ### Destructive
 - `coral-500: #de3a28` → `accent-destructive`. Red-leaning (hue 5°) to differentiate from warning.
@@ -195,8 +200,8 @@ Components reference **semantic tokens only** — never primitives directly.
 | zinc-900 | #202123 | `surface-elevated` | Cards, panels |
 | zinc-850 | #242528 | `surface-elevated-alt` | Sidebar |
 | zinc-800 | #27282b | `surface-sunken` | Inputs, code |
-| zinc-750 | #2d2f33 | `secondary` | Secondary button bg |
-| zinc-700 | #323539 | `surface-popover` | Menus, dropdowns |
+| zinc-750 | #2d2f33 | `secondary` · `surface-popover` | Secondary button bg · menus, dropdowns |
+| zinc-700 | #323539 | — | Scrollbar thumb (no semantic role) |
 | zinc-600 | #41454b | `accent` | Menu items |
 
 ---

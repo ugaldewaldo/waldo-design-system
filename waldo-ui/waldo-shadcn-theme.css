@@ -163,7 +163,7 @@
     --destructive:            6 77% 41%;              /* coral-600 #ba2818 */
     --destructive-foreground: 0 0% 100%;
 
-    --warning:                18 80% 56%;            /* orange-500 #e76638 */
+    --warning:                16 71% 46%;            /* orange-600 #c94e22 */
     --warning-foreground:     0 0% 100%;
 
     --border:                 220 9% 88%;
@@ -196,7 +196,7 @@
     --card:                   220 4% 13%;            /* zinc-900  #202123 */
     --card-foreground:        180 1% 82%;
 
-    --popover:                214 7% 21%;            /* zinc-700  #323539 */
+    --popover:                220 6% 19%;            /* zinc-750  #2d2f33 */
     --popover-foreground:     180 1% 82%;
 
     --primary:                180 54% 43%;           /* green-500  #32a9a9 */
@@ -214,7 +214,7 @@
     --destructive:            6 73% 51%;              /* coral-500 #de3a28 */
     --destructive-foreground: 180 1% 82%;
 
-    --warning:                18 80% 56%;            /* orange-500 #e76638 */
+    --warning:                16 71% 46%;            /* orange-600 #c94e22 */
     --warning-foreground:     0 0% 100%;
 
     --border:                 180 1% 82% / 0.12;     /* zinc-200  12% */
@@ -413,6 +413,7 @@ code, kbd, samp, pre { font-family: var(--font-mono); }
 
   --color-coral-500:  rgb(222 58 40);
   --color-orange-500: rgb(231 102 56);
+  --color-orange-600: rgb(201 78 34);
   --color-yellow-300: rgb(247 211 113);
 
   /* ── Border radius ── */

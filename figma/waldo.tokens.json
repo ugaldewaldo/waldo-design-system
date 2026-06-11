@@ -151,7 +151,7 @@
       "elevated":      { "value": "{primitives.zinc.900}",          "type": "color" },
       "elevated-alt":  { "value": "{primitives.zinc.850}",          "type": "color" },
       "sunken":        { "value": "{primitives.zinc.800}",          "type": "color" },
-      "popover":       { "value": "{primitives.zinc.700}",          "type": "color" },
+      "popover":       { "value": "{primitives.zinc.750}",          "type": "color" },
       "frosted":       { "value": "{primitives.alpha.zinc-950.40}", "type": "color" },
       "frosted-hover": { "value": "{primitives.alpha.zinc-950.50}", "type": "color" }
     },

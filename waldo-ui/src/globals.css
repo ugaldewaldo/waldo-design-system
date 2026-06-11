@@ -36,6 +36,7 @@
   /* Accent */
   --color-coral-500:  rgb(222 58 40);
   --color-orange-500: rgb(231 102 56);
+  --color-orange-600: rgb(201 78 34);
   --color-yellow-300: rgb(247 211 113);
 
   /* Brand (marketing only) */
@@ -72,8 +73,8 @@
     --zinc-400: 143 144 145;   /* text-tertiary */
     --zinc-500:  99 100 101;
     --zinc-600:  65  69  75;
-    --zinc-700:  50  53  57;   /* surface-popover */
-    --zinc-750:  45  47  51;
+    --zinc-700:  50  53  57;
+    --zinc-750:  45  47  51;   /* surface-popover / secondary */
     --zinc-800:  39  40  43;   /* surface-sunken */
     --zinc-850:  36  37  40;   /* surface-elevated alt */
     --zinc-900:  32  33  35;   /* surface-elevated */
@@ -86,7 +87,8 @@
     --green-800:  38  81  82;  /* input hover/focus border #265152 */
 
     --coral-500: 222  58  40;  /* destructive */
-    --orange-500: 231 102  56; /* warning */
+    --orange-500: 231 102  56;
+    --orange-600: 201  78  34; /* warning */
     --yellow-300: 247 211 113; /* highlight */
 
     /* ── Brand palette (marketing only — never in product UI) ── */
@@ -113,7 +115,7 @@
 
     /* shadcn: primary = brand CTA */
     --primary:           50 169 169;        /* green-500 — product brand */
-    --primary-foreground: 255 255 255;      /* white — Figma shows white text on teal in all modes */
+    --primary-foreground: 255 255 255;      /* white — pairs with green-700 button fill (6.06:1 AA); never white on green-500 (2.84:1 fails) */
 
     /* shadcn: secondary = subtle interactive */
     --secondary:         45 47 51;          /* zinc-750 */
@@ -131,8 +133,8 @@
     --destructive:      222  58  40;        /* coral-500 */
     --destructive-foreground: 210 211 211;
 
-    /* shadcn: warning — orange-500 */
-    --warning:          231 102  56;
+    /* shadcn: warning — orange-600 */
+    --warning:          201  78  34;
     --warning-foreground: 210 211 211;
 
     /* shadcn: border / input / ring */
@@ -143,7 +145,7 @@
     /* ── Waldo semantic extras (non-shadcn) ── */
     --surface-default:     23 24 25;
     --surface-elevated:    32 33 35;
-    --surface-popover:     50 53 57;
+    --surface-popover:     45 47 51;        /* zinc-750 */
     --surface-sunken:      39 40 43;
 
     --text-primary:       210 211 211;
@@ -159,7 +161,7 @@
 
     --accent-brand:        50 169 169;
     --accent-destructive: 222  58  40;      /* coral-500 */
-    --accent-warning:     231 102  56;      /* orange-500 */
+    --accent-warning:     201  78  34;      /* orange-600 */
     --accent-highlight:   247 211 113;
 
     /* ── Radius ──────────────────────────────
