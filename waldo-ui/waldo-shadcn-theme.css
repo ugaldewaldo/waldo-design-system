@@ -259,9 +259,6 @@
    Wrap the typography vars below in `@theme { ... }` so utilities
    `text-xs`, `text-display-md`, `font-mono`, etc. auto-generate.
 
-   ─── For Tailwind v3 users ──────────────────────────────────────
-   Mirror these tokens in tailwind.config.js → theme.extend.fontSize
-   using the compound tuple syntax. See NOTES-FOR-STEVE.md.
    ══════════════════════════════════════════════════════ */
 :root {
   --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
