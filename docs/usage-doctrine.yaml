@@ -38,9 +38,13 @@ components:
     dont_use_when:
       - Multi-line content — use Textarea
       - Selection from a list — use Select or Combobox
+    prefer_over:
+      - Combobox: when the value is free text, not a selection from known options
+      - TagInput: when only a single value is entered, not a multi-value list
     notes: |
       Always pill shape (rounded-full). Label uses text-primary.
       Hover/focus border: border-waldo-green-800. No ring.
+
 
   - component: Select / Dropdown
     use_when:
@@ -49,6 +53,16 @@ components:
     dont_use_when:
       - 2-3 options — use SegmentedControl or RadioGroup instead
       - Free-text search needed — use Combobox
+    prefer_over:
+      - RadioGroup: when there are 5+ options and inline space is limited
+      - FilterTrigger: when the trigger needs a pill background inside a form, not a bare inline filter
+    notes: |
+      Select trigger: h-8, rounded (4px), bg-secondary, border foreground/12, px-2.5 py-1.5 text-sm;
+      hover/focus border-waldo-green-800, no ring; disabled opacity-40.
+      Select content: rounded-2-5xl, bg-popover, shadow-popover, py-1.5, width matches trigger;
+      items text-[13px] popover-foreground/70, check indicator text-primary.
+      DropdownMenu has its own entry. Figma node 62122:58381.
+
 
   - component: Checkbox
     use_when:
@@ -58,7 +72,11 @@ components:
     dont_use_when:
       - Mutually exclusive options — use RadioGroup
       - Immediate action toggle — use Switch
+    prefer_over:
+      - Switch: when the choice is saved with a form submit rather than applied instantly
+      - RadioGroup: when selections are independent, not mutually exclusive
     notes: Circular shape (not square). green variant for brand, mono for neutral.
+
 
   - component: Switch
     use_when:
@@ -67,6 +85,13 @@ components:
     dont_use_when:
       - Options that need a Save action — use Checkbox + Button instead
       - Multi-select — use Checkbox
+    prefer_over:
+      - Checkbox: when the toggle takes effect immediately without a Save action
+    notes: |
+      32x18px pill; ON track bg-primary, OFF track bg-muted (zinc-800).
+      Thumb: white 14px circle (h-3.5), translates 13px when checked; 150ms transitions.
+      Disabled opacity-40. Built on Radix Switch. Figma node 11406:98105.
+
 
   - component: Badge
     use_when:
@@ -93,7 +118,13 @@ components:
       - Representing a person (round shape)
       - Representing a brand/company/logo (square shape)
       - Member lists, author attribution, team displays
+    dont_use_when:
+      - Status indicators or labels — use Badge
+      - Decorative icons that don't represent a person or brand — use Icon
+    prefer_over:
+      - Icon: when representing a specific person or brand rather than a generic concept
     notes: round = people, square = brands. Sizes 16/24/32/40px.
+
 
   - component: Tag / TagInput
     use_when:
@@ -102,6 +133,16 @@ components:
     dont_use_when:
       - Static labels — use Badge
       - Single selection — use Select
+    prefer_over:
+      - Badge: when the user can remove the value (onRemove interaction)
+      - Input: when the field collects multiple discrete values instead of one string
+    notes: |
+      Tag: pill rounded-full, bg-popover (zinc-750); sizes sm=28, default=36, lg=44px;
+      textColor high (foreground) or muted (foreground/70); onRemove adds X button (opacity-50 to 100 on hover).
+      TagInput: min-h-10 rounded-full container (rounded-2xl when tags present), border foreground/12,
+      focus-within border-waldo-green-800; Enter/comma/blur adds, Backspace removes last, dedupes, optional maxTags.
+      Figma node 67645:81618 (CHIP/800).
+
 
   - component: FileInput
     use_when:
@@ -109,6 +150,9 @@ components:
       - Showing uploaded file list with remove action
     dont_use_when:
       - Simple single-file button upload — use a Button instead
+      - Showing per-file async status outside a drop zone — use StatusSpinner in a ListItem row
+    prefer_over:
+      - Button: when drag-and-drop and a visible uploaded-file list are needed
     notes: |
       Two sizes: default (68px drop zone, py-6) and slim (36px drop zone, py-2).
       Slim is functionally identical to default — same file list, same drag-and-drop,
@@ -118,6 +162,7 @@ components:
       Hover state: bg-secondary. Drag-over: bg-secondary + teal border.
       Error state per file uses text-warning inline.
       Zone text is text-primary (teal). Optional label uses foreground/50.
+
 
   - component: SegmentedControl
     use_when:
@@ -144,6 +189,13 @@ components:
     dont_use_when:
       - Required information — put it in the UI, not a tooltip
       - Long text — use Popover
+    prefer_over:
+      - Popover: when the content is a short non-essential hint, not rich or interactive content
+    notes: |
+      Content: bg-zinc-900, rounded-md, px-2.5 py-1.5, shadow-surface, matching zinc-900 arrow.
+      Text 12px font-medium tracking-[-0.01em] text-foreground; animate-fade-in, sideOffset 4.
+      Requires TooltipProvider wrapper (Radix).
+
 
   - component: Table
     use_when:
@@ -152,11 +204,14 @@ components:
     dont_use_when:
       - Simple lists — use ListItem/ListView
       - 1-2 columns — use a list layout
+    prefer_over:
+      - ListItem / ListView: when the data has 3+ comparable columns or needs sorting
     notes: |
       stickyHeader prop — keeps thead fixed on scroll, bg-muted (zinc-800) header background.
       Linear pattern: slightly lighter than card surface, no shadow. Use maxHeight prop to
       constrain the scroll container (default 400px).
       Waldo extension: shadcn Table has no stickyHeader.
+
 
   - component: Tabs
     use_when:
@@ -165,6 +220,15 @@ components:
     dont_use_when:
       - 2-3 toggle options — use SegmentedControl
       - Deeply nested navigation — use sidebar
+    prefer_over:
+      - SegmentedControl: when switching navigates between distinct sections rather than toggling modes on the same data
+      - Select: when there are few enough sections to show all options inline
+    notes: |
+      Two variants: text = transparent, px-3 py-2, active = text-foreground + font-medium (page-level nav);
+      pill = px-3 py-1 rounded-full, active = bg-secondary + font-medium + shadow-surface (inline filters, view toggles).
+      Inactive: text-muted-foreground, hover to foreground. Built on Radix Tabs; disabled opacity-40.
+      Figma node 83931-3758.
+
 
   - component: Alert
     use_when:
@@ -189,6 +253,9 @@ components:
     dont_use_when:
       - Persistent warnings — use Alert
       - Blocking confirmations — use AlertDialog
+    prefer_over:
+      - Alert: when feedback is ephemeral and self-dismissing rather than tied to the current view
+      - Dialog: when the message needs no acknowledgment or user action
     notes: |
       notification pattern for user actions.
       banner pattern for system-level alerts (limits, connectivity).
@@ -196,12 +263,21 @@ components:
       Exports: toast (function) + Toaster (component). No useToast hook.
       Use: toast("message") / toast.success() / toast.error() / toast.warning()
 
+
   - component: Separator
     use_when:
       - Grouping related items in menus, dropdowns, settings panels
       - Visual division between sections
     dont_use_when:
       - Adding space — use padding/margin instead
+      - Separating major page sections with their own headers — use layout, not a line
+    prefer_over:
+      - Spacing utilities: when groups need an explicit visual divider, not just whitespace
+    notes: |
+      1px line, bg-foreground/[0.12] (border-subtle).
+      orientation horizontal (h-px w-full, default) or vertical (h-full w-px); decorative by default.
+      Built on Radix Separator.
+
 
   - component: ListItem / ListView
     use_when:
@@ -210,16 +286,26 @@ components:
     dont_use_when:
       - Tabular data with multiple columns — use Table
       - Navigation items — use NavItem
+    prefer_over:
+      - Table: when rows are entity-centric (avatar + label + hover actions) with 1-2 columns
+      - NavItem: when the row displays entity data rather than navigating
     notes: 40px height. Actions appear on hover. Avatar round=people, square=brands.
+
 
   - component: EmptyState
     use_when:
       - Page, section, or inline area with no data yet
       - After filtering returns zero results
+    dont_use_when:
+      - Loading states while data fetches — use Skeleton
+      - Error feedback after a failed action — use Alert or Toast
+    prefer_over:
+      - Skeleton: when the zero-data state is final (no data exists), not a loading placeholder
     notes: |
       page (80px padding) for full-view empty.
       section (48px) inside tables/panels.
       inline (24px) inside dropdowns/search.
+
 
   - component: RadioGroup
     use_when:
@@ -228,6 +314,15 @@ components:
     dont_use_when:
       - Independent toggles — use Switch or Checkbox
       - 2 options that are view toggles — use SegmentedControl
+    prefer_over:
+      - Select: when there are 2-4 options that benefit from descriptions and all-visible layout
+      - SegmentedControl: when options need a description line (RadioGroupField supports it)
+    notes: |
+      Item: circular 16px (h-4 w-4); unchecked border-foreground/30, transparent bg;
+      checked = colored border + 8px center dot, bg stays transparent.
+      colorScheme: brand = primary green (default), mono = foreground/70; disabled opacity-40.
+      Root flex-col gap-2; RadioGroupField composes item + label + optional description.
+
 
   - component: Slider
     use_when:
@@ -235,6 +330,14 @@ components:
       - Range selection with two thumbs
     dont_use_when:
       - Precise numeric input — use Input with type=number
+      - Choosing among a small set of discrete options — use SegmentedControl or RadioGroup
+    prefer_over:
+      - Input: when approximate visual adjustment matters more than exact numeric values
+    notes: |
+      Track: h-1 (4px) rounded-full bg-muted; filled range bg-primary.
+      Thumb: h-2.5 (10px) rounded-full bg-primary, shadow-surface, focus ring-ring/30, grab cursors.
+      Single value or range (two thumbs via two-value array); disabled opacity-40.
+
 
   - component: Dialog / Modal
     use_when:
@@ -243,6 +346,9 @@ components:
     dont_use_when:
       - Large panels with navigation — use Sheet/Drawer
       - Purely informational content — use Toast or Alert
+    prefer_over:
+      - Sheet: when the action is compact and needs the user's full attention, centered
+      - WizardDialog: when the flow is a single step with no progression
     notes: |
       WALDO EXTENSIONS (not in shadcn — intentional additions):
         DialogBody     — wraps the scrollable content area between header and footer. Adds consistent padding and gap.
@@ -290,6 +396,7 @@ components:
         14. Brand Audit — md, form fields + FileInput slim + AdvancedSection + split footer
         15. Report builder — lg, SegmentedControl + date Fields
 
+
   - component: WizardDialog
     use_when:
       - Multi-step onboarding flows
@@ -297,6 +404,16 @@ components:
     dont_use_when:
       - Single-step forms — use Dialog
       - Settings — use Dialog with tabs
+    prefer_over:
+      - Dialog: when the flow has multiple sequential steps with back/next navigation and a contextual image panel
+    notes: |
+      Split layout: left step content, right 280px dark image panel (bg-zinc-900);
+      content max-w-[800px], rounded-4xl, bg-card, shadow-dialog.
+      Header: uppercase step label (text-xs, tracking 0.04em) + close; title text-xl font-medium; px-8 throughout.
+      Footer: Back link left, primary Next button right (h-11 px-8 rounded-full).
+      Progress dots: active 16x6 primary pill, completed 6px primary/50, upcoming 6px foreground/20.
+      Figma node 83966-356773.
+
 
   - component: StatusSpinner
     use_when:
@@ -305,7 +422,11 @@ components:
     dont_use_when:
       - Page-level loading — use Skeleton
       - Button loading state — use DotsLoader or built-in Button loading prop
+    prefer_over:
+      - Skeleton: when showing per-item async status that resolves to success/error/warning, not page-level loading
+      - Loader: when the operation has a terminal state to morph into, not an indefinite wait
     notes: Canvas 16px. Morphs to success/error/warning with animation.
+
 
   - component: FilterTrigger
     use_when:
@@ -358,12 +479,15 @@ components:
     dont_use_when:
       - Editable URL fields — use Input instead
       - Multiple links in a list — use ListItem instead
+    prefer_over:
+      - Input: when the URL is read-only and the primary action is one-click copy
     notes: |
       URL text is always text-primary (teal) — not muted, not foreground.
       Always full width of its container (no fit-content).
       bg-secondary container, rounded-2xl.
       Click copies to clipboard and swaps copy icon → check icon for 2s.
       Figma node 83966:356556.
+
 
   - component: AdvancedSection
     use_when:
@@ -393,6 +517,538 @@ components:
       Canvas 16px. Always 14px rendered (h-3.5 w-3.5). Uses currentColor.
       3 horizontal lines of decreasing width.
       Figma node 84009:176113.
+
+  - component: AlertDialog
+    use_when:
+      - Confirming deletion of a space, feed, or saved report where data loss is irreversible
+      - Confirming a destructive bulk action on signals (e.g. dismiss all, purge feed items)
+      - Interrupting the user before an action that consumes credits or triggers an external send
+    dont_use_when:
+      - Non-blocking editing or configuration of a feed or report — use Dialog
+      - Lightweight inline confirmation that can be undone — use a toast with undo action instead
+      - Contextual info or settings anchored to a trigger — use Popover
+    prefer_over:
+      - Dialog: when the action is destructive/irreversible and must block dismissal via outside click or Escape
+      - Popover: when the decision must interrupt the flow rather than sit beside the trigger
+    notes: |
+      shadcn default — not yet reviewed against Figma. Content: rounded-lg, bg-background, p-6, shadow-lg, gap-4,
+      max-w-[calc(100%-2rem)]; size="default" caps at sm:max-w-lg, size="sm" at max-w-xs (footer becomes 2-col grid).
+      Overlay bg-black/50. Includes AlertDialogMedia slot (size-16 rounded-md bg-muted icon well).
+      Action/Cancel render as DS Button (Action variant="default", Cancel variant="outline").
+
+  - component: ContextMenu
+    use_when:
+      - Right-click actions on a signal card in a feed (pin, mute brand, copy link, add to report)
+      - Right-click on a space or feed in the sidebar tree (rename, duplicate, archive)
+      - Power-user shortcuts on report blocks or insight rows without adding visible chrome
+    dont_use_when:
+      - Actions that need a discoverable visible trigger — use DropdownMenu on a kebab/ellipsis button
+      - Persistent app-level menus — use Menubar
+      - Picking a value for a form field — use Select or Combobox
+    prefer_over:
+      - DropdownMenu: when the surface is large (cards, rows, canvas) and right-click is the natural gesture; no extra trigger button needed
+    notes: |
+      shadcn default — not yet reviewed against Figma. Content: rounded-md, border, bg-popover, p-1, shadow-md,
+      min-w-[8rem]. Items rounded-sm px-2 py-1.5 text-sm, focus:bg-accent; variant="destructive" gets
+      text-destructive + focus:bg-destructive/10. Supports CheckboxItem, RadioItem, Sub menus, Label, Shortcut.
+
+  - component: DropdownMenu
+    use_when:
+      - Kebab/ellipsis action menu on signal cards, feed items, and report rows (edit, share, delete)
+      - Workspace/account switcher and user avatar menu in the top bar
+      - Sort or grouping options behind a labeled button on a feed or insights list
+    dont_use_when:
+      - Selecting a value that fills a form field — use Select or Combobox
+      - Right-click contextual actions on a large surface — use ContextMenu
+      - Searchable navigation across many destinations — use Command (palette)
+    prefer_over:
+      - ContextMenu: when the trigger must be visible and discoverable (button-anchored)
+      - Popover: when the content is a list of actions, not free-form content — items, separators, and shortcuts come built in
+    notes: |
+      Waldo-customized from Figma DS (node 62122:58381). Container: bg-popover (zinc-750), rounded-2-5xl
+      (20px radius), py-3, shadow-popover, min-w-[160px]. Items: px-4 py-2 text-sm tracking-[-0.02em],
+      text-popover-foreground/70 with hover/focus text-foreground + bg-foreground/5; disabled opacity-40.
+      Separator h-px bg-foreground/[0.12]. Label is 11px uppercase tracking-wider muted.
+      Open animation: animate-fade-in + animate-slide-in-top. NEVER --destructive inside items.
+
+  - component: HoverCard
+    use_when:
+      - Previewing a brand profile (logo, follower counts, recent signals) when hovering a brand mention
+      - Peeking at a creator or author card from a byline in a signals feed
+      - Showing a report or space summary on hover over a link, without navigating
+    dont_use_when:
+      - Short text label or hint — use Tooltip
+      - Content the user must click or interact with (buttons, inputs) — use Popover
+      - Touch-first or mobile flows where hover does not exist — use Popover or Sheet
+    prefer_over:
+      - Tooltip: when the preview is rich content (avatar, stats, multiple lines), not a one-line label
+      - Popover: when the surface is read-only and should open/close on hover with no click commitment
+    notes: |
+      shadcn default — not yet reviewed against Figma. Content: w-64, rounded-md, border, bg-popover,
+      p-4, text-popover-foreground, shadow-md, sideOffset=4. Hover-triggered only (Radix HoverCard) —
+      no touch support.
+
+  - component: Popover
+    use_when:
+      - Date-range picker for filtering signals or report periods, anchored to a filter button
+      - Inline settings panel for a feed widget (refresh cadence, sources) without leaving the page
+      - Small anchored forms like "add tag to insight" or share-link options
+    dont_use_when:
+      - A pure action list — use DropdownMenu
+      - Read-only hover preview of a brand or person — use HoverCard
+      - Multi-field editing tasks or long content — use Dialog or Sheet
+    prefer_over:
+      - Dialog: when the task is small and benefits from staying anchored to its trigger and visible page context
+      - HoverCard: when the user must interact with the content (click, type), not just glance
+    notes: |
+      shadcn default — not yet reviewed against Figma. Content: w-72, rounded-md, border, bg-popover,
+      p-4, text-popover-foreground, shadow-md, sideOffset=4. Provides PopoverHeader / PopoverTitle /
+      PopoverDescription subcomponents plus PopoverAnchor for detached positioning.
+
+  - component: Sheet
+    use_when:
+      - Signal detail panel sliding in from the right while keeping the feed visible behind the overlay
+      - Editing a space's configuration (sources, brands tracked) in a side panel
+      - Report block inspector or insight annotation panel on desktop
+    dont_use_when:
+      - Mobile bottom-edge interactions with swipe-to-dismiss — use Drawer
+      - Short confirmations or small forms — use Dialog or AlertDialog
+      - Content that should persist alongside the page without modal overlay — use a Sidebar/Resizable layout instead
+    prefer_over:
+      - Dialog: when content is long/scrollable and benefits from full viewport height with the page context behind it
+      - Drawer: on desktop, where edge-slide without drag gestures is expected
+    notes: |
+      shadcn default — not yet reviewed against Figma. Modal overlay bg-black/50; panel bg-background
+      shadow-lg, side="right" default (also left/top/bottom); right/left are w-3/4 sm:max-w-sm.
+      Open animation 500ms, close 300ms. Built-in close button toggleable via showCloseButton.
+
+  - component: Drawer
+    use_when:
+      - Mobile bottom-sheet for signal quick actions or filter controls with swipe-to-dismiss
+      - Touch-friendly detail view of a feed item on small viewports
+      - Progressive disclosure of report options on mobile where a centered Dialog feels cramped
+    dont_use_when:
+      - Desktop side panels — use Sheet
+      - Blocking destructive confirmation — use AlertDialog
+      - Anchored micro-interactions next to a control — use Popover
+    prefer_over:
+      - Sheet: on touch devices, for the vaul drag handle and gesture-driven dismiss
+      - Dialog: on mobile, when content benefits from a bottom-anchored, partially-open surface
+    notes: |
+      shadcn default — not yet reviewed against Figma. Built on vaul. Panel bg-background; bottom
+      direction gets rounded-t-lg, border-t, max-h-[80vh], and a drag handle (h-2 w-[100px]
+      rounded-full bg-muted). Supports top/bottom/left/right. Overlay bg-black/50.
+
+  - component: Command
+    use_when:
+      - Global command palette (Cmd+K) to jump between spaces, feeds, and reports
+      - Searchable action list inside a Popover (e.g. assign signal to feed from many options)
+      - Filterable multi-group pickers — brands, sources, report templates — with keyboard navigation
+    dont_use_when:
+      - Short static option list bound to a form value — use Select
+      - Plain action menus with no search need — use DropdownMenu
+      - Single-field autocomplete bound to an input — use Combobox
+    prefer_over:
+      - Select: when the option set is long enough to need fuzzy filtering and grouping
+      - DropdownMenu: when keyboard-driven search across many items is the primary interaction
+    notes: |
+      Waldo-customized cmdk wrapper. Root: rounded-lg, bg-popover, text-popover-foreground. Input row:
+      h-10 text-sm with Search icon, border-b border-border/20. List max-h-[300px] p-1. Items:
+      rounded-[3px] px-2 py-1.5 text-sm, aria-selected:bg-accent, disabled opacity-40. Group headings:
+      11px font-medium uppercase tracking-wider muted. No built-in CommandDialog — compose with Dialog
+      or Popover yourself.
+
+  - component: Combobox
+    use_when:
+      - Typeahead brand picker when adding brands to track in a space
+      - Selecting a feed or report destination from a long list while typing to filter
+      - Tag/topic input on insights where options are fetched or numerous
+    dont_use_when:
+      - Few options (under ~7) with no search need — use Select
+      - Full-screen navigational search — use Command in a palette
+      - Free-form text with no constrained options — use Input
+    prefer_over:
+      - Select: when the list is long and filter-as-you-type beats scrolling
+      - Command: when the value binds to a single form field with an input-style trigger
+    notes: |
+      shadcn default — not yet reviewed against Figma. Built on @base-ui/react Combobox (not Radix).
+      Input: h-9 rounded-md border-input bg-transparent px-3 text-sm, focus ring-[3px] ring-ring/50.
+      Popup: rounded-md bg-popover shadow-md, max-h-96, width matches anchor. Items: rounded-sm
+      py-1.5 pr-8 pl-2, data-highlighted:bg-accent, CheckIcon indicator right.
+
+  - component: Menubar
+    use_when:
+      - Persistent app-level menu row in a desktop-style editor surface (e.g. report builder: File, Insert, View)
+      - Grouped command sets with keyboard shortcuts always visible at the top of a workspace canvas
+    dont_use_when:
+      - Single button-triggered action list — use DropdownMenu
+      - Primary app navigation between sections — use Sidebar or Tabs
+      - Right-click actions on content — use ContextMenu
+    prefer_over:
+      - DropdownMenu: when multiple related menus must sit side-by-side with arrow-key roving between them
+      - NavigationMenu: when items are commands/actions (with shortcuts, checkboxes) rather than links
+    notes: |
+      shadcn default — not yet reviewed against Figma. Root bar: h-9, rounded-md, border, bg-background,
+      p-1, shadow-xs, gap-1. Triggers: rounded-sm px-2 py-1 text-sm font-medium, open state bg-accent.
+      Content: min-w-[12rem], rounded-md, border, bg-popover, p-1, shadow-md. Items match ContextMenu
+      styling; supports CheckboxItem, RadioItem, Sub menus, Shortcut.
+
+  - component: Card
+    use_when:
+      - Grouping a self-contained insight or report summary on a dashboard, with title, description, and an action in the header
+      - Presenting a signal feed's stat block (mention counts, sentiment deltas) as a bounded surface
+      - Wrapping a space overview tile (brand logo, latest activity, quick actions) in a grid of spaces
+    dont_use_when:
+      - Rendering a long uniform list of signals or mentions — use ListItem inside a plain container
+      - Showing dense comparative data across feeds — use Table
+      - Housing secondary or power-user settings — use AdvancedSection
+    prefer_over:
+      - Table: when each record is a rich standalone object (insight, report) rather than a row of comparable fields
+      - ListItem: when content needs internal structure (header/content/footer) and visual containment, not just a scannable row
+    notes: |
+      shadcn default — not yet reviewed against Figma. Root: rounded-xl, border, bg-card,
+      text-card-foreground, shadow-sm, flex-col gap-6 py-6. Header/Content/Footer use px-6;
+      header is a container-query grid that adds a [1fr_auto] column when CardAction is present.
+      CardTitle: leading-none font-semibold; CardDescription: text-sm text-muted-foreground.
+
+  - component: Sidebar
+    use_when:
+      - The app shell's primary navigation with grouped menus and an active-route indicator
+      - Persistent workspace switcher plus per-space navigation that survives route changes and collapses to icons
+      - Mobile navigation that should automatically become an off-canvas Sheet drawer
+    dont_use_when:
+      - Switching between views inside a single page — use Tabs or SegmentedControl
+      - A temporary contextual panel (signal detail, filters) — use Sheet or Drawer
+      - A simple flat list of links inside content — use NavItem directly without the full shell
+    prefer_over:
+      - NavigationMenu: for app-level persistent navigation; NavigationMenu is for horizontal header menus with dropdown panels
+      - Sheet: when navigation is permanent chrome, not a transient overlay (Sidebar falls back to Sheet on mobile automatically)
+    notes: |
+      Widths: SIDEBAR_WIDTH 16rem, mobile 18rem, icon-collapsed 3rem. Cmd/Ctrl+B toggles; state
+      persisted in "sidebar_state" cookie. Variants: sidebar | floating | inset; collapsible:
+      offcanvas | icon | none. Uses bg-sidebar / text-sidebar-foreground / bg-sidebar-accent tokens.
+      MenuButton sizes: default h-8 text-sm, sm h-7 text-xs, lg h-12. Mobile renders inside Sheet
+      automatically via useIsMobile.
+
+  - component: Breadcrumb
+    use_when:
+      - Showing location depth inside a space hierarchy (Space > Feed > Signal detail)
+      - Report drill-downs where users navigate back up the path
+      - Long paths that need truncation — BreadcrumbEllipsis collapses middle ancestors
+    dont_use_when:
+      - Top-level section switching — use Sidebar or Tabs; breadcrumbs reflect position, they don't offer peers
+      - A single back action — use a Button with a chevron instead of a one-segment breadcrumb
+    prefer_over:
+      - Tabs: for hierarchical "where am I" context; Tabs are for lateral sibling views at the same level
+      - NavigationMenu: for read-mostly path display; NavigationMenu implies interactive dropdown exploration
+    notes: |
+      List: text-sm, tracking-[-0.02em] (Waldo tightened), text-muted-foreground, gap-1.5 (sm:gap-2.5).
+      Current page: font-normal text-foreground with aria-current="page". Links hover:text-foreground.
+      Separator defaults to ChevronRight strokeWidth 1.5, size-3.5. Ellipsis is a size-9 hit area.
+
+  - component: NavigationMenu
+    use_when:
+      - A horizontal top-bar menu where items expand into rich dropdown panels with descriptions per link
+      - Grouped link panels on marketing or settings surfaces
+    dont_use_when:
+      - Primary app navigation in the shell — use Sidebar
+      - Simple per-item dropdown actions — use DropdownMenu
+      - Switching content panes in place — use Tabs
+    prefer_over:
+      - DropdownMenu: when triggers are navigational links with hover-open viewport panels, not action lists
+      - Tabs: when items navigate to other routes rather than swapping local content
+    notes: |
+      shadcn default — not yet reviewed against Figma. Trigger: h-9 rounded-md bg-background px-4 py-2
+      text-sm font-medium; open state bg-accent/50 with chevron rotating 180deg. Viewport panel:
+      rounded-md border bg-popover shadow. Links: rounded-sm p-2 text-sm, hover:bg-accent.
+
+  - component: Pagination
+    use_when:
+      - Paging through bounded, countable result sets (archived reports, signal search results with known totals)
+      - Tables of mentions where users need to jump to a specific page
+    dont_use_when:
+      - Continuous reverse-chronological feeds — use infinite scroll inside ScrollArea
+      - Tiny sets that fit one screen — render the full list, no paging chrome
+    prefer_over:
+      - ScrollArea: when users need positional jumps and a sense of total volume; ScrollArea wins for continuous browsing
+    notes: |
+      shadcn default — not yet reviewed against Figma. Built on buttonVariants: active page =
+      variant "outline", inactive = "ghost", default size "icon"; isActive sets aria-current="page".
+      Previous/Next hide their text labels below sm breakpoint. Nav is mx-auto centered, items gap-1.
+
+  - component: ScrollArea
+    use_when:
+      - A fixed-height signal feed column that scrolls independently of the page
+      - Long filter or space lists inside popovers, dialogs, or sidebar panels that must not grow the container
+      - Horizontal strips of report cards or media thumbnails (ScrollBar orientation="horizontal")
+    dont_use_when:
+      - Whole-page scrolling — let the document scroll natively
+      - Paged, countable results where position matters — use Pagination
+    prefer_over:
+      - Pagination: for continuous streams (signals, mentions) where users skim rather than jump to page N
+    notes: |
+      shadcn default — not yet reviewed against Figma. Radix wrapper; viewport inherits parent radius
+      and has focus-visible ring-[3px] ring-ring/50. Scrollbar 2.5 thick, thumb rounded-full bg-border.
+      Requires an explicit height/width constraint on the root to activate.
+
+  - component: Resizable
+    use_when:
+      - Split workspace views (signal feed list left, signal detail or insight editor right, user-adjustable)
+      - Report builder layouts where users balance an outline panel against a preview pane
+    dont_use_when:
+      - Fixed app chrome navigation — use Sidebar (it has its own collapse behavior, not freeform resize)
+      - Static two-column layouts users never need to adjust — use plain flex/grid
+    prefer_over:
+      - Sidebar: when both panes are content (feed + detail) and the ratio is a user preference, not navigation chrome
+    notes: |
+      shadcn default — not yet reviewed against Figma. Wraps react-resizable-panels. Handle is a 1px
+      bg-border line with an invisible grab zone; focus-visible ring-1 ring-ring. Optional withHandle
+      grip: h-4 w-3 rounded-xs border bg-border, auto-rotated in horizontal orientation.
+
+  - component: AspectRatio
+    use_when:
+      - Locking media in signal cards to a consistent ratio (post thumbnails, ad creatives at 16/9 or 1/1)
+      - Embedded video or chart previews in reports that must keep proportions across responsive grids
+    dont_use_when:
+      - Content whose height should follow its text — use Card with natural flow
+      - Square avatars — use Avatar, which handles sizing and fallback
+    prefer_over:
+      - Skeleton: as the layout-reservation layer — put a Skeleton inside an AspectRatio while media loads
+    notes: |
+      shadcn default — not yet reviewed against Figma. Pure passthrough of Radix AspectRatio Root;
+      no styling, no props beyond ratio.
+
+  - component: Collapsible
+    use_when:
+      - Show/hide of a single optional region (expanding a truncated transcript, "see all 12 sources")
+      - Collapsible sub-groups inside the Sidebar (pairs with SidebarMenuSub)
+      - One-off "more details" toggles where multiple regions may be open simultaneously
+    dont_use_when:
+      - A stack of related expandable sections with shared styling — use Accordion
+      - Advanced or destructive settings that warrant a styled, labeled reveal — use AdvancedSection
+    prefer_over:
+      - Accordion: for a single independent toggle with fully custom trigger/content; Accordion wins for uniform stacked sets
+    notes: |
+      shadcn default — not yet reviewed against Figma. Thin unstyled passthrough of Radix Collapsible —
+      no classes, no animation; bring your own trigger styling.
+
+  - component: Accordion
+    use_when:
+      - FAQ-style breakdowns in a report (methodology, data sources, limitations as stacked sections)
+      - Grouping insight categories where users scan headers and expand one at a time (type="single" collapsible)
+      - Settings pages with multiple bordered sections sharing identical trigger styling
+    dont_use_when:
+      - A single expandable region or custom trigger layout — use Collapsible
+      - Sections users compare side by side or switch between constantly — use Tabs
+      - Hiding rarely-used configuration behind one labeled toggle — use AdvancedSection
+    prefer_over:
+      - Collapsible: when you need consistent bordered stacking, built-in chevron rotation, and single/multiple open control
+      - Tabs: for vertically scanned, content-heavy sections where seeing all headers at once matters
+    notes: |
+      Item: border-b with last:border-b-0. Trigger: py-4 text-sm font-medium, hover:underline,
+      focus ring-[3px] ring-ring/50; ChevronDown size-4 muted rotates 180deg over 200ms.
+      Content: text-sm, pt-0 pb-4, animate-accordion-up/down. shadcn default — not yet reviewed
+      against Figma.
+
+  - component: Calendar
+    use_when:
+      - Picking a custom date range for a signals or mentions feed (range selection inside a Popover)
+      - Scheduling a report delivery date or a space digest start date
+      - Filtering insights by a specific day or week in a brand timeline view
+    dont_use_when:
+      - Choosing among preset periods like "Last 7 days / 30 days" — use SegmentedControl or Select
+      - Picking a single year or month from a long list — use Select
+      - Displaying read-only date metadata on a signal card — plain text, no picker needed
+    prefer_over:
+      - Select: when the user needs arbitrary day-level or range precision, not a short preset list
+      - Input: whenever validity and range constraints matter more than free-text entry
+    notes: |
+      shadcn default (react-day-picker wrapper) — not yet reviewed against Figma. Cell size driven by
+      --cell-size; nav and day buttons use Button variant="ghost". Selected/range ends use bg-primary
+      text-primary-foreground; range middle and today use bg-accent. NOTE: selected-day white-on-teal
+      combo pending the green-700 contrast review applied to Button.
+
+  - component: Carousel
+    use_when:
+      - Swiping through ad creatives or post media attached to a single signal
+      - Browsing a horizontal strip of featured insight cards on a space home
+      - Stepping through report cover previews in a gallery
+    dont_use_when:
+      - Listing many signals that all need to be scannable at once — use a grid or Table
+      - Step-by-step onboarding or setup flows — use WizardDialog
+      - Two or three items that fit the viewport — lay them out side by side
+    prefer_over:
+      - Tabs: for media/visual content where swiping is natural and labels would be meaningless
+      - ScrollArea: when you need snap-to-item paging and prev/next controls rather than free scroll
+    notes: |
+      shadcn default (embla-carousel wrapper) — not yet reviewed against Figma. Arrow-key navigation
+      built in. Previous/Next are Button variant="outline" size="icon", size-8 rounded-full,
+      positioned -left-12/-right-12 — reserve outside gutter space. Items default basis-full.
+
+  - component: Chart
+    use_when:
+      - Plotting signal volume over time for a brand or competitor feed
+      - Visualizing sentiment or share-of-voice breakdowns inside a report
+      - Rendering trend lines for audience or category insights in a dashboard card
+    dont_use_when:
+      - Showing a single completion percentage — use Progress
+      - Displaying one headline number with a delta — use a stat card with Badge
+      - Tabular data the user needs to sort or copy — use Table
+    prefer_over:
+      - Progress: when there are multiple series, time axes, or comparisons — not a single bounded value
+      - Table: when shape and trend matter more than exact row-level values
+    notes: |
+      shadcn default Recharts wrapper — not yet reviewed against Figma. Requires ChartConfig with
+      per-series label/icon and color or theme — emitted as --color-<key> CSS vars. Container is
+      aspect-video, text-xs; axis ticks fill-muted-foreground, grid stroke-border/50. Tooltip:
+      min-w-[8rem] rounded-lg bg-background text-xs shadow-xl, values in font-mono tabular-nums
+      (numeric tooltip values are the documented mono exception).
+
+  - component: FilterChip
+    use_when:
+      - Filter bars above signal or mention feeds — an on/off facet like "Favourites" (icon + active + onClick)
+      - Dropdown-style filters in the same row (PopoverTrigger asChild with showChevron)
+      - Quick toggling of feed scopes (paid ads / owned media / news) where chips sit side by side
+    dont_use_when:
+      - Read-only metadata on a card — use Tag or Badge, FilterChip is interactive
+      - Mutually exclusive view switching — use SegmentedControl
+      - Long option lists needing search — use Combobox or Select
+    prefer_over:
+      - Toggle: in filter bars — pill shape, border, and active treatment match the DS Button language
+      - Tag: whenever the element filters content rather than labels it
+      - Select: for one-or-two-click filters where a full select trigger is too heavy for the row
+    notes: |
+      Waldo custom (PRO-2636, fully reviewed). h-9 rounded-full pill, pl-3, pr-4 (pr-2 with chevron),
+      text-sm font-medium tracking-[-0.02em]. Resting: border-foreground/[0.12], text-foreground/70,
+      icons text-foreground/40 (size-4). Active: bg-foreground/10, border-transparent, text-foreground.
+      Hover bg-foreground/[0.04], pressed bg-foreground/10. Chevron !size-3.5 muted. Plain <button>
+      with forwardRef so it composes under PopoverTrigger asChild.
+
+  - component: InputOTP
+    use_when:
+      - Email or 2FA verification codes during sign-in
+      - Confirming a destructive action with a short emailed code
+      - Entering a short invite or pairing code when joining a team space
+    dont_use_when:
+      - Free-form text like a brand name or search query — use Input
+      - Passwords or anything longer than ~8 characters — use Input type="password"
+      - API keys pasted as one blob — use Input; per-character slots fight long pastes
+    prefer_over:
+      - Input: for fixed-length codes — per-slot display, fake caret, and auto-advance beat a single field
+    notes: |
+      shadcn default (input-otp wrapper) — not yet reviewed against Figma. Slots h-9 w-9 text-sm,
+      grouped with shared borders. Active slot: border-ring + ring-[3px] ring-ring/50; invalid:
+      border-destructive. Fake caret: h-4 w-px bg-foreground animate-caret-blink.
+
+  - component: Kbd
+    use_when:
+      - Showing the shortcut next to a command in the command palette
+      - Hinting shortcuts inside Tooltip content on toolbar actions
+      - Documenting keyboard navigation in empty states or onboarding hints
+    dont_use_when:
+      - Status or category labels on signals — use Badge or Tag
+      - Interactive key remapping UI — Kbd is pointer-events-none, purely presentational
+    prefer_over:
+      - Badge: for anything representing a literal keypress — reads as a key, not a status
+    notes: |
+      Waldo-tuned: h-5 min-w-5 rounded-sm bg-muted px-1, font-sans text-xs font-medium
+      tracking-[-0.02em] text-muted-foreground, select-none, pointer-events-none. Inside tooltip
+      content it auto-restyles (bg-background/20). KbdGroup wraps multiple keys with gap-1.
+      Keyboard shortcuts are a documented mono-allowed context, but Kbd intentionally uses font-sans.
+
+  - component: Label
+    use_when:
+      - Naming form fields in space settings, feed configuration, or report setup dialogs
+      - Pairing with Checkbox/Switch/RadioGroup rows (e.g. notification toggles per signal type)
+      - Labeling Select or Input controls in filter and creation forms
+    dont_use_when:
+      - Section headings inside a page or card — use heading typography, not a form label
+      - Inline descriptive helper text under a field — use muted paragraph text
+    prefer_over:
+      - Badge: for form-control naming — Label is semantically tied to inputs (htmlFor, peer states)
+    notes: |
+      Radix Label wrapper with Waldo type tuning: text-sm leading-none font-medium
+      tracking-[-0.02em], flex items-center gap-2, select-none. Dims to opacity-50 via
+      peer-disabled. Note: Field labels (field-label) use text-primary teal — this Label is neutral.
+
+  - component: Loader
+    use_when:
+      - DotsLoader for async waits — feed refreshing, signals being fetched, report list loading
+      - ShimmerText for AI generation in progress ("Analyzing signals…", agent thinking states)
+      - TextCursor appended to streaming AI text as it types out an insight
+    dont_use_when:
+      - Content with a known layout still loading — use Skeleton so the page shape stays stable
+      - A long-running job with measurable completion — use Progress
+      - Step/status indication on a pipeline item — use StatusSpinner
+    prefer_over:
+      - StatusSpinner: for inline, lightweight waiting and streaming-text states rather than per-item status
+      - Skeleton: when there is no placeholder layout to mimic (e.g. text being generated)
+    notes: |
+      Waldo custom, three types: DotsLoader (sm h-1 w-1 gap-1, default h-1.5 w-1.5 gap-1.5; staggered
+      pulse, 160ms delay steps), ShimmerText (moving gradient via bg-clip-text, 2s shimmer), TextCursor
+      (w-0.5, blink 1s). Variants zinc and green (bg-primary). Exports: DotsLoader, ShimmerText, TextCursor.
+
+  - component: Progress
+    use_when:
+      - Showing a bulk import or backfill of signals with a known percentage
+      - Report generation steps where completion is measurable
+      - Quota usage bars (e.g. monthly credits consumed) in workspace settings
+    dont_use_when:
+      - Indeterminate waits with no known duration — use Loader (DotsLoader) or StatusSpinner
+      - Placeholder while a card's content loads — use Skeleton
+    prefer_over:
+      - Loader: whenever you can compute a real 0-100 value — determinate beats indeterminate for trust
+      - Chart: for a single bounded value; Chart is for series and comparisons
+    notes: |
+      shadcn default (Radix Progress) — not yet reviewed against Figma. Track: h-1.5 rounded-full
+      bg-primary/20. Indicator: bg-primary with transition-all via translateX. value prop only;
+      no size or color variants.
+
+  - component: Skeleton
+    use_when:
+      - Placeholder rows while a signals feed or mentions list fetches
+      - Ghosting a report card grid or space sidebar during initial load
+      - Reserving the shape of an insight summary block before data arrives
+    dont_use_when:
+      - The final layout is unknown (e.g. AI composing freeform output) — use Loader
+      - Showing job completion percentage — use Progress
+    prefer_over:
+      - Loader: when content has a predictable layout — preserving shape prevents layout shift
+      - StatusSpinner: for whole-region loading; StatusSpinner is for per-item status
+    notes: |
+      Waldo-tuned single div: animate-pulse rounded-md bg-foreground/[0.07] (alpha token on
+      foreground, not bg-muted — works across themes). Size entirely via className; no variants.
+
+  - component: Toggle
+    use_when:
+      - Icon-only formatting or view affordances in an editor toolbar (e.g. bold in a report editor)
+      - A standalone on/off tool state in a toolbar, like snapping or compact density
+    dont_use_when:
+      - Filter bars above feeds — use FilterChip, the reviewed Waldo pill for that row
+      - Settings on/off rows — use Switch with a Label
+      - Mutually exclusive choices — use ToggleGroup type="single" or SegmentedControl
+    prefer_over:
+      - Switch: inside toolbars where a pressed-button metaphor fits; Switch belongs in settings forms
+    notes: |
+      shadcn default (Radix Toggle) — not yet reviewed against Figma. Variants: default (transparent),
+      outline (border-input). Sizes: sm h-8, default h-9, lg h-10; rounded-md text-sm font-medium.
+      Pressed: bg-accent text-accent-foreground; hover bg-muted.
+
+  - component: ToggleGroup
+    use_when:
+      - Multi-select formatting clusters in an editor toolbar (bold/italic/underline together)
+      - Toolbar single-choice icon sets, e.g. chart type (line/bar/area) on an insight visualization
+    dont_use_when:
+      - Primary view switching — use SegmentedControl or Tabs for page-level navigation
+      - Independent filters over a feed — use FilterChip per facet
+      - More than ~5 options — use Select
+    prefer_over:
+      - SegmentedControl: for dense icon-button clusters and type="multiple" selection inside toolbars
+      - Toggle: when related toggles should share size/variant and read as one fused control
+    notes: |
+      shadcn default (Radix ToggleGroup, inherits toggleVariants) — not yet reviewed against Figma.
+      Context propagates variant/size/spacing to items; at spacing=0 items fuse (rounded-none with
+      first:rounded-l-md last:rounded-r-md and collapsed borders).
 
 component_choice_logic:
 
@@ -426,3 +1082,28 @@ component_choice_logic:
   navitem_vs_filtertrigger:
     navitem: Navigates or selects a view — full-width, pill shape, active bg
     filtertrigger: Opens a dropdown to set a filter value — bare inline, no bg
+
+  tooltip_vs_popover_vs_hovercard:
+    tooltip: One-line text hint, no interaction
+    popover: Anchored interactive content (forms, pickers, small tasks)
+    hovercard: Rich read-only preview on hover (brand, person)
+
+  dialog_vs_sheet_vs_drawer:
+    dialog: Compact focused task, centered, full attention
+    sheet: Long/scrollable side panel on desktop, page context stays visible
+    drawer: Touch/mobile bottom sheet with swipe-to-dismiss
+
+  skeleton_vs_loader_vs_statusspinner:
+    skeleton: Known layout loading — preserve the shape, avoid layout shift
+    loader: Indeterminate waits and AI-streaming states (dots, shimmer, cursor)
+    statusspinner: Per-item async status that resolves to success/error/warning
+
+  select_vs_combobox_vs_command:
+    select: Short known list bound to a form field
+    combobox: Long list with type-to-filter, bound to a form field
+    command: Global palette / searchable actions across the app (Cmd+K)
+
+  toggle_vs_switch_vs_filterchip:
+    toggle: Toolbar pressed-state tool (icon affordance, editor contexts)
+    switch: Settings on/off that applies immediately
+    filterchip: Filter bars above feeds — the reviewed Waldo pill
