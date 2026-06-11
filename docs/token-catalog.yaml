@@ -400,6 +400,37 @@ forbidden:
     - "referencing primitives directly from components — always via semantic tokens"
 
 # ────────────────────────────────────────────────────────────────────
+# MODEL DEFAULTS — colors AI models generate when unconstrained.
+# These come from shadcn/Tailwind training data, NOT from anyone's choice.
+# The detector flags every one of these with its Waldo replacement.
+# ────────────────────────────────────────────────────────────────────
+model_defaults:
+  note: |
+    When a model generates UI without Waldo context, it falls back to these
+    statistically-favored defaults. Finding one = the file was generated
+    without (or ignoring) the DS context kit.
+  colors:
+    - { hex: "#09090b", looks_like: "shadcn zinc-950 background", use_instead: "--background #171819" }
+    - { hex: "#0a0a0a", looks_like: "shadcn neutral-950 background", use_instead: "--background #171819" }
+    - { hex: "#18181b", looks_like: "shadcn zinc-900 card", use_instead: "--card #202123" }
+    - { hex: "#27272a", looks_like: "shadcn zinc-800 muted", use_instead: "--muted #27282b" }
+    - { hex: "#fafafa", looks_like: "shadcn zinc-50 light text", use_instead: "--foreground #d2d3d3" }
+    - { hex: "#f4f4f5", looks_like: "shadcn zinc-100", use_instead: "--foreground #d2d3d3" }
+    - { hex: "#a1a1aa", looks_like: "Tailwind zinc-400", use_instead: "--muted-foreground #8f9091" }
+    - { hex: "#71717a", looks_like: "Tailwind zinc-500", use_instead: "--muted-foreground #8f9091" }
+    - { hex: "#ff6467", looks_like: "shadcn default red", use_instead: "--destructive #de3a28" }
+    - { hex: "#ef4444", looks_like: "Tailwind red-500", use_instead: "--destructive #de3a28" }
+    - { hex: "#dc2626", looks_like: "Tailwind red-600", use_instead: "--destructive #de3a28" }
+    - { hex: "#22c55e", looks_like: "Tailwind green-500", use_instead: "--primary #32a9a9" }
+    - { hex: "#10b981", looks_like: "Tailwind emerald-500", use_instead: "--primary #32a9a9" }
+    - { hex: "#3b82f6", looks_like: "Tailwind blue-500", use_instead: "--primary #32a9a9 (Waldo has no blue)" }
+    - { hex: "#8b5cf6", looks_like: "Tailwind violet-500", use_instead: "--primary #32a9a9 (Waldo has no purple in product)" }
+    - { hex: "#a855f7", looks_like: "Tailwind purple-500", use_instead: "--primary #32a9a9 (Waldo has no purple in product)" }
+    - { hex: "#f59e0b", looks_like: "Tailwind amber-500", use_instead: "--warning #c94e22" }
+    - { hex: "#eab308", looks_like: "Tailwind yellow-500", use_instead: "--highlight #f7d371" }
+    - { hex: "#f5c453", looks_like: "model-favorite gold (seen in waldo-labs prototypes)", use_instead: "--highlight #f7d371" }
+
+# ────────────────────────────────────────────────────────────────────
 # KNOWN DISCREPANCIES — found 2026-06-10 while building this catalog.
 # Documented, NOT resolved. Resolving any of these = Miguel's decision.
 # ────────────────────────────────────────────────────────────────────

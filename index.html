@@ -9060,8 +9060,28 @@ index.html                   ← live reference (this site)</pre>
 5. shadcn naming compliance              variants, props, sub-components, exports</pre>
       </div>
       <div class="doc-section">
-        <div class="doc-section-title">Planned — standalone detector</div>
-        <p class="doc-p">A runnable script (no LLM) that scans any HTML/TSX file or URL for Waldo violations and outputs JSON — usable in CI and on the Brand API prototypes. Modeled on Impeccable's <code class="doc-code">detect</code> command, but enforcing Waldo's rules from the token catalog.</p>
+        <div class="doc-section-title">Standalone detector — detect.js</div>
+        <p class="doc-p">A runnable script (pure Node, no dependencies, no LLM) that scans any file or folder for Waldo violations. Rules come from <code class="doc-code">docs/token-catalog.yaml</code> — add a rule to the catalog and the detector enforces it automatically.</p>
+        <pre class="doc-pre">node tools/detect.js &lt;file|dir&gt; [--json]
+
+# examples
+node tools/detect.js path/to/prototype/        # human-readable report
+node tools/detect.js src/components/ --json    # JSON for CI
+# exit code: 0 = clean · 1 = errors found</pre>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead><tr><th>Rule</th><th>Catches</th></tr></thead>
+            <tbody>
+              <tr><td><code class="doc-code">model-default</code></td><td>Colors AI models generate when unconstrained (#09090b, #fafafa, #f5c453…) — each with its Waldo replacement</td></tr>
+              <tr><td><code class="doc-code">unknown-color</code></td><td>Any hex not in the token catalog, with the nearest Waldo token suggested</td></tr>
+              <tr><td><code class="doc-code">legacy-var</code></td><td>Variables that don't exist in the DS (--txt-high, --bg, --fill-low…) with corrections</td></tr>
+              <tr><td><code class="doc-code">foreign-palette</code></td><td>Tailwind default palette classes (text-red-500, bg-blue-600…)</td></tr>
+              <tr><td><code class="doc-code">wrong-font</code> · <code class="doc-code">italic</code></td><td>Non-Inter fonts and any italic usage</td></tr>
+              <tr><td><code class="doc-code">raw-rgba</code> · <code class="doc-code">off-scale-radius</code> · <code class="doc-code">arbitrary-radius</code></td><td>Alphas outside the alpha namespace, radii off the token scale, rounded-[Npx]</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="doc-p">Field-tested against the 4 waldo-labs prototypes (340 violations found) and against DS components (button.tsx: clean).</p>
       </div>
       <div class="doc-section">
         <div class="doc-section-title">Anti-patterns — Colors</div>

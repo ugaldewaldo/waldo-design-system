@@ -239,6 +239,7 @@ Font: Inter. Weights: Regular, Medium, Semi Bold, Bold (Figma is picky — use n
 | `waldo-ui/` | **Everything for shadcn/React** — components, CSS vars, Tailwind config. See `waldo-ui/README.md` |
 | `docs/token-catalog.yaml` | **Machine-readable token lookup** — hex → primitive → semantic → CSS var → Tailwind class. Check here before using any color value |
 | `docs/usage-doctrine.yaml` | **Machine-readable component usage rules** — use_when / dont_use_when / prefer_over per component |
+| `tools/detect.js` | **DS violation detector** — `node tools/detect.js <file\|dir> [--json]`. No LLM; rules come from the token catalog. Run it on anything you generate |
 | `index.html` | Live DS reference + component library (GitHub Pages) |
 | `waldo-design-system.html` | Legacy DS reference |
 | `NOTES-FOR-STEVE.md` | Notes for the developer |
