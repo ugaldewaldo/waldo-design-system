@@ -214,6 +214,52 @@ If a component needs a token that doesn't exist yet, ask me to add it. Don't ref
 
 ---
 
+## ⚡ Component Change Protocol
+
+**Trigger:** any change to a file in `waldo-ui/src/components/ui/*.tsx` or `waldo-ui/waldo-shadcn-theme.css` or `waldo.tokens.json`.
+
+When a component change is approved and applied, run through this checklist IN ORDER. Do not skip steps. Do not batch — complete each step before moving to the next.
+
+### Step 1 — Code ✅ (auto)
+- [ ] Apply the change to `waldo-ui/src/components/ui/<component>.tsx`
+- [ ] Verify no hardcoded hex, rgba, or `text-white`/`text-black` — use DS tokens only
+- [ ] Run `grep -n "text-white\|text-black\|#[0-9a-f]" <file>` to confirm clean
+- [ ] Commit + push to GitHub
+
+### Step 2 — Tokens (requires confirmation)
+- [ ] Verify that any new/changed token exists in `waldo-ui/src/globals.css`
+- [ ] Verify the same token exists in `waldo-ui/waldo-shadcn-theme.css` (HSL form)
+- [ ] If token is missing in either file → run `/ds-add-token` before continuing
+- [ ] Verify token exists in `figma/waldo.tokens.json`
+- [ ] **Ask Miguel to confirm before pushing to Figma**
+
+### Step 3 — Figma (requires Miguel approval)
+- [ ] Push updated tokens via Tokens Studio (only after explicit "sí")
+- [ ] Update the Figma component — bind text/fill/border to the correct variable, not hardcoded
+- [ ] Update FIGMA MASTER frame if it exists for this component
+- [ ] Verify exactly 4 collections in Figma after push
+
+### Step 4 — Documentation (auto)
+- [ ] Update `index.html` demo for this component if the visual output changed
+- [ ] Update Docs section "Component Rules" if a new rule was introduced
+- [ ] Update `docs/usage-doctrine.yaml` entry for this component
+
+### Step 5 — Notify (requires Miguel approval)
+- [ ] Draft Linear comment for the relevant card — wait for explicit "sí" before posting
+- [ ] Note for Steve: `pnpm registry:sync` needed + `shadcn add @waldo/<component>` in consumers
+
+### Step 6 — Linear
+- [ ] Mark the Linear card as **Shipped!**
+
+---
+
+**When to trigger this protocol:**
+- Miguel says "aplica el protocolo" after a component change
+- Any change that touches token values, variant colors, or typography in a component
+- NOT triggered for: demo-only changes, index.html layout fixes, playground changes
+
+---
+
 ## Typography
 
 Two tracks — never mix.
