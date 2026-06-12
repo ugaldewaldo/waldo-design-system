@@ -52,7 +52,7 @@ const buttonVariants = cva(
         // green-700 fill / white text (6.06:1 AA). One per view max.
         // Never green-500 + white (2.84:1 fails) — text color is married to the fill.
         default:
-          "bg-waldo-green-700 text-white hover:bg-waldo-green-700/88 active:bg-waldo-green-700/75",
+          "bg-waldo-green-700 text-primary-foreground hover:bg-waldo-green-700/88 active:bg-waldo-green-700/75",
 
         // zinc-200/5% fill / zinc-200/70% text. No border.
         // Filter chips, toolbar, secondary actions.
@@ -86,7 +86,7 @@ const buttonVariants = cva(
         // coral fill / white text. Hard — confirmation dialogs ONLY.
         // Never use as a first-touch action.
         "destructive-solid":
-          "bg-destructive text-white hover:bg-destructive/90 active:bg-destructive/80",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90 active:bg-destructive/80",
 
         // brand text / underline on hover. Inline body links only.
         link:
