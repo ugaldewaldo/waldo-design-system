@@ -22,7 +22,7 @@ const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'build', '.next']);
 /* ── Rules from the catalog ────────────────────────────────────── */
 
 function loadRules(catalogText) {
-  const rules = { validHex: new Set(), tokenByHex: {}, legacyVars: {}, modelDefaults: {}, validRgba: new Set() };
+  const rules = { validHex: new Set(), tokenByHex: {}, legacyVars: {}, modelDefaults: {}, validRgba: new Set(), patterns: [] };
 
   // colors: every catalog entry hex + its primitive/var for suggestions
   const colorBlocks = catalogText.matchAll(
@@ -55,6 +55,31 @@ function loadRules(catalogText) {
   // model defaults
   for (const m of catalogText.matchAll(/\{ hex: "(#[0-9a-fA-F]{6})", looks_like: "([^"]+)", use_instead: "([^"]+)" \}/g)) {
     rules.modelDefaults[m[1].toLowerCase()] = { looksLike: m[2], useInstead: m[3] };
+  }
+
+  // forbidden.patterns — entries that carry a `match` become enforced rules.
+  // Documenting an enforceable pattern in the catalog = enforcing it here.
+  const patternsBlock = catalogText.match(/\n {2}patterns:\n([\s\S]*?)(?=\n[a-z_]+:|\n {0,2}#|$)/);
+  if (patternsBlock) {
+    // split into list items (each starts with "    - ")
+    const items = patternsBlock[1].split(/\n {4}- /).slice(1);
+    for (const item of items) {
+      const matchVal = item.match(/(?:^|\n) {6}match:\s*'((?:[^']|'')*)'/);
+      if (!matchVal) continue; // no regex → documentation-only, skip
+      const rule = (item.match(/(?:^|\n) {6}rule:\s*([^\n]+)/) || [])[1];
+      const severity = (item.match(/(?:^|\n) {6}severity:\s*([^\n]+)/) || [])[1];
+      const suggestion = (item.match(/(?:^|\n) {6}suggestion:\s*'((?:[^']|'')*)'/) || [])[1];
+      try {
+        rules.patterns.push({
+          rule: (rule || 'forbidden-pattern').trim(),
+          severity: (severity || 'error').trim() === 'warning' ? 'warning' : 'error',
+          regex: new RegExp(matchVal[1].replace(/''/g, "'"), 'g'),
+          suggestion: suggestion ? suggestion.replace(/''/g, "'") : null,
+        });
+      } catch (e) {
+        console.error(`detect.js: bad regex in forbidden.patterns (${rule || '?'}): ${e.message}`);
+      }
+    }
   }
 
   return rules;
@@ -181,6 +206,14 @@ function scanFile(filePath, rules) {
     }
     for (const m of line.matchAll(/\b(?:bg|text|border)-green-(\d{2,3})\b/g)) {
       add(n, 'warning', 'ambiguous-green', `${m[0]} — Waldo green only in Tailwind v4 (@theme); in v3 it's Tailwind's default green`, `prefer a semantic class or waldo-green-${m[1]}`);
+    }
+
+    // 8. catalog-driven forbidden patterns (from forbidden.patterns entries with a `match`)
+    for (const p of rules.patterns) {
+      p.regex.lastIndex = 0;
+      if (p.regex.test(line)) {
+        add(n, p.severity, p.rule, `forbidden pattern: ${p.rule}`, p.suggestion);
+      }
     }
   });
 

@@ -10534,7 +10534,7 @@ function loadILCatalog(){
       }
       if (d.forbidden.patterns) {
         h += '</div><div class="doc-section"><div class="doc-section-title">Forbidden — patterns</div>';
-        h += '<pre class="doc-pre doc-pre-danger">'+d.forbidden.patterns.map(function(p){return '❌ '+ilEsc(p);}).join('\n')+'</pre>';
+        h += '<pre class="doc-pre doc-pre-danger">'+d.forbidden.patterns.map(function(p){var t=(p&&p.text!==undefined)?p.text:p;var badge=(p&&p.match)?' 🔒':'';return '❌ '+ilEsc(t)+badge;}).join('\n')+'</pre>';
       }
       h += '</div>';
     }

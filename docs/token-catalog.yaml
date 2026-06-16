@@ -383,21 +383,38 @@ forbidden:
       - { wrong: "--line-low",  use_instead: "--border (12% alpha)" }
       - { wrong: "--line-reg / --line-high", use_instead: "border-foreground/20 or /30" }
       - { wrong: "--green",     use_instead: "--primary" }
+  # Each entry has `text` (human-readable, rendered in docs). Entries that are
+  # mechanically detectable also carry `match` (a JS regex), `rule` (id) and
+  # `severity` — detect.js reads these and enforces them automatically, so
+  # documenting an enforceable pattern here = enforcing it. No `match` = the
+  # pattern is conceptual / context-dependent and stays documentation-only.
   patterns:
-    - "White text on green-500 fill — 2.84:1 fails AA. Default button = green-700 + white"
-    - "Dark text on green-700 fill — 2.93:1 fails AA. Text color is married to the fill"
-    - "#1b8c8c (brand-green-700) as product button fill — brand palette is marketing-only AND white on it fails AA (4.06:1)"
-    - "Inline style= attributes for colors/backgrounds/spacing — define a class with tokens instead"
-    - "SVG stroke=\"var(--x)\" — presentation attributes don't resolve CSS vars; use style=\"stroke:var(--x)\" or currentColor"
-    - "box-shadow focus ring on inputs — single border only (border-waldo-green-800)"
-    - "font-semibold on buttons — font-medium always"
-    - "italic — anywhere"
-    - "monospace for UI text/numbers/values — Inter only"
-    - "rounded-[Xpx] arbitrary radii — token classes only"
-    - "--destructive color inside .wdd dropdown items — destructive only in dialogs/alerts/buttons"
-    - "display-* typography in product UI — marketing heroes only"
-    - "text-green-500 / bg-zinc-800 raw Tailwind palette classes — use semantic (text-primary, bg-muted)"
-    - "referencing primitives directly from components — always via semantic tokens"
+    - text: "White text on green-500 fill — 2.84:1 fails AA. Default button = green-700 + white"
+    - text: "Dark text on green-700 fill — 2.93:1 fails AA. Text color is married to the fill"
+    - text: "#1b8c8c (brand-green-700) as product button fill — brand palette is marketing-only AND white on it fails AA (4.06:1)"
+    - text: "Inline style= attributes for colors/backgrounds/spacing — define a class with tokens instead"
+    - text: "SVG stroke=\"var(--x)\" — presentation attributes don't resolve CSS vars; use style=\"stroke:var(--x)\" or currentColor"
+      rule: svg-var-attr
+      severity: error
+      match: '(?:stroke|fill)="var\('
+      suggestion: 'use style="stroke:var(--x)" or currentColor'
+    - text: "box-shadow focus ring on inputs — single border only (border-waldo-green-800)"
+    - text: "font-semibold on buttons — font-medium always"
+      rule: font-semibold
+      severity: warning
+      match: '\bfont-semibold\b'
+      suggestion: 'use font-medium'
+    - text: "italic — anywhere"
+    - text: "monospace for UI text/numbers/values — Inter only"
+      rule: font-mono-class
+      severity: warning
+      match: '\bfont-mono\b'
+      suggestion: 'Inter only — mono is for code/kbd/hex'
+    - text: "rounded-[Xpx] arbitrary radii — token classes only"
+    - text: "--destructive color inside .wdd dropdown items — destructive only in dialogs/alerts/buttons"
+    - text: "display-* typography in product UI — marketing heroes only"
+    - text: "text-green-500 / bg-zinc-800 raw Tailwind palette classes — use semantic (text-primary, bg-muted)"
+    - text: "referencing primitives directly from components — always via semantic tokens"
 
 # ────────────────────────────────────────────────────────────────────
 # MODEL DEFAULTS — colors AI models generate when unconstrained.
