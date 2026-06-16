@@ -8870,6 +8870,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         <button class="sb-item" onclick="switchDocsPage('doc-page-install',this)">Installation</button>
         <button class="sb-item" onclick="switchDocsPage('doc-page-components',this)">Component Rules</button>
         <button class="sb-item" onclick="switchDocsPage('doc-page-figma',this)">Figma</button>
+        <button class="sb-item" onclick="switchDocsPage('doc-page-sync',this)">Sync Runbook</button>
       </div>
     </div>
     <div class="sb-group">
@@ -9012,26 +9013,11 @@ npm run dev   # runs on :4502</pre>
     <div id="doc-page-figma" class="doc-page">
       <div class="page-header">
         <div class="page-title">Figma</div>
-        <div class="page-desc">How to keep Figma in sync with the token source of truth.</div>
+        <div class="page-desc">Figma-specific gotchas. The full sync flow lives in the Sync Runbook.</div>
       </div>
       <div class="doc-section">
-        <div class="doc-section-title">Figma sync — code-first, via MCP</div>
-        <p class="doc-p"><code class="doc-code">waldo.tokens.json</code> is the single source of truth. Figma's native variables are written directly from code via the <code class="doc-code">use_figma</code> MCP — <strong>Tokens Studio is not used</strong>, and Figma variables are <strong>never edited by hand</strong>.</p>
-        <div class="doc-table-wrap">
-          <table class="doc-table">
-            <thead><tr><th>Step</th><th>Action</th></tr></thead>
-            <tbody>
-              <tr><td>1</td><td>Update <code class="doc-code">waldo.tokens.json</code> (source of truth), then propagate down the chain</td></tr>
-              <tr><td>2</td><td>Write the changed variables to Figma via <code class="doc-code">use_figma</code> — bind to the variable, never hardcode</td></tr>
-              <tr><td>3</td><td>Audit before destructive ops; Figma version history is the escape hatch</td></tr>
-              <tr><td>4</td><td>Verify exactly 6 collections: <code class="doc-code">primitives · brand · typography · semantic · radius · spacing</code></td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="doc-section">
-        <div class="doc-section-title">Sync chain</div>
-        <pre class="doc-pre">waldo.tokens.json  →  globals.css / waldo-shadcn-theme.css  →  .tsx  →  index.html (vanilla)  →  docs/token-catalog.yaml</pre>
+        <div class="doc-section-title">Sync flow → see Sync Runbook</div>
+        <p class="doc-p">The full token &amp; component sync flow — code-first, with Figma variables written from code via the <code class="doc-code">use_figma</code> MCP (<strong>Tokens Studio is not used</strong>, variables are <strong>never edited by hand</strong>) — lives in the <strong>Sync Runbook</strong> docs page. This page covers only the Figma-specific gotchas below.</p>
       </div>
       <div class="doc-section">
         <div class="doc-section-title">Figma model gotchas</div>
@@ -9042,6 +9028,99 @@ npm run dev   # runs on :4502</pre>
       <div class="doc-section">
         <div class="doc-section-title">Figma DS link</div>
         <p class="doc-p"><a class="doc-link" href="https://www.figma.com/design/bgyz7RmoeEbnsqybjQveUy" target="_blank">figma.com/design/bgyz7RmoeEbnsqybjQveUy</a></p>
+      </div>
+    </div>
+
+    <!-- Sync Runbook -->
+    <div id="doc-page-sync" class="doc-page">
+      <div class="page-header">
+        <div class="page-title">Sync Runbook</div>
+        <div class="page-desc">What to update everywhere when the design system changes — so nothing drifts out of sync.</div>
+      </div>
+
+      <div class="doc-section">
+        <div class="doc-section-title">Golden rule</div>
+        <p class="doc-p"><code class="doc-code">waldo.tokens.json</code> (tokens) and the <code class="doc-code">.tsx</code> components are the single source of truth. Everything else is derived. Direction is one-way: code → everything else. Figma variables are written from code via the <code class="doc-code">use_figma</code> MCP and are <strong>never edited by hand</strong>.</p>
+        <pre class="doc-pre">waldo.tokens.json  →  globals.css / waldo-shadcn-theme.css  →  .tsx  →  index.html (vanilla)  →  docs/token-catalog.yaml  →  Figma (via MCP)</pre>
+      </div>
+
+      <div class="doc-section">
+        <div class="doc-section-title">Token change — new color or a value that changes</div>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead><tr><th>Step</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Edit <code class="doc-code">waldo.tokens.json</code> (source of truth)</td></tr>
+              <tr><td>2</td><td>Regenerate <code class="doc-code">globals.css</code> + <code class="doc-code">waldo-shadcn-theme.css</code> → review affected <code class="doc-code">.tsx</code></td></tr>
+              <tr><td>3</td><td>Reflect in <code class="doc-code">index.html</code> vanilla (prototypes copy from here)</td></tr>
+              <tr><td>4</td><td>Update <code class="doc-code">docs/token-catalog.yaml</code> — if it resolves something, move it out of <code class="doc-code">known_discrepancies</code></td></tr>
+              <tr><td>5</td><td>Write the variable to Figma via <code class="doc-code">use_figma</code> MCP — never by hand</td></tr>
+              <tr><td>6</td><td>Publish the Figma library</td></tr>
+              <tr><td>7</td><td>Consumer (e.g. Brand API prototypes) accepts library updates</td></tr>
+              <tr><td>8</td><td>Review the docs page (see below)</td></tr>
+              <tr><td>9</td><td>Validate: <code class="doc-code">/ds-verify</code> + AA contrast</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="doc-section-title">Component change — new or modified</div>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead><tr><th>Step</th><th>Action</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>Create/edit the <code class="doc-code">.tsx</code> + its canonical class in <code class="doc-code">index.html</code></td></tr>
+              <tr><td>2</td><td>Entry in <code class="doc-code">docs/usage-doctrine.yaml</code> (no duplicates)</td></tr>
+              <tr><td>3</td><td>Build it in the Figma Master DS, bound to variables (never hardcoded hex)</td></tr>
+              <tr><td>4</td><td>Publish the Figma library</td></tr>
+              <tr><td>5</td><td>Consumer accepts the update or drags in the new instance — never a local/pirate component</td></tr>
+              <tr><td>6</td><td>Review the docs page (see below)</td></tr>
+              <tr><td>7</td><td>Validate: <code class="doc-code">/ds-verify</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="doc-section-title">Update this docs page</div>
+        <p class="doc-p">The docs page is an artifact too — check it on every change.</p>
+        <p class="doc-p">The <strong>Doctrine</strong> and <strong>Token Catalog</strong> tabs render live from the YAML via <code class="doc-code">fetch()</code> — update the YAML and they refresh on reload, <strong>no manual edit</strong>.</p>
+        <p class="doc-p">Everything else (Overview, component demos, canonical classes like <code class="doc-code">.btn-default</code>) is <strong>manual</strong> — review and update by hand.</p>
+      </div>
+
+      <div class="doc-section">
+        <div class="doc-section-title">Anti-drift rules — the steps people forget</div>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead><tr><th>#</th><th>Rule</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td><strong>Publish the Figma library</strong> after every change — the #1 forgotten step. Without it, consumers see nothing.</td></tr>
+              <tr><td>2</td><td><strong>Accept updates</strong> in the consumer after publishing.</td></tr>
+              <tr><td>3</td><td><strong>Never edit a variable by hand in Figma</strong> → always <code class="doc-code">waldo.tokens.json</code> → MCP rewrites it. Hand edits get overwritten on the next sync.</td></tr>
+              <tr><td>4</td><td><strong>Keep <code class="doc-code">index.html</code> vanilla in step with the <code class="doc-code">.tsx</code></strong> — prototypes copy from it.</td></tr>
+              <tr><td>5</td><td><strong>Move <code class="doc-code">token-catalog.yaml</code> discrepancies to resolved</strong> the moment a decision is made.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="doc-section-title">Enforcement &amp; known gaps</div>
+        <p class="doc-p">The intelligence-layer tooling catches most violations, but a few checks are manual or not yet wired — know them so they don't bite:</p>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead><tr><th>Mechanism</th><th>What it catches / gap</th></tr></thead>
+            <tbody>
+              <tr><td><code class="doc-code">tools/detect.js</code></td><td>Reads <code class="doc-code">token-catalog.yaml</code>, so new catalog entries are caught automatically — <strong>except</strong> its hardcoded allow-lists (<code class="doc-code">ALLOWED_HEX</code>, rgba families, <code class="doc-code">ALLOWED_RADII</code>, <code class="doc-code">ALLOWED_FONTS</code>): a new family/value must be added to the JS by hand or it throws false positives.</td></tr>
+              <tr><td><code class="doc-code">tools/lint-doctrine.js</code></td><td>Errors if a <code class="doc-code">.tsx</code> has no <code class="doc-code">usage-doctrine.yaml</code> entry — but only if someone runs it (not yet wired to a hook). Infra-only files go in its <code class="doc-code">EXEMPT</code> set.</td></tr>
+              <tr><td><code class="doc-code">forbidden.patterns</code></td><td><strong>Gap:</strong> documenting an anti-pattern in the YAML does <strong>not</strong> enforce it — detect.js regex rules are separate. Documented ≠ enforced.</td></tr>
+              <tr><td>Catalog derivation</td><td><strong>Manual.</strong> Catalog says "derived from tokens.json" but nothing auto-syncs — change <code class="doc-code">tokens.json</code> and forget the catalog = silent drift.</td></tr>
+              <tr><td>YAML integrity</td><td>A broken indent kills the live-rendered Doctrine / Token Catalog pages. <strong>Parse both YAML before commit.</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="doc-p"><strong>Planned:</strong> a single pre-commit guard running <code class="doc-code">detect.js</code> + <code class="doc-code">lint-doctrine.js</code> + a YAML parse of both files — owned by this Sync Runbook.</p>
       </div>
     </div>
 
