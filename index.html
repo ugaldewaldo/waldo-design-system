@@ -428,16 +428,16 @@
 .badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; letter-spacing: -0.01em; white-space: nowrap; }
 .badge-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
 /* Badges — tokens via CSS vars, no hardcoded hex */
-.badge-default     { background: var(--muted); color: var(--foreground); border-color: transparent; }
-.badge-secondary   { background: rgba(210,211,211,0.08); color: rgba(210,211,211,0.60); border-color: transparent; }
-.badge-outline     { background: transparent; color: rgba(210,211,211,0.70);  }
-.badge-ghost       { background: transparent; color: rgba(210,211,211,0.45); border-color: transparent; }
-.badge-destructive { background: rgba(222,58,40,0.10); color: var(--destructive);  }
-.badge-warning     { background: rgba(201,78,34,0.10); color: var(--warning);  }
-.badge-highlight   { background: rgba(247,211,113,0.10); color: #f7d371;  }
-.badge-active      { background: rgba(50,169,169,0.12); color: var(--primary);  }
-.badge-sm { padding: 1px 6px; font-size: 10px; }
-.badge-lg { padding: 3px 10px; font-size: 12px; }
+.badge-default     { background: rgba(50,169,169,0.12); color: var(--primary); border-color: transparent; }
+.badge-secondary   { background: rgba(210,211,211,0.08); color: rgba(210,211,211,0.65); border-color: transparent; }
+.badge-outline     { background: transparent; color: rgba(210,211,211,0.65); border: 1px solid rgba(210,211,211,0.30); }
+.badge-success     { background: rgba(50,169,169,0.12); color: var(--primary); border-color: transparent; }
+.badge-destructive { background: rgba(222,58,40,0.10); color: var(--destructive); }
+.badge-warning     { background: rgba(201,78,34,0.10); color: var(--warning); }
+.badge-highlight   { background: rgba(247,211,113,0.10); color: #f7d371; }
+.badge-active      { background: rgba(50,169,169,0.12); color: var(--primary); }
+.badge-sm { padding: 0 6px; font-size: 10px; line-height: 20px; border-radius: 3px; }
+.badge-lg { padding: 4px 10px; font-size: 14px; }
 
 /* ── Input ───────────────────────────────────── */
 .field { display: flex; flex-direction: column; gap: 5px; width: 100%; }
@@ -1500,7 +1500,7 @@ window.addEventListener('load', function(){
           <span class="badge badge-secondary">Secondary</span>
           <span class="badge badge-destructive">Destructive</span>
           <span class="badge badge-outline">Outline</span>
-          <span class="badge badge-ghost">Ghost</span>
+          <span class="badge badge-success">Success</span>
           <span class="badge badge-active">Active</span>
           <span class="badge badge-warning">Warning</span>
           <span class="badge badge-highlight">Pro</span>
@@ -6763,6 +6763,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <button class="sb-item" onclick="switchChartPage('chart-page-radar',this)">Radar Charts</button>
     <button class="sb-item" onclick="switchChartPage('chart-page-radial',this)">Radial Charts</button>
     <button class="sb-item" onclick="switchChartPage('chart-page-tooltip',this)">Tooltip</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-palette',this)">Chart Palette</button>
     </div>
   </div>
 </div>
@@ -8745,6 +8746,100 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   </div>
 </div>
 
+
+<div id="chart-page-palette" class="chart-page">
+  <div class="chart-page-header">
+    <div class="chart-page-title">Chart Palette</div>
+    <div class="chart-page-desc">12 semantic color tokens for data visualizations. Use via <code style="font-family:monospace;font-size:12px;">hsl(var(--chart-N))</code> in CSS or <code style="font-family:monospace;font-size:12px;">chart-N</code> via Recharts config.</div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;">
+    <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="height:72px;background:#2DD4C4;"></div>
+      <div style="padding:12px 14px;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:2px;">chart-1</div>
+        <div style="font-size:12px;color:var(--muted-foreground);">Cyan Teal · #2DD4C4</div>
+      </div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="height:72px;background:#8899AA;"></div>
+      <div style="padding:12px 14px;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:2px;">chart-2</div>
+        <div style="font-size:12px;color:var(--muted-foreground);">Slate · #8899AA</div>
+      </div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="height:72px;background:#F5A080;"></div>
+      <div style="padding:12px 14px;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:2px;">chart-3</div>
+        <div style="font-size:12px;color:var(--muted-foreground);">Salmon · #F5A080</div>
+      </div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="height:72px;background:#F07080;"></div>
+      <div style="padding:12px 14px;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:2px;">chart-4</div>
+        <div style="font-size:12px;color:var(--muted-foreground);">Rose · #F07080</div>
+      </div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="height:72px;background:#9B88E0;"></div>
+      <div style="padding:12px 14px;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:2px;">chart-5</div>
+        <div style="font-size:12px;color:var(--muted-foreground);">Lavender · #9B88E0</div>
+      </div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="height:72px;background:#5599EE;"></div>
+      <div style="padding:12px 14px;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:2px;">chart-6</div>
+        <div style="font-size:12px;color:var(--muted-foreground);">Periwinkle · #5599EE</div>
+      </div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="height:72px;background:#F0A82A;"></div>
+      <div style="padding:12px 14px;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:2px;">chart-7</div>
+        <div style="font-size:12px;color:var(--muted-foreground);">Amber · #F0A82A</div>
+      </div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="height:72px;background:#1AB8A8;"></div>
+      <div style="padding:12px 14px;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:2px;">chart-8</div>
+        <div style="font-size:12px;color:var(--muted-foreground);">Teal · #1AB8A8</div>
+      </div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="height:72px;background:#99CC44;"></div>
+      <div style="padding:12px 14px;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:2px;">chart-9</div>
+        <div style="font-size:12px;color:var(--muted-foreground);">Lime · #99CC44</div>
+      </div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="height:72px;background:#66BB80;"></div>
+      <div style="padding:12px 14px;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:2px;">chart-10</div>
+        <div style="font-size:12px;color:var(--muted-foreground);">Sage · #66BB80</div>
+      </div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="height:72px;background:#BB77CC;"></div>
+      <div style="padding:12px 14px;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:2px;">chart-11</div>
+        <div style="font-size:12px;color:var(--muted-foreground);">Orchid · #BB77CC</div>
+      </div>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="height:72px;background:#E06699;"></div>
+      <div style="padding:12px 14px;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:2px;">chart-12</div>
+        <div style="font-size:12px;color:var(--muted-foreground);">Hot Rose · #E06699</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div><!-- /#wb-charts-main -->
 </div><!-- /#tb-panel-charts -->
 
@@ -8920,25 +9015,29 @@ npm run dev   # runs on :4502</pre>
         <div class="page-desc">How to keep Figma in sync with the token source of truth.</div>
       </div>
       <div class="doc-section">
-        <div class="doc-section-title">Tokens Studio push workflow</div>
+        <div class="doc-section-title">Figma sync — code-first, via MCP</div>
+        <p class="doc-p"><code class="doc-code">waldo.tokens.json</code> is the single source of truth. Figma's native variables are written directly from code via the <code class="doc-code">use_figma</code> MCP — <strong>Tokens Studio is not used</strong>, and Figma variables are <strong>never edited by hand</strong>.</p>
         <div class="doc-table-wrap">
           <table class="doc-table">
             <thead><tr><th>Step</th><th>Action</th></tr></thead>
             <tbody>
-              <tr><td>1</td><td>Open Tokens Studio plugin in Figma</td></tr>
-              <tr><td>2</td><td>Verify 4 sets enabled: <code class="doc-code">primitives · brand · typography · semantic</code></td></tr>
-              <tr><td>3</td><td>Push → Variables: Color ✓ String ✓ Number ✓ Boolean ✓ · Styles: Typography ✓</td></tr>
-              <tr><td>4</td><td>⚠ "Remove without connection" must be <strong>OFF</strong> — enabling it wipes everything</td></tr>
-              <tr><td>5</td><td>Verify exactly 4 collections in Figma. More = something duplicated.</td></tr>
+              <tr><td>1</td><td>Update <code class="doc-code">waldo.tokens.json</code> (source of truth), then propagate down the chain</td></tr>
+              <tr><td>2</td><td>Write the changed variables to Figma via <code class="doc-code">use_figma</code> — bind to the variable, never hardcode</td></tr>
+              <tr><td>3</td><td>Audit before destructive ops; Figma version history is the escape hatch</td></tr>
+              <tr><td>4</td><td>Verify exactly 6 collections: <code class="doc-code">primitives · brand · typography · semantic · radius · spacing</code></td></tr>
             </tbody>
           </table>
         </div>
       </div>
       <div class="doc-section">
-        <div class="doc-section-title">Tokens Studio gotchas</div>
-        <p class="doc-p">References do <strong>not</strong> resolve in composite textStyles — use literal values (<code class="doc-code">Inter</code>, <code class="doc-code">"Regular"</code>, <code class="doc-code">"14"</code>, <code class="doc-code">"-2%"</code>), not token references.</p>
+        <div class="doc-section-title">Sync chain</div>
+        <pre class="doc-pre">waldo.tokens.json  →  globals.css / waldo-shadcn-theme.css  →  .tsx  →  index.html (vanilla)  →  docs/token-catalog.yaml</pre>
+      </div>
+      <div class="doc-section">
+        <div class="doc-section-title">Figma model gotchas</div>
         <p class="doc-p">Font weights are named strings: <code class="doc-code">"Semi Bold"</code> with space — not <code class="doc-code">"600"</code> or <code class="doc-code">"SemiBold"</code>.</p>
-        <p class="doc-p">Top-level JSON keys become Figma collections — don't add new ones without planning the full Figma collection structure.</p>
+        <p class="doc-p">References do <strong>not</strong> resolve in composite textStyles — use literal values (<code class="doc-code">Inter</code>, <code class="doc-code">"Regular"</code>, <code class="doc-code">"14"</code>, <code class="doc-code">"-2%"</code>), not token references.</p>
+        <p class="doc-p">Top-level token-set keys map to Figma collections — don't add new ones without planning the full collection structure.</p>
       </div>
       <div class="doc-section">
         <div class="doc-section-title">Figma DS link</div>
@@ -9105,7 +9204,7 @@ node tools/detect.js src/components/ --json    # JSON for CI
 ❌ Don't add box-shadow ring to inputs
 ❌ Don't reference primitives directly from components — always via semantic tokens
 ❌ Don't add top-level keys to waldo.tokens.json without planning the Figma collection
-❌ Don't push Tokens Studio with references in textStyles — resolve to literals first</pre>
+❌ Don't write Figma textStyles with token references — resolve to literals first (Tokens Studio is out; Figma vars are written via use_figma MCP, never by hand)</pre>
       </div>
       <div class="doc-section">
         <div class="doc-section-title">Anti-patterns — SVG</div>
@@ -9471,11 +9570,18 @@ node tools/detect.js src/components/ --json    # JSON for CI
     <div class="token-section">
       <div class="token-group-title">Charts</div>
       <div class="token-grid">
-        <div class="token-card"><div class="token-dot" style="background:#32a9a9"></div><div><div class="token-var">--chart-1</div><div class="token-src">green-500</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#d6ac32"></div><div><div class="token-var">--chart-2</div><div class="token-src">yellow-600</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#e76638"></div><div><div class="token-var">--chart-3</div><div class="token-src">orange-500</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#d76695"></div><div><div class="token-var">--chart-4</div><div class="token-src">pink-600</div></div></div>
-        <div class="token-card"><div class="token-dot" style="background:#3b82f6"></div><div><div class="token-var">--chart-5</div><div class="token-src">blue-500</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#2DD4C4"></div><div><div class="token-var">--chart-1</div><div class="token-src">Cyan Teal</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#8899AA"></div><div><div class="token-var">--chart-2</div><div class="token-src">Slate</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#F5A080"></div><div><div class="token-var">--chart-3</div><div class="token-src">Salmon</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#F07080"></div><div><div class="token-var">--chart-4</div><div class="token-src">Rose</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#9B88E0"></div><div><div class="token-var">--chart-5</div><div class="token-src">Lavender</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#5599EE"></div><div><div class="token-var">--chart-6</div><div class="token-src">Periwinkle</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#F0A82A"></div><div><div class="token-var">--chart-7</div><div class="token-src">Amber</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#1AB8A8"></div><div><div class="token-var">--chart-8</div><div class="token-src">Teal</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#99CC44"></div><div><div class="token-var">--chart-9</div><div class="token-src">Lime</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#66BB80"></div><div><div class="token-var">--chart-10</div><div class="token-src">Sage</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#BB77CC"></div><div><div class="token-var">--chart-11</div><div class="token-src">Orchid</div></div></div>
+        <div class="token-card"><div class="token-dot" style="background:#E06699"></div><div><div class="token-var">--chart-12</div><div class="token-src">Hot Rose</div></div></div>
       </div>
     </div>
   </div>

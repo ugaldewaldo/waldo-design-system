@@ -437,7 +437,7 @@ model_defaults:
 known_discrepancies:
   # RESOLVED 2026-06-11 (Miguel): warning-color → orange-600 #c94e22 everywhere.
   # RESOLVED 2026-06-11 (Miguel): popover-surface → zinc-750 #2d2f33 everywhere.
-  #   Figma still needs a Tokens Studio push to pick up semantic.surface.popover.
+  #   Applied to the Figma variable (semantic/surface/popover) directly via use_figma MCP.
   # RESOLVED 2026-06-11 (Miguel): border-strong-alpha -> 0.30 everywhere.
 
   # RESOLVED 2026-06-11 (Miguel): primary-foreground -> default button is green-700

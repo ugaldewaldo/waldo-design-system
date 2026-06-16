@@ -234,10 +234,10 @@ When a component change is approved and applied, run through this checklist IN O
 - [ ] **Ask Miguel to confirm before pushing to Figma**
 
 ### Step 3 — Figma (requires Miguel approval)
-- [ ] Push updated tokens via Tokens Studio (only after explicit "sí")
+- [ ] Write the updated variables to Figma via `use_figma` MCP (only after explicit "sí") — never edit Figma vars by hand
 - [ ] Update the Figma component — bind text/fill/border to the correct variable, not hardcoded
 - [ ] Update FIGMA MASTER frame if it exists for this component
-- [ ] Verify exactly 4 collections in Figma after push
+- [ ] Verify exactly 6 collections in Figma (primitives · brand · typography · semantic · radius · spacing)
 
 ### Step 4 — Documentation (auto)
 - [ ] Update `index.html` demo for this component if the visual output changed
@@ -307,34 +307,27 @@ import '@waldo/ui/globals.css'
 
 ---
 
-## Figma push workflow (Tokens Studio)
+## Figma sync — code-first, via MCP
 
-1. Open Tokens Studio plugin
-2. Verify 4 sets enabled: primitives, brand, typography, semantic
-3. Push → Options:
-   - Variables: Color ✓ · String ✓ · Number ✓ · Boolean ✓
-   - Styles: Typography ✓ (rest off)
-   - Update existing: ✓
-   - Remove without connection: ❌ (CRITICAL — wipes things not in JSON)
-4. Confirm
-5. Verify exactly 4 collections in Figma. More = something duplicated.
+**Decision (2026-06-11): code-first.** `figma/waldo.tokens.json` is the single source of truth. Claude writes the native Figma variables directly via `use_figma` (MCP). **Tokens Studio is OUT of the loop** — do not reopen that workflow.
 
-### Tokens Studio gotchas
-- **References do NOT resolve in composite textStyles** → use literal values (Inter, "Regular", "14", "20", "-2%"), not `{typography.fontWeight.normal}`.
+### Hard rules
+- **Never edit Figma variables by hand.** Every variable write goes through `use_figma` so it traces back to tokens.json.
+- Requires Miguel approval before writing to Figma (same as any external change).
+- Bind text/fill/border to the correct variable — never a hardcoded value.
+
+### Sync chain (official)
+`tokens.json` → `globals.css` / `waldo-shadcn-theme.css` → `.tsx` → `index.html` (vanilla) → `docs/token-catalog.yaml`
+
+### use_figma rules
+- Always audit before destructive ops; use Figma version history as the escape hatch.
+- Skip `#9747FF`, `#8A38F5`, `#522B2B`, `#D9D9D9`, `#444444` (Figma chrome / placeholders).
+- For instance descendants: changing fills creates overrides — fix the master instead.
+
+### Figma model gotchas (still apply)
 - **Font weights are named strings**: "Semi Bold" (with space), not "600" or "SemiBold".
-- **Top-level JSON keys become Figma collections** — don't add new ones casually.
-
----
-
-## Direct Figma editing (use_figma MCP)
-
-Plugin API in JS. Read context, bind variables, apply text styles, create/delete vars.
-
-**Rules:**
-- Always audit before destructive ops
-- Use Figma version history as escape hatch
-- Skip `#9747FF`, `#8A38F5`, `#522B2B`, `#D9D9D9`, `#444444` (Figma chrome / placeholders)
-- For instance descendants: changing fills creates overrides — fix master instead
+- **References do NOT resolve in composite textStyles** → use literal values, not `{typography.fontWeight.normal}`.
+- **Top-level token-set keys map to Figma collections** — there are 6 (primitives · brand · typography · semantic · radius · spacing); don't add new ones casually.
 
 ---
 
@@ -404,7 +397,7 @@ The approval must be an explicit "yes", "publícalo", "dale", "go ahead" or simi
 - Don't add red anywhere in product
 - Don't use `--destructive` color inside `.wdd` dropdown items — destructive color only applies in dialog confirmations, alerts, and destructive buttons. Never in dropdown menus.
 - Don't add top-level keys to `waldo.tokens.json` without planning the Figma collection
-- Don't push Tokens Studio with references in textStyles — resolve to literals first
+- Don't write Figma textStyles with token references — resolve to literals first (references don't resolve in composite styles)
 
 ---
 
