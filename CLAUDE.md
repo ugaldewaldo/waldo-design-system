@@ -20,14 +20,12 @@ Violating this rule wastes hours and breaks things that were working.
 
 ---
 
-## 🔄 SYNC & VALIDATION — active in this repo
+## 🔄 SYNC & VALIDATION
 
-When you change the DS (a token, a color, a component), validation runs automatically — don't skip it:
+When you change the DS, the **Sync Runbook** (docs site → Documentation → Sync Runbook) is the authoritative process — read it. Two activation steps not obvious from it:
 
-- **CI on push** (`.github/workflows/ds-validate.yml`) — runs on every push: `detect.js` on changed code + `lint-doctrine.js` coverage + YAML parse of both catalogs. Cannot be bypassed. Covers you automatically.
-- **Pre-commit hook** — run **once per clone**: `bash tools/install-hooks.sh`. Then every commit is checked locally (blocks on violations). Excludes `index.html` (showcase) and `tools/` (infra).
-- **Follow the Sync Runbook** (docs site → Documentation → Sync Runbook) on any change: `tokens.json` → CSS → `.tsx` → `index.html` → `token-catalog.yaml` → Figma variables via `use_figma` MCP → **publish library** → consumer accepts updates → `/ds-verify`. Code-first: `tokens.json` is the source of truth; never edit Figma variables by hand.
-- **Ownership** (don't edit across the line — pass change requests instead): `token-catalog.yaml` + `tools/detect.js` + the docs page are owned by the VALIDADOR session; `usage-doctrine.yaml` + `tools/lint-doctrine.js` + `/ds-*` skills by Intelligence Layer.
+- **Run once per clone:** `bash tools/install-hooks.sh` (installs the pre-commit guard).
+- **CI runs automatically** on every push (`.github/workflows/ds-validate.yml`) and cannot be bypassed.
 
 ---
 
