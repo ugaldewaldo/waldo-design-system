@@ -9107,20 +9107,21 @@ npm run dev   # runs on :4502</pre>
 
       <div class="doc-section">
         <div class="doc-section-title">Enforcement &amp; known gaps</div>
-        <p class="doc-p">The intelligence-layer tooling catches most violations, but a few checks are manual or not yet wired — know them so they don't bite:</p>
+        <p class="doc-p">A pre-commit guard now runs the checks automatically; a couple of gaps remain — know them so they don't bite:</p>
         <div class="doc-table-wrap">
           <table class="doc-table">
             <thead><tr><th>Mechanism</th><th>What it catches / gap</th></tr></thead>
             <tbody>
               <tr><td><code class="doc-code">tools/detect.js</code></td><td>Reads <code class="doc-code">token-catalog.yaml</code>, so new catalog entries are caught automatically — <strong>except</strong> its hardcoded allow-lists (<code class="doc-code">ALLOWED_HEX</code>, rgba families, <code class="doc-code">ALLOWED_RADII</code>, <code class="doc-code">ALLOWED_FONTS</code>): a new family/value must be added to the JS by hand or it throws false positives.</td></tr>
-              <tr><td><code class="doc-code">tools/lint-doctrine.js</code></td><td>Errors if a <code class="doc-code">.tsx</code> has no <code class="doc-code">usage-doctrine.yaml</code> entry — but only if someone runs it (not yet wired to a hook). Infra-only files go in its <code class="doc-code">EXEMPT</code> set.</td></tr>
-              <tr><td><code class="doc-code">forbidden.patterns</code></td><td><strong>Gap:</strong> documenting an anti-pattern in the YAML does <strong>not</strong> enforce it — detect.js regex rules are separate. Documented ≠ enforced.</td></tr>
-              <tr><td>Catalog derivation</td><td><strong>Manual.</strong> Catalog says "derived from tokens.json" but nothing auto-syncs — change <code class="doc-code">tokens.json</code> and forget the catalog = silent drift.</td></tr>
-              <tr><td>YAML integrity</td><td>A broken indent kills the live-rendered Doctrine / Token Catalog pages. <strong>Parse both YAML before commit.</strong></td></tr>
+              <tr><td><code class="doc-code">forbidden.patterns</code></td><td>Each entry has <code class="doc-code">text</code>; entries that also carry a <code class="doc-code">match</code> (regex) + <code class="doc-code">rule</code> + <code class="doc-code">severity</code> are <strong>enforced by detect.js automatically</strong> (🔒 in the catalog). No <code class="doc-code">match</code> = conceptual / context-dependent, documentation-only. <strong>Documenting an enforceable pattern = enforcing it.</strong></td></tr>
+              <tr><td><code class="doc-code">tools/lint-doctrine.js</code></td><td>Errors if a <code class="doc-code">.tsx</code> has no <code class="doc-code">usage-doctrine.yaml</code> entry. Now wired into the pre-commit guard. Infra-only files go in its <code class="doc-code">EXEMPT</code> set.</td></tr>
+              <tr><td>Catalog derivation</td><td><strong>Still manual.</strong> Catalog says "derived from tokens.json" but nothing auto-syncs — change <code class="doc-code">tokens.json</code> and forget the catalog = silent drift.</td></tr>
+              <tr><td>YAML integrity</td><td>A broken indent kills the live-rendered Doctrine / Token Catalog pages — the guard parses both YAML before each commit.</td></tr>
             </tbody>
           </table>
         </div>
-        <p class="doc-p"><strong>Planned:</strong> a single pre-commit guard running <code class="doc-code">detect.js</code> + <code class="doc-code">lint-doctrine.js</code> + a YAML parse of both files — owned by this Sync Runbook.</p>
+        <div class="doc-section-title" style="margin-top:24px;">Pre-commit guard</div>
+        <p class="doc-p">Install once per clone: <code class="doc-code">bash tools/install-hooks.sh</code>. On every commit it runs <code class="doc-code">detect.js</code> on staged code + <code class="doc-code">lint-doctrine.js</code> + a YAML parse of both catalogs, and <strong>blocks the commit on any error</strong>. It skips <code class="doc-code">index.html</code> (the showcase reference, full of demo colors) and <code class="doc-code">tools/</code> (infra — the detector's own source carries hex literals as detection logic). Bypass with <code class="doc-code">git commit --no-verify</code> only when you must.</p>
       </div>
     </div>
 
