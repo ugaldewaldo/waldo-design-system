@@ -1,0 +1,58 @@
+name: DS Validate
+
+# Server-side backstop for the design-system sync process. Runs on every push
+# and PR — cannot be bypassed with --no-verify like the local pre-commit hook.
+# Mirrors tools/pre-commit.sh: detect.js on changed code, doctrine coverage,
+# and YAML integrity of both catalogs.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Doctrine coverage (lint-doctrine.js)
+        run: node tools/lint-doctrine.js
+
+      - name: YAML integrity (both catalogs)
+        run: |
+          python3 -m pip install --quiet pyyaml
+          python3 -c "import yaml; yaml.safe_load(open('docs/token-catalog.yaml'))"
+          python3 -c "import yaml; yaml.safe_load(open('docs/usage-doctrine.yaml'))"
+
+      - name: detect.js on changed code
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="origin/${{ github.base_ref }}"
+            git fetch --quiet origin "${{ github.base_ref }}"
+            range="$base...HEAD"
+          else
+            before="${{ github.event.before }}"
+            if [ -z "$before" ] || [ "$before" = "0000000000000000000000000000000000000000" ]; then
+              range="HEAD~1...HEAD"
+            else
+              range="$before...HEAD"
+            fi
+          fi
+          changed="$(git diff --name-only "$range" \
+            | grep -E '\.(html|css|tsx|jsx|ts|js|vue|svelte)$' \
+            | grep -vx 'index.html' \
+            | grep -v '^tools/' || true)"
+          if [ -z "$changed" ]; then
+            echo "No changed code files to scan."
+            exit 0
+          fi
+          echo "Scanning:"; echo "$changed"
+          # shellcheck disable=SC2086
+          node tools/detect.js $changed
