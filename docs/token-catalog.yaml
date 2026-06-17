@@ -284,6 +284,167 @@ colors:
     tailwind: bg-background/40
     use: Frosted glass surfaces (0.50 on hover)
 
+  # ── Primitive scale steps (DERIVED 50→950; ANCHOR steps are listed above) ──
+  # Valid DS primitives, but prefer semantic tokens in product UI.
+  - hex: "#f8f8f9"
+    primitive: zinc-50
+    vanilla_var: --zinc-50
+    use: Primitive scale step
+  - hex: "#f0f0f2"
+    primitive: zinc-100
+    vanilla_var: --zinc-100
+    use: Primitive scale step
+  - hex: "#edfafa"
+    primitive: green-50
+    vanilla_var: --green-50
+    use: Primitive scale step
+  - hex: "#d5f3f3"
+    primitive: green-100
+    vanilla_var: --green-100
+    use: Primitive scale step
+  - hex: "#a8e6e6"
+    primitive: green-200
+    vanilla_var: --green-200
+    use: Primitive scale step
+  - hex: "#6dcece"
+    primitive: green-300
+    vanilla_var: --green-300
+    use: Primitive scale step
+  - hex: "#223133"
+    primitive: green-900
+    vanilla_var: --green-900
+    use: Primitive scale step
+  - hex: "#111e1f"
+    primitive: green-950
+    vanilla_var: --green-950
+    use: Primitive scale step
+  - hex: "#fffbeb"
+    primitive: yellow-50
+    vanilla_var: --yellow-50
+    use: Primitive scale step
+  - hex: "#fef3c7"
+    primitive: yellow-100
+    vanilla_var: --yellow-100
+    use: Primitive scale step
+  - hex: "#fde68a"
+    primitive: yellow-200
+    vanilla_var: --yellow-200
+    use: Primitive scale step
+  - hex: "#f0c040"
+    primitive: yellow-400
+    vanilla_var: --yellow-400
+    use: Primitive scale step
+  - hex: "#e5b020"
+    primitive: yellow-500
+    vanilla_var: --yellow-500
+    use: Primitive scale step
+  - hex: "#d6ac32"
+    primitive: yellow-600
+    vanilla_var: --yellow-600
+    use: Primitive scale step
+  - hex: "#b48a00"
+    primitive: yellow-700
+    vanilla_var: --yellow-700
+    use: Primitive scale step
+  - hex: "#946f00"
+    primitive: yellow-800
+    vanilla_var: --yellow-800
+    use: Primitive scale step
+  - hex: "#713d00"
+    primitive: yellow-900
+    vanilla_var: --yellow-900
+    use: Primitive scale step
+  - hex: "#3d2100"
+    primitive: yellow-950
+    vanilla_var: --yellow-950
+    use: Primitive scale step
+  - hex: "#fff8f5"
+    primitive: orange-50
+    vanilla_var: --orange-50
+    use: Primitive scale step
+  - hex: "#ffeed5"
+    primitive: orange-100
+    vanilla_var: --orange-100
+    use: Primitive scale step
+  - hex: "#ffd4b0"
+    primitive: orange-200
+    vanilla_var: --orange-200
+    use: Primitive scale step
+  - hex: "#cd917b"
+    primitive: orange-300
+    vanilla_var: --orange-300
+    use: Primitive scale step
+  - hex: "#a95d41"
+    primitive: orange-400
+    vanilla_var: --orange-400
+    use: Primitive scale step
+  - hex: "#a83a18"
+    primitive: orange-700
+    vanilla_var: --orange-700
+    use: Primitive scale step
+  - hex: "#86280f"
+    primitive: orange-800
+    vanilla_var: --orange-800
+    use: Primitive scale step
+  - hex: "#5e1a08"
+    primitive: orange-900
+    vanilla_var: --orange-900
+    use: Primitive scale step
+  - hex: "#380e03"
+    primitive: orange-950
+    vanilla_var: --orange-950
+    use: Primitive scale step
+
+  # ── Chart / data-viz categorical palette (--chart-1..12) ──
+  - hex: "#2dd4c4"
+    primitive: chart-1
+    vanilla_var: --chart-1
+    use: "Chart palette — Cyan Teal"
+  - hex: "#8899aa"
+    primitive: chart-2
+    vanilla_var: --chart-2
+    use: "Chart palette — Slate"
+  - hex: "#f5a080"
+    primitive: chart-3
+    vanilla_var: --chart-3
+    use: "Chart palette — Salmon"
+  - hex: "#f07080"
+    primitive: chart-4
+    vanilla_var: --chart-4
+    use: "Chart palette — Rose"
+  - hex: "#9b88e0"
+    primitive: chart-5
+    vanilla_var: --chart-5
+    use: "Chart palette — Lavender"
+  - hex: "#5599ee"
+    primitive: chart-6
+    vanilla_var: --chart-6
+    use: "Chart palette — Periwinkle"
+  - hex: "#f0a82a"
+    primitive: chart-7
+    vanilla_var: --chart-7
+    use: "Chart palette — Amber"
+  - hex: "#1ab8a8"
+    primitive: chart-8
+    vanilla_var: --chart-8
+    use: "Chart palette — Teal"
+  - hex: "#99cc44"
+    primitive: chart-9
+    vanilla_var: --chart-9
+    use: "Chart palette — Lime"
+  - hex: "#66bb80"
+    primitive: chart-10
+    vanilla_var: --chart-10
+    use: "Chart palette — Sage"
+  - hex: "#bb77cc"
+    primitive: chart-11
+    vanilla_var: --chart-11
+    use: "Chart palette — Orchid"
+  - hex: "#e06699"
+    primitive: chart-12
+    vanilla_var: --chart-12
+    use: "Chart palette — Hot Rose"
+
 # ── Brand palette — MARKETING ONLY, never in product UI ─────────────
 brand_marketing_only:
   warning: Using any of these in product UI is a violation. Marketing surfaces only.

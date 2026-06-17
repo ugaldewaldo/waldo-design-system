@@ -26,7 +26,7 @@ function loadRules(catalogText) {
 
   // colors: every catalog entry hex + its primitive/var for suggestions
   const colorBlocks = catalogText.matchAll(
-    /- hex: "(#[0-9a-fA-F]{6}|rgba\([^)]+\))"\s*\n\s*primitive: ([^\n]+)\n(?:[\s\S]*?vanilla_var: ([^\n]*)\n)?/g
+    /- hex: "(#[0-9a-fA-F]{6}|rgba\([^)]+\))"\s*\n\s*primitive: ([^\n]+)\n(?:(?:(?!- hex:)[\s\S])*?vanilla_var: ([^\n]*)\n)?/g
   );
   for (const m of colorBlocks) {
     const value = m[1].toLowerCase().replace(/\s/g, '');
@@ -131,11 +131,14 @@ function scanFile(filePath, rules) {
   const add = (line, severity, rule, message, suggestion) =>
     findings.push({ file: filePath, line, severity, rule, message, suggestion: suggestion || null });
 
-  lines.forEach((line, i) => {
+  lines.forEach((rawLine, i) => {
     const n = i + 1;
 
-    // skip comment-only lines (commented code/notes are not rendered)
-    if (/^(\/\/|\/\*|\*\s|<!--)/.test(line.trim())) return;
+    // skip comment-only lines, and strip inline /* */ and <!-- --> comments so
+    // hex labels inside comments (e.g. `--chart-1: … /* #2DD4C4 */`) don't trip
+    // color rules. `//` is NOT stripped inline (would break https:// in URLs).
+    if (/^(\/\/|\/\*|\*\s|<!--)/.test(rawLine.trim())) return;
+    const line = rawLine.replace(/\/\*.*?\*\//g, '').replace(/<!--.*?-->/g, '');
 
     // 1. hex colors
     for (const m of line.matchAll(/#[0-9a-fA-F]{3,8}\b/g)) {
