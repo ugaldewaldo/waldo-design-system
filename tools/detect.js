@@ -134,6 +134,9 @@ function scanFile(filePath, rules) {
   lines.forEach((line, i) => {
     const n = i + 1;
 
+    // skip comment-only lines (commented code/notes are not rendered)
+    if (/^(\/\/|\/\*|\*\s|<!--)/.test(line.trim())) return;
+
     // 1. hex colors
     for (const m of line.matchAll(/#[0-9a-fA-F]{3,8}\b/g)) {
       const raw = m[0];
@@ -180,7 +183,7 @@ function scanFile(filePath, rules) {
 
     // 4. font families
     const fontMatch = line.match(/font-family\s*:\s*([^;}]+)/i);
-    if (fontMatch && !ALLOWED_FONTS.test(fontMatch[1].toLowerCase())) {
+    if (fontMatch && !ALLOWED_FONTS.test(fontMatch[1].toLowerCase()) && !/var\(/.test(fontMatch[1])) {
       add(n, 'error', 'wrong-font', `font-family "${fontMatch[1].trim()}" — Inter is the only UI font`, 'use Inter (mono only for code/kbd/hex)');
     }
 
