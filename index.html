@@ -107,7 +107,7 @@
       display: inline-flex; align-items: center; justify-content: center; gap: 6px;
       border-radius: 24px; border: 1px solid transparent; cursor: pointer;
       font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; line-height: 20px;
-      padding: 8px 16px; height: 36px;
+      padding: 8px 16px; height: 40px;
       transition: background .15s, opacity .15s, color .15s, box-shadow .15s;
       white-space: nowrap; text-decoration: none; outline: none;
     }
@@ -337,8 +337,8 @@
   transition: background 0.1s, color 0.1s, border-color 0.1s, opacity 0.1s;
   font-family: 'Inter', sans-serif; white-space: nowrap; user-select: none;
   text-decoration: none;
-  /* default size: 36px */
-  height: 36px; padding: 0 16px;
+  /* default size: 40px — aligns with input h-10 */
+  height: 40px; padding: 0 16px;
 }
 .btn:focus-visible {
   outline: none;
@@ -411,7 +411,7 @@
 
 /* Icon-only — square pill */
 .btn-icon-sm { height: 28px; width: 28px; padding: 0; }
-.btn-icon    { height: 36px; width: 36px; padding: 0; }
+.btn-icon    { height: 40px; width: 40px; padding: 0; }
 .btn-icon-lg { height: 44px; width: 44px; padding: 0; }
 
 .btn:disabled, .btn.disabled { opacity: 0.4; pointer-events: none; }

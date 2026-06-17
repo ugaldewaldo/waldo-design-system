@@ -6,9 +6,9 @@ import { cn } from "@/lib/utils";
 // Waldo FileInput — values from Figma DS (node 83838:481260, Section 2)
 //
 // Zone       → zinc-850 #242528 · border-radius 24px · padding py-6
-// Zone text  → "Click to upload or drag and drop" green-600 #2db4b4
+// Zone text  → "Click to upload or drag and drop" text-primary (green-500 #32a9a9)
 // Optional   → zinc-200/50%
-// Files label → green-600 #2db4b4
+// Files label → text-primary (green-500 #32a9a9)
 // File row   → icon + name + trash icon
 // Drag over  → lighter bg + teal border
 // ─────────────────────────────────────────────────────────────────────────────

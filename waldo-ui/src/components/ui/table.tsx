@@ -14,8 +14,12 @@ const Table = React.forwardRef<HTMLTableElement, TableProps>(
   ({ className, stickyHeader, maxHeight, ...props }, ref) => (
     <div
       className={cn(
-        "w-full overflow-x-auto",
-        stickyHeader && maxHeight && "overflow-y-auto"
+        "w-full",
+        // Page-level sticky needs NO scroll container on the root (overflow-x-auto
+        // would force overflow-y to compute to auto and trap the sticky thead).
+        // Only clip when not sticky (wide tables) or sticky+bounded (own scroller).
+        !stickyHeader && "overflow-x-auto",
+        stickyHeader && maxHeight && "overflow-auto"
       )}
       style={stickyHeader && maxHeight ? { maxHeight } : undefined}
     >
@@ -89,7 +93,7 @@ const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
       ref={ref}
       data-selected={selected || undefined}
       className={cn(
-        "border-b border-foreground/[0.06] transition-colors duration-100",
+        "border-b border-foreground/[0.07] transition-colors duration-100",
         "hover:bg-foreground/[0.04]",
         "data-[selected]:bg-primary/[0.06]",
         className

@@ -43,13 +43,13 @@ All values come from `globals.css` → `tailwind.config.ts`. Use Tailwind classe
 ## Component status
 
 ### ✅ Atomic
-Button, Input/Field, Badge, Avatar, Checkbox, Switch, Select, SegmentedControl, Tag/TagInput, FilterChip, FileInput, Separator, Tooltip, Table, Tabs, Toast, Alert, EmptyState, Icon, ListItem/ListView
+Button, Input/Field, Badge, Avatar, Checkbox, Switch, Select, SegmentedControl, Tag/TagInput, FilterChip, FileInput, Separator, Tooltip, Table, Tabs, Toast, Alert, EmptyState, Icon, ListItem/ListView, RadioGroup, Slider
 
 ### ✅ Overlay
 Dialog, DropdownMenu, Command
 
 ### ⏳ Pending
-Skeleton, Sheet/Drawer, Card/ResultCard, DataTable, Combobox, Popover, DatePicker, RadioGroup, Slider, AlertDialog, NavigationSidebar
+Skeleton, Sheet/Drawer, Card/ResultCard, DataTable, Combobox, Popover, DatePicker, AlertDialog, NavigationSidebar
 
 ---
 
@@ -99,6 +99,18 @@ Skeleton, Sheet/Drawer, Card/ResultCard, DataTable, Combobox, Popover, DatePicke
 - Canvas 24px → `h-4 w-4` (16px) or `h-[18px] w-[18px]` — default buttons, nav
 - strokeWidth: always `1.5`
 - Color: always one tone below the accompanying text — if text is `text-foreground`, icon is `text-muted-foreground`. Never match the text color exactly.
+
+---
+
+## Component audit protocol
+
+0. Visual review — show demo in preview, get approval before touching code
+1. Update component tokens/styles
+2. Add to `index.ts` (new components only)
+3. Doctrine — only if non-obvious rules worth documenting
+4. Verify shadcn compatibility — no breaking API changes
+5. Push
+6. Mark Linear card as Shipped
 
 ---
 

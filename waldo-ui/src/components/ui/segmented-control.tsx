@@ -4,9 +4,9 @@ import { cn } from "@/lib/utils";
 // ─────────────────────────────────────────────────────────────────────────────
 // Waldo SegmentedControl — values from Figma DS (node 83872:2208)
 //
-// Container  → zinc-950 (#171819) + rounded-[24px]
-// Active opt → zinc-800 (#27282b) + zinc-200 full text
-// Inactive   → transparent + zinc-200/70% text
+// Container  → bg-background/50 + rounded-[24px]
+// Active opt → bg-foreground/14 + full text
+// Inactive   → transparent + text muted
 // Font       → text-sm-normal: 14px / 400 / -0.02em
 // Padding    → py-[6px] per option, options are flex-1
 //
@@ -73,8 +73,8 @@ function SegmentedControl({
               "transition-colors duration-100 cursor-pointer select-none",
               // States
               isActive
-                ? "bg-foreground/[0.14] text-foreground shadow-sm"
-                : "bg-transparent text-foreground/60",
+                ? "bg-foreground/[0.12] text-foreground shadow-sm"
+                : "bg-transparent text-foreground/70",
             )}
           >
             {opt.icon ?? opt.label}

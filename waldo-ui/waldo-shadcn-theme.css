@@ -94,7 +94,10 @@
 
   /* ── zinc-200 alpha — text & borders on dark ── */
   /* Use for text/icons that sit on variable-depth backgrounds */
+  --zinc-200-4:  rgba(210, 211, 211, 0.04);  /* hover very subtle   — list/row hover bg */
   --zinc-200-5:  rgba(210, 211, 211, 0.05);  /* fillOpacity800Low   — very subtle fill */
+  --zinc-200-7:  rgba(210, 211, 211, 0.07);  /* bg secondary        — component bg (Linear pattern) */
+  --zinc-200-8:  rgba(210, 211, 211, 0.08);  /* border standard     — default border (Linear pattern) */
   --zinc-200-10: rgba(210, 211, 211, 0.10);  /* fillOpacity700Reg   — subtle fill */
   --zinc-200-12: rgba(210, 211, 211, 0.12);  /* border / input bg   — current --border */
   --zinc-200-20: rgba(210, 211, 211, 0.20);  /* line700Low          — low contrast border */
@@ -172,11 +175,18 @@
 
     --radius: 0.375rem;
 
-    --chart-1: 180 54% 43%;    /* green-500  */
-    --chart-2: 42 67% 51%;     /* yellow-600 */
-    --chart-3: 18 80% 56%;     /* orange-500 */
-    --chart-4: 51 50% 56%;     /* yellow-600 (was pink) */
-    --chart-5: 180 50% 62%;    /* green-300 (was blue-500) */
+    --chart-1:  174 66% 50%;   /* Cyan Teal    #2DD4C4 */
+    --chart-2:  210 17% 60%;   /* Slate        #8899AA */
+    --chart-3:   16 85% 73%;   /* Salmon       #F5A080 */
+    --chart-4:  353 81% 69%;   /* Rose         #F07080 */
+    --chart-5:  253 59% 71%;   /* Lavender     #9B88E0 */
+    --chart-6:  213 82% 63%;   /* Periwinkle   #5599EE */
+    --chart-7:   38 87% 55%;   /* Amber        #F0A82A */
+    --chart-8:  174 75% 41%;   /* Teal         #1AB8A8 */
+    --chart-9:   83 57% 53%;   /* Lime         #99CC44 */
+    --chart-10: 138 38% 57%;   /* Sage         #66BB80 */
+    --chart-11: 288 45% 63%;   /* Orchid       #BB77CC */
+    --chart-12: 335 66% 64%;   /* Hot Rose     #E06699 */
 
     --sidebar-background:           220 9% 96%;
     --sidebar-foreground:           220 4% 9%;
@@ -221,11 +231,18 @@
     --input:                  180 1% 82% / 0.20;     /* zinc-200  20% */
     --ring:                   180 54% 43%;           /* green-500  #32a9a9 */
 
-    --chart-1: 180 54% 43%;
-    --chart-2: 42 67% 51%;
-    --chart-3: 18 80% 56%;
-    --chart-4: 51 50% 56%;     /* yellow-600 (was pink) */
-    --chart-5: 180 50% 62%;    /* green-300 (was blue-500) */
+    --chart-1:  174 66% 50%;   /* Cyan Teal    #2DD4C4 */
+    --chart-2:  210 17% 60%;   /* Slate        #8899AA */
+    --chart-3:   16 85% 73%;   /* Salmon       #F5A080 */
+    --chart-4:  353 81% 69%;   /* Rose         #F07080 */
+    --chart-5:  253 59% 71%;   /* Lavender     #9B88E0 */
+    --chart-6:  213 82% 63%;   /* Periwinkle   #5599EE */
+    --chart-7:   38 87% 55%;   /* Amber        #F0A82A */
+    --chart-8:  174 75% 41%;   /* Teal         #1AB8A8 */
+    --chart-9:   83 57% 53%;   /* Lime         #99CC44 */
+    --chart-10: 138 38% 57%;   /* Sage         #66BB80 */
+    --chart-11: 288 45% 63%;   /* Orchid       #BB77CC */
+    --chart-12: 335 66% 64%;   /* Hot Rose     #E06699 */
 
     --sidebar-background:           225 5% 15%;     /* zinc-850  #242528 */
     --sidebar-foreground:           180 1% 82%;

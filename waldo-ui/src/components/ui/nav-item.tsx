@@ -46,7 +46,7 @@ export function NavSection({ label, className }: NavSectionProps) {
 // ── NavSeparator ──────────────────────────────────────────────────────────────
 
 export function NavSeparator({ className }: { className?: string }) {
-  return <div className={cn("my-1 h-px bg-foreground/[0.06]", className)} />;
+  return <div className={cn("my-1 h-px bg-foreground/[0.07]", className)} />;
 }
 
 // ── NavItem ───────────────────────────────────────────────────────────────────

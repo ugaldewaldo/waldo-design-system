@@ -11,7 +11,7 @@ export function IconCircleChevronDown({ className, ...props }: React.SVGProps<SV
       {...props}
     >
       <g>
-<path d="M8 1C11.866 1 15 4.13401 15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8C1 4.13401 4.13401 1 8 1ZM7.85352 9.14648L4.70703 6L4 6.70703L7.85352 10.5605L11.707 6.70703L11 6L7.85352 9.14648Z" fill="currentColor"/>
+<path fillRule="evenodd" clipRule="evenodd" d="M8 1C11.866 1 15 4.13401 15 8C15 11.866 11.866 15 8 15C4.13401 15 1 11.866 1 8C1 4.13401 4.13401 1 8 1ZM7.85352 9.14648L4.70703 6L4 6.70703L7.85352 10.5605L11.707 6.70703L11 6L7.85352 9.14648Z" fill="currentColor"/>
 </g>
     </svg>
   );

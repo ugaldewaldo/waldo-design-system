@@ -101,6 +101,7 @@ const Textarea = React.forwardRef<
       "px-4 py-3 text-sm font-normal tracking-[-0.02em] text-foreground",
       "placeholder:text-muted-foreground",
       "transition-colors duration-100",
+      "hover:border-waldo-green-800",
       "focus-visible:outline-none focus-visible:border-waldo-green-800",
       "disabled:cursor-not-allowed disabled:opacity-40",
       className

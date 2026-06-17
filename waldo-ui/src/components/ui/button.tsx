@@ -21,12 +21,12 @@ import { cn } from "@/lib/utils";
 //   destructive-solid Hard danger        coral fill · white text (confirmation dialogs only)
 //   link              Inline action      brand text · underline on hover
 //
-// Size taxonomy (Figma heights: 28 / 36 / 44):
+// Size taxonomy (Figma heights: 28 / 40 / 44):
 //   sm       28px  dense UIs, table rows, toolbar
-//   default  36px  standard
+//   default  40px  standard — aligns with input h-10
 //   lg       44px  hero CTAs, onboarding
 //   icon-sm  28×28
-//   icon     36×36
+//   icon     40×40
 //   icon-lg  44×44
 //
 // Disabled state:
@@ -57,7 +57,7 @@ const buttonVariants = cva(
         // zinc-200/5% fill / zinc-200/70% text. No border.
         // Filter chips, toolbar, secondary actions.
         secondary:
-          "bg-foreground/5 text-foreground/70 hover:bg-foreground/10 hover:text-foreground active:bg-foreground/[0.14]",
+          "bg-foreground/5 text-foreground/70 hover:bg-foreground/10 hover:text-foreground active:bg-foreground/[0.12]",
 
         // zinc-200/20% border / zinc-200 text / no fill.
         // Pairs with default (Save / Cancel row).
@@ -95,10 +95,10 @@ const buttonVariants = cva(
 
       size: {
         sm:        "h-7  px-3",
-        default:   "h-9  px-4",
+        default:   "h-10 px-4",
         lg:        "h-11 px-5",
         "icon-sm": "h-7  w-7  p-0",
-        "icon":    "h-9  w-9  p-0",
+        "icon":    "h-10 w-10 p-0",
         "icon-lg": "h-11 w-11 p-0",
       },
     },
