@@ -1050,6 +1050,83 @@ components:
       Context propagates variant/size/spacing to items; at spacing=0 items fuse (rounded-none with
       first:rounded-l-md last:rounded-r-md and collapsed borders).
 
+  - component: KPI Stat Card
+    use_when:
+      - Headline metric on a dashboard (big number + label + trend delta)
+      - Summarizing a single KPI with period-over-period change
+    dont_use_when:
+      - Showing more than one metric — use a grid of cards, one KPI each
+      - Listing ranked items — use Leaderboard Row
+    prefer_over:
+      - Card: when the content is a single metric with a trend indicator
+    notes: |
+      Brand API prototype dashboard component — not yet reviewed against Figma.
+      Surface/text colors from semantic tokens; trend up/down via --primary / --destructive.
+
+  - component: Leaderboard Row
+    use_when:
+      - One row in a ranked list (rank, entity, value, optional bar)
+      - Comparing entities ordered by a metric
+    dont_use_when:
+      - Non-ranked tabular data — use Table
+      - A single headline metric — use KPI Stat Card
+    prefer_over:
+      - ListItem: when rows are ranked and carry a comparative value/bar
+    notes: |
+      Brand API prototype dashboard component — not yet reviewed against Figma.
+      Divider at /70, gap 3px, explicit text-foreground.
+
+  - component: Depth Pill
+    use_when:
+      - Compact inline indicator of a depth/intensity score
+      - Annotating an item with a small quantified badge
+    dont_use_when:
+      - Binary status — use Badge or Live Badge
+      - Filtering — use FilterChip
+    prefer_over:
+      - Badge: when the value encodes a depth/intensity level, not a status label
+    notes: |
+      Brand API prototype component — not yet reviewed against Figma.
+      depthAlpha accepts a maxDepth param.
+
+  - component: Ad Copy Card
+    use_when:
+      - Displaying ad creative copy (headline, body, CTA) in a card
+      - Competitive ad teardown / creative review surfaces
+    dont_use_when:
+      - Generic content — use Card
+      - A single metric — use KPI Stat Card
+    prefer_over:
+      - Card: when the content is structured ad creative copy
+    notes: |
+      Brand API prototype component — not yet reviewed against Figma.
+
+  - component: Alert List Row
+    use_when:
+      - One row in an alerts / signals list (icon, message, timestamp)
+      - Feed of system or brand alerts
+    dont_use_when:
+      - Inline ephemeral notification — use Toast
+      - Generic list content — use ListItem
+    prefer_over:
+      - ListItem: when the row represents an alert/signal with severity
+    notes: |
+      Brand API prototype component — not yet reviewed against Figma.
+      min-h-10.
+
+  - component: Live Badge
+    use_when:
+      - Indicating a real-time / live state on a surface
+      - Marking streaming or actively-updating data
+    dont_use_when:
+      - Static status label — use Badge
+      - A depth/intensity value — use Depth Pill
+    prefer_over:
+      - Badge: when the state is specifically "live" / real-time
+    notes: |
+      Brand API prototype component — not yet reviewed against Figma.
+      motion-safe: for reduced-motion.
+
 component_choice_logic:
 
   dialog_vs_drawer:
