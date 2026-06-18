@@ -19,6 +19,7 @@ const CATALOG_PATH = path.join(__dirname, '..', 'docs', 'token-catalog.yaml');
 const SCAN_EXTENSIONS = new Set(['.html', '.css', '.tsx', '.jsx', '.ts', '.js', '.vue', '.svelte']);
 const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'build', '.next']);
 const SKIP_PATH_SEGMENTS = ['waldo-labs']; // prototype lab files — not DS components
+const SKIP_FILES = new Set(['waldo-ds.css']); // compiled DS stylesheet — source of truth, not linted
 
 /* ── Rules from the catalog ────────────────────────────────────── */
 
@@ -231,6 +232,7 @@ function collectFiles(target) {
   const out = [];
   const stat = fs.statSync(target);
   if (SKIP_PATH_SEGMENTS.some(seg => target.split(path.sep).includes(seg))) return out;
+  if (SKIP_FILES.has(path.basename(target))) return out;
   if (stat.isFile()) {
     if (SCAN_EXTENSIONS.has(path.extname(target))) out.push(target);
     return out;
