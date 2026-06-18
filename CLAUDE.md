@@ -27,6 +27,8 @@ When you change the DS, the **Sync Runbook** (docs site → Documentation → Sy
 - **Run once per clone:** `bash tools/install-hooks.sh` (installs the pre-commit guard).
 - **CI runs automatically** on every push (`.github/workflows/ds-validate.yml`) and cannot be bypassed.
 
+Enforced rule: **every component demo in `index.html` must be backed by a real `.tsx`** in `waldo-ui/src/components/ui/` — no demos for components that don't exist in code. Checked by `tools/lint-index.js` (in the guard + CI).
+
 ---
 
 ## ⛔ ABSOLUTE RULES — read before touching any file
@@ -144,6 +146,12 @@ Waldo y Linear comparten el mismo ADN de diseño: dark-first, tool-aesthetic, al
 Radix UI Themes es el segundo fallback — especialmente para comportamientos de accesibilidad y estados de foco.
 
 **Nunca inventar** — si no está en Waldo DS y no está en Linear/Radix, pregunta a Miguel.
+
+---
+
+## Brand API Dashboards
+
+For any work on prototypes in `waldo-labs/` (Promo Radar, Prospector, Moodtape, Poppi Health, or new Brand API dashboards), read `docs/brand-api-dashboard-doctrine.md` first. It covers custom dashboard components (KPI card, horizontal bar chart, leaderboard row, depth pill, SVG trend chart), the alpha-highlight encoding system, chart palette token rules, and file structure.
 
 ---
 

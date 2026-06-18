@@ -43,6 +43,13 @@ if ! node tools/lint-doctrine.js; then
   fail=1
 fi
 
+# 2b. index demos must be backed by a real .tsx component.
+echo "▶ lint-index.js…"
+if ! node tools/lint-index.js; then
+  echo "✗ index.html has a component demo with no backing .tsx."
+  fail=1
+fi
+
 # 3. YAML integrity — a broken indent silently kills the live-rendered docs pages.
 if command -v python3 >/dev/null 2>&1 && python3 -c "import yaml" >/dev/null 2>&1; then
   for y in docs/token-catalog.yaml docs/usage-doctrine.yaml; do

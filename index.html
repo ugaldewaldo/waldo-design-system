@@ -23,12 +23,29 @@
 
   /* ── Brand ── */
   --primary:            #32a9a9;
+  --primary-light:      #63dbdb;
+  --primary-rgb:        50, 169, 169;
+
+  /* ── Chart palette ── */
+  --chart-1:  #2DD4C4;
+  --chart-2:  #8899AA;
+  --chart-3:  #F5A080;
+  --chart-4:  #F07080;
+  --chart-5:  #9B88E0;
+  --chart-6:  #5599EE;
+  --chart-7:  #F0A82A;
+  --chart-8:  #1AB8A8;
+  --chart-9:  #99CC44;
+  --chart-10: #66BB80;
+  --chart-11: #BB77CC;
+  --chart-12: #E06699;
   --primary-foreground: #ffffff;
 
   /* ── Status ── */
   --destructive:        #de3a28;
   --warning:            #c94e22;
   --highlight:          #f7d371;
+  --highlight-rgb:      247, 211, 113;
 
   /* ── Borders ── */
   --border:             rgba(210,211,211,0.12);
@@ -180,6 +197,11 @@
 
     /* Card */
     .card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; }
+    /* Dashboard card — Figma CONATINER/: 730px, radius 16px, padding 32px, gap 24px */
+    .ds-dashboard-card { background: var(--card); border-radius: 16px; padding: 32px; width: 730px; max-width: 100%; display: flex; flex-direction: column; gap: 24px; }
+    .ds-dashboard-card-header { display: flex; flex-direction: column; gap: 4px; }
+    .ds-dashboard-card-title { font-size: 20px; font-weight: 500; line-height: 28px; letter-spacing: -0.4px; color: var(--foreground); }
+    .ds-dashboard-card-subtitle { font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: -0.28px; color: var(--muted-foreground); }
     .card h4 { font-size: 14px; font-weight: 600; color: var(--foreground); margin-bottom: 6px; }
     .card p  { font-size: 13px; color: color-mix(in srgb, var(--foreground) 68%, transparent); line-height: 1.5; }
     .card-footer { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); display: flex; gap: 8px; }
@@ -835,6 +857,15 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
     <button class="sb-item" onclick="waldoGo('comp-toggle',this)">Toggle</button>
     <button class="sb-item" onclick="waldoGo('comp-toggle-group',this)">Toggle Group</button>
     </div>
+  </div>
+  <div class="sb-group">
+    <div class="sb-group-label">Brand API</div>
+    <button class="sb-item" onclick="waldoGo('comp-depth-pill',this)">Depth Pill</button>
+    <button class="sb-item" onclick="waldoGo('comp-leaderboard',this)">Leaderboard Row</button>
+    <button class="sb-item" onclick="waldoGo('comp-kpi-card',this)">KPI Stat Card</button>
+    <button class="sb-item" onclick="waldoGo('comp-alert-list',this)">Alert List Row</button>
+    <button class="sb-item" onclick="waldoGo('comp-ad-copy-card',this)">Ad Copy Card</button>
+    <button class="sb-item" onclick="waldoGo('comp-live-badge',this)">Live Status Badge</button>
   </div>
   <div class="sb-no-results" id="sb-no-results">No results</div>
   <div class="sb-footer">Shadcn/ui · Inter · Dark-first</div>
@@ -1506,7 +1537,7 @@ window.addEventListener('load', function(){
           <span class="badge badge-highlight">Pro</span>
         </div>
         <div class="demo-code-bar">
-          <span class="demo-code-label">&lt;Badge variant="default | secondary | destructive | outline | ghost | brand | warning | highlight"&gt;</span>
+          <span class="demo-code-label">&lt;Badge variant="default | secondary | destructive | outline | active | success | warning | highlight"&gt;</span>
           <button class="copy-btn" onclick="copyCode(this, '&lt;Badge variant=&quot;default&quot;&gt;Default&lt;/Badge&gt;')">Copy</button>
         </div>
       </div>
@@ -6747,6 +6778,424 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   </div>
 </div>
 
+
+<!-- Live Status Badge -->
+<div id="comp-live-badge" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Live Status Badge</div>
+    <div class="page-desc">Brand API custom component. Indicates whether a brand is currently discounting. Active state uses destructive color + animated pulse dot. Inactive is muted with no dot.</div>
+  </div>
+
+  <style>
+    .live-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 20px; letter-spacing: -0.24px; white-space: nowrap; }
+    .live-badge.active { background: rgba(222,58,40,0.10); color: var(--destructive); }
+    .live-badge.inactive { background: var(--secondary); color: var(--muted-foreground); }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--destructive); flex: none; }
+    @keyframes live-pulse { 0%,100%{ opacity:1; transform:scale(1); } 50%{ opacity:0.5; transform:scale(1.4); } }
+    .live-dot.pulse { animation: live-pulse 1.4s ease-in-out infinite; }
+    @media (prefers-reduced-motion: reduce) { .live-dot.pulse { animation: none; } }
+  </style>
+
+  <div class="demo-section">
+    <div class="demo-label">States</div>
+    <div class="demo-box" style="display:flex;align-items:center;gap:16px;">
+      <span class="live-badge active"><span class="live-dot pulse"></span>Discounting now</span>
+      <span class="live-badge inactive">No active discount</span>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-label">In context — brand header</div>
+    <div class="demo-box" style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;">
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <div style="font-size:28px;font-weight:600;letter-spacing:-0.56px;line-height:34px;">Zara</div>
+        <div style="font-size:14px;color:var(--muted-foreground);">Apparel &amp; Fashion · <span style="color:var(--primary);cursor:pointer;">view category</span></div>
+      </div>
+      <span class="live-badge active" style="margin-top:6px;"><span class="live-dot pulse"></span>Discounting now</span>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-label">Rules</div>
+    <div class="demo-box" style="font-size:13px;line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+      <div>Active: <code>var(--destructive)</code> text + 10% bg + animated pulse dot.</div>
+      <div>Inactive: <code>var(--secondary)</code> bg + muted text, no dot.</div>
+      <div>Pulse animation respects <code>prefers-reduced-motion</code> — static dot when reduced.</div>
+      <div>Never use for general status — only for live/active promo detection.</div>
+    </div>
+  </div>
+
+  <div class="demo-code-bar">
+    <span class="demo-code-label">&lt;span class="live-badge active" /&gt;</span>
+    <button class="copy-btn" onclick="copyCode(this, '&lt;span class=&quot;live-badge active&quot;&gt;\n  &lt;span class=&quot;live-dot pulse&quot;&gt;&lt;/span&gt;Discounting now\n&lt;/span&gt;\n\n&lt;span class=&quot;live-badge inactive&quot;&gt;No active discount&lt;/span&gt;')">Copy</button>
+  </div>
+</div>
+
+<!-- KPI Stat Card -->
+<div id="comp-kpi-card" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">KPI Stat Card</div>
+    <div class="page-desc">Brand API custom component. 4-up grid of summary metrics. Value is the dominant element — up signal uses destructive (red = more discounting = pressure), down uses primary (teal = less discounting = relief).</div>
+  </div>
+
+  <style>
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .kpi { background: var(--card); border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 8px; }
+    .k-label { font-size: 14px; font-weight: 500; line-height: 20px; letter-spacing: -0.28px; color: var(--muted-foreground); }
+    .k-value { font-size: 30px; font-weight: 600; line-height: 36px; letter-spacing: -0.6px; }
+    .k-sub { font-size: 12px; font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: var(--muted-foreground); }
+    .k-sub .k-up { color: var(--destructive); font-weight: 600; }
+    .k-sub .k-down { color: var(--primary); font-weight: 600; }
+    .k-header { display: flex; gap: 10px; align-items: center; justify-content: space-between; }
+  </style>
+
+  <div class="demo-section">
+    <div class="demo-label">4-up grid</div>
+    <div class="demo-box">
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="k-label">Brands discounting now</div>
+          <div class="k-value">1 in 3</div>
+          <div class="k-sub">~36% of 7.5k tracked brands</div>
+        </div>
+        <div class="kpi" style="position:relative;">
+          <span class="badge" style="position:absolute;top:16px;right:16px;background:hsl(var(--destructive)/0.12);color:var(--destructive);border:none;">▲ +4pp</span>
+          <div class="k-label">Avg Discount Depth</div>
+          <div class="k-value">36%</div>
+          <div class="k-sub">vs last month</div>
+        </div>
+        <div class="kpi" style="position:relative;">
+          <span class="badge" style="position:absolute;top:16px;right:16px;background:hsl(var(--primary)/0.12);color:var(--primary);border:none;">▼ −1.2d</span>
+          <div class="k-label">Avg Duration</div>
+          <div class="k-value">8.4d</div>
+          <div class="k-sub">vs last month</div>
+        </div>
+        <div class="kpi">
+          <div class="k-label">Category Coverage</div>
+          <div class="k-value">68%</div>
+          <div class="k-sub">across 14 categories</div>
+        </div>
+      </div>
+      <div style="margin-top:14px;font-size:12px;color:var(--muted-foreground);margin-bottom:8px;">With badge</div>
+      <div class="kpi-grid" style="grid-template-columns:repeat(2,1fr);max-width:580px;">
+        <div class="kpi" style="position:relative;">
+          <span class="badge" style="position:absolute;top:16px;right:16px;background:hsl(var(--destructive)/0.12);color:var(--destructive);border:none;">▲ +8pp</span>
+          <div class="k-label">Week-over-week</div>
+          <div class="k-value">+8pp</div>
+          <div class="k-sub">more brands discounting vs. last week</div>
+        </div>
+        <div class="kpi" style="position:relative;">
+          <span class="badge" style="position:absolute;top:16px;right:16px;background:hsl(var(--primary)/0.12);color:var(--primary);border:none;">▼ −2pp</span>
+          <div class="k-label">Avg depth change</div>
+          <div class="k-value">−2pp</div>
+          <div class="k-sub">shallower discounts vs. last week</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-label">Signal semantics</div>
+    <div class="demo-box" style="display:flex;gap:24px;">
+      <div class="kpi" style="flex:1;">
+        <div class="k-label">More discounting</div>
+        <div class="k-value">▲ up</div>
+        <div class="k-sub"><span class="k-up">▲ pressure signal</span> · use destructive</div>
+      </div>
+      <div class="kpi" style="flex:1;">
+        <div class="k-label">Less discounting</div>
+        <div class="k-value">▼ down</div>
+        <div class="k-sub"><span class="k-down">▼ relief signal</span> · use primary</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-label">Rules</div>
+    <div class="demo-box" style="font-size:13px;line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+      <div>Max 4 cards per row. Collapse to 2 on mobile.</div>
+      <div>No border — cards distinguished by surface elevation only (<code>var(--card)</code>).</div>
+      <div>Up = <code>var(--destructive)</code> (red) — more discounting is a pressure signal, not a positive.</div>
+      <div>Down = <code>var(--primary)</code> (teal) — less discounting is a relief signal.</div>
+    </div>
+  </div>
+
+  <div class="demo-code-bar">
+    <span class="demo-code-label">&lt;div class="kpi-grid" /&gt;</span>
+    <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;kpi-grid&quot;&gt;\n  &lt;div class=&quot;kpi&quot;&gt;\n    &lt;div class=&quot;k-label&quot;&gt;Avg Discount Depth&lt;/div&gt;\n    &lt;div class=&quot;k-value&quot;&gt;36%&lt;/div&gt;\n    &lt;div class=&quot;k-sub&quot;&gt;&lt;span class=&quot;k-up&quot;&gt;▲ +4pp&lt;/span&gt; vs last month&lt;/div&gt;\n  &lt;/div&gt;\n&lt;/div&gt;')">Copy</button>
+  </div>
+</div>
+
+<!-- Depth Pill -->
+<div id="comp-depth-pill" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Depth Pill</div>
+    <div class="page-desc">Brand API custom component. Encodes discount magnitude via opacity — higher depth = more opaque. Uses <code>--highlight-rgb</code> as base color.</div>
+  </div>
+
+  <style>
+    .depth-pill { font-size: 13px; font-weight: 700; padding: 4px 10px; border-radius: 8px; white-space: nowrap; }
+  </style>
+
+  <div class="demo-section">
+    <div class="demo-label">Opacity scale — 10% → 60%+</div>
+    <div class="demo-box" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <span class="depth-pill" style="color:rgba(var(--highlight-rgb),0.30);background:rgba(var(--highlight-rgb),0.10);">10% off</span>
+      <span class="depth-pill" style="color:rgba(var(--highlight-rgb),0.47);background:rgba(var(--highlight-rgb),0.10);">20% off</span>
+      <span class="depth-pill" style="color:rgba(var(--highlight-rgb),0.65);background:rgba(var(--highlight-rgb),0.10);">30% off</span>
+      <span class="depth-pill" style="color:rgba(var(--highlight-rgb),0.77);background:rgba(var(--highlight-rgb),0.10);">40% off</span>
+      <span class="depth-pill" style="color:rgba(var(--highlight-rgb),0.88);background:rgba(var(--highlight-rgb),0.10);">50% off</span>
+      <span class="depth-pill" style="color:rgba(var(--highlight-rgb),1.00);background:rgba(var(--highlight-rgb),0.10);">60%+ off</span>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-label">Live alpha calculator</div>
+    <div class="demo-box" style="display:flex;align-items:center;gap:16px;">
+      <input id="depth-input" type="range" min="0" max="100" value="35" style="flex:1;accent-color:rgba(247,211,113,0.9);">
+      <span id="depth-output" class="depth-pill" style="min-width:72px;text-align:center;"></span>
+      <span id="depth-alpha-label" style="font-size:12px;color:var(--muted-foreground);width:80px;text-align:right;"></span>
+    </div>
+    <script>
+      (function(){
+        function depthAlpha(d){ return Math.max(0.30, Math.min(1, 0.30 + (d / 60) * 0.70)); }
+        function update(){
+          var d = +document.getElementById('depth-input').value;
+          var a = depthAlpha(d).toFixed(2);
+          var el = document.getElementById('depth-output');
+          el.textContent = d + '% off';
+          el.style.color = 'rgba(247,211,113,' + a + ')';
+          el.style.background = 'rgba(247,211,113,0.10)';
+          document.getElementById('depth-alpha-label').textContent = 'α = ' + a;
+        }
+        document.getElementById('depth-input').addEventListener('input', update);
+        update();
+      })();
+    </script>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-label">Rules</div>
+    <div class="demo-box" style="font-size:13px;line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+      <div>Alpha formula: <code>Math.max(0.30, Math.min(1, 0.30 + (depth / 60) * 0.70))</code></div>
+      <div>Background is always <code>rgba(var(--highlight-rgb), 0.10)</code> — fixed.</div>
+      <div>Use only for discount depth or comparable magnitude metrics. Never repurpose for status.</div>
+      <div>Never use <code>--chart-*</code> colors in a depth pill.</div>
+    </div>
+  </div>
+
+  <div class="demo-code-bar">
+    <span class="demo-code-label">&lt;span class="depth-pill" /&gt;</span>
+    <button class="copy-btn" onclick="copyCode(this, '&lt;span class=&quot;depth-pill&quot; style=&quot;color:rgba(var(--highlight-rgb),{alpha});background:rgba(var(--highlight-rgb),0.10);&quot;&gt;{value}% off&lt;/span&gt;\n\n// alpha = Math.max(0.30, Math.min(1, 0.30 + (depth / 60) * 0.70))')">Copy</button>
+  </div>
+</div>
+
+<!-- Leaderboard Row -->
+<div id="comp-leaderboard" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Leaderboard Row</div>
+    <div class="page-desc">Brand API custom component. Ranked list of brands combining rank number, name + meta, and a depth pill for discount magnitude.</div>
+  </div>
+
+  <style>
+    .lb { display: flex; flex-direction: column; }
+    .lb-row { display: flex; gap: 14px; align-items: flex-start; padding: 12px 8px; cursor: pointer; transition: background 0.12s; border-radius: 8px; }
+    .lb-row:hover { background: var(--secondary); }
+    .lb-rank { width: 24px; flex: none; font-size: 18px; font-weight: 600; line-height: 28px; letter-spacing: -0.36px; color: var(--foreground); text-align: center; }
+    .lb-main { flex: 1; min-width: 0; border-bottom: 1px solid var(--border); padding-bottom: 12px; display: flex; flex-direction: column; gap: 3px; }
+    .lb-row:last-child .lb-main { border-bottom: none; }
+    .lb-name-row { display: flex; gap: 10px; align-items: center; width: 100%; }
+    .lb-brand { flex: 1; min-width: 0; font-size: 14px; font-weight: 600; line-height: 20px; letter-spacing: -0.28px; color: var(--foreground); }
+    .lb-meta { display: flex; gap: 8px; align-items: center; overflow: hidden; }
+    .lb-offer { font-size: 12px; font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: var(--muted-foreground); white-space: nowrap; flex: none; }
+    .lb-category { font-size: 11px; font-weight: 400; line-height: 16px; letter-spacing: -0.22px; color: var(--muted-foreground); opacity: 0.6; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  </style>
+
+  <div class="demo-section">
+    <div class="demo-label">Live demo — Top 5 brands by discount depth</div>
+    <div class="demo-box" style="max-width:520px;">
+      <div class="lb" id="lb-demo"></div>
+    </div>
+    <script>
+      (function(){
+        var brands = [
+          { rank:1, name:"Wayfair",  type:"Sitewide sale", offer:"Up to 70% off", cat:"Home & Furniture",      depth:70 },
+          { rank:2, name:"Everlane", type:"Clearance",     offer:"Up to 60% off", cat:"Apparel & Fashion",     depth:60 },
+          { rank:3, name:"Zara",     type:"Sitewide sale", offer:"Up to 50% off", cat:"Apparel & Fashion",     depth:50 },
+          { rank:4, name:"Ritual",   type:"% off",         offer:"40% off first month", cat:"Health & Supplements", depth:40 },
+          { rank:5, name:"Chewy",    type:"% off",         offer:"35% off first Autoship", cat:"Pet Care",     depth:35 },
+        ];
+        function depthAlpha(d){ return Math.max(0.30, Math.min(1, 0.30 + (d / 70) * 0.70)); }
+        var lb = document.getElementById('lb-demo');
+        lb.innerHTML = brands.map(function(b){
+          var a = depthAlpha(b.depth).toFixed(2);
+          return '<div class="lb-row">'
+            + '<div class="lb-rank">' + b.rank + '</div>'
+            + '<div class="lb-main">'
+            + '<div class="lb-name-row">'
+            + '<span class="lb-brand">' + b.name + '</span>'
+            + '<span class="badge badge-secondary">' + b.type + '</span>'
+            + '<span class="badge" style="background:rgba(247,211,113,0.10);color:rgba(247,211,113,' + a + ');">' + b.depth + '%</span>'
+            + '</div>'
+            + '<div class="lb-meta">'
+            + '<span class="lb-offer">' + b.offer + '</span>'
+            + '<span class="lb-category">· ' + b.cat + '</span>'
+            + '</div>'
+            + '</div>'
+            + '</div>';
+        }).join('');
+      })();
+    </script>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-label">Rules</div>
+    <div class="demo-box" style="font-size:13px;line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+      <div>Rank number is muted — structural, not the focus.</div>
+      <div>Brand name is the dominant element (600 weight).</div>
+      <div>Depth pill is always right-aligned, uses alpha-encoding (see Depth Pill).</div>
+      <div>Last row has no bottom border (<code>.lb-row:last-child .lb-main { border-bottom: none; }</code>).</div>
+      <div>Use <code>var(--secondary)</code> for hover — never a custom bg color.</div>
+    </div>
+  </div>
+
+  <div class="demo-code-bar">
+    <span class="demo-code-label">&lt;div class="lb-row" /&gt;</span>
+    <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;lb&quot;&gt;\n  &lt;div class=&quot;lb-row&quot;&gt;\n    &lt;div class=&quot;lb-rank&quot;&gt;1&lt;/div&gt;\n    &lt;div class=&quot;lb-main&quot;&gt;\n      &lt;div class=&quot;lb-brand&quot;&gt;Zara&lt;/div&gt;\n      &lt;div class=&quot;lb-meta&quot;&gt;\n        &lt;span class=&quot;lb-type-tag&quot;&gt;Sitewide sale&lt;/span&gt;\n        &lt;span&gt;Up to 50% off&lt;/span&gt;\n      &lt;/div&gt;\n    &lt;/div&gt;\n    &lt;span class=&quot;depth-pill&quot; style=&quot;color:rgba(var(--highlight-rgb),0.88);background:rgba(var(--highlight-rgb),0.10);&quot;&gt;50%&lt;/span&gt;\n  &lt;/div&gt;\n&lt;/div&gt;')">Copy</button>
+  </div>
+</div>
+
+
+<!-- Alert List Row -->
+<div id="comp-alert-list" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Alert List Row</div>
+    <div class="page-desc">Brand API custom component. Active user alerts — condition label + delivery address per row. Teal dot = active. Trash icon destructive on hover.</div>
+  </div>
+
+  <style>
+    .alert-list { display: flex; flex-direction: column; }
+    .alert-item { display: flex; gap: 10px; min-height: 40px; align-items: flex-start; border-bottom: 1px solid var(--border); padding: 10px 0; cursor: default; border-radius: 8px; transition: background 0.12s; }
+    .alert-item:hover { background: var(--secondary); padding-left: 8px; padding-right: 8px; }
+    .alert-item:last-child { border-bottom: none; }
+    .alert-dot-col { width: 8px; flex: none; display: flex; align-items: center; justify-content: center; padding-top: 3px; }
+    .alert-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); flex: none; }
+    .alert-content { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+    .alert-condition { font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: -0.28px; }
+    .alert-condition-main { color: var(--foreground); }
+    .alert-condition-detail { color: var(--muted-foreground); }
+    .alert-delivery { font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: -0.28px; color: var(--muted-foreground); opacity: 0.6; }
+    .alert-delete { width: 16px; height: 16px; flex: none; color: var(--muted-foreground); cursor: pointer; opacity: 0.4; transition: color 0.12s, opacity 0.12s; margin-top: 3px; }
+    .alert-delete:hover { color: var(--destructive); opacity: 1; }
+  </style>
+
+  <div class="demo-section">
+    <div class="demo-label">Live demo</div>
+    <div class="demo-box" style="max-width:560px;">
+      <div class="ds-dashboard-card" style="width:100%;">
+        <div class="ds-dashboard-card-header">
+          <div class="ds-dashboard-card-title">your alerts</div>
+        </div>
+        <div class="alert-list" id="alert-list-demo"></div>
+      </div>
+    </div>
+    <script>
+      (function(){
+        var alerts = [
+          { main: 'Apparel & Fashion', detail: '  any discount → email', delivery: 'team@acme.com' },
+          { main: 'Nike ·', detail: ' ≥30% off → text', delivery: '+1 (555) 010-2233' },
+          { main: 'Zara ·', detail: ' sitewide sale → email', delivery: 'alerts@brand.co' },
+        ];
+        var el = document.getElementById('alert-list-demo');
+        el.innerHTML = alerts.map(function(a){
+          return '<div class="alert-item">'
+            + '<div class="alert-dot-col"><div class="alert-dot"></div></div>'
+            + '<div class="alert-content">'
+            + '<div class="alert-condition"><span class="alert-condition-main">' + a.main + '</span><span class="alert-condition-detail">' + a.detail + '</span></div>'
+            + '<div class="alert-delivery">' + a.delivery + '</div>'
+            + '</div>'
+            + '<svg class="alert-delete" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5V4M6 7v5M10 7v5M3 4l.8 8.5a.5.5 0 0 0 .5.5h7.4a.5.5 0 0 0 .5-.5L13 4"/></svg>'
+            + '</div>';
+        }).join('');
+      })();
+    </script>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-label">Rules</div>
+    <div class="demo-box" style="font-size:13px;line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+      <div>Teal dot = active alert. Always <code>var(--primary)</code> — never hardcoded.</div>
+      <div>Line 1: entity name in <code>var(--foreground)</code> + condition detail in <code>var(--muted-foreground)</code> — same element, mixed spans.</div>
+      <div>Line 2: delivery address in muted/60% — email or phone.</div>
+      <div>Trash icon: 16×16, muted 40% at rest, <code>var(--destructive)</code> on hover.</div>
+      <div>Last row has no border-bottom.</div>
+    </div>
+  </div>
+
+  <div class="demo-code-bar">
+    <span class="demo-code-label">&lt;div class="alert-item" /&gt;</span>
+    <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;alert-list&quot;&gt;\n  &lt;div class=&quot;alert-item&quot;&gt;\n    &lt;div class=&quot;alert-dot-col&quot;&gt;&lt;div class=&quot;alert-dot&quot;&gt;&lt;/div&gt;&lt;/div&gt;\n    &lt;div class=&quot;alert-content&quot;&gt;\n      &lt;div class=&quot;alert-condition&quot;&gt;\n        &lt;span class=&quot;alert-condition-main&quot;&gt;Apparel &amp;amp; Fashion&lt;/span&gt;\n        &lt;span class=&quot;alert-condition-detail&quot;&gt;  any discount → email&lt;/span&gt;\n      &lt;/div&gt;\n      &lt;div class=&quot;alert-delivery&quot;&gt;team@acme.com&lt;/div&gt;\n    &lt;/div&gt;\n    &lt;svg class=&quot;alert-delete&quot; ...&gt;&lt;/svg&gt;\n  &lt;/div&gt;\n&lt;/div&gt;')">Copy</button>
+  </div>
+</div>
+
+
+<!-- Ad Copy Card -->
+<div id="comp-ad-copy-card" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Ad Copy Card</div>
+    <div class="page-desc">Brand API component. Quote card showing detected ad copy with mixed-color highlight for discount depth, source metadata, and a "Detected in ad copy" badge.</div>
+  </div>
+
+  <style>
+    .ad-copy-grid { display: flex; gap: 16px; width: 100%; }
+    .ad-copy-card { flex: 1; min-width: 0; background: #171819; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 20px; }
+    .ad-copy-body { display: flex; flex-direction: column; gap: 4px; }
+    .ad-copy-quote { font-size: 18px; font-weight: 400; line-height: 28px; letter-spacing: -0.36px; color: var(--foreground); }
+    .ad-copy-quote .highlight { color: #f7d372; }
+    .ad-copy-meta { font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: -0.28px; color: var(--muted-foreground); }
+  </style>
+
+  <div class="demo-section">
+    <div class="demo-label">Live demo</div>
+    <div class="demo-box">
+      <div class="ds-dashboard-card" style="width:100%;">
+        <div class="ds-dashboard-card-header">
+          <div>
+            <div class="ds-dashboard-card-title">Up to 60% off</div>
+            <div style="font-size:14px;font-weight:400;line-height:20px;letter-spacing:-0.28px;color:var(--muted-foreground);margin-top:2px;">Live since May 15</div>
+          </div>
+        </div>
+        <div class="ad-copy-grid">
+          <div class="ad-copy-card">
+            <div class="ad-copy-body">
+              <div class="ad-copy-quote">"Last chance: <span class="highlight">up to 60%</span> off final-sale styles. No code needed."</div>
+              <div class="ad-copy-meta">meta · CTA: Shop Final Sale</div>
+            </div>
+            <span class="badge badge-secondary" style="align-self:flex-start;">Detected in ad copy</span>
+          </div>
+          <div class="ad-copy-card">
+            <div class="ad-copy-body">
+              <div class="ad-copy-quote">"Don't miss it — <span class="highlight">save up to 60%</span> on everything in clearance."</div>
+              <div class="ad-copy-meta">meta · CTA: View Clearance</div>
+            </div>
+            <span class="badge badge-secondary" style="align-self:flex-start;">Detected in ad copy</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-label">Rules</div>
+    <div class="demo-box" style="font-size:13px;line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+      <div>Card bg: <code>#171819</code> (zinc-950) — darker than <code>var(--card)</code> surface for visual nesting.</div>
+      <div>Quote highlight: <code>#f7d372</code> (amber) — always spans only the discount/number portion.</div>
+      <div>Badge: <code>badge badge-secondary</code> — always "Detected in ad copy".</div>
+      <div>Cards are flex-1 inside a 16px-gap row — always paired side by side.</div>
+    </div>
+  </div>
+</div>
+
 </div><!-- /#wb-main -->
 </div><!-- /#tb-panel-components -->
 
@@ -6764,6 +7213,10 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <button class="sb-item" onclick="switchChartPage('chart-page-radial',this)">Radial Charts</button>
     <button class="sb-item" onclick="switchChartPage('chart-page-tooltip',this)">Tooltip</button>
     <button class="sb-item" onclick="switchChartPage('chart-page-palette',this)">Chart Palette</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-hbar',this)">HBar Track</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-trend',this)">Trend Line</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-donut',this)">Donut Chart</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-gantt',this)">Gantt / Timeline</button>
     </div>
   </div>
 </div>
@@ -8840,6 +9293,399 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   </div>
 </div>
 
+<!-- ══ HBAR TRACK PAGE ══ -->
+<div id="chart-page-hbar" class="chart-page">
+  <div class="chart-page-header">
+    <div class="chart-page-title">HBar Track</div>
+    <div class="chart-page-desc">Horizontal bar chart with track background. Default fill: primary gradient (teal). Used for category/brand comparisons in Brand API dashboards.</div>
+  </div>
+
+  <style>
+    /* ── HBar base (Figma: HBar / 1lines @Master) ──────────────────── */
+    .ds-hbars { display: flex; flex-direction: column; }
+
+    /* Inline — 1 line (Figma primary component) */
+    .ds-hbar-row {
+      display: flex; flex-direction: row; align-items: center;
+      height: 32px; padding: 6px 12px; gap: 12px;
+      border-radius: 8px; cursor: pointer;
+      transition: background .12s;
+    }
+    .ds-hbar-row:hover { background: var(--muted); }
+    .ds-hbar-name {
+      width: 180px; flex: none;
+      font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: -0.28px;
+      color: var(--muted-foreground);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .ds-hbar-inner { flex: 1; display: flex; align-items: center; gap: 12px; }
+    .ds-hbar-track { flex: 1; height: 6px; background: var(--muted); border-radius: 12px; overflow: hidden; }
+    .ds-hbar-fill  { height: 100%; border-radius: 15px; }
+    .ds-hbar-val {
+      width: 46px; flex: none; text-align: right;
+      font-size: 12px; font-weight: 400; line-height: 16px; letter-spacing: -0.24px;
+      color: var(--muted-foreground);
+    }
+
+    /* Stacked — 2 lines (label above bar, HBar / 2lines in Figma) */
+    .ds-hbar-row.stacked {
+      flex-direction: column; align-items: stretch;
+      height: auto; padding: 8px 12px; gap: 4px;
+    }
+    .ds-hbar-row.stacked .ds-hbar-name { width: auto; }
+    .ds-hbar-row.stacked .ds-hbar-inner { gap: 12px; }
+  </style>
+
+  <!-- Stacked layout (primary) -->
+  <div class="comp-group">
+    <div class="comp-group-label">Stacked — label above bar</div>
+    <div class="comp-group-desc">Label on its own line above the track. Default layout for category comparisons.</div>
+    <div class="ds-dashboard-card">
+      <div class="ds-dashboard-card-header">
+        <div class="ds-dashboard-card-title">Discount pressure by industry</div>
+        <div class="ds-dashboard-card-subtitle">% of tracked brands running a discount now</div>
+      </div>
+      <div class="ds-hbars" id="hbar-demo-primary"></div>
+    </div>
+    <script>
+    (function() {
+      var data = [
+        { label: 'Apparel & Fashion',    val: 48 },
+        { label: 'Health & Supplements', val: 45 },
+        { label: 'Beauty & Skincare',    val: 43 },
+        { label: 'Home & Furniture',     val: 41 },
+        { label: 'Sportswear & Athletic',val: 38 },
+        { label: 'Consumer Electronics', val: 34 },
+        { label: 'Pet Care',             val: 29 },
+        { label: 'Beverages & Food',     val: 26 },
+      ];
+      var max = Math.max.apply(null, data.map(function(d){ return d.val; }));
+      var c = document.getElementById('hbar-demo-primary');
+      if (!c) return;
+      data.forEach(function(d) {
+        var pct = Math.round((d.val / max) * 100);
+        c.innerHTML += '<div class="ds-hbar-row stacked">' +
+          '<div class="ds-hbar-name">' + d.label + '</div>' +
+          '<div class="ds-hbar-inner">' +
+            '<div class="ds-hbar-track"><div class="ds-hbar-fill" style="width:' + pct + '%;background:linear-gradient(to right,rgba(var(--primary-rgb),0.23),var(--primary-light));"></div></div>' +
+            '<div class="ds-hbar-val">' + d.val + '%</div>' +
+          '</div>' +
+        '</div>';
+      });
+    })();
+    </script>
+  </div>
+
+  <!-- Inline layout -->
+  <div class="comp-group">
+    <div class="comp-group-label">Inline — label left of bar</div>
+    <div class="comp-group-desc">Label fixed-width on the left, bar + value on the same line. Use for compact lists with short labels.</div>
+    <div class="ds-dashboard-card">
+      <div class="ds-dashboard-card-header">
+        <div class="ds-dashboard-card-title">Discount type mix</div>
+        <div class="ds-dashboard-card-subtitle">% of tracked brands per discount type</div>
+      </div>
+      <div class="ds-hbars" id="hbar-demo-inline"></div>
+    </div>
+    <script>
+    (function() {
+      var data2 = [
+        { label: 'Flash sale',   val: 42 },
+        { label: 'Seasonal',     val: 35 },
+        { label: 'Bundle',       val: 27 },
+        { label: 'Loyalty',      val: 21 },
+        { label: 'Clearance',    val: 14 },
+      ];
+      var max2 = Math.max.apply(null, data2.map(function(d){ return d.val; }));
+      var c2 = document.getElementById('hbar-demo-inline');
+      if (!c2) return;
+      data2.forEach(function(d) {
+        var pct = Math.round((d.val / max2) * 100);
+        c2.innerHTML += '<div class="ds-hbar-row">' +
+          '<div class="ds-hbar-name">' + d.label + '</div>' +
+          '<div class="ds-hbar-inner">' +
+            '<div class="ds-hbar-track"><div class="ds-hbar-fill" style="width:' + pct + '%;background:linear-gradient(to right,rgba(var(--primary-rgb),0.23),var(--primary-light));"></div></div>' +
+            '<div class="ds-hbar-val">' + d.val + '%</div>' +
+          '</div>' +
+        '</div>';
+      });
+    })();
+    </script>
+  </div>
+
+  <!-- Usage rules -->
+  <div class="comp-group">
+    <div class="comp-group-label">Rules</div>
+    <ul style="font-size:13px;line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;padding-left:16px;">
+      <li>Default fill: <code>linear-gradient(to right, var(--primary), transparent)</code>.</li>
+      <li>Width encodes magnitude as percentage of the max value in the set.</li>
+      <li>Alpha-highlight is an alternative only when warm tone is intentional for the metric.</li>
+      <li>Never mix both styles in the same bar set.</li>
+      <li>Never use <code>--chart-N</code> colors for single-metric bars — those are for multi-series with a legend.</li>
+      <li>Track background: always <code>var(--secondary)</code>, 6px tall, fully rounded.</li>
+    </ul>
+  </div>
+</div><!-- /#chart-page-hbar -->
+
+<!-- Trend Line Chart -->
+<div id="chart-page-trend" class="chart-page">
+  <div class="chart-page-title">Trend Line</div>
+  <div class="chart-page-desc">Multi-series SVG line chart. No external library. 3 thin lines, no area fill. Legend: 14×6px color pill + label, flex row below chart.</div>
+
+  <style>
+    .trend-wrap { position: relative; width: 100%; }
+    .trend-wrap svg { display: block; width: 100%; }
+    .trend-wrap:hover .trend-dot { opacity: 1 !important; }
+    .trend-legend { display: flex; gap: 18px; padding-left: 47px; }
+    .trend-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; line-height: 16px; letter-spacing: -0.24px; color: rgba(210,211,211,0.7); }
+    .trend-swatch { width: 14px; height: 6px; border-radius: 4px; flex: none; }
+  </style>
+
+  <div class="comp-group">
+    <div class="ds-dashboard-card" style="width:703px;">
+      <div class="ds-dashboard-card-header">
+        <div class="ds-dashboard-card-title">Discount share over time</div>
+        <div class="ds-dashboard-card-subtitle">3 categories — Mar 9 to May 25</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div class="trend-wrap" id="trend-chart-wrap"></div>
+        <div class="trend-legend" id="trend-legend"></div>
+      </div>
+    </div>
+    <script>
+    (function(){
+      var W = 703, H = 224, padL = 47, padR = 17, padT = 8, padB = 32;
+      var series = [
+        { label: 'Apparel & Fashion', color: 'var(--chart-7)', data: [38,40,41,43,45,47,46,48,49,48,50,51] },
+        { label: 'All brands',        color: 'var(--primary-light)', data: [28,30,29,32,33,35,33,35,37,36,38,39] },
+        { label: 'Beverages & Food',  color: 'var(--chart-6)', data: [24,23,22,24,23,22,24,23,22,24,23,24] },
+      ];
+      var xLabels = ['Mar 9','Mar 30','Apr 20','May 11','','May 25'];
+      var xPoints = [0, 2, 4, 6, 8, 10, 11];
+      var allVals = series.reduce(function(a,s){ return a.concat(s.data); }, []);
+      var minV = 10, maxV = 70;
+      var cW = W - padL - padR, cH = H - padT - padB;
+      function xp(i){ return padL + (i / (series[0].data.length - 1)) * cW; }
+      function yp(v){ return padT + (1 - (v - minV)/(maxV - minV)) * cH; }
+
+      var svg = '<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" width="100%" preserveAspectRatio="xMidYMid meet">';
+
+      // Grid lines at 20%, 40%, 60%
+      [20,40,60].forEach(function(v){
+        var yy = yp(v);
+        svg += '<line x1="'+padL+'" y1="'+yy+'" x2="'+(W-padR)+'" y2="'+yy+'" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>';
+        svg += '<text x="'+(padL-8)+'" y="'+(yy+4)+'" font-size="12" fill="#8f9091" text-anchor="end" letter-spacing="-0.24">'+v+'%</text>';
+      });
+
+      // X labels
+      var xLabelData = [
+        {i:0, label:'Mar 9'}, {i:3, label:'Mar 30'},
+        {i:6, label:'Apr 20'}, {i:8, label:'May 11'}, {i:11, label:'May 25'}
+      ];
+      xLabelData.forEach(function(d){
+        svg += '<text x="'+xp(d.i)+'" y="'+(H-8)+'" font-size="12" fill="#8f9091" text-anchor="middle" letter-spacing="-0.24">'+d.label+'</text>';
+      });
+
+      series.forEach(function(s){
+        var pts = s.data.map(function(v,i){ return xp(i)+','+yp(v); });
+        var lineD = 'M'+pts.join(' L');
+        // Area fill under primary series (All brands)
+        if(s.label === 'All brands'){
+          var areaD = 'M'+xp(0)+','+yp(s.data[0])+' '+pts.join(' L')+' L'+xp(s.data.length-1)+','+(padT+cH)+' L'+xp(0)+','+(padT+cH)+' Z';
+          svg += '<path d="'+areaD+'" fill="'+s.color+'" fill-opacity="0.08"/>';
+        }
+        svg += '<path d="'+lineD+'" fill="none" stroke="'+s.color+'" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>';
+        s.data.forEach(function(v,i){
+          svg += '<circle cx="'+xp(i)+'" cy="'+yp(v)+'" r="3" fill="'+s.color+'" class="trend-dot" style="opacity:0;transition:opacity 0.15s;"/>';
+        });
+      });
+
+      svg += '</svg>';
+      document.getElementById('trend-chart-wrap').innerHTML = svg;
+
+      document.getElementById('trend-legend').innerHTML = series.map(function(s){
+        return '<div class="trend-legend-item"><div class="trend-swatch" style="background:'+s.color+'"></div>'+s.label+'</div>';
+      }).join('');
+    })();
+    </script>
+  </div>
+
+  <div class="comp-group">
+    <div class="comp-group-label">Rules</div>
+    <div style="font-size:13px;line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+      <div>No area fill — lines only. Width 1.5px, round join/cap.</div>
+      <div>Y-axis: 3 grid lines at 20%, 40%, 60%. Color <code>#8f9091</code> (muted-foreground).</div>
+      <div>Legend: 14×6px pill, gap 6px, padding-left matches Y-axis offset.</div>
+      <div>Colors: use <code>--chart-N</code> tokens. Never hardcode.</div>
+    </div>
+  </div>
+
+  <div class="demo-code-bar">
+    <span class="demo-code-label">SVG trend line chart</span>
+    <button class="copy-btn" onclick="copyCode(this, '// See Brand API dashboard doctrine for full implementation\n// docs/brand-api-dashboard-doctrine.md — SVG Trend Line Chart')">Copy</button>
+  </div>
+</div><!-- /#chart-page-trend -->
+
+<!-- Donut Chart -->
+<div id="chart-page-donut" class="chart-page">
+  <div class="chart-page-title">Donut Chart</div>
+  <div class="chart-page-desc">SVG donut chart. No external library. Segments use <code>--chart-1</code> through <code>--chart-12</code> only. Center label shows total or primary metric. Legend below with color swatch + label + value.</div>
+
+  <style>
+    .donut-wrap { display: flex; flex-direction: column; gap: 24px; align-items: flex-start; }
+    .donut-chart-row { display: flex; flex-direction: column; gap: 24px; align-items: flex-start; }
+    .donut-legend-grid { display: flex; flex-direction: column; gap: 8px; }
+    .donut-legend-row { display: flex; align-items: center; gap: 8px; font-size: 12px; min-width: 140px; }
+    .donut-swatch { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+    .donut-legend-label { flex: 1; color: var(--muted-foreground); }
+    .donut-legend-val { font-weight: 500; font-size: 12px; color: var(--foreground); }
+  </style>
+
+  <div class="demo-section">
+    <div class="demo-label">Discount type mix — 8 segments</div>
+    <div class="demo-box">
+      <div class="donut-wrap">
+        <div class="donut-chart-row">
+          <div id="donut-svg-wrap" style="width:280px;height:280px;flex:none;position:relative;"></div>
+          <div class="donut-legend-grid" id="donut-legend"></div>
+        </div>
+      </div>
+    </div>
+    <script>
+    (function(){
+      var data = [
+        { label: '% off',         value: 30, color: 'var(--chart-1)' },
+        { label: 'Sitewide sale', value: 30, color: 'var(--chart-2)' },
+        { label: 'Free shipping', value: 30, color: 'var(--chart-3)' },
+        { label: 'Bundle deal',   value: 30, color: 'var(--chart-4)' },
+        { label: 'BOGO',          value: 30, color: 'var(--chart-5)' },
+        { label: 'Clearance',     value: 30, color: 'var(--chart-6)' },
+        { label: 'Free gift',     value: 30, color: 'var(--chart-7)' },
+        { label: '$ off',         value: 30, color: 'var(--chart-8)' },
+      ];
+      var count = data.length;
+      var cx=140, cy=140, r=128, ri=112, W=280, H=280;
+      var TAU = Math.PI*2, gap = 0.014;
+      var sweep = TAU / count - gap;
+
+      function arc(cx,cy,r,ri,a0,a1){
+        var x1=cx+r*Math.cos(a0), y1=cy+r*Math.sin(a0);
+        var x2=cx+r*Math.cos(a1), y2=cy+r*Math.sin(a1);
+        var x3=cx+ri*Math.cos(a1), y3=cy+ri*Math.sin(a1);
+        var x4=cx+ri*Math.cos(a0), y4=cy+ri*Math.sin(a0);
+        var lg = (a1-a0) > Math.PI ? 1 : 0;
+        return 'M'+x1+','+y1+' A'+r+','+r+' 0 '+lg+',1 '+x2+','+y2
+              +' L'+x3+','+y3+' A'+ri+','+ri+' 0 '+lg+',0 '+x4+','+y4+' Z';
+      }
+
+      var svg = '<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" width="280" height="280">';
+      var a = -Math.PI/2;
+      data.forEach(function(d){
+        svg += '<path d="'+arc(cx,cy,r,ri,a,a+sweep)+'" fill="'+d.color+'"/>';
+        a += sweep + gap;
+      });
+      svg += '<text x="'+cx+'" y="'+(cy+10)+'" text-anchor="middle" font-size="32" font-weight="600" fill="white">'+count+'</text>';
+      svg += '<text x="'+cx+'" y="'+(cy+28)+'" text-anchor="middle" font-size="12" fill="rgba(255,255,255,0.4)">types</text>';
+      svg += '</svg>';
+      document.getElementById('donut-svg-wrap').innerHTML = svg;
+
+      document.getElementById('donut-legend').innerHTML = data.map(function(d){
+        return '<div class="donut-legend-row">'
+          +'<div class="donut-swatch" style="background:'+d.color+'"></div>'
+          +'<span class="donut-legend-label">'+d.label+'</span>'
+          +'<span class="donut-legend-val">'+d.value+'%</span>'
+          +'</div>';
+      }).join('');
+    })();
+    </script>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-label">Rules</div>
+    <div class="demo-box" style="font-size:13px;line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+      <div>Segments: only <code>--chart-1</code> through <code>--chart-12</code>. Never hardcode hex.</div>
+      <div>Small gap between segments (0.018 rad) for visual separation — never 0.</div>
+      <div>Center: total value or primary metric. Two lines max.</div>
+      <div>Legend always below or beside chart — never floating tooltips as primary label.</div>
+    </div>
+  </div>
+
+  <div class="demo-code-bar">
+    <span class="demo-code-label">SVG donut chart</span>
+    <button class="copy-btn" onclick="copyCode(this, '// See Brand API dashboard doctrine\n// docs/brand-api-dashboard-doctrine.md')">Copy</button>
+  </div>
+</div><!-- /#chart-page-donut -->
+
+<!-- Gantt / Timeline -->
+<div id="chart-page-gantt" class="chart-page">
+  <div class="chart-page-title">Gantt / Timeline</div>
+  <div class="chart-page-desc">Discount history timeline. Label on left, solid teal bar per period, month labels below. No gradient, no opacity variation — bars are uniform <code>var(--primary)</code>.</div>
+
+  <style>
+    .gantt-wrap { display: flex; flex-direction: column; gap: 0; }
+    .gantt-row { display: flex; align-items: center; gap: 0; height: 36px; }
+    .gantt-label { width: 110px; font-size: 13px; font-weight: 500; color: var(--muted-foreground); flex: none; padding-right: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right; }
+    .gantt-track { flex: 1; position: relative; height: 8px; }
+    .gantt-bar { position: absolute; height: 8px; border-radius: 4px; background: var(--primary); }
+    .gantt-months { display: flex; margin-left: 110px; margin-top: 8px; }
+    .gantt-month { flex: 1; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted-foreground); text-align: center; }
+  </style>
+
+  <div class="demo-section">
+    <div class="demo-label">Discount history — 6 brands, 8 months</div>
+    <div class="demo-box">
+      <div id="gantt-chart"></div>
+    </div>
+    <script>
+    (function(){
+      var months = ['NOV','DEC','JAN','FEB','MAR','APR','MAY','JUN'];
+      var n = months.length;
+      // start/end as fraction of total range [0,1]
+      var brands = [
+        { label: 'Zara',    bars: [{s:0.00,e:0.25},{s:0.62,e:1.00}] },
+        { label: 'H&M',     bars: [{s:0.12,e:0.50}] },
+        { label: 'Mango',   bars: [{s:0.00,e:0.12},{s:0.75,e:1.00}] },
+        { label: 'ASOS',    bars: [{s:0.37,e:0.62}] },
+        { label: 'Uniqlo',  bars: [{s:0.50,e:0.87}] },
+        { label: 'Primark', bars: [{s:0.00,e:0.37},{s:0.62,e:0.87}] },
+      ];
+
+      var html = '<div class="gantt-wrap">';
+      brands.forEach(function(b){
+        html += '<div class="gantt-row">'
+          + '<div class="gantt-label">'+b.label+'</div>'
+          + '<div class="gantt-track">';
+        b.bars.forEach(function(bar){
+          html += '<div class="gantt-bar" style="left:'+(bar.s*100)+'%;width:'+((bar.e-bar.s)*100)+'%"></div>';
+        });
+        html += '</div></div>';
+      });
+      html += '</div>';
+      html += '<div class="gantt-months">'
+        + months.map(function(m){ return '<div class="gantt-month">'+m+'</div>'; }).join('')
+        + '</div>';
+
+      document.getElementById('gantt-chart').innerHTML = html;
+    })();
+    </script>
+  </div>
+
+  <div class="demo-section" style="margin-top:8px;">
+    <div class="demo-label">Rules</div>
+    <div class="demo-box" style="font-size:13px;line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;margin-top:0;">
+      <div>Bars: solid <code>var(--primary)</code> — no gradient, no opacity variation.</div>
+      <div>Month labels: muted, uppercase, small, evenly distributed below the track area.</div>
+      <div>Label column: fixed width (110px), right-aligned, text truncated on overflow.</div>
+      <div>Multiple bars per row allowed — one brand can have non-contiguous discount periods.</div>
+    </div>
+  </div>
+
+  <div class="demo-code-bar">
+    <span class="demo-code-label">Gantt / Timeline</span>
+    <button class="copy-btn" onclick="copyCode(this, '// See Brand API dashboard doctrine\n// docs/brand-api-dashboard-doctrine.md — Timeline / Gantt chart')">Copy</button>
+  </div>
+</div><!-- /#chart-page-gantt -->
+
 </div><!-- /#wb-charts-main -->
 </div><!-- /#tb-panel-charts -->
 
@@ -9115,6 +9961,7 @@ npm run dev   # runs on :4502</pre>
               <tr><td><code class="doc-code">tools/detect.js</code></td><td>Reads <code class="doc-code">token-catalog.yaml</code>, so new catalog entries are caught automatically — <strong>except</strong> its hardcoded allow-lists (<code class="doc-code">ALLOWED_HEX</code>, rgba families, <code class="doc-code">ALLOWED_RADII</code>, <code class="doc-code">ALLOWED_FONTS</code>): a new family/value must be added to the JS by hand or it throws false positives.</td></tr>
               <tr><td><code class="doc-code">forbidden.patterns</code></td><td>Each entry has <code class="doc-code">text</code>; entries that also carry a <code class="doc-code">match</code> (regex) + <code class="doc-code">rule</code> + <code class="doc-code">severity</code> are <strong>enforced by detect.js automatically</strong> (🔒 in the catalog). No <code class="doc-code">match</code> = conceptual / context-dependent, documentation-only. <strong>Documenting an enforceable pattern = enforcing it.</strong></td></tr>
               <tr><td><code class="doc-code">tools/lint-doctrine.js</code></td><td>Errors if a <code class="doc-code">.tsx</code> has no <code class="doc-code">usage-doctrine.yaml</code> entry. Now wired into the pre-commit guard. Infra-only files go in its <code class="doc-code">EXEMPT</code> set.</td></tr>
+              <tr><td><code class="doc-code">tools/lint-index.js</code></td><td>Errors if a component demo in <code class="doc-code">index.html</code> (nav registry) has no backing <code class="doc-code">.tsx</code> in <code class="doc-code">waldo-ui/src/components/ui/</code>. Wired into the guard + CI.</td></tr>
               <tr><td>Catalog derivation</td><td><strong>Still manual.</strong> Catalog says "derived from tokens.json" but nothing auto-syncs — change <code class="doc-code">tokens.json</code> and forget the catalog = silent drift.</td></tr>
               <tr><td>YAML integrity</td><td>A broken indent kills the live-rendered Doctrine / Token Catalog pages — the guard parses both YAML before each commit.</td></tr>
             </tbody>

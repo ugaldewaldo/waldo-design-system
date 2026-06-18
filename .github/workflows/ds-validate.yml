@@ -25,6 +25,9 @@ jobs:
       - name: Doctrine coverage (lint-doctrine.js)
         run: node tools/lint-doctrine.js
 
+      - name: Index demos backed by .tsx (lint-index.js)
+        run: node tools/lint-index.js
+
       - name: YAML integrity (both catalogs)
         run: |
           python3 -m pip install --quiet pyyaml
