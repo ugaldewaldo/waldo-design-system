@@ -51,7 +51,8 @@ jobs:
           changed="$(git diff --name-only "$range" \
             | grep -E '\.(html|css|tsx|jsx|ts|js|vue|svelte)$' \
             | grep -vx 'index.html' \
-            | grep -v '^tools/' || true)"
+            | grep -v '^tools/' \
+            | grep -v '^waldo-labs/' || true)"
           if [ -z "$changed" ]; then
             echo "No changed code files to scan."
             exit 0

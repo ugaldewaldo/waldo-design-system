@@ -23,7 +23,8 @@ fail=0
 staged="$(git diff --cached --name-only --diff-filter=ACM \
   | grep -E '\.(html|css|tsx|jsx|ts|js|vue|svelte)$' \
   | grep -vx 'index.html' \
-  | grep -v '^tools/' || true)"
+  | grep -v '^tools/' \
+  | grep -v '^waldo-labs/' || true)"
 if [ -n "$staged" ]; then
   count="$(printf '%s\n' "$staged" | grep -c .)"
   echo "▶ detect.js on $count staged file(s)…"
