@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Promo Radar — Waldo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../waldo-ds.css" />
+  <style>
+    /* ── CRITICAL RESET ── */
+    html, body { height: auto !important; }
+    html {
+      background: var(--background);
+      color: var(--foreground);
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      display: block !important;
+      max-width: none !important;
+      overflow: auto !important;
+      flex-direction: unset !important;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* Override waldo-ds.css attribute-selector borders */
+    .card, .kpi { border: none !important; }
+
+    /* ── Topbar ── */
+    .topbar {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: blur(8px);
+      background: rgba(23,24,25,0.85);
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar-inner {
+      max-width: 1440px; margin: 0 auto; padding: 0 32px;
+      height: 73px; display: flex; align-items: center; gap: 32px;
+    }
+    .topbar-brand { display: flex; align-items: center; gap: 12px; }
+    .topbar-logo { flex: none; }
+    .topbar-nav { display: flex; gap: 24px; margin-left: auto; }
+    .nav-link { font-size: 14px; color: var(--muted-foreground); text-decoration: none; cursor: pointer; }
+    .nav-link.active { color: var(--foreground); font-weight: 500; }
+    .topbar-powered { font-size: 13px; color: var(--muted-foreground); white-space: nowrap; }
+
+    /* ── Page wrap ── */
+    .wrap {
+      max-width: 1184px;
+      margin: 0 auto;
+      padding: 32px 0 80px;
+      display: block;
+    }
+
+    /* ── Dashboard layout ── */
+    .dashboard { display: flex; flex-direction: column; gap: 24px; }
+    .dash-row { display: flex; gap: 16px; align-items: stretch; }
+    .dash-col { flex: 1; min-width: 0; }
+
+    /* ── Card ── */
+    .card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      height: 100%;
+      border: none !important;
+    }
+    .card-header { display: flex; flex-direction: column; gap: 4px; }
+    .card-title { font-size: 20px; font-weight: 500; line-height: 28px; letter-spacing: -0.4px; }
+    .card-subtitle { font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: -0.28px; color: var(--muted-foreground); }
+    .card-header-row { display: flex; align-items: flex-start; justify-content: space-between; }
+
+    /* ── KPI Grid ── */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .kpi { background: var(--card); border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 8px; border: none !important; }
+    .kpi-top { display: flex; align-items: flex-start; justify-content: space-between; }
+    .k-label { font-size: 11px; font-weight: 500; letter-spacing: 0.04em; color: var(--muted-foreground); text-transform: uppercase; }
+    .k-delta { font-size: 11px; font-weight: 600; padding: 2px 6px; border-radius: 6px; }
+    .k-delta.up { color: var(--destructive); background: hsl(var(--destructive) / 0.12); }
+    .k-delta.down { color: var(--primary); background: hsl(var(--primary) / 0.12); }
+    .k-value { font-size: 30px; font-weight: 600; line-height: 36px; letter-spacing: -0.6px; }
+    .k-sub { font-size: 12px; font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: var(--muted-foreground); }
+
+    /* ── Segmented control ── */
+    .seg { display: inline-flex; align-items: center; background: color-mix(in srgb, var(--background) 50%, transparent); border-radius: 999px; padding: 4px; }
+    .seg button {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      padding: 6px 16px; border-radius: 999px; border: none; cursor: pointer;
+      font-size: 13px; font-weight: 600; letter-spacing: -0.02em;
+      font-family: 'Inter', sans-serif; transition: background .1s, color .1s;
+      white-space: nowrap;
+    }
+    .seg button.on { background: color-mix(in srgb, var(--foreground) 14%, transparent); color: var(--foreground); }
+    .seg button:not(.on) { background: transparent; color: color-mix(in srgb, var(--foreground) 60%, transparent); }
+
+    /* ── HBars ── */
+    .hbars { display: flex; flex-direction: column; }
+    .hbar-row { display: flex; flex-direction: column; gap: 4px; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
+    .hbar-row:hover { background: var(--secondary); }
+    .hbar-name { font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: -0.28px; color: var(--muted-foreground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hbar-inner { display: flex; align-items: center; gap: 12px; }
+    .hbar-track { flex: 1; height: 6px; background: var(--secondary); border-radius: 12px; overflow: hidden; }
+    .hbar-fill { height: 100%; border-radius: 15px; }
+    .hbar-val { font-size: 12px; font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: var(--muted-foreground); text-align: right; width: 46px; flex: none; }
+
+    /* ── Leaderboard ── */
+    .lb { display: flex; flex-direction: column; }
+    .lb-row { display: flex; gap: 14px; align-items: flex-start; padding: 12px 8px; border-radius: 8px; cursor: pointer; transition: background 0.12s; }
+    .lb-row:hover { background: var(--secondary); }
+    .lb-rank { font-size: 18px; font-weight: 600; line-height: 28px; letter-spacing: -0.36px; color: var(--muted-foreground); text-align: center; width: 24px; flex: none; padding-top: 2px; }
+    .lb-main { flex: 1; min-width: 0; border-bottom: 1px solid var(--border); padding-bottom: 12px; display: flex; flex-direction: column; gap: 3px; }
+    .lb-row:last-child .lb-main { border-bottom: none; }
+    .lb-brand { font-size: 14px; font-weight: 600; line-height: 20px; letter-spacing: -0.28px; }
+    .lb-meta { font-size: 12px; font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: var(--muted-foreground); display: flex; gap: 8px; align-items: center; }
+    .lb-offer { color: var(--muted-foreground); }
+
+    /* ── Depth Pill ── */
+    .depth-pill { font-size: 13px; font-weight: 700; padding: 4px 10px; border-radius: 8px; white-space: nowrap; flex: none; }
+
+    /* ── Type tag ── */
+    .type-tag { font-size: 11px; font-family: 'SF Mono','Fira Code', monospace; background: var(--muted); border-radius: 4px; padding: 2px 7px; color: var(--muted-foreground); display: inline-block; white-space: nowrap; }
+
+    /* ── Live badge ── */
+    .badge-live { display: inline-flex; align-items: center; gap: 6px; background: hsl(var(--destructive) / 0.12); color: var(--destructive); border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 600; }
+    .pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--destructive); animation: pulse-anim 1.4s ease-in-out infinite; flex: none; }
+    @keyframes pulse-anim { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(0.75)} }
+
+    /* ── Trend chart ── */
+    .trend-wrap { position: relative; width: 100%; }
+    .trend-wrap svg { display: block; width: 100%; }
+    .trend-wrap:hover .trend-dot { opacity: 1 !important; }
+    .trend-legend { display: flex; gap: 18px; padding-left: 47px; flex-wrap: wrap; }
+    .trend-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; line-height: 16px; letter-spacing: -0.24px; color: rgba(210,211,211,0.7); }
+    .trend-swatch { width: 14px; height: 6px; border-radius: 4px; flex: none; }
+
+    /* ── Donut chart ── */
+    .donut-legend-grid { display: flex; flex-direction: column; gap: 8px; }
+    .donut-legend-row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+    .donut-swatch { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+    .donut-legend-label { flex: 1; color: var(--muted-foreground); }
+    .donut-legend-val { font-weight: 500; font-size: 12px; color: var(--foreground); }
+
+    /* ── Scrollable card body ── */
+    .card-scroll { flex: 1; min-height: 0; overflow-y: auto; }
+    .card-scroll::-webkit-scrollbar { width: 4px; }
+    .card-scroll::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 99px; }
+
+    /* ── Page header ── */
+    .page-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 56px 0 40px; }
+    .ph-left { display: flex; flex-direction: column; gap: 13px; }
+    .ph-title { font-size: 40px; font-weight: 600; line-height: 48px; letter-spacing: -1.6px; color: var(--foreground); }
+    .ph-sub { font-size: 16px; font-weight: 400; line-height: 24px; letter-spacing: -0.32px; color: var(--muted-foreground); }
+    .ph-actions { display: flex; gap: 8px; align-items: center; }
+    .ph-search { display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: 9999px; border: 1px solid rgba(210,211,211,0.12); color: var(--muted-foreground); font-size: 14px; width: 238px; }
+    .ph-btn { display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 20px; border-radius: 9999px; background: var(--foreground); color: var(--background); font-size: 14px; font-weight: 500; border: none; cursor: pointer; white-space: nowrap; }
+  </style>
+</head>
+<body>
+
+<!-- ── Topbar ── -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-brand">
+      <svg class="topbar-logo" width="70" height="18" viewBox="0 0 69.75 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="var(--foreground)"/></svg>
+    </div>
+    <nav class="topbar-nav">
+      <a class="nav-link active">Dashboard</a>
+      <a class="nav-link">Alerts</a>
+      <a class="nav-link">API Coverage</a>
+    </nav>
+    <span class="topbar-powered">Powered by Waldo API</span>
+  </div>
+</header>
+
+<!-- ── Main content ── -->
+<div class="wrap">
+  <div class="dashboard">
+
+    <!-- ── Row 0: Page header ── -->
+    <div class="page-header">
+      <div class="ph-left">
+        <h1 class="ph-title">Promo Radar</h1>
+        <p class="ph-sub">Discount intelligence</p>
+      </div>
+      <div class="ph-actions">
+        <div class="ph-search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span>Search brand or category</span>
+        </div>
+        <button class="ph-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          Set alert
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Row 1: KPI Grid ── -->
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-top">
+          <div class="k-label">Brands discounting</div>
+          <span class="k-delta up">▲ +8pp</span>
+        </div>
+        <div class="k-value">36%</div>
+        <div class="k-sub">448 of 1,240 brands tracked</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-top">
+          <div class="k-label">Avg. discount depth</div>
+          <span class="k-delta up">▲ +3pp</span>
+        </div>
+        <div class="k-value">28%</div>
+        <div class="k-sub">Up from 25% last week</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-top">
+          <div class="k-label">New promos today</div>
+          <span class="k-delta up">▲ +12</span>
+        </div>
+        <div class="k-value">47</div>
+        <div class="k-sub">Across 19 categories</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-top">
+          <div class="k-label">Ended promos</div>
+          <span class="k-delta down">▼ −5</span>
+        </div>
+        <div class="k-value">23</div>
+        <div class="k-sub">Avg. duration 8.4 days</div>
+      </div>
+    </div>
+
+    <!-- ── Row 2: Trend line + Donut ── -->
+    <div class="dash-row">
+      <!-- Trend line -->
+      <div class="dash-col" style="flex:1.4;">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Discount share over time</div>
+            <div class="card-subtitle">Top 3 categories — last 12 weeks</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div class="trend-wrap" id="trend-chart-wrap"></div>
+            <div class="trend-legend" id="trend-legend"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Donut -->
+      <div class="dash-col">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Promo type mix</div>
+            <div class="card-subtitle">This week · All categories</div>
+          </div>
+          <div style="display:flex;gap:24px;align-items:flex-start;">
+            <div id="donut-svg-wrap" style="width:160px;height:160px;flex:none;position:relative;"></div>
+            <div class="donut-legend-grid" id="donut-legend" style="flex:1;min-width:0;padding-top:8px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Row 3: Leaderboard + HBars ── -->
+    <div class="dash-row">
+      <!-- Leaderboard -->
+      <div class="dash-col">
+        <div class="card" style="height:480px;">
+          <div class="card-header">
+            <div class="card-header-row">
+              <div>
+                <div class="card-title">Most aggressive discounters</div>
+                <div class="card-subtitle">Ranked by discount depth · This week</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-scroll">
+            <div class="lb" id="leaderboard"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HBars -->
+      <div class="dash-col">
+        <div class="card" style="height:480px;">
+          <div class="card-header">
+            <div class="card-title">Discount share by category</div>
+            <div class="card-subtitle">% of brands with active promo</div>
+          </div>
+          <div class="card-scroll">
+            <div class="hbars" id="hbars"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Row 4: Recent alerts table ── -->
+    <div class="dash-row">
+      <div class="dash-col">
+        <div class="card">
+          <div class="card-header-row" style="display:flex;align-items:flex-start;justify-content:space-between;">
+            <div class="card-header">
+              <div class="card-title">Recent promo activity</div>
+              <div class="card-subtitle">Last 24 hours · 47 new promos detected</div>
+            </div>
+            <div class="seg" id="activity-seg">
+              <button class="on" onclick="switchSeg('activity-seg',this)">All</button>
+              <button onclick="switchSeg('activity-seg',this)">Started</button>
+              <button onclick="switchSeg('activity-seg',this)">Ended</button>
+            </div>
+          </div>
+          <div id="activity-table"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /.dashboard -->
+</div><!-- /.wrap -->
+
+<script>
+// ── Chart color palette (inline hex for SVG fill compatibility) ──────
+var CHART_COLORS = ['#2DD4C4','#8899AA','#F5A080','#F07080','#9B88E0','#5599EE','#F0A82A','#1AB8A8'];
+
+// ── Segmented control toggle ──────────────────────────────────────
+function switchSeg(id, btn) {
+  var seg = document.getElementById(id);
+  seg.querySelectorAll('button').forEach(function(b) { b.classList.remove('on'); });
+  btn.classList.add('on');
+}
+
+// ── Depth pill alpha encoding ─────────────────────────────────────
+function depthAlpha(d) { return Math.max(0.30, Math.min(1.0, 0.30 + (d / 60) * 0.70)); }
+
+// ── Trend line chart ──────────────────────────────────────────────
+(function() {
+  var W = 600, H = 200, padL = 44, padR = 16, padT = 8, padB = 28;
+  // Use inline hex for SVG stroke — CSS vars don't always resolve in SVG attributes
+  var series = [
+    { label: 'Apparel & Fashion', color: '#F0A82A', data: [38,40,41,43,45,47,46,48,49,48,50,51] },
+    { label: 'All brands',        color: '#32a9a9', data: [28,30,29,32,33,35,33,35,37,36,38,39] },
+    { label: 'Beverages & Food',  color: '#5599EE', data: [24,23,22,24,23,22,24,23,22,24,23,24] },
+  ];
+  var minV = 10, maxV = 65;
+  var cW = W - padL - padR, cH = H - padT - padB;
+  function xp(i){ return padL + (i / (series[0].data.length - 1)) * cW; }
+  function yp(v){ return padT + (1 - (v - minV)/(maxV - minV)) * cH; }
+
+  var svg = '<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" width="100%" preserveAspectRatio="xMidYMid meet">';
+
+  [20, 40, 60].forEach(function(v) {
+    var yy = yp(v);
+    svg += '<line x1="'+padL+'" y1="'+yy+'" x2="'+(W-padR)+'" y2="'+yy+'" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>';
+    svg += '<text x="'+(padL-8)+'" y="'+(yy+4)+'" font-size="11" fill="#8f9091" text-anchor="end">'+v+'%</text>';
+  });
+
+  var xLabels = [{i:0,l:'Wk 1'},{i:2,l:'Wk 3'},{i:5,l:'Wk 6'},{i:8,l:'Wk 9'},{i:11,l:'Wk 12'}];
+  xLabels.forEach(function(d) {
+    svg += '<text x="'+xp(d.i)+'" y="'+(H-6)+'" font-size="11" fill="#8f9091" text-anchor="middle">'+d.l+'</text>';
+  });
+
+  series.forEach(function(s) {
+    var pts = s.data.map(function(v,i){ return xp(i)+','+yp(v); });
+    var lineD = 'M'+pts.join(' L');
+    if (s.label === 'All brands') {
+      var areaD = 'M'+xp(0)+','+yp(s.data[0])+' '+pts.join(' L')+' L'+xp(s.data.length-1)+','+(padT+cH)+' L'+xp(0)+','+(padT+cH)+' Z';
+      svg += '<path d="'+areaD+'" fill="'+s.color+'" fill-opacity="0.08"/>';
+    }
+    svg += '<path d="'+lineD+'" fill="none" stroke="'+s.color+'" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"/>';
+    s.data.forEach(function(v,i) {
+      svg += '<circle cx="'+xp(i)+'" cy="'+yp(v)+'" r="3" fill="'+s.color+'" class="trend-dot" style="opacity:0;transition:opacity 0.15s;"/>';
+    });
+  });
+
+  svg += '</svg>';
+  document.getElementById('trend-chart-wrap').innerHTML = svg;
+  document.getElementById('trend-legend').innerHTML = series.map(function(s) {
+    return '<div class="trend-legend-item"><div class="trend-swatch" style="background:'+s.color+'"></div>'+s.label+'</div>';
+  }).join('');
+})();
+
+// ── Donut chart ───────────────────────────────────────────────────
+(function() {
+  var data = [
+    { label: '% off',         value: 32, color: CHART_COLORS[0] },
+    { label: 'Sitewide sale', value: 22, color: CHART_COLORS[1] },
+    { label: 'Free shipping', value: 18, color: CHART_COLORS[2] },
+    { label: 'Bundle deal',   value: 10, color: CHART_COLORS[3] },
+    { label: 'BOGO',          value: 8,  color: CHART_COLORS[4] },
+    { label: 'Clearance',     value: 6,  color: CHART_COLORS[5] },
+    { label: '$ off',         value: 4,  color: CHART_COLORS[6] },
+  ];
+  var total = data.reduce(function(s,d){ return s+d.value; }, 0);
+  var cx=80, cy=80, r=76, ri=54, W=160, H=160;
+  var TAU = Math.PI*2, gap = 0.018;
+  var svg = '<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" width="160" height="160">';
+  var a = -Math.PI/2;
+  data.forEach(function(d) {
+    var sweep = (d.value/total)*TAU - gap;
+    var x1=cx+r*Math.cos(a), y1=cy+r*Math.sin(a);
+    var x2=cx+r*Math.cos(a+sweep), y2=cy+r*Math.sin(a+sweep);
+    var x3=cx+ri*Math.cos(a+sweep), y3=cy+ri*Math.sin(a+sweep);
+    var x4=cx+ri*Math.cos(a), y4=cy+ri*Math.sin(a);
+    var lg = sweep > Math.PI ? 1 : 0;
+    var path = 'M'+x1+','+y1+' A'+r+','+r+' 0 '+lg+',1 '+x2+','+y2
+              +' L'+x3+','+y3+' A'+ri+','+ri+' 0 '+lg+',0 '+x4+','+y4+' Z';
+    svg += '<path d="'+path+'" fill="'+d.color+'"/>';
+    a += sweep + gap;
+  });
+  svg += '<text x="'+cx+'" y="'+(cy+6)+'" text-anchor="middle" font-size="22" font-weight="600" fill="white">'+data.length+'</text>';
+  svg += '<text x="'+cx+'" y="'+(cy+20)+'" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.4)">types</text>';
+  svg += '</svg>';
+  document.getElementById('donut-svg-wrap').innerHTML = svg;
+  document.getElementById('donut-legend').innerHTML = data.map(function(d) {
+    return '<div class="donut-legend-row">'
+      +'<div class="donut-swatch" style="background:'+d.color+'"></div>'
+      +'<span class="donut-legend-label">'+d.label+'</span>'
+      +'<span class="donut-legend-val">'+d.value+'%</span>'
+      +'</div>';
+  }).join('');
+})();
+
+// ── Leaderboard ───────────────────────────────────────────────────
+(function() {
+  var brands = [
+    { rank:1,  name:'Zara',         type:'Sitewide sale',  offer:'Up to 50% off',    depth:50 },
+    { rank:2,  name:'H&M',          type:'Seasonal',       offer:'Up to 40% off',    depth:40 },
+    { rank:3,  name:'Nike',         type:'% off',          offer:'30% off sitewide', depth:30 },
+    { rank:4,  name:'Gap',          type:'Clearance',      offer:'Up to 60% off',    depth:60 },
+    { rank:5,  name:'ASOS',         type:'Flash sale',     offer:'25% off orders',   depth:25 },
+    { rank:6,  name:'Mango',        type:'Sitewide sale',  offer:'Up to 45% off',    depth:45 },
+    { rank:7,  name:'Anthropologie',type:'Bundle deal',    offer:'Buy 2 get 1 free', depth:33 },
+    { rank:8,  name:'Revolve',      type:'% off',          offer:'20% off select',   depth:20 },
+    { rank:9,  name:'Nordstrom',    type:'Clearance',      offer:'Up to 70% off',    depth:70 },
+    { rank:10, name:'Free People',  type:'Sitewide',       offer:'35% off all orders',depth:35 },
+  ];
+
+  document.getElementById('leaderboard').innerHTML = brands.map(function(b) {
+    var alpha = depthAlpha(b.depth);
+    // Use literal rgba with inline hex to avoid CSS var resolution issues
+    var pillStyle = 'color:rgba(247,211,113,'+alpha.toFixed(2)+');background:rgba(247,211,113,0.10);';
+    return '<div class="lb-row">'
+      +'<div class="lb-rank">'+b.rank+'</div>'
+      +'<div class="lb-main">'
+        +'<div class="lb-brand">'+b.name+'</div>'
+        +'<div class="lb-meta">'
+          +'<span class="type-tag">'+b.type+'</span>'
+          +'<span class="lb-offer">'+b.offer+'</span>'
+        +'</div>'
+      +'</div>'
+      +'<span class="depth-pill" style="'+pillStyle+'">'+b.depth+'%</span>'
+    +'</div>';
+  }).join('');
+})();
+
+// ── HBars ─────────────────────────────────────────────────────────
+(function() {
+  var categories = [
+    { name:'Apparel & Fashion',     val:48 },
+    { name:'Consumer Electronics',  val:41 },
+    { name:'Home & Garden',         val:38 },
+    { name:'Sports & Outdoors',     val:35 },
+    { name:'Beauty & Personal',     val:33 },
+    { name:'Footwear',              val:30 },
+    { name:'Food & Beverage',       val:27 },
+    { name:'Travel & Luggage',      val:24 },
+    { name:'Kids & Baby',           val:21 },
+    { name:'Pet Supplies',          val:18 },
+    { name:'Books & Media',         val:15 },
+    { name:'Jewelry & Accessories', val:12 },
+  ];
+  var max = categories[0].val;
+  document.getElementById('hbars').innerHTML = categories.map(function(c) {
+    var width = (c.val / max * 100).toFixed(1) + '%';
+    var alpha = (0.30 + (c.val / max) * 0.70).toFixed(2);
+    var fillBg = 'hsl(var(--primary) / '+alpha+')';
+    return '<div class="hbar-row">'
+      +'<div class="hbar-name">'+c.name+'</div>'
+      +'<div class="hbar-inner">'
+        +'<div class="hbar-track"><div class="hbar-fill" style="width:'+width+';background:'+fillBg+';"></div></div>'
+        +'<div class="hbar-val">'+c.val+'%</div>'
+      +'</div>'
+    +'</div>';
+  }).join('');
+})();
+
+// ── Activity table ─────────────────────────────────────────────────
+(function() {
+  var events = [
+    { time:'4m ago',  brand:'Nordstrom', action:'started', type:'Clearance',     offer:'Up to 70% off',    depth:70 },
+    { time:'12m ago', brand:'Zara',      action:'started', type:'Sitewide sale', offer:'Up to 50% off',    depth:50 },
+    { time:'28m ago', brand:'Old Navy',  action:'ended',   type:'Flash sale',    offer:'40% off sitewide', depth:40 },
+    { time:'1h ago',  brand:'Mango',     action:'started', type:'Seasonal',      offer:'Up to 45% off',    depth:45 },
+    { time:'2h ago',  brand:'ASOS',      action:'started', type:'% off',         offer:'25% off orders',   depth:25 },
+    { time:'3h ago',  brand:'Target',    action:'ended',   type:'Bundle deal',   offer:'BOGO 50% off',     depth:50 },
+    { time:'4h ago',  brand:'Gap',       action:'started', type:'Clearance',     offer:'Up to 60% off',    depth:60 },
+    { time:'5h ago',  brand:'Nike',      action:'started', type:'% off',         offer:'30% off sitewide', depth:30 },
+  ];
+
+  var html = '<div style="display:flex;flex-direction:column;gap:0;">';
+  html += '<div style="display:grid;grid-template-columns:80px 160px 80px 1fr 80px 60px;gap:0 16px;padding:8px 12px;font-size:11px;font-weight:500;color:var(--muted-foreground);text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid var(--border);">'
+    +'<span>Time</span><span>Brand</span><span>Event</span><span>Offer</span><span>Type</span><span style="text-align:right;">Depth</span></div>';
+
+  events.forEach(function(e) {
+    var alpha = depthAlpha(e.depth);
+    var pillStyle = 'color:rgba(247,211,113,'+alpha.toFixed(2)+');background:rgba(247,211,113,0.10);font-size:12px;font-weight:700;padding:2px 8px;border-radius:6px;white-space:nowrap;';
+    var actionColor = e.action === 'started' ? 'var(--destructive)' : 'var(--muted-foreground)';
+    html += '<div style="display:grid;grid-template-columns:80px 160px 80px 1fr 80px 60px;gap:0 16px;padding:12px;align-items:center;border-bottom:1px solid var(--border);font-size:13px;border-radius:8px;cursor:pointer;" onmouseover="this.style.background=\'var(--secondary)\'" onmouseout="this.style.background=\'\';">'
+      +'<span style="color:var(--muted-foreground);font-size:12px;">'+e.time+'</span>'
+      +'<span style="font-weight:600;">'+e.brand+'</span>'
+      +'<span style="color:'+actionColor+';font-weight:600;font-size:12px;">'+e.action+'</span>'
+      +'<span style="color:var(--muted-foreground);">'+e.offer+'</span>'
+      +'<span><span class="type-tag">'+e.type+'</span></span>'
+      +'<span style="text-align:right;"><span style="'+pillStyle+'">'+e.depth+'%</span></span>'
+      +'</div>';
+  });
+  html += '</div>';
+  document.getElementById('activity-table').innerHTML = html;
+})();
+</script>
+</body>
+</html>

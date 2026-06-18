@@ -17,7 +17,7 @@ const badgeVariants = cva(
         success:     "bg-primary/12 text-primary",
       },
       size: {
-        sm:      "px-1.5 py-0 text-[10px] leading-5 rounded-[3px]",
+        sm:      "px-1.5 py-0 text-[10px] leading-5 rounded-sm",
         default: "px-2   py-0.5 text-xs",
         lg:      "px-2.5 py-1   text-sm",
       },
@@ -47,6 +47,8 @@ function Badge({ className, variant, size, dot, children, ...props }: BadgeProps
             "h-1.5 w-1.5 rounded-full shrink-0",
             variant === "destructive" ? "bg-destructive" :
             variant === "secondary"   ? "bg-muted-foreground" :
+            variant === "warning"     ? "bg-warning" :
+            variant === "highlight"   ? "bg-highlight" :
             "bg-primary"
           )}
         />

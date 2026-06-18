@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poppi — Scoring methodology</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #09090B;
+    --surface: #111114;
+    --surface-2: #16161B;
+    --surface-3: #1C1C22;
+    --border: rgba(255,255,255,0.07);
+    --border-strong: rgba(255,255,255,0.12);
+    --text: #FAFAFA;
+    --text-2: #B4B4BC;
+    --text-3: #6B6B74;
+    --reputation: #32A9A9;
+    --presence: #7EE8C4;
+    --resonance: #4ADE80;
+    --amber: #FBBF24;
+    --red: #FB7185;
+    --green: #4ADE80;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 80px;
+  }
+  a { color: var(--presence); text-decoration: none; }
+  a:hover { opacity: 0.85; }
+  code, .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+  /* Top bar */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 32px; border-bottom: 1px solid var(--border);
+    background: rgba(9,9,11,0.85); backdrop-filter: blur(8px);
+    position: sticky; top: 0; z-index: 50;
+  }
+  .brand-mark { display: flex; align-items: center; gap: 12px; }
+  .brand-mark .logo {
+    width: 32px; height: 32px; border-radius: 50%; background: #fff;
+    box-shadow: 0 0 24px rgba(50,169,169,0.45);
+  }
+  .brand-mark .name { font-weight: 800; font-size: 18px; letter-spacing: -0.01em; }
+  .brand-mark .cat { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 1px; }
+  .topbar-links { display: flex; gap: 18px; font-size: 12px; }
+  .topbar-links a { color: var(--text-2); }
+  .topbar-links a:hover { color: var(--text); opacity: 1; }
+
+  /* Layout */
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+  .hero { padding: 56px 0 32px; border-bottom: 1px solid var(--border); }
+  .eyebrow {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--text-3); margin-bottom: 14px;
+  }
+  h1 {
+    font-size: 38px; letter-spacing: -0.02em; font-weight: 800;
+    line-height: 1.15; margin-bottom: 18px;
+  }
+  h1 span.r { color: var(--reputation); }
+  h1 span.p { color: var(--presence); }
+  h1 span.s { color: var(--resonance); }
+  .lede {
+    font-size: 16px; color: var(--text-2); max-width: 780px; line-height: 1.6;
+  }
+  .lede a { color: var(--text); border-bottom: 1px dashed var(--border-strong); }
+
+  /* Section */
+  .section { padding: 48px 0; border-bottom: 1px solid var(--border); }
+  .section-head { margin-bottom: 24px; }
+  .section-head .tag {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; padding: 4px 10px; border-radius: 999px;
+    margin-bottom: 12px;
+  }
+  .tag.reputation { color: var(--reputation); background: rgba(50,169,169,0.12); border: 1px solid rgba(50,169,169,0.28); }
+  .tag.presence   { color: var(--presence);   background: rgba(126,232,196,0.10); border: 1px solid rgba(126,232,196,0.28); }
+  .tag.resonance  { color: var(--resonance);  background: rgba(74,222,128,0.10);  border: 1px solid rgba(74,222,128,0.28); }
+  .section-head h2 {
+    font-size: 26px; letter-spacing: -0.015em; font-weight: 800; line-height: 1.2;
+  }
+  .section-head h2 .ttl-r { color: var(--reputation); }
+  .section-head h2 .ttl-p { color: var(--presence); }
+  .section-head h2 .ttl-s { color: var(--resonance); }
+  .section-head .def {
+    color: var(--text-2); margin-top: 8px; font-size: 15px; max-width: 760px;
+  }
+
+  /* Notation card */
+  .notation {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px 22px; margin-top: 24px;
+  }
+  .notation h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); margin-bottom: 12px; }
+  .notation ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 32px; font-size: 13px; color: var(--text-2); }
+  .notation li { padding-left: 14px; position: relative; }
+  .notation li::before { content: "•"; color: var(--text-3); position: absolute; left: 0; }
+  .notation code { background: var(--surface-3); padding: 1px 6px; border-radius: 4px; font-size: 12px; color: var(--text); }
+
+  /* Equation block */
+  .eq {
+    background: var(--surface); border: 1px solid var(--border-strong);
+    border-radius: 12px; padding: 18px 22px; margin: 18px 0 24px;
+    font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    color: var(--text); line-height: 1.7;
+    white-space: pre-wrap; word-break: break-word;
+    overflow-x: auto;
+  }
+  .eq.reputation { border-left: 3px solid var(--reputation); }
+  .eq.presence   { border-left: 3px solid var(--presence); }
+  .eq.resonance  { border-left: 3px solid var(--resonance); }
+  .eq .w { color: var(--amber); }
+  .eq .fn { color: var(--text-2); }
+  .eq .num { color: var(--text); }
+  .eq .com { color: var(--text-3); font-style: italic; }
+
+  /* Contributor cards */
+  .contrib-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  .contrib {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 20px;
+    transition: border-color 0.15s;
+  }
+  .contrib:hover { border-color: var(--border-strong); }
+  .contrib-head {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .contrib-name { font-size: 15px; font-weight: 700; letter-spacing: -0.005em; }
+  .contrib-weight {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: var(--text-2); background: var(--surface-3);
+    padding: 2px 8px; border-radius: 4px;
+  }
+  .type-pill {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 2px 8px; border-radius: 999px;
+  }
+  .type-pill.controllable { color: var(--green); background: rgba(74,222,128,0.10); }
+  .type-pill.environmental { color: var(--amber); background: rgba(251,191,36,0.10); }
+  .type-pill.mixed { color: var(--text-2); background: var(--surface-3); }
+  .status-pill {
+    font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 0.02em;
+    margin-left: auto;
+    display: inline-block; white-space: nowrap;
+  }
+  .status-pill.ok { color: var(--green); background: rgba(74,222,128,0.10); border: 1px solid rgba(74,222,128,0.30); }
+  .status-pill.partial { color: var(--amber); background: rgba(251,191,36,0.10); border: 1px solid rgba(251,191,36,0.30); }
+  .status-pill.gap { color: var(--red); background: rgba(251,113,133,0.10); border: 1px solid rgba(251,113,133,0.30); }
+  .status-pill.v2 { color: var(--text-2); background: var(--surface-3); border: 1px solid var(--border-strong); }
+
+  .contrib.v2 { opacity: 0.78; }
+  .contrib.v2 .contrib-name::after {
+    content: "post-MVP"; margin-left: 10px;
+    font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-3); padding: 2px 7px; border-radius: 4px; background: var(--surface-3);
+    vertical-align: middle;
+  }
+
+  .contrib-raw {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: var(--text-2); background: var(--surface-2);
+    padding: 10px 12px; border-radius: 8px; margin: 10px 0 14px;
+    white-space: pre-wrap; line-height: 1.6;
+  }
+
+  .contrib-body {
+    display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 18px;
+    margin-top: 10px;
+  }
+  .contrib-col h4 {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--text-3); margin-bottom: 8px;
+  }
+  .endpoint-list { display: flex; flex-direction: column; gap: 6px; }
+  .endpoint-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    background: var(--surface-3); padding: 4px 10px; border-radius: 6px;
+    color: var(--text); border: 1px solid var(--border);
+    transition: border-color 0.15s, background 0.15s;
+    width: fit-content; max-width: 100%;
+  }
+  .endpoint-link:hover { background: var(--surface-2); border-color: var(--border-strong); opacity: 1; }
+  .endpoint-link .method {
+    font-size: 9px; font-weight: 800; color: var(--reputation);
+    letter-spacing: 0.08em;
+  }
+  .endpoint-link.missing { color: var(--text-3); border-style: dashed; }
+  .endpoint-link.missing .method { color: var(--red); }
+  .prop-list { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--text-2); }
+  .prop-list code { background: var(--surface-3); padding: 1px 6px; border-radius: 4px; font-size: 12px; color: var(--text); }
+  .status-note {
+    margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border);
+    font-size: 12px; color: var(--text-3); line-height: 1.55;
+  }
+  .status-note b { color: var(--text-2); font-weight: 600; }
+
+  /* Resonance composition extras */
+  .compose-grid {
+    display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 14px;
+    margin: 22px 0 18px;
+  }
+  .compose-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 20px;
+  }
+  .compose-card h4 {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.12em; color: var(--text-3); margin-bottom: 12px;
+  }
+  .compose-card p { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+  .compose-card p + p { margin-top: 8px; }
+  .compose-card code {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    background: var(--surface-3); padding: 1px 6px; border-radius: 4px; color: var(--text);
+  }
+
+  .quadrant {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+    margin: 8px 0 22px;
+  }
+  .quadrant th, .quadrant td {
+    padding: 14px 16px; vertical-align: top; text-align: left;
+    border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  }
+  .quadrant tr:last-child th, .quadrant tr:last-child td { border-bottom: none; }
+  .quadrant th:last-child, .quadrant td:last-child { border-right: none; }
+  .quadrant thead th {
+    background: var(--surface-2); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3);
+  }
+  .quadrant tbody th {
+    background: var(--surface-2); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3);
+    width: 130px;
+  }
+  .quadrant tbody td { background: var(--surface); }
+  .quadrant tbody td b { color: var(--text); font-size: 14px; display: block; margin-bottom: 4px; }
+  .quadrant tbody td { font-size: 13px; color: var(--text-2); line-height: 1.55; }
+
+  .ex-table {
+    width: 100%; border-collapse: collapse; font-size: 13px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden;
+    margin: 8px 0 18px;
+  }
+  .ex-table th, .ex-table td {
+    padding: 10px 14px; text-align: right;
+    font-family: 'JetBrains Mono', monospace;
+    border-bottom: 1px solid var(--border);
+  }
+  .ex-table th:first-child, .ex-table td:first-child { text-align: left; font-family: 'Inter', sans-serif; }
+  .ex-table th:last-child, .ex-table td:last-child { text-align: left; font-family: 'Inter', sans-serif; }
+  .ex-table thead th {
+    background: var(--surface-2); font-size: 10px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3);
+    font-family: 'Inter', sans-serif;
+  }
+  .ex-table tbody td { color: var(--text-2); }
+  .ex-table tbody td.score { color: var(--resonance); font-weight: 700; }
+  .ex-table tbody td.over { color: var(--red); }
+  .ex-table tbody td.under { color: var(--amber); }
+  .ex-table tbody tr:last-child td { border-bottom: none; }
+
+  .v2-divider {
+    display: flex; align-items: center; gap: 14px;
+    margin: 36px 0 18px;
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.14em; color: var(--text-3);
+  }
+  .v2-divider::before, .v2-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  /* Properties summary table */
+  .prop-table-wrap {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden; overflow-x: auto;
+  }
+  .prop-table {
+    width: 100%; border-collapse: collapse; font-size: 13px;
+  }
+  .prop-table thead th {
+    text-align: left; padding: 12px 16px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--text-3); background: var(--surface-2);
+    border-bottom: 1px solid var(--border-strong);
+    white-space: nowrap;
+  }
+  .prop-table thead th.num { text-align: right; }
+  .prop-table td {
+    padding: 14px 16px; vertical-align: top; border-bottom: 1px solid var(--border);
+    color: var(--text-2); line-height: 1.55;
+  }
+  .prop-table td.num { text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text); }
+  .prop-table td:first-child { color: var(--text); font-weight: 600; min-width: 240px; }
+  .prop-table td code, .prop-table th code {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    background: var(--surface-3); padding: 1px 6px; border-radius: 4px; color: var(--text);
+  }
+  .prop-table td a { color: var(--text); border-bottom: 1px dashed var(--border-strong); }
+  .prop-table td a:hover { color: var(--presence); opacity: 1; }
+  .prop-table .would { color: var(--text-3); font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 400; margin-left: 4px; }
+  .prop-table tr.grp td {
+    padding: 14px 16px 8px;
+    background: var(--surface-2);
+    font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--text-3); border-bottom: 1px solid var(--border-strong);
+  }
+  .prop-table tr:last-child td { border-bottom: none; }
+
+  /* Footer */
+  .foot {
+    padding: 40px 0 0; text-align: center;
+    font-size: 12px; color: var(--text-3); line-height: 1.8;
+  }
+  .foot a { color: var(--text-2); border-bottom: 1px dashed var(--border-strong); }
+
+  /* Responsive */
+  @media (max-width: 720px) {
+    .wrap { padding: 0 20px; }
+    h1 { font-size: 28px; }
+    .contrib-body { grid-template-columns: 1fr; }
+    .notation ul { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand-mark">
+    <div class="logo" style="background: url('https://logos.waldo.fyi/poppi') center/cover no-repeat, #fff;"></div>
+    <div>
+      <div class="name">Poppi</div>
+      <div class="cat">Scoring methodology · v2026.05.01</div>
+    </div>
+  </div>
+  <div class="topbar-links">
+    <a href="index.html">← Dashboard</a>
+    <a href="../bxcapi/index.html">/bxcapi spec</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section class="hero">
+  <div class="eyebrow">Brand health · scoring reference</div>
+  <h1>How <span class="r">Reputation</span>, <span class="p">Presence</span>, and <span class="s">Resonance</span> are computed.</h1>
+  <p class="lede">
+    Every contributor below maps a raw signal to a 0–100 component, weighted into a single score. This page documents the exact equations, the <a href="../bxcapi/index.html">/bxcapi</a> endpoints and properties they require, and whether each one exists today.
+  </p>
+  <p class="lede" style="margin-top: 12px;">
+    <b style="color: var(--text);">Status legend.</b> <span class="mono" style="color: var(--green);">✓ Available</span> = exists in /bxcapi today · <span class="mono" style="color: var(--amber);">⚠ Partial</span> = endpoint exists but a needed property doesn't · <span class="mono" style="color: var(--red);">✗ Gap</span> = MVP requirement, not in /bxcapi yet · <span class="mono" style="color: var(--text-2);">◷ V2</span> = deferred past MVP (no reliable source yet, or signal won't be accurate). In <b>Reputation</b> and <b>Presence</b>, V2 contributors drop from the formula and their weight redistributes proportionally to the remaining contributors. <b>Resonance</b> at v1 is derived directly from Reputation and Presence — see that section.
+  </p>
+
+  <div class="notation">
+    <h3>Notation used in every equation</h3>
+    <ul>
+      <li><code>μ_i</code>, <code>σ_i</code> — brand's trailing-28d mean and stdev of raw signal <code>s_i</code></li>
+      <li><code>Z(s) = clamp((s − μ) / σ, −3, +3)</code></li>
+      <li><code>Norm(s) = 50 + 16.67 · Z(s)</code> — maps to 0–100, 50 = your own median</li>
+      <li><code>Norm⁻(s) = 50 − 16.67 · Z(s)</code> — inverse contributors</li>
+      <li><code>decay_τ(d) = exp(−d / τ)</code> — age decay in days</li>
+      <li><code>Σ w_i = 1</code> — weights sum to 1 per score</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     REPUTATION
+     ════════════════════════════════════════════════════════════ -->
+<section class="section" id="reputation">
+  <div class="section-head">
+    <span class="tag reputation">Reputation · Recovery analog</span>
+    <h2><span class="ttl-r">Reputation</span> — how the world is receiving the brand, with credit for how it's handling what it can.</h2>
+    <p class="def">Two brands with identical sentiment can have different Reputation scores depending on how they respond. A negative spike that's been engaged with, acknowledged, and reframed shouldn't score the same as one that's been left to fester.</p>
+  </div>
+
+  <div class="eq reputation">Reputation = clamp(
+  <span class="w">0.35</span>·Norm(NetSentiment)        + <span class="w">0.20</span>·Norm⁻(ComplaintPressure)
++ <span class="w">0.10</span>·Norm(NewsTone)             + <span class="w">0.15</span>·Norm(ResponseRate24h)
++ <span class="w">0.10</span>·Norm(ClusterEngagement)    + <span class="w">0.10</span>·Norm(VoiceConsistency),
+  0, 100
+)</div>
+
+  <div class="contrib-grid">
+
+    <!-- NetSentiment -->
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">NetSentiment</span>
+        <span class="contrib-weight">w = 0.35</span>
+        <span class="type-pill environmental">environmental</span>
+        <span class="status-pill ok">✓ Available</span>
+      </div>
+      <div class="contrib-raw">raw = Σ_m [ sign(m) · decay_7(age_m) ]
+      over mentions m in trailing 14d
+sign = +1 (pos), 0 (neu), −1 (neg), −0.5 (mix)</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/mentions</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>sentiment</code> per mention (pos / neu / neg / mix)</div>
+            <div><code>posted_at</code> for decay</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>V2 enhancement:</b> add <code>reach</code>-weighting once we have a reliable source for it. Without reach, all mentions count equally — viral and obscure alike.</div>
+    </div>
+
+    <!-- ComplaintPressure -->
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">ComplaintPressure</span>
+        <span class="contrib-weight">w = 0.20</span>
+        <span class="type-pill environmental">environmental · inverse</span>
+        <span class="status-pill ok">✓ Available</span>
+      </div>
+      <div class="contrib-raw">raw = Σ_c [ frequency_c · intensity_c · active_c ]
+      across active complaint clusters
+active = 1 if cluster had ≥1 mention in last 14d</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/customer-complaints</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>cluster</code>, <code>frequency</code>, <code>intensity</code>, <code>last_mention_at</code></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NewsTone -->
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">NewsTone</span>
+        <span class="contrib-weight">w = 0.10</span>
+        <span class="type-pill environmental">environmental</span>
+        <span class="status-pill ok">✓ Available</span>
+      </div>
+      <div class="contrib-raw">raw = Σ_n [ sign(n) · decay_14(age_n) ]
+      over mentions n where source_type = "news", trailing 30d</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/mentions</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>source_type</code> filter set to <code>"news"</code></div>
+            <div><code>sentiment</code> per mention</div>
+            <div><code>posted_at</code> for decay</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Sourcing:</b> brand mentions already include news items via <code>source_type</code>. No separate news endpoint needed. Categories supply the broader news context but aren't required for this contributor.</div>
+    </div>
+
+    <!-- ResponseRate24h -->
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">ResponseRate24h</span>
+        <span class="contrib-weight">w = 0.15</span>
+        <span class="type-pill controllable">controllable</span>
+        <span class="status-pill gap">✗ Gap</span>
+      </div>
+      <div class="contrib-raw">raw = count(neg mentions with brand_replies within 24h of posted_at)
+      / count(neg mentions)
+      in trailing 14d</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/mentions</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>brand_replies[]</code> on each mention object — array of <code>{ replied_at, reply_url, channel }</code></div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Highest-priority new field.</b> Without per-mention reply detection there is no way to measure the most important controllable lever for Reputation.</div>
+    </div>
+
+    <!-- ClusterEngagement -->
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">ClusterEngagement</span>
+        <span class="contrib-weight">w = 0.10</span>
+        <span class="type-pill controllable">controllable</span>
+        <span class="status-pill partial">⚠ Partial</span>
+      </div>
+      <div class="contrib-raw">raw = Σ_c [ frequency_c · 1{any owned post in 14d themed to cluster c} ]
+      across active complaint clusters</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/customer-complaints</a>
+            <a class="endpoint-link" href="../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/posts</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div>From complaints: <code>cluster</code>, <code>frequency</code></div>
+            <div>From owned posts: <code>themes[]</code> — canonical vocabulary that overlaps with cluster names</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Theme dependency.</b> Owned posts need a stable canonical theme classification that overlaps with complaint cluster names. Same dependency unlocks 4 other contributors.</div>
+    </div>
+
+    <!-- VoiceConsistency -->
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">VoiceConsistency</span>
+        <span class="contrib-weight">w = 0.10</span>
+        <span class="type-pill controllable">controllable</span>
+        <span class="status-pill partial">⚠ Partial</span>
+      </div>
+      <div class="contrib-raw">raw = mean( cosine(embed(post_i), brand_voice_fingerprint) )
+      over owned posts in trailing 14d</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/analysis</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>voice_similarity</code> per owned post (cosine vs. brand-voice fingerprint)</div>
+            <div><code>voice_fingerprint</code> on brand profile (bootstrapped from sample posts)</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Gap:</b> the endpoint exists but doesn't expose per-post similarity. Aggregate "voice consistency = 0.82" is shown in the dashboard but not derived from a returned property.</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PRESENCE
+     ════════════════════════════════════════════════════════════ -->
+<section class="section" id="presence">
+  <div class="section-head">
+    <span class="tag presence">Presence · Strain analog</span>
+    <h2><span class="ttl-p">Presence</span> — how much of the category conversation the brand is generating, and whether it's quality.</h2>
+    <p class="def">The score the brand has the most control over. Raw share of voice is the trunk, but quality multipliers — cadence fit, freshness, whitespace — prevent the score from rewarding spam.</p>
+  </div>
+
+  <div class="eq presence">Presence = clamp(
+  <span class="w">0.35</span>·Norm(SOV)                + <span class="w">0.15</span>·Norm(CadenceFit)
++ <span class="w">0.15</span>·Norm(Freshness)          + <span class="w">0.10</span>·Norm(ChannelBreadth)
++ <span class="w">0.10</span>·Norm(WhitespaceHitRate)  + <span class="w">0.15</span>·Norm⁻(CategoryHeadwind),
+  0, 100
+)</div>
+
+  <div class="contrib-grid">
+
+    <!-- SOV -->
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">SOV</span>
+        <span class="contrib-weight">w = 0.35</span>
+        <span class="type-pill mixed">mixed</span>
+        <span class="status-pill ok">✓ Available</span>
+      </div>
+      <div class="contrib-raw">volume(brand) = mentions_28d + 0.5 · owned_posts_28d + 0.7 · ad_impressions_28d
+raw = volume(brand) / Σ_c volume(c)   over competitive set ∪ {brand}</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="../bxcapi/index.html#market-conditions"><span class="method">GET</span>/brands/compare</a>
+            <a class="endpoint-link" href="../bxcapi/index.html#market-conditions"><span class="method">GET</span>/brands/{id}/competitive-set</a>
+            <a class="endpoint-link" href="../bxcapi/index.html#analysis"><span class="method">GET</span>/reports/share-of-voice</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>mentions_count</code>, <code>owned_posts_count</code>, <code>ad_impressions</code> per brand in the competitive set</div>
+            <div>Stable <code>competitor_brand_ids[]</code> list</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CadenceFit -->
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">CadenceFit</span>
+        <span class="contrib-weight">w = 0.15</span>
+        <span class="type-pill controllable">controllable</span>
+        <span class="status-pill ok">✓ Available</span>
+      </div>
+      <div class="contrib-raw">p = posts_per_day across owned channels (trailing 14d)
+t = cadence_target (per-brand or category median)
+raw = min(p/t, 1) · min(t/p, 1)^0.5
+      (peaks at p = t; soft falloff above target)</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/summary</a>
+            <a class="endpoint-link" href="../bxcapi/index.html#cat-landscape"><span class="method">GET</span>/category/{id}/channel-mix</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>posts_per_day</code> per channel from owned-media summary</div>
+            <div>Category-median cadence per channel for the target <code>t</code></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Freshness -->
+    <div class="contrib v2">
+      <div class="contrib-head">
+        <span class="contrib-name">CreativeFreshness</span>
+        <span class="contrib-weight">w = 0.15</span>
+        <span class="type-pill controllable">controllable</span>
+        <span class="status-pill v2">◷ V2</span>
+      </div>
+      <div class="contrib-raw">raw = count(active ads with days_active < fatigue_threshold)
+      / count(active ads)
+fatigue_threshold defaults to 30d</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="../bxcapi/index.html#paid-media"><span class="method">GET</span>/brands/{id}/creative-fatigue</a>
+            <a class="endpoint-link" href="../bxcapi/index.html#paid-media"><span class="method">GET</span>/brands/{id}/ads/active</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>days_active</code> per ad</div>
+            <div><code>fatigue_flag</code> from <code>/creative-fatigue</code></div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Deferred to V2:</b> we don't have a reliable way to measure ad distribution and fatigue accurately at MVP. Drop from the score and re-introduce once ad-library signals are validated.</div>
+    </div>
+
+    <!-- ChannelBreadth -->
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">ChannelBreadth</span>
+        <span class="contrib-weight">w = 0.10</span>
+        <span class="type-pill controllable">controllable</span>
+        <span class="status-pill ok">✓ Available</span>
+      </div>
+      <div class="contrib-raw">raw = count(channels c where posts_in_c_14d ≥ min_cadence_c)
+      / count(target channels)</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="../bxcapi/index.html#brand-discovery"><span class="method">GET</span>/brands/{id}/platforms</a>
+            <a class="endpoint-link" href="../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/posts</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div>List of tracked <code>platform</code> handles</div>
+            <div><code>channel</code> + <code>posted_at</code> on each owned post (to count per-channel cadence)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Whitespace -->
+    <div class="contrib v2">
+      <div class="contrib-head">
+        <span class="contrib-name">WhitespaceHitRate</span>
+        <span class="contrib-weight">w = 0.10</span>
+        <span class="type-pill controllable">controllable</span>
+        <span class="status-pill v2">◷ V2</span>
+      </div>
+      <div class="contrib-raw">raw = count(owned posts in 14d whose theme ∈ under_indexed_themes)
+      / count(owned posts in 14d)
+under_indexed_themes from analysis/whitespace with momentum > 1.0</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="../bxcapi/index.html#analysis"><span class="method">GET</span>/analysis/whitespace</a>
+            <a class="endpoint-link" href="../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/posts</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div>From whitespace: <code>theme</code>, <code>momentum</code> (canonical vocab)</div>
+            <div>From owned posts: <code>themes[]</code> using the same canonical vocab</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Deferred to V2:</b> two blockers — (1) <code>/analysis/whitespace</code> in /bxcapi is missing its response example, so the returned shape isn't fully specified yet, and (2) owned posts need canonical theme tags to compute the intersection. Revisit once both land.</div>
+    </div>
+
+    <!-- Headwind -->
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">CategoryHeadwind</span>
+        <span class="contrib-weight">w = 0.15</span>
+        <span class="type-pill environmental">environmental · inverse</span>
+        <span class="status-pill ok">✓ Available</span>
+      </div>
+      <div class="contrib-raw">raw = Σ_c Δ7d(SOV_c)   over competitors c (excluding brand)
+      (strong competitor momentum drags this down)</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="../bxcapi/index.html#brand-trends"><span class="method">GET</span>/brands/{id}/{dataset}/timeseries</a>
+            <a class="endpoint-link" href="../bxcapi/index.html#market-conditions"><span class="method">GET</span>/brands/compare</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>dataset=mentions</code>, <code>grain=day</code>, 14d window per competitor</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     RESONANCE
+     ════════════════════════════════════════════════════════════ -->
+<section class="section" id="resonance">
+  <div class="section-head">
+    <span class="tag resonance">Resonance · Synthesis</span>
+    <h2><span class="ttl-s">Resonance</span> — is the brand's attention productive given its current reputation?</h2>
+    <p class="def">For v1, Resonance is derived directly from Reputation and Presence. The intuition: your attention (Presence) is only as productive as your standing (Reputation) makes it — and the formula penalizes both wasted goodwill and overexposure. Richer contributors (earned-to-owned ratio, founder voice carry, love/pain velocity, search interest) are deferred to V2 — see the V2 section below.</p>
+  </div>
+
+  <div class="eq resonance">Base Resonance     = <span class="num">2</span>·Reputation·Presence / (Reputation + Presence)
+                     (or <span class="num">0</span> if both are <span class="num">0</span>)
+
+Target Presence    = <span class="num">25</span> + <span class="num">0.75</span>·Reputation
+
+Overexposure       = max(<span class="num">0</span>, Presence − Target Presence)
+Underactivation    = max(<span class="num">0</span>, Target Presence − Presence)
+
+Over Penalty Wt    = <span class="w">0.20</span> + <span class="w">0.40</span>·(<span class="num">1</span> − Reputation/<span class="num">100</span>)
+Under Penalty Wt   = <span class="w">0.05</span> + <span class="w">0.15</span>·(Reputation/<span class="num">100</span>)
+
+Resonance = clamp(
+    Base Resonance
+  − Overexposure   · Over Penalty Wt
+  − Underactivation · Under Penalty Wt,
+  <span class="num">0</span>, <span class="num">100</span>
+)</div>
+
+  <div class="compose-grid">
+    <div class="compose-card">
+      <h4>Why a harmonic mean</h4>
+      <p>The base score uses the harmonic mean of Reputation and Presence — not the arithmetic average. Harmonic means are pulled toward the smaller of the two values, so a brand with one strong dimension and one weak one is graded by the weak one, not the average.</p>
+      <p>Example: <code>Rep = 100, P = 20</code> gives Base = <code>33.3</code>, not <code>60</code>. You have one thing going for you, but it's not being used.</p>
+    </div>
+    <div class="compose-card">
+      <h4>Why a Target Presence curve</h4>
+      <p>A brand with higher reputation has earned more permission to show up. Target Presence is the proportional share of category attention that fits your standing: <code>25 + 0.75·Reputation</code>.</p>
+      <p>Presence is already category-relative (your share within your competitive set), so the same curve works for a multinational, a regional chain, and a single-location service. No profile picker needed.</p>
+    </div>
+    <div class="compose-card">
+      <h4>Why asymmetric penalties</h4>
+      <p>The overexposure weight grows as Reputation falls — being loud when you're disliked is the worst sin (<code>0.20 → 0.60</code> as Reputation drops from 100 to 0).</p>
+      <p>The underactivation weight grows as Reputation rises — wasted goodwill is more costly when you have more of it (<code>0.05 → 0.20</code> as Reputation rises from 0 to 100). Quiet rebuilding gets a soft penalty; sitting on a strong brand gets a sharper one.</p>
+    </div>
+    <div class="compose-card">
+      <h4>Why no compliance dial</h4>
+      <p>I originally proposed a separate <code>compliance_sensitivity</code> for regulated industries (therapy, finance, legal) so they'd be penalized harder for overexposure. Dropped it: regulated brands that overexpose accumulate negative mentions and complaints → Reputation drops → the overexposure weight climbs naturally via the existing formula.</p>
+      <p>The system self-corrects without a separate categorical dial that would have broken at the edges (multi-location services, multinationals).</p>
+    </div>
+  </div>
+
+  <h3 style="font-size: 14px; font-weight: 700; letter-spacing: 0.04em; margin: 24px 0 12px;">Four-quadrant reading</h3>
+  <table class="quadrant">
+    <thead>
+      <tr><th></th><th>Low Presence</th><th>High Presence</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>High Reputation</th>
+        <td><b>Unused goodwill</b>Your standing is strong but you're not earning attention with it. Push.</td>
+        <td><b>Strong resonance</b>Attention is productive — both dimensions reinforcing.</td>
+      </tr>
+      <tr>
+        <th>Low Reputation</th>
+        <td><b>Quiet repair mode</b>Low on both — rebuild before broadcasting. The formula's gentle here.</td>
+        <td><b>Overexposed / risky</b>Loud and disliked — attention is actively hurting. The formula punishes this hardest.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 style="font-size: 14px; font-weight: 700; letter-spacing: 0.04em; margin: 24px 0 12px;">Worked examples</h3>
+  <table class="ex-table">
+    <thead>
+      <tr>
+        <th>Scenario</th>
+        <th>Rep</th>
+        <th>Presence</th>
+        <th>Target P</th>
+        <th>Base</th>
+        <th>Δ vs target</th>
+        <th>Penalty</th>
+        <th>Resonance</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Peak alignment</td><td>100</td><td>100</td><td>100</td><td>100</td><td>0</td><td>0</td><td class="score">100</td></tr>
+      <tr><td>Well-aligned</td><td>80</td><td>80</td><td>85</td><td>80</td><td class="under">−5 under</td><td>−0.9</td><td class="score">79</td></tr>
+      <tr><td>Unused goodwill</td><td>90</td><td>60</td><td>92.5</td><td>72</td><td class="under">−32.5 under</td><td>−6.0</td><td class="score">66</td></tr>
+      <tr><td>Overexposed</td><td>40</td><td>80</td><td>55</td><td>53.3</td><td class="over">+25 over</td><td>−11.0</td><td class="score">42</td></tr>
+      <tr><td>Quiet repair</td><td>30</td><td>25</td><td>47.5</td><td>27.3</td><td class="under">−22.5 under</td><td>−2.1</td><td class="score">25</td></tr>
+      <tr><td>Loud + disliked</td><td>20</td><td>80</td><td>40</td><td>32</td><td class="over">+40 over</td><td>−20.8</td><td class="score">11</td></tr>
+    </tbody>
+  </table>
+
+  <div class="v2-divider">V2 — richer Resonance signals (deferred)</div>
+  <p class="def" style="margin-bottom: 18px;">The seven contributors below are what Resonance reads from in a future version, when there are reliable sources for engagement, period-over-period cluster deltas, search-interest data, and a curated <code>/brands/{id}/people</code> endpoint. They're shown here so the design intent is visible — but at v1 they don't move the Resonance score.</p>
+
+  <div class="contrib-grid">
+
+    <!-- EarnedToOwned -->
+    <div class="contrib v2">
+      <div class="contrib-head">
+        <span class="contrib-name">EarnedToOwned</span>
+        <span class="contrib-weight">w = 0.25</span>
+        <span class="type-pill mixed">mixed</span>
+        <span class="status-pill v2">◷ V2</span>
+      </div>
+      <div class="contrib-raw">raw = mentions_count_7d / max(owned_posts_count_7d, 1)
+      (capped at 95th percentile of category to limit outliers)</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/mentions/summary</a>
+            <a class="endpoint-link" href="../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/summary</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>total_count</code> or volume from both summaries, scoped to <code>window=7d</code></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EngagementVsMedian -->
+    <div class="contrib v2">
+      <div class="contrib-head">
+        <span class="contrib-name">EngagementVsMedian</span>
+        <span class="contrib-weight">w = 0.20</span>
+        <span class="type-pill mixed">mixed</span>
+        <span class="status-pill v2">◷ V2</span>
+      </div>
+      <div class="contrib-raw">raw = engagement_rate_brand_28d / engagement_rate_category_median_28d</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/summary</a>
+            <a class="endpoint-link" href="../bxcapi/index.html#brand-trends"><span class="method">GET</span>/brands/{id}/{dataset}/benchmark</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>engagement_rate</code> on owned summary</div>
+            <div><code>dataset=engagement</code>, <code>median</code> field on benchmark response</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Deferred to V2:</b> engagement numbers won't be accurate at MVP — owned posts are scanned only once on first ingestion, so likes/comments/shares are frozen at that snapshot. Pull <code>engagement</code> out of the API and the score until we can re-scan posts over time.</div>
+    </div>
+
+    <!-- LovePainVelocity -->
+    <div class="contrib v2">
+      <div class="contrib-head">
+        <span class="contrib-name">LovePainVelocity</span>
+        <span class="contrib-weight">w = 0.15</span>
+        <span class="type-pill environmental">environmental</span>
+        <span class="status-pill v2">◷ V2</span>
+      </div>
+      <div class="contrib-raw">raw = Δ14d(Σ love_cluster_freq) − Δ14d(Σ pain_cluster_freq)</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/love-letters</a>
+            <a class="endpoint-link" href="../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/customer-complaints</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>?compare=prev_window</code> param returning prior-period <code>frequency</code> alongside current</div>
+            <div>Or a <code>previous_frequency</code> field on each cluster</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Gap:</b> both endpoints return current-state clusters but no period-over-period delta.</div>
+    </div>
+
+    <!-- SearchInterestGrowth -->
+    <div class="contrib v2">
+      <div class="contrib-head">
+        <span class="contrib-name">SearchInterestGrowth</span>
+        <span class="contrib-weight">w = 0.15</span>
+        <span class="type-pill environmental">environmental</span>
+        <span class="status-pill v2">◷ V2</span>
+      </div>
+      <div class="contrib-raw">raw = Δ14d(search_volume(brand_terms)) / search_volume(brand_terms)_baseline</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link missing"><span class="method">GAP</span>/brands/{id}/search-interest</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>search_volume</code> timeseries for <code>brand_terms[]</code> (Google Trends-style index)</div>
+            <div><code>baseline</code> or comparable smoothed reference</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Deferred to V2:</b> no validated data source yet. Google Trends is the obvious option but isn't a formal API; alternatives (Semrush, Glimpse) cost money and we haven't picked one. Defer until a source is locked in.</div>
+    </div>
+
+    <!-- AudienceFitHitRate -->
+    <div class="contrib v2">
+      <div class="contrib-head">
+        <span class="contrib-name">AudienceFitHitRate</span>
+        <span class="contrib-weight">w = 0.10</span>
+        <span class="type-pill controllable">controllable</span>
+        <span class="status-pill v2">◷ V2</span>
+      </div>
+      <div class="contrib-raw">raw = count(owned posts in 14d themed to growing love clusters)
+      / count(owned posts in 14d)
+growing love cluster = love cluster with Δ14d(freq) > 0</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="../bxcapi/index.html#aud-conversations"><span class="method">GET</span>/audiences/{id}/voice-of-customer</a>
+            <a class="endpoint-link" href="../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/posts</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div>Love clusters with <code>frequency</code> + <code>previous_frequency</code></div>
+            <div>Owned posts with <code>themes[]</code> (canonical vocab)</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Theme + delta dependency.</b> Same canonical theme vocab as ClusterEngagement / WhitespaceHitRate; same prev-window delta as LovePainVelocity.</div>
+    </div>
+
+    <!-- CrossChannelReinforcement -->
+    <div class="contrib v2">
+      <div class="contrib-head">
+        <span class="contrib-name">CrossChannelReinforcement</span>
+        <span class="contrib-weight">w = 0.10</span>
+        <span class="type-pill controllable">controllable</span>
+        <span class="status-pill v2">◷ V2</span>
+      </div>
+      <div class="contrib-raw">raw = count(themes appearing in ≥3 owned channels within same 7d window)
+      / count(distinct themes posted in 7d)</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/posts</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>themes[]</code> and <code>channel</code> on each owned post</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Theme dependency.</b> All client-side once owned posts are themed.</div>
+    </div>
+
+    <!-- FounderVoiceCarry -->
+    <div class="contrib v2">
+      <div class="contrib-head">
+        <span class="contrib-name">FounderVoiceCarry</span>
+        <span class="contrib-weight">w = 0.05</span>
+        <span class="type-pill controllable">controllable</span>
+        <span class="status-pill v2">◷ V2</span>
+      </div>
+      <div class="contrib-raw">raw = posts_from_(founder + exec + comms) accounts in 14d
+      / posts_from_(brand + founder + exec + comms) accounts in 14d
+      (defaults to 0 if no people are configured for this brand)</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link missing"><span class="method">GAP</span>/brands/{id}/people</a>
+            <a class="endpoint-link" href="../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/posts</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div>From people: <code>role</code> (<code>founder</code> | <code>exec</code> | <code>comms</code>), <code>platform_handles[]</code> linked to this brand</div>
+            <div>From owned posts: <code>handle</code> / <code>account_id</code> attribution so each post can be mapped back to a person or to the brand</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Refactor:</b> originally engagement-weighted, but engagement isn't reliable at MVP (see <i>EngagementVsMedian</i>). Switched to a post-count ratio. <b>Needs <code>/brands/{id}/people</code>:</b> a curated management-team endpoint that lists each person with role + handles. The same endpoint replaces the proposed <code>account_role</code> tag on platform entries.</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     TIER C — long-tail brand augmentations
+     ════════════════════════════════════════════════════════════ -->
+<section class="section" id="tier-c">
+  <div class="section-head">
+    <span class="tag" style="color: var(--text-2); background: var(--surface-3); border: 1px solid var(--border-strong);">Tier C · long-tail brands <span style="color: var(--text-3); margin-left: 8px;">◷ V2</span></span>
+    <h2>Small-brand contributors</h2>
+    <p class="def">For brands under ~50 mentions/month (a local therapist, solo creator, single-location service), the default Reputation contributors will eventually get gated off and these three take their place. <b>Deferred to V2</b> — the underlying review and local-search endpoints don't exist yet. For v1, small brands run on the standard methodology with the universal Resonance formula (which works across brand sizes because Presence is already category-relative).</p>
+  </div>
+
+  <div class="contrib-grid">
+
+    <!-- ReviewSentiment -->
+    <div class="contrib v2">
+      <div class="contrib-head">
+        <span class="contrib-name">ReviewSentiment</span>
+        <span class="contrib-weight">w = 0.30 (Reputation, replaces NetSentiment)</span>
+        <span class="type-pill environmental">environmental</span>
+        <span class="status-pill v2">◷ V2</span>
+      </div>
+      <div class="contrib-raw">raw = Σ_r [ (rating_r − 3) · log(1 + helpful_votes_r) · decay_60(age_r) ]
+      over reviews on Google / Yelp / vertical platforms, trailing 180d</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link missing"><span class="method">GAP</span>/brands/{id}/reviews/summary</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>platform</code> (google_business / yelp / psychology_today / healthgrades / avvo / …)</div>
+            <div><code>rating</code> (1–5), <code>review_text</code>, <code>helpful_votes</code>, <code>posted_at</code></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ReviewResponseRate -->
+    <div class="contrib v2">
+      <div class="contrib-head">
+        <span class="contrib-name">ReviewResponseRate</span>
+        <span class="contrib-weight">w = 0.15 (Reputation, replaces ResponseRate24h)</span>
+        <span class="type-pill controllable">controllable</span>
+        <span class="status-pill v2">◷ V2</span>
+      </div>
+      <div class="contrib-raw">raw = count(last 50 reviews with a business reply)
+      / 50</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link missing"><span class="method">GAP</span>/brands/{id}/reviews/summary</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>business_reply</code> on each review (<code>{ replied_at, text }</code> or <code>null</code>)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LocalSearchRank -->
+    <div class="contrib v2">
+      <div class="contrib-head">
+        <span class="contrib-name">LocalSearchRank</span>
+        <span class="contrib-weight">w = 0.20 (Presence, replaces SOV)</span>
+        <span class="type-pill environmental">environmental</span>
+        <span class="status-pill v2">◷ V2</span>
+      </div>
+      <div class="contrib-raw">raw = mean( 1 / rank ) across N target queries for service area
+      e.g. "therapist near me", "anxiety therapist brooklyn", …</div>
+      <div class="contrib-body">
+        <div class="contrib-col">
+          <h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link missing"><span class="method">GAP</span>/brands/{id}/local-search-rank</a>
+          </div>
+        </div>
+        <div class="contrib-col">
+          <h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>queries[]</code> with <code>rank</code> per query, <code>geo</code> filter</div>
+            <div>Likely a partner integration (BrightLocal, Local Falcon, etc.)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     PROPERTIES SUMMARY TABLE
+     ════════════════════════════════════════════════════════════ -->
+<section class="section" id="properties">
+  <div class="section-head">
+    <span class="tag" style="color: var(--text-2); background: var(--surface-3); border: 1px solid var(--border-strong);">Properties summary</span>
+    <h2>Every property the scoring system reads</h2>
+    <p class="def">One row per property, across all three scores. Rows are ordered by status: MVP gaps first (these block the score from launching), then properties already available in /bxcapi, then V2 (deferred past MVP). Resonance contributor properties and Tier-C augmentations sit in the V2 group at the bottom.</p>
+  </div>
+
+  <div class="prop-table-wrap">
+    <table class="prop-table">
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Endpoint</th>
+          <th class="num">Uses</th>
+          <th>Used by</th>
+          <th>Description</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- ═══ MVP GAPS ═══ -->
+        <tr class="grp"><td colspan="6">MVP gaps — blocks the score until built</td></tr>
+
+        <tr>
+          <td><code>themes[]</code> (canonical) on owned posts</td>
+          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/posts</code></a></td>
+          <td class="num">1</td>
+          <td>ClusterEngagement</td>
+          <td>Stable canonical theme vocabulary that overlaps with complaint clusters. (V2 contributors AudienceFitHitRate and CrossChannelReinforcement read the same vocab when they come online.)</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td><code>brand_replies[]</code> on each mention</td>
+          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions</code></a></td>
+          <td class="num">1</td>
+          <td>ResponseRate24h</td>
+          <td>Array of <code>{ replied_at, reply_url, channel }</code> per mention. Single highest-priority Reputation lever.</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td><code>voice_similarity</code> per owned post</td>
+          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/analysis</code></a></td>
+          <td class="num">1</td>
+          <td>VoiceConsistency</td>
+          <td>Per-post cosine similarity to a brand-voice fingerprint, plus the fingerprint itself on the brand profile.</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td><code>GET /brands/{id}/health</code> composite</td>
+          <td><code>/brands/{id}/health</code> <span style="color: var(--text-3); font-size: 11px;">(new)</span></td>
+          <td class="num">—</td>
+          <td>(dashboard composite)</td>
+          <td>Single read returning all three scores + <code>contributors[]</code> with weights, deltas, and <code>methodology_version</code>. Spec'd in <a href="api-gaps.md">api-gaps.md §1</a>.</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+
+        <!-- ═══ AVAILABLE ═══ -->
+        <tr class="grp"><td colspan="6">Available in /bxcapi today</td></tr>
+
+        <tr>
+          <td><code>posted_at</code> on each mention</td>
+          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions</code></a></td>
+          <td class="num">3</td>
+          <td>NetSentiment, NewsTone, ResponseRate24h</td>
+          <td>Timestamp used for age-decay weighting.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td><code>sentiment</code> on each mention</td>
+          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions</code></a></td>
+          <td class="num">2</td>
+          <td>NetSentiment, NewsTone</td>
+          <td>Per-mention sentiment classification (pos / neu / neg / mix).</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td><code>source_type</code> on each mention</td>
+          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions</code></a></td>
+          <td class="num">1</td>
+          <td>NewsTone</td>
+          <td>Filter to <code>source_type = "news"</code> to isolate press mentions from social.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td><code>cluster</code> &amp; <code>frequency</code> on complaint / love clusters</td>
+          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/customer-complaints</code></a> · <a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/love-letters</code></a></td>
+          <td class="num">2</td>
+          <td>ComplaintPressure, ClusterEngagement</td>
+          <td>Cluster label + current-window frequency.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td><code>intensity</code> &amp; <code>last_mention_at</code> on complaint clusters</td>
+          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/customer-complaints</code></a></td>
+          <td class="num">1</td>
+          <td>ComplaintPressure</td>
+          <td>Intensity 0–1 for severity weighting; <code>last_mention_at</code> for active-cluster gating.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td><code>posted_at</code> &amp; <code>channel</code> on owned posts</td>
+          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/posts</code></a></td>
+          <td class="num">2</td>
+          <td>CadenceFit, ChannelBreadth</td>
+          <td>Per-post timestamp and platform attribution.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td><code>posts_count</code> / <code>posts_per_day</code> aggregations</td>
+          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/summary</code></a></td>
+          <td class="num">1</td>
+          <td>CadenceFit</td>
+          <td>Pre-aggregated post volume and daily rate per channel.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Per-competitor volume (<code>mentions_count</code>, <code>owned_posts_count</code>)</td>
+          <td><a href="../bxcapi/index.html#market-conditions"><code>/brands/compare</code></a> · <a href="../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/timeseries</code></a></td>
+          <td class="num">2</td>
+          <td>SOV, CategoryHeadwind</td>
+          <td>Volume metrics per brand in the competitive set; 7d delta drives headwind.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td><code>competitor_brand_ids[]</code></td>
+          <td><a href="../bxcapi/index.html#market-conditions"><code>/brands/{id}/competitive-set</code></a></td>
+          <td class="num">1</td>
+          <td>SOV, CategoryHeadwind</td>
+          <td>Stable competitive-set membership.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Tracked platform list per brand</td>
+          <td><a href="../bxcapi/index.html#brand-discovery"><code>/brands/{id}/platforms</code></a></td>
+          <td class="num">1</td>
+          <td>ChannelBreadth</td>
+          <td>Which channels count toward breadth.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Category-median cadence per channel</td>
+          <td><a href="../bxcapi/index.html#cat-landscape"><code>/category/{id}/channel-mix</code></a></td>
+          <td class="num">1</td>
+          <td>CadenceFit</td>
+          <td>The <code>t</code> target in the cadence formula.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+
+        <!-- ═══ V2 ═══ -->
+        <tr class="grp"><td colspan="6">Deferred to V2 — not in the MVP score</td></tr>
+
+        <tr>
+          <td><code>reach</code> on each mention</td>
+          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions</code></a></td>
+          <td class="num">0 <span class="would">(would be 3)</span></td>
+          <td>NetSentiment, NewsTone, ResponseRate24h</td>
+          <td>Reach-weighting for sentiment and response rules. Removed from MVP — no reliable source for accurate reach yet.</td>
+          <td><span class="status-pill v2">◷ V2</span></td>
+        </tr>
+        <tr>
+          <td><code>engagement</code> / <code>engagement_rate</code> on owned posts</td>
+          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/posts</code></a> · <a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/summary</code></a></td>
+          <td class="num">0 <span class="would">(would be 2)</span></td>
+          <td>EngagementVsMedian, FounderVoiceCarry (original)</td>
+          <td>Posts are scanned once on first ingestion, so likes / comments / shares are frozen at that snapshot. Pull from API and score until we can re-scan over time.</td>
+          <td><span class="status-pill v2">◷ V2</span></td>
+        </tr>
+        <tr>
+          <td><code>days_active</code> &amp; <code>fatigue_flag</code> on ads</td>
+          <td><a href="../bxcapi/index.html#paid-media"><code>/brands/{id}/ads/active</code></a> · <a href="../bxcapi/index.html#paid-media"><code>/brands/{id}/creative-fatigue</code></a></td>
+          <td class="num">0 <span class="would">(would be 1)</span></td>
+          <td>CreativeFreshness</td>
+          <td>Ad distribution and fatigue can't be measured accurately at MVP. Reintroduce once ad-library signals are validated.</td>
+          <td><span class="status-pill v2">◷ V2</span></td>
+        </tr>
+        <tr>
+          <td>Whitespace themes + <code>momentum</code></td>
+          <td><a href="../bxcapi/index.html#analysis"><code>/analysis/whitespace</code></a></td>
+          <td class="num">0 <span class="would">(would be 1)</span></td>
+          <td>WhitespaceHitRate</td>
+          <td>Endpoint exists but the response example is missing in /bxcapi — and owned posts need canonical themes to compute the intersection. Both required before this is usable.</td>
+          <td><span class="status-pill v2">◷ V2</span></td>
+        </tr>
+        <tr>
+          <td>Brand-term search timeseries</td>
+          <td><code>/brands/{id}/search-interest</code> <span style="color: var(--text-3); font-size: 11px;">(new)</span></td>
+          <td class="num">0 <span class="would">(would be 1)</span></td>
+          <td>SearchInterestGrowth</td>
+          <td>No validated data source yet (Google Trends has no formal API; paid alternatives unpicked). Defer.</td>
+          <td><span class="status-pill v2">◷ V2</span></td>
+        </tr>
+        <tr>
+          <td><code>previous_frequency</code> on clusters (or <code>?compare=prev_window</code>)</td>
+          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/customer-complaints</code></a> · <a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/love-letters</code></a></td>
+          <td class="num">0 <span class="would">(would be 2)</span></td>
+          <td>LovePainVelocity, AudienceFitHitRate</td>
+          <td>Prior-window cluster frequency for period-over-period delta. Only used by V2 Resonance contributors — not in the v1 score.</td>
+          <td><span class="status-pill v2">◷ V2</span></td>
+        </tr>
+        <tr>
+          <td><code>handle</code> / <code>account_id</code> attribution on each post</td>
+          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/posts</code></a></td>
+          <td class="num">0 <span class="would">(would be 1)</span></td>
+          <td>FounderVoiceCarry</td>
+          <td>Which configured account published each post — needed to partition founder/exec posts from brand. Only used by V2 Resonance.</td>
+          <td><span class="status-pill v2">◷ V2</span></td>
+        </tr>
+        <tr>
+          <td>Management team with roles &amp; handles</td>
+          <td><code>/brands/{id}/people</code> <span style="color: var(--text-3); font-size: 11px;">(new)</span></td>
+          <td class="num">0 <span class="would">(would be 1)</span></td>
+          <td>FounderVoiceCarry</td>
+          <td>Curated list of people associated with the brand with <code>role</code> and <code>platform_handles[]</code>. Only used by V2 Resonance.</td>
+          <td><span class="status-pill v2">◷ V2</span></td>
+        </tr>
+        <tr>
+          <td>Tier C review &amp; local-search endpoints</td>
+          <td><code>/brands/{id}/reviews/summary</code> · <code>/brands/{id}/local-search-rank</code> <span style="color: var(--text-3); font-size: 11px;">(new)</span></td>
+          <td class="num">0 <span class="would">(would be 3)</span></td>
+          <td>ReviewSentiment, ReviewResponseRate, LocalSearchRank</td>
+          <td>Long-tail Reputation/Presence augmentations for brands with too few mentions to score well on social signals alone. Likely a partner integration (BrightLocal, Local Falcon, etc.). Deferred.</td>
+          <td><span class="status-pill v2">◷ V2</span></td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════════════════════
+     DASHBOARD ENDPOINTS — everything else on /poppi-health
+     ════════════════════════════════════════════════════════════ -->
+<section class="section" id="dashboard-endpoints" style="border-bottom: none;">
+  <div class="section-head">
+    <span class="tag" style="color: var(--text-2); background: var(--surface-3); border: 1px solid var(--border-strong);">Dashboard endpoints</span>
+    <h2>Every chart and content box on /poppi-health</h2>
+    <p class="def">Beyond the three score rings, the dashboard renders ~30 widgets across seven tabs. This table maps each to the /bxcapi endpoint(s) that would feed it — separate from the scoring methodology, since most of these are presentational reads, not score inputs. Rows are grouped by tab in the order they appear in the UI.</p>
+  </div>
+
+  <div class="prop-table-wrap">
+    <table class="prop-table">
+      <thead>
+        <tr>
+          <th>Widget</th>
+          <th>Endpoint(s)</th>
+          <th>What it shows</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- ═══ HERO (always visible) ═══ -->
+        <tr class="grp"><td colspan="4">Hero — always visible across tabs</td></tr>
+
+        <tr>
+          <td>Three score rings (Reputation / Resonance / Presence)</td>
+          <td><code>/brands/{id}/health</code> <span style="color: var(--text-3); font-size: 11px;">(new)</span></td>
+          <td>Composite of all three scores with <code>contributors[]</code> and deltas. The scoring methodology above describes how the rings are computed.</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td>Mentions L30d sparkline tile</td>
+          <td><a href="../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/timeseries?dataset=mentions</code></a></td>
+          <td>Daily mention-volume series feeding the pulse-strip sparkline.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Sentiment L30d sparkline tile</td>
+          <td><a href="../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/timeseries?dataset=sentiment</code></a></td>
+          <td>Daily net-sentiment series feeding the pulse-strip sparkline.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Active creatives L30d sparkline tile</td>
+          <td><a href="../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/timeseries?dataset=paid-media</code></a></td>
+          <td>Daily active-ad count series for the pulse-strip sparkline.</td>
+          <td><span class="status-pill partial">⚠ Partial</span></td>
+        </tr>
+        <tr>
+          <td>90-day scrubber timeseries (base)</td>
+          <td><a href="../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/timeseries</code></a></td>
+          <td>Daily series across mentions, sentiment, SOV — the scrubber lets the dashboard replay history.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>90-day scrubber event annotations</td>
+          <td><code>/brands/{id}/launches</code> <span style="color: var(--text-3); font-size: 11px;">(new)</span></td>
+          <td>Detected and curated launch events (Doc Pop, BÉIS collab, Walmart rollout) that mark the timeline.</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td>"Today's note" pulse line</td>
+          <td><code>/brands/{id}/health.pulse_note</code> <span style="color: var(--text-3); font-size: 11px;">(new)</span></td>
+          <td>One-line natural-language summary of the day's signals. Currently synthesized client-side.</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+
+        <!-- ═══ RESONANCE TAB ═══ -->
+        <tr class="grp"><td colspan="4">Resonance tab (default synthesis view)</td></tr>
+
+        <tr>
+          <td>Recent mentions snapshot (3 of N)</td>
+          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions?limit=3</code></a></td>
+          <td>Top mentions with platform, author, sentiment, text. Sort by recency or reach.</td>
+          <td><span class="status-pill partial">⚠ Partial</span></td>
+        </tr>
+        <tr>
+          <td>Audience themes pills</td>
+          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions/analysis</code></a></td>
+          <td>Top discussion themes by volume, colored by sentiment.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Suggestions (top 3 coach cards)</td>
+          <td><code>/brands/{id}/recommendations?limit=3</code> <span style="color: var(--text-3); font-size: 11px;">(new)</span></td>
+          <td>Coach rollup preview shown on the synthesis view; full list lives in the Coach tab.</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+
+        <!-- ═══ REPUTATION TAB ═══ -->
+        <tr class="grp"><td colspan="4">Reputation tab</td></tr>
+
+        <tr>
+          <td>Sentiment by platform stacked bars</td>
+          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions/summary</code></a></td>
+          <td>pos / neu / neg / mix percentages per platform with volume.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Spike Detected callout</td>
+          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions/analysis</code></a></td>
+          <td>Auto-detected mention-volume spike with the causal one-liner.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Top discussion themes pills</td>
+          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions/analysis</code></a></td>
+          <td>Frequency × sentiment per theme.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Recent high-reach mentions list</td>
+          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions</code></a></td>
+          <td>Mention feed sorted by reach. Reach itself is V2 in the score; widget can fall back to recency-sorted for v1.</td>
+          <td><span class="status-pill partial">⚠ Partial</span></td>
+        </tr>
+        <tr>
+          <td>Engagement rate on owned content</td>
+          <td><a href="../bxcapi/index.html#enrich-posts"><code>/posts/{id}</code></a> (per-post live fetch)</td>
+          <td>Aggregate engagement was removed from the API (frozen-snapshot accuracy issue). For an aggregate card we'd need a live-engagement re-scan layer or accept stale data.</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td>Post-launch pulse card (mini-cans · 72h)</td>
+          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/post-launch-pulse</code></a></td>
+          <td>72-hour mention reaction + sentiment for a named launch.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Sentiment percentile vs category</td>
+          <td><a href="../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/benchmark?dataset=mentions</code></a></td>
+          <td>"P84 · top quartile" — percentile of net sentiment within the competitive set.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Reputation risk — complaint clusters</td>
+          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/customer-complaints</code></a></td>
+          <td>Cluster list with frequency, intensity, type, examples.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Audience voice — loves &amp; pains (VoC)</td>
+          <td><a href="../bxcapi/index.html#aud-conversations"><code>/audiences/{id}/voice-of-customer</code></a></td>
+          <td>Top love and pain clusters with verbatim quotes. Brand-scoped variant is <a href="api-gaps.md">api-gaps.md §7</a>.</td>
+          <td><span class="status-pill partial">⚠ Partial</span></td>
+        </tr>
+        <tr>
+          <td>Reputation percentile multi-metric bars</td>
+          <td><a href="../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/benchmark</code></a></td>
+          <td>Per-metric percentile vs category (sentiment, volume, engagement, audience fit) with median + leader markers.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+
+        <!-- ═══ PRESENCE TAB ═══ -->
+        <tr class="grp"><td colspan="4">Presence tab</td></tr>
+
+        <tr>
+          <td>Presence % over 90 days area chart</td>
+          <td><a href="../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/timeseries?dataset=mentions</code></a> per competitor</td>
+          <td>One line per brand showing share of the category set over time.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Top owned posts grid (@drinkpoppi)</td>
+          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/posts</code></a></td>
+          <td>Recent owned posts with thumbnails. Sorting by engagement requires live <code>/posts/{id}</code> fetches.</td>
+          <td><span class="status-pill partial">⚠ Partial</span></td>
+        </tr>
+        <tr>
+          <td>Theme mix · owned content donut</td>
+          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/summary</code></a></td>
+          <td>Share of owned posts by canonical theme (top_themes block).</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Voice consistency single-number card</td>
+          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/analysis</code></a></td>
+          <td>Reads <code>voice_consistency_score</code> directly. Same field powers the Reputation contributor.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>"Where Poppi punches above weight" channel donut</td>
+          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/summary</code></a> · <a href="../bxcapi/index.html#cat-landscape"><code>/category/{id}/channel-mix</code></a></td>
+          <td>Brand share per channel vs. category-average share.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Spend signal daily chart</td>
+          <td><a href="../bxcapi/index.html#market-conditions"><code>/brands/{id}/spend-signal</code></a></td>
+          <td>Directional ad-spend index over time per brand + category median.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Active creatives count + flagged-for-fatigue</td>
+          <td><a href="../bxcapi/index.html#paid-media"><code>/brands/{id}/ads/active</code></a> · <a href="../bxcapi/index.html#paid-media"><code>/brands/{id}/creative-fatigue</code></a></td>
+          <td>Count of currently-active ads, 7-day average, new today, fatigue flags. (CreativeFreshness in the score is V2, but the display card works on the existing endpoints.)</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Promo watch card</td>
+          <td><a href="../bxcapi/index.html#market-conditions"><code>/brands/{id}/promo-watch</code></a></td>
+          <td>% of competitive set running promos, with month-over-month delta.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Posting cadence per platform</td>
+          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/summary</code></a></td>
+          <td>Posts/day per channel and share of total posts. Reads <code>by_platform.avg_posts_per_day</code>.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Currently-active Poppi ads grid</td>
+          <td><a href="../bxcapi/index.html#paid-media"><code>/brands/{id}/ads/active</code></a></td>
+          <td>Real ads from Meta Ad Library with hook + angle + platform + days active.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Side-by-side last 30d comparison table</td>
+          <td><a href="../bxcapi/index.html#market-conditions"><code>/brands/compare</code></a></td>
+          <td>Per-brand rows of mentions, sentiment, posts, engagement, ads, SOV.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>"Where Poppi over-indexes" themes</td>
+          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/analysis</code></a> + <a href="../bxcapi/index.html#analysis"><code>/analysis/whitespace</code></a></td>
+          <td>Themes the brand owns disproportionately vs the category. Inverse of whitespace.</td>
+          <td><span class="status-pill partial">⚠ Partial</span></td>
+        </tr>
+        <tr>
+          <td>"Where Poppi under-indexes" themes</td>
+          <td><a href="../bxcapi/index.html#analysis"><code>/analysis/whitespace</code></a></td>
+          <td>Themes with high momentum but low brand coverage.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Switch-from clusters</td>
+          <td><a href="../bxcapi/index.html#aud-conversations"><code>/audiences/{id}/voice-of-customer</code></a></td>
+          <td>Why people moved off competitors (Diet Coke, Kombucha, etc.) with frequencies. Currently embedded in VoC; could become a dedicated <code>/brands/{id}/switch-from</code>.</td>
+          <td><span class="status-pill partial">⚠ Partial</span></td>
+        </tr>
+
+        <!-- ═══ TRACKER TAB ═══ -->
+        <tr class="grp"><td colspan="4">Tracker tab</td></tr>
+
+        <tr>
+          <td>User-tracked URLs + search-term feeds</td>
+          <td><a href="../bxcapi/index.html#search"><code>/search</code></a> · <a href="../bxcapi/index.html#discover-posts"><code>/discover/posts</code></a></td>
+          <td>Each tracker hits search or discovery to pull fresh matches. Tracker list itself is client-side state.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+
+        <!-- ═══ COACH TAB ═══ -->
+        <tr class="grp"><td colspan="4">Coach tab</td></tr>
+
+        <tr>
+          <td>Coach recommendations list (full)</td>
+          <td><code>/brands/{id}/recommendations</code> <span style="color: var(--text-3); font-size: 11px;">(new)</span></td>
+          <td>Ranked actions with <code>expected_impact: { ring, delta }</code>, evidence references, source endpoints. Spec'd in <a href="api-gaps.md">api-gaps.md §2</a>.</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+
+        <!-- ═══ NEWS TAB ═══ -->
+        <tr class="grp"><td colspan="4">News tab</td></tr>
+
+        <tr>
+          <td>Recent news list (title, source, snippet, link)</td>
+          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions?source_type=news</code></a></td>
+          <td>Brand-relevant news items filtered from the mentions stream. Endpoint exists; news-shaped fields (title vs. text, domain authority) may need verification.</td>
+          <td><span class="status-pill partial">⚠ Partial</span></td>
+        </tr>
+
+        <!-- ═══ TRENDING TAB ═══ -->
+        <tr class="grp"><td colspan="4">Trending tab</td></tr>
+
+        <tr>
+          <td>Trending hashtags / X trends / Google search terms</td>
+          <td><a href="../bxcapi/index.html#cat-trends"><code>/categories/{id}/trends</code></a> · <a href="../bxcapi/index.html#discover-trends"><code>/discover/trends</code></a></td>
+          <td>Where the category is heating up — TikTok hashtags, X trends, Google search terms.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <div class="foot">
+    Reference doc · methodology version <code class="mono">2026.05.01</code><br>
+    See <a href="api-gaps.md">api-gaps.md</a> for related endpoint proposals · <a href="../bxcapi/index.html">/bxcapi spec</a> · <a href="index.html">back to dashboard</a>
+  </div>
+</section>
+
+</div>
+
+</body>
+</html>

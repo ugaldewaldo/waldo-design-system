@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Promo Radar — who's discounting right now</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #171819;
+    --surface: #202123;
+    --surface-2: #27282b;
+    --surface-3: #323539;
+    --border: rgba(210,211,211,0.12);
+    --border-strong: rgba(210,211,211,0.20);
+    --text: #d2d3d3;
+    --text-2: rgba(210,211,211,0.70);
+    --text-3: #8f9091;
+    --gold: #f7d371;
+    --highlight: #f7d371;
+    --highlight-rgb: 247,211,113;
+    --green: #32a9a9;
+    --mint: #32a9a9;
+    --red: #de3a28;
+    --amber: #f7d371;
+    --blue: #32a9a9;
+    --violet: #32a9a9;
+    --pink: #32a9a9;
+    --radar: #32a9a9;
+    --radar-rgb: 50,169,169;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { overflow-x: hidden; scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5; font-size: 14px;
+    -webkit-font-smoothing: antialiased; padding-bottom: 80px; overflow-x: hidden; width: 100%;
+  }
+  a { color: var(--radar); text-decoration: none; }
+  a:hover { opacity: 0.85; }
+  code, .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+  button { font-family: inherit; cursor: pointer; }
+
+  /* ── Top bar ── */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 32px; border-bottom: 1px solid var(--border); background: rgba(9,9,11,0.88);
+    backdrop-filter: blur(8px); position: sticky; top: 0; z-index: 50;
+  }
+  .brand-mark { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+  .radar-logo { width: 34px; height: 34px; flex: none; color: var(--radar); }
+  .brand-mark .name { font-weight: 800; font-size: 18px; letter-spacing: -0.02em; }
+  .brand-mark .cat { font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 1px; }
+  .topbar-right { display: flex; align-items: center; gap: 22px; }
+  .topbar-links { display: flex; gap: 18px; font-size: 12px; }
+  .topbar-links a { color: var(--text-2); }
+  .topbar-links a:hover { color: var(--text); opacity: 1; }
+  .powered { font-size: 11px; color: var(--text-3); }
+  .powered b { color: var(--text-2); font-weight: 600; }
+  .menu-btn { display: none; background: var(--surface-2); border: 1px solid var(--border-strong); border-radius: 10px; width: 40px; height: 40px; align-items: center; justify-content: center; color: var(--text); }
+  .mobile-menu { display: none; position: absolute; top: calc(100% + 6px); right: 16px; flex-direction: column; gap: 2px; min-width: 210px; background: var(--surface-2); border: 1px solid var(--border-strong); border-radius: 12px; padding: 8px; box-shadow: 0 24px 60px rgba(0,0,0,0.55); z-index: 60; }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { padding: 11px 14px; border-radius: 8px; color: var(--text-2); font-size: 14px; cursor: pointer; }
+  .mobile-menu a:hover { background: var(--surface-3); color: var(--text); opacity: 1; }
+  .mm-powered { padding: 11px 14px 4px; font-size: 11px; color: var(--text-3); border-top: 1px solid var(--border); margin-top: 4px; }
+  .mm-powered b { color: var(--text-2); font-weight: 600; }
+
+  /* ── Layout ── */
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+  .hero { padding: 20vh 0 36px; text-align: center; }
+  .eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-3); margin-bottom: 16px; }
+  h1 { font-size: 46px; letter-spacing: -0.025em; font-weight: 800; line-height: 1.08; margin-bottom: 4px; display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  h1 .hl { color: var(--radar); }
+  .info-btn {
+    width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--border-strong);
+    background: var(--surface-2); color: var(--text-3); font-size: 12px; font-weight: 700;
+    font-style: italic; font-family: Georgia, serif; line-height: 1; flex: none;
+  }
+  .info-btn:hover { color: var(--text); border-color: var(--radar); }
+  .hero-info {
+    display: none; max-width: 600px; margin: 16px auto 0; font-size: 14px; line-height: 1.6;
+    color: var(--text-2); background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 18px; text-align: left;
+  }
+  .hero-info.open { display: block; }
+  .hero-info b { color: var(--text); font-weight: 600; }
+
+  /* ── Search ── */
+  .search-row { display: flex; gap: 12px; justify-content: center; align-items: stretch; max-width: 880px; margin: 34px auto 0; }
+  .search-wrap { position: relative; flex: 1; text-align: left; }
+  .search-box {
+    display: flex; align-items: center; gap: 14px; background: var(--surface-2);
+    border: 1px solid rgba(var(--radar-rgb),0.55); box-shadow: 0 0 0 4px rgba(var(--radar-rgb),0.09);
+    border-radius: 16px; padding: 18px 22px; height: 100%;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .search-box:focus-within { border-color: var(--radar); box-shadow: 0 0 0 4px rgba(var(--radar-rgb),0.18); }
+  .search-box svg { flex: none; }
+  .search-box input {
+    flex: 1; background: none; border: none; outline: none; color: var(--text);
+    font-size: 17px; font-family: inherit;
+  }
+  .btn-alert {
+    display: inline-flex; align-items: center; gap: 9px; background: var(--surface-2); color: var(--text-2);
+    border: 1px solid var(--border-strong); border-radius: 16px; padding: 0 22px; font-size: 15px; font-weight: 600;
+    white-space: nowrap; transition: all 0.12s;
+  }
+  .btn-alert:hover { color: var(--text); border-color: var(--border-strong); background: var(--surface-3); }
+  @media (max-width: 620px){ .search-row { flex-direction: column; } .btn-alert { justify-content: center; padding: 14px; } }
+  .search-box input::placeholder { color: var(--text-3); }
+  .search-results {
+    position: absolute; top: calc(100% + 8px); left: 0; right: 0; z-index: 40;
+    background: var(--surface-2); border: 1px solid var(--border-strong); border-radius: 14px;
+    overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.55); display: none;
+  }
+  .search-results.open { display: block; }
+  .sr-group-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-3); padding: 12px 16px 4px; }
+  .sr-item { display: flex; align-items: center; gap: 12px; padding: 10px 16px; cursor: pointer; transition: background 0.12s; }
+  .sr-item:hover, .sr-item.active { background: var(--surface-3); }
+  .sr-item .sr-name { font-weight: 600; color: var(--text); }
+  .sr-item .sr-meta { font-size: 12px; color: var(--text-3); margin-left: auto; }
+  .sr-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .sr-empty { padding: 16px; color: var(--text-3); font-size: 13px; }
+
+  /* ── KPI cards ── */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 28px 0 8px; }
+  .kpi {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 18px 20px; position: relative; overflow: hidden;
+  }
+  .kpi .k-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); }
+  .kpi .k-value { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; margin-top: 8px; line-height: 1; }
+  .kpi .k-sub { font-size: 12px; color: var(--text-2); margin-top: 8px; }
+  .kpi .k-sub .up { color: var(--red); font-weight: 600; }
+  .kpi .k-sub .down { color: var(--green); font-weight: 600; }
+
+  /* ── Sections / cards ── */
+  .section { padding: 14px 0; }
+  .grid-2 { display: grid; grid-template-columns: 1.35fr 1fr; gap: 18px; align-items: start; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 22px 24px; margin-bottom: 18px;
+  }
+  .card-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; gap: 12px; }
+  .card-head h2 { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
+  .card-head .sub { font-size: 12px; color: var(--text-3); }
+  .card-note { font-size: 12px; color: var(--text-3); margin-top: 14px; line-height: 1.55; }
+  .card-note a { color: var(--text-2); border-bottom: 1px dashed var(--border-strong); }
+
+  /* ── Horizontal bar chart ── */
+  .hbars { display: flex; flex-direction: column; gap: 11px; margin-top: 18px; }
+  .hbar-row { display: grid; grid-template-columns: 150px 1fr 46px; align-items: center; gap: 12px; cursor: pointer; }
+  .hbar-row:hover .hbar-name { color: var(--text); }
+  .hbar-name { font-size: 13px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: color 0.12s; }
+  .hbar-track { height: 22px; background: var(--surface-3); border-radius: 6px; overflow: hidden; position: relative; }
+  .hbar-fill { height: 100%; border-radius: 6px; transition: width 0.5s ease; }
+  .hbar-val { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text); text-align: right; }
+
+  /* ── Leaderboard ── */
+  .lb { display: flex; flex-direction: column; }
+  .lb-row {
+    display: grid; grid-template-columns: 24px 1fr auto; align-items: center; gap: 14px;
+    padding: 12px 8px; border-bottom: 1px solid var(--border); cursor: pointer; border-radius: 8px;
+    transition: background 0.12s;
+  }
+  .lb-row:hover { background: var(--surface-2); }
+  .lb-row:last-child { border-bottom: none; }
+  .lb-rank { font-family: 'JetBrains Mono', monospace; color: var(--text-3); font-size: 13px; text-align: center; }
+  .lb-main { min-width: 0; }
+  .lb-brand { font-weight: 600; font-size: 14px; }
+  .lb-meta { font-size: 12px; color: var(--text-3); margin-top: 2px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .lb-offer { font-size: 12px; color: var(--text-2); }
+  .depth-pill {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700;
+    padding: 4px 10px; border-radius: 8px; white-space: nowrap;
+  }
+  .depth-deep { color: var(--red); background: rgba(251,113,133,0.12); }
+  .depth-mid { color: var(--gold); background: rgba(245,196,83,0.12); }
+  .depth-light { color: var(--mint); background: rgba(126,232,196,0.12); }
+
+  .type-tag {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 5px; white-space: nowrap;
+    color: var(--text-2); background: var(--surface-3);
+  }
+  .plat-tag { font-size: 11px; color: var(--text-3); text-transform: capitalize; }
+
+  /* ── Donut / type mix ── */
+  .mix-wrap { display: flex; align-items: center; gap: 24px; margin-top: 14px; flex-wrap: wrap; }
+  .mix-legend { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 180px; }
+  .mix-leg-row { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  .mix-leg-row .dot { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+  .mix-leg-row .lbl { color: var(--text-2); }
+  .mix-leg-row .pct { margin-left: auto; font-family: 'JetBrains Mono', monospace; color: var(--text); font-size: 12px; }
+
+  /* ── Detail view ── */
+  .back-link { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--text-2); margin: 28px 0 18px; }
+  .back-link:hover { color: var(--text); opacity: 1; }
+  .detail-head { display: flex; align-items: flex-start; gap: 18px; margin-bottom: 8px; flex-wrap: wrap; }
+  .detail-title { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; }
+  .detail-sub { color: var(--text-3); font-size: 13px; margin-top: 4px; }
+  .badge-live { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 5px 11px; border-radius: 999px; color: var(--red); background: rgba(251,113,133,0.12); border: 1px solid rgba(251,113,133,0.3); display: inline-flex; align-items: center; gap: 7px; }
+  .badge-live .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--red); animation: pulse 1.6s infinite; }
+  .badge-none { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; padding: 5px 11px; border-radius: 999px; color: var(--text-3); background: var(--surface-3); border: 1px solid var(--border-strong); }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.25; } }
+
+  .promo-card { background: var(--surface-2); border: 1px solid var(--border); border-left: 3px solid var(--gold); border-radius: 12px; padding: 18px 20px; margin-bottom: 14px; }
+  .promo-card.deep { border-left-color: var(--red); }
+  .promo-card.light { border-left-color: var(--mint); }
+  .promo-top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+  .promo-headline { font-size: 18px; font-weight: 800; letter-spacing: -0.01em; }
+  .promo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .promo-field h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-3); margin-bottom: 6px; }
+  .promo-field .val { font-size: 13px; color: var(--text-2); line-height: 1.5; }
+  .promo-field .val.mono { font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .ad-evidence { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-top: 4px; font-size: 13px; color: var(--text); line-height: 1.55; }
+  .ad-evidence .quote { color: var(--text); }
+  .ad-evidence .src { display: block; margin-top: 8px; font-size: 11px; color: var(--text-3); text-transform: capitalize; }
+  .hl-token { background: rgba(245,196,83,0.18); color: var(--gold); padding: 0 3px; border-radius: 3px; font-weight: 600; }
+
+  /* timeline */
+  .timeline { margin-top: 18px; }
+  .tl-row { display: grid; grid-template-columns: 160px 1fr; gap: 16px; align-items: center; padding: 7px 0; }
+  .tl-label { font-size: 13px; color: var(--text-2); }
+  .tl-track { position: relative; height: 26px; }
+  .tl-bar { position: absolute; height: 18px; top: 4px; border-radius: 5px; display: flex; align-items: center; padding: 0 8px; font-size: 11px; font-weight: 600; color: #09090B; overflow: hidden; white-space: nowrap; }
+  .tl-axis { display: flex; justify-content: space-between; margin: 6px 0 0 176px; font-size: 11px; color: var(--text-3); font-family: 'JetBrains Mono', monospace; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin: 4px 0 6px; }
+  .stat-mini { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+  .stat-mini .sm-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); }
+  .stat-mini .sm-val { font-size: 22px; font-weight: 800; margin-top: 6px; letter-spacing: -0.02em; }
+
+  /* ── Alert form ── */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; margin-top: 8px; }
+  .form-grid .full { grid-column: 1 / -1; }
+  .field label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); margin-bottom: 7px; }
+  .field select, .field input {
+    width: 100%; background: var(--surface-2); border: 1px solid var(--border-strong); color: var(--text);
+    border-radius: 10px; padding: 11px 13px; font-size: 14px; font-family: inherit; outline: none;
+  }
+  .field select:focus, .field input:focus { border-color: var(--radar); }
+  .ac-wrap { position: relative; }
+  .ac-wrap .search-results { border-radius: 10px; }
+  .seg { display: flex; gap: 8px; flex-wrap: wrap; }
+  .seg button {
+    background: var(--surface-2); border: 1px solid var(--border-strong); color: var(--text-2);
+    border-radius: 10px; padding: 10px 14px; font-size: 13px; font-weight: 600; transition: all 0.12s;
+  }
+  .seg button.on { background: rgba(var(--radar-rgb),0.12); border-color: var(--radar); color: var(--radar); }
+  .btn-primary {
+    background: var(--radar); color: #09090B; border: none; border-radius: 10px;
+    padding: 12px 22px; font-size: 14px; font-weight: 700; transition: opacity 0.12s;
+  }
+  .btn-primary:hover { opacity: 0.9; }
+  .preview-box { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; margin-top: 18px; }
+  .preview-box .pv-big { font-size: 26px; font-weight: 800; color: var(--gold); }
+  .preview-box .pv-events { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .pv-event { font-size: 12px; color: var(--text-2); display: flex; gap: 10px; }
+  .pv-event .date { font-family: 'JetBrains Mono', monospace; color: var(--text-3); flex: none; }
+  .alert-list { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .alert-item { display: flex; align-items: center; gap: 12px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; font-size: 13px; }
+  .alert-item .ai-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex: none; }
+  .alert-item .ai-x { margin-left: auto; color: var(--text-3); cursor: pointer; font-size: 16px; }
+  .alert-item .ai-x:hover { color: var(--red); }
+
+  .toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--surface-3); border: 1px solid var(--radar); color: var(--text);
+    padding: 14px 22px; border-radius: 12px; font-size: 14px; font-weight: 600;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5); opacity: 0; pointer-events: none; transition: all 0.3s; z-index: 100;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── Footer ── */
+  .footer-note { max-width: 1180px; margin: 40px auto 0; padding: 24px 32px 0; border-top: 1px solid var(--border); color: var(--text-3); font-size: 12px; line-height: 1.6; }
+  .footer-note a { color: var(--text-2); border-bottom: 1px dashed var(--border-strong); }
+
+  .view { display: none; }
+  .view.active { display: block; }
+
+  @media (max-width: 880px) {
+    .kpi-grid { grid-template-columns: repeat(2,1fr); }
+    .grid-2 { grid-template-columns: 1fr; }
+    .stat-row { grid-template-columns: repeat(2,1fr); }
+    .form-grid { grid-template-columns: 1fr; }
+    .hbar-row { grid-template-columns: 110px 1fr 42px; }
+    .tl-row, .tl-axis { grid-template-columns: 110px 1fr; }
+    .tl-axis { margin-left: 126px; }
+    h1 { font-size: 38px; }
+  }
+  /* mobile nav: collapse links into a menu */
+  @media (max-width: 720px) {
+    .topbar { padding: 12px 18px; }
+    .topbar-links, .topbar-right .powered { display: none; }
+    .menu-btn { display: flex; }
+    h1 { font-size: 30px; gap: 9px; }
+    .hero { padding: 13vh 0 28px; }
+    .detail-title { font-size: 24px; }
+  }
+  @media (max-width: 420px) {
+    h1 { font-size: 26px; }
+    .brand-mark .cat { display: none; }
+    .search-box { padding: 15px 18px; }
+    .search-box input { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand-mark" onclick="go('#/')">
+    <svg class="radar-logo" viewBox="0 0 34 34" fill="none">
+      <circle cx="17" cy="17" r="15" stroke="currentColor" stroke-width="1.4" opacity="0.35"/>
+      <circle cx="17" cy="17" r="9.5" stroke="currentColor" stroke-width="1.4" opacity="0.5"/>
+      <circle cx="17" cy="17" r="2.4" fill="currentColor"/>
+      <path d="M17 17 L17 3 A14 14 0 0 1 30 13 Z" fill="currentColor" opacity="0.22"/>
+      <line x1="17" y1="17" x2="30" y2="9" stroke="currentColor" stroke-width="1.6"/>
+    </svg>
+    <div>
+      <div class="name">Promo Radar</div>
+      <div class="cat">Discount intelligence</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-links">
+      <a onclick="go('#/')">Dashboard</a>
+      <a onclick="go('#/alerts')">Alerts</a>
+      <a href="/promo-radar/endpoints.html">API coverage</a>
+      <a href="/bxcapi/index.html">bxcAPI</a>
+    </div>
+    <div class="powered">Powered by <b>Waldo API</b></div>
+    <button class="menu-btn" onclick="toggleMenu(event)" aria-label="Menu">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><line x1="3" y1="6" x2="17" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="3" y1="10" x2="17" y2="10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="3" y1="14" x2="17" y2="14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div id="mobile-menu" class="mobile-menu">
+    <a onclick="navMenu('#/')">Dashboard</a>
+    <a onclick="navMenu('#/alerts')">Alerts</a>
+    <a href="/promo-radar/endpoints.html">API coverage</a>
+    <a href="/bxcapi/index.html">bxcAPI</a>
+    <div class="mm-powered">Powered by <b>Waldo API</b></div>
+  </div>
+</div>
+
+<!-- ══════════════ HOME ══════════════ -->
+<div id="view-home" class="view active">
+  <div class="wrap">
+    <div class="hero">
+      <div class="eyebrow">Live across 7,800 tracked brands · updated daily</div>
+      <h1>Who's <span class="hl">discounting</span> right now?<button class="info-btn" onclick="toggleInfo()" aria-label="About Promo Radar" title="About Promo Radar">i</button></h1>
+      <div id="hero-info" class="hero-info">Promo Radar reads every brand's <b>active ad creative and landing pages</b>, detects copy and CTAs that name an <b>explicit discount</b>, and rolls it up by brand and industry — so you can see who's cutting prices, how deep, and which way the market is trending.</div>
+
+      <div class="search-row">
+        <div class="search-wrap">
+          <div class="search-box">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="9" cy="9" r="6.5" stroke="#6B6B74" stroke-width="1.6"/><line x1="14" y1="14" x2="18" y2="18" stroke="#6B6B74" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <input id="search-input" type="text" placeholder="Search a brand or category…" autocomplete="off">
+          </div>
+          <div id="search-results" class="search-results"></div>
+        </div>
+        <button class="btn-alert" onclick="go('#/alerts')">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 2a4 4 0 0 0-4 4c0 4-1.5 5-1.5 5h11S13 10 13 6a4 4 0 0 0-4-4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M7.5 14a1.5 1.5 0 0 0 3 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Set an alert
+        </button>
+      </div>
+    </div>
+
+    <div id="kpi-grid" class="kpi-grid"></div>
+
+    <div class="section grid-2">
+      <div class="card">
+        <div class="card-head">
+          <h2>Discount pressure by industry</h2>
+          <span class="sub">% of tracked brands running a discount now</span>
+        </div>
+        <div id="cat-bars" class="hbars"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Discount type mix</h2><span class="sub">active promos</span></div>
+        <div id="type-mix" class="mix-wrap"></div>
+      </div>
+    </div>
+
+    <div class="section grid-2">
+      <div class="card">
+        <div class="card-head">
+          <h2>Discount trend</h2>
+          <span class="sub">share of brands discounting · 12 weeks</span>
+        </div>
+        <div id="trend-chart"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Deepest discounts live now</h2></div>
+        <div id="leaderboard" class="lb"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ BRAND DETAIL ══════════════ -->
+<div id="view-brand" class="view">
+  <div class="wrap" id="brand-body"></div>
+</div>
+
+<!-- ══════════════ CATEGORY DETAIL ══════════════ -->
+<div id="view-category" class="view">
+  <div class="wrap" id="category-body"></div>
+</div>
+
+<!-- ══════════════ ALERTS ══════════════ -->
+<div id="view-alerts" class="view">
+  <div class="wrap">
+    <a class="back-link" onclick="go('#/')">← Dashboard</a>
+    <h1 style="font-size:30px;margin-bottom:10px;">Track a discount</h1>
+    <p class="lede" style="margin-bottom:22px;">Get pinged the moment a brand or a whole category starts cutting prices. Tune the trigger against the last 30 days before you go live — the same dry-run workflow as <a href="../bxcapi/index.html#alerts">bxcAPI <code class="mono">/alerts/{id}/preview</code></a>.</p>
+
+    <div class="grid-2" style="align-items:start;">
+      <div class="card">
+        <div class="card-head"><h2>New alert</h2></div>
+        <div class="form-grid">
+          <div class="field full">
+            <label>What to watch</label>
+            <div class="seg" id="alert-scope-seg">
+              <button class="on" data-scope="brand" onclick="setAlertScope('brand')">A brand</button>
+              <button data-scope="category" onclick="setAlertScope('category')">A category</button>
+            </div>
+          </div>
+          <div class="field full">
+            <label id="alert-target-label">Brand</label>
+            <div class="ac-wrap">
+              <input id="alert-target-input" type="text" autocomplete="off" placeholder="Type a brand name…" oninput="acInput()" onfocus="acInput()">
+              <div id="alert-target-results" class="search-results"></div>
+            </div>
+          </div>
+          <div class="field full">
+            <label>Trigger when…</label>
+            <div class="seg" id="alert-trigger-seg">
+              <button class="on" data-trig="any" onclick="setAlertTrigger('any')">Any discount is live</button>
+              <button data-trig="new" onclick="setAlertTrigger('new')">A new discount starts</button>
+              <button data-trig="deep" onclick="setAlertTrigger('deep')">Discount deeper than…</button>
+            </div>
+          </div>
+          <div class="field" id="threshold-field" style="display:none;">
+            <label>Minimum depth</label>
+            <select id="alert-threshold" onchange="renderPreview()">
+              <option value="10">10% off</option>
+              <option value="20" selected>20% off</option>
+              <option value="30">30% off</option>
+              <option value="40">40% off</option>
+              <option value="50">50% off</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Deliver to</label>
+            <select id="alert-channel">
+              <option value="email">Email</option>
+              <option value="sms">Text</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label id="channel-target-label">Email address</label>
+            <input id="alert-channel-target" type="text" placeholder="you@brand.com">
+          </div>
+          <div class="full">
+            <button class="btn-primary" onclick="createAlert()">Create alert</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="preview-box">
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);">Dry-run · last 30 days</div>
+          <div id="pv-summary"></div>
+        </div>
+        <div class="card" style="margin-top:18px;">
+          <div class="card-head"><h2>Your alerts</h2></div>
+          <div id="alert-list" class="alert-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer-note">
+  <p>Prototype · realistic sample data · built to spec the <a href="/bxcapi/index.html">Brand Intelligence API</a>. See <a href="/promo-radar/endpoints.html">API coverage</a> for every endpoint and field Promo Radar needs and where the gaps are. Discount detection, classification, and history shown here are illustrative.</p>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+/* ════════════════════ MOCK DATA ════════════════════ */
+/* Modeled on bxcAPI vocab: category names from /categories, brand fields from
+   /brands/search, ad fields from /brands/{id}/ads/active & /discover/ads. */
+
+const TYPE_META = {
+  percentage_off: { label: '% off',         color: '#F5C453' },
+  sitewide_sale:  { label: 'Sitewide sale', color: '#FB7185' },
+  bogo:           { label: 'BOGO',          color: '#A78BFA' },
+  free_shipping:  { label: 'Free shipping', color: '#60A5FA' },
+  dollar_off:     { label: '$ off',         color: '#4ADE80' },
+  bundle:         { label: 'Bundle deal',   color: '#7EE8C4' },
+  free_gift:      { label: 'Free gift',     color: '#F472B6' },
+  clearance:      { label: 'Clearance',     color: '#FBBF24' },
+};
+
+const CATEGORIES = [
+  { id:'cat_athletic',   name:'Sportswear & Athletic', brandCount:1240, pctNow:34, avgDepth:27, wow:+6 },
+  { id:'cat_fashion',    name:'Apparel & Fashion',     brandCount:1530, pctNow:48, avgDepth:33, wow:+9 },
+  { id:'cat_beauty',     name:'Beauty & Skincare',     brandCount:1120, pctNow:41, avgDepth:24, wow:+3 },
+  { id:'cat_bev',        name:'Beverages & Food',      brandCount:980,  pctNow:22, avgDepth:18, wow:-2 },
+  { id:'cat_home',       name:'Home & Furniture',      brandCount:870,  pctNow:38, avgDepth:31, wow:+5 },
+  { id:'cat_electronics',name:'Consumer Electronics',  brandCount:640,  pctNow:29, avgDepth:15, wow:+1 },
+  { id:'cat_supplements',name:'Health & Supplements',  brandCount:720,  pctNow:45, avgDepth:28, wow:+11 },
+  { id:'cat_pet',        name:'Pet Care',              brandCount:430,  pctNow:26, avgDepth:21, wow:-4 },
+];
+
+// Per-category active discount type mix (fractions, sum ~1)
+const CAT_TYPE_MIX = {
+  cat_athletic:   { percentage_off:0.34, sitewide_sale:0.18, free_shipping:0.16, bogo:0.10, clearance:0.12, bundle:0.10 },
+  cat_fashion:    { percentage_off:0.30, sitewide_sale:0.26, clearance:0.16, bogo:0.12, free_shipping:0.10, free_gift:0.06 },
+  cat_beauty:     { percentage_off:0.28, free_gift:0.22, bundle:0.16, sitewide_sale:0.14, free_shipping:0.12, bogo:0.08 },
+  cat_bev:        { bundle:0.30, percentage_off:0.24, bogo:0.20, free_shipping:0.14, dollar_off:0.12 },
+  cat_home:       { percentage_off:0.32, sitewide_sale:0.22, clearance:0.20, free_shipping:0.14, bundle:0.12 },
+  cat_electronics:{ dollar_off:0.34, percentage_off:0.26, bundle:0.18, free_shipping:0.14, free_gift:0.08 },
+  cat_supplements:{ percentage_off:0.30, bundle:0.24, bogo:0.18, free_gift:0.16, free_shipping:0.12 },
+  cat_pet:        { percentage_off:0.30, bundle:0.24, free_shipping:0.20, bogo:0.14, dollar_off:0.12 },
+};
+
+// 12-week trend: overall share of brands discounting, plus two category overlays
+const TREND_WEEKS = ['Mar 9','Mar 16','Mar 23','Mar 30','Apr 6','Apr 13','Apr 20','Apr 27','May 4','May 11','May 18','May 25'];
+const TREND = {
+  overall:  [28,29,27,30,31,30,33,34,36,35,37,38],
+  fashion:  [37,38,36,40,41,42,44,45,47,46,48,48],
+  bev:      [26,25,27,24,23,24,22,23,22,21,23,22],
+};
+
+function mkDiscount(o){ return Object.assign({ promoCode:null, endedAt:null, confidence:0.9 }, o); }
+
+const BRANDS = [
+  { id:'brand_nike', name:'Nike', category:'cat_athletic',
+    current:[ mkDiscount({ type:'percentage_off', value:'25% off', depth:25, text:'25% off select running styles', cta:'Shop Sale', platform:'instagram', startedAt:'2026-05-19', promoCode:'RUN25', adCopy:'Move faster for less — 25% off select Pegasus & Vaporfly. Ends Sunday.', landingOffer:'25% off running — code RUN25' }) ],
+    past:[
+      { type:'sitewide_sale', value:'30% off', depth:30, label:'Spring Sale', startedAt:'2026-03-20', endedAt:'2026-03-27' },
+      { type:'percentage_off', value:'20% off', depth:20, label:'Members Week', startedAt:'2026-02-10', endedAt:'2026-02-17' },
+      { type:'clearance', value:'40% off', depth:40, label:'End of season', startedAt:'2025-12-26', endedAt:'2026-01-09' },
+    ],
+    depthSeries:[0,0,20,0,0,0,0,0,30,0,0,25] },
+
+  { id:'brand_hoka', name:'Hoka', category:'cat_athletic',
+    current:[],
+    past:[
+      { type:'free_shipping', value:'Free shipping', depth:12, label:'Free ship weekend', startedAt:'2026-04-18', endedAt:'2026-04-21' },
+      { type:'percentage_off', value:'15% off', depth:15, label:'New customer', startedAt:'2026-01-15', endedAt:'2026-02-28' },
+    ],
+    depthSeries:[0,0,0,0,0,12,0,0,0,0,0,0] },
+
+  { id:'brand_zara', name:'Zara', category:'cat_fashion',
+    current:[ mkDiscount({ type:'sitewide_sale', value:'Up to 50% off', depth:50, text:'Mid-season sale — up to 50% off', cta:'Shop Now', platform:'meta', startedAt:'2026-05-21', adCopy:'The mid-season SALE is here. Up to 50% off across the board. While stocks last.', landingOffer:'Mid-season sale: up to 50% off' }) ],
+    past:[
+      { type:'sitewide_sale', value:'40% off', depth:40, label:'Winter sale', startedAt:'2026-01-02', endedAt:'2026-01-31' },
+      { type:'percentage_off', value:'20% off', depth:20, label:'App exclusive', startedAt:'2026-03-12', endedAt:'2026-03-19' },
+    ],
+    depthSeries:[0,40,0,0,0,20,0,0,0,0,50,50] },
+
+  { id:'brand_everlane', name:'Everlane', category:'cat_fashion',
+    current:[ mkDiscount({ type:'clearance', value:'Up to 60% off', depth:60, text:'Final sale — up to 60% off', cta:'Shop Final Sale', platform:'meta', startedAt:'2026-05-15', adCopy:'Last chance: up to 60% off final-sale styles. No code needed.', landingOffer:'Final sale — up to 60% off' }),
+             mkDiscount({ type:'free_shipping', value:'Free shipping $75+', depth:10, text:'Free shipping over $75', cta:'Shop Now', platform:'google', startedAt:'2026-05-01', adCopy:'Free shipping on orders over $75.', landingOffer:'Free shipping over $75' }) ],
+    past:[ { type:'percentage_off', value:'25% off', depth:25, label:'Friends & family', startedAt:'2026-04-04', endedAt:'2026-04-11' } ],
+    depthSeries:[0,0,0,0,25,0,0,0,10,60,60,60] },
+
+  { id:'brand_glossier', name:'Glossier', category:'cat_beauty',
+    current:[ mkDiscount({ type:'free_gift', value:'Free gift $50+', depth:18, text:'Free Balm Dotcom with $50+', cta:'Shop Now', platform:'instagram', startedAt:'2026-05-20', adCopy:'Treat yourself — free Balm Dotcom on orders $50+. This week only.', landingOffer:'Free Balm Dotcom with orders $50+' }) ],
+    past:[
+      { type:'percentage_off', value:'20% off', depth:20, label:'Sitewide event', startedAt:'2026-02-14', endedAt:'2026-02-18' },
+      { type:'bundle', value:'Set saves 25%', depth:25, label:'Holiday sets', startedAt:'2025-12-01', endedAt:'2025-12-24' },
+    ],
+    depthSeries:[0,20,0,0,0,0,0,0,0,18,18,18] },
+
+  { id:'brand_cerave', name:'CeraVe', category:'cat_beauty',
+    current:[ mkDiscount({ type:'bundle', value:'Bundle & save 20%', depth:20, text:'Build a routine, save 20%', cta:'Shop Bundles', platform:'meta', startedAt:'2026-05-12', adCopy:'Build your skin-barrier routine and save 20% on the 3-step bundle.', landingOffer:'Save 20% on routine bundles' }) ],
+    past:[ { type:'percentage_off', value:'15% off', depth:15, label:'Derm month', startedAt:'2026-03-01', endedAt:'2026-03-31' } ],
+    depthSeries:[0,15,15,15,15,0,0,0,20,20,20,20] },
+
+  { id:'brand_olipop', name:'Olipop', category:'cat_bev',
+    current:[ mkDiscount({ type:'bundle', value:'Variety pack saves 15%', depth:15, text:'Subscribe & save 15%', cta:'Shop Now', platform:'tiktok', startedAt:'2026-05-10', adCopy:'Gut-happy soda. Subscribe to the variety pack and save 15% every month.', landingOffer:'Subscribe & save 15% on variety packs' }) ],
+    past:[ { type:'bogo', value:'BOGO 50%', depth:25, label:'New flavor launch', startedAt:'2026-04-01', endedAt:'2026-04-08' } ],
+    depthSeries:[0,0,0,0,25,0,0,0,15,15,15,15] },
+
+  { id:'brand_poppi', name:'Poppi', category:'cat_bev',
+    current:[],
+    past:[
+      { type:'percentage_off', value:'20% off', depth:20, label:'Spring refresh', startedAt:'2026-03-25', endedAt:'2026-04-01' },
+      { type:'free_shipping', value:'Free shipping', depth:10, label:'First order', startedAt:'2026-02-01', endedAt:'2026-02-28' },
+    ],
+    depthSeries:[0,0,10,0,0,20,0,0,0,0,0,0] },
+
+  { id:'brand_wayfair', name:'Wayfair', category:'cat_home',
+    current:[ mkDiscount({ type:'sitewide_sale', value:'Up to 70% off', depth:70, text:'Memorial Day blowout — up to 70% off', cta:'Shop Now', platform:'meta', startedAt:'2026-05-22', adCopy:'The Memorial Day sale is ON. Up to 70% off + free shipping on everything.', landingOffer:'Up to 70% off + free shipping' }) ],
+    past:[
+      { type:'percentage_off', value:'30% off', depth:30, label:'Way Day', startedAt:'2026-04-25', endedAt:'2026-04-27' },
+      { type:'clearance', value:'50% off', depth:50, label:'Closeout', startedAt:'2026-02-15', endedAt:'2026-03-01' },
+    ],
+    depthSeries:[0,50,50,0,0,0,30,0,0,0,0,70] },
+
+  { id:'brand_article', name:'Article', category:'cat_home',
+    current:[],
+    past:[ { type:'percentage_off', value:'15% off', depth:15, label:'Patio season', startedAt:'2026-04-10', endedAt:'2026-04-24' } ],
+    depthSeries:[0,0,0,0,15,15,0,0,0,0,0,0] },
+
+  { id:'brand_anker', name:'Anker', category:'cat_electronics',
+    current:[ mkDiscount({ type:'dollar_off', value:'$30 off', depth:24, text:'$30 off the 737 power bank', cta:'Shop Deal', platform:'google', startedAt:'2026-05-18', promoCode:'CHARGE30', adCopy:'Power up for less — $30 off the Anker 737. Limited-time deal.', landingOffer:'$30 off Anker 737 — code CHARGE30' }) ],
+    past:[ { type:'dollar_off', value:'$20 off', depth:18, label:'Prime-style sale', startedAt:'2026-03-15', endedAt:'2026-03-22' } ],
+    depthSeries:[0,0,18,0,0,0,0,0,24,24,24,24] },
+
+  { id:'brand_sony', name:'Sony', category:'cat_electronics',
+    current:[],
+    past:[ { type:'bundle', value:'Bundle saves $50', depth:14, label:'Headphone bundle', startedAt:'2026-04-05', endedAt:'2026-04-20' } ],
+    depthSeries:[0,0,0,0,14,14,0,0,0,0,0,0] },
+
+  { id:'brand_athleticgreens', name:'AG1', category:'cat_supplements',
+    current:[ mkDiscount({ type:'free_gift', value:'Free gifts + 5 travel packs', depth:22, text:'Free starter kit with subscription', cta:'Subscribe', platform:'meta', startedAt:'2026-05-08', adCopy:'Subscribe to AG1 and get a free welcome kit, 5 travel packs, and a year of vitamin D3.', landingOffer:'Free welcome kit + travel packs with subscription' }) ],
+    past:[ { type:'percentage_off', value:'20% off first', depth:20, label:'New year', startedAt:'2026-01-01', endedAt:'2026-01-15' } ],
+    depthSeries:[0,0,0,0,0,0,0,22,22,22,22,22] },
+
+  { id:'brand_ritual', name:'Ritual', category:'cat_supplements',
+    current:[ mkDiscount({ type:'percentage_off', value:'40% off first month', depth:40, text:'40% off your first month', cta:'Shop Now', platform:'instagram', startedAt:'2026-05-16', promoCode:'RITUAL40', adCopy:'Science you can see — 40% off your first month of Essential.', landingOffer:'40% off first month — code RITUAL40' }) ],
+    past:[ { type:'bundle', value:'Bundle saves 30%', depth:30, label:'Family stack', startedAt:'2026-03-18', endedAt:'2026-04-01' } ],
+    depthSeries:[0,0,30,30,0,0,0,0,40,40,40,40] },
+
+  { id:'brand_chewy', name:'Chewy', category:'cat_pet',
+    current:[ mkDiscount({ type:'percentage_off', value:'35% off first Autoship', depth:35, text:'35% off your first Autoship', cta:'Shop Now', platform:'google', startedAt:'2026-05-14', promoCode:'AUTO35', adCopy:'New to Chewy? Get 35% off your first Autoship order. Cancel anytime.', landingOffer:'35% off first Autoship — code AUTO35' }) ],
+    past:[ { type:'free_shipping', value:'Free shipping $49+', depth:10, label:'Always-on', startedAt:'2026-01-01', endedAt:'2026-05-01' } ],
+    depthSeries:[10,10,10,10,10,10,10,10,35,35,35,35] },
+
+  { id:'brand_barkbox', name:'BarkBox', category:'cat_pet',
+    current:[],
+    past:[ { type:'free_gift', value:'Free extra toy', depth:15, label:'Double deal', startedAt:'2026-04-12', endedAt:'2026-04-26' } ],
+    depthSeries:[0,0,0,0,15,15,0,0,0,0,0,0] },
+];
+
+/* ════════════════════ HELPERS ════════════════════ */
+const $  = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>Array.from(r.querySelectorAll(s));
+const catById = id => CATEGORIES.find(c=>c.id===id);
+const brandById = id => BRANDS.find(b=>b.id===id);
+const brandsInCat = id => BRANDS.filter(b=>b.category===id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+// discount significance is encoded as opacity of a single gold, not different hues
+function depthAlpha(d){ return Math.max(0.30, Math.min(1, 0.30 + (d/60)*0.70)); }
+function depthPillStyle(d){ return `color:rgba(var(--highlight-rgb),${depthAlpha(d).toFixed(2)});background:rgba(var(--highlight-rgb),0.10);`; }
+function goldFill(frac){ return `rgba(var(--highlight-rgb),${(0.30+Math.max(0,Math.min(1,frac))*0.70).toFixed(2)})`; }
+function maxDepth(b){ return b.current.reduce((m,d)=>Math.max(m,d.depth),0); }
+function activeBrands(){ return BRANDS.filter(b=>b.current.length); }
+function fmtDate(s){ const d=new Date(s+'T00:00:00'); return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
+function fmtDateY(s){ const d=new Date(s+'T00:00:00'); return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+
+// highlight explicit discount tokens inside ad copy
+function hlDiscount(text){
+  return esc(text).replace(/(\bup to\s+)?\b\d{1,3}%\s*off\b|\$\d{1,4}\s*off\b|\bfree shipping\b|\bBOGO\b|\bbuy one get one\b|\bfree (gift|toy|kit|welcome kit|starter kit|travel packs?)\b|\bsave\s+\d{1,3}%|\bsubscribe (and|&) save\b/gi,
+    m => `<span class="hl-token">${m}</span>`);
+}
+
+/* ════════════════════ ROUTER ════════════════════ */
+function go(hash){ if(location.hash===hash){ route(); } else { location.hash=hash; } }
+function showView(id){ $$('.view').forEach(v=>v.classList.remove('active')); $('#'+id).classList.add('active'); window.scrollTo(0,0); }
+function toggleInfo(){ $('#hero-info').classList.toggle('open'); }
+function toggleMenu(e){ if(e) e.stopPropagation(); $('#mobile-menu').classList.toggle('open'); }
+function closeMenu(){ const m=$('#mobile-menu'); if(m) m.classList.remove('open'); }
+function navMenu(hash){ closeMenu(); go(hash); }
+document.addEventListener('click', e=>{ if(!e.target.closest('.mobile-menu') && !e.target.closest('.menu-btn')) closeMenu(); });
+
+function route(){
+  const h = location.hash || '#/';
+  const m = h.match(/^#\/(brand|category)\/(.+)$/);
+  if(h==='#/' || h===''){ showView('view-home'); renderHome(); closeSearch(); }
+  else if(h==='#/alerts'){ showView('view-alerts'); renderAlerts(); }
+  else if(m && m[1]==='brand'){ const b=brandById(m[2]); if(b){ showView('view-brand'); renderBrand(b); } else go('#/'); }
+  else if(m && m[1]==='category'){ const c=catById(m[2]); if(c){ showView('view-category'); renderCategory(c); } else go('#/'); }
+  else go('#/');
+}
+window.addEventListener('hashchange', route);
+
+/* ════════════════════ HOME ════════════════════ */
+function renderHome(){
+  renderKPIs(); renderCatBars(); renderTypeMix(); renderTrend(); renderLeaderboard();
+}
+
+function renderKPIs(){
+  const active = activeBrands();
+  const totalTracked = CATEGORIES.reduce((s,c)=>s+c.brandCount,0);
+  const allDepths = active.flatMap(b=>b.current.map(d=>d.depth));
+  const avg = Math.round(allDepths.reduce((s,d)=>s+d,0)/allDepths.length);
+  const deepest = active.reduce((m,b)=> maxDepth(b)>m.d ? {d:maxDepth(b),b} : m, {d:0,b:null});
+  const sharePct = 36; // overall share this week
+  const wow = +8;
+  const cards = [
+    { label:'Brands discounting now', value:'1 in 3', sub:`~36% of ${(totalTracked/1000).toFixed(1)}k tracked brands`, tone:'' },
+    { label:'Avg discount depth', value:avg+'%', sub:'across all live promos', tone:'' },
+    { label:'Week-over-week', value:(wow>0?'+':'')+wow+'pp', sub:'more brands discounting vs. last week', tone: wow>0?'up':'down' },
+    { label:'Deepest live', value:maxDepthLabel(deepest), sub: deepest.b? deepest.b.name+' · '+catById(deepest.b.category).name : '', tone:'' },
+  ];
+  $('#kpi-grid').innerHTML = cards.map(c=>`
+    <div class="kpi">
+      <div class="k-label">${c.label}</div>
+      <div class="k-value">${c.value}</div>
+      <div class="k-sub ${c.tone? '':''}">${c.tone?`<span class="${c.tone}">▲ trending</span> · `:''}${esc(c.sub)}</div>
+    </div>`).join('');
+}
+function maxDepthLabel(d){ return d.b? (d.b.current.reduce((best,x)=>x.depth>best.depth?x:best).value) : '—'; }
+
+function renderCatBars(){
+  const sorted = [...CATEGORIES].sort((a,b)=>b.pctNow-a.pctNow);
+  const max = Math.max(...sorted.map(c=>c.pctNow));
+  $('#cat-bars').innerHTML = sorted.map(c=>{
+    const w = (c.pctNow/max*100).toFixed(0);
+    const col = goldFill(c.pctNow/max);
+    return `<div class="hbar-row" onclick="go('#/category/${c.id}')">
+      <div class="hbar-name" title="${esc(c.name)}">${esc(c.name)}</div>
+      <div class="hbar-track"><div class="hbar-fill" style="width:${w}%;background:${col};"></div></div>
+      <div class="hbar-val">${c.pctNow}%</div>
+    </div>`;
+  }).join('');
+}
+
+function renderTypeMix(){
+  // aggregate type mix weighted by category pctNow*brandCount
+  const agg = {};
+  CATEGORIES.forEach(c=>{
+    const wgt = c.pctNow*c.brandCount;
+    const mix = CAT_TYPE_MIX[c.id]||{};
+    Object.entries(mix).forEach(([t,f])=>{ agg[t]=(agg[t]||0)+f*wgt; });
+  });
+  const total = Object.values(agg).reduce((s,v)=>s+v,0);
+  const rows = Object.entries(agg).map(([t,v])=>({t,pct:v/total})).sort((a,b)=>b.pct-a.pct);
+  $('#type-mix').innerHTML = donutSVG(rows) + `<div class="mix-legend">${
+    rows.map(r=>`<div class="mix-leg-row"><span class="dot" style="background:${TYPE_META[r.t].color}"></span><span class="lbl">${TYPE_META[r.t].label}</span><span class="pct">${Math.round(r.pct*100)}%</span></div>`).join('')
+  }</div>`;
+}
+function donutSVG(rows){
+  const R=58, r=36, cx=68, cy=68; let acc=0; const C=2*Math.PI*((R+r)/2); const sw=R-r;
+  const segs = rows.map(d=>{
+    const len=d.pct*C, off=acc*C; acc+=d.pct;
+    return `<circle cx="${cx}" cy="${cy}" r="${(R+r)/2}" fill="none" stroke="${TYPE_META[d.t].color}" stroke-width="${sw}" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}" transform="rotate(-90 ${cx} ${cy})"/>`;
+  }).join('');
+  return `<svg width="136" height="136" viewBox="0 0 136 136">${segs}<text x="${cx}" y="${cy-2}" text-anchor="middle" fill="#FAFAFA" font-size="13" font-weight="800">${rows.length}</text><text x="${cx}" y="${cy+14}" text-anchor="middle" fill="#6B6B74" font-size="9">types</text></svg>`;
+}
+
+function renderTrend(){
+  const W=520,H=200,pad={l:34,r:14,t:14,b:28};
+  const ACCENT=getComputedStyle(document.documentElement).getPropertyValue('--radar').trim()||'#A3E635';
+  const series=[ {key:'fashion',color:'#FB7185',label:'Apparel & Fashion'}, {key:'overall',color:ACCENT,label:'All brands'}, {key:'bev',color:'#60A5FA',label:'Beverages & Food'} ];
+  const maxY=60, n=TREND.overall.length;
+  const x=i=>pad.l+(i/(n-1))*(W-pad.l-pad.r);
+  const y=v=>pad.t+(1-v/maxY)*(H-pad.t-pad.b);
+  const grid=[0,20,40,60].map(g=>`<line x1="${pad.l}" y1="${y(g)}" x2="${W-pad.r}" y2="${y(g)}" stroke="rgba(255,255,255,0.05)"/><text x="${pad.l-8}" y="${y(g)+4}" text-anchor="end" fill="#6B6B74" font-size="10" font-family="JetBrains Mono">${g}%</text>`).join('');
+  const lines=series.map(s=>{
+    const pts=TREND[s.key].map((v,i)=>`${x(i)},${y(v)}`).join(' ');
+    const area=`M${x(0)},${y(0)} L`+TREND[s.key].map((v,i)=>`${x(i)},${y(v)}`).join(' L')+` L${x(n-1)},${y(0)} Z`;
+    const fill = s.key==='overall'? `<path d="${area}" fill="${s.color}" opacity="0.08"/>`:'';
+    const dots = s.key==='overall'? TREND[s.key].map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="2.4" fill="${s.color}"/>`).join(''):'';
+    return `${fill}<polyline points="${pts}" fill="none" stroke="${s.color}" stroke-width="${s.key==='overall'?2.4:1.6}" stroke-linejoin="round"/>${dots}`;
+  }).join('');
+  const xlabels=[0,3,6,9,11].map(i=>`<text x="${x(i)}" y="${H-8}" text-anchor="middle" fill="#6B6B74" font-size="10" font-family="JetBrains Mono">${TREND_WEEKS[i]}</text>`).join('');
+  const legend=series.map(s=>`<span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--text-2);"><span style="width:14px;height:3px;border-radius:2px;background:${s.color};display:inline-block;"></span>${s.label}</span>`).join('');
+  $('#trend-chart').innerHTML=`<svg width="100%" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${grid}${lines}${xlabels}</svg><div style="display:flex;gap:18px;flex-wrap:wrap;margin-top:6px;">${legend}</div>`;
+}
+
+function renderLeaderboard(){
+  const ranked = activeBrands().map(b=>{
+    const d=b.current.reduce((best,x)=>x.depth>best.depth?x:best);
+    return {b,d};
+  }).sort((a,b)=>b.d.depth-a.d.depth).slice(0,8);
+  $('#leaderboard').innerHTML = ranked.map((r,i)=>`
+    <div class="lb-row" onclick="go('#/brand/${r.b.id}')">
+      <div class="lb-rank">${i+1}</div>
+      <div class="lb-main">
+        <div class="lb-brand">${esc(r.b.name)}</div>
+        <div class="lb-meta">
+          <span class="type-tag">${TYPE_META[r.d.type].label}</span>
+          <span class="lb-offer">${esc(r.d.value)}</span>
+          <span class="plat-tag">· ${esc(catById(r.b.category).name)}</span>
+        </div>
+      </div>
+      <div class="depth-pill" style="${depthPillStyle(r.d.depth)}">${r.d.depth}%</div>
+    </div>`).join('');
+}
+
+/* ════════════════════ BRAND DETAIL ════════════════════ */
+function renderBrand(b){
+  const cat=catById(b.category);
+  const live=b.current.length>0;
+  const allPromos=[...b.current.map(d=>({...d,active:true})), ...b.past.map(d=>({...d,active:false}))];
+  $('#brand-body').innerHTML = `
+    <a class="back-link" onclick="go('#/')">← Dashboard</a>
+    <div class="detail-head">
+      <div>
+        <div class="detail-title">${esc(b.name)}</div>
+        <div class="detail-sub">${esc(cat.name)} · <a onclick="go('#/category/${cat.id}')">view category</a></div>
+      </div>
+      <div style="margin-left:auto;">${ live
+        ? `<span class="badge-live"><span class="pulse"></span>Discounting now</span>`
+        : `<span class="badge-none">No active discount</span>` }</div>
+    </div>
+
+    ${ live ? `<div class="card"><div class="card-head"><h2>Live discounts</h2><span class="sub">${b.current.length} active promo${b.current.length>1?'s':''}</span></div>
+      ${b.current.map(promoCardHTML).join('')}</div>` : '' }
+
+    <div class="card">
+      <div class="card-head"><h2>Discount history</h2><span class="sub">last 12 months</span></div>
+      ${ allPromos.length ? timelineHTML(allPromos) : '<p style="color:var(--text-3);margin-top:8px;">No discounts detected in the window.</p>' }
+    </div>`;
+}
+
+function promoCardHTML(d){
+  return `<div class="promo-card">
+    <div class="promo-top">
+      <span class="promo-headline">${esc(d.value)}</span>
+      <span class="type-tag">${TYPE_META[d.type].label}</span>
+      ${d.promoCode?`<span class="promo-field val mono" style="color:var(--text);background:var(--surface-3);padding:2px 8px;border-radius:5px;">code ${esc(d.promoCode)}</span>`:''}
+      <span style="margin-left:auto;font-size:12px;color:var(--text-3);">live since ${fmtDate(d.startedAt)}</span>
+    </div>
+    <div class="promo-grid">
+      <div class="promo-field"><h4>Detected in ad copy</h4>
+        <div class="ad-evidence"><span class="quote">“${hlDiscount(d.adCopy)}”</span><span class="src">${esc(d.platform)} · CTA: ${esc(d.cta)}</span></div>
+      </div>
+      <div class="promo-field"><h4>Landing-page offer</h4>
+        <div class="ad-evidence"><span class="quote">${hlDiscount(d.landingOffer)}</span><span class="src">confidence ${(d.confidence*100|0)}%</span></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function timelineHTML(promos){
+  // axis: last 12 months ending today (2026-05-28)
+  const end=new Date('2026-05-28T00:00:00');
+  const start=new Date(end); start.setMonth(start.getMonth()-12);
+  const span=end-start;
+  const xpct=ds=>{ const d=new Date(ds+'T00:00:00'); return Math.max(0,Math.min(100,((d-start)/span)*100)); };
+  const rows=[...promos].sort((a,b)=> new Date(b.startedAt)-new Date(a.startedAt)).map(d=>{
+    const x1=xpct(d.startedAt);
+    const x2= d.active ? xpct('2026-05-28') : xpct(d.endedAt);
+    const w=Math.max(3,x2-x1);
+    const col=goldFill(d.depth/60);
+    const lbl=d.active?'Live':`${fmtDate(d.startedAt)}–${fmtDate(d.endedAt)}`;
+    return `<div class="tl-row">
+      <div class="tl-label">${esc(d.label||d.value)} <span style="color:var(--text-3)">· ${d.value}</span></div>
+      <div class="tl-track"><div class="tl-bar" style="left:${x1}%;width:${w}%;background:${col};${d.active?'box-shadow:0 0 0 1px rgba(255,255,255,0.7) inset;':''}" title="${lbl}"></div></div>
+    </div>`;
+  }).join('');
+  const months=[];
+  for(let i=0;i<=12;i+=3){ const dt=new Date(start); dt.setMonth(dt.getMonth()+i); months.push(dt.toLocaleDateString('en-US',{month:'short'})); }
+  return `<div class="timeline">${rows}</div><div class="tl-axis">${months.map(m=>`<span>${m}</span>`).join('')}</div>`;
+}
+
+/* ════════════════════ CATEGORY DETAIL ════════════════════ */
+function renderCategory(c){
+  const brands=brandsInCat(c.id);
+  const active=brands.filter(b=>b.current.length).sort((a,b)=>maxDepth(b)-maxDepth(a));
+  const idle=brands.filter(b=>!b.current.length);
+  const mix=CAT_TYPE_MIX[c.id]||{};
+  const mixRows=Object.entries(mix).map(([t,f])=>({t,pct:f})).sort((a,b)=>b.pct-a.pct);
+  $('#category-body').innerHTML=`
+    <a class="back-link" onclick="go('#/')">← Dashboard</a>
+    <div class="detail-head"><div>
+      <div class="detail-title">${esc(c.name)}</div>
+      <div class="detail-sub">${c.brandCount.toLocaleString()} tracked brands</div>
+    </div></div>
+
+    <div class="stat-row">
+      <div class="stat-mini"><div class="sm-label">Discounting now</div><div class="sm-val">${c.pctNow}%</div></div>
+      <div class="stat-mini"><div class="sm-label">Avg depth</div><div class="sm-val">${c.avgDepth}%</div></div>
+      <div class="stat-mini"><div class="sm-label">Week-over-week</div><div class="sm-val" style="color:${c.wow>0?'var(--red)':'var(--green)'}">${c.wow>0?'+':''}${c.wow}pp</div></div>
+      <div class="stat-mini"><div class="sm-label">Brands live (sample)</div><div class="sm-val">${active.length}</div></div>
+    </div>
+
+    <div class="grid-2" style="margin-top:18px;align-items:start;">
+      <div class="card">
+        <div class="card-head"><h2>Discounting now</h2><span class="sub">sample of tracked brands</span></div>
+        <div class="lb">${ active.length? active.map((b,i)=>{
+          const d=b.current.reduce((best,x)=>x.depth>best.depth?x:best);
+          return `<div class="lb-row" onclick="go('#/brand/${b.id}')">
+            <div class="lb-rank">${i+1}</div>
+            <div class="lb-main"><div class="lb-brand">${esc(b.name)}</div>
+              <div class="lb-meta"><span class="type-tag">${TYPE_META[d.type].label}</span><span class="lb-offer">${esc(d.value)}</span></div></div>
+            <div class="depth-pill" style="${depthPillStyle(d.depth)}">${d.depth}%</div>
+          </div>`;}).join('') : '<p style="color:var(--text-3);padding:8px;">No brands discounting in the sample right now.</p>' }
+          ${ idle.length? `<div style="padding:12px 8px 2px;font-size:12px;color:var(--text-3);">Not discounting: ${idle.map(b=>`<a onclick="go('#/brand/${b.id}')">${esc(b.name)}</a>`).join(', ')}</div>`:'' }
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Discount type mix</h2></div>
+        <div class="hbars" style="margin-top:14px;">${mixRows.map(r=>`
+          <div class="hbar-row" style="cursor:default;">
+            <div class="hbar-name">${TYPE_META[r.t].label}</div>
+            <div class="hbar-track"><div class="hbar-fill" style="width:${(r.pct/mixRows[0].pct*100).toFixed(0)}%;background:${TYPE_META[r.t].color};"></div></div>
+            <div class="hbar-val">${Math.round(r.pct*100)}%</div>
+          </div>`).join('')}</div>
+      </div>
+    </div>`;
+}
+
+/* ════════════════════ SEARCH ════════════════════ */
+const searchInput=$('#search-input'), searchResults=$('#search-results');
+function closeSearch(){ searchResults.classList.remove('open'); if(searchInput) searchInput.value=''; }
+function runSearch(q){
+  q=q.trim().toLowerCase();
+  if(!q){ searchResults.classList.remove('open'); return; }
+  const cats=CATEGORIES.filter(c=>c.name.toLowerCase().includes(q)).slice(0,4);
+  const brs=BRANDS.filter(b=>b.name.toLowerCase().includes(q)).slice(0,6);
+  let html='';
+  if(cats.length){ html+='<div class="sr-group-label">Categories</div>'+cats.map(c=>`
+    <div class="sr-item" onclick="go('#/category/${c.id}')"><span class="sr-dot" style="background:var(--gold)"></span><span class="sr-name">${esc(c.name)}</span><span class="sr-meta">${c.pctNow}% discounting</span></div>`).join(''); }
+  if(brs.length){ html+='<div class="sr-group-label">Brands</div>'+brs.map(b=>{
+    const live=b.current.length; const d=live?b.current.reduce((x,y)=>y.depth>x.depth?y:x):null;
+    return `<div class="sr-item" onclick="go('#/brand/${b.id}')"><span class="sr-dot" style="background:${live?'var(--red)':'var(--text-3)'}"></span><span class="sr-name">${esc(b.name)}</span><span class="sr-meta">${live?esc(d.value):'no active discount'}</span></div>`;}).join(''); }
+  if(!html) html='<div class="sr-empty">No matches. Try “fashion”, “beauty”, or a brand like “Zara”.</div>';
+  searchResults.innerHTML=html; searchResults.classList.add('open');
+}
+if(searchInput){
+  searchInput.addEventListener('input', e=>runSearch(e.target.value));
+  searchInput.addEventListener('focus', e=>{ if(e.target.value) runSearch(e.target.value); });
+  document.addEventListener('click', e=>{ if(!e.target.closest('.search-wrap')) searchResults.classList.remove('open'); });
+}
+
+/* ════════════════════ ALERTS ════════════════════ */
+let alertScope='brand', alertTrigger='any', alertTarget='brand_nike', alertTargetName='Nike';
+const ALERTS=[
+  { scope:'category', target:'cat_fashion', trigger:'any', channel:'email', dest:'team@acme.com' },
+  { scope:'brand', target:'brand_nike', trigger:'deep', threshold:30, channel:'sms', dest:'+1 (555) 010-2233' },
+];
+function setAlertScope(s){
+  alertScope=s;
+  $$('#alert-scope-seg button').forEach(b=>b.classList.toggle('on',b.dataset.scope===s));
+  $('#alert-target-label').textContent = s==='brand'?'Brand':'Category';
+  $('#alert-target-input').placeholder = s==='brand'?'Type a brand name…':'Type a category name…';
+  alertTarget=''; alertTargetName=''; $('#alert-target-input').value=''; $('#alert-target-results').classList.remove('open');
+  renderPreview();
+}
+function setAlertTrigger(t){ alertTrigger=t; $$('#alert-trigger-seg button').forEach(b=>b.classList.toggle('on',b.dataset.trig===t)); $('#threshold-field').style.display = t==='deep'?'block':'none'; renderPreview(); }
+function acInput(){
+  const q=$('#alert-target-input').value.trim().toLowerCase();
+  const res=$('#alert-target-results');
+  const items = alertScope==='brand'
+    ? BRANDS.filter(b=>b.name.toLowerCase().includes(q)).slice(0,8).map(b=>({id:b.id,name:b.name,meta:catById(b.category).name}))
+    : CATEGORIES.filter(c=>c.name.toLowerCase().includes(q)).slice(0,8).map(c=>({id:c.id,name:c.name,meta:c.pctNow+'% discounting'}));
+  res.innerHTML = items.length
+    ? items.map(it=>`<div class="sr-item" onclick="pickTarget('${it.id}')"><span class="sr-name">${esc(it.name)}</span><span class="sr-meta">${esc(it.meta)}</span></div>`).join('')
+    : '<div class="sr-empty">No matches.</div>';
+  res.classList.add('open');
+}
+function pickTarget(id){
+  alertTarget=id;
+  alertTargetName = alertScope==='brand' ? (brandById(id)?.name||'') : (catById(id)?.name||'');
+  $('#alert-target-input').value=alertTargetName;
+  $('#alert-target-results').classList.remove('open');
+  renderPreview();
+}
+$('#alert-channel')?.addEventListener('change', e=>{
+  const lbl={email:'Email address',sms:'Phone number'}[e.target.value];
+  const ph={email:'you@brand.com',sms:'+1 (555) 000-0000'}[e.target.value];
+  $('#channel-target-label').textContent=lbl; $('#alert-channel-target').placeholder=ph; $('#alert-channel-target').value='';
+});
+document.addEventListener('click', e=>{ if(!e.target.closest('.ac-wrap')){ const r=$('#alert-target-results'); if(r) r.classList.remove('open'); } });
+
+function countWouldFire(scope,target,trigger,threshold){
+  // dry-run over "last 30 days" using past+current promos with start dates after Apr 28
+  const since=new Date('2026-04-28T00:00:00');
+  let brands = scope==='brand' ? [brandById(target)].filter(Boolean) : brandsInCat(target);
+  const events=[];
+  brands.forEach(b=>{
+    const promos=[...b.current.map(d=>({...d,active:true})),...b.past.map(d=>({...d,active:false}))];
+    promos.forEach(d=>{
+      const st=new Date(d.startedAt+'T00:00:00');
+      if(st<since) { if(!(trigger==='any' && d.active)) return; }
+      if(trigger==='deep' && d.depth<threshold) return;
+      // 'any' counts each live/started promo; 'new'/'deep' count starts within window
+      if(trigger!=='any' && st<since) return;
+      events.push({ date:d.startedAt, brand:b.name, value:d.value, depth:d.depth });
+    });
+  });
+  events.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  return events;
+}
+function renderPreview(){
+  if(!$('#alert-target-input')) return;
+  const threshold=+($('#alert-threshold')?.value||20);
+  if(!alertTarget){ $('#pv-summary').innerHTML=`<div style="font-size:13px;color:var(--text-3);margin-top:8px;">Pick a ${alertScope==='brand'?'brand':'category'} above to see how often this alert would fire.</div>`; return; }
+  const events=countWouldFire(alertScope,alertTarget,alertTrigger,threshold);
+  const trigLabel={any:'while any discount is live',new:'when a new discount starts',deep:`when a discount ≥ ${threshold}% starts`}[alertTrigger];
+  $('#pv-summary').innerHTML=`
+    <div class="pv-big">${events.length}</div>
+    <div style="font-size:13px;color:var(--text-2);margin-top:2px;">deliveries ${trigLabel}</div>
+    <div class="pv-events">${ events.slice(0,6).map(e=>`<div class="pv-event"><span class="date">${fmtDate(e.date)}</span><span>${esc(e.brand)} — ${esc(e.value)} <span style="color:var(--text-3)">(${e.depth}% depth)</span></span></div>`).join('') || '<div style="color:var(--text-3);font-size:12px;">Nothing would have fired in the window. Loosen the trigger.</div>' }</div>`;
+}
+function renderAlerts(){
+  $('#alert-target-label').textContent = alertScope==='brand'?'Brand':'Category';
+  $('#alert-target-input').placeholder = alertScope==='brand'?'Type a brand name…':'Type a category name…';
+  $('#alert-target-input').value = alertTargetName||'';
+  $('#threshold-field').style.display = alertTrigger==='deep'?'block':'none';
+  renderPreview(); renderAlertList();
+}
+function renderAlertList(){
+  $('#alert-list').innerHTML = ALERTS.length? ALERTS.map((a,i)=>{
+    const name = a.scope==='brand'? brandById(a.target)?.name : catById(a.target)?.name;
+    const trig = {any:'any discount',new:'new discount',deep:`≥${a.threshold}% off`}[a.trigger];
+    const chan = a.channel==='sms'?'text':'email';
+    return `<div class="alert-item"><span class="ai-dot"></span><span><b>${esc(name||'—')}</b> · ${trig} → ${chan} ${esc(a.dest||'')}</span><span class="ai-x" onclick="removeAlert(${i})">×</span></div>`;
+  }).join('') : '<p style="color:var(--text-3);font-size:13px;">No alerts yet.</p>';
+}
+function removeAlert(i){ ALERTS.splice(i,1); renderAlertList(); }
+function createAlert(){
+  if(!alertTarget){ showToast(`Pick a ${alertScope==='brand'?'brand':'category'} first`); return; }
+  const channel=$('#alert-channel').value;
+  const dest=$('#alert-channel-target').value || $('#alert-channel-target').placeholder;
+  const a={ scope:alertScope, target:alertTarget, trigger:alertTrigger, channel, dest };
+  if(alertTrigger==='deep') a.threshold=+$('#alert-threshold').value;
+  ALERTS.push(a); renderAlertList();
+  showToast(`Alert created — watching ${alertTargetName}`);
+}
+function showToast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(showToast._t); showToast._t=setTimeout(()=>t.classList.remove('show'),2600); }
+
+/* ════════════════════ INIT ════════════════════ */
+route();
+</script>
+</body>
+</html>

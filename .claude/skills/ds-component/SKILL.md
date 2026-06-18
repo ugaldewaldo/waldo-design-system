@@ -172,6 +172,11 @@ NO font-semibold en buttons → font-medium siempre
 NO box-shadow ring en inputs → solo border
 NO italic en ningún sitio
 NO colores brand.* en producto → son marketing
+
+--destructive     → ONLY for irreversible/destructive actions (delete, purge, no-undo)
+                    NEVER for trends, metrics, live badges, or recoverable errors
+--warning         → negative trends, competitor growth, caution states (recoverable)
+--primary         → positive trends, CTAs, good metric direction
 ```
 
 ---
@@ -294,6 +299,7 @@ En la sección "Component progress":
 - [ ] Demo en `index.html` actualizada
 - [ ] `STATUS.md` actualizado
 - [ ] Si se necesitó un token nuevo → se ejecutó `/ds-add-token` primero
+- [ ] Si se añadió un variant nuevo o regla de uso → actualizar `docs/usage-doctrine.yaml`
 
 ---
 

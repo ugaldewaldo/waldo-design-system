@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prospector — new business, on a schedule</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F8FA;
+    --surface: #FFFFFF;
+    --surface-2: #FBFBFD;
+    --surface-3: #F2F4F7;
+    --border: #E6E8EC;
+    --border-2: #EEF0F3;
+    --ink: #101828;
+    --ink-2: #475467;
+    --ink-3: #98A2B3;
+    --brand: #4F46E5;
+    --brand-2: #6366F1;
+    --brand-tint: #EEF0FF;
+    --brand-ink: #3730A3;
+    --green: #16A34A;  --green-tint: #E7F6EC;
+    --amber: #B45309;  --amber-tint: #FDF3E7;
+    --red: #DC2626;    --red-tint: #FCEBEB;
+    --teal: #0E7490;   --teal-tint: #E0F2F7;
+    --shadow: 0 1px 2px rgba(16,24,40,.06);
+    --shadow-md: 0 4px 12px rgba(16,24,40,.08);
+    --shadow-lg: 0 12px 32px rgba(16,24,40,.12);
+    --radius: 12px;
+    --radius-sm: 9px;
+    --sidebar-w: 252px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg); color: var(--ink); font-size: 14px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--brand); text-decoration: none; }
+  .tabular { font-variant-numeric: tabular-nums; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  ::selection { background: var(--brand-tint); }
+
+  /* ── App shell ── */
+  .app { display: grid; grid-template-columns: var(--sidebar-w) 1fr; min-height: 100vh; }
+
+  .sidebar {
+    background: var(--surface); border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh;
+  }
+  .side-brand { display: flex; align-items: center; gap: 10px; padding: 18px 18px 16px; }
+  .logo {
+    width: 32px; height: 32px; border-radius: 8px; background: var(--brand);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(79,70,229,.35);
+  }
+  .side-brand .wordmark { font-weight: 800; font-size: 17px; letter-spacing: -0.02em; }
+  .side-brand .tag { font-size: 10px; color: var(--ink-3); font-weight: 600; letter-spacing: .04em; text-transform: uppercase; margin-top: 1px; }
+
+  .agency-chip {
+    margin: 4px 12px 12px; padding: 10px 12px; border: 1px solid var(--border);
+    border-radius: var(--radius-sm); background: var(--surface-2); cursor: pointer;
+    display: flex; align-items: center; gap: 10px; transition: background .15s;
+  }
+  .agency-chip:hover { background: var(--surface-3); }
+  .agency-avatar {
+    width: 30px; height: 30px; border-radius: 7px; background: linear-gradient(135deg,#111827,#374151);
+    color: #fff; font-weight: 800; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .agency-chip .a-name { font-weight: 700; font-size: 13px; line-height: 1.2; }
+  .agency-chip .a-sub { font-size: 11px; color: var(--ink-3); }
+
+  .nav { padding: 6px 12px; display: flex; flex-direction: column; gap: 2px; }
+  .nav-label { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); padding: 12px 12px 6px; }
+  .nav-item {
+    display: flex; align-items: center; gap: 11px; padding: 8px 12px; border-radius: 8px;
+    color: var(--ink-2); font-weight: 600; font-size: 13.5px; transition: background .12s, color .12s;
+  }
+  .nav-item:hover { background: var(--surface-3); color: var(--ink); }
+  .nav-item.active { background: var(--brand-tint); color: var(--brand-ink); }
+  .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; stroke-width: 1.9; }
+  .nav-item .count { margin-left: auto; font-size: 11px; font-weight: 700; background: var(--brand); color: #fff; border-radius: 999px; padding: 1px 7px; min-width: 20px; text-align: center; }
+  .nav-item.active .count { background: var(--brand); }
+  .nav-item .dot { margin-left: auto; width: 7px; height: 7px; border-radius: 50%; background: var(--amber); }
+
+  .side-foot { margin-top: auto; padding: 14px; border-top: 1px solid var(--border); }
+  .credit-bar { height: 6px; border-radius: 4px; background: var(--surface-3); overflow: hidden; margin: 8px 0 6px; }
+  .credit-bar > i { display: block; height: 100%; background: var(--brand); border-radius: 4px; }
+  .side-foot .lbl { font-size: 11px; color: var(--ink-3); display: flex; justify-content: space-between; }
+
+  /* ── Main ── */
+  .main { display: flex; flex-direction: column; min-width: 0; }
+  .topbar {
+    height: 60px; background: rgba(255,255,255,.85); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 16px;
+    padding: 0 28px; position: sticky; top: 0; z-index: 40;
+  }
+  .topbar-brand { display: none; align-items: center; gap: 9px; color: var(--ink); }
+  .topbar-brand .logo { width: 28px; height: 28px; border-radius: 7px; background: var(--brand); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(79,70,229,.32); flex-shrink: 0; }
+  .topbar-brand .tb-name { font-weight: 800; font-size: 16px; letter-spacing: -0.02em; }
+  .search {
+    flex: 1; max-width: 420px; display: flex; align-items: center; gap: 9px;
+    background: var(--surface-3); border: 1px solid transparent; border-radius: 9px; padding: 8px 12px;
+    transition: border .15s, background .15s;
+  }
+  .search .search-ico { cursor: text; }
+  .search:focus-within { background: var(--surface); border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-tint); }
+  .search svg { width: 16px; height: 16px; color: var(--ink-3); flex-shrink: 0; }
+  .search input { border: none; outline: none; background: none; flex: 1; font-size: 13.5px; color: var(--ink); }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .integ-pill {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600;
+    padding: 6px 11px; border-radius: 999px; border: 1px solid var(--border); color: var(--ink-2); background: var(--surface);
+    white-space: nowrap;
+  }
+  .integ-pill svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .integ-pill .d { width: 7px; height: 7px; border-radius: 50%; background: var(--ink-3); }
+  .integ-pill.on { color: var(--green); border-color: var(--green-tint); background: var(--green-tint); }
+  .integ-pill.on .d { background: var(--green); }
+
+  .content { padding: 28px 28px 80px; max-width: 1160px; width: 100%; margin: 0 auto; }
+
+  /* ── Page header ── */
+  .page-head { margin-bottom: 22px; }
+  .page-head h1 { font-size: 25px; font-weight: 800; letter-spacing: -0.02em; }
+  .page-head .sub { color: var(--ink-2); margin-top: 5px; font-size: 14px; }
+  .page-head .row { display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+  .page-head .spacer { flex: 1; }
+
+  .week-switch { display: flex; align-items: center; gap: 6px; background: var(--surface); border: 1px solid var(--border); border-radius: 9px; padding: 4px; }
+  .week-switch button { padding: 6px 12px; border-radius: 6px; font-size: 12.5px; font-weight: 600; color: var(--ink-2); }
+  .week-switch button.active { background: var(--brand-tint); color: var(--brand-ink); }
+
+  /* ── Buttons ── */
+  .btn { display: inline-flex; align-items: center; gap: 7px; padding: 8px 14px; border-radius: 9px; font-weight: 600; font-size: 13px; transition: all .14s; border: 1px solid transparent; white-space: nowrap; }
+  .btn svg { width: 15px; height: 15px; stroke-width: 2; }
+  .btn-primary { background: var(--brand); color: #fff; box-shadow: 0 1px 2px rgba(79,70,229,.3); }
+  .btn-primary:hover { background: #4338CA; }
+  .btn-ghost { background: var(--surface); border-color: var(--border); color: var(--ink-2); }
+  .btn-ghost:hover { background: var(--surface-3); color: var(--ink); }
+  .btn-accept { background: var(--green); color: #fff; }
+  .btn-accept:hover { filter: brightness(.95); }
+  .btn-reject { background: var(--surface); border-color: var(--border); color: var(--ink-2); }
+  .btn-reject:hover { color: var(--red); border-color: var(--red-tint); background: var(--red-tint); }
+  .btn-sm { padding: 6px 11px; font-size: 12.5px; }
+
+  /* ── Pills / badges ── */
+  .pill { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; letter-spacing: .01em; white-space: nowrap; }
+  .pill svg { width: 13px; height: 13px; flex-shrink: 0; }
+  .pill.now { background: var(--amber-tint); color: var(--amber); }
+  .pill.hot { background: var(--red-tint); color: var(--red); }
+  .pill.cat { background: var(--surface-3); color: var(--ink-2); }
+  .pill.muted { background: var(--surface-3); color: var(--ink-3); }
+  .pill.ok { background: var(--green-tint); color: var(--green); }
+  .pill.brand { background: var(--brand-tint); color: var(--brand-ink); }
+
+  .score { font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+  .score .pct { font-size: 11px; color: var(--ink-3); font-weight: 600; }
+  .score.s-hi { color: var(--green); } .score.s-mid { color: var(--brand); } .score.s-lo { color: var(--ink-2); }
+
+  /* ── Prospect cards ── */
+  .stack { display: flex; flex-direction: column; gap: 14px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+    box-shadow: var(--shadow); transition: box-shadow .16s, border-color .16s, transform .16s;
+  }
+  .pcard { padding: 18px 20px; cursor: pointer; }
+  .pcard:hover { box-shadow: var(--shadow-md); border-color: #D6D9DF; }
+  .pcard.is-done { opacity: .62; }
+  .pcard-top { display: flex; align-items: flex-start; gap: 14px; }
+  .brand-logo {
+    width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0; color: #fff; font-weight: 800; font-size: 18px;
+    display: flex; align-items: center; justify-content: center; letter-spacing: -.02em;
+    position: relative; overflow: hidden;
+  }
+  .brand-logo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 16%; background: #fff; }
+  .brand-logo.has-logo { background: #fff !important; box-shadow: inset 0 0 0 1px var(--border-2); }
+  .pcard h3 { font-size: 16px; font-weight: 700; letter-spacing: -.01em; display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+  .pcard .domain { color: var(--ink-3); font-size: 12.5px; font-weight: 500; }
+  .pcard .badges { display: flex; gap: 7px; margin-top: 7px; flex-wrap: wrap; }
+  .pcard-score { margin-left: auto; text-align: right; flex-shrink: 0; }
+  .pcard-score .score { font-size: 22px; }
+  .pcard-score .slabel { font-size: 10px; color: var(--ink-3); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+
+  .reason-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 15px; }
+  .reason { background: var(--surface-2); border: 1px solid var(--border-2); border-radius: var(--radius-sm); padding: 11px 13px; }
+  .reason .rl { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-3); display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+  .reason .rl svg { width: 13px; height: 13px; }
+  .reason p { font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+  .reason p b { color: var(--ink); font-weight: 600; }
+  .reason.now-r .rl { color: var(--amber); }
+
+  .pcard-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-2); }
+  .pcard-actions .grow { flex: 1; }
+
+  /* ── Empty state ── */
+  .empty { text-align: center; padding: 64px 24px; }
+  .empty .ico { width: 56px; height: 56px; border-radius: 14px; background: var(--brand-tint); color: var(--brand); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+  .empty .ico svg { width: 26px; height: 26px; }
+  .empty h2 { font-size: 19px; font-weight: 700; }
+  .empty p { color: var(--ink-2); margin: 7px auto 0; max-width: 420px; }
+
+  /* ── Detail page ── */
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); font-weight: 600; font-size: 13px; margin-bottom: 18px; }
+  .back-link:hover { color: var(--ink); }
+  .back-link svg { width: 15px; height: 15px; }
+  .detail-grid { display: grid; grid-template-columns: 1fr 332px; gap: 22px; align-items: start; }
+  .detail-hd { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 22px; }
+  .detail-hd .brand-logo { width: 56px; height: 56px; font-size: 22px; border-radius: 13px; }
+  .detail-hd h1 { font-size: 26px; font-weight: 800; letter-spacing: -.02em; display: flex; align-items: center; gap: 12px; }
+  .detail-hd .domain { color: var(--ink-2); font-size: 14px; margin-top: 3px; }
+  .detail-hd .domain a { color: var(--ink-2); border-bottom: 1px dashed var(--border); }
+
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px 22px; margin-bottom: 18px; }
+  .panel h2 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-3); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .panel h2 svg { width: 16px; height: 16px; }
+  .panel p.lead { font-size: 14.5px; line-height: 1.6; color: var(--ink-2); }
+  .panel p.lead b { color: var(--ink); font-weight: 600; }
+
+  .why-now-box { border-left: 3px solid var(--amber); background: var(--amber-tint); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 14px 16px; }
+  .why-now-box.hot { border-left-color: var(--red); background: var(--red-tint); }
+  .why-now-box .hl { font-weight: 700; color: var(--ink); font-size: 14.5px; display: flex; align-items: center; gap: 8px; }
+  .why-now-box .hl svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .why-now-box p { color: var(--ink-2); font-size: 13.5px; margin-top: 5px; line-height: 1.55; }
+  .why-now-box .src { font-size: 12px; color: var(--ink-3); margin-top: 9px; display: flex; align-items: center; gap: 6px; }
+  .why-now-box .src svg { width: 13px; height: 13px; }
+
+  .overlap-row { display: flex; align-items: center; gap: 12px; margin: 9px 0; }
+  .overlap-row .nm { width: 130px; font-size: 13px; color: var(--ink-2); font-weight: 500; flex-shrink: 0; }
+  .overlap-row .track { flex: 1; height: 8px; border-radius: 5px; background: var(--surface-3); overflow: hidden; }
+  .overlap-row .track > i { display: block; height: 100%; background: var(--brand); border-radius: 5px; }
+  .overlap-row .v { width: 38px; text-align: right; font-size: 12.5px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .echo { display: inline-flex; align-items: center; gap: 7px; background: var(--surface-2); border: 1px solid var(--border-2); border-radius: 999px; padding: 5px 12px 5px 6px; font-size: 13px; font-weight: 600; margin-top: 4px; }
+  .echo .ed { width: 22px; height: 22px; border-radius: 50%; color: #fff; font-weight: 800; font-size: 10px; display: flex; align-items: center; justify-content: center; }
+
+  /* contacts */
+  .contact { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border-2); }
+  .contact:last-child { border-bottom: none; padding-bottom: 0; }
+  .contact .av { width: 38px; height: 38px; border-radius: 50%; background: var(--surface-3); color: var(--ink-2); font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .contact .ci { flex: 1; min-width: 0; }
+  .contact .cn { font-weight: 600; font-size: 13.5px; }
+  .contact .ct { font-size: 12.5px; color: var(--ink-2); }
+  .contact .mutual { font-size: 11.5px; color: var(--green); font-weight: 600; margin-top: 2px; display: flex; align-items: center; gap: 5px; }
+  .contact .mutual svg { width: 12px; height: 12px; }
+  .contact .li { width: 30px; height: 30px; border-radius: 7px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: #0A66C2; flex-shrink: 0; }
+  .contact .li:hover { background: var(--surface-3); }
+  .li-prompt { background: var(--surface-2); border: 1px dashed var(--border); border-radius: var(--radius-sm); padding: 13px 15px; display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--ink-2); }
+  .li-prompt svg { width: 20px; height: 20px; color: #0A66C2; flex-shrink: 0; }
+
+  /* side action panel */
+  .side-actions .act-btn { width: 100%; justify-content: center; margin-bottom: 9px; }
+  .meta-list { font-size: 13px; }
+  .meta-list .ml-row { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--border-2); }
+  .meta-list .ml-row:last-child { border-bottom: none; }
+  .meta-list .k { color: var(--ink-3); }
+  .meta-list .v { font-weight: 600; text-align: right; }
+
+  /* ── Pipeline board ── */
+  .board { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 14px; align-items: start; }
+  .col { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; min-height: 120px; }
+  .col-hd { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: var(--ink-2); margin-bottom: 12px; padding: 0 2px; }
+  .col-hd .cdot { width: 8px; height: 8px; border-radius: 50%; }
+  .col-hd .cnt { margin-left: auto; color: var(--ink-3); font-weight: 700; }
+  .mini-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 11px 12px; margin-bottom: 9px; cursor: pointer; box-shadow: var(--shadow); transition: box-shadow .14s, transform .14s; }
+  .mini-card:hover { box-shadow: var(--shadow-md); }
+  .mini-card .mc-top { display: flex; align-items: center; gap: 9px; }
+  .mini-card .brand-logo { width: 28px; height: 28px; font-size: 12px; border-radius: 7px; }
+  .mini-card .mc-name { font-weight: 700; font-size: 13px; }
+  .mini-card .mc-cat { font-size: 11px; color: var(--ink-3); }
+  .mini-card .mc-foot { display: flex; align-items: center; gap: 6px; margin-top: 9px; }
+  .mini-card .mc-foot .stage-sel { font-size: 11px; color: var(--ink-2); background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; padding: 3px 6px; font-weight: 600; cursor: pointer; }
+  .icon-flag { display: inline-flex; width: 22px; height: 22px; border-radius: 6px; align-items: center; justify-content: center; }
+  .icon-flag svg { width: 13px; height: 13px; }
+  .icon-flag.hs { background: #FFF1E8; color: #FF7A59; }
+  .icon-flag.pb { background: var(--brand-tint); color: var(--brand); }
+
+  /* ── Watchlist ── */
+  .wl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
+  .feed-item { display: flex; gap: 13px; padding: 14px 0; border-bottom: 1px solid var(--border-2); }
+  .feed-item:last-child { border-bottom: none; }
+  .feed-ico { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .feed-ico svg { width: 16px; height: 16px; }
+  .feed-item .ft { font-size: 13.5px; line-height: 1.45; }
+  .feed-item .ft b { font-weight: 700; }
+  .feed-item .fm { font-size: 11.5px; color: var(--ink-3); margin-top: 3px; }
+  .tracked-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border-2); }
+  .tracked-row:last-child { border-bottom: none; }
+
+  /* ── Settings & setup ── */
+  .form-row { margin-bottom: 18px; }
+  .form-row label { display: block; font-size: 12.5px; font-weight: 700; color: var(--ink-2); margin-bottom: 6px; }
+  .form-row input[type=text], .form-row input[type=url], .form-row select {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 9px; font-size: 14px; font-family: inherit; color: var(--ink); background: var(--surface); outline: none;
+  }
+  .form-row input:focus, .form-row select:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-tint); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .chip { display: inline-flex; align-items: center; gap: 7px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 999px; padding: 6px 12px; font-size: 13px; font-weight: 600; }
+  .chip .cx { color: var(--ink-3); cursor: pointer; font-weight: 700; }
+  .chip .cdot2 { width: 20px; height: 20px; border-radius: 5px; color: #fff; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .fingerprint-tag { display: inline-flex; align-items:center; gap:6px; background: var(--brand-tint); color: var(--brand-ink); border-radius: 999px; padding: 5px 12px; font-size: 12.5px; font-weight: 600; margin: 4px 6px 0 0; }
+
+  .integ-card { display: flex; align-items: center; gap: 14px; padding: 16px 18px; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; background: var(--surface); }
+  .integ-card .il { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .integ-card .it { flex: 1; }
+  .integ-card .it h3 { font-size: 14.5px; font-weight: 700; }
+  .integ-card .it p { font-size: 12.5px; color: var(--ink-2); margin-top: 2px; }
+
+  /* toggle */
+  .switch { position: relative; width: 42px; height: 24px; border-radius: 999px; background: var(--surface-3); border: 1px solid var(--border); transition: background .16s; flex-shrink: 0; cursor: pointer; }
+  .switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; box-shadow: var(--shadow); transition: transform .16s; }
+  .switch.on { background: var(--brand); border-color: var(--brand); }
+  .switch.on::after { transform: translateX(18px); }
+
+  .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--ink); color: #fff; padding: 11px 18px; border-radius: 10px; font-size: 13.5px; font-weight: 600; box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: all .25s; z-index: 90; display: flex; align-items: center; gap: 9px; }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast svg { width: 16px; height: 16px; color: #6EE7B7; }
+
+  .note { font-size: 12px; color: var(--ink-3); }
+  .divider { height: 1px; background: var(--border); margin: 22px 0; }
+  .api-foot { margin-top: 30px; padding-top: 18px; border-top: 1px solid var(--border); font-size: 12.5px; color: var(--ink-3); }
+  .api-foot a { color: var(--ink-2); border-bottom: 1px dashed var(--border); }
+
+  .mobile-nav { display: none; }
+
+  @media (max-width: 940px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .mobile-nav { display: flex; gap: 4px; overflow-x: auto; padding: 8px 14px; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 60px; z-index: 39; }
+    .mobile-nav .nav-item { white-space: nowrap; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .reason-row { grid-template-columns: 1fr; }
+    .board { grid-template-columns: 1fr; }
+    .wl-grid { grid-template-columns: 1fr; }
+    .topbar { padding: 0 16px; }
+    .topbar-brand { display: flex; }
+    .topbar-right { display: none; }
+    .search { flex: 0 0 auto; max-width: none; width: auto; margin-left: auto; padding: 9px; cursor: pointer; }
+    .search input { display: none; }
+    .search .search-ico { cursor: pointer; }
+    .search.expanded { position: absolute; left: 16px; right: 16px; top: 11px; z-index: 45; flex: 1; width: auto; padding: 8px 12px; background: var(--surface); border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-tint); }
+    .search.expanded input { display: block; }
+    .content { padding: 20px 16px 80px; }
+    .col { min-height: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- ════ SIDEBAR ════ -->
+  <aside class="sidebar">
+    <div class="side-brand">
+      <div class="logo">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><circle cx="11" cy="11" r="2.4" fill="#fff" stroke="none"/>
+        </svg>
+      </div>
+      <div><div class="wordmark">Prospector</div><div class="tag">New business engine</div></div>
+    </div>
+
+    <div class="agency-chip" onclick="go('/settings')">
+      <div class="agency-avatar" id="agency-av">H</div>
+      <div style="min-width:0">
+        <div class="a-name" id="agency-name">Highline Studio</div>
+        <div class="a-sub" id="agency-sub">highlinestudio.com</div>
+      </div>
+    </div>
+
+    <nav class="nav" id="nav"></nav>
+
+    <div class="side-foot">
+      <div class="lbl"><span>Prospect credits</span><span id="cred-n">612 / 1,000</span></div>
+      <div class="credit-bar"><i style="width:61%"></i></div>
+      <div class="lbl"><span>Resets Jun 1</span><a href="#/settings" style="font-weight:600">Manage</a></div>
+    </div>
+  </aside>
+
+  <!-- ════ MAIN ════ -->
+  <div class="main">
+    <div class="topbar">
+      <a class="topbar-brand" href="#/">
+        <span class="logo"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><circle cx="11" cy="11" r="2.4" fill="#fff" stroke="none"/></svg></span>
+        <span class="tb-name">Prospector</span>
+      </a>
+      <div class="search" id="searchbox">
+        <svg class="search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="toggleSearchMobile()"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="search" placeholder="Search prospects, brands, categories…" autocomplete="off">
+      </div>
+      <div class="topbar-right" id="integ-status"></div>
+    </div>
+    <div class="mobile-nav" id="mobile-nav"></div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ════════════════════════ ICONS ════════════════════════ */
+const I = {
+  inbox: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>',
+  pipeline: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="3" y2="20"/><line x1="9" y1="6" x2="9" y2="14"/><line x1="15" y1="6" x2="15" y2="18"/><line x1="21" y1="6" x2="21" y2="11"/><circle cx="3" cy="4" r="1.6"/><circle cx="9" cy="4" r="1.6"/><circle cx="15" cy="4" r="1.6"/><circle cx="21" cy="4" r="1.6"/></svg>',
+  eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>',
+  settings: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+  link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>',
+  users: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  spark: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3"/></svg>',
+  bolt: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+  back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+  x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+  bookmark: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>',
+  doc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>',
+  arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>',
+  hub: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 9V4M12 15v5M9 12H4M15 12h5"/></svg>',
+  linkedin: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zm-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79zM6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68zm1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>',
+  building: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="9" y1="6" x2="9" y2="6"/><line x1="15" y1="6" x2="15" y2="6"/><line x1="9" y1="10" x2="9" y2="10"/><line x1="15" y1="10" x2="15" y2="10"/><line x1="9" y1="14" x2="9" y2="14"/><line x1="15" y1="14" x2="15" y2="14"/><path d="M9 22v-4h6v4"/></svg>',
+  dollar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+  trend: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
+  swap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>',
+  upload: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>',
+  target: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+};
+
+/* ════════════════════════ MOCK DATA ════════════════════════ */
+const AGENCY = {
+  name: 'Highline Studio',
+  domain: 'highlinestudio.com',
+  blurb: 'Independent creative + media agency · Chicago · 72 people',
+  fingerprint: {
+    audiences: ['Gen Z & younger millennials', 'Wellness-driven', 'Culture-forward', 'Value-conscious', 'Mobile-first'],
+    categories: ['Better-for-you CPG', 'DTC apparel & footwear', 'Consumer fintech', 'Fast-casual food']
+  }
+};
+const PAST_CLIENTS = [
+  { id:'olipop',   name:'OLIPOP',       domain:'drinkolipop.com', color:'#C2410C', cat:'Better-for-you beverage' },
+  { id:'allbirds', name:'Allbirds',     domain:'allbirds.com',    color:'#0F766E', cat:'Sustainable footwear' },
+  { id:'chime',    name:'Chime',        domain:'chime.com',       color:'#1D9B6C', cat:'Consumer fintech' },
+  { id:'sweetgrn', name:'Sweetgreen',   domain:'sweetgreen.com',  color:'#3F6212', cat:'Fast-casual food' },
+  { id:'liqdeath', name:'Liquid Death', domain:'liquiddeath.com', color:'#111827', cat:'Beverage / culture' },
+];
+const STAGES = [
+  { id:'new',         label:'New',         color:'#6366F1' },
+  { id:'researching', label:'Researching', color:'#0E7490' },
+  { id:'outreach',    label:'Outreach',    color:'#B45309' },
+  { id:'meeting',     label:'Meeting',     color:'#7C3AED' },
+  { id:'won',         label:'Won',         color:'#16A34A' },
+];
+const WHYNOW_META = {
+  leadership: { label:'New CMO', icon:I.users,   cls:'now', hot:false, src:'LinkedIn · job change' },
+  acquisition:{ label:'Acquired',icon:I.swap,    cls:'now', hot:false, src:'Press · M&A' },
+  funding:    { label:'New funding', icon:I.dollar, cls:'now', hot:false, src:'Press · funding round' },
+  review:     { label:'Agency review', icon:I.swap, cls:'hot', hot:true, src:'Trade press · AdAge' },
+  surge:      { label:'Category surge', icon:I.trend, cls:'now', hot:false, src:'Category trends' },
+  expansion:  { label:'Retail expansion', icon:I.building, cls:'now', hot:false, src:'Press · distribution' },
+  lull:       { label:'Campaign lull', icon:I.trend, cls:'hot', hot:true, src:'Paid-media spend signal' },
+};
+
+// status seeds simulate prior weeks already actioned
+const PROSPECTS = [
+  // ── Week of 2026-05-25 (current) — the 5 ──
+  { id:'poppi', brand:'Poppi', domain:'drinkpoppi.com', cat:'Better-for-you beverage', color:'#E11D74',
+    week:'2026-05-25', score:94, status:'new',
+    why_related:{ echoes:'olipop', text:'Near-perfect mirror of your <b>OLIPOP</b> work — prebiotic soda, same gut-health positioning, same Gen Z wellness buyer you built that brand voice for.',
+      overlap:[['Gen Z wellness',92],['Functional CPG buyers',88],['TikTok-native',81]] },
+    why_now:{ type:'acquisition', headline:'Acquired by PepsiCo for ~$1.95B — brand team mid-reshuffle.',
+      detail:'Post-close, Poppi is standing up an independent brand marketing org inside PepsiCo and is reportedly reviewing creative partners to scale beyond founder-led social. A new VP of Brand started 3 weeks ago.', dated:'May 22, 2026' },
+    contacts:[
+      { name:'Jordan Hayes', title:'VP, Brand Marketing', li:'in/jordan-hayes', mutuals:['Maya Chen — Highline ECD','You'] },
+      { name:'Priya Anand',  title:'Director, Integrated Marketing', li:'in/priya-anand', mutuals:[] },
+      { name:'Devin Cole',   title:'Sr. Manager, Social & Creator', li:'in/devin-cole', mutuals:['Sam Ortiz — Highline'] },
+    ] },
+  { id:'cava', brand:'CAVA', domain:'cava.com', cat:'Fast-casual food', color:'#B45309',
+    week:'2026-05-25', score:90, status:'new',
+    why_related:{ echoes:'sweetgrn', text:'Direct analog to <b>Sweetgreen</b> — Mediterranean fast-casual chasing the same urban, health-forward lunch crowd you grew Sweetgreen with.',
+      overlap:[['Urban health-conscious',90],['Premium QSR diners',85],['App-loyalty users',72]] },
+    why_now:{ type:'expansion', headline:'Post-IPO unit blitz — 70+ new locations this year, first national brand push.',
+      detail:'CAVA is moving from regional darling to national brand and just elevated a CMO to lead its first above-the-line campaign. They have budget and a story but no lead creative AOR.', dated:'May 19, 2026' },
+    contacts:[
+      { name:'Lena Marsh', title:'Chief Marketing Officer', li:'in/lena-marsh', mutuals:['You'] },
+      { name:'Tariq Bell', title:'VP, Brand & Creative', li:'in/tariq-bell', mutuals:[] },
+    ] },
+  { id:'magicspoon', brand:'Magic Spoon', domain:'magicspoon.com', cat:'Better-for-you CPG', color:'#7C3AED',
+    week:'2026-05-25', score:88, status:'new',
+    why_related:{ echoes:'olipop', text:'Better-for-you CPG with the exact DTC-to-retail arc you ran for <b>OLIPOP</b> — high-protein cereal, playful brand, wellness shopper.',
+      overlap:[['Functional CPG buyers',86],['Gen Z wellness',78],['DTC-first shoppers',83]] },
+    why_now:{ type:'funding', headline:'Closed a Series C and landing in Target & Walmart nationwide.',
+      detail:'Retail expansion means the brand suddenly needs shopper + brand marketing muscle it has never had in-house. They just opened a "Head of Brand Marketing" req — a classic signal they are building, not just hiring a doer.', dated:'May 20, 2026' },
+    contacts:[
+      { name:'Noah Feldman', title:'Co-Founder & CEO', li:'in/noah-feldman', mutuals:[] },
+      { name:'Riley Tan', title:'Head of Growth', li:'in/riley-tan', mutuals:['Maya Chen — Highline ECD'] },
+    ] },
+  { id:'vuori', brand:'Vuori', domain:'vuori.com', cat:'Performance apparel', color:'#0F766E',
+    week:'2026-05-25', score:86, status:'new',
+    why_related:{ echoes:'allbirds', text:'Premium, sustainability-leaning apparel for the same conscious-comfort buyer you know from <b>Allbirds</b> — adjacent category, identical brand sensibility.',
+      overlap:[['Conscious-comfort buyers',84],['Premium DTC apparel',88],['Active millennials',76]] },
+    why_now:{ type:'leadership', headline:'New CMO from Nike just started — and an agency review is rumored.',
+      detail:'A new CMO (ex-Nike brand lead) joined this month. New marketing leadership almost always re-evaluates agency rosters within the first quarter — the window to get on the consideration list is now.', dated:'May 16, 2026' },
+    contacts:[
+      { name:'Marcus Reed', title:'Chief Marketing Officer', li:'in/marcus-reed', mutuals:['You','Sam Ortiz — Highline'] },
+      { name:'Hana Yoo', title:'VP, Brand Marketing', li:'in/hana-yoo', mutuals:[] },
+    ] },
+  { id:'step', brand:'Step', domain:'step.com', cat:'Consumer fintech', color:'#1D9B6C',
+    week:'2026-05-25', score:83, status:'new',
+    why_related:{ echoes:'chime', text:'Mobile-first banking for the underbanked, mass-market audience you built <b>Chime</b> for — same buyer, younger skew (teens & Gen Z).',
+      overlap:[['Mass-market mobile-first',87],['Gen Z',80],['First-account openers',74]] },
+    why_now:{ type:'lull', headline:'No major brand work in ~9 months despite a fresh raise.',
+      detail:'Step raised earlier this year but its paid-media spend signal shows a long creative lull — lots of performance, no brand. A funded brand that has gone quiet is a brand about to spend.', dated:'May 14, 2026' },
+    contacts:[
+      { name:'Alyssa Pope', title:'VP Marketing', li:'in/alyssa-pope', mutuals:[] },
+      { name:'Chris Nolan', title:'Head of Brand', li:'in/chris-nolan', mutuals:['You'] },
+    ] },
+
+  // ── Week of 2026-05-18 (prior — pre-actioned to seed pipeline/watchlist) ──
+  { id:'ghia', brand:'Ghia', domain:'drinkghia.com', cat:'Non-alc beverage', color:'#C2410C',
+    week:'2026-05-18', score:89, status:'accepted', stage:'outreach', hubspot:true, playbook:true,
+    why_related:{ echoes:'liqdeath', text:'Culture-forward non-alc aperitif — the irreverent, design-led beverage lane you owned with <b>Liquid Death</b>, aimed at the sober-curious set.',
+      overlap:[['Sober-curious',88],['Design-led CPG',82],['Culture-forward',79]] },
+    why_now:{ type:'surge', headline:'Non-alc category is surging into summer; Ghia is scaling distribution.',
+      detail:'The non-alc category is up sharply YoY and Ghia is expanding retail. Timing is ideal for a brand campaign.', dated:'May 12, 2026' },
+    contacts:[ { name:'Sofia Greco', title:'Head of Marketing', li:'in/sofia-greco', mutuals:['You'] } ] },
+  { id:'rothys', brand:"Rothy's", domain:'rothys.com', cat:'Sustainable footwear', color:'#0E7490',
+    week:'2026-05-18', score:85, status:'accepted', stage:'researching', hubspot:false, playbook:false,
+    why_related:{ echoes:'allbirds', text:'Sustainable footwear built on recycled materials — your <b>Allbirds</b> playbook applies almost line-for-line.',
+      overlap:[['Eco-conscious millennials',86],['Premium DTC apparel',81]] },
+    why_now:{ type:'leadership', headline:'New VP of Brand hired from a competitor.', detail:'Fresh brand leadership reassessing partners.', dated:'May 10, 2026' },
+    contacts:[ { name:'Erin Wells', title:'VP Brand', li:'in/erin-wells', mutuals:[] } ] },
+  { id:'immi', brand:'Immi', domain:'immieats.com', cat:'Better-for-you CPG', color:'#DC2626',
+    week:'2026-05-18', score:81, status:'tracked',
+    why_related:{ echoes:'olipop', text:'High-protein, better-for-you instant ramen — same functional-CPG, Gen Z wellness buyer as <b>OLIPOP</b>.',
+      overlap:[['Functional CPG buyers',84],['Gen Z wellness',77]] },
+    why_now:{ type:'funding', headline:'Series B extension reported; building out the team.', detail:'Watching for a brand-leadership hire as the trigger to pitch.', dated:'May 9, 2026' },
+    contacts:[ { name:'Kevin Lee', title:'Co-Founder', li:'in/kevin-lee', mutuals:[] } ] },
+  { id:'athletic', brand:'Athletic Brewing', domain:'athleticbrewing.com', cat:'Non-alc beverage', color:'#111827',
+    week:'2026-05-18', score:78, status:'rejected',
+    why_related:{ echoes:'liqdeath', text:'Non-alc craft beer in the beverage-culture lane.', overlap:[['Sober-curious',80]] },
+    why_now:{ type:'surge', headline:'Category tailwinds.', detail:'Rejected — they re-signed their incumbent AOR last month.', dated:'May 8, 2026' },
+    contacts:[] },
+  { id:'parade', brand:'Parade', domain:'yourparade.com', cat:'DTC apparel', color:'#7C3AED',
+    week:'2026-05-18', score:80, status:'tracked',
+    why_related:{ echoes:'allbirds', text:'Inclusive DTC intimates with a strong Gen Z brand voice.', overlap:[['Gen Z',83],['DTC-first shoppers',78]] },
+    why_now:{ type:'lull', headline:'Brand campaign went quiet after founder transition.', detail:'Monitoring for the next funding or leadership move.', dated:'May 7, 2026' },
+    contacts:[ { name:'Dana Brooks', title:'Acting Head of Marketing', li:'in/dana-brooks', mutuals:[] } ] },
+
+  // ── Week of 2026-05-11 (prior — one won deal) ──
+  { id:'recess', brand:'Recess', domain:'takearecess.com', cat:'Better-for-you beverage', color:'#E11D74',
+    week:'2026-05-11', score:87, status:'accepted', stage:'won', hubspot:true, playbook:true,
+    why_related:{ echoes:'olipop', text:'Adaptogen + CBD sparkling drink — functional beverage in your OLIPOP wheelhouse.', overlap:[['Functional CPG buyers',85],['Gen Z wellness',79]] },
+    why_now:{ type:'funding', headline:'Raised a growth round to fund a national brand campaign.', detail:'Closed — signed Highline as lead creative AOR.', dated:'May 5, 2026' },
+    contacts:[ { name:'Mia Sato', title:'CMO', li:'in/mia-sato', mutuals:['You'] } ] },
+];
+
+// monitoring feed for tracked brands
+const SIGNALS = [
+  { brand:'Immi', type:'leadership', text:'<b>Immi</b> hired a new <b>Head of Growth Marketing</b> — a likely buying-committee signal.', when:'2 days ago' },
+  { brand:'Parade', type:'lull', text:'<b>Parade</b> launched a spring brand campaign — produced in-house, no agency credited.', when:'3 days ago' },
+  { brand:'Immi', type:'funding', text:'<b>Immi</b> Series B extension reported in trade press.', when:'5 days ago' },
+  { brand:'Parade', type:'review', text:'<b>Parade</b> posted a "Brand Marketing Lead" role — leadership gap forming.', when:'6 days ago' },
+];
+
+const WEEKS = ['2026-05-25','2026-05-18','2026-05-11'];
+const WEEK_LABEL = { '2026-05-25':'This week', '2026-05-18':'May 18', '2026-05-11':'May 11' };
+
+/* ════════════════════════ STATE ════════════════════════ */
+const LS_KEY = 'prospector_state_v1';
+let state = load();
+function load(){
+  let s = {};
+  try { s = JSON.parse(localStorage.getItem(LS_KEY)) || {}; } catch(e){}
+  return Object.assign({
+    integrations: { linkedin:false, hubspot:false },
+    cadence: { perWeek:5, day:'Monday' },
+    over: {},            // per-prospect overrides {status, stage, hubspot, playbook}
+    activeWeek: '2026-05-25',
+    query: ''
+  }, s);
+}
+function save(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+
+// merge seed prospect with any saved override
+function P(id){ const base = PROSPECTS.find(p=>p.id===id); return Object.assign({}, base, state.over[id]||{}); }
+function allP(){ return PROSPECTS.map(p=>P(p.id)); }
+function setP(id, patch){ state.over[id] = Object.assign({}, state.over[id]||{}, patch); save(); }
+
+/* ════════════════════════ HELPERS ════════════════════════ */
+const $ = s => document.querySelector(s);
+const esc = s => (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function go(path){ location.hash = '#'+path; }
+function scoreCls(n){ return n>=90?'s-hi':n>=80?'s-mid':'s-lo'; }
+// real brand favicon/logo via Google's favicon service, with a graceful fallback to the colored initial
+function brandLogoEl(domain, color, letter, cls){
+  const img = domain ? `<img src="https://www.google.com/s2/favicons?domain=${esc(domain)}&sz=128" alt="" loading="lazy" referrerpolicy="no-referrer" onload="if(this.naturalWidth>1)this.parentNode.classList.add('has-logo');else this.remove();" onerror="this.remove()">` : '';
+  return `<div class="brand-logo ${cls||''}" style="background:${color}">${img}<span>${esc(letter)}</span></div>`;
+}
+function logoMark(p){ return brandLogoEl(p.domain, p.color, p.brand[0]); }
+function initials(name){ return name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
+function toast(msg){ const t=$('#toast'); t.innerHTML = I.check + esc(msg); t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2200); }
+
+/* ════════════════════════ NAV ════════════════════════ */
+function renderNav(){
+  const route = currentRoute();
+  const isActive = (n) => {
+    if(n.path==='/') return route==='/'||route.startsWith('/prospect');
+    return route===n.path;
+  };
+  const items = [
+    { path:'/', icon:I.inbox, label:'This Week' },
+    { path:'/pipeline', icon:I.pipeline, label:'Pipeline' },
+    { path:'/watchlist', icon:I.eye, label:'Watchlist' },
+    { path:'/settings', icon:I.settings, label:'Setup & integrations' },
+  ];
+  const queue = allP().filter(p=>p.week===state.activeWeek && p.status==='new').length;
+  const pipe = allP().filter(p=>p.status==='accepted').length;
+  const tracked = allP().filter(p=>p.status==='tracked').length;
+  const badge = (path)=> path==='/' && queue ? `<span class="count">${queue}</span>`
+    : path==='/pipeline' && pipe ? `<span class="count" style="background:var(--ink-3)">${pipe}</span>`
+    : path==='/watchlist' && tracked ? `<span class="dot" title="${tracked} tracked"></span>` : '';
+  const html = items.map(n=>`<a class="nav-item ${isActive(n)?'active':''}" href="#${n.path}">${n.icon}<span>${n.label}</span>${badge(n.path)}</a>`).join('');
+  $('#nav').innerHTML = `<div class="nav-label">Workspace</div>` + html;
+  $('#mobile-nav').innerHTML = items.map(n=>`<a class="nav-item ${isActive(n)?'active':''}" href="#${n.path}">${n.icon}<span>${n.label}</span>${badge(n.path)}</a>`).join('');
+  // integrations status pills
+  $('#integ-status').innerHTML =
+    `<span class="integ-pill ${state.integrations.linkedin?'on':''}" title="LinkedIn">${I.linkedin}<span>${state.integrations.linkedin?'LinkedIn':'Connect LinkedIn'}</span></span>`+
+    `<span class="integ-pill ${state.integrations.hubspot?'on':''}" title="HubSpot"><span class="d"></span><span>${state.integrations.hubspot?'HubSpot synced':'HubSpot off'}</span></span>`;
+  $('#agency-name').textContent = AGENCY.name;
+  $('#agency-sub').textContent = AGENCY.domain;
+  $('#agency-av').textContent = AGENCY.name[0];
+}
+
+/* ════════════════════════ VIEWS ════════════════════════ */
+function renderThisWeek(){
+  const wk = state.activeWeek;
+  const list = allP().filter(p=>p.week===wk);
+  const queue = list.filter(p=>p.status==='new');
+  const actioned = list.filter(p=>p.status!=='new');
+  const weekTabs = WEEKS.map(w=>`<button class="${w===wk?'active':''}" onclick="state.activeWeek='${w}';save();render()">${WEEK_LABEL[w]}</button>`).join('');
+
+  let body = '';
+  if(queue.length===0 && actioned.length===0){
+    body = emptyState(I.inbox, 'No prospects this week yet', 'Your next five will be delivered '+state.cadence.day+' morning. Adjust cadence in Setup.');
+  } else if(queue.length===0){
+    body = emptyState(I.check, 'You\'re all caught up', 'Every prospect for '+WEEK_LABEL[wk].toLowerCase()+' has been reviewed. Check your <a href="#/pipeline">Pipeline</a> or come back '+state.cadence.day+'.');
+  } else {
+    body = `<div class="stack">${queue.map(prospectCard).join('')}</div>`;
+  }
+  let reviewed = '';
+  if(actioned.length){
+    reviewed = `<div class="divider"></div><div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);margin-bottom:12px">Reviewed (${actioned.length})</div><div class="stack">${actioned.map(prospectCard).join('')}</div>`;
+  }
+
+  $('#content').innerHTML = `
+    <div class="page-head">
+      <div class="row">
+        <div>
+          <h1>This Week</h1>
+          <div class="sub">${queue.length} new look-alike ${queue.length===1?'prospect':'prospects'} matched to ${AGENCY.name}'s past work · week of ${fmtWeek(wk)}${passedLink()}</div>
+        </div>
+        <div class="spacer"></div>
+        <div class="week-switch">${weekTabs}</div>
+      </div>
+    </div>
+    ${body}
+    ${reviewed}
+    ${apiFoot()}
+  `;
+}
+
+function prospectCard(p){
+  const wn = WHYNOW_META[p.why_now.type];
+  const client = PAST_CLIENTS.find(c=>c.id===p.why_related.echoes);
+  const done = p.status!=='new';
+  const statusPill = p.status==='accepted' ? `<span class="pill ok">${I.check} Accepted</span>`
+    : p.status==='rejected' ? `<span class="pill muted">Passed</span>`
+    : p.status==='tracked' ? `<span class="pill brand">${I.eye} Tracking</span>` : '';
+  return `
+  <div class="card pcard ${done?'is-done':''}" onclick="go('/prospect/${p.id}')">
+    <div class="pcard-top">
+      ${logoMark(p)}
+      <div style="min-width:0">
+        <h3>${esc(p.brand)} <span class="domain">${esc(p.domain)}</span> ${statusPill}</h3>
+        <div class="badges">
+          <span class="pill cat">${esc(p.cat)}</span>
+          <span class="pill ${wn.cls}">${wn.icon} ${wn.label}</span>
+        </div>
+      </div>
+      <div class="pcard-score">
+        <div class="score ${scoreCls(p.score)}">${p.score}<span class="pct">/100</span></div>
+        <div class="slabel">Match</div>
+      </div>
+    </div>
+    <div class="reason-row">
+      <div class="reason">
+        <div class="rl">${I.target} Why it's a fit</div>
+        <p>${p.why_related.text}</p>
+      </div>
+      <div class="reason now-r">
+        <div class="rl">${I.bolt} Why now</div>
+        <p>${esc(p.why_now.headline)}</p>
+      </div>
+    </div>
+    ${done ? '' : `
+    <div class="pcard-actions" onclick="event.stopPropagation()">
+      <button class="btn btn-accept" onclick="accept('${p.id}')">${I.check} Accept → Pipeline</button>
+      <button class="btn btn-ghost" onclick="track('${p.id}')">${I.eye} Track</button>
+      <button class="btn btn-reject" onclick="reject('${p.id}')">${I.x} Pass</button>
+      <div class="grow"></div>
+      <button class="btn btn-ghost btn-sm" onclick="go('/prospect/${p.id}')">View brief ${I.arrow}</button>
+    </div>`}
+  </div>`;
+}
+
+function renderDetail(id){
+  const p = P(id);
+  if(!p.brand){ $('#content').innerHTML = emptyState(I.x,'Prospect not found','<a href="#/">Back to This Week</a>'); return; }
+  const wn = WHYNOW_META[p.why_now.type];
+  const client = PAST_CLIENTS.find(c=>c.id===p.why_related.echoes);
+  const liOn = state.integrations.linkedin;
+
+  const contactsHtml = p.contacts.length ? p.contacts.map(c=>`
+    <div class="contact">
+      <div class="av">${initials(c.name)}</div>
+      <div class="ci">
+        <div class="cn">${esc(c.name)}</div>
+        <div class="ct">${esc(c.title)}</div>
+        ${liOn && c.mutuals.length ? `<div class="mutual">${I.users} ${c.mutuals.length} mutual ${c.mutuals.length===1?'connection':'connections'} · ${esc(c.mutuals.join(', '))}</div>` : ''}
+      </div>
+      <a class="li" href="https://linkedin.com/${esc(c.li)}" target="_blank" rel="noopener" title="LinkedIn profile">${I.linkedin}</a>
+    </div>`).join('') : `<p class="note">No contacts surfaced yet.</p>`;
+
+  const liPrompt = !liOn ? `<div class="li-prompt" style="margin-top:14px">${I.linkedin}<div>Connect LinkedIn to see which contacts you and your team already know.</div><button class="btn btn-ghost btn-sm" style="margin-left:auto" onclick="toggleInteg('linkedin')">Connect</button></div>` : '';
+
+  const overlap = p.why_related.overlap.map(([nm,v])=>`
+    <div class="overlap-row"><div class="nm">${esc(nm)}</div><div class="track"><i style="width:${v}%"></i></div><div class="v">${v}%</div></div>`).join('');
+
+  // side action panel depends on status
+  const inPipeline = p.status==='accepted';
+  const tracked = p.status==='tracked';
+  let actionBtns = '';
+  if(inPipeline){
+    actionBtns = `
+      <div class="pill ok" style="margin-bottom:12px">${I.check} In your pipeline · ${STAGES.find(s=>s.id===(p.stage||'new')).label}</div>
+      <button class="btn ${p.playbook?'btn-ghost':'btn-primary'} act-btn" onclick="makePlaybook('${p.id}')">${I.doc} ${p.playbook?'View pitch playbook':'Create pitch playbook'}</button>
+      <button class="btn btn-ghost act-btn" onclick="syncHubspot('${p.id}')"><span class="icon-flag hs" style="width:18px;height:18px">${I.hub}</span> ${p.hubspot?'Synced to HubSpot ✓':'Sync to HubSpot'}</button>`;
+  } else {
+    actionBtns = `
+      <button class="btn btn-accept act-btn" onclick="accept('${p.id}')">${I.check} Accept → Pipeline</button>
+      <button class="btn btn-ghost act-btn" onclick="track('${p.id}')">${I.eye} ${tracked?'Tracking ✓ · monitor':'Track this brand'}</button>
+      ${p.status!=='rejected' ? `<button class="btn btn-reject act-btn" onclick="reject('${p.id}')">${I.x} Pass</button>` : `<div class="note" style="text-align:center;margin-top:6px">Passed on this prospect.</div>`}`;
+  }
+
+  $('#content').innerHTML = `
+    <a class="back-link" href="#/">${I.back} Back to This Week</a>
+    <div class="detail-hd">
+      ${logoMark(p)}
+      <div style="flex:1">
+        <h1>${esc(p.brand)} <span class="score ${scoreCls(p.score)}" style="font-size:18px">${p.score}<span class="pct">/100 match</span></span></h1>
+        <div class="domain"><a href="https://${esc(p.domain)}" target="_blank" rel="noopener">${esc(p.domain)}</a> · ${esc(p.cat)}</div>
+      </div>
+    </div>
+    <div class="detail-grid">
+      <div>
+        <div class="panel">
+          <h2>${I.bolt} Why now — the opening</h2>
+          <div class="why-now-box ${wn.hot?'hot':''}">
+            <div class="hl">${wn.icon} ${esc(p.why_now.headline)}</div>
+            <p>${esc(p.why_now.detail)}</p>
+            <div class="src">${I.spark} ${esc(wn.src)} · detected ${esc(p.why_now.dated)}</div>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>${I.target} Why it's a fit</h2>
+          <p class="lead">${p.why_related.text}</p>
+          <div style="margin:14px 0 4px"><span class="note" style="font-weight:700">Echoes your client</span></div>
+          <div class="echo">${brandLogoEl(client.domain, client.color, client.name[0], 'ed')} ${esc(client.name)} · ${esc(client.cat)}</div>
+          <div style="margin:18px 0 8px"><span class="note" style="font-weight:700;text-transform:uppercase;letter-spacing:.06em">Audience overlap</span></div>
+          ${overlap}
+        </div>
+        <div class="panel">
+          <h2>${I.users} Probable contacts</h2>
+          ${contactsHtml}
+          ${liPrompt}
+        </div>
+      </div>
+      <div>
+        <div class="panel side-actions">
+          <h2>Actions</h2>
+          ${actionBtns}
+        </div>
+        <div class="panel">
+          <h2>Details</h2>
+          <div class="meta-list">
+            <div class="ml-row"><span class="k">Category</span><span class="v">${esc(p.cat)}</span></div>
+            <div class="ml-row"><span class="k">Match score</span><span class="v">${p.score}/100</span></div>
+            <div class="ml-row"><span class="k">Surfaced</span><span class="v">${fmtWeek(p.week)}</span></div>
+            <div class="ml-row"><span class="k">Opening type</span><span class="v">${wn.label}</span></div>
+            <div class="ml-row"><span class="k">Contacts found</span><span class="v">${p.contacts.length}</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    ${apiFoot()}
+  `;
+}
+
+function renderPipeline(){
+  const accepted = allP().filter(p=>p.status==='accepted');
+  const cols = STAGES.map(st=>{
+    const items = accepted.filter(p=>(p.stage||'new')===st.id);
+    const cards = items.map(p=>{
+      const opts = STAGES.map(s=>`<option value="${s.id}" ${(p.stage||'new')===s.id?'selected':''}>${s.label}</option>`).join('');
+      return `<div class="mini-card" onclick="go('/prospect/${p.id}')">
+        <div class="mc-top">${logoMark(p)}<div style="min-width:0"><div class="mc-name">${esc(p.brand)}</div><div class="mc-cat">${esc(p.cat)} · ${p.score}</div></div></div>
+        <div class="mc-foot" onclick="event.stopPropagation()">
+          <select class="stage-sel" onchange="setStage('${p.id}',this.value)">${opts}</select>
+          ${p.hubspot?`<span class="icon-flag hs" title="Synced to HubSpot">${I.hub}</span>`:''}
+          ${p.playbook?`<span class="icon-flag pb" title="Pitch playbook ready">${I.doc}</span>`:''}
+        </div>
+      </div>`;
+    }).join('') || `<div class="note" style="padding:6px 2px">—</div>`;
+    return `<div class="col">
+      <div class="col-hd"><span class="cdot" style="background:${st.color}"></span>${st.label}<span class="cnt">${items.length}</span></div>
+      ${cards}
+    </div>`;
+  }).join('');
+
+  const body = accepted.length ? `<div class="board">${cols}</div>`
+    : emptyState(I.pipeline,'Your pipeline is empty','Accept prospects from <a href="#/">This Week</a> and they\'ll land here. Drag them through your stages and sync to HubSpot.');
+
+  $('#content').innerHTML = `
+    <div class="page-head"><h1>Pipeline</h1><div class="sub">${accepted.length} accepted ${accepted.length===1?'prospect':'prospects'} · move them stage to stage as you work the deal</div></div>
+    ${body}
+    ${apiFoot()}
+  `;
+}
+
+function passedLink(){
+  const n = allP().filter(p=>p.status==='rejected').length;
+  return n ? ` · <a href="#/passed">${n} passed →</a>` : '';
+}
+
+function renderPassed(){
+  const passed = allP().filter(p=>p.status==='rejected');
+  const rows = passed.length ? `<div class="stack">${passed.map(p=>{
+    const wn = WHYNOW_META[p.why_now.type];
+    return `<div class="card pcard is-done" style="cursor:default">
+      <div class="pcard-top">
+        ${logoMark(p)}
+        <div style="min-width:0">
+          <h3 style="cursor:pointer" onclick="go('/prospect/${p.id}')">${esc(p.brand)} <span class="domain">${esc(p.domain)}</span></h3>
+          <div class="badges"><span class="pill cat">${esc(p.cat)}</span><span class="pill ${wn.cls}">${wn.icon} ${wn.label}</span><span class="pill muted">Passed · ${fmtWeek(p.week)}</span></div>
+        </div>
+        <div class="pcard-score"><div class="score ${scoreCls(p.score)}">${p.score}<span class="pct">/100</span></div><div class="slabel">Match</div></div>
+      </div>
+      <div class="pcard-actions">
+        <button class="btn btn-accept btn-sm" onclick="accept('${p.id}')">${I.check} Accept → Pipeline</button>
+        <button class="btn btn-ghost btn-sm" onclick="track('${p.id}')">${I.eye} Track</button>
+        <button class="btn btn-ghost btn-sm" onclick="restore('${p.id}')">${I.swap} Move back to review</button>
+        <div class="grow"></div>
+        <button class="btn btn-ghost btn-sm" onclick="go('/prospect/${p.id}')">View brief ${I.arrow}</button>
+      </div>
+    </div>`;
+  }).join('')}</div>` : emptyState(I.x, 'Nothing passed yet', 'Prospects you pass on from <a href="#/">This Week</a> are archived here — you can always reconsider them later.');
+
+  $('#content').innerHTML = `
+    <a class="back-link" href="#/">${I.back} Back to This Week</a>
+    <div class="page-head"><h1>Passed</h1><div class="sub">${passed.length} archived ${passed.length===1?'prospect':'prospects'} · reconsider any of them anytime</div></div>
+    ${rows}
+    ${apiFoot()}
+  `;
+}
+
+function renderWatchlist(){
+  const tracked = allP().filter(p=>p.status==='tracked');
+  const trackedRows = tracked.length ? tracked.map(p=>{
+    const wn = WHYNOW_META[p.why_now.type];
+    return `<div class="tracked-row">
+      ${logoMark(p)}
+      <div style="flex:1;min-width:0;cursor:pointer" onclick="go('/prospect/${p.id}')">
+        <div style="font-weight:700;font-size:14px">${esc(p.brand)}</div>
+        <div class="note">${esc(p.cat)} · watching for: ${wn.label.toLowerCase()}</div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="accept('${p.id}')">${I.check} Promote</button>
+    </div>`;
+  }).join('') : `<p class="note">No brands tracked yet. Hit <b>Track</b> on any prospect to monitor it for an opening.</p>`;
+
+  const feed = SIGNALS.map(s=>{
+    const wn = WHYNOW_META[s.type];
+    return `<div class="feed-item">
+      <div class="feed-ico" style="background:${wn.hot?'var(--red-tint)':'var(--amber-tint)'};color:${wn.hot?'var(--red)':'var(--amber)'}">${wn.icon}</div>
+      <div><div class="ft">${s.text}</div><div class="fm">${esc(s.when)} · ${wn.label}</div></div>
+    </div>`;
+  }).join('');
+
+  $('#content').innerHTML = `
+    <div class="page-head"><h1>Watchlist</h1><div class="sub">Brands we monitor on your behalf — we'll surface the moment an opening appears</div></div>
+    <div class="wl-grid">
+      <div class="panel"><h2>${I.eye} Tracked brands (${tracked.length})</h2>${trackedRows}</div>
+      <div class="panel"><h2>${I.spark} Opening signals</h2>${feed}</div>
+    </div>
+    ${apiFoot()}
+  `;
+}
+
+function renderSettings(){
+  const fp = AGENCY.fingerprint;
+  const clientChips = PAST_CLIENTS.map(c=>`<span class="chip"><span class="cdot2" style="background:${c.color}">${esc(c.name[0])}</span>${esc(c.name)}<span class="cx" title="(demo)">×</span></span>`).join('');
+  const audTags = fp.audiences.map(a=>`<span class="fingerprint-tag">${I.users} ${esc(a)}</span>`).join('');
+  const catTags = fp.categories.map(a=>`<span class="fingerprint-tag" style="background:var(--surface-3);color:var(--ink-2)">${esc(a)}</span>`).join('');
+
+  const integ = (key, name, desc, iconHtml, iconBg, iconColor, blurbOn) => `
+    <div class="integ-card">
+      <div class="il" style="background:${iconBg};color:${iconColor}">${iconHtml}</div>
+      <div class="it"><h3>${name}</h3><p>${state.integrations[key]?blurbOn:desc}</p></div>
+      <div class="switch ${state.integrations[key]?'on':''}" onclick="toggleInteg('${key}')"></div>
+    </div>`;
+
+  $('#content').innerHTML = `
+    <div class="page-head"><h1>Setup & integrations</h1><div class="sub">Prospector learns from your past work, then delivers look-alikes on a schedule</div></div>
+
+    <div class="panel">
+      <h2>${I.building} Your agency</h2>
+      <div class="form-row"><label>Agency name</label><input type="text" value="${esc(AGENCY.name)}"></div>
+      <div class="form-row"><label>Website</label><input type="url" value="https://${esc(AGENCY.domain)}"></div>
+      <div class="form-row"><label>Past & current clients <span class="note">(uploaded — drives your look-alike model)</span></label>
+        <div class="chips">${clientChips}</div>
+        <button class="btn btn-ghost btn-sm" style="margin-top:10px" onclick="toast('Demo · client-list upload')">${I.upload} Upload client list (CSV)</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>${I.spark} Your audience & category fingerprint</h2>
+      <p class="note" style="margin-bottom:10px">Derived from the audiences your past clients addressed. We score every brand in the index against this.</p>
+      <div style="margin-bottom:6px"><span class="note" style="font-weight:700">Audiences</span></div>
+      <div>${audTags}</div>
+      <div style="margin:16px 0 6px"><span class="note" style="font-weight:700">Categories</span></div>
+      <div>${catTags}</div>
+    </div>
+
+    <div class="panel">
+      <h2>${I.link} Integrations</h2>
+      ${integ('linkedin','LinkedIn','Connect to reveal mutual connections with prospect contacts and warm-intro paths.', I.linkedin, '#E8F1FB', '#0A66C2', 'Connected — mutual connections shown on every prospect.')}
+      ${integ('hubspot','HubSpot','Push accepted prospects into your CRM as companies + contacts, kept in sync.', I.hub, '#FFF1E8', '#FF7A59', 'Connected — accepted prospects sync automatically.')}
+    </div>
+
+    <div class="panel">
+      <h2>${I.inbox} Delivery cadence</h2>
+      <div class="form-row" style="max-width:280px"><label>Prospects per week</label>
+        <select onchange="state.cadence.perWeek=+this.value;save();toast('Cadence updated')">
+          ${[3,5,8,10].map(n=>`<option value="${n}" ${state.cadence.perWeek===n?'selected':''}>${n} per week</option>`).join('')}
+        </select></div>
+      <div class="form-row" style="max-width:280px"><label>Delivery day</label>
+        <select onchange="state.cadence.day=this.value;save();toast('Cadence updated')">
+          ${['Monday','Tuesday','Wednesday','Thursday','Friday'].map(d=>`<option ${state.cadence.day===d?'selected':''}>${d}</option>`).join('')}
+        </select></div>
+    </div>
+    ${apiFoot()}
+  `;
+}
+
+/* ════════════════════════ SHARED BITS ════════════════════════ */
+function emptyState(icon, h, p){ return `<div class="card"><div class="empty"><div class="ico">${icon}</div><h2>${esc(h)}</h2><p>${p}</p></div></div>`; }
+function apiFoot(){ return `<div class="api-foot">Prototype for the <b>bxcAPI</b> · <a href="/prospector/endpoints.html">See every endpoint Prospector needs →</a> · <a href="/bxcapi/index.html">Brand Intelligence API spec</a></div>`; }
+function fmtWeek(w){ const [y,m,d]=w.split('-'); return new Date(y,m-1,d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+
+/* ════════════════════════ ACTIONS ════════════════════════ */
+function accept(id){ setP(id,{status:'accepted', stage:'new'}); if(state.integrations.hubspot) setP(id,{hubspot:true}); toast(P(id).brand+' → Pipeline'); render(); }
+function reject(id){ setP(id,{status:'rejected'}); toast('Passed on '+P(id).brand); render(); }
+function track(id){ setP(id,{status:'tracked'}); toast('Tracking '+P(id).brand); render(); }
+function setStage(id,stage){ setP(id,{stage}); toast(P(id).brand+' → '+STAGES.find(s=>s.id===stage).label); render(); }
+function restore(id){ setP(id,{status:'new'}); toast(P(id).brand+' moved back to review'); render(); }
+function syncHubspot(id){
+  if(!state.integrations.hubspot){ toast('Connect HubSpot in Setup first'); go('/settings'); return; }
+  setP(id,{hubspot:true}); toast(P(id).brand+' synced to HubSpot'); render();
+}
+function makePlaybook(id){
+  setP(id,{playbook:true}); toast('Pitch playbook generated for '+P(id).brand);
+  // open a representative generated playbook (example output)
+  window.open('/pitch-playbook/reddish-ag1.html','_blank','noopener');
+  render();
+}
+function toggleInteg(key){
+  state.integrations[key] = !state.integrations[key];
+  save();
+  if(key==='hubspot' && state.integrations.hubspot){ allP().filter(p=>p.status==='accepted').forEach(p=>setP(p.id,{hubspot:true})); }
+  toast((key==='linkedin'?'LinkedIn ':'HubSpot ')+(state.integrations[key]?'connected':'disconnected'));
+  render();
+}
+
+/* ════════════════════════ SEARCH ════════════════════════ */
+function toggleSearchMobile(){
+  if(window.innerWidth > 940) return;          // desktop: icon is decorative
+  const sb = $('#searchbox');
+  sb.classList.toggle('expanded');
+  if(sb.classList.contains('expanded')) setTimeout(()=>$('#search').focus(), 0);
+}
+function runSearch(q){
+  state.query = q.trim().toLowerCase();
+  // lightweight: filter the visible cards on This Week & Pipeline
+  if(currentRoute()==='/' || currentRoute()==='/pipeline'){ applySearchFilter(); }
+}
+function applySearchFilter(){
+  const q = state.query;
+  document.querySelectorAll('.pcard, .mini-card').forEach(el=>{
+    const t = el.textContent.toLowerCase();
+    el.style.display = (!q || t.includes(q)) ? '' : 'none';
+  });
+}
+
+/* ════════════════════════ ROUTER ════════════════════════ */
+function currentRoute(){ return (location.hash.replace(/^#/,'')||'/'); }
+function render(){
+  renderNav();
+  const r = currentRoute();
+  if(r.startsWith('/prospect/')) renderDetail(r.split('/')[2]);
+  else if(r==='/pipeline') renderPipeline();
+  else if(r==='/watchlist') renderWatchlist();
+  else if(r==='/passed') renderPassed();
+  else if(r==='/settings'||r==='/setup') renderSettings();
+  else renderThisWeek();
+  window.scrollTo(0,0);
+  if(state.query && (r==='/'||r==='/pipeline')){ $('#search').value=state.query; applySearchFilter(); }
+}
+window.addEventListener('hashchange', ()=>{ state.query=''; $('#search').value=''; render(); });
+$('#search').addEventListener('input', e=>runSearch(e.target.value));
+$('#search').addEventListener('blur', ()=>{ if(!$('#search').value) $('#searchbox').classList.remove('expanded'); });
+render();
+</script>
+</body>
+</html>

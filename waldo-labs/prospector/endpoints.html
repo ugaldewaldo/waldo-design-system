@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prospector — API coverage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F7F8FA; --surface: #FFFFFF; --surface-2: #FBFBFD; --surface-3: #F2F4F7;
+    --border: #E6E8EC; --border-2: #EEF0F3;
+    --ink: #101828; --ink-2: #475467; --ink-3: #98A2B3;
+    --brand: #4F46E5; --brand-tint: #EEF0FF; --brand-ink: #3730A3;
+    --green: #16A34A; --green-tint: #E7F6EC;
+    --amber: #B45309; --amber-tint: #FDF3E7;
+    --red: #DC2626; --red-tint: #FCEBEB;
+    --gold: #B7791F; --gold-tint: #FBF4E3;
+    --shadow: 0 1px 2px rgba(16,24,40,.06);
+    --radius: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.55; font-size: 14px; -webkit-font-smoothing: antialiased; padding-bottom: 80px; }
+  a { color: var(--brand); text-decoration: none; }
+  a:hover { opacity: .85; }
+  code, .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 32px; border-bottom: 1px solid var(--border); background: rgba(255,255,255,.9); backdrop-filter: blur(8px); position: sticky; top: 0; z-index: 50; }
+  .brand-mark { display: flex; align-items: center; gap: 11px; }
+  .brand-mark .logo { width: 30px; height: 30px; border-radius: 8px; background: var(--brand); display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(79,70,229,.32); }
+  .brand-mark .name { font-weight: 800; font-size: 17px; letter-spacing: -0.02em; }
+  .brand-mark .cat { font-size: 10px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 1px; font-weight: 600; }
+  .topbar-links { display: flex; gap: 18px; font-size: 13px; }
+  .topbar-links a { color: var(--ink-2); font-weight: 600; }
+  .topbar-links a:hover { color: var(--ink); opacity: 1; }
+
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+  .hero { padding: 50px 0 30px; border-bottom: 1px solid var(--border); }
+  .eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-3); margin-bottom: 13px; font-weight: 700; }
+  h1 { font-size: 35px; letter-spacing: -0.025em; font-weight: 800; line-height: 1.15; margin-bottom: 15px; }
+  h1 .hl { color: var(--brand); }
+  .lede { font-size: 16px; color: var(--ink-2); max-width: 820px; line-height: 1.62; }
+  .lede a { color: var(--ink); border-bottom: 1px dashed var(--border); }
+  .lede b { color: var(--ink); font-weight: 600; }
+
+  .summary-row { display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap; }
+  .sum-chip { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 15px 18px; flex: 1; min-width: 150px; box-shadow: var(--shadow); }
+  .sum-chip .n { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; }
+  .sum-chip .l { font-size: 12.5px; color: var(--ink-3); margin-top: 3px; }
+  .sum-chip.ok .n { color: var(--green); }
+  .sum-chip.partial .n { color: var(--amber); }
+  .sum-chip.gap .n { color: var(--brand); }
+
+  .section { padding: 44px 0; border-bottom: 1px solid var(--border); }
+  .section-head { margin-bottom: 22px; }
+  .section-head h2 { font-size: 23px; letter-spacing: -0.015em; font-weight: 800; }
+  .section-head .def { color: var(--ink-2); margin-top: 8px; font-size: 15px; max-width: 820px; }
+  .section-head .def code, .lede code { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; background: var(--surface-3); padding: 1px 6px; border-radius: 4px; color: var(--brand-ink); }
+
+  .prop-table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; overflow-x: auto; box-shadow: var(--shadow); }
+  .prop-table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+  .prop-table thead th { text-align: left; padding: 12px 16px; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); background: var(--surface-2); border-bottom: 1px solid var(--border); }
+  .prop-table col.c-field { width: 18%; } .prop-table col.c-endpoint { width: 22%; }
+  .prop-table col.c-powers { width: 15%; } .prop-table col.c-notes { width: 31%; } .prop-table col.c-status { width: 14%; }
+  .prop-table td { padding: 14px 16px; vertical-align: top; border-bottom: 1px solid var(--border-2); color: var(--ink-2); line-height: 1.55; overflow-wrap: anywhere; }
+  .prop-table td:first-child { color: var(--ink); font-weight: 600; }
+  .prop-table td code, .prop-table th code { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; background: var(--surface-3); padding: 1px 6px; border-radius: 4px; color: var(--brand-ink); overflow-wrap: anywhere; word-break: break-word; }
+  .prop-table td a { color: var(--ink); }
+  .prop-table td a code { color: var(--brand-ink); text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 2px; }
+  .prop-table td a:hover code { background: var(--brand-tint); }
+  .prop-table tr.grp td { padding: 13px 16px 9px; background: var(--surface-2); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+  .prop-table tr:last-child td { border-bottom: none; }
+  .powers { font-size: 12px; color: var(--ink-3); }
+
+  .status-pill { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; font-family: 'JetBrains Mono', monospace; display: inline-block; white-space: nowrap; }
+  .status-pill.ok { color: var(--green); background: var(--green-tint); border: 1px solid #BBE7C9; }
+  .status-pill.partial { color: var(--amber); background: var(--amber-tint); border: 1px solid #F2D9B3; }
+  .status-pill.gap { color: var(--brand); background: var(--brand-tint); border: 1px solid #D7DAFB; }
+
+  .gap-card { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--brand); border-radius: var(--radius); padding: 22px 24px; margin-bottom: 16px; box-shadow: var(--shadow); }
+  .gap-card.hero-gap { border-left-color: var(--gold); background: linear-gradient(180deg, var(--gold-tint), var(--surface) 55%); }
+  .gap-card.connector { border-left-color: var(--ink-3); }
+  .gap-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+  .gap-method { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; color: var(--ink); }
+  .gap-method .verb { color: var(--brand); }
+  .gap-desc { color: var(--ink-2); font-size: 14px; line-height: 1.62; margin-bottom: 12px; }
+  .gap-desc b { color: var(--ink); }
+  .gap-desc code { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: var(--surface-3); padding: 1px 5px; border-radius: 4px; color: var(--brand-ink); }
+  pre { background: #0F1422; border: 1px solid #1E2A3D; border-radius: 10px; padding: 15px 17px; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.65; color: #C7D2E0; }
+  pre .key { color: #7DD3FC; } pre .str { color: #FDBA74; } pre .num { color: #86EFAC; } pre .bool { color: #C4B5FD; } pre .cm { color: #64748B; }
+  .powers-line { font-size: 12.5px; color: var(--ink-3); margin-top: 12px; }
+  .powers-line b { color: var(--ink-2); font-weight: 600; }
+
+  .footer-note { max-width: 1100px; margin: 40px auto 0; padding: 24px 32px 0; border-top: 1px solid var(--border); color: var(--ink-3); font-size: 12.5px; line-height: 1.6; }
+  .footer-note a { color: var(--ink-2); border-bottom: 1px dashed var(--border); }
+
+  @media (max-width: 760px){
+    .prop-table { min-width: 740px; }
+    h1 { font-size: 27px; }
+    .topbar { padding: 12px 16px; } .wrap { padding: 0 16px; }
+    .topbar-links { gap: 13px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand-mark">
+    <div class="logo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><circle cx="11" cy="11" r="2.4" fill="#fff" stroke="none"/></svg>
+    </div>
+    <div><div class="name">Prospector</div><div class="cat">API coverage</div></div>
+  </div>
+  <div class="topbar-links">
+    <a href="/prospector/index.html">← Back to app</a>
+    <a href="/bxcapi/index.html">bxcAPI spec</a>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="eyebrow">What Prospector needs from the Brand Intelligence API</div>
+    <h1>Every endpoint Prospector reads — and where the <span class="hl">gaps</span> are</h1>
+    <p class="lede">Prospector turns an agency's <b>past client roster</b> into a weekly feed of look-alike brands that have an <b>opening right now</b>. Most of the raw material already exists in the <a href="/bxcapi/index.html">Brand Intelligence API</a> — brand &amp; audience profiles, company contacts, hiring signals, category news, alerts, and pitch-pack generation. What's missing is the connective tissue: a way to <b>ingest an agency profile</b>, a <b>multi-seed look-alike</b> ranking that blends a whole client list, and a <b>classified "opening" object</b> so "why now" stops being stitched together client-side. The CRM-sync and LinkedIn-mutuals pieces sit outside the read API as connectors.</p>
+    <div class="summary-row">
+      <div class="sum-chip ok"><div class="n">14</div><div class="l">endpoints usable today</div></div>
+      <div class="sum-chip partial"><div class="n">4</div><div class="l">partial — exists, but unstructured</div></div>
+      <div class="sum-chip gap"><div class="n">7</div><div class="l">proposed additions</div></div>
+    </div>
+  </div>
+
+  <!-- ════ TABLE 1 ════ -->
+  <div class="section">
+    <div class="section-head">
+      <h2>Every endpoint Prospector reads</h2>
+      <p class="def">One row per field or capability the prototype consumes, ordered gaps → partial → available. "Partial" means the data exists but is unstructured for this use, or requires per-brand fan-out / diffing over time.</p>
+    </div>
+
+    <div class="prop-table-wrap">
+      <table class="prop-table">
+        <colgroup><col class="c-field"><col class="c-endpoint"><col class="c-powers"><col class="c-notes"><col class="c-status"></colgroup>
+        <thead><tr><th>Field / capability</th><th>Endpoint</th><th>Powers</th><th>Notes</th><th>Status</th></tr></thead>
+        <tbody>
+
+          <tr class="grp"><td colspan="5">Gaps — block the product until built (detailed below)</td></tr>
+          <tr>
+            <td>Agency profile ingest</td>
+            <td><code>POST /agencies</code> <span style="color:var(--ink-3);font-size:11px;">(new)</span></td>
+            <td class="powers">Onboarding · fingerprint</td>
+            <td>Website + uploaded client list → derived audience/category fingerprint. Onboarding has nowhere to land today.</td>
+            <td><span class="status-pill gap">✗ Gap</span></td>
+          </tr>
+          <tr>
+            <td>Multi-seed look-alikes</td>
+            <td><code>POST /discover/lookalike-brands</code> <span style="color:var(--ink-3);font-size:11px;">(new)</span></td>
+            <td class="powers">The weekly 5 · match score</td>
+            <td>Blend a set of seed brands into one ranked, scored, de-conflicted look-alike list. The keystone — see below.</td>
+            <td><span class="status-pill gap">✗ Gap</span></td>
+          </tr>
+          <tr>
+            <td>Classified "opening" signal</td>
+            <td><code>GET /brands/{id}/openings</code> <span style="color:var(--ink-3);font-size:11px;">(new)</span></td>
+            <td class="powers">"Why now" box · badges</td>
+            <td>One typed object per opening (new CMO, funding, acquisition, agency review, category surge, campaign lull) with source + date.</td>
+            <td><span class="status-pill gap">✗ Gap</span></td>
+          </tr>
+          <tr>
+            <td>Prospect-scoped events</td>
+            <td><a href="/bxcapi/index.html#event-types"><code>POST /alerts</code></a> <span style="color:var(--ink-3);font-size:11px;">(+events)</span></td>
+            <td class="powers">Watchlist feed</td>
+            <td><code>brand.leadership_change</code>, <code>brand.funding</code>, <code>brand.agency_review</code>, <code>prospect.new_opening</code>.</td>
+            <td><span class="status-pill gap">✗ Gap</span></td>
+          </tr>
+          <tr>
+            <td>Weekly prospect digest</td>
+            <td><code>POST /digests/prospect-brief</code> <span style="color:var(--ink-3);font-size:11px;">(new)</span></td>
+            <td class="powers">"This Week" cadence</td>
+            <td>Scheduled batch of N look-alikes with openings. Mirrors existing <code>/digests/monday-brief</code>.</td>
+            <td><span class="status-pill gap">✗ Gap</span></td>
+          </tr>
+          <tr>
+            <td>LinkedIn mutuals</td>
+            <td><code>GET /contacts/{id}/mutuals</code> <span style="color:var(--ink-3);font-size:11px;">(connector)</span></td>
+            <td class="powers">Warm-intro paths</td>
+            <td>Needs the user's own OAuth relationship graph — outside the read API. See connector note below.</td>
+            <td><span class="status-pill gap">✗ Gap</span></td>
+          </tr>
+          <tr>
+            <td>HubSpot CRM sync</td>
+            <td><code>POST /integrations/hubspot/sync</code> <span style="color:var(--ink-3);font-size:11px;">(connector)</span></td>
+            <td class="powers">Pipeline ↔ CRM</td>
+            <td>Outbound write to a customer's CRM — a connector/webhook, not a read endpoint. See note below.</td>
+            <td><span class="status-pill gap">✗ Gap</span></td>
+          </tr>
+
+          <tr class="grp"><td colspan="5">Partial — data exists, but unstructured for this use</td></tr>
+          <tr>
+            <td>Brand → audience linkage</td>
+            <td><a href="/bxcapi/index.html#aud-discovery"><code>/audiences</code></a> + <a href="/bxcapi/index.html#brand-discovery"><code>/brands/{id}</code></a></td>
+            <td class="powers">Fingerprint derivation</td>
+            <td>Audiences are their own index; resolving "which audiences does this client brand serve" to build a blended agency fingerprint isn't a single call.</td>
+            <td><span class="status-pill partial">⚠ Partial</span></td>
+          </tr>
+          <tr>
+            <td>Leadership <i>change</i> (new CMO)</td>
+            <td><a href="/bxcapi/index.html#enrich-companies"><code>/companies/{id}/people</code></a></td>
+            <td class="powers">"New CMO" opening</td>
+            <td>Returns current people, not a "new since {date}" event. Detecting a <i>change</i> means diffing snapshots client-side.</td>
+            <td><span class="status-pill partial">⚠ Partial</span></td>
+          </tr>
+          <tr>
+            <td>Category "why-now"</td>
+            <td><a href="/bxcapi/index.html#cat-news"><code>/categories/{id}/news</code></a></td>
+            <td class="powers">"Category surge" opening</td>
+            <td>News &amp; trends exist, but nothing classifies an item as an actionable <i>opportunity</i> for a specific brand.</td>
+            <td><span class="status-pill partial">⚠ Partial</span></td>
+          </tr>
+          <tr>
+            <td>Incumbent / promo context</td>
+            <td><a href="/bxcapi/index.html#market-conditions"><code>/brands/{id}/promo-watch</code></a></td>
+            <td class="powers">Brief context</td>
+            <td>Useful competitive context for a brief, but not prospect-aware (no "is this brand between agencies" read).</td>
+            <td><span class="status-pill partial">⚠ Partial</span></td>
+          </tr>
+
+          <tr class="grp"><td colspan="5">Available today — used as-is</td></tr>
+          <tr>
+            <td>Brand search &amp; resolve</td>
+            <td><a href="/bxcapi/index.html#brand-discovery"><code>/brands/search</code></a></td>
+            <td class="powers">Resolve clients &amp; prospects</td>
+            <td>Name/domain search → brand id. Used to resolve the uploaded client roster and every prospect.</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Brand profile</td>
+            <td><a href="/bxcapi/index.html#brand-discovery"><code>/brands/{id}/overview</code></a>, <code>/platforms</code></td>
+            <td class="powers">Prospect detail header</td>
+            <td>Category, domain, platform presence — the prospect card + detail header.</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Single-audience look-alike</td>
+            <td><a href="/bxcapi/index.html#aud-discovery"><code>/audiences/{id}/brands</code></a></td>
+            <td class="powers">Look-alike primitive</td>
+            <td>Brands sharing one audience — the closest existing primitive to our matcher, but single-seed and unscored (see keystone).</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Audience insights</td>
+            <td><a href="/bxcapi/index.html#aud-insights"><code>/audiences/{id}/insights</code></a></td>
+            <td class="powers">Audience-overlap bars</td>
+            <td>Demos/affinities behind the "why related" overlap chart.</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Category news &amp; trends</td>
+            <td><a href="/bxcapi/index.html#cat-news"><code>/categories/{id}/news</code></a>, <a href="/bxcapi/index.html#cat-trends"><code>/trends</code></a>, <a href="/bxcapi/index.html#cat-landscape"><code>/landscape</code></a></td>
+            <td class="powers">Category-surge evidence</td>
+            <td>Raw evidence behind a "category surge" opening and brief context.</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Brand momentum</td>
+            <td><a href="/bxcapi/index.html#market-conditions"><code>/brands/{id}/market-conditions</code></a></td>
+            <td class="powers">Opening corroboration</td>
+            <td>Is the brand in motion? Corroborates funding / expansion openings.</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Paid-media spend signal</td>
+            <td><a href="/bxcapi/index.html#market-conditions"><code>/brands/{id}/spend-signal</code></a></td>
+            <td class="powers">"Campaign lull" opening</td>
+            <td>A funded brand that's gone quiet on brand spend — directly powers the lull signal.</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Company contacts</td>
+            <td><a href="/bxcapi/index.html#enrich-companies"><code>/companies/{id}/people</code></a></td>
+            <td class="powers">Probable contacts list</td>
+            <td>Marketing leaders &amp; titles → the contact cards on every prospect.</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Open roles / hiring</td>
+            <td><a href="/bxcapi/index.html#enrich-companies"><code>/companies/{id}/jobs</code></a></td>
+            <td class="powers">"Building a team" signal</td>
+            <td>A "Head of Brand" req is a classic buying signal — feeds the opening detector.</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Find companies by attributes</td>
+            <td><a href="/bxcapi/index.html#discover-companies"><code>/discover/companies</code></a></td>
+            <td class="powers">Candidate sourcing</td>
+            <td>Surfacing candidate brands by category/size/geo before scoring.</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Find brands hiring marketing</td>
+            <td><a href="/bxcapi/index.html#discover-jobs"><code>/discover/jobs</code></a></td>
+            <td class="powers">Opening-led sourcing</td>
+            <td>Cross-index search for brands hiring CMOs / brand leads — opening-first prospect sourcing.</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Alert CRUD + channels</td>
+            <td><a href="/bxcapi/index.html#alerts"><code>POST /alerts</code></a>, <a href="/bxcapi/index.html#events"><code>GET /events</code></a></td>
+            <td class="powers">Watchlist monitoring</td>
+            <td>Create/list alerts on tracked brands; consume the event stream that drives the Watchlist feed.</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Pitch playbook generation</td>
+            <td><a href="/bxcapi/index.html#deliverables"><code>POST /briefs/pitch-pack</code></a>, <code>/generate</code></td>
+            <td class="powers">"Create pitch playbook"</td>
+            <td>Async deliverable per accepted prospect → the existing <a href="/pitch-playbook/">pitch-playbook</a> output.</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Credits &amp; usage</td>
+            <td><a href="/bxcapi/index.html#utility"><code>/account/usage</code></a>, <code>/balance</code></td>
+            <td class="powers">Sidebar credit meter</td>
+            <td>Prospect-credit balance shown in the sidebar.</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ════ TABLE 2: PROPOSED ADDITIONS ════ -->
+  <div class="section" style="border-bottom:none;">
+    <div class="section-head">
+      <h2>Proposed additions</h2>
+      <p class="def">The keystone is a <code>POST /discover/lookalike-brands</code> that blends a whole client roster into one ranked, scored list (shown first). Everything else either feeds it (agency profile, the openings object) or distributes it (events, the weekly digest). Two pieces are connectors, not read endpoints.</p>
+    </div>
+
+    <!-- KEYSTONE -->
+    <div class="gap-card hero-gap">
+      <div class="gap-head">
+        <span class="gap-method"><span class="verb">POST</span> /discover/lookalike-brands</span>
+        <span class="status-pill gap" style="margin-left:auto;">★ Keystone</span>
+      </div>
+      <p class="gap-desc">Given a <b>set</b> of seed <code>brand_ids</code> (the agency's client roster) plus exclusions, return a single <b>ranked, scored</b> list of look-alike brands with structured <code>match_reasons</code> — which seed each one echoes and on which audiences. Today <a href="/bxcapi/index.html#aud-discovery"><code>/audiences/{id}/brands</code></a> does <i>one</i> audience and returns no score, so blending five clients + de-duping + ranking is all client-side.</p>
+<pre>POST /discover/lookalike-brands
+{
+  <span class="key">"seed_brand_ids"</span>: [<span class="str">"brand_olipop"</span>, <span class="str">"brand_allbirds"</span>, <span class="str">"brand_chime"</span>, <span class="str">"brand_sweetgreen"</span>, <span class="str">"brand_liquiddeath"</span>],
+  <span class="key">"exclude_brand_ids"</span>: [<span class="cm">// current clients + conflicts</span>],
+  <span class="key">"limit"</span>: <span class="num">5</span>, <span class="key">"min_score"</span>: <span class="num">70</span>
+}
+
+{
+  <span class="key">"data"</span>: [
+    {
+      <span class="key">"brand_id"</span>: <span class="str">"brand_poppi"</span>,
+      <span class="key">"brand_name"</span>: <span class="str">"Poppi"</span>,
+      <span class="key">"category"</span>: <span class="str">"Better-for-you beverage"</span>,
+      <span class="key">"match_score"</span>: <span class="num">94</span>,
+      <span class="key">"match_reasons"</span>: [
+        { <span class="key">"echoes_seed"</span>: <span class="str">"brand_olipop"</span>, <span class="key">"shared_audience"</span>: <span class="str">"Gen Z wellness"</span>, <span class="key">"overlap"</span>: <span class="num">0.92</span> }
+      ]
+    }
+  ],
+  <span class="key">"meta"</span>: { <span class="key">"candidates_scored"</span>: <span class="num">3120</span> }
+}</pre>
+      <p class="powers-line"><b>Powers:</b> the weekly five, the match score on every card, and the "why related / echoes your client" block.</p>
+    </div>
+
+    <!-- AGENCY INGEST -->
+    <div class="gap-card">
+      <div class="gap-head">
+        <span class="gap-method"><span class="verb">POST</span> /agencies</span>
+        <span class="status-pill gap" style="margin-left:auto;">✗ Gap</span>
+      </div>
+      <p class="gap-desc">Ingest an agency at onboarding: a website to crawl plus an uploaded client list, returning the resolved seed brands and a derived <b>audience + category fingerprint</b>. There's no first-class "agency" object in the API today, so the whole setup flow has nowhere to persist.</p>
+<pre>POST /agencies
+{
+  <span class="key">"name"</span>: <span class="str">"Highline Studio"</span>,
+  <span class="key">"website"</span>: <span class="str">"highlinestudio.com"</span>,
+  <span class="key">"client_list"</span>: [<span class="str">"OLIPOP"</span>, <span class="str">"Allbirds"</span>, <span class="str">"Chime"</span>, <span class="str">"Sweetgreen"</span>, <span class="str">"Liquid Death"</span>]
+}
+
+{
+  <span class="key">"agency_id"</span>: <span class="str">"agency_highline"</span>,
+  <span class="key">"resolved_clients"</span>: [{ <span class="key">"input"</span>: <span class="str">"OLIPOP"</span>, <span class="key">"brand_id"</span>: <span class="str">"brand_olipop"</span> }],
+  <span class="key">"fingerprint"</span>: {
+    <span class="key">"audiences"</span>: [<span class="str">"Gen Z wellness"</span>, <span class="str">"Culture-forward"</span>, <span class="str">"Value-conscious"</span>],
+    <span class="key">"categories"</span>: [<span class="str">"Better-for-you CPG"</span>, <span class="str">"DTC apparel"</span>, <span class="str">"Consumer fintech"</span>]
+  }
+}</pre>
+      <p class="powers-line"><b>Powers:</b> the Setup screen, the sidebar agency identity, and the seed set passed to the look-alike matcher.</p>
+    </div>
+
+    <!-- OPENINGS -->
+    <div class="gap-card">
+      <div class="gap-head">
+        <span class="gap-method"><span class="verb">GET</span> /brands/{id}/openings</span>
+        <span class="status-pill gap" style="margin-left:auto;">✗ Gap</span>
+      </div>
+      <p class="gap-desc">A classified array of <b>"why now"</b> openings per brand, each typed and sourced. Today this is reverse-engineered from <a href="/bxcapi/index.html#enrich-companies"><code>/people</code></a> diffs, <a href="/bxcapi/index.html#enrich-companies"><code>/jobs</code></a>, <a href="/bxcapi/index.html#cat-news"><code>/news</code></a>, and <a href="/bxcapi/index.html#market-conditions"><code>/spend-signal</code></a> — this returns it pre-classified.</p>
+<pre>{
+  <span class="key">"brand_id"</span>: <span class="str">"brand_vuori"</span>,
+  <span class="key">"openings"</span>: [
+    {
+      <span class="key">"type"</span>: <span class="str">"leadership_change"</span>,    <span class="cm">// funding | acquisition | agency_review | category_surge | campaign_lull</span>
+      <span class="key">"role"</span>: <span class="str">"cmo"</span>,
+      <span class="key">"headline"</span>: <span class="str">"New CMO from Nike just started"</span>,
+      <span class="key">"since"</span>: <span class="str">"2026-05-16"</span>,
+      <span class="key">"source"</span>: { <span class="key">"type"</span>: <span class="str">"linkedin"</span>, <span class="key">"url"</span>: <span class="str">"…"</span> },
+      <span class="key">"confidence"</span>: <span class="num">0.88</span>
+    }
+  ]
+}</pre>
+      <p class="powers-line"><b>Powers:</b> the "Why now" box, every card's opening badge, and the prospect score's recency boost.</p>
+    </div>
+
+    <!-- EVENTS -->
+    <div class="gap-card">
+      <div class="gap-head">
+        <span class="gap-method"><span class="verb">EVENTS</span> · prospect-scoped alert types</span>
+        <span class="status-pill gap" style="margin-left:auto;">✗ Gap</span>
+      </div>
+      <p class="gap-desc">New <code>event_type</code> values for <a href="/bxcapi/index.html#alerts"><code>POST /alerts</code></a> / <a href="/bxcapi/index.html#events"><code>GET /events</code></a> so a tracked brand fires the moment an opening appears — instead of leaning on generic mention alerts. <a href="/bxcapi/index.html#alerts"><code>/alerts/{id}/preview</code></a> already gives the dry-run.</p>
+<pre>{
+  <span class="key">"trigger"</span>: {
+    <span class="key">"event_type"</span>: <span class="str">"brand.leadership_change"</span>,  <span class="cm">// brand.funding | brand.agency_review | prospect.new_opening</span>
+    <span class="key">"filter"</span>: { <span class="key">"role"</span>: <span class="str">"cmo"</span> }
+  },
+  <span class="key">"scope"</span>: { <span class="key">"brand_ids"</span>: [<span class="str">"brand_immi"</span>, <span class="str">"brand_parade"</span>] },
+  <span class="key">"channels"</span>: [{ <span class="key">"type"</span>: <span class="str">"in_app"</span> }, { <span class="key">"type"</span>: <span class="str">"email"</span> }]
+}</pre>
+      <p class="powers-line"><b>Powers:</b> the Watchlist "opening signals" feed and the tracked-brand alerts.</p>
+    </div>
+
+    <!-- DIGEST -->
+    <div class="gap-card">
+      <div class="gap-head">
+        <span class="gap-method"><span class="verb">POST</span> /digests/prospect-brief</span>
+        <span class="status-pill gap" style="margin-left:auto;">✗ Gap</span>
+      </div>
+      <p class="gap-desc">The scheduled engine behind "This Week": every <code>delivery_day</code>, run the look-alike matcher for an agency, attach the freshest opening to each, and emit a batch of <code>count</code> prospects. Mirrors the existing <a href="/bxcapi/index.html#deliverables"><code>/digests/monday-brief</code></a> and <code>/digests/audience-pulse</code> shapes.</p>
+<pre>POST /digests/prospect-brief
+{
+  <span class="key">"agency_id"</span>: <span class="str">"agency_highline"</span>,
+  <span class="key">"count"</span>: <span class="num">5</span>,
+  <span class="key">"delivery_day"</span>: <span class="str">"monday"</span>,
+  <span class="key">"require_opening"</span>: <span class="bool">true</span>     <span class="cm">// only surface brands with a live opening</span>
+}</pre>
+      <p class="powers-line"><b>Powers:</b> the weekly cadence, the "come back Monday" empty state, and delivery-cadence settings.</p>
+    </div>
+
+    <!-- CONNECTORS -->
+    <div class="gap-card connector">
+      <div class="gap-head">
+        <span class="gap-method"><span class="verb">CONNECTOR</span> · LinkedIn mutuals &amp; HubSpot sync</span>
+        <span class="status-pill gap" style="margin-left:auto;">✗ Out of read-API scope</span>
+      </div>
+      <p class="gap-desc">Two features live <b>outside</b> the read API. <b>LinkedIn mutuals</b> needs each user's own OAuth relationship graph to answer "who do we already know here" — <a href="/bxcapi/index.html#enrich-companies"><code>/companies/{id}/people</code></a> gives the brand-side contacts, but the mutual edge is the customer's data, not ours. <b>HubSpot sync</b> is an outbound write/webhook that pushes accepted prospects into a customer's CRM as companies + contacts. Both are connector surfaces (OAuth + sync jobs), not endpoints we'd add to the bxcAPI itself — flagged here so the boundary is explicit.</p>
+      <p class="powers-line"><b>Powers:</b> the "N mutual connections" line on contacts, the warm-intro paths, and the Pipeline → HubSpot sync indicators.</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer-note">
+  <p>Prospector · prototype for the <a href="/bxcapi/index.html">Brand Intelligence API</a>. <a href="/prospector/index.html">Back to the app →</a></p>
+</div>
+
+</body>
+</html>

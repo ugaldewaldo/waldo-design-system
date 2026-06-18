@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Missing Components — Promo Radar → Waldo DS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #171819;
+    --surface: #202123;
+    --surface-2: #27282b;
+    --surface-3: #323539;
+    --border: rgba(210,211,211,0.12);
+    --border-strong: rgba(210,211,211,0.20);
+    --text: #d2d3d3;
+    --text-2: rgba(210,211,211,0.70);
+    --text-3: #8f9091;
+    --gold: #f7d371;
+    --green: #32a9a9;
+    --mint: #32a9a9;
+    --red: #de3a28;
+    --amber: #f7d371;
+    --blue: #32a9a9;
+    --violet: #32a9a9;
+    --pink: #32a9a9;
+    --radar: #32a9a9;
+    --radar-rgb: 50,169,169;
+    --radius: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { overflow-x: hidden; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5; font-size: 14px;
+    -webkit-font-smoothing: antialiased; padding-bottom: 100px;
+  }
+  code, .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+  /* ── Page header ── */
+  .page-header {
+    border-bottom: 1px solid var(--border);
+    padding: 32px 48px 28px;
+    background: var(--surface);
+  }
+  .page-header .breadcrumb {
+    font-size: 12px; color: var(--text-3); margin-bottom: 10px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .page-header .breadcrumb span { color: var(--text-2); }
+  .page-header h1 {
+    font-size: 26px; font-weight: 800; letter-spacing: -0.02em; color: var(--text);
+    margin-bottom: 8px;
+  }
+  .page-header p {
+    font-size: 14px; color: var(--text-2); max-width: 640px; line-height: 1.6;
+  }
+  .page-header .meta-row {
+    display: flex; gap: 20px; margin-top: 16px; flex-wrap: wrap;
+  }
+  .meta-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text-3);
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 999px; padding: 4px 12px;
+  }
+  .meta-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--radar); }
+
+  /* ── Layout ── */
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+  .section-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-3);
+    margin: 48px 0 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .section-label .count {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 999px; padding: 2px 10px; color: var(--text-3);
+  }
+
+  /* ── Demo card ── */
+  .demo-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    margin-bottom: 40px; overflow: hidden;
+  }
+  .demo-card-header {
+    padding: 20px 28px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+  }
+  .demo-card-header .left { min-width: 0; }
+  .demo-card-header h2 {
+    font-size: 16px; font-weight: 700; letter-spacing: -0.01em; color: var(--text);
+    margin-bottom: 4px;
+  }
+  .demo-card-header p {
+    font-size: 13px; color: var(--text-3); line-height: 1.55; max-width: 520px;
+  }
+  .component-id {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--radar);
+    background: rgba(50,169,169,0.08); border: 1px solid rgba(50,169,169,0.2);
+    border-radius: 6px; padding: 3px 9px; white-space: nowrap; flex: none;
+  }
+  .demo-card-body {
+    padding: 32px 28px;
+    background: var(--bg);
+  }
+  .demo-card-body.surface { background: var(--surface); }
+  .demo-card-body.surface-2 { background: var(--surface-2); }
+  .demo-card-footer {
+    padding: 14px 28px;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    display: flex; gap: 24px; flex-wrap: wrap;
+  }
+  .prop-row {
+    display: flex; gap: 6px; align-items: baseline;
+  }
+  .prop-label {
+    font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .prop-value {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-2);
+  }
+
+  /* ════════════════════════════════════════════════════
+     COMPONENT 1: KPI Stat Card with Trend
+  ════════════════════════════════════════════════════ */
+  .kpi-stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+    min-width: 200px;
+  }
+  .kpi-stat::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--radar), transparent);
+    opacity: 0.6;
+  }
+  .kpi-stat .ks-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--text-3); margin-bottom: 10px;
+  }
+  .kpi-stat .ks-value {
+    font-size: 32px; font-weight: 800; letter-spacing: -0.03em;
+    line-height: 1; color: var(--text); margin-bottom: 10px;
+  }
+  .kpi-stat .ks-value .ks-unit {
+    font-size: 18px; font-weight: 700; color: var(--text-3); margin-left: 2px;
+  }
+  .kpi-stat .ks-trend {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; line-height: 1.4;
+  }
+  .ks-trend-badge {
+    display: inline-flex; align-items: center; gap: 3px;
+    font-size: 11px; font-weight: 700;
+    padding: 2px 7px; border-radius: 5px;
+    white-space: nowrap; flex: none;
+  }
+  .ks-trend-badge.up   { color: var(--red);   background: rgba(222,58,40,0.12); }
+  .ks-trend-badge.down { color: var(--radar);  background: rgba(50,169,169,0.12); }
+  .ks-trend-badge.flat { color: var(--text-3); background: var(--surface-3); }
+  .ks-trend-text { color: var(--text-3); }
+
+  .kpi-stat-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+    max-width: 740px;
+  }
+
+  /* ════════════════════════════════════════════════════
+     COMPONENT 2: Horizontal Progress Bar (inline label)
+  ════════════════════════════════════════════════════ */
+  .prog-list {
+    display: flex; flex-direction: column; gap: 10px;
+    max-width: 520px;
+  }
+  .prog-row {
+    display: grid;
+    grid-template-columns: 170px 1fr 46px;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+    cursor: default;
+  }
+  .prog-row:hover .prog-name { color: var(--text); }
+  .prog-name {
+    font-size: 13px; color: var(--text-2);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    transition: color 0.12s;
+  }
+  .prog-bar-wrap {
+    position: relative; height: 20px;
+    background: var(--surface-3); border-radius: 5px; overflow: hidden;
+  }
+  .prog-bar-fill {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    border-radius: 5px;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+  /* teal fill for DS primary color */
+  .prog-bar-fill.teal   { background: var(--radar); opacity: 0.75; }
+  .prog-bar-fill.gold   { background: var(--gold);  opacity: 0.70; }
+  .prog-bar-fill.red    { background: var(--red);   opacity: 0.70; }
+  .prog-pct {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 600; color: var(--text);
+    text-align: right; white-space: nowrap;
+  }
+
+  /* ════════════════════════════════════════════════════
+     COMPONENT 3: Leaderboard Row
+  ════════════════════════════════════════════════════ */
+  .lb-list {
+    display: flex; flex-direction: column;
+    max-width: 620px;
+  }
+  .lb-entry {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 11px 10px;
+    border-bottom: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .lb-entry:last-child { border-bottom: none; }
+  .lb-entry:hover { background: var(--surface-2); }
+  .lb-entry .rank {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--text-3); text-align: center;
+    width: 24px;
+  }
+  .lb-entry .rank.top { color: var(--gold); font-weight: 700; }
+  .lb-entry .lb-info { min-width: 0; }
+  .lb-entry .brand-name {
+    font-size: 14px; font-weight: 600; color: var(--text);
+    margin-bottom: 4px;
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .lb-entry .offer-line {
+    font-size: 12px; color: var(--text-3);
+    display: flex; align-items: center; gap: 7px; flex-wrap: wrap;
+  }
+  .lb-entry .offer-copy { color: var(--text-2); }
+  /* DS badge — pill style */
+  .lb-badge {
+    display: inline-flex; align-items: center;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 5px; white-space: nowrap;
+    color: var(--text-2); background: var(--surface-3);
+  }
+  /* DS depth pill — gold opacity encoding */
+  .lb-depth {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 700;
+    padding: 5px 11px; border-radius: 8px;
+    white-space: nowrap; flex: none;
+  }
+
+  /* ════════════════════════════════════════════════════
+     COMPONENT 4: Animated Brand Mark / Logo Badge
+  ════════════════════════════════════════════════════ */
+  @keyframes radar-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  @keyframes radar-ring-pulse {
+    0%,100% { opacity: 0.25; r: 15; }
+    50%      { opacity: 0.5;  r: 15; }
+  }
+  @keyframes radar-ripple-1 {
+    0%   { r: 2;  opacity: 0.8; }
+    100% { r: 18; opacity: 0; }
+  }
+  @keyframes radar-ripple-2 {
+    0%   { r: 2;  opacity: 0.6; }
+    100% { r: 14; opacity: 0; }
+  }
+  @keyframes radar-sweep-fade {
+    0%   { opacity: 0.22; }
+    40%  { opacity: 0.32; }
+    100% { opacity: 0.22; }
+  }
+
+  .radar-mark {
+    display: inline-flex; align-items: center; justify-content: center;
+    position: relative;
+    color: var(--radar);
+  }
+  .radar-mark .sweep-group {
+    transform-origin: center;
+    animation: radar-spin 3s linear infinite;
+  }
+  .radar-mark .sweep-path {
+    animation: radar-sweep-fade 3s ease-in-out infinite;
+  }
+  .radar-mark .ripple-1 {
+    animation: radar-ripple-1 3s ease-out infinite;
+  }
+  .radar-mark .ripple-2 {
+    animation: radar-ripple-2 3s ease-out infinite;
+    animation-delay: 1.5s;
+  }
+
+  .mark-size-sm  { width: 28px; height: 28px; }
+  .mark-size-md  { width: 40px; height: 40px; }
+  .mark-size-lg  { width: 60px; height: 60px; }
+  .mark-size-xl  { width: 80px; height: 80px; }
+
+  /* Contained circular badge variant */
+  .radar-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    background: rgba(50,169,169,0.1);
+    border: 1px solid rgba(50,169,169,0.25);
+    color: var(--radar);
+    flex: none;
+  }
+  .radar-badge.sm { width: 36px; height: 36px; }
+  .radar-badge.md { width: 52px; height: 52px; }
+  .radar-badge.lg { width: 72px; height: 72px; }
+
+  /* topbar demo */
+  .topbar-demo {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(9,9,11,0.88);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 20px;
+    max-width: 400px;
+  }
+  .topbar-demo .brand-name-demo {
+    font-weight: 800; font-size: 16px; letter-spacing: -0.02em; color: var(--text);
+  }
+  .topbar-demo .brand-cat-demo {
+    font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.1em;
+    margin-top: 1px;
+  }
+
+  /* variant grid */
+  .variants-row {
+    display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-end;
+  }
+  .variant-item {
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+  }
+  .variant-label {
+    font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em;
+  }
+
+  /* ── Annotation blocks ── */
+  .annotation {
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-left: 3px solid rgba(50,169,169,0.5);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px; font-size: 12px; color: var(--text-3);
+    line-height: 1.6; margin-top: 20px; max-width: 640px;
+  }
+  .annotation b { color: var(--text-2); font-weight: 600; }
+  .annotation code {
+    font-size: 11px; background: var(--surface-3);
+    padding: 1px 5px; border-radius: 3px; color: var(--radar);
+  }
+
+  /* ── Tonal separator ── */
+  .tonal-sep {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 11px; color: var(--text-3); margin: 32px 0 20px;
+  }
+  .tonal-sep::before, .tonal-sep::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Page header ── -->
+<div class="page-header">
+  <div class="wrap">
+    <div class="breadcrumb">
+      Waldo Design System
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4.5 9L7.5 6L4.5 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Missing Components</span>
+    </div>
+    <h1>Missing Components — Promo Radar → Waldo DS</h1>
+    <p>Four UI patterns used in the Promo Radar prototype that don't have a DS equivalent yet. Each component is shown with live demos, DS token usage, and notes for the design team.</p>
+    <div class="meta-row">
+      <div class="meta-chip"><span class="dot"></span>4 components to add</div>
+      <div class="meta-chip">Source: promo-radar/index.html</div>
+      <div class="meta-chip">June 2026</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="section-label">
+    Components missing from DS
+    <span class="count">4 of 4</span>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       COMPONENT 1: KPI Stat Card with Trend
+  ════════════════════════════════════════ -->
+  <div class="demo-card">
+    <div class="demo-card-header">
+      <div class="left">
+        <h2>KPI Stat Card with Trend</h2>
+        <p>A card that displays a large metric value with a label and a contextual trend indicator below. Different from a plain card — it's purpose-built for dashboard KPIs where the direction of change matters as much as the number itself.</p>
+      </div>
+      <div class="component-id">KpiStatCard</div>
+    </div>
+
+    <div class="demo-card-body">
+      <div class="kpi-stat-grid">
+
+        <!-- Variant: trending up (pressure increasing) -->
+        <div class="kpi-stat">
+          <div class="ks-label">Brands discounting now</div>
+          <div class="ks-value">1 in 3</div>
+          <div class="ks-trend">
+            <span class="ks-trend-badge up">▲ trending</span>
+            <span class="ks-trend-text">more brands discounting vs. last week</span>
+          </div>
+        </div>
+
+        <!-- Variant: flat / neutral -->
+        <div class="kpi-stat">
+          <div class="ks-label">Avg discount depth</div>
+          <div class="ks-value">28<span class="ks-unit">%</span></div>
+          <div class="ks-trend">
+            <span class="ks-trend-badge flat">— stable</span>
+            <span class="ks-trend-text">across all live promos</span>
+          </div>
+        </div>
+
+        <!-- Variant: trending down (pressure easing) -->
+        <div class="kpi-stat">
+          <div class="ks-label">Week-over-week</div>
+          <div class="ks-value">+8<span class="ks-unit">pp</span></div>
+          <div class="ks-trend">
+            <span class="ks-trend-badge down">▼ easing</span>
+            <span class="ks-trend-text">vs. prior week</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="annotation">
+        <b>Differs from plain Card:</b> Has a fixed 3-zone layout — label → big value → trend row.
+        The trend badge encodes direction: <code>up</code> = red (pressure rising), <code>down</code> = teal (easing), <code>flat</code> = muted.
+        The top border stripe uses a subtle teal gradient to anchor it visually as a metric surface.
+        <br><br>
+        <b>Tokens used:</b> <code>--surface</code> bg, <code>--radar</code> stripe + down badge, <code>--red</code> up badge, <code>--text-3</code> label, <code>--text</code> value.
+      </div>
+    </div>
+
+    <div class="demo-card-footer">
+      <div class="prop-row"><span class="prop-label">Prop:</span><span class="prop-value">trend: "up" | "down" | "flat"</span></div>
+      <div class="prop-row"><span class="prop-label">Prop:</span><span class="prop-value">value: string</span></div>
+      <div class="prop-row"><span class="prop-label">Prop:</span><span class="prop-value">label: string</span></div>
+      <div class="prop-row"><span class="prop-label">Prop:</span><span class="prop-value">trendText: string</span></div>
+    </div>
+  </div>
+
+
+  <!-- ════════════════════════════════════════
+       COMPONENT 2: Horizontal Progress Bar (inline label)
+  ════════════════════════════════════════ -->
+  <div class="demo-card">
+    <div class="demo-card-header">
+      <div class="left">
+        <h2>Horizontal Progress Bar (inline label)</h2>
+        <p>A single-row layout with a category name on the left, a filled progress bar in the middle, and a percentage value on the right. Used for ranking and comparison lists. Distinct from the DS Bar Chart — no axes, no chart container, designed to stack as a list inside a card.</p>
+      </div>
+      <div class="component-id">ProgressBarRow</div>
+    </div>
+
+    <div class="demo-card-body surface">
+      <div class="prog-list">
+
+        <div class="prog-row">
+          <div class="prog-name">Apparel &amp; Fashion</div>
+          <div class="prog-bar-wrap">
+            <div class="prog-bar-fill teal" style="width:100%"></div>
+          </div>
+          <div class="prog-pct">48%</div>
+        </div>
+
+        <div class="prog-row">
+          <div class="prog-name">Health &amp; Supplements</div>
+          <div class="prog-bar-wrap">
+            <div class="prog-bar-fill teal" style="width:93%"></div>
+          </div>
+          <div class="prog-pct">45%</div>
+        </div>
+
+        <div class="prog-row">
+          <div class="prog-name">Beauty &amp; Skincare</div>
+          <div class="prog-bar-wrap">
+            <div class="prog-bar-fill teal" style="width:85%"></div>
+          </div>
+          <div class="prog-pct">41%</div>
+        </div>
+
+        <div class="prog-row">
+          <div class="prog-name">Home &amp; Furniture</div>
+          <div class="prog-bar-wrap">
+            <div class="prog-bar-fill teal" style="width:79%"></div>
+          </div>
+          <div class="prog-pct">38%</div>
+        </div>
+
+        <div class="prog-row">
+          <div class="prog-name">Sportswear &amp; Athletic</div>
+          <div class="prog-bar-wrap">
+            <div class="prog-bar-fill teal" style="width:70%"></div>
+          </div>
+          <div class="prog-pct">34%</div>
+        </div>
+
+        <div class="prog-row">
+          <div class="prog-name">Consumer Electronics</div>
+          <div class="prog-bar-wrap">
+            <div class="prog-bar-fill teal" style="width:60%"></div>
+          </div>
+          <div class="prog-pct">29%</div>
+        </div>
+
+        <div class="prog-row">
+          <div class="prog-name">Pet Care</div>
+          <div class="prog-bar-wrap">
+            <div class="prog-bar-fill teal" style="width:54%"></div>
+          </div>
+          <div class="prog-pct">26%</div>
+        </div>
+
+        <div class="prog-row">
+          <div class="prog-name">Beverages &amp; Food</div>
+          <div class="prog-bar-wrap">
+            <div class="prog-bar-fill teal" style="width:46%"></div>
+          </div>
+          <div class="prog-pct">22%</div>
+        </div>
+
+      </div>
+
+      <div class="tonal-sep">Color variant — gold encoding</div>
+
+      <!-- Gold variant: discount depth encoding -->
+      <div class="prog-list" style="max-width:400px">
+        <div class="prog-row">
+          <div class="prog-name">Wayfair</div>
+          <div class="prog-bar-wrap">
+            <div class="prog-bar-fill gold" style="width:100%"></div>
+          </div>
+          <div class="prog-pct">70%</div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-name">Everlane</div>
+          <div class="prog-bar-wrap">
+            <div class="prog-bar-fill gold" style="width:86%"></div>
+          </div>
+          <div class="prog-pct">60%</div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-name">Ritual</div>
+          <div class="prog-bar-wrap">
+            <div class="prog-bar-fill gold" style="width:57%"></div>
+          </div>
+          <div class="prog-pct">40%</div>
+        </div>
+        <div class="prog-row">
+          <div class="prog-name">Chewy</div>
+          <div class="prog-bar-wrap">
+            <div class="prog-bar-fill gold" style="width:50%"></div>
+          </div>
+          <div class="prog-pct">35%</div>
+        </div>
+      </div>
+
+      <div class="annotation">
+        <b>Not the same as DS Bar Chart:</b> No SVG, no axes, no chart wrapper. Just a CSS grid row that stacks inside any card.
+        Bar width is a simple percentage of max value. The fill color is a prop — <code>teal</code> for frequency data, <code>gold</code> for depth/intensity data, <code>red</code> for urgency.
+        <br><br>
+        <b>Tokens used:</b> <code>--surface-3</code> track bg, <code>--radar</code> teal fill, <code>--gold</code> gold fill, <code>--text-2</code> label, <code>--text</code> value.
+      </div>
+    </div>
+
+    <div class="demo-card-footer">
+      <div class="prop-row"><span class="prop-label">Prop:</span><span class="prop-value">label: string</span></div>
+      <div class="prop-row"><span class="prop-label">Prop:</span><span class="prop-value">value: number (0–100)</span></div>
+      <div class="prop-row"><span class="prop-label">Prop:</span><span class="prop-value">displayText: string</span></div>
+      <div class="prop-row"><span class="prop-label">Prop:</span><span class="prop-value">color: "teal" | "gold" | "red"</span></div>
+    </div>
+  </div>
+
+
+  <!-- ════════════════════════════════════════
+       COMPONENT 3: Leaderboard Row
+  ════════════════════════════════════════ -->
+  <div class="demo-card">
+    <div class="demo-card-header">
+      <div class="left">
+        <h2>Leaderboard Row</h2>
+        <p>A list row for ranked "top N" lists. Each row carries: rank number + brand name + discount-type badge + offer copy + depth pill on the right. More information-dense than a standard list item — it combines three data types (rank, metadata badge, numeric indicator) in one scannable row.</p>
+      </div>
+      <div class="component-id">LeaderboardRow</div>
+    </div>
+
+    <div class="demo-card-body surface">
+      <div class="lb-list">
+
+        <div class="lb-entry">
+          <div class="rank top">1</div>
+          <div class="lb-info">
+            <div class="brand-name">
+              Wayfair
+              <span class="lb-badge">Sitewide sale</span>
+            </div>
+            <div class="offer-line">
+              <span class="offer-copy">Up to 70% off + free shipping</span>
+              <span>· Home &amp; Furniture</span>
+            </div>
+          </div>
+          <div class="lb-depth" style="color:rgba(245,196,83,1.0);background:rgba(245,196,83,0.10);">70%</div>
+        </div>
+
+        <div class="lb-entry">
+          <div class="rank top">2</div>
+          <div class="lb-info">
+            <div class="brand-name">
+              Everlane
+              <span class="lb-badge">Clearance</span>
+            </div>
+            <div class="offer-line">
+              <span class="offer-copy">Up to 60% off final-sale styles</span>
+              <span>· Apparel &amp; Fashion</span>
+            </div>
+          </div>
+          <div class="lb-depth" style="color:rgba(245,196,83,0.90);background:rgba(245,196,83,0.10);">60%</div>
+        </div>
+
+        <div class="lb-entry">
+          <div class="rank top">3</div>
+          <div class="lb-info">
+            <div class="brand-name">
+              Zara
+              <span class="lb-badge">Sitewide sale</span>
+            </div>
+            <div class="offer-line">
+              <span class="offer-copy">Mid-season sale — up to 50% off</span>
+              <span>· Apparel &amp; Fashion</span>
+            </div>
+          </div>
+          <div class="lb-depth" style="color:rgba(245,196,83,0.79);background:rgba(245,196,83,0.10);">50%</div>
+        </div>
+
+        <div class="lb-entry">
+          <div class="rank">4</div>
+          <div class="lb-info">
+            <div class="brand-name">
+              Ritual
+              <span class="lb-badge">% off</span>
+            </div>
+            <div class="offer-line">
+              <span class="offer-copy">40% off your first month</span>
+              <span>· Health &amp; Supplements</span>
+            </div>
+          </div>
+          <div class="lb-depth" style="color:rgba(245,196,83,0.70);background:rgba(245,196,83,0.10);">40%</div>
+        </div>
+
+        <div class="lb-entry">
+          <div class="rank">5</div>
+          <div class="lb-info">
+            <div class="brand-name">
+              Chewy
+              <span class="lb-badge">% off</span>
+            </div>
+            <div class="offer-line">
+              <span class="offer-copy">35% off first Autoship order</span>
+              <span>· Pet Care</span>
+            </div>
+          </div>
+          <div class="lb-depth" style="color:rgba(245,196,83,0.64);background:rgba(245,196,83,0.10);">35%</div>
+        </div>
+
+        <div class="lb-entry">
+          <div class="rank">6</div>
+          <div class="lb-info">
+            <div class="brand-name">
+              Nike
+              <span class="lb-badge">% off</span>
+            </div>
+            <div class="offer-line">
+              <span class="offer-copy">25% off select running styles</span>
+              <span>· Sportswear &amp; Athletic</span>
+            </div>
+          </div>
+          <div class="lb-depth" style="color:rgba(245,196,83,0.59);background:rgba(245,196,83,0.10);">25%</div>
+        </div>
+
+      </div>
+
+      <div class="annotation">
+        <b>Differs from a plain list row:</b> Three visual zones in one row — rank (mono, fixed width), content block (brand + badge + offer text), depth pill (right-aligned, gold opacity-encoded to convey severity at a glance).
+        Ranks 1–3 get gold color treatment; rank 4+ are muted.
+        The depth pill opacity scales with depth: <code>depth ≥ 60%</code> = full opacity, <code>30%</code> = ~0.59.
+        <br><br>
+        <b>Tokens used:</b> <code>--surface-3</code> badge bg, <code>--text-3</code> rank, <code>--gold</code> depth pill + top ranks, <code>--text-2</code> offer copy.
+      </div>
+    </div>
+
+    <div class="demo-card-footer">
+      <div class="prop-row"><span class="prop-label">Prop:</span><span class="prop-value">rank: number</span></div>
+      <div class="prop-row"><span class="prop-label">Prop:</span><span class="prop-value">brand: string</span></div>
+      <div class="prop-row"><span class="prop-label">Prop:</span><span class="prop-value">badgeLabel: string</span></div>
+      <div class="prop-row"><span class="prop-label">Prop:</span><span class="prop-value">offerCopy: string</span></div>
+      <div class="prop-row"><span class="prop-label">Prop:</span><span class="prop-value">depth: number (0–100)</span></div>
+    </div>
+  </div>
+
+
+  <!-- ════════════════════════════════════════
+       COMPONENT 4: Animated Brand Mark / Logo Badge
+  ════════════════════════════════════════ -->
+  <div class="demo-card">
+    <div class="demo-card-header">
+      <div class="left">
+        <h2>Animated Brand Mark / Logo Badge</h2>
+        <p>A circular SVG radar icon with a rotating sweep arm and optional ripple/pulse animations. Used as the app identity mark in the topbar — it communicates "live data, always scanning." Distinct from a static icon because the animation is load-bearing: it signals active monitoring state.</p>
+      </div>
+      <div class="component-id">RadarMark</div>
+    </div>
+
+    <div class="demo-card-body">
+
+      <!-- Topbar context demo -->
+      <div style="margin-bottom:32px;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);margin-bottom:12px;">In-context: topbar usage</div>
+        <div class="topbar-demo">
+          <!-- Full animated mark -->
+          <svg class="radar-mark" width="34" height="34" viewBox="0 0 34 34" fill="none" color="var(--radar)">
+            <!-- Ripple rings -->
+            <circle class="ripple-1" cx="17" cy="17" r="2" fill="none" stroke="currentColor" stroke-width="1" opacity="0"/>
+            <circle class="ripple-2" cx="17" cy="17" r="2" fill="none" stroke="currentColor" stroke-width="1" opacity="0"/>
+            <!-- Static rings -->
+            <circle cx="17" cy="17" r="15" stroke="currentColor" stroke-width="1.4" opacity="0.3"/>
+            <circle cx="17" cy="17" r="9.5" stroke="currentColor" stroke-width="1.4" opacity="0.45"/>
+            <!-- Rotating sweep -->
+            <g class="sweep-group">
+              <path class="sweep-path" d="M17 17 L17 3 A14 14 0 0 1 29.5 13 Z" fill="currentColor" opacity="0.22"/>
+              <line x1="17" y1="17" x2="30" y2="9" stroke="currentColor" stroke-width="1.6"/>
+            </g>
+            <!-- Center dot -->
+            <circle cx="17" cy="17" r="2.4" fill="currentColor"/>
+          </svg>
+          <div>
+            <div class="brand-name-demo">Promo Radar</div>
+            <div class="brand-cat-demo">Discount intelligence</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Size scale -->
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);margin-bottom:16px;">Size scale</div>
+      <div class="variants-row" style="margin-bottom:32px;">
+
+        <div class="variant-item">
+          <svg class="radar-mark mark-size-sm" viewBox="0 0 34 34" fill="none" color="var(--radar)">
+            <circle cx="17" cy="17" r="15" stroke="currentColor" stroke-width="1.4" opacity="0.3"/>
+            <circle cx="17" cy="17" r="9.5" stroke="currentColor" stroke-width="1.4" opacity="0.45"/>
+            <g class="sweep-group">
+              <path class="sweep-path" d="M17 17 L17 3 A14 14 0 0 1 29.5 13 Z" fill="currentColor" opacity="0.22"/>
+              <line x1="17" y1="17" x2="30" y2="9" stroke="currentColor" stroke-width="1.6"/>
+            </g>
+            <circle cx="17" cy="17" r="2.4" fill="currentColor"/>
+          </svg>
+          <span class="variant-label">sm / 28px</span>
+        </div>
+
+        <div class="variant-item">
+          <svg class="radar-mark mark-size-md" viewBox="0 0 34 34" fill="none" color="var(--radar)">
+            <circle cx="17" cy="17" r="15" stroke="currentColor" stroke-width="1.4" opacity="0.3"/>
+            <circle cx="17" cy="17" r="9.5" stroke="currentColor" stroke-width="1.4" opacity="0.45"/>
+            <g class="sweep-group">
+              <path class="sweep-path" d="M17 17 L17 3 A14 14 0 0 1 29.5 13 Z" fill="currentColor" opacity="0.22"/>
+              <line x1="17" y1="17" x2="30" y2="9" stroke="currentColor" stroke-width="1.6"/>
+            </g>
+            <circle cx="17" cy="17" r="2.4" fill="currentColor"/>
+          </svg>
+          <span class="variant-label">md / 40px</span>
+        </div>
+
+        <div class="variant-item">
+          <svg class="radar-mark mark-size-lg" viewBox="0 0 34 34" fill="none" color="var(--radar)">
+            <circle class="ripple-1" cx="17" cy="17" r="2" fill="none" stroke="currentColor" stroke-width="1" opacity="0"/>
+            <circle class="ripple-2" cx="17" cy="17" r="2" fill="none" stroke="currentColor" stroke-width="1" opacity="0"/>
+            <circle cx="17" cy="17" r="15" stroke="currentColor" stroke-width="1.4" opacity="0.3"/>
+            <circle cx="17" cy="17" r="9.5" stroke="currentColor" stroke-width="1.4" opacity="0.45"/>
+            <g class="sweep-group">
+              <path class="sweep-path" d="M17 17 L17 3 A14 14 0 0 1 29.5 13 Z" fill="currentColor" opacity="0.22"/>
+              <line x1="17" y1="17" x2="30" y2="9" stroke="currentColor" stroke-width="1.6"/>
+            </g>
+            <circle cx="17" cy="17" r="2.4" fill="currentColor"/>
+          </svg>
+          <span class="variant-label">lg / 60px + ripple</span>
+        </div>
+
+        <div class="variant-item">
+          <svg class="radar-mark mark-size-xl" viewBox="0 0 34 34" fill="none" color="var(--radar)">
+            <circle class="ripple-1" cx="17" cy="17" r="2" fill="none" stroke="currentColor" stroke-width="1" opacity="0"/>
+            <circle class="ripple-2" cx="17" cy="17" r="2" fill="none" stroke="currentColor" stroke-width="1" opacity="0"/>
+            <circle cx="17" cy="17" r="15" stroke="currentColor" stroke-width="1.4" opacity="0.3"/>
+            <circle cx="17" cy="17" r="9.5" stroke="currentColor" stroke-width="1.4" opacity="0.45"/>
+            <g class="sweep-group">
+              <path class="sweep-path" d="M17 17 L17 3 A14 14 0 0 1 29.5 13 Z" fill="currentColor" opacity="0.22"/>
+              <line x1="17" y1="17" x2="30" y2="9" stroke="currentColor" stroke-width="1.6"/>
+            </g>
+            <circle cx="17" cy="17" r="2.4" fill="currentColor"/>
+          </svg>
+          <span class="variant-label">xl / 80px + ripple</span>
+        </div>
+
+      </div>
+
+      <!-- Contained badge variant -->
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);margin-bottom:16px;">Contained badge variant</div>
+      <div class="variants-row">
+
+        <div class="variant-item">
+          <div class="radar-badge sm">
+            <svg class="radar-mark" style="width:18px;height:18px;" viewBox="0 0 34 34" fill="none" color="var(--radar)">
+              <circle cx="17" cy="17" r="15" stroke="currentColor" stroke-width="1.6" opacity="0.35"/>
+              <circle cx="17" cy="17" r="9" stroke="currentColor" stroke-width="1.6" opacity="0.5"/>
+              <g class="sweep-group">
+                <path d="M17 17 L17 3 A14 14 0 0 1 29.5 13 Z" fill="currentColor" opacity="0.3"/>
+              </g>
+              <circle cx="17" cy="17" r="2.4" fill="currentColor"/>
+            </svg>
+          </div>
+          <span class="variant-label">sm / 36px</span>
+        </div>
+
+        <div class="variant-item">
+          <div class="radar-badge md">
+            <svg class="radar-mark" style="width:26px;height:26px;" viewBox="0 0 34 34" fill="none" color="var(--radar)">
+              <circle cx="17" cy="17" r="15" stroke="currentColor" stroke-width="1.6" opacity="0.35"/>
+              <circle cx="17" cy="17" r="9" stroke="currentColor" stroke-width="1.6" opacity="0.5"/>
+              <g class="sweep-group">
+                <path d="M17 17 L17 3 A14 14 0 0 1 29.5 13 Z" fill="currentColor" opacity="0.3"/>
+              </g>
+              <circle cx="17" cy="17" r="2.4" fill="currentColor"/>
+            </svg>
+          </div>
+          <span class="variant-label">md / 52px</span>
+        </div>
+
+        <div class="variant-item">
+          <div class="radar-badge lg">
+            <svg class="radar-mark" style="width:38px;height:38px;" viewBox="0 0 34 34" fill="none" color="var(--radar)">
+              <circle class="ripple-1" cx="17" cy="17" r="2" fill="none" stroke="currentColor" stroke-width="1" opacity="0"/>
+              <circle cx="17" cy="17" r="15" stroke="currentColor" stroke-width="1.6" opacity="0.35"/>
+              <circle cx="17" cy="17" r="9" stroke="currentColor" stroke-width="1.6" opacity="0.5"/>
+              <g class="sweep-group">
+                <path d="M17 17 L17 3 A14 14 0 0 1 29.5 13 Z" fill="currentColor" opacity="0.3"/>
+              </g>
+              <circle cx="17" cy="17" r="2.4" fill="currentColor"/>
+            </svg>
+          </div>
+          <span class="variant-label">lg / 72px</span>
+        </div>
+
+      </div>
+
+      <div class="annotation">
+        <b>Why this is a component, not an icon:</b> The animation is semantically meaningful — it signals "actively scanning / live data." A static version would lose that meaning. The sweep rotation speed (3s), ripple timing, and opacity values are all intentional and should be DS-standardized so every app that signals live intelligence uses the same cadence.
+        <br><br>
+        <b>Tokens used:</b> <code>--radar</code> / <code>currentColor</code> for all strokes and fills. Container badge uses <code>rgba(--radar-rgb, 0.1)</code> bg and <code>rgba(--radar-rgb, 0.25)</code> border.
+        <br><br>
+        <b>Animation tokens to define:</b> <code>--anim-radar-sweep: 3s linear infinite</code>, <code>--anim-radar-ripple: 3s ease-out infinite</code>.
+      </div>
+    </div>
+
+    <div class="demo-card-footer">
+      <div class="prop-row"><span class="prop-label">Prop:</span><span class="prop-value">size: "sm" | "md" | "lg" | "xl"</span></div>
+      <div class="prop-row"><span class="prop-label">Prop:</span><span class="prop-value">ripple: boolean</span></div>
+      <div class="prop-row"><span class="prop-label">Prop:</span><span class="prop-value">contained: boolean</span></div>
+      <div class="prop-row"><span class="prop-label">Prop:</span><span class="prop-value">speed: number (seconds, default 3)</span></div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+</body>
+</html>

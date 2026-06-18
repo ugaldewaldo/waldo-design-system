@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Promo Radar — API coverage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #09090B;
+    --surface: #111114;
+    --surface-2: #16161B;
+    --surface-3: #1C1C22;
+    --border: rgba(255,255,255,0.07);
+    --border-strong: rgba(255,255,255,0.12);
+    --text: #FAFAFA;
+    --text-2: #B4B4BC;
+    --text-3: #6B6B74;
+    --radar: #38BDF8;
+    --radar-rgb: 56,189,248;
+    --gold: #F5C453;
+    --green: #4ADE80;
+    --amber: #FBBF24;
+    --red: #FB7185;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.55; font-size: 14px;
+    -webkit-font-smoothing: antialiased; padding-bottom: 80px;
+  }
+  a { color: var(--radar); text-decoration: none; }
+  a:hover { opacity: 0.85; }
+  code, .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 32px; border-bottom: 1px solid var(--border);
+    background: rgba(9,9,11,0.88); backdrop-filter: blur(8px); position: sticky; top: 0; z-index: 50;
+  }
+  .brand-mark { display: flex; align-items: center; gap: 12px; }
+  .brand-mark .name { font-weight: 800; font-size: 18px; letter-spacing: -0.02em; }
+  .brand-mark .cat { font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 1px; }
+  .topbar-links { display: flex; gap: 18px; font-size: 12px; }
+  .topbar-links a { color: var(--text-2); }
+  .topbar-links a:hover { color: var(--text); opacity: 1; }
+
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+  .hero { padding: 52px 0 30px; border-bottom: 1px solid var(--border); }
+  .eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-3); margin-bottom: 14px; }
+  h1 { font-size: 36px; letter-spacing: -0.02em; font-weight: 800; line-height: 1.15; margin-bottom: 16px; }
+  h1 .hl { color: var(--radar); }
+  .lede { font-size: 16px; color: var(--text-2); max-width: 800px; line-height: 1.6; }
+  .lede a { color: var(--text); border-bottom: 1px dashed var(--border-strong); }
+
+  .summary-row { display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap; }
+  .sum-chip { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; flex: 1; min-width: 150px; }
+  .sum-chip .n { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; }
+  .sum-chip .l { font-size: 12px; color: var(--text-3); margin-top: 4px; }
+  .sum-chip.ok .n { color: var(--green); }
+  .sum-chip.partial .n { color: var(--amber); }
+  .sum-chip.gap .n { color: var(--red); }
+
+  .section { padding: 44px 0; border-bottom: 1px solid var(--border); }
+  .section-head { margin-bottom: 22px; }
+  .section-head h2 { font-size: 24px; letter-spacing: -0.015em; font-weight: 800; }
+  .section-head .def { color: var(--text-2); margin-top: 8px; font-size: 15px; max-width: 800px; }
+
+  .prop-table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; overflow-x: auto; }
+  .prop-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .prop-table thead th {
+    text-align: left; padding: 12px 16px; font-size: 10px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3);
+    background: var(--surface-2); border-bottom: 1px solid var(--border);
+  }
+  .prop-table { table-layout: fixed; }
+  .prop-table col.c-field { width: 17%; } .prop-table col.c-endpoint { width: 21%; }
+  .prop-table col.c-powers { width: 15%; } .prop-table col.c-notes { width: 33%; } .prop-table col.c-status { width: 14%; }
+  .prop-table td { padding: 14px 16px; vertical-align: top; border-bottom: 1px solid var(--border); color: var(--text-2); line-height: 1.55; overflow-wrap: anywhere; }
+  .prop-table td:first-child { color: var(--text); font-weight: 600; }
+  .prop-table td code, .prop-table th code {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    background: var(--surface-3); padding: 1px 6px; border-radius: 4px; color: var(--text);
+    overflow-wrap: anywhere; word-break: break-word;
+  }
+  .prop-table td a { color: var(--text); border-bottom: 1px dashed var(--border-strong); }
+  .prop-table td a:hover { color: var(--radar); opacity: 1; }
+  .prop-table tr.grp td {
+    padding: 14px 16px 8px; background: var(--surface-2);
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3);
+  }
+  .prop-table tr:last-child td { border-bottom: none; }
+  .powers { font-size: 12px; color: var(--text-3); }
+
+  .status-pill {
+    font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 0.02em;
+    display: inline-block; white-space: nowrap;
+  }
+  .status-pill.ok { color: var(--green); background: rgba(74,222,128,0.10); border: 1px solid rgba(74,222,128,0.30); }
+  .status-pill.partial { color: var(--amber); background: rgba(251,191,36,0.10); border: 1px solid rgba(251,191,36,0.30); }
+  .status-pill.gap { color: var(--red); background: rgba(251,113,133,0.10); border: 1px solid rgba(251,113,133,0.30); }
+
+  .gap-card { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--red); border-radius: 12px; padding: 22px 24px; margin-bottom: 16px; }
+  .gap-card.hero-gap { border-left-color: var(--gold); }
+  .gap-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+  .gap-method { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 700; color: var(--text); }
+  .gap-method .verb { color: var(--radar); }
+  .gap-desc { color: var(--text-2); font-size: 14px; line-height: 1.6; margin-bottom: 12px; }
+  .gap-desc b { color: var(--text); }
+  pre { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.6; color: var(--text-2); }
+  pre .key { color: var(--radar); }
+  pre .str { color: var(--gold); }
+  pre .num { color: var(--green); }
+  pre .bool { color: var(--amber); }
+  .powers-line { font-size: 12px; color: var(--text-3); margin-top: 12px; }
+  .powers-line b { color: var(--text-2); font-weight: 600; }
+
+  .footer-note { max-width: 1100px; margin: 40px auto 0; padding: 24px 32px 0; border-top: 1px solid var(--border); color: var(--text-3); font-size: 12px; line-height: 1.6; }
+  .footer-note a { color: var(--text-2); border-bottom: 1px dashed var(--border-strong); }
+
+  @media (max-width: 760px){
+    .prop-table { min-width: 720px; }
+    .prop-table-wrap { -webkit-overflow-scrolling: touch; }
+    h1 { font-size: 28px; }
+    .topbar-links { gap: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand-mark">
+    <svg width="34" height="34" viewBox="0 0 34 34" fill="none" style="color:var(--radar)">
+      <circle cx="17" cy="17" r="15" stroke="currentColor" stroke-width="1.4" opacity="0.35"/>
+      <circle cx="17" cy="17" r="9.5" stroke="currentColor" stroke-width="1.4" opacity="0.5"/>
+      <circle cx="17" cy="17" r="2.4" fill="currentColor"/>
+      <path d="M17 17 L17 3 A14 14 0 0 1 30 13 Z" fill="currentColor" opacity="0.22"/>
+      <line x1="17" y1="17" x2="30" y2="9" stroke="currentColor" stroke-width="1.6"/>
+    </svg>
+    <div><div class="name">Promo Radar</div><div class="cat">API coverage</div></div>
+  </div>
+  <div class="topbar-links">
+    <a href="/promo-radar/index.html">← Back to app</a>
+    <a href="../bxcapi/index.html">bxcAPI spec</a>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="eyebrow">What Promo Radar needs from the Brand Intelligence API</div>
+    <h1>Every endpoint Promo Radar reads — and where the <span class="hl">gaps</span> are</h1>
+    <p class="lede">Promo Radar is built on the <a href="../bxcapi/index.html">Brand Intelligence API</a>. The keystone need — a structured <b><code class="mono">promotion</code> object</b> on active ads — has now been added to <a href="../bxcapi/index.html#paid-media"><code class="mono">/brands/{id}/ads/active</code></a>, so discount detection no longer depends on regexing ad text. The remaining additions below are the roll-ups, history, and alert events that would let the dashboard stop fanning out across every brand and faking a promotion history.</p>
+    <div class="summary-row">
+      <div class="sum-chip ok"><div class="n">7</div><div class="l">endpoints usable today</div></div>
+      <div class="sum-chip partial"><div class="n">5</div><div class="l">partial — text only, no classification</div></div>
+      <div class="sum-chip gap"><div class="n">5</div><div class="l">proposed additions</div></div>
+    </div>
+  </div>
+
+  <!-- ════ TABLE 1 ════ -->
+  <div class="section">
+    <div class="section-head">
+      <h2>Every endpoint Promo Radar reads</h2>
+      <p class="def">One row per field or endpoint the prototype consumes. Ordered gaps → partial → available. "Partial" means the data exists as free text or requires per-ad fan-out, but there's no structured discount object to read.</p>
+    </div>
+
+    <div class="prop-table-wrap">
+      <table class="prop-table">
+        <colgroup>
+          <col class="c-field"><col class="c-endpoint"><col class="c-powers"><col class="c-notes"><col class="c-status">
+        </colgroup>
+        <thead>
+          <tr><th>Field / capability</th><th>Endpoint</th><th>Powers</th><th>Notes</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+
+          <tr class="grp"><td colspan="5">Gaps — blocks the product until built (detailed below)</td></tr>
+          <tr>
+            <td>Promotion history</td>
+            <td><code>/brands/{id}/promotions</code> <span style="color:var(--text-3);font-size:11px;">(new)</span></td>
+            <td class="powers">Brand detail timeline</td>
+            <td>Current + past promos with start/end dates, depth, type, source ad/LP.</td>
+            <td><span class="status-pill gap">✗ Gap</span></td>
+          </tr>
+          <tr>
+            <td>Category discount roll-up</td>
+            <td><code>/categories/{id}/promotions/summary</code> <span style="color:var(--text-3);font-size:11px;">(new)</span></td>
+            <td class="powers">Category bars · category detail</td>
+            <td>% discounting, avg depth, type mix, w/w trend in one call instead of fanning out across every brand.</td>
+            <td><span class="status-pill gap">✗ Gap</span></td>
+          </tr>
+          <tr>
+            <td>Cross-index discount search</td>
+            <td><code>/discover/promotions</code> <span style="color:var(--text-3);font-size:11px;">(new)</span></td>
+            <td class="powers">"Deepest live now" leaderboard</td>
+            <td>Who's discounting now, filterable by category / type / min-depth, sorted by depth or recency.</td>
+            <td><span class="status-pill gap">✗ Gap</span></td>
+          </tr>
+          <tr>
+            <td>Market discount index</td>
+            <td><code>/promotions/landscape</code> <span style="color:var(--text-3);font-size:11px;">(new)</span></td>
+            <td class="powers">Hero KPIs · 12-week trend</td>
+            <td>Top-level discount-pressure index + trend across all categories.</td>
+            <td><span class="status-pill gap">✗ Gap</span></td>
+          </tr>
+          <tr>
+            <td>Discount alert event types</td>
+            <td><a href="../bxcapi/index.html#event-types"><code>POST /alerts</code></a> <span style="color:var(--text-3);font-size:11px;">(+events)</span></td>
+            <td class="powers">Alert setup + dry-run</td>
+            <td><code>promotion.started</code>, <code>promotion.deepened</code>, <code>promotion.ended</code>, <code>category.promo_surge</code>.</td>
+            <td><span class="status-pill gap">✗ Gap</span></td>
+          </tr>
+
+          <tr class="grp"><td colspan="5">Partial — data exists, but unstructured or requires fan-out</td></tr>
+          <tr>
+            <td><code>body</code>, <code>headline</code>, <code>cta</code>, <code>active</code>, <code>started_at</code></td>
+            <td><a href="../bxcapi/index.html#discover-ads"><code>/discover/ads</code></a></td>
+            <td class="powers">Ad-copy evidence · detection</td>
+            <td>Returns <code>headline</code>/<code>body</code>/<code>cta</code>/<code>active</code>/<code>started_at</code> for cross-platform ad-library search, but no structured <code>promotion</code> object — so detection is left to the client. (Volume is fine — <code>next_cursor</code> paginates; the cap isn't the issue.)</td>
+            <td><span class="status-pill partial">⚠ Partial</span></td>
+          </tr>
+          <tr>
+            <td><code>offer</code> (free text)</td>
+            <td><a href="../bxcapi/index.html#paid-media"><code>/ads/{id}/landing-page</code></a></td>
+            <td class="powers">Landing-page offer on cards</td>
+            <td>Has the offer (e.g. "20% off") — but it's a freeform string and needs a separate call per ad (N+1).</td>
+            <td><span class="status-pill partial">⚠ Partial</span></td>
+          </tr>
+          <tr>
+            <td><code>change_type: "offer"</code> before/after</td>
+            <td><a href="../bxcapi/index.html#paid-media"><code>/brands/{id}/lp-changes</code></a></td>
+            <td class="powers">History (proxy today)</td>
+            <td>Detects offer swaps with timestamps — the closest thing to history, but unstructured and LP-only.</td>
+            <td><span class="status-pill partial">⚠ Partial</span></td>
+          </tr>
+          <tr>
+            <td><code>competitor.messaging_pivot</code></td>
+            <td><a href="../bxcapi/index.html#event-types"><code>POST /alerts</code></a></td>
+            <td class="powers">Alert (nearest existing trigger)</td>
+            <td>Fires on new semantic clusters in ad copy — would catch a promo indirectly, but isn't discount-scoped.</td>
+            <td><span class="status-pill partial">⚠ Partial</span></td>
+          </tr>
+          <tr>
+            <td><code>by_platform</code>, <code>active_campaigns</code></td>
+            <td><a href="../bxcapi/index.html#paid-media"><code>/brands/{id}/paid-media/summary</code></a></td>
+            <td class="powers">Platform context</td>
+            <td>Spend/volume context for a discounting brand. Useful, not discount-aware.</td>
+            <td><span class="status-pill partial">⚠ Partial</span></td>
+          </tr>
+
+          <tr class="grp"><td colspan="5">Available today — used as-is</td></tr>
+          <tr>
+            <td><code>promotion</code> object, <code>body</code>, <code>cta_text</code></td>
+            <td><a href="../bxcapi/index.html#paid-media"><code>/brands/{id}/ads/active</code></a></td>
+            <td class="powers">Discount detection · live-promo cards</td>
+            <td>Now returns full ad copy plus a structured <code>promotion</code> object (<code>discount_type</code>, <code>discount_value</code>, <code>promo_code</code>, <code>expires_at</code>, <code>confidence</code>) — the prototype's primary detection source.</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Brand search</td>
+            <td><a href="../bxcapi/index.html#brand-discovery"><code>/brands/search?q=&amp;category=</code></a></td>
+            <td class="powers">Search box (brands)</td>
+            <td>Name/category search returning brand id, name, category.</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Category taxonomy</td>
+            <td><a href="../bxcapi/index.html#cat-discovery"><code>/categories</code></a></td>
+            <td class="powers">Search box (categories) · bars</td>
+            <td>40 categories / 89 subcategories with brand counts.</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Brands in a category</td>
+            <td><a href="../bxcapi/index.html#cat-discovery"><code>/categories/{id}/brands</code></a></td>
+            <td class="powers">Category detail roster</td>
+            <td>Paginated brand list per category — what we fan out over today.</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>New creative this week</td>
+            <td><a href="../bxcapi/index.html#paid-media"><code>/category/{id}/ads/new</code></a></td>
+            <td class="powers">Surfacing newly-launched promos</td>
+            <td>Net-new creative clustered by angle — useful for "just started discounting".</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Alert dry-run</td>
+            <td><a href="../bxcapi/index.html#alerts"><code>POST /alerts/{id}/preview</code></a></td>
+            <td class="powers">"Would have fired N times" panel</td>
+            <td>Replays last 30 days against a config — exactly the preview the alert form shows.</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Alert CRUD + channels</td>
+            <td><a href="../bxcapi/index.html#alerts"><code>POST /alerts</code></a></td>
+            <td class="powers">Create / list / delete alerts</td>
+            <td><code>trigger</code> / <code>scope</code> / <code>channels</code> shape (email, SMS) is reused directly.</td>
+            <td><span class="status-pill ok">✓ Available</span></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ════ TABLE 2: PROPOSED ADDITIONS ════ -->
+  <div class="section">
+    <div class="section-head">
+      <h2>Proposed additions</h2>
+      <p class="def">The keystone — a structured <code class="mono">promotion</code> object on ads — has landed on <code class="mono">/brands/{id}/ads/active</code> (shown first, for reference). The five additions after it build on that object: every roll-up, the history, the search, and the alerts derive from it.</p>
+    </div>
+
+    <div class="gap-card hero-gap">
+      <div class="gap-head">
+        <span class="gap-method"><span class="verb">FIELD</span> · <code>promotion</code> object on ads</span>
+        <span class="status-pill ok" style="margin-left:auto;">✓ Added · keystone</span>
+      </div>
+      <p class="gap-desc">A classified <b>promotion</b> object is now attached to each ad on <a href="../bxcapi/index.html#paid-media"><code>/brands/{id}/ads/active</code></a> — so the prototype reads <code>discount_type</code>/<code>discount_value</code>/<code>promo_code</code> directly instead of regexing <code>body</code>, <code>on_screen_text</code>, and the landing <code>offer</code> string. Mirroring the same object onto <code>/discover/ads</code> would extend structured detection to cross-platform ad-library search.</p>
+<pre>{
+  <span class="key">"ad_id"</span>: <span class="str">"ad_b8c4d1e2"</span>,
+  <span class="key">"body"</span>: <span class="str">"The mid-season SALE is here. Up to 50% off..."</span>,
+  <span class="key">"promotion"</span>: {
+    <span class="key">"is_promotional"</span>: <span class="bool">true</span>,
+    <span class="key">"discount_type"</span>: <span class="str">"percentage_off"</span>,   <span class="key">// percentage_off | dollar_off | bogo | free_shipping | free_gift | bundle | clearance | sitewide_sale</span>
+    <span class="key">"discount_value"</span>: <span class="num">50</span>,
+    <span class="key">"discount_unit"</span>: <span class="str">"pct"</span>,            <span class="key">// pct | usd | other</span>
+    <span class="key">"discount_text"</span>: <span class="str">"Up to 50% off"</span>,
+    <span class="key">"promo_code"</span>: <span class="str">null</span>,
+    <span class="key">"conditions"</span>: <span class="str">"While stocks last"</span>,
+    <span class="key">"expires_at"</span>: <span class="str">"2026-05-31"</span>,
+    <span class="key">"confidence"</span>: <span class="num">0.94</span>
+  }
+}</pre>
+      <p class="powers-line"><b>Powers:</b> every live-promo card, the leaderboard ranking, search result labels, and the inputs to all four roll-ups below.</p>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-head">
+        <span class="gap-method"><span class="verb">GET</span> /brands/{id}/promotions</span>
+        <span class="status-pill gap" style="margin-left:auto;">✗ Gap</span>
+      </div>
+      <p class="gap-desc">A brand's promotion <b>history</b> — current and past — as discrete records with start/end dates, depth, type, channels, and the source ad/LP. Today the brand-detail timeline is stitched from <code>lp-changes</code> offer swaps plus ad start dates; this returns it cleanly.</p>
+<pre>{
+  <span class="key">"brand_id"</span>: <span class="str">"brand_zara"</span>,
+  <span class="key">"promotions"</span>: [
+    {
+      <span class="key">"promotion_id"</span>: <span class="str">"promo_91af"</span>,
+      <span class="key">"discount_type"</span>: <span class="str">"sitewide_sale"</span>,
+      <span class="key">"discount_value"</span>: <span class="num">50</span>,
+      <span class="key">"label"</span>: <span class="str">"Mid-season sale"</span>,
+      <span class="key">"started_at"</span>: <span class="str">"2026-05-21"</span>,
+      <span class="key">"ended_at"</span>: <span class="str">null</span>,        <span class="key">// null = still live</span>
+      <span class="key">"channels"</span>: [<span class="str">"meta"</span>, <span class="str">"google"</span>],
+      <span class="key">"source_ad_ids"</span>: [<span class="str">"ad_b8c4d1e2"</span>]
+    }
+  ],
+  <span class="key">"meta"</span>: { <span class="key">"total"</span>: <span class="num">7</span> }
+}</pre>
+      <p class="powers-line"><b>Powers:</b> the brand-detail discount-history timeline and the depth-over-time series.</p>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-head">
+        <span class="gap-method"><span class="verb">GET</span> /categories/{id}/promotions/summary</span>
+        <span class="status-pill gap" style="margin-left:auto;">✗ Gap</span>
+      </div>
+      <p class="gap-desc">A category discount roll-up in one call: share of brands discounting, average depth, discount-type mix, and a week-over-week trend series. Today the prototype fans out across every brand in a category and aggregates client-side — an N×calls problem the dashboard repeats for all eight categories.</p>
+<pre>{
+  <span class="key">"category_id"</span>: <span class="str">"cat_fashion"</span>,
+  <span class="key">"window"</span>: <span class="str">"7d"</span>,
+  <span class="key">"pct_brands_discounting"</span>: <span class="num">0.48</span>,
+  <span class="key">"avg_depth_pct"</span>: <span class="num">33</span>,
+  <span class="key">"wow_delta_pp"</span>: <span class="num">9</span>,
+  <span class="key">"type_mix"</span>: { <span class="key">"percentage_off"</span>: <span class="num">0.30</span>, <span class="key">"sitewide_sale"</span>: <span class="num">0.26</span>, <span class="key">"clearance"</span>: <span class="num">0.16</span> },
+  <span class="key">"trend"</span>: [{ <span class="key">"week"</span>: <span class="str">"2026-05-25"</span>, <span class="key">"pct"</span>: <span class="num">0.48</span> }]
+}</pre>
+      <p class="powers-line"><b>Powers:</b> the "discount pressure by industry" bar chart and the category-detail stats + type mix.</p>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-head">
+        <span class="gap-method"><span class="verb">GET</span> /discover/promotions</span>
+        <span class="status-pill gap" style="margin-left:auto;">✗ Gap</span>
+      </div>
+      <p class="gap-desc">Cross-index search for <b>who's discounting right now</b>: filter by category, discount type, and minimum depth; sort by depth or recency. This is the query the entire app is about — today it's impossible without pulling every brand's active ads and filtering locally.</p>
+<pre>GET /discover/promotions?active=true&amp;min_depth=20&amp;sort=depth_desc&amp;category=cat_fashion
+
+{
+  <span class="key">"data"</span>: [
+    {
+      <span class="key">"brand_id"</span>: <span class="str">"brand_everlane"</span>,
+      <span class="key">"brand_name"</span>: <span class="str">"Everlane"</span>,
+      <span class="key">"category"</span>: <span class="str">"Apparel &amp; Fashion"</span>,
+      <span class="key">"discount_type"</span>: <span class="str">"clearance"</span>,
+      <span class="key">"discount_value"</span>: <span class="num">60</span>,
+      <span class="key">"discount_text"</span>: <span class="str">"Up to 60% off"</span>,
+      <span class="key">"started_at"</span>: <span class="str">"2026-05-15"</span>
+    }
+  ],
+  <span class="key">"meta"</span>: { <span class="key">"total"</span>: <span class="num">142</span> }
+}</pre>
+      <p class="powers-line"><b>Powers:</b> the "deepest discounts live now" leaderboard and category "discounting now" rosters.</p>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-head">
+        <span class="gap-method"><span class="verb">GET</span> /promotions/landscape</span>
+        <span class="status-pill gap" style="margin-left:auto;">✗ Gap</span>
+      </div>
+      <p class="gap-desc">A single top-level read for the home hero: a market-wide <b>discount-pressure index</b>, its week-over-week move, the deepest live discount, and a trend series — across the whole tracked universe, not one category.</p>
+<pre>{
+  <span class="key">"as_of"</span>: <span class="str">"2026-05-28"</span>,
+  <span class="key">"pct_brands_discounting"</span>: <span class="num">0.36</span>,
+  <span class="key">"avg_depth_pct"</span>: <span class="num">29</span>,
+  <span class="key">"wow_delta_pp"</span>: <span class="num">8</span>,
+  <span class="key">"deepest_live"</span>: { <span class="key">"brand_name"</span>: <span class="str">"Wayfair"</span>, <span class="key">"discount_value"</span>: <span class="num">70</span> },
+  <span class="key">"trend"</span>: [{ <span class="key">"week"</span>: <span class="str">"2026-05-25"</span>, <span class="key">"pct"</span>: <span class="num">0.38</span> }]
+}</pre>
+      <p class="powers-line"><b>Powers:</b> the four hero KPI cards and the 12-week discount-trend chart.</p>
+    </div>
+
+    <div class="gap-card">
+      <div class="gap-head">
+        <span class="gap-method"><span class="verb">EVENTS</span> · discount-scoped alert types</span>
+        <span class="status-pill gap" style="margin-left:auto;">✗ Gap</span>
+      </div>
+      <p class="gap-desc">New <code>event_type</code> values for <code>POST /alerts</code> so a user can track discounts directly, rather than leaning on the indirect <code>competitor.messaging_pivot</code>. With these, the alert form's three triggers map 1:1 onto API events, and <code>/alerts/{id}/preview</code> already gives the dry-run.</p>
+<pre>{
+  <span class="key">"trigger"</span>: {
+    <span class="key">"event_type"</span>: <span class="str">"promotion.deepened"</span>,   <span class="key">// promotion.started | promotion.ended | promotion.deepened | category.promo_surge</span>
+    <span class="key">"threshold"</span>: { <span class="key">"min_depth_pct"</span>: <span class="num">30</span> }
+  },
+  <span class="key">"scope"</span>: { <span class="key">"brand_ids"</span>: [<span class="str">"brand_nike"</span>] },
+  <span class="key">"channels"</span>: [{ <span class="key">"type"</span>: <span class="str">"slack"</span>, <span class="key">"target"</span>: <span class="str">"#promo-watch"</span> }]
+}</pre>
+      <p class="powers-line"><b>Powers:</b> the alert-setup triggers ("any discount live", "new discount starts", "deeper than X%") and the dry-run preview.</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer-note">
+  <p>Promo Radar · prototype for the <a href="../bxcapi/index.html">Brand Intelligence API</a>. <a href="/promo-radar/index.html">Back to the app →</a></p>
+</div>
+
+</body>
+</html>

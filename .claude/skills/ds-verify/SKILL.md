@@ -65,6 +65,7 @@ The component passes verification when:
 - [ ] All atoms reused correctly
 - [ ] index.html demo updated
 - [ ] English only — no Spanish in comments or labels
+- [ ] If new variants or usage rules were added → `docs/usage-doctrine.yaml` reflects them
 
 **If any check fails → fix it. Do not commit.**
 
