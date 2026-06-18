@@ -168,18 +168,28 @@ components:
     use_when:
       - 2–4 mutually exclusive view modes or toggles (Everyone/Only selected, Day/Week/Month)
       - Inside dialog body to switch between modes or filter scope
+      - Primary page-level navigation with many items (variant="surface")
     dont_use_when:
-      - More than 4 options — use Tabs or Select
+      - More than 4 options with variant="default" — use Tabs, Select, or variant="surface"
       - Options with descriptions — use RadioGroup
       - Navigation between distinct sections — use Tabs (wtabs-pill)
       - Dialog footer or header — always in the body
     prefer_over:
       - Tabs: when the options toggle within the same view, not navigate to a new section
+    variants:
+      surface:
+        use_when: Primary navigation control for a page — many items (5+), top-level tab bar
+        appearance: bg-[#202123] container, zinc-200 active pill with drop-shadow, shrink-0 items (content-fit width)
+        example: Brand API page tabs (Resonance / Reputation / Presence / Tracker / Coach / News / Trending)
+      default:
+        use_when: Secondary inline toggle — few options (2–4), embedded inside a form, dialog, or card
+        appearance: bg-background/50 container, foreground/12 active pill, flex-1 items (equal width)
+        example: '"Visible / Hidden", "Day / Week / Month", "Specific emails / Organization access"'
     notes: |
-      Max 4 options. Generally 2–3 in practice.
-      Full width (fullWidth prop) when inside a dialog body spanning the content area.
-      CSS class: wseg / wseg-opt (NOT wtabs-pill — that is the Tabs component).
-      Tabs (wtabs-pill) = navigation. SegmentedControl (wseg) = mode toggle. Never mix.
+      variant="surface" = primary/main control. variant="default" = secondary toggle. Never use default for top-level nav.
+      Full width (fullWidth prop) when inside a dialog body spanning the content area — only with variant="default".
+      CSS class: wseg / wseg-opt for default · wseg-surface / wseg-surface-opt for surface (NOT wtabs-pill — that is Tabs).
+      Tabs (wtabs-pill) = navigation between sections. SegmentedControl = mode/view toggle within a section. Never mix.
 
   - component: Tooltip
     use_when:
@@ -1061,7 +1071,8 @@ components:
       - Card: when the content is a single metric with a trend indicator
     notes: |
       Brand API prototype dashboard component — not yet reviewed against Figma.
-      Surface/text colors from semantic tokens; trend up/down via --primary / --destructive.
+      Surface/text colors from semantic tokens; trend up/down via --primary (good) / --warning (bad).
+      NEVER use --destructive for trends — it is reserved for irreversible destructive actions only.
 
   - component: Leaderboard Row
     use_when:
@@ -1113,6 +1124,16 @@ components:
     notes: |
       Brand API prototype component — not yet reviewed against Figma.
       min-h-10.
+
+  - component: Waldo Logo
+    use_when:
+      - Displaying the Waldo wordmark in topbars, splash screens, or branded surfaces
+    dont_use_when:
+      - Generic icon usage — use a standard icon instead
+    prefer_over: []
+    notes: |
+      SVG wordmark component. Use fill="var(--foreground)" for theme-aware rendering.
+      Width 70px, height 18px. Do not substitute with text or a placeholder box.
 
   - component: Live Badge
     use_when:
@@ -1184,3 +1205,41 @@ component_choice_logic:
     toggle: Toolbar pressed-state tool (icon affordance, editor contexts)
     switch: Settings on/off that applies immediately
     filterchip: Filter bars above feeds — the reviewed Waldo pill
+
+# ─── Semantic token rules ────────────────────────────────────────────────────
+# These govern WHEN to use each color token. Violating these makes the UI
+# semantically incorrect even if it looks visually fine.
+
+token_rules:
+
+  destructive:
+    use_only_for:
+      - Irreversible / destructive user actions (delete, remove permanently, purge)
+      - Confirmation dialogs for actions with no undo
+      - Button variants that trigger data loss
+    never_use_for:
+      - Negative trends or metric deltas (competitor growing, share dropping)
+      - Error states that don't involve data loss
+      - Live/active indicators (pulse dots, badges)
+      - Anything that the user can recover from
+    correct_alternatives:
+      negative_trend: "--warning"
+      recoverable_error: "--warning"
+      live_indicator: "--primary or --warning depending on context"
+
+  warning:
+    use_for:
+      - Negative trends (metric going in wrong direction)
+      - Caution states (something needs attention but no data loss)
+      - Competitor activity indicators
+      - Upward delta badges on metrics that are bad for the user
+    never_use_for:
+      - Irreversible destructive actions — use --destructive
+
+  primary:
+    use_for:
+      - Positive trends (metric improving, share growing)
+      - CTAs, brand actions
+      - Downward delta on competitor metrics (good for the user)
+    never_use_for:
+      - Error or warning states
