@@ -2950,11 +2950,11 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="comp-section-title">In context — inside a menu</div>
       <div class="demo-block">
         <div class="demo-canvas" style="align-items:flex-start">
-          <div style="background:var(--popover);border-radius:8px;padding:4px;width:200px;border:1px solid var(--border)">
-            <div style="padding:6px 8px;font-size:var(--fs-sm);color:var(--foreground);border-radius:4px;cursor:pointer" onmouseover="this.style.background='var(--muted)'" onmouseout="this.style.background='transparent'">Edit</div>
-            <div style="padding:6px 8px;font-size:var(--fs-sm);color:var(--foreground);border-radius:4px;cursor:pointer" onmouseover="this.style.background='var(--muted)'" onmouseout="this.style.background='transparent'">Duplicate</div>
-            <div class="wsep-h" style="margin:4px 0"></div>
-            <div style="padding:6px 8px;font-size:var(--fs-sm);color:var(--destructive);border-radius:4px;cursor:pointer" onmouseover="this.style.background='rgba(222,58,40,.08)'" onmouseout="this.style.background='transparent'">Delete</div>
+          <div class="wdd" style="width:200px">
+            <div class="wdd-item">Edit</div>
+            <div class="wdd-item">Duplicate</div>
+            <div class="wdd-sep"></div>
+            <div class="wdd-item" style="color:var(--destructive)">Delete</div>
           </div>
         </div>
         <div class="demo-code-bar">
