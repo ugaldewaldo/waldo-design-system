@@ -59,6 +59,16 @@ function loadRules(catalogText) {
     rules.modelDefaults[m[1].toLowerCase()] = { looksLike: m[2], useInstead: m[3] };
   }
 
+  // typography: allowed font-size px scale (data-driven, dormant while empty)
+  rules.fontSizes = new Set();
+  const fsBlock = catalogText.match(/\n {2}font_sizes_px:\s*\[([^\]]*)\]/);
+  if (fsBlock) {
+    for (const n of fsBlock[1].split(',').map((s) => s.trim()).filter(Boolean)) {
+      const v = Number(n);
+      if (!Number.isNaN(v)) rules.fontSizes.add(v);
+    }
+  }
+
   // forbidden.patterns — entries that carry a `match` become enforced rules.
   // Documenting an enforceable pattern in the catalog = enforcing it here.
   const patternsBlock = catalogText.match(/\n {2}patterns:\n([\s\S]*?)(?=\n[a-z_]+:|\n {0,2}#|$)/);
@@ -221,6 +231,15 @@ function scanFile(filePath, rules) {
       p.regex.lastIndex = 0;
       if (p.regex.test(line)) {
         add(n, p.severity, p.rule, `forbidden pattern: ${p.rule}`, p.suggestion);
+      }
+    }
+
+    // 9. off-scale font-size — dormant until catalog `font_sizes_px` is populated
+    if (rules.fontSizes.size) {
+      for (const m of line.matchAll(/font-size\s*:\s*(\d+(?:\.\d+)?)px/g)) {
+        if (!rules.fontSizes.has(Number(m[1]))) {
+          add(n, 'error', 'off-scale-font-size', `font-size ${m[1]}px is not in the type scale`, `use a tokenized size (${[...rules.fontSizes].join('/')}px)`);
+        }
       }
     }
   });

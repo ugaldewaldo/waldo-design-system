@@ -503,6 +503,11 @@ typography:
     ui_body:     "text-sm font-normal tracking-[-0.02em]"   # body, inputs
     ui_meta:     "text-xs tracking-[-0.01em]"               # badges, meta
   rule: Buttons are font-medium, NEVER font-semibold.
+  # Allowed UI font-size px values. POPULATE this once the type scale is tokenized
+  # (Component Library infra refactor). While empty, tools/detect.js does NOT check
+  # font-sizes (dormant — no false positives). Once filled, any off-scale font-size:Npx
+  # is flagged/blocked. Note 13px is NOT a step (scale is 12/14/16…), it migrates to 14.
+  font_sizes_px: []   # e.g. [12, 14, 16, 18, 20, 24, 30, 36]
 
 # ────────────────────────────────────────────────────────────────────
 # VANILLA HTML CLASSES — for static prototypes (waldo-labs) and index.html demos
