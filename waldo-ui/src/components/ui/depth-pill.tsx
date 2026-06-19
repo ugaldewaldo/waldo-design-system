@@ -29,7 +29,7 @@ const DepthPill = React.forwardRef<HTMLSpanElement, DepthPillProps>(
       <span
         ref={ref}
         className={cn(
-          "text-[13px] font-bold px-2.5 py-1 rounded-lg whitespace-nowrap",
+          "text-sm font-bold px-2.5 py-1 rounded-lg whitespace-nowrap",
           className
         )}
         style={{

@@ -32,7 +32,7 @@ const LeaderboardRow = React.forwardRef<HTMLDivElement, LeaderboardRowProps>(
         )}
         {...props}
       >
-        <div className="w-6 shrink-0 text-[18px] font-semibold leading-7 tracking-[-0.02em] text-center text-foreground">
+        <div className="w-6 shrink-0 text-lg font-semibold leading-7 tracking-[-0.02em] text-center text-foreground">
           {item.rank}
         </div>
         <div
@@ -52,7 +52,7 @@ const LeaderboardRow = React.forwardRef<HTMLDivElement, LeaderboardRowProps>(
             <span className="text-xs leading-4 tracking-[-0.015em] text-muted-foreground shrink-0">
               {item.offer}
             </span>
-            <span className="text-[11px] leading-4 tracking-[-0.014em] text-muted-foreground/60 truncate min-w-0">
+            <span className="text-label leading-4 tracking-[-0.014em] text-muted-foreground/60 truncate min-w-0">
               · {item.category}
             </span>
           </div>

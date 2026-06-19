@@ -31,7 +31,7 @@ const AdCopyCard = React.forwardRef<HTMLDivElement, AdCopyCardProps>(
         {...props}
       >
         <div className="flex flex-col gap-1">
-          <p className="text-[18px] font-normal leading-7 tracking-[-0.02em] text-foreground">
+          <p className="text-lg font-normal leading-7 tracking-[-0.02em] text-foreground">
             &ldquo;
             {segments.map((seg, i) =>
               seg.highlight ? (

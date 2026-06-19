@@ -17,7 +17,7 @@ const badgeVariants = cva(
         success:     "bg-primary/12 text-primary",
       },
       size: {
-        sm:      "px-1.5 py-0 text-[10px] leading-5 rounded-sm",
+        sm:      "px-1.5 py-0 text-xs-minus leading-5 rounded-sm",
         default: "px-2   py-0.5 text-xs",
         lg:      "px-2.5 py-1   text-sm",
       },

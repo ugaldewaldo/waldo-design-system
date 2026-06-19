@@ -71,7 +71,7 @@ const CommandGroup = React.forwardRef<
     ref={ref}
     className={cn(
       "[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5",
-      "[&_[cmdk-group-heading]]:text-[11px] [&_[cmdk-group-heading]]:font-medium",
+      "[&_[cmdk-group-heading]]:text-label [&_[cmdk-group-heading]]:font-medium",
       "[&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wider",
       className
     )}
@@ -99,7 +99,7 @@ const CommandItem = React.forwardRef<
   <CommandPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-default gap-2 select-none items-center rounded-[3px]",
+      "relative flex cursor-default gap-2 select-none items-center rounded-sm",
       "px-2 py-1.5 text-sm text-foreground outline-none",
       "transition-colors duration-100",
       "aria-selected:bg-accent aria-selected:text-accent-foreground",
@@ -114,7 +114,7 @@ CommandItem.displayName = CommandPrimitive.Item.displayName;
 function CommandShortcut({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) {
   return (
     <span
-      className={cn("ml-auto text-[11px] tracking-widest text-muted-foreground", className)}
+      className={cn("ml-auto text-label tracking-widest text-muted-foreground", className)}
       {...props}
     />
   );
