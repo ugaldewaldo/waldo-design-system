@@ -29,6 +29,8 @@ When you change the DS, the **Sync Runbook** (docs site → Documentation → Sy
 
 Enforced rule: **every component demo in `index.html` must be backed by a real `.tsx`** in `waldo-ui/src/components/ui/` — no demos for components that don't exist in code. Checked by `tools/lint-index.js` (in the guard + CI).
 
+**`waldo-ds.css` is GENERATED — never edit it by hand.** It is `banner + waldo-ui/src/globals.css` (tokens) `+ tools/waldo-ds.styles.css` (vanilla CSS). Edit tokens in `globals.css`, vanilla styles in `tools/waldo-ds.styles.css`, then run `bash tools/build-waldo-ds.sh`. `index.html` and the `waldo-labs/` prototypes consume it via `<link>`. The guard + CI run `build-waldo-ds.sh --check` and block the commit if it's stale.
+
 ---
 
 ## ⛔ ABSOLUTE RULES — read before touching any file
