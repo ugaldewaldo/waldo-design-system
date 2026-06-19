@@ -52,7 +52,7 @@ Ownership (don't edit across the line — pass a change request to the owner ins
 
 To change a color/token: edit `tokens.json` → `globals.css` → `tailwind.config.ts`, fix any hardcoded `.tsx`, run `bash tools/build-waldo-ds.sh`, `/ds-verify`, commit/push; ask Validador to add the token to `token-catalog.yaml`; ask Figma Master to write it to Figma via MCP. The guard blocks the commit if any of this is incomplete.
 
----
+**To build a prototype** (`waldo-labs/…`): read `docs/brand-api-dashboard-doctrine.md` FIRST — it holds the prototype rules (layout, cards, topbar, chart palette, etc.). Link the DS via `<link href="../../waldo-ds.css">`, use `var(--chart-1..12)` for data colors, never hardcode hex, no `:root` redeclaring DS tokens. The doctrine is the source of these rules — don't restate or invent them.
 
 ## ⛔ ABSOLUTE RULES — read before touching any file
 
