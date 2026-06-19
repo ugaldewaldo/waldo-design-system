@@ -133,19 +133,6 @@
     <h3 class="section-title" style="font-size:16px;margin-bottom:4px">Buttons</h3>
     <p class="section-sub" style="margin-bottom:28px">border-radius: 24px · font-semibold · sizes: sm=28 · md=36 · lg=44 · icon=32 · focus-visible ring: green-500</p>
 
-    <style>
-      .btn-grid { display: grid; grid-template-columns: 180px 1fr; gap: 0; margin-bottom: 2px; }
-      .btn-grid-label { display: flex; flex-direction: column; justify-content: center; font-size: 11px; font-weight: 600; color: var(--muted-foreground); letter-spacing: .01em; padding-right: 20px; gap: 2px; }
-      .btn-grid-label code { font-size: 10px; font-family: monospace; color: var(--primary); font-weight: 400; }
-      .btn-grid-label small { font-size: 10px; color: color-mix(in srgb, var(--foreground) 45%, transparent); font-weight: 400; }
-      .btn-grid-row { display: flex; align-items: center; gap: 8px; padding: 12px 0; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
-      .btn-grid-row:last-child { border-bottom: none; }
-      .btn-section-head { font-size: 11px; font-weight: 600; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: .08em; margin: 32px 0 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-      .btn-section-badge { font-size: 9px; font-weight: 500; padding: 2px 7px; border-radius: 20px; letter-spacing: .04em; text-transform: uppercase; }
-      .shadcn-core { background: rgba(50,169,169,.12); color: #4dbcbc; }
-      .waldo-ext  { background: rgba(210,211,211,.08); color: color-mix(in srgb, var(--foreground) 45%, transparent); }
-      .note-chip { font-size: 10px; color: color-mix(in srgb, var(--foreground) 45%, transparent); font-style: italic; padding: 2px 8px; background: rgba(247,211,113,.08); border-radius: 4px; border: 1px solid rgba(247,211,113,.15); color: #f7d371; }
-    </style>
 
     <!-- ── SHADCN CORE ── -->
     <div class="btn-section-head">Shadcn Core <span class="btn-section-badge shadcn-core">shadcn/ui</span></div>
@@ -277,25 +264,6 @@
     <h3 class="section-title" style="font-size:16px;margin-bottom:4px">Chips / Dropdown Triggers</h3>
     <p class="section-sub" style="margin-bottom:28px">Base: CHIP/MASTA · bg zinc-800 · font-normal 14px · text zinc-200/47% · icon left + chevron right</p>
 
-    <style>
-      .chip {
-        display: inline-flex; align-items: center; gap: 10px;
-        background: var(--muted); border-radius: 24px;
-        padding: 8px 16px; cursor: pointer; border: none;
-        font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 400;
-        color: rgba(210,211,211,0.47); transition: background .15s;
-        white-space: nowrap;
-      }
-      .chip:hover { background: var(--popover); }
-      .chip-inner { display: flex; align-items: center; gap: 6px; }
-      .chip-chevron { opacity: .6; }
-      /* Selected state */
-      .chip-selected { background: rgba(50,169,169,0.12); color: #4dbcbc; }
-      .chip-selected:hover { background: rgba(50,169,169,0.18); }
-      /* Active/filled */
-      .chip-active { background: #41454b; color: var(--foreground); }
-      .chip-active:hover { background: var(--secondary); }
-    </style>
 
     <div style="margin-bottom:20px">
       <div class="comp-label" style="margin-bottom:12px">Default states</div>
@@ -868,68 +836,6 @@ window.addEventListener('load', function(){
       <div class="page-desc">Circular checkbox (two variants) · Switch 32×18px with green-700 ON state.</div>
     </div>
 
-    <style>
-      /* Checkbox — circular, from Figma DS */
-      /* ── File Input ── */
-      /* AdvancedSection — Figma node 84009:174707 */
-      .wadv-toggle { display:flex;align-items:center;gap:6px;height:48px;cursor:pointer;background:none;border:none;padding:0;font-size:14px;font-weight:400;letter-spacing:-0.02em;color:color-mix(in srgb,var(--foreground) 70%,transparent);font-family:inherit;transition:color .1s; }
-      .wadv-toggle:hover { color:var(--foreground); }
-      .wadv-toggle svg { flex-shrink:0;color:var(--primary); }
-      .wadv-body-wrap { display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .2s ease,opacity .2s ease; }
-      .wadv-body-wrap.open { grid-template-rows:1fr;opacity:1; }
-      .wadv-body-wrap > div { overflow:hidden; }
-      .wadv-body { display:flex;flex-direction:column;gap:16px;padding-bottom:4px; }
-
-      /* CopyLink — Figma node 83966:356556 */
-      .wcopy-link { display:flex;align-items:center;gap:10px;padding:8px 16px;border-radius:16px;background:var(--secondary);cursor:pointer;user-select:none;transition:background .1s; }
-      .wcopy-link:hover { background:color-mix(in srgb,var(--secondary) 80%,transparent); }
-      .wcopy-link-url { flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:400;letter-spacing:-0.02em;color:var(--primary);font-family:inherit; }
-      .wcopy-link-icon { flex-shrink:0;color:var(--muted-foreground);transition:color .1s; }
-      .wcopy-link.copied .wcopy-link-icon { color:var(--primary); }
-
-      .wfile-zone { display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border-radius:24px;height:36px;padding:0 16px;background:var(--muted);cursor:pointer;user-select:none;transition:background .1s; }
-      .wfile-zone:hover { background:var(--secondary); }
-      .wfile-zone.drag  { background:var(--secondary);outline:1px solid #265152; }
-      .wfile-zone-label { font-size:14px;font-weight:400;letter-spacing:-0.02em;color:var(--primary); }
-      .wfile-zone-opt   { font-size:14px;color:color-mix(in srgb, var(--foreground) 50%, transparent); }
-      .wfile-list-label { font-size:14px;color:var(--primary);padding:0 4px;margin-bottom:4px; }
-      .wfile-row { display:flex;align-items:center;gap:8px;padding:6px 4px;border-radius:6px;transition:color .1s; }
-      .wfile-row:hover .wfile-name { color:var(--primary); }
-      .wfile-row:hover .wfile-icon { color:var(--primary); }
-      .wfile-row:hover .wfile-del { opacity:1; }
-      .wfile-name { font-size:13px;color:color-mix(in srgb, var(--foreground) 68%, transparent);white-space:nowrap;transition:color .1s; }
-      .wfile-del { opacity:0;background:none;border:none;cursor:pointer;color:color-mix(in srgb, var(--foreground) 40%, transparent);padding:2px;border-radius:4px;transition:opacity .1s,color .1s;display:flex;align-items:center; }
-      .wfile-del:hover { color:rgba(210,211,211,0.80); }
-      .wfile-icon { color:color-mix(in srgb, var(--foreground) 40%, transparent);flex-shrink:0;transition:color .1s; }
-
-      .wchk { display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none; }
-      .wchk input { display:none; }
-      .wchk-box {
-        width:16px;height:16px;border-radius:50%;flex-shrink:0;
-        border:1px solid var(--border-strong);background:transparent;
-        display:flex;align-items:center;justify-content:center;
-        transition:background .1s,border-color .1s;
-      }
-      .wchk input:checked + .wchk-box.green { background:#1b8c8c;border-color:#1b8c8c; }
-      .wchk input:checked + .wchk-box.mono  { background:rgba(210,211,211,0.70);border-color:color-mix(in srgb, var(--foreground) 68%, transparent); }
-      .wchk-label { font-size:14px;font-weight:500;letter-spacing:-0.02em;color:color-mix(in srgb, var(--foreground) 68%, transparent); }
-      .wchk.disabled { opacity:0.4;pointer-events:none; }
-      /* Switch — 32×18px, green-700 ON */
-      .wswitch { display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none; }
-      .wswitch input { display:none; }
-      .wswitch-track {
-        position:relative;width:32px;height:18px;border-radius:999px;
-        background:var(--muted);padding:2px 3px;
-        transition:background .15s;flex-shrink:0;display:flex;align-items:center;
-      }
-      .wswitch-thumb {
-        width:14px;height:14px;border-radius:50%;background:#fff;
-        transition:transform .15s;flex-shrink:0;
-      }
-      .wswitch input:checked + .wswitch-track { background:#1b8c8c; }
-      .wswitch input:checked + .wswitch-track .wswitch-thumb { transform:translateX(13px); }
-      .wswitch.disabled { opacity:0.4;pointer-events:none; }
-    </style>
 
     <div class="comp-section">
       <div class="comp-section-title">Checkbox — green (brand)</div>
@@ -1237,19 +1143,6 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
       <div class="page-desc">Two shapes · four sizes · group with overflow. Round = people · Square = brands/logos.</div>
     </div>
 
-    <style>
-      .wav { display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--background);font-weight:500;letter-spacing:-0.01em;color:color-mix(in srgb, var(--foreground) 68%, transparent);flex-shrink:0; }
-      .wav-round  { border-radius:999px; }
-      .wav-square { border-radius:4px; }
-      .wav-16 { width:16px;height:16px;font-size:8px; }
-      .wav-24 { width:24px;height:24px;font-size:10px; }
-      .wav-32 { width:32px;height:32px;font-size:12px; }
-      .wav-40 { width:40px;height:40px;font-size:14px; }
-      .wav img { width:100%;height:100%;object-fit:cover; }
-      .wav-group { display:flex;align-items:center; }
-      .wav-group .wav { box-shadow:0 0 0 2px #171819;margin-left:-5px; }
-      .wav-group .wav:first-child { margin-left:0; }
-    </style>
 
     <div class="comp-section">
       <div class="comp-section-title">Round — people · users</div>
@@ -1350,23 +1243,6 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
       <div class="page-desc">Container: zinc-750 · border-radius: 20px · shadow. Values from Figma DS.</div>
     </div>
 
-    <style>
-      .wdd { background:var(--secondary);border-radius:20px;padding:12px 0;width:256px;box-shadow:0 4px 4px rgba(0,0,0,.25),0 -3px 2px rgba(0,0,0,.18);display:flex;flex-direction:column;overflow:hidden; }
-      .wdd.wdd-has-search { padding-top:0; }
-      .wdd-search { background:var(--muted);display:flex;align-items:center;gap:8px;padding:10px 16px;flex-shrink:0; }
-      .wdd-search input { background:none;border:none;outline:none;font-size:14px;color:color-mix(in srgb, var(--foreground) 50%, transparent);font-family:'Inter',sans-serif;width:100%;letter-spacing:-0.02em; }
-      .wdd-search svg { color:color-mix(in srgb, var(--foreground) 40%, transparent);flex-shrink:0; }
-      .wdd-header { padding:8px 16px;font-size:14px;color:var(--primary);letter-spacing:-0.02em; }
-      .wdd-item { display:flex;align-items:center;gap:8px;padding:6px 16px;height:32px;font-size:14px;font-weight:400;color:color-mix(in srgb, var(--foreground) 68%, transparent);letter-spacing:-0.02em;cursor:pointer;transition:background .08s,color .08s;user-select:none; }
-      .wdd-item:hover { background:color-mix(in srgb, var(--foreground) 6%, transparent);color:var(--foreground); }
-      .wdd-item.wdd-active { color:var(--foreground); }
-      .wdd-check { margin-left:auto;color:var(--primary);opacity:0;flex-shrink:0; }
-      .wdd-active .wdd-check { opacity:1; }
-      .wdd-item.wdd-active { color:var(--foreground); }
-      .wdd-radio { margin-left:auto;width:14px;height:14px;border-radius:50%;border:1px solid var(--border-strong);flex-shrink:0;transition:all .1s; }
-      .wdd-active .wdd-radio { background:var(--primary);border-color:var(--primary); }
-      .wdd-sep { height:1px;background:var(--border);margin:4px 0; }
-    </style>
 
     <div class="comp-section">
       <div class="comp-section-title">Simple list · Separator</div>
@@ -1523,18 +1399,6 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
       <div class="page-desc">Foundation for all modals in Waldo. Composed with Header, Body, Footer. 4 sizes. Use the recipes below for common patterns.</div>
     </div>
 
-    <style>
-      .wdialog { background:var(--card);border:1px solid rgba(210,211,211,0.08);border-radius:32px;box-shadow:var(--shadow-dialog);display:flex;flex-direction:column;width:100%;position:relative; }
-      .wdialog-sm  { max-width:560px; }
-      .wdialog-md  { max-width:720px; }
-      .wdialog-lg  { max-width:960px; }
-      .wdialog-header { display:flex;align-items:center;justify-content:space-between;padding:28px 32px 20px; }
-      .wdialog-title  { font-size:20px;font-weight:500;letter-spacing:-0.01em;color:var(--foreground); }
-      .wdialog-close  { display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;border:none;background:transparent;color:var(--muted-foreground);cursor:pointer;transition:background .1s,color .1s; }
-      .wdialog-close:hover { background:var(--accent);color:var(--foreground); }
-      .wdialog-body   { padding:0 32px 28px; }
-      .wdialog-footer { display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:20px 32px 28px; }
-    </style>
 
     <!-- Anatomy -->
     <div class="comp-section">
@@ -2750,42 +2614,6 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="page-desc">Tags are interactive removable pills. TagInput is a multi-value input that holds tags. Different from Badge (which is static/informational).</div>
     </div>
 
-    <style>
-      .wtag {
-        display:inline-flex;align-items:center;gap:6px;
-        background:var(--secondary);border-radius:999px;
-        font-size:14px;font-weight:500;letter-spacing:-0.02em;line-height:20px;
-        color:var(--foreground);white-space:nowrap;
-      }
-      .wtag-sm { height:28px;padding:0 12px;font-size:12px;gap:4px; }
-      .wtag-md { height:36px;padding:0 16px; }
-      .wtag-lg { height:44px;padding:0 20px; }
-      .wtag-muted { color:color-mix(in srgb, var(--foreground) 68%, transparent); }
-      .wtag-x {
-        display:flex;align-items:center;justify-content:center;
-        width:14px;height:14px;border-radius:50%;
-        opacity:0.5;cursor:pointer;flex-shrink:0;
-        transition:opacity .1s;
-      }
-      .wtag-x:hover { opacity:1; }
-      .wtag-x svg { width:100%;height:100%; }
-
-      /* TagInput */
-      .wtag-input {
-        display:flex;flex-wrap:wrap;align-items:center;gap:6px;
-        min-height:40px;border-radius:20px;
-        border:1px solid var(--border);background:transparent;
-        padding:8px 16px;cursor:text;
-        transition:border-color .1s;
-      }
-      .wtag-input:focus-within { border-color:#265152; }
-      .wtag-input input {
-        flex:1;min-width:80px;background:transparent;border:none;outline:none;
-        font-size:14px;font-weight:400;letter-spacing:-0.02em;color:var(--foreground);
-        font-family:'Inter',sans-serif;
-      }
-      .wtag-input input::placeholder { color:color-mix(in srgb, var(--foreground) 50%, transparent); }
-    </style>
 
     <div class="comp-section">
       <div class="comp-section-title">Sizes</div>
@@ -2865,81 +2693,6 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="page-desc">Row composable — Linear-style density. 3 patterns: People, Entity, Strategy. Actions visible on hover. Metadata always visible on the right.</div>
     </div>
 
-    <style>
-      /* ── Base row — Linear density: 40px, no padding bloat ── */
-      .wli {
-        display:flex;align-items:center;gap:8px;
-        padding:0 12px;height:40px;
-        border-bottom:1px solid var(--border);
-        transition:background .1s;cursor:default;
-      }
-      .wli:hover { background:var(--muted); }
-      .wli:hover .wli-act { opacity:1; }
-      .wli.wli-sel { background:var(--muted); }
-      .wli:last-child { border-bottom:none; }
-      .wli.wli-ghost,
-      .wdialog .wli,
-      .wwizard .wli { 
-        height:40px;padding:0 10px;margin:1px 4px;
-        border-radius:999px;border-bottom:none !important;
-      }
-      .wli.wli-ghost:hover,
-      .wdialog .wli:hover,
-      .wwizard .wli:hover { background:color-mix(in srgb,var(--foreground) 7%,transparent); }
-      .wli.wli-ghost.wli-sel,.wli.wli-ghost.active,
-      .wdialog .wli.wli-sel,.wdialog .wli.active,
-      .wwizard .wli.wli-sel,.wwizard .wli.active { background:color-mix(in srgb,var(--foreground) 7%,transparent); }
-      /* No top border when list follows an input */
-      .input + div > .wli:first-child,
-      .input ~ div > .wli:first-child { border-top:none; }
-
-      /* ── Status dot (Linear-style left indicator) ── */
-      .wli-dot { width:8px;height:8px;border-radius:50%;flex-shrink:0; }
-      .wli-dot.active  { background:var(--primary); }
-      .wli-dot.paused  { background:color-mix(in srgb, var(--foreground) 45%, transparent); }
-      .wli-dot.error   { background:var(--destructive); }
-
-      /* ── Avatar 24px (compact) ── */
-      .wli-av {
-        width:24px;height:24px;border-radius:50%;flex-shrink:0;
-        background:var(--secondary);display:flex;align-items:center;justify-content:center;
-        font-size:9px;font-weight:600;color:color-mix(in srgb, var(--foreground) 68%, transparent);overflow:hidden;
-      }
-      .wli-av.sq { border-radius:4px; }
-
-      /* ── Body ── */
-      .wli-body { flex:1;min-width:0;display:flex;align-items:center;gap:8px; }
-      .wli-name { font-size:13px;font-weight:400;letter-spacing:-0.01em;color:var(--foreground);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0; }
-      .wli-sub  { font-size:12px;color:var(--muted-foreground);white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
-      .wli-sep  { font-size:12px;color:color-mix(in srgb, var(--foreground) 45%, transparent);flex-shrink:0; }
-
-      /* ── Right ── */
-      .wli-right { display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:auto; }
-      .wli-meta  { font-size:12px;color:color-mix(in srgb, var(--foreground) 45%, transparent);white-space:nowrap; }
-      .wli-act   { display:flex;align-items:center;gap:2px;opacity:0;transition:opacity .1s; }
-      .wli-btn {
-        display:flex;align-items:center;justify-content:center;
-        width:22px;height:22px;border-radius:50%;border:none;background:transparent;
-        color:color-mix(in srgb, var(--foreground) 45%, transparent);cursor:pointer;transition:background .1s,color .1s;
-      }
-      .wli-btn:hover { background:var(--accent);color:var(--foreground); }
-
-      /* ── Avatar stack ── */
-      .wli-stack { display:flex;align-items:center; }
-      .wli-stack .wli-av {
-        margin-left:-5px;border:1.5px solid var(--card);
-      }
-      .wli-stack .wli-av:first-child { margin-left:0; }
-
-      /* ── ListView container ── */
-      .wlv { border-radius:8px;overflow:hidden;border:1px solid var(--border); }
-      .wlv-h {
-        display:flex;align-items:center;height:28px;padding:0 12px;
-        border-bottom:1px solid var(--border);background:var(--muted);
-      }
-      .wlv-h + .wlv-h { border-top:1px solid var(--border); }
-      .wlv-h span { font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:color-mix(in srgb, var(--foreground) 45%, transparent); }
-    </style>
 
     <!-- Pattern 1: People -->
     <div class="comp-section">
@@ -3169,10 +2922,6 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="page-desc">Thin divider line. Token: border-subtle = zinc-200 / 12%. Horizontal (default) or vertical.</div>
     </div>
 
-    <style>
-      .wsep-h { height:1px;width:100%;background:var(--border); }
-      .wsep-v { width:1px;height:100%;background:var(--border); }
-    </style>
 
     <div class="comp-section">
       <div class="comp-section-title">Horizontal</div>
@@ -3234,37 +2983,6 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="page-desc">Ephemeral notifications. Two patterns: <strong>notification</strong> (compact card, user actions) and <strong>banner</strong> (wide pill, system alerts). Bottom-right position by default.</div>
     </div>
 
-    <style>
-      /* Toast notification card */
-      .wtoast {
-        display:flex;align-items:flex-start;gap:10px;
-        background:var(--card);
-        border-radius:12px;padding:12px 14px;
-        min-width:280px;max-width:360px;
-        box-shadow:0 2px 8px rgba(0,0,0,.25),0 1px 3px rgba(0,0,0,.2);
-      }
-      .wtoast-body { flex:1;min-width:0;display:flex;flex-direction:column;gap:2px; }
-      .wtoast-title { font-size:13px;font-weight:500;letter-spacing:-0.01em;color:color-mix(in srgb, var(--foreground) 68%, transparent); }
-      .wtoast-action { font-size:13px;color:var(--primary);cursor:pointer;width:fit-content; }
-      .wtoast-action:hover { opacity:.8; }
-      .wtoast-icon { color:var(--muted-foreground);flex-shrink:0;display:flex;margin-top:2px; }
-      .wtoast-btn { display:flex;align-items:center;justify-content:center;width:22px;height:22px;border:none;background:transparent;color:var(--muted-foreground);cursor:pointer;border-radius:50%;transition:background .1s,color .1s; }
-      .wtoast-btn:hover { background:var(--muted);color:var(--foreground); }
-
-      /* Toast banner */
-      .wbanner {
-        display:flex;align-items:center;gap:10px;
-        background:var(--card);
-        border-radius:999px;padding:8px 16px;
-        width:100%;max-width:560px;
-        box-shadow:0 2px 8px rgba(0,0,0,.25);
-      }
-      .wbanner-msg { flex:1;font-size:13px;color:color-mix(in srgb, var(--foreground) 68%, transparent);letter-spacing:-0.01em; }
-      .wbanner-action { font-size:13px;font-weight:500;color:var(--primary);cursor:pointer;white-space:nowrap; }
-
-      /* Viewport demo */
-      .wtoast-vp { display:flex;flex-direction:column;gap:8px;align-items:flex-end; }
-    </style>
 
     <!-- Notification -->
     <div class="comp-section">
@@ -3456,30 +3174,6 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="page-desc">Inline feedback within the page — not ephemeral. Different from Toast: the Alert lives in the content. Use it for form errors, plan limits, onboarding states, and contextual info.</div>
     </div>
 
-    <style>
-      .walert {
-        display:flex;gap:10px;
-        border-radius:8px;
-        padding:12px 16px;font-size:13px;
-      }
-      .walert.walert-sm { padding:8px 12px;font-size:12px;gap:8px; }
-
-      .walert-info    { background:rgba(50,169,169,.07); border-color:rgba(50,169,169,.25); color:var(--foreground); }
-      .walert-success { background:rgba(50,169,169,.07); border-color:rgba(50,169,169,.25); color:var(--foreground); }
-      .walert-warning { background:rgba(201,78,34,.08);  border-color:rgba(201,78,34,.25);  color:var(--foreground); }
-      .walert-destructive   { background:rgba(222,58,40,.08);  border-color:rgba(222,58,40,.25);  color:var(--foreground); }
-
-      .walert-icon { flex-shrink:0;margin-top:1px; }
-      .walert-info    .walert-icon, .walert-success .walert-icon { color:var(--primary); }
-      .walert-warning .walert-icon { color:var(--warning); }
-      .walert-destructive   .walert-icon { color:var(--destructive); }
-
-      .walert-body { flex:1;min-width:0; }
-      .walert-title { font-weight:500;letter-spacing:-.01em;margin-bottom:2px; }
-      .walert-desc  { color:color-mix(in srgb, var(--foreground) 68%, transparent);line-height:1.5; }
-      .walert-action { display:inline-block;margin-top:6px;font-size:12px;font-weight:500;color:var(--primary);cursor:pointer; }
-      .walert-action:hover { opacity:.8; }
-    </style>
 
     <!-- Variants -->
     <div class="comp-section">
@@ -3580,32 +3274,6 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="page-desc">Feedback when there is no data. Three sizes: page (full view), section (inside a table or panel), inline (dropdown or search). Always includes a title — description and action are optional.</div>
     </div>
 
-    <style>
-      .wempty {
-        display:flex;flex-direction:column;align-items:center;justify-content:center;
-        text-align:center;
-      }
-      .wempty-page    { padding:80px 24px; }
-      .wempty-section { padding:48px 24px; }
-      .wempty-inline  { height:36px;padding:0 16px; }
-
-      .wempty-icon { color:color-mix(in srgb, var(--muted-foreground) 50%, transparent);margin-bottom:12px; }
-      .wempty-page    .wempty-icon { width:40px;height:40px; }
-      .wempty-section .wempty-icon { width:32px;height:32px; }
-      .wempty-inline  .wempty-icon { width:20px;height:20px; }
-
-      .wempty-title { font-weight:500;letter-spacing:-0.01em;color:color-mix(in srgb, var(--foreground) 70%, transparent); }
-      .wempty-page    .wempty-title { font-size:15px; }
-      .wempty-section .wempty-title { font-size:13px; }
-      .wempty-inline  .wempty-title { font-size:12px; }
-
-      .wempty-desc { color:var(--muted-foreground);max-width:280px;line-height:1.5;margin-top:4px; }
-      .wempty-page    .wempty-desc { font-size:13px; }
-      .wempty-section .wempty-desc { font-size:12px; }
-      .wempty-inline  .wempty-desc { font-size:11px; }
-
-      .wempty-action { margin-top:16px; }
-    </style>
 
     <!-- Page -->
     <div class="comp-section">
@@ -3717,35 +3385,6 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="page-desc">Two variants: <strong>text</strong> — transparent, active tab is foreground + medium weight. <strong>Pill</strong> — active tab has a pill background. Both use Radix UI for full keyboard + ARIA support.</div>
     </div>
 
-    <style>
-      /* Text tabs */
-      .wtabs-text { display:inline-flex;align-items:center;gap:0; }
-      .wtab-text {
-        padding:6px 12px;border-radius:6px;
-        font-size:13px;font-weight:400;letter-spacing:-0.02em;
-        color:var(--muted-foreground);cursor:pointer;
-        transition:color .1s,background .1s;border:none;background:transparent;
-        font-family:inherit;
-      }
-      .wtab-text:hover { color:var(--foreground); }
-      .wtab-text.active { color:var(--foreground);font-weight:500; }
-
-      /* Pill tabs */
-      .wtabs-pill { display:inline-flex;align-items:center;gap:2px;padding:4px;background:color-mix(in srgb,var(--background) 50%,transparent);border-radius:999px; }
-      .wtab-pill {
-        padding:4px 12px;border-radius:999px;
-        font-size:13px;font-weight:400;letter-spacing:-0.02em;
-        color:var(--muted-foreground);cursor:pointer;
-        transition:all .1s;border:none;background:transparent;
-        font-family:inherit;
-      }
-      .wtab-pill:hover { color:var(--foreground); }
-      .wtab-pill.active { background:color-mix(in srgb,var(--foreground) 14%,transparent);color:var(--foreground);font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,0.2); }
-
-      /* Content area */
-      .wtab-content { display:none;padding:16px 0; }
-      .wtab-content.active { display:block; }
-    </style>
 
     <!-- Text variant -->
     <div class="comp-section">
@@ -3923,21 +3562,6 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="page-desc">Lucide React — 1000+ icons, consistent 1.5px stroke. Two canvas sizes: <strong>16px canvas → 14px icon</strong> (h-3.5 w-3.5) · <strong>24px canvas → 16–18px icon</strong> (h-4 w-4 or h-[18px]).</div>
     </div>
 
-    <style>
-      .icon-size-demo { display:flex;align-items:center;gap:24px;padding:20px;background:var(--card);border-radius:8px; }
-      .icon-size-item { display:flex;flex-direction:column;align-items:center;gap:8px; }
-      .icon-size-label { font-size:11px;color:var(--muted-foreground);font-family:'JetBrains Mono',monospace; }
-      .icon-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:2px; }
-      .icon-item {
-        display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
-        padding:12px 6px;border-radius:6px;cursor:default;
-        transition:background .1s;
-      }
-      .icon-item:hover { background:var(--muted); }
-      .icon-item svg { color:var(--foreground); }
-      .icon-item span { font-size:9px;color:var(--muted-foreground);font-family:'JetBrains Mono',monospace;text-align:center;line-height:1.3;word-break:break-all; }
-      .icon-category { font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted-foreground);margin:24px 0 8px; }
-    </style>
 
     <!-- Size reference -->
     <div class="comp-section">
@@ -4100,26 +3724,6 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="page-desc">Single-select from a set of options. Two variants: <strong>green</strong> (brand, default) and <strong>mono</strong> (neutral). Circular 16px, consistent with Checkbox.</div>
     </div>
 
-    <style>
-      .wradio-group { display:flex;flex-direction:column;gap:8px; }
-      .wradio-field { display:flex;align-items:flex-start;gap:10px;cursor:pointer;user-select:none; }
-      .wradio-field input { display:none; }
-      .wradio {
-        width:16px;height:16px;border-radius:50%;flex-shrink:0;
-        border:1px solid var(--border-strong, rgba(210,211,211,0.30));
-        background:transparent;display:flex;align-items:center;justify-content:center;
-        transition:border-color .1s;margin-top:2px;
-      }
-      .wradio-dot { width:8px;height:8px;border-radius:50%;opacity:0;transition:opacity .1s; }
-      .wradio-field input:checked + .wradio.green { border-color:var(--primary); }
-      .wradio-field input:checked + .wradio.green .wradio-dot { background:var(--primary);opacity:1; }
-      .wradio-field input:checked + .wradio.mono { border-color:rgba(210,211,211,0.70); }
-      .wradio-field input:checked + .wradio.mono .wradio-dot { background:rgba(210,211,211,0.70);opacity:1; }
-      .wradio-label { display:flex;flex-direction:column;gap:2px; }
-      .wradio-text { font-size:13px;font-weight:500;letter-spacing:-0.02em;color:var(--foreground); }
-      .wradio-desc { font-size:12px;color:var(--muted-foreground);line-height:1.4; }
-      .wradio-field.disabled { opacity:.4;pointer-events:none; }
-    </style>
 
     <div class="comp-section">
       <div class="comp-section-title">Green variant (default)</div>
@@ -4200,22 +3804,6 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="page-desc">Single value or range. Track is <code>bg-muted</code>, range fill and thumb use <code>bg-primary</code>.</div>
     </div>
 
-    <style>
-      .wslider-wrap { display:flex;align-items:center;gap:12px;width:100%;max-width:360px; }
-      .wslider { position:relative;display:flex;align-items:center;flex:1;height:20px;cursor:pointer; }
-      .wslider-track { position:relative;height:2px;width:100%;background:var(--muted);border-radius:999px;overflow:hidden; }
-      .wslider-range { position:absolute;height:100%;background:var(--primary);border-radius:999px; }
-      .wslider-thumb {
-        position:absolute;width:10px;height:10px;border-radius:50%;
-        background:var(--primary);
-        transform:translateX(-50%);
-        transition:transform .1s;
-        cursor:grab;box-shadow:var(--shadow-surface);
-      }
-      .wslider-thumb:hover { transform:translateX(-50%) scale(1.15); }
-      .wslider-thumb:active { cursor:grabbing; }
-      .wslider-value { font-size:12px;color:var(--muted-foreground);min-width:28px;text-align:right; }
-    </style>
 
     <div class="comp-section">
       <div class="comp-section-title">Single value</div>
@@ -4414,9 +4002,6 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="comp-section">
       <div class="comp-section-title">Type A — Three dots · 2 sizes</div>
       <div class="demo-block">
-        <style>
-          .wdot-green { background:var(--primary) !important; }
-        </style>
         <div class="demo-canvas" style="gap:32px;align-items:center">
           <!-- zinc -->
           <div style="display:flex;flex-direction:column;align-items:center;gap:12px">
@@ -4538,34 +4123,6 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="page-desc">Multi-step onboarding modal. Split layout — left: form content, right: dark image panel. Steps tracked in header. Back/Next navigation in footer.</div>
     </div>
 
-    <style>
-      .wwizard {
-        background:var(--card);border:1px solid rgba(210,211,211,0.08);
-        border-radius:32px;box-shadow:var(--shadow-dialog);
-        display:flex;overflow:hidden;width:100%;max-width:800px;
-      }
-      .wwizard-left { display:flex;flex-direction:column;flex:1;min-width:0; }
-      .wwizard-header { display:flex;align-items:center;justify-content:space-between;padding:28px 32px 0; }
-      .wwizard-step-label { font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted-foreground); }
-      .wwizard-title { font-size:20px;font-weight:500;letter-spacing:-0.01em;color:var(--foreground);padding:16px 32px 0; }
-      .wwizard-body { flex:1;padding:16px 32px 24px;overflow-y:auto; }
-      .wwizard-footer { display:flex;align-items:center;justify-content:space-between;padding:12px 32px 28px; }
-      .wwizard-back { display:flex;align-items:center;gap:4px;font-size:13px;color:var(--muted-foreground);border:none;background:transparent;cursor:pointer;font-family:inherit;transition:color .1s; }
-      .wwizard-back:hover { color:var(--foreground); }
-      .wwizard-next { height:44px;padding:0 32px;border-radius:999px;background:var(--foreground);color:var(--background);font-size:13px;font-weight:500;border:none;cursor:pointer;font-family:inherit;transition:opacity .1s; }
-      .wwizard-next:hover { opacity:.9; }
-
-      /* Right image panel */
-      .wwizard-image { width:260px;flex-shrink:0;background:var(--zinc-900);display:flex;align-items:center;justify-content:center;overflow:hidden; }
-      .wwizard-image-placeholder { width:100%;height:100%;background:linear-gradient(160deg,var(--zinc-900) 0%,var(--zinc-800) 100%);display:flex;align-items:center;justify-content:center;padding:24px; }
-
-      /* Progress dots */
-      .wwizard-progress { display:flex;align-items:center;gap:5px; }
-      .wwizard-dot { height:6px;border-radius:999px;transition:all .2s; }
-      .wwizard-dot.active { width:16px;background:var(--primary); }
-      .wwizard-dot.done   { width:6px;background:color-mix(in srgb,var(--primary) 50%,transparent); }
-      .wwizard-dot.future { width:6px;background:color-mix(in srgb,var(--foreground) 20%,transparent); }
-    </style>
 
     <!-- Anatomy -->
     <div class="comp-section">
@@ -4780,15 +4337,6 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="page-desc">Inline filter selector — bare text trigger with label, optional active value, and chevron. No background, no pill. Used in Insights panels and search headers.</div>
     </div>
 
-    <style>
-      .wft { display:inline-flex;align-items:center;gap:6px;font-size:14px;letter-spacing:-0.02em;cursor:pointer;transition:color .1s;user-select:none; }
-      .wft-default { color:color-mix(in srgb,var(--foreground) 70%,transparent); }
-      .wft-default:hover { color:var(--foreground); }
-      .wft-active { color:var(--foreground); }
-      .wft-value { font-weight:500; }
-      .wft-chevron { color:var(--muted-foreground);display:flex; }
-      .wft-row { display:flex;align-items:center;gap:2px;padding:4px 8px; }
-    </style>
 
     <!-- Default vs active state -->
     <div class="comp-section">
@@ -4856,52 +4404,6 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="page-desc">Navigation items used across sidebars, settings panels, filter panels, and report builders. Height 36px · padding 0 16px · border-radius 9999px · active = bg-muted.</div>
     </div>
 
-    <style>
-      .wnav-panel {
-        background:var(--popover);border-radius:24px;padding:8px 0;
-        width:288px;display:flex;flex-direction:column;
-      }
-      .wnav-items-wrap { padding:0 16px; }
-      .wnav-section { padding:8px 24px 12px;font-size:12px;font-weight:500;letter-spacing:-.02em;text-transform:uppercase;color:color-mix(in srgb,var(--foreground) 30%,transparent);user-select:none; }
-      .wnav-action.visible { opacity:1; }
-      .wnav-badge--ghost { background:transparent;color:var(--muted-foreground); }
-      .wnav-sep { height:1px;background:color-mix(in srgb,var(--foreground) 6%,transparent);margin:4px 0; }
-      .wnav-item {
-        display:flex;align-items:center;gap:6px;
-        height:36px;padding:0 16px;
-        border-radius:9999px;cursor:pointer;
-        font-size:14px;letter-spacing:-0.02em;
-        color:color-mix(in srgb,var(--foreground) 70%,transparent);
-        transition:background .08s,color .08s;
-        user-select:none;position:relative;
-      }
-      .wnav-item:hover { background:color-mix(in srgb,var(--foreground) 6%,transparent);color:var(--foreground); }
-      .wnav-item:hover .wnav-action { opacity:1; }
-      .wnav-item.active { background:var(--muted);color:var(--foreground);font-weight:500; }
-      .wnav-item.sub { padding-left:36px; }
-      .wnav-label { flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
-      .wnav-count { font-size:11px;font-weight:600;color:var(--primary);min-width:18px;text-align:center;flex-shrink:0; }
-      .wnav-icon  { flex-shrink:0;color:var(--muted-foreground);display:flex; }
-      .wnav-action { flex-shrink:0;opacity:0;transition:opacity .1s;display:flex; }
-      .wnav-badge { background:color-mix(in srgb,var(--primary) 15%,transparent);color:var(--primary);border-radius:999px;padding:0 6px;font-size:10px;font-weight:600;flex-shrink:0; }
-      .wnav-section-row { display:flex;align-items:center;justify-content:space-between;padding:8px 24px 12px; }
-      .wnav-section-row .wnav-section { padding:0; }
-      .wnav-section-add { display:flex;align-items:center;color:color-mix(in srgb,var(--foreground) 30%,transparent);cursor:pointer; }
-      .wnav-section-add:hover { color:var(--foreground); }
-      .wft-subopts { display:flex;flex-direction:column;background:color-mix(in srgb,var(--foreground) 5%,transparent);border-radius:6px;margin:2px 8px 4px;padding:2px 0; }
-      .wft-opt { font-size:13px;letter-spacing:-0.01em;padding:5px 10px;color:color-mix(in srgb,var(--foreground) 60%,transparent);cursor:pointer; }
-      .wft-opt:hover { color:var(--foreground); }
-      .wft-opt.active { color:var(--foreground);font-weight:500; }
-      /* Search input inside nav panel */
-      .wnav-search { padding:8px 20px 12px; }
-      /* Filter rows */
-      .wnav-filters { display:flex;flex-direction:column;gap:16px;padding:0 32px 12px; }
-      .wnav-subitems { overflow:hidden;transition:max-height .15s ease; }
-      .wnav-subitems.collapsed { max-height:0; }
-      .wnav-chevron { transition:transform .15s ease; }
-      .wnav-parent:not(.open) .wnav-chevron svg { transform:rotate(180deg); }
-      .wnav-parent:not(.open).active { background:none; font-weight:normal; color:color-mix(in srgb,var(--foreground) 70%,transparent); }
-    </style>
 
     <!-- Pill items — Workflows pattern -->
     <div class="comp-section">
@@ -9535,15 +9037,6 @@ node tools/detect.js src/components/ --json    # JSON for CI
     <h3 class="section-title" style="font-size:16px;margin-bottom:4px">Alpha Scale</h3>
     <p class="section-sub" style="margin-bottom:28px">Semi-transparent variants — adapt automatically to any background depth.</p>
 
-    <style>
-      .alpha-row { display:flex; gap:0; margin-bottom:24px; }
-      .alpha-chip { flex:1; height:40px; display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:600; font-family:monospace; color:rgba(255,255,255,.7); letter-spacing:.02em; position:relative; cursor:default; }
-      .alpha-chip:first-child { border-radius:4px 0 0 4px; }
-      .alpha-chip:last-child  { border-radius:0 4px 4px 0; }
-      .alpha-family-label { font-size:11px; font-weight:600; color:var(--muted-foreground); text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px; }
-      .alpha-demo-row { display:flex; gap:8px; align-items:stretch; margin-top:20px; }
-      .alpha-demo-bg { flex:1; border-radius:6px; padding:12px; display:flex; flex-direction:column; gap:6px; }
-    </style>
 
     <!-- zinc-200 alpha -->
     <div style="margin-bottom:28px">
@@ -9633,28 +9126,6 @@ node tools/detect.js src/components/ --json    # JSON for CI
   <h2 class="section-title">Brand Colors</h2>
   <p class="section-sub">5 families · 5 steps each · marketing website only (packages/web) · Tailwind: <code style="font-family:'SF Mono','Fira Code',monospace;background:var(--muted);padding:1px 6px;border-radius:3px;font-size:12px">brand-[family]-[step]</code></p>
 
-  <style>
-    .brand-grid { display: grid; grid-template-columns: 100px repeat(5, 1fr); gap: 6px; align-items: center; margin-bottom: 8px; }
-    .brand-label { font-size: 13px; font-weight: 600; color: var(--foreground); letter-spacing: -0.01em; }
-    .brand-step-head { font-size: 11px; font-weight: 500; color: var(--muted-foreground); text-align: center; padding-bottom: 8px; }
-    .brand-swatch {
-      width: 100%; height: 44px; border-radius: 6px; position: relative; cursor: default;
-      transition: transform .1s, box-shadow .1s;
-    }
-    .brand-swatch:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.4); z-index: 2; }
-    .brand-swatch-tip {
-      display: none; position: absolute; bottom: calc(100% + 8px); left: 50%;
-      transform: translateX(-50%); background: var(--popover); color: var(--foreground);
-      border: 1px solid var(--border-md); border-radius: 6px; padding: 6px 10px;
-      font-size: 10px; white-space: nowrap; z-index: 10; line-height: 1.6;
-      box-shadow: 0 4px 12px rgba(0,0,0,.4);
-    }
-    .brand-swatch:hover .brand-swatch-tip { display: block; }
-    .brand-swatch-tip code { font-family: 'SF Mono','Fira Code',monospace; color: var(--primary); display: block; }
-    .brand-main-dot { position: absolute; bottom: 6px; right: 6px; width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,.5); }
-    .brand-section-divider { height: 1px; background: var(--border); margin: 32px 0; }
-    .brand-notice { display: inline-flex; align-items: center; gap: 6px; background: rgba(129,58,239,.1); color: #ba91f7; border: 1px solid rgba(129,58,239,.2); border-radius: 20px; padding: 3px 12px; font-size: 11px; font-weight: 500; margin-bottom: 32px; }
-  </style>
 
   <div class="brand-notice">⚡ These colors are flashy by design — use in marketing, not in the product UI</div>
 
@@ -9955,23 +9426,6 @@ node tools/detect.js src/components/ --json    # JSON for CI
   <h2 class="section-title">Migration Map</h2>
   <p class="section-sub">Waldo original styles → Shadcn/Tailwind standard. Exact matches, closest equivalents, and new additions.</p>
 
-  <style>
-    .mig-table { width:100%; border-collapse:collapse; font-size:12px; }
-    .mig-table th { font-size:10px; font-weight:600; color:var(--muted-foreground); text-transform:uppercase; letter-spacing:.08em; padding:8px 12px; border-bottom:2px solid var(--border); text-align:left; }
-    .mig-table td { padding:12px 12px; border-bottom:1px solid var(--border); vertical-align:middle; }
-    .mig-table tr:last-child td { border-bottom:none; }
-    .mig-old  { font-family:'SF Mono','Fira Code',monospace; background:var(--muted); border-radius:4px; padding:2px 7px; color:var(--muted-foreground); display:inline-block; }
-    .mig-new  { font-family:'SF Mono','Fira Code',monospace; background:rgba(50,169,169,.1); border-radius:4px; padding:2px 7px; color:var(--primary); display:inline-block; }
-    .mig-new-added { font-family:'SF Mono','Fira Code',monospace; background:rgba(247,211,113,.1); border-radius:4px; padding:2px 7px; color:#f7d371; display:inline-block; }
-    .badge-exact   { background:rgba(50,169,169,.15); color:#4dbcbc; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
-    .badge-close   { background:rgba(247,211,113,.15); color:#f7d371; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
-    .badge-new     { background:rgba(144,205,144,.15); color:#90cd90; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
-    .badge-changed { background:rgba(222,58,40,.15); color:#ff8082; border-radius:20px; padding:2px 9px; font-size:10px; font-weight:500; white-space:nowrap; }
-    .mig-note { font-size:11px; color:color-mix(in srgb, var(--foreground) 45%, transparent); margin-top:3px; }
-    .mig-section { font-size:11px; font-weight:600; color:var(--muted-foreground); text-transform:uppercase; letter-spacing:.08em; padding:20px 12px 8px; background:var(--background); }
-    .mig-legend { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:32px; }
-    .mig-legend-item { display:flex; align-items:center; gap:7px; font-size:12px; color:var(--muted-foreground); }
-  </style>
 
   <div class="mig-legend">
     <div class="mig-legend-item"><span class="badge-exact">exact</span> Pixel-perfect match</div>
