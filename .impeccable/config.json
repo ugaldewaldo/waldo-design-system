@@ -1,0 +1,16 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [
+      "waldo-labs/promo-radar/index-ds-test4-20260618.html"
+    ],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "reason": "Inter is the mandated DS font per brand-api-dashboard-doctrine.md — not a discretionary choice",
+        "createdAt": "2026-06-17T12:32:27.967Z"
+      }
+    ]
+  }
+}
