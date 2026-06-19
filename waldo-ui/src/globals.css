@@ -185,6 +185,34 @@
        Token reference: 1=4 1_5=6 2=8 2_5=10 3=12 4=16 5=20 6=24
                         8=32 10=40 12=48 14=56 16=64 20=80 24=96
     ──────────────────────────────────────────── */
+
+    /* ── Typography scale ────────────────────
+       Source of truth: figma/waldo.tokens.json typography.fontSize
+       Named to match JSON keys (xs=12, sm=14, base=16, lg=18, xl=20,
+       2xl=24, 3xl=30, 4xl=36, display-xs=24, display-sm=32,
+       display-md=40, display-lg=56, display-xl=72).
+       Micro sizes below xs added for dense UI elements.
+       13px → --fs-sm (14px); 15px → --fs-base (16px).
+    ──────────────────────────────────────────── */
+    --fs-micro:       7px;   /* avatar initials, very dense labels */
+    --fs-3xs:         8px;
+    --fs-2xs:         9px;
+    --fs-xs-minus:   10px;
+    --fs-label:      11px;
+    --fs-xs:         12px;   /* token: xs */
+    --fs-sm:         14px;   /* token: sm  (13px → this) */
+    --fs-base:       16px;   /* token: base (15px → this) */
+    --fs-lg:         18px;   /* token: lg */
+    --fs-xl:         20px;   /* token: xl */
+    --fs-2xl:        24px;   /* token: 2xl / display-xs */
+    --fs-3xl:        28px;   /* between tokens — chip/badge large */
+    --fs-4xl:        30px;   /* token: 3xl */
+    --fs-5xl:        32px;   /* token: display-sm */
+    --fs-6xl:        36px;   /* token: 4xl */
+    --fs-display-md: 40px;   /* token: display-md */
+    --fs-display-lg: 56px;   /* token: display-lg */
+    --fs-display-xl: 72px;   /* token: display-xl */
+    --fs-display-2xl: 96px;  /* extended display */
   }
 
   /* Waldo is dark-first — light mode intentionally mirrors dark */
