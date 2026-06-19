@@ -33,6 +33,27 @@ Enforced rule: **every component demo in `index.html` must be backed by a real `
 
 ---
 
+## 🧭 ARCHITECTURE & OWNERSHIP — read this, don't re-derive or ask another session
+
+This is the single source of coordination truth. If something here contradicts your memory or another session, **this wins**. Everything is ONE repo (`waldo-design-system`); `waldo-ui/` is a subfolder, not a separate repo.
+
+**Source of truth = `waldo-ui/src/` (`figma/waldo.tokens.json` + `globals.css` + `.tsx`). Everything else derives. Direction is one-way, code-first.**
+
+Token flow: `waldo.tokens.json` → `globals.css` / `tailwind.config.ts` → `.tsx` → `waldo-ds.css` (generated) → `index.html` + `waldo-labs/` (via `<link>`).
+
+Figma: variables are written **from code via the `use_figma` MCP** (code-first). **Tokens Studio is OUT of the loop** — do not "push via Tokens Studio". Figma sync is currently manual (a session runs the MCP + publishes the library); there is no automated code→Figma job yet.
+
+Ownership (don't edit across the line — pass a change request to the owner instead):
+- `token-catalog.yaml` · `tools/detect.js` · `tools/build-waldo-ds.sh` + `waldo-ds.css` · the docs page · the guard/CI → **Validador**
+- `usage-doctrine.yaml` · `tools/lint-doctrine.js` · `/ds-*` skills → **Intelligence Layer**
+- `.tsx` components · `globals.css` · `tailwind.config.ts` → **Component Library**
+- The Figma Master DS file + its variables → **Figma Master**
+- `waldo-labs/` prototypes → **Brand API Prototypes**
+
+To change a color/token: edit `tokens.json` → `globals.css` → `tailwind.config.ts`, fix any hardcoded `.tsx`, run `bash tools/build-waldo-ds.sh`, `/ds-verify`, commit/push; ask Validador to add the token to `token-catalog.yaml`; ask Figma Master to write it to Figma via MCP. The guard blocks the commit if any of this is incomplete.
+
+---
+
 ## ⛔ ABSOLUTE RULES — read before touching any file
 
 ### 1. Zero hardcoded styles — including inline `style=` attributes
