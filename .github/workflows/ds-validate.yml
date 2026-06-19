@@ -31,6 +31,9 @@ jobs:
       - name: waldo-ds.css in sync with index.html (lint-ds-css.js)
         run: node tools/lint-ds-css.js
 
+      - name: waldo-ds.css built from its sources (build-waldo-ds.sh --check)
+        run: bash tools/build-waldo-ds.sh --check
+
       - name: YAML integrity (both catalogs)
         run: |
           python3 -m pip install --quiet pyyaml

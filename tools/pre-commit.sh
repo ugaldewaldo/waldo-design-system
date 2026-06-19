@@ -51,10 +51,17 @@ if ! node tools/lint-index.js; then
   fail=1
 fi
 
-# 2c. waldo-ds.css must stay in sync with index.html (its source).
+# 2c. waldo-ds.css must stay in sync with index.html (its vanilla twin).
 echo "▶ lint-ds-css.js…"
 if ! node tools/lint-ds-css.js; then
   echo "✗ waldo-ds.css drifted from index.html. Re-sync before committing."
+  fail=1
+fi
+
+# 2d. waldo-ds.css must match its sources (globals.css + tools/waldo-ds.styles.css).
+echo "▶ build-waldo-ds.sh --check…"
+if ! bash tools/build-waldo-ds.sh --check; then
+  echo "✗ waldo-ds.css is stale vs globals.css/styles. Run: bash tools/build-waldo-ds.sh"
   fail=1
 fi
 
