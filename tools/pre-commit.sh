@@ -51,6 +51,13 @@ if ! node tools/lint-index.js; then
   fail=1
 fi
 
+# 2c. waldo-ds.css must stay in sync with index.html (its source).
+echo "▶ lint-ds-css.js…"
+if ! node tools/lint-ds-css.js; then
+  echo "✗ waldo-ds.css drifted from index.html. Re-sync before committing."
+  fail=1
+fi
+
 # 3. YAML integrity — a broken indent silently kills the live-rendered docs pages.
 if command -v python3 >/dev/null 2>&1 && python3 -c "import yaml" >/dev/null 2>&1; then
   for y in docs/token-catalog.yaml docs/usage-doctrine.yaml; do
