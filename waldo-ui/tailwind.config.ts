@@ -148,13 +148,6 @@ const config: Config = {
         "display-xl": ["4.5rem",  { lineHeight: "5rem",   letterSpacing: "-0.04em" }],
         "display-2xl":["6rem",    { lineHeight: "6.25rem",letterSpacing: "-0.04em" }],
 
-        // Waldo DS token scale — backed by --fs-* CSS vars in globals.css
-        "micro":    ["var(--fs-micro)",    { lineHeight: "1" }],
-        "3xs":      ["var(--fs-3xs)",      { lineHeight: "1" }],
-        "2xs":      ["var(--fs-2xs)",      { lineHeight: "1.2" }],
-        "xs-minus": ["var(--fs-xs-minus)", { lineHeight: "1.4" }],
-        "label":    ["var(--fs-label)",    { lineHeight: "1.4" }],
-        "fs-4xl":   ["var(--fs-4xl)",      { lineHeight: "1.2" }],
       },
 
       // ── Animations ─────────────────────────────────────────────────

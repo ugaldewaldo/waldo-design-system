@@ -194,18 +194,13 @@
        Micro sizes below xs added for dense UI elements.
        13px → --fs-sm (14px); 15px → --fs-base (16px).
     ──────────────────────────────────────────── */
-    --fs-micro:       7px;   /* avatar initials, very dense labels */
-    --fs-3xs:         8px;
-    --fs-2xs:         9px;
-    --fs-xs-minus:   10px;
-    --fs-label:      11px;
     --fs-xs:         12px;   /* token: xs */
     --fs-sm:         14px;   /* token: sm  (13px → this) */
     --fs-base:       16px;   /* token: base (15px → this) */
     --fs-lg:         18px;   /* token: lg */
     --fs-xl:         20px;   /* token: xl */
     --fs-2xl:        24px;   /* token: 2xl / display-xs */
-    --fs-3xl:        28px;   /* between tokens — chip/badge large */
+    --fs-3xl:        30px;   /* token: 3xl */
     --fs-4xl:        30px;   /* token: 3xl */
     --fs-5xl:        32px;   /* token: display-sm */
     --fs-6xl:        36px;   /* token: 4xl */

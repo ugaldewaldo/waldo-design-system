@@ -52,7 +52,7 @@ const LeaderboardRow = React.forwardRef<HTMLDivElement, LeaderboardRowProps>(
             <span className="text-xs leading-4 tracking-[-0.015em] text-muted-foreground shrink-0">
               {item.offer}
             </span>
-            <span className="text-label leading-4 tracking-[-0.014em] text-muted-foreground/60 truncate min-w-0">
+            <span className="text-xs leading-4 tracking-[-0.014em] text-muted-foreground/60 truncate min-w-0">
               · {item.category}
             </span>
           </div>

@@ -19,8 +19,8 @@ const avatarVariants = cva(
   {
     variants: {
       size: {
-        "16": "h-4 w-4 text-3xs",
-        "24": "h-6 w-6 text-xs-minus",
+        "16": "h-4 w-4 text-xs",
+        "24": "h-6 w-6 text-xs",
         "32": "h-8 w-8 text-xs",
         "40": "h-10 w-10 text-sm",
       },
@@ -109,7 +109,7 @@ function AvatarGroup({ children, max, size = "32", shape = "round", className }:
       {overflow > 0 && (
         <div className={cn(ringClass, "-ml-1.5")}>
           <Avatar size={size} shape={shape}>
-            <AvatarFallback className="text-xs-minus">+{overflow}</AvatarFallback>
+            <AvatarFallback className="text-xs">+{overflow}</AvatarFallback>
           </Avatar>
         </div>
       )}

@@ -45,7 +45,7 @@ const KpiStatCard = React.forwardRef<HTMLDivElement, KpiStatCardProps>(
         <div className="text-sm font-medium leading-5 tracking-[-0.02em] text-muted-foreground">
           {label}
         </div>
-        <div className="text-fs-4xl font-semibold leading-9 tracking-[-0.02em]">
+        <div className="text-3xl font-semibold leading-9 tracking-[-0.02em]">
           {value}
         </div>
         {sub && (

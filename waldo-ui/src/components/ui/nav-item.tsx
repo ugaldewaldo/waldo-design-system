@@ -123,7 +123,7 @@ export function NavItem({
 
         {/* Count badge — right */}
         {count !== undefined && (
-          <span className="min-w-[18px] text-center text-label font-medium text-primary shrink-0">
+          <span className="min-w-[18px] text-center text-xs font-medium text-primary shrink-0">
             {count}
           </span>
         )}
