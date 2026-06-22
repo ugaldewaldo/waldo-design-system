@@ -4877,27 +4877,80 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="section-title">Default</div>
     <div class="demo-block">
       <div class="demo-canvas">
-        <div style="display:flex;align-items:center;gap:8px;width:400px">
-          <button style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-full);width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--foreground);flex-shrink:0">‹</button>
-          <div style="flex:1;overflow:hidden;border-radius:var(--radius)">
-            <div style="display:flex;gap:12px">
-              <div style="min-width:100%;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;text-align:center">
-                <div style="font-size:var(--fs-3xl);font-weight:700;color:var(--foreground)">1</div>
-                <div style="font-size:var(--fs-xs);color:var(--muted-foreground);margin-top:4px">Slide one</div>
+        <div style="width:380px">
+          <!-- Carousel track -->
+          <div style="display:flex;align-items:center;gap:8px">
+            <!-- Prev button -->
+            <button style="background:transparent;border:none;border-radius:var(--radius-full);width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--foreground);opacity:0.5;flex-shrink:0;transition:opacity .15s" onmouseover="this.style.opacity=1;this.style.background='rgba(210,211,211,.06)'" onmouseout="this.style.opacity=.5;this.style.background='transparent'">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <!-- Slide -->
+            <div style="flex:1;overflow:hidden;border-radius:var(--radius-xl)">
+              <div id="waldo-carousel-slide" style="display:flex;transition:transform .3s cubic-bezier(.4,0,.2,1)">
+                <!-- Slide 1 -->
+                <div style="min-width:100%;background:var(--card);border-radius:var(--radius-xl);padding:28px 24px">
+                  <div style="font-size:var(--fs-xs);color:var(--muted-foreground);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px">Brand Mentions</div>
+                  <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px">
+                    <span style="font-size:var(--fs-3xl);font-weight:700;color:var(--foreground);line-height:1">24.8k</span>
+                    <span style="font-size:var(--fs-sm);color:var(--primary);font-weight:500">↑ 14%</span>
+                  </div>
+                  <div style="font-size:var(--fs-sm);color:var(--muted-foreground)">vs. last week across all channels</div>
+                </div>
+                <!-- Slide 2 -->
+                <div style="min-width:100%;background:var(--card);border-radius:var(--radius-xl);padding:28px 24px">
+                  <div style="font-size:var(--fs-xs);color:var(--muted-foreground);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px">Sentiment Score</div>
+                  <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px">
+                    <span style="font-size:var(--fs-3xl);font-weight:700;color:var(--foreground);line-height:1">87</span>
+                    <span style="font-size:var(--fs-sm);color:var(--muted-foreground);font-weight:400">/ 100</span>
+                  </div>
+                  <div style="font-size:var(--fs-sm);color:var(--muted-foreground)">Positive trending across Instagram & TikTok</div>
+                </div>
+                <!-- Slide 3 -->
+                <div style="min-width:100%;background:var(--card);border-radius:var(--radius-xl);padding:28px 24px">
+                  <div style="font-size:var(--fs-xs);color:var(--muted-foreground);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px">Top Channel</div>
+                  <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:6px">
+                    <span style="font-size:var(--fs-3xl);font-weight:700;color:var(--foreground);line-height:1">Instagram</span>
+                  </div>
+                  <div style="font-size:var(--fs-sm);color:var(--muted-foreground)">62% of total brand mentions this week</div>
+                </div>
               </div>
             </div>
+            <!-- Next button -->
+            <button style="background:transparent;border:none;border-radius:var(--radius-full);width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--foreground);flex-shrink:0;transition:opacity .15s" onmouseover="this.style.background='rgba(210,211,211,.06)'" onmouseout="this.style.background='transparent'" onclick="waldoCarouselNext()">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
           </div>
-          <button style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-full);width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--foreground);flex-shrink:0">›</button>
+          <!-- Dots -->
+          <div id="waldo-carousel-dots" style="display:flex;gap:5px;justify-content:center;margin-top:14px;align-items:center">
+            <span style="width:20px;height:6px;border-radius:var(--radius-full);background:var(--primary);transition:all .2s"></span>
+            <span style="width:6px;height:6px;border-radius:var(--radius-full);background:rgba(210,211,211,.2);transition:all .2s"></span>
+            <span style="width:6px;height:6px;border-radius:var(--radius-full);background:rgba(210,211,211,.2);transition:all .2s"></span>
+          </div>
         </div>
-        <div style="display:flex;gap:6px;justify-content:center;margin-top:12px">
-          <span style="width:8px;height:8px;border-radius:var(--radius-full);background:var(--primary)"></span>
-          <span style="width:8px;height:8px;border-radius:var(--radius-full);background:var(--border)"></span>
-          <span style="width:8px;height:8px;border-radius:var(--radius-full);background:var(--border)"></span>
-        </div>
+        <script>
+        (function(){
+          var idx = 0;
+          var total = 3;
+          function update() {
+            var track = document.getElementById('waldo-carousel-slide');
+            if(track) track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+            var dots = document.getElementById('waldo-carousel-dots');
+            if(dots) {
+              var spans = dots.querySelectorAll('span');
+              spans.forEach(function(s, i) {
+                s.style.width = i === idx ? '20px' : '6px';
+                s.style.background = i === idx ? 'var(--primary)' : 'rgba(210,211,211,.2)';
+              });
+            }
+          }
+          window.waldoCarouselNext = function() { idx = (idx + 1) % total; update(); };
+          window.waldoCarouselPrev = function() { idx = (idx - 1 + total) % total; update(); };
+        })();
+        </script>
       </div>
       <div class="demo-code-bar">
         <span class="demo-code-label">&lt;Carousel /&gt;</span>
-        <button class="copy-btn" onclick="copyCode(this, '&lt;Carousel&gt;\n  &lt;CarouselContent&gt;\n    &lt;CarouselItem&gt;Slide 1&lt;/CarouselItem&gt;\n    &lt;CarouselItem&gt;Slide 2&lt;/CarouselItem&gt;\n    &lt;CarouselItem&gt;Slide 3&lt;/CarouselItem&gt;\n  &lt;/CarouselContent&gt;\n  &lt;CarouselPrevious /&gt;\n  &lt;CarouselNext /&gt;\n&lt;/Carousel&gt;')">Copy</button>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Carousel&gt;\n  &lt;CarouselContent&gt;\n    &lt;CarouselItem&gt;...&lt;/CarouselItem&gt;\n  &lt;/CarouselContent&gt;\n  &lt;CarouselPrevious /&gt;\n  &lt;CarouselNext /&gt;\n&lt;/Carousel&gt;')">Copy</button>
       </div>
     </div>
   </div>
