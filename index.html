@@ -5305,21 +5305,23 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   <div class="section">
     <div class="section-title">Default</div>
     <div class="demo-block">
-      <div class="demo-canvas">
-        <div style="display:flex;gap:2px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);padding:4px;width:fit-content">
-          <div style="position:relative">
-            <button style="padding:5px 10px;border-radius:var(--radius-sm);background:var(--accent);border:none;color:var(--foreground);font-size:var(--fs-sm);cursor:pointer">File</button>
-            <div style="position:absolute;top:calc(100% + 4px);left:0;background:var(--popover);border:1px solid var(--border);border-radius:var(--radius);min-width:140px;box-shadow:0 4px 16px rgba(0,0,0,0.3);padding:4px;z-index:10">
-              <div style="padding:5px 8px;font-size:var(--fs-xs);color:var(--foreground);border-radius:var(--radius-sm);display:flex;justify-content:space-between">New Tab <kbd style="font-size:var(--fs-xs);background:var(--muted);padding:1px 4px;border-radius:var(--radius-xs)">⌘T</kbd></div>
-              <div style="padding:5px 8px;font-size:var(--fs-xs);color:var(--foreground);border-radius:var(--radius-sm);display:flex;justify-content:space-between">New Window <kbd style="font-size:var(--fs-xs);background:var(--muted);padding:1px 4px;border-radius:var(--radius-xs)">⌘N</kbd></div>
-              <div style="height:1px;background:var(--border);margin:4px 0"></div>
-              <div style="padding:5px 8px;font-size:var(--fs-xs);color:var(--foreground);border-radius:var(--radius-sm)">Share</div>
-              <div style="padding:5px 8px;font-size:var(--fs-xs);color:var(--foreground);border-radius:var(--radius-sm)">Print…</div>
-            </div>
+      <div class="demo-canvas" style="min-height:320px;align-items:flex-start;padding-top:16px">
+        <div style="position:relative">
+          <!-- Menubar trigger row — segmented control pattern -->
+          <div class="inline-flex items-center rounded-full p-1" style="display:inline-flex;align-items:center;background:var(--card);border-radius:var(--radius-full);padding:4px;gap:2px">
+            <button onclick="document.getElementById('menubar-file').style.display=document.getElementById('menubar-file').style.display==='flex'?'none':'flex'" style="padding:5px 12px;border-radius:var(--radius-full);background:color-mix(in srgb,var(--foreground) 12%,transparent);border:none;color:var(--foreground);font-size:var(--fs-sm);font-weight:500;cursor:pointer;letter-spacing:-0.02em">File</button>
+            <button style="padding:5px 12px;border-radius:var(--radius-full);background:transparent;border:none;color:color-mix(in srgb,var(--foreground) 70%,transparent);font-size:var(--fs-sm);cursor:pointer;letter-spacing:-0.02em">Edit</button>
+            <button style="padding:5px 12px;border-radius:var(--radius-full);background:transparent;border:none;color:color-mix(in srgb,var(--foreground) 70%,transparent);font-size:var(--fs-sm);cursor:pointer;letter-spacing:-0.02em">View</button>
+            <button style="padding:5px 12px;border-radius:var(--radius-full);background:transparent;border:none;color:color-mix(in srgb,var(--foreground) 70%,transparent);font-size:var(--fs-sm);cursor:pointer;letter-spacing:-0.02em">Help</button>
           </div>
-          <button style="padding:5px 10px;border-radius:var(--radius-sm);background:transparent;border:none;color:var(--foreground);font-size:var(--fs-sm);cursor:pointer">Edit</button>
-          <button style="padding:5px 10px;border-radius:var(--radius-sm);background:transparent;border:none;color:var(--foreground);font-size:var(--fs-sm);cursor:pointer">View</button>
-          <button style="padding:5px 10px;border-radius:var(--radius-sm);background:transparent;border:none;color:var(--foreground);font-size:var(--fs-sm);cursor:pointer">Help</button>
+          <!-- File dropdown — .wdd directly -->
+          <div id="menubar-file" class="wdd" style="position:absolute;top:calc(100% + 6px);left:0;display:flex;z-index:20">
+            <div class="wdd-item">New Tab <span style="margin-left:auto;font-size:var(--fs-xs);color:var(--muted-foreground)">⌘T</span></div>
+            <div class="wdd-item">New Window <span style="margin-left:auto;font-size:var(--fs-xs);color:var(--muted-foreground)">⌘N</span></div>
+            <div class="wdd-sep"></div>
+            <div class="wdd-item">Share</div>
+            <div class="wdd-item">Print…</div>
+          </div>
         </div>
       </div>
       <div class="demo-code-bar">
