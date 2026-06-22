@@ -4967,23 +4967,53 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="section-title">Default</div>
     <div class="demo-block">
       <div class="demo-canvas">
-        <div style="width:320px">
-          <details style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden" open>
-            <summary style="padding:12px 16px;cursor:pointer;font-size:var(--fs-sm);font-weight:500;color:var(--foreground);list-style:none;display:flex;justify-content:space-between;align-items:center">
-              @waldo/ui repositories
-              <span style="font-size:var(--fs-sm);background:var(--muted);border-radius:var(--radius-sm);padding:2px 6px;color:var(--muted-foreground)">Toggle</span>
-            </summary>
-            <div style="padding:0 16px 12px;display:flex;flex-direction:column;gap:6px">
-              <div style="padding:8px 10px;background:var(--muted);border-radius:var(--radius);font-size:var(--fs-xs);color:var(--foreground)">@waldo/ui</div>
-              <div style="padding:8px 10px;background:var(--muted);border-radius:var(--radius);font-size:var(--fs-xs);color:var(--foreground)">@waldo/icons</div>
-              <div style="padding:8px 10px;background:var(--muted);border-radius:var(--radius);font-size:var(--fs-xs);color:var(--foreground)">@waldo/tokens</div>
+        <div style="width:320px;background:var(--card);border-radius:var(--radius-xl);overflow:hidden">
+          <!-- Trigger -->
+          <button onclick="waldoCollapsibleToggle()" style="width:100%;background:transparent;border:none;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;gap:8px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground)">Monitored channels</span>
+              <span style="font-size:var(--fs-xs);color:var(--muted-foreground);background:rgba(210,211,211,.08);border-radius:var(--radius-full);padding:1px 8px">4</span>
             </div>
-          </details>
+            <svg id="waldo-coll-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" style="color:var(--muted-foreground);transition:transform .2s;transform:rotate(180deg);flex-shrink:0"><path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <!-- Content -->
+          <div id="waldo-coll-content" style="overflow:hidden;transition:max-height .25s cubic-bezier(.4,0,.2,1);max-height:200px">
+            <div style="padding:0 12px 12px;display:flex;flex-direction:column;gap:2px">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 8px;border-radius:var(--radius-lg)">
+                <span style="font-size:var(--fs-sm);color:var(--foreground)">Instagram</span>
+                <span style="font-size:var(--fs-xs);color:var(--muted-foreground)">12.4k</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 8px;border-radius:var(--radius-lg)">
+                <span style="font-size:var(--fs-sm);color:var(--foreground)">TikTok</span>
+                <span style="font-size:var(--fs-xs);color:var(--muted-foreground)">7.1k</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 8px;border-radius:var(--radius-lg)">
+                <span style="font-size:var(--fs-sm);color:var(--foreground)">Twitter / X</span>
+                <span style="font-size:var(--fs-xs);color:var(--muted-foreground)">3.8k</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:7px 8px;border-radius:var(--radius-lg)">
+                <span style="font-size:var(--fs-sm);color:var(--foreground)">YouTube</span>
+                <span style="font-size:var(--fs-xs);color:var(--muted-foreground)">1.5k</span>
+              </div>
+            </div>
+          </div>
         </div>
+        <script>
+        (function(){
+          var open = true;
+          window.waldoCollapsibleToggle = function() {
+            var content = document.getElementById('waldo-coll-content');
+            var chevron = document.getElementById('waldo-coll-chevron');
+            open = !open;
+            if(content) content.style.maxHeight = open ? '200px' : '0px';
+            if(chevron) chevron.style.transform = open ? 'rotate(180deg)' : 'rotate(0deg)';
+          };
+        })();
+        </script>
       </div>
       <div class="demo-code-bar">
         <span class="demo-code-label">&lt;Collapsible /&gt;</span>
-        <button class="copy-btn" onclick="copyCode(this, '&lt;Collapsible open={isOpen} onOpenChange={setIsOpen}&gt;\n  &lt;CollapsibleTrigger&gt;Toggle&lt;/CollapsibleTrigger&gt;\n  &lt;CollapsibleContent&gt;Content here&lt;/CollapsibleContent&gt;\n&lt;/Collapsible&gt;')">Copy</button>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Collapsible open={isOpen} onOpenChange={setIsOpen}&gt;\n  &lt;CollapsibleTrigger&gt;Monitored channels&lt;/CollapsibleTrigger&gt;\n  &lt;CollapsibleContent&gt;...&lt;/CollapsibleContent&gt;\n&lt;/Collapsible&gt;')">Copy</button>
       </div>
     </div>
   </div>
