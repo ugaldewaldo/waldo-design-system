@@ -5028,28 +5028,46 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   <div class="section">
     <div class="section-title">Default</div>
     <div class="demo-block">
-      <div class="demo-canvas">
-        <div style="position:relative;width:240px">
-          <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);font-size:var(--fs-sm);color:var(--foreground)">
-            <span style="flex:1">Select framework…</span>
-            <span style="color:var(--muted-foreground);font-size:var(--fs-xs)">⌄</span>
-          </div>
-          <div style="position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--popover);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;z-index:10;box-shadow:0 4px 16px rgba(0,0,0,0.3)">
-            <div style="padding:6px 8px;border-bottom:1px solid var(--border)">
-              <input style="width:100%;background:transparent;border:none;outline:none;font-size:var(--fs-xs);color:var(--foreground)" placeholder="Search framework…" />
+      <div class="demo-canvas" style="min-height:300px;align-items:flex-start;padding-top:16px">
+        <div style="position:relative;display:inline-block">
+          <!-- Trigger — mismo patrón que Select·Dropdown del DS -->
+          <button onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'flex':'none'" style="display:flex;align-items:center;gap:8px;padding:6px 12px;background:var(--secondary);border:none;border-radius:var(--radius-full);font-size:var(--fs-sm);color:var(--foreground);cursor:pointer;letter-spacing:-0.02em">
+            Nike
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style="color:var(--muted-foreground);margin-left:2px"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <!-- Dropdown — .wdd directo, sin wrapper extra -->
+          <div class="wdd wdd-has-search" style="position:absolute;top:calc(100% + 6px);left:0;display:flex;z-index:20">
+            <div class="wdd-search">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <input placeholder="Search brand…" />
             </div>
-            <div style="padding:4px">
-              <div style="padding:6px 8px;border-radius:var(--radius-sm);font-size:var(--fs-xs);background:var(--accent);color:var(--foreground)">Next.js ✓</div>
-              <div style="padding:6px 8px;border-radius:var(--radius-sm);font-size:var(--fs-xs);color:var(--foreground)">SvelteKit</div>
-              <div style="padding:6px 8px;border-radius:var(--radius-sm);font-size:var(--fs-xs);color:var(--foreground)">Nuxt.js</div>
-              <div style="padding:6px 8px;border-radius:var(--radius-sm);font-size:var(--fs-xs);color:var(--foreground)">Remix</div>
+            <div class="wdd-item wdd-active">
+              <div class="wav wav-square" style="width:16px;height:16px;font-size:var(--fs-xs);border-radius:var(--radius-xs);background:var(--muted);flex-shrink:0">N</div>
+              Nike
+              <span class="wdd-check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+            </div>
+            <div class="wdd-item">
+              <div class="wav wav-square" style="width:16px;height:16px;font-size:var(--fs-xs);border-radius:var(--radius-xs);background:var(--muted);flex-shrink:0">A</div>
+              Adidas
+            </div>
+            <div class="wdd-item">
+              <div class="wav wav-square" style="width:16px;height:16px;font-size:var(--fs-xs);border-radius:var(--radius-xs);background:var(--muted);flex-shrink:0">L</div>
+              Lululemon
+            </div>
+            <div class="wdd-item">
+              <div class="wav wav-square" style="width:16px;height:16px;font-size:var(--fs-xs);border-radius:var(--radius-xs);background:var(--muted);flex-shrink:0">U</div>
+              Under Armour
+            </div>
+            <div class="wdd-item">
+              <div class="wav wav-square" style="width:16px;height:16px;font-size:var(--fs-xs);border-radius:var(--radius-xs);background:var(--muted);flex-shrink:0">N</div>
+              New Balance
             </div>
           </div>
         </div>
       </div>
       <div class="demo-code-bar">
         <span class="demo-code-label">&lt;Combobox /&gt;</span>
-        <button class="copy-btn" onclick="copyCode(this, '&lt;Popover open={open} onOpenChange={setOpen}&gt;\n  &lt;PopoverTrigger asChild&gt;\n    &lt;Button variant=&quot;outline&quot;&gt;Select framework…&lt;/Button&gt;\n  &lt;/PopoverTrigger&gt;\n  &lt;PopoverContent&gt;\n    &lt;Command&gt;\n      &lt;CommandInput placeholder=&quot;Search…&quot; /&gt;\n      &lt;CommandList&gt;\n        &lt;CommandItem&gt;Next.js&lt;/CommandItem&gt;\n      &lt;/CommandList&gt;\n    &lt;/Command&gt;\n  &lt;/PopoverContent&gt;\n&lt;/Popover&gt;')">Copy</button>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Popover open={open} onOpenChange={setOpen}&gt;\n  &lt;PopoverTrigger asChild&gt;\n    &lt;Button variant=&quot;secondary&quot; size=&quot;sm&quot;&gt;Nike&lt;/Button&gt;\n  &lt;/PopoverTrigger&gt;\n  &lt;PopoverContent&gt;\n    &lt;Command&gt;\n      &lt;CommandInput placeholder=&quot;Search brand…&quot; /&gt;\n      &lt;CommandList&gt;\n        &lt;CommandItem&gt;Nike&lt;/CommandItem&gt;\n      &lt;/CommandList&gt;\n    &lt;/Command&gt;\n  &lt;/PopoverContent&gt;\n&lt;/Popover&gt;')">Copy</button>
       </div>
     </div>
   </div>
@@ -5065,16 +5083,25 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="section-title">Default</div>
     <div class="demo-block">
       <div class="demo-canvas">
-        <div style="position:relative;display:inline-block">
-          <div style="padding:40px 60px;background:var(--muted);border:1px dashed var(--border);border-radius:var(--radius);font-size:var(--fs-xs);color:var(--muted-foreground);text-align:center">Right click here</div>
-          <div style="position:absolute;top:20px;left:80px;background:var(--popover);border:1px solid var(--border);border-radius:var(--radius);min-width:160px;box-shadow:0 4px 16px rgba(0,0,0,0.3);overflow:hidden;z-index:10">
-            <div style="padding:4px">
-              <div style="padding:6px 10px;font-size:var(--fs-xs);color:var(--foreground);border-radius:var(--radius-sm)">Back</div>
-              <div style="padding:6px 10px;font-size:var(--fs-xs);color:var(--foreground);border-radius:var(--radius-sm);opacity:0.4">Forward</div>
-              <div style="padding:6px 10px;font-size:var(--fs-xs);color:var(--foreground);border-radius:var(--radius-sm)">Reload</div>
+        <div class="dropdown-root open" style="display:inline-block">
+          <div style="padding:40px 60px;background:var(--muted);border-radius:var(--radius-lg);font-size:var(--fs-xs);color:var(--muted-foreground);text-align:center">Right click here</div>
+          <div class="dropdown-menu" style="position:absolute;top:20px;left:80px;min-width:180px">
+            <div class="cmd-list">
+              <div class="cmd-item">
+                <span>Back</span>
+                <span class="cmd-shortcut">⌘[</span>
+              </div>
+              <div class="cmd-item" style="opacity:0.4;pointer-events:none">
+                <span>Forward</span>
+                <span class="cmd-shortcut">⌘]</span>
+              </div>
+              <div class="cmd-item">
+                <span>Reload</span>
+                <span class="cmd-shortcut">⌘R</span>
+              </div>
               <div style="height:1px;background:var(--border);margin:4px 0"></div>
-              <div style="padding:6px 10px;font-size:var(--fs-xs);color:var(--foreground);border-radius:var(--radius-sm)">Save Page As…</div>
-              <div style="padding:6px 10px;font-size:var(--fs-xs);color:var(--foreground);background:var(--accent);border-radius:var(--radius-sm)">Inspect</div>
+              <div class="cmd-item">Save Page As…</div>
+              <div class="cmd-item selected">Inspect</div>
             </div>
           </div>
         </div>

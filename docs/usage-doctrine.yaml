@@ -62,6 +62,10 @@ components:
       Select content: rounded-2-5xl, bg-popover, shadow-popover, py-1.5, width matches trigger;
       items text-[13px] popover-foreground/70, check indicator text-primary.
       DropdownMenu has its own entry. Figma node 62122:58381.
+      COMPOSITION RULE: .wdd IS the complete popover (bg, shadow, radius). Never nest .wdd inside
+      .dropdown-menu — they share the same visual role and their styles will clash (double bg, double shadow).
+      The trigger opens .wdd directly via position:absolute. .dropdown-root/.dropdown-menu is an
+      alternative shell pattern for non-.wdd content only.
 
 
   - component: Checkbox
@@ -580,6 +584,8 @@ components:
       text-popover-foreground/70 with hover/focus text-foreground + bg-foreground/5; disabled opacity-40.
       Separator h-px bg-foreground/[0.12]. Label is 11px uppercase tracking-wider muted.
       Open animation: animate-fade-in + animate-slide-in-top. NEVER --destructive inside items.
+      COMPOSITION RULE: same as Select/Dropdown — .wdd IS the popover. Do not wrap .wdd inside
+      .dropdown-menu. Trigger → .wdd directly (position:absolute, top:calc(100%+6px)).
 
   - component: HoverCard
     use_when:
@@ -685,6 +691,9 @@ components:
       Input: h-9 rounded-md border-input bg-transparent px-3 text-sm, focus ring-[3px] ring-ring/50.
       Popup: rounded-md bg-popover shadow-md, max-h-96, width matches anchor. Items: rounded-sm
       py-1.5 pr-8 pl-2, data-highlighted:bg-accent, CheckIcon indicator right.
+      COMPOSITION RULE: use .wdd (+ .wdd-has-search) as the popup — it IS the complete Waldo popover.
+      Trigger is a plain button/pill (label + chevron only, no avatar). Never put .wdd inside
+      .dropdown-menu — styles clash. Never add an avatar to the trigger; avatars belong inside .wdd-items.
 
   - component: Menubar
     use_when:
