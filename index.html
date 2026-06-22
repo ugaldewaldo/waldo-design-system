@@ -5140,10 +5140,10 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <div style="width:36px;height:4px;background:var(--muted-foreground);border-radius:99px;margin:0 auto 16px;opacity:0.35"></div>
             <div style="font-size:var(--fs-sm);font-weight:600;color:var(--foreground);margin-bottom:4px">Export Report</div>
             <div style="font-size:var(--fs-xs);color:var(--muted-foreground);margin-bottom:14px">Choose format and date range for the export.</div>
-            <div style="display:flex;gap:8px;margin-bottom:14px">
-              <div style="flex:1;padding:8px 12px;background:var(--primary);color:var(--primary-foreground);border-radius:var(--radius);font-size:var(--fs-xs);font-weight:500;text-align:center">PDF</div>
-              <div style="flex:1;padding:8px 12px;background:var(--muted);color:var(--muted-foreground);border-radius:var(--radius);font-size:var(--fs-xs);font-weight:500;text-align:center">CSV</div>
-              <div style="flex:1;padding:8px 12px;background:var(--muted);color:var(--muted-foreground);border-radius:var(--radius);font-size:var(--fs-xs);font-weight:500;text-align:center">PPTX</div>
+            <div class="wseg full" style="margin-bottom:14px" id="drawer-fmt">
+              <button class="wseg-opt active" onclick="switchSegTab('drawer-fmt',this)">PDF</button>
+              <button class="wseg-opt inactive" onclick="switchSegTab('drawer-fmt',this)">CSV</button>
+              <button class="wseg-opt inactive" onclick="switchSegTab('drawer-fmt',this)">PPTX</button>
             </div>
             <button class="btn" style="width:100%">Export</button>
           </div>
@@ -5167,8 +5167,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
           <!-- page content hint -->
           <div style="position:absolute;top:16px;left:20px;opacity:0.18;font-size:var(--fs-xs);color:var(--foreground)">Brand Intelligence</div>
           <!-- side panel -->
-          <div style="position:absolute;top:0;right:0;bottom:0;width:240px;background:var(--card);border-left:1px solid var(--border);display:flex;flex-direction:column">
-            <div style="padding:16px 16px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+          <div style="position:absolute;top:0;right:0;bottom:0;width:240px;background:var(--card);display:flex;flex-direction:column">
+            <div style="padding:16px 16px 12px;display:flex;align-items:center;justify-content:space-between">
               <div style="font-size:var(--fs-sm);font-weight:600;color:var(--foreground)">Brand Details</div>
               <div style="font-size:var(--fs-xs);color:var(--muted-foreground);cursor:pointer">✕</div>
             </div>
@@ -5195,7 +5195,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
                 </div>
               </div>
             </div>
-            <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px">
+            <div style="padding:12px 16px;display:flex;gap:8px">
               <button class="btn btn-outline" style="flex:1;font-size:var(--fs-xs)">Dismiss</button>
               <button class="btn" style="flex:1;font-size:var(--fs-xs)">View Full</button>
             </div>
