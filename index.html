@@ -4922,7 +4922,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
           </div>
           <!-- Dots -->
           <div id="waldo-carousel-dots" style="display:flex;gap:5px;justify-content:center;margin-top:14px;align-items:center">
-            <span style="width:20px;height:6px;border-radius:var(--radius-full);background:var(--primary);transition:all .2s"></span>
+            <span style="width:20px;height:6px;border-radius:var(--radius-full);background:var(--foreground);transition:all .2s"></span>
             <span style="width:6px;height:6px;border-radius:var(--radius-full);background:rgba(210,211,211,.2);transition:all .2s"></span>
             <span style="width:6px;height:6px;border-radius:var(--radius-full);background:rgba(210,211,211,.2);transition:all .2s"></span>
           </div>
@@ -4939,7 +4939,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               var spans = dots.querySelectorAll('span');
               spans.forEach(function(s, i) {
                 s.style.width = i === idx ? '20px' : '6px';
-                s.style.background = i === idx ? 'var(--primary)' : 'rgba(210,211,211,.2)';
+                s.style.background = i === idx ? 'var(--foreground)' : 'rgba(210,211,211,.2)';
               });
             }
           }
