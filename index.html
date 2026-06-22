@@ -5159,12 +5159,12 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         <form style="width:320px;display:flex;flex-direction:column;gap:16px" onsubmit="return false">
           <div style="display:flex;flex-direction:column;gap:6px">
             <label style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground)">Name</label>
-            <input style="padding:8px 12px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);font-size:var(--fs-sm);outline:none" placeholder="Miguel Ugalde" />
+            <input class="input" placeholder="Miguel Ugalde" />
             <span style="font-size:var(--fs-sm);color:var(--muted-foreground)">Your full display name.</span>
           </div>
           <div style="display:flex;flex-direction:column;gap:6px">
             <label style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground)">Email</label>
-            <input type="email" style="padding:8px 12px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);font-size:var(--fs-sm);outline:none" placeholder="miguel@waldo.fyi" />
+            <input type="email" class="input" placeholder="miguel@waldo.fyi" />
           </div>
           <button style="padding:9px;background:var(--primary);color:var(--primary-foreground);border:none;border-radius:var(--radius);font-size:var(--fs-sm);font-weight:500;cursor:pointer">Submit</button>
         </form>
@@ -5224,13 +5224,13 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="demo-block">
       <div class="demo-canvas">
         <div style="display:flex;gap:8px;align-items:center">
-          <input maxlength="1" style="width:40px;height:48px;text-align:center;font-size:var(--fs-lg);font-weight:600;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);outline:none" value="1" />
-          <input maxlength="1" style="width:40px;height:48px;text-align:center;font-size:var(--fs-lg);font-weight:600;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);outline:none" value="2" />
-          <input maxlength="1" style="width:40px;height:48px;text-align:center;font-size:var(--fs-lg);font-weight:600;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);outline:none" value="3" />
+          <input maxlength="1" class="input" style="width:40px;height:48px;text-align:center;font-size:var(--fs-lg);font-weight:600" value="1" />
+          <input maxlength="1" class="input" style="width:40px;height:48px;text-align:center;font-size:var(--fs-lg);font-weight:600" value="2" />
+          <input maxlength="1" class="input" style="width:40px;height:48px;text-align:center;font-size:var(--fs-lg);font-weight:600" value="3" />
           <span style="color:var(--muted-foreground)">—</span>
-          <input maxlength="1" style="width:40px;height:48px;text-align:center;font-size:var(--fs-lg);font-weight:600;background:var(--background);border:2px solid var(--primary);border-radius:var(--radius);color:var(--foreground);outline:none" value="" />
-          <input maxlength="1" style="width:40px;height:48px;text-align:center;font-size:var(--fs-lg);font-weight:600;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);outline:none" value="" />
-          <input maxlength="1" style="width:40px;height:48px;text-align:center;font-size:var(--fs-lg);font-weight:600;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);outline:none" value="" />
+          <input maxlength="1" class="input" style="width:40px;height:48px;text-align:center;font-size:var(--fs-lg);font-weight:600;border:2px solid var(--primary)" value="" />
+          <input maxlength="1" class="input" style="width:40px;height:48px;text-align:center;font-size:var(--fs-lg);font-weight:600" value="" />
+          <input maxlength="1" class="input" style="width:40px;height:48px;text-align:center;font-size:var(--fs-lg);font-weight:600" value="" />
         </div>
       </div>
       <div class="demo-code-bar">
@@ -5280,7 +5280,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         <div style="display:flex;flex-direction:column;gap:14px">
           <div style="display:flex;flex-direction:column;gap:6px">
             <label style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground)">Email address</label>
-            <input type="email" style="padding:8px 12px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);font-size:var(--fs-sm);outline:none;width:260px" placeholder="name@example.com" />
+            <input type="email" class="input" style="width:260px" placeholder="name@example.com" />
           </div>
           <div style="display:flex;align-items:center;gap:8px">
             <input type="checkbox" id="lbl-check" style="width:14px;height:14px;accent-color:var(--primary)" />
@@ -5379,14 +5379,14 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="demo-block">
       <div class="demo-canvas">
         <nav style="display:flex;align-items:center;gap:4px;font-size:var(--fs-sm)">
-          <button style="padding:6px 10px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);cursor:pointer">←</button>
-          <button style="padding:6px 10px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);cursor:pointer">1</button>
-          <button style="padding:6px 10px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);cursor:pointer">2</button>
-          <button style="padding:6px 10px;background:var(--primary);border:1px solid var(--primary);border-radius:var(--radius);color:var(--primary-foreground);cursor:pointer">3</button>
-          <button style="padding:6px 10px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--muted-foreground);cursor:pointer">…</button>
-          <button style="padding:6px 10px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);cursor:pointer">8</button>
-          <button style="padding:6px 10px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);cursor:pointer">9</button>
-          <button style="padding:6px 10px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);cursor:pointer">→</button>
+          <button class="btn btn-outline btn-sm">←</button>
+          <button class="btn btn-ghost btn-sm">1</button>
+          <button class="btn btn-ghost btn-sm">2</button>
+          <button class="btn btn-secondary btn-sm">3</button>
+          <button class="btn btn-ghost btn-sm">…</button>
+          <button class="btn btn-ghost btn-sm">8</button>
+          <button class="btn btn-ghost btn-sm">9</button>
+          <button class="btn btn-outline btn-sm">→</button>
         </nav>
       </div>
       <div class="demo-code-bar">
@@ -5408,18 +5408,18 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="demo-block">
       <div class="demo-canvas">
         <div style="display:flex;flex-direction:column;align-items:flex-start;gap:8px">
-          <button style="padding:8px 16px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);color:var(--foreground);font-size:var(--fs-sm);cursor:pointer">Open popover</button>
-          <div style="background:var(--popover);border:1px solid var(--border);border-radius:var(--radius);padding:16px;width:280px;box-shadow:0 4px 16px rgba(0,0,0,0.3)">
+          <button class="btn btn-secondary btn-sm">Open popover</button>
+          <div style="background:var(--popover);border-radius:var(--radius);padding:16px;width:280px;box-shadow:0 4px 16px rgba(0,0,0,0.3)">
             <div style="font-size:var(--fs-sm);font-weight:600;color:var(--foreground);margin-bottom:4px">Dimensions</div>
             <div style="font-size:var(--fs-xs);color:var(--muted-foreground);margin-bottom:12px">Set the dimensions for the layer.</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
               <div>
                 <label style="font-size:var(--fs-sm);color:var(--muted-foreground)">Width</label>
-                <input style="width:100%;margin-top:4px;padding:6px 8px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);font-size:var(--fs-xs);color:var(--foreground);outline:none;box-sizing:border-box" value="100%" />
+                <input class="input" style="width:100%;margin-top:4px;box-sizing:border-box" value="100%" />
               </div>
               <div>
                 <label style="font-size:var(--fs-sm);color:var(--muted-foreground)">Height</label>
-                <input style="width:100%;margin-top:4px;padding:6px 8px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);font-size:var(--fs-xs);color:var(--foreground);outline:none;box-sizing:border-box" value="25px" />
+                <input class="input" style="width:100%;margin-top:4px;box-sizing:border-box" value="25px" />
               </div>
             </div>
           </div>
@@ -5482,7 +5482,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="section-title">Horizontal</div>
     <div class="demo-block">
       <div class="demo-canvas">
-        <div style="display:flex;width:400px;height:140px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+        <div style="display:flex;width:400px;height:140px;border-radius:var(--radius);overflow:hidden">
           <div style="flex:0 0 200px;background:var(--card);padding:16px;display:flex;align-items:center;justify-content:center;font-size:var(--fs-xs);color:var(--muted-foreground)">Panel One</div>
           <div style="width:4px;background:var(--border);cursor:col-resize;display:flex;align-items:center;justify-content:center">
             <div style="width:2px;height:24px;background:var(--muted-foreground);border-radius:1px;opacity:0.5"></div>
@@ -5508,7 +5508,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="section-title">Default</div>
     <div class="demo-block">
       <div class="demo-canvas">
-        <div style="width:240px;height:200px;border:1px solid var(--border);border-radius:var(--radius);overflow-y:auto;background:var(--card)">
+        <div style="width:240px;height:200px;border-radius:var(--radius);overflow-y:auto;background:var(--card)">
           <div style="padding:12px;display:flex;flex-direction:column;gap:1px">
             <div style="font-size:var(--fs-sm);font-weight:600;color:var(--muted-foreground);padding:4px 0;text-transform:uppercase;letter-spacing:.05em">Tags</div>
             <div style="padding:8px 10px;font-size:var(--fs-sm);color:var(--foreground);border-radius:var(--radius-sm)">v1.0.0-alpha</div>
@@ -5541,7 +5541,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="section-title">Right Side Panel</div>
     <div class="demo-block">
       <div class="demo-canvas">
-        <div style="position:relative;width:420px;height:240px;background:var(--background);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)">
+        <div style="position:relative;width:420px;height:240px;background:var(--background);border-radius:var(--radius);overflow:hidden">
           <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:var(--fs-xs);color:var(--muted-foreground);opacity:0.4">Page content</div>
           <div style="position:absolute;top:0;right:0;bottom:0;width:240px;background:var(--card);border-left:1px solid var(--border);padding:20px">
             <div style="font-size:var(--fs-sm);font-weight:600;color:var(--foreground);margin-bottom:4px">Edit Profile</div>
@@ -5549,11 +5549,11 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <div style="display:flex;flex-direction:column;gap:10px">
               <div>
                 <label style="font-size:var(--fs-sm);color:var(--muted-foreground)">Name</label>
-                <input style="width:100%;margin-top:4px;padding:6px 8px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);font-size:var(--fs-xs);color:var(--foreground);outline:none;box-sizing:border-box" value="Miguel Ugalde" />
+                <input class="input" style="width:100%;margin-top:4px;box-sizing:border-box" value="Miguel Ugalde" />
               </div>
               <div>
                 <label style="font-size:var(--fs-sm);color:var(--muted-foreground)">Username</label>
-                <input style="width:100%;margin-top:4px;padding:6px 8px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius);font-size:var(--fs-xs);color:var(--foreground);outline:none;box-sizing:border-box" value="@miguel" />
+                <input class="input" style="width:100%;margin-top:4px;box-sizing:border-box" value="@miguel" />
               </div>
             </div>
             <button style="margin-top:16px;width:100%;padding:7px;background:var(--primary);color:var(--primary-foreground);border:none;border-radius:var(--radius);font-size:var(--fs-xs);cursor:pointer">Save changes</button>
@@ -5643,7 +5643,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="demo-block">
       <div class="demo-canvas">
         <div style="display:flex;flex-direction:column;gap:8px;width:320px">
-          <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 2px 8px rgba(0,0,0,0.3)">
+          <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border-radius:var(--radius);box-shadow:0 2px 8px rgba(0,0,0,0.3)">
             <span style="font-size:var(--fs-sm)">✓</span>
             <div style="flex:1">
               <div style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground)">Report exported</div>
@@ -5651,7 +5651,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             </div>
             <button style="background:transparent;border:none;color:var(--muted-foreground);cursor:pointer;font-size:var(--fs-sm)">×</button>
           </div>
-          <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 2px 8px rgba(0,0,0,0.3);opacity:0.8;transform:scale(0.97)">
+          <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border-radius:var(--radius);box-shadow:0 2px 8px rgba(0,0,0,0.3);opacity:0.8;transform:scale(0.97)">
             <span style="font-size:var(--fs-sm)">⚠</span>
             <div style="flex:1">
               <div style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground)">Rate limit reached</div>
@@ -5659,7 +5659,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             </div>
             <button style="background:transparent;border:none;color:var(--muted-foreground);cursor:pointer;font-size:var(--fs-sm)">×</button>
           </div>
-          <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 2px 8px rgba(0,0,0,0.3);opacity:0.6;transform:scale(0.94)">
+          <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border-radius:var(--radius);box-shadow:0 2px 8px rgba(0,0,0,0.3);opacity:0.6;transform:scale(0.94)">
             <span style="font-size:var(--fs-sm)">ℹ</span>
             <div style="flex:1">
               <div style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground)">New signals available</div>
@@ -5687,9 +5687,9 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="demo-block">
       <div class="demo-canvas">
         <div style="display:flex;gap:4px">
-          <button style="padding:8px 14px;border-radius:var(--radius);border:1px solid var(--border);background:var(--accent);color:var(--foreground);font-size:var(--fs-sm);font-weight:700;cursor:pointer">B</button>
-          <button style="padding:8px 14px;border-radius:var(--radius);border:1px solid transparent;background:transparent;color:var(--muted-foreground);font-size:var(--fs-sm);font-style:italic;cursor:pointer">I</button>
-          <button style="padding:8px 14px;border-radius:var(--radius);border:1px solid transparent;background:transparent;color:var(--muted-foreground);font-size:var(--fs-sm);text-decoration:underline;cursor:pointer">U</button>
+          <button class="btn btn-secondary btn-sm" style="font-weight:700">B</button>
+          <button class="btn btn-outline btn-sm" style="font-style:italic">I</button>
+          <button class="btn btn-outline btn-sm" style="text-decoration:underline">U</button>
         </div>
       </div>
       <div class="demo-code-bar">
