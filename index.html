@@ -5166,7 +5166,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <label style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground)">Email</label>
             <input type="email" class="input" placeholder="miguel@waldo.fyi" />
           </div>
-          <button style="padding:9px;background:var(--primary);color:var(--primary-foreground);border:none;border-radius:var(--radius);font-size:var(--fs-sm);font-weight:500;cursor:pointer">Submit</button>
+          <button class="btn" style="margin-top:16px">Submit</button>
         </form>
       </div>
       <div class="demo-code-bar">
@@ -5342,23 +5342,41 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="section-title">Default</div>
     <div class="demo-block">
       <div class="demo-canvas">
-        <div style="display:flex;flex-direction:column;gap:0">
-          <div style="display:flex;gap:4px;align-items:center;padding:4px;background:var(--background);border:1px solid var(--border);border-radius:var(--radius) var(--radius) 0 0;border-bottom:none">
-            <button style="padding:6px 12px;border-radius:var(--radius-sm);background:var(--accent);border:none;color:var(--foreground);font-size:var(--fs-sm);cursor:pointer">Getting Started ▾</button>
-            <button style="padding:6px 12px;border-radius:var(--radius-sm);background:transparent;border:none;color:var(--foreground);font-size:var(--fs-sm);cursor:pointer">Components ▾</button>
-            <button style="padding:6px 12px;border-radius:var(--radius-sm);background:transparent;border:none;color:var(--foreground);font-size:var(--fs-sm);cursor:pointer">Docs</button>
-          </div>
-          <div style="background:var(--popover);border:1px solid var(--border);border-radius:0 var(--radius) var(--radius) var(--radius);padding:16px;width:360px;box-shadow:0 4px 16px rgba(0,0,0,0.2)">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-              <div style="padding:10px;background:var(--muted);border-radius:var(--radius)">
-                <div style="font-size:var(--fs-xs);font-weight:600;color:var(--foreground);margin-bottom:4px">Introduction</div>
-                <div style="font-size:var(--fs-sm);color:var(--muted-foreground)">Re-usable components built with Radix UI.</div>
+        <div style="position:relative;display:inline-flex;flex-direction:column;align-items:flex-start;gap:4px">
+          <nav style="display:flex;gap:2px;align-items:center">
+            <button class="btn btn-ghost btn-sm">Overview</button>
+            <button class="btn btn-secondary btn-sm" style="gap:6px">Intelligence <span style="font-size:10px;opacity:0.6">▾</span></button>
+            <button class="btn btn-ghost btn-sm">Competitive</button>
+            <button class="btn btn-ghost btn-sm">Trends</button>
+          </nav>
+          <div class="wdd" style="width:320px;padding:12px">
+            <div style="font-size:var(--fs-xs);font-weight:600;color:var(--muted-foreground);padding:4px 8px 8px;text-transform:uppercase;letter-spacing:0.08em">Brand Intelligence</div>
+            <a class="wdd-item" href="#">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.5;flex-shrink:0"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              <div>
+                <div style="font-size:var(--fs-sm);font-weight:500">Brand Overview</div>
+                <div style="font-size:var(--fs-xs);color:var(--muted-foreground)">Health score, reach, and share of voice</div>
               </div>
-              <div style="padding:10px;background:var(--muted);border-radius:var(--radius)">
-                <div style="font-size:var(--fs-xs);font-weight:600;color:var(--foreground);margin-bottom:4px">Installation</div>
-                <div style="font-size:var(--fs-sm);color:var(--muted-foreground)">How to install dependencies.</div>
+            </a>
+            <a class="wdd-item" href="#">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.5;flex-shrink:0"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+              <div>
+                <div style="font-size:var(--fs-sm);font-weight:500">Mentions &amp; Sentiment</div>
+                <div style="font-size:var(--fs-xs);color:var(--muted-foreground)">Track what people are saying</div>
               </div>
-            </div>
+            </a>
+            <a class="wdd-item" href="#">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.5;flex-shrink:0"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              <div>
+                <div style="font-size:var(--fs-sm);font-weight:500">Paid Media</div>
+                <div style="font-size:var(--fs-xs);color:var(--muted-foreground)">Ad spend, creatives, and performance</div>
+              </div>
+            </a>
+            <div class="wdd-sep"></div>
+            <a class="wdd-item" href="#">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.5;flex-shrink:0"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <div style="font-size:var(--fs-sm);font-weight:500">Audience Insights</div>
+            </a>
           </div>
         </div>
       </div>
