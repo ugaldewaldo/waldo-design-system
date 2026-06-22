@@ -52,7 +52,7 @@ function SegmentedControl({
     <div
       className={cn(
         "inline-flex items-center rounded-full p-1",
-        isSurface ? "bg-[#202123]" : "bg-background/[0.5]",
+        isSurface ? "bg-card" : "bg-background/[0.5]",
         fullWidth && "flex w-full",
         disabled && "opacity-40 pointer-events-none",
         className

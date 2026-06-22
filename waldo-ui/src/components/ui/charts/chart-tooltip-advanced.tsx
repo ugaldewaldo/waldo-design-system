@@ -64,13 +64,13 @@ export function ChartTooltipAdvanced() {
             <Bar
               dataKey="running"
               stackId="a"
-              fill="var(--color-running)"
+              style={{ fill: "var(--color-running)" }}
               radius={[0, 0, 4, 4]}
             />
             <Bar
               dataKey="swimming"
               stackId="a"
-              fill="var(--color-swimming)"
+              style={{ fill: "var(--color-swimming)" }}
               radius={[4, 4, 0, 0]}
             />
             <ChartTooltip
@@ -81,7 +81,7 @@ export function ChartTooltipAdvanced() {
                   formatter={(value, name, item, index) => (
                     <>
                       <div
-                        className="h-2.5 w-2.5 shrink-0 rounded-[2px] bg-(--color-bg)"
+                        className="h-2.5 w-2.5 shrink-0 rounded-xs bg-(--color-bg)"
                         style={
                           {
                             "--color-bg": `var(--color-${name})`,

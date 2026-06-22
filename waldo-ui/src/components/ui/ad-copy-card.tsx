@@ -27,7 +27,7 @@ const AdCopyCard = React.forwardRef<HTMLDivElement, AdCopyCardProps>(
           "flex-1 min-w-0 rounded-xl p-4 flex flex-col gap-5",
           className
         )}
-        style={{ background: "#171819" }}
+        style={{ background: "var(--background)" }}
         {...props}
       >
         <div className="flex flex-col gap-1">

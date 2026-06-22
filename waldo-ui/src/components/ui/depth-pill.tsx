@@ -6,8 +6,6 @@ import { cn } from "@/lib/utils";
 // Alpha formula: Math.max(0.30, Math.min(1, 0.30 + (depth / 60) * 0.70))
 // Base color: amber #f7d372 (--highlight-rgb: 247,211,113)
 
-const HIGHLIGHT_RGB = "247,211,113";
-
 /** @param maxDepth — denominator for the alpha scale (default 60; leaderboard uses 70) */
 function depthAlpha(depth: number, maxDepth = 60): number {
   return Math.max(0.30, Math.min(1, 0.30 + (depth / maxDepth) * 0.70));
@@ -33,8 +31,8 @@ const DepthPill = React.forwardRef<HTMLSpanElement, DepthPillProps>(
           className
         )}
         style={{
-          color: `rgba(${HIGHLIGHT_RGB},${alpha})`,
-          background: `rgba(${HIGHLIGHT_RGB},0.10)`,
+          color: `rgb(var(--yellow-300) / ${alpha})`,
+          background: `rgb(var(--yellow-300) / 0.10)`,
           ...style,
         }}
         {...props}

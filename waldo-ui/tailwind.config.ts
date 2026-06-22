@@ -97,16 +97,18 @@ const config: Config = {
       // ── Border radius ──────────────────────────────────────────────
       // Tight radii — product/tool aesthetic (Linear-style)
       borderRadius: {
-        none:   "0",
-        sm:     "calc(var(--radius) - 2px)",   // 4px  → token radius.sm
-        DEFAULT: "var(--radius)",              // 6px  → token radius.md
-        md:     "var(--radius)",               // 6px  → token radius.md
-        lg:     "calc(var(--radius) + 2px)",   // 8px  → token radius.lg
-        xl:     "calc(var(--radius) + 6px)",   // 12px → token radius.xl
-        "2xl":  "calc(var(--radius) + 10px)", // 16px → token radius.2xl
-        "2-5xl":"calc(var(--radius) + 14px)", // 20px → token radius.2_5xl (dropdowns)
-        "4xl":  "calc(var(--radius) + 26px)", // 32px → token radius.4xl (file input)
-        full:   "9999px",                     //        token radius.full
+        none:    "0",
+        xs:      "var(--radius-xs)",     // 2px
+        sm:      "var(--radius-sm)",     // 4px
+        DEFAULT: "var(--radius-md)",     // 6px
+        md:      "var(--radius-md)",     // 6px
+        lg:      "var(--radius-lg)",     // 8px
+        xl:      "var(--radius-xl)",     // 12px
+        "2xl":   "var(--radius-2xl)",    // 16px
+        "2-5xl": "var(--radius-2-5xl)",  // 20px (dropdowns)
+        "3xl":   "var(--radius-3xl)",    // 24px (panels, nav)
+        "4xl":   "var(--radius-4xl)",    // 32px (file input, dialog)
+        full:    "var(--radius-full)",   // 9999px
       },
 
       // ── Shadows ────────────────────────────────────────────────────
