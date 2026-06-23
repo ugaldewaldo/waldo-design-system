@@ -58,6 +58,13 @@ if ! bash tools/build-waldo-ds.sh --check; then
   fail=1
 fi
 
+# 2e. component-index.md must match index.html (so the flat consumables list never drifts).
+echo "▶ build-component-index.js --check…"
+if ! node tools/build-component-index.js --check; then
+  echo "✗ docs/component-index.md is stale. Run: node tools/build-component-index.js"
+  fail=1
+fi
+
 # 3. YAML integrity — a broken indent silently kills the live-rendered docs pages.
 if command -v python3 >/dev/null 2>&1 && python3 -c "import yaml" >/dev/null 2>&1; then
   for y in docs/token-catalog.yaml docs/usage-doctrine.yaml; do

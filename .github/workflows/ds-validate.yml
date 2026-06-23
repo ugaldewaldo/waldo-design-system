@@ -31,6 +31,9 @@ jobs:
       - name: waldo-ds.css built from its sources (build-waldo-ds.sh --check)
         run: bash tools/build-waldo-ds.sh --check
 
+      - name: Component index in sync with index.html (build-component-index.js --check)
+        run: node tools/build-component-index.js --check
+
       - name: YAML integrity (both catalogs)
         run: |
           python3 -m pip install --quiet pyyaml

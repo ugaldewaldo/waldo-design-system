@@ -7,7 +7,7 @@
  * enforces it automatically.
  *
  * Usage:
- *   node tools/detect.js <file|dir> [more paths...] [--json]
+ *   node tools/detect.js <file|dir> [more paths...] [--json] [--include-labs]
  *
  * Exit code: 0 = clean, 1 = errors found (warnings alone don't fail).
  */
@@ -250,7 +250,7 @@ function scanFile(filePath, rules) {
 function collectFiles(target) {
   const out = [];
   const stat = fs.statSync(target);
-  if (SKIP_PATH_SEGMENTS.some(seg => target.split(path.sep).includes(seg))) return out;
+  if (!includeLabs && SKIP_PATH_SEGMENTS.some(seg => target.split(path.sep).includes(seg))) return out;
   if (SKIP_FILES.has(path.basename(target))) return out;
   if (stat.isFile()) {
     if (SCAN_EXTENSIONS.has(path.extname(target))) out.push(target);
@@ -267,10 +267,12 @@ function collectFiles(target) {
 
 const args = process.argv.slice(2);
 const json = args.includes('--json');
-const targets = args.filter((a) => a !== '--json');
+const includeLabs = args.includes('--include-labs');
+const targets = args.filter((a) => a !== '--json' && a !== '--include-labs');
 
 if (!targets.length) {
-  console.error('usage: node tools/detect.js <file|dir> [more paths...] [--json]');
+  console.error('usage: node tools/detect.js <file|dir> [more paths...] [--json] [--include-labs]');
+  console.error('  --include-labs  scan waldo-labs/ prototypes (skipped by default to keep the commit guard fast)');
   process.exit(2);
 }
 

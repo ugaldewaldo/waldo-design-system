@@ -52,7 +52,9 @@ Ownership (don't edit across the line — pass a change request to the owner ins
 
 To change a color/token: edit `tokens.json` → `globals.css` → `tailwind.config.ts`, fix any hardcoded `.tsx`, run `bash tools/build-waldo-ds.sh`, `/ds-verify`, commit/push; ask Validador to add the token to `token-catalog.yaml`; ask Figma Master to write it to Figma via MCP. The guard blocks the commit if any of this is incomplete.
 
-**To build a prototype** (`waldo-labs/…`): read `docs/brand-api-dashboard-doctrine.md` FIRST — it holds the prototype rules (layout, cards, topbar, chart palette, etc.). Link the DS via `<link href="../../waldo-ds.css">`, use `var(--chart-1..12)` for data colors, never hardcode hex, no `:root` redeclaring DS tokens. The doctrine is the source of these rules — don't restate or invent them.
+**Before deciding any component or chart is missing**, read `docs/component-index.md` — the flat list of ALL consumables (60 components + 13 charts). Consumables live in two sections of `index.html` (Components `#comp-*` AND Charts `#chart-page-*`); a comp-only scan misses the charts and leads to rebuilding data-viz that already exists. The index is GENERATED from `index.html` (`node tools/build-component-index.js`) and drift-checked by the guard — never hand-edit it.
+
+**To build a prototype** (`waldo-labs/…`): read `docs/brand-api-dashboard-doctrine.md` FIRST — it holds the prototype rules (layout, cards, topbar, chart palette, etc.). Link the DS via `<link href="../../waldo-ds.css">`, use `var(--chart-1..12)` for data colors, never hardcode hex, no `:root` redeclaring DS tokens. The doctrine is the source of these rules — don't restate or invent them. To validate a prototype, `detect.js` skips `waldo-labs/` by default (keeps the guard fast) — run it explicitly with `node tools/detect.js waldo-labs/<proto>/index.html --include-labs`, otherwise it reports "0 files scanned" (a false green).
 
 ## ⛔ ABSOLUTE RULES — read before touching any file
 
