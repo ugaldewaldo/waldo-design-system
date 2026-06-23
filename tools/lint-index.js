@@ -20,7 +20,10 @@ const UI_DIR = path.join(ROOT, 'waldo-ui', 'src', 'components', 'ui');
 
 // Demos that legitimately have no single .tsx (composed / vanilla-only patterns).
 // Keep this list tight and justified.
-const EXEMPT = new Set([]);
+const EXEMPT = new Set([
+  'theme-pill',    // vanilla-only DS utility component, no React wrapper needed
+  'comment-card',  // vanilla-only prototype component, consumed by waldo-labs
+]);
 
 const norm = (s) => s.replace(/-/g, '').toLowerCase();
 

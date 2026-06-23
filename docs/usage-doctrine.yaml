@@ -15,6 +15,10 @@ components:
     prefer_over:
       - Link: when the action causes a side effect (not navigation)
     notes: |
+      ONE PRIMARY PER SURFACE: Only one default (primary fill) Button per view, drawer,
+      dialog, or card. Two primary buttons create visual tie — demote the secondary action
+      to ghost, outline, or a segmented control if it is a selection (not an action).
+
       DEFAULT FILL: green-700 #2a6c6d + white text (6.06:1 AA).
       Never white on green-500 (2.84:1 fails) and never dark text on green-700 (2.93:1 fails)
       — text color is married to the fill.
@@ -1120,6 +1124,24 @@ components:
       - Card: when the content is structured ad creative copy
     notes: |
       Brand API prototype component — not yet reviewed against Figma.
+
+  - component: Comment Card
+    use_when:
+      - Displaying a social mention (Reddit, X, TikTok, Instagram, etc.)
+      - Feed of brand mentions with platform, author, sentiment, and text
+    dont_use_when:
+      - Internal system alerts — use Alert List Row
+      - Generic list content without platform context — use List Item
+    prefer_over:
+      - Alert List Row: when the row represents a social mention with platform/author/sentiment
+    notes: |
+      Structure: platform favicon · author · time → sentiment chip (right-aligned) → text body → footer (comment count + arrow).
+      Background: var(--secondary). Border-radius: var(--radius-lg).
+      Sentiment chip classes: .sentiment-chip.pos / .neu / .neg / .mix — same palette as Theme Pill.
+      Platform favicon: 14×14px img. Author + time in var(--muted-foreground) at --fs-xs.
+      Text body: var(--foreground) at --fs-sm, 2-line clamp.
+      Footer: comment count + chevron arrow, both muted.
+      Never use hardcoded platform colors — use favicon only.
 
   - component: Alert List Row
     use_when:

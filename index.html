@@ -110,9 +110,11 @@
     <button class="sb-item" onclick="waldoGo('comp-depth-pill',this)">Depth Pill</button>
     <button class="sb-item" onclick="waldoGo('comp-leaderboard',this)">Leaderboard Row</button>
     <button class="sb-item" onclick="waldoGo('comp-kpi-card',this)">KPI Stat Card</button>
+    <button class="sb-item" onclick="waldoGo('comp-comment-card',this)">Comment Card</button>
     <button class="sb-item" onclick="waldoGo('comp-alert-list',this)">Alert List Row</button>
     <button class="sb-item" onclick="waldoGo('comp-ad-copy-card',this)">Ad Copy Card</button>
     <button class="sb-item" onclick="waldoGo('comp-live-badge',this)">Live Status Badge</button>
+    <button class="sb-item" onclick="waldoGo('comp-theme-pill',this)">Theme Pill</button>
   </div>
   <div class="sb-no-results" id="sb-no-results">No results</div>
   <div class="sb-footer">Shadcn/ui · Inter · Dark-first</div>
@@ -597,7 +599,7 @@ window.addEventListener('load', function(){
     </div>
 
     <div class="section">
-      <div class="section-title">Sizes — sm (28) · default (36) · lg (44)</div>
+      <div class="section-title">Sizes — sm (28) · default (40) · lg (44)</div>
       <div class="demo-block">
         <div class="demo-canvas" style="align-items:center">
           <button class="btn btn-default btn-sm">Small</button>
@@ -5288,13 +5290,13 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="demo-block">
       <div class="demo-canvas">
         <div style="display:flex;gap:8px;align-items:center">
-          <input maxlength="1" class="input" style="width:40px;height:48px;text-align:center;font-size:var(--fs-lg);font-weight:600" value="1" />
-          <input maxlength="1" class="input" style="width:40px;height:48px;text-align:center;font-size:var(--fs-lg);font-weight:600" value="2" />
-          <input maxlength="1" class="input" style="width:40px;height:48px;text-align:center;font-size:var(--fs-lg);font-weight:600" value="3" />
+          <input maxlength="1" class="input" style="width:44px;height:44px;text-align:center;font-size:var(--fs-lg);font-weight:600;border-radius:var(--radius-lg);padding:0" value="1" />
+          <input maxlength="1" class="input" style="width:44px;height:44px;text-align:center;font-size:var(--fs-lg);font-weight:600;border-radius:var(--radius-lg);padding:0" value="2" />
+          <input maxlength="1" class="input" style="width:44px;height:44px;text-align:center;font-size:var(--fs-lg);font-weight:600;border-radius:var(--radius-lg);padding:0" value="3" />
           <span style="color:var(--muted-foreground)">—</span>
-          <input maxlength="1" class="input" style="width:40px;height:48px;text-align:center;font-size:var(--fs-lg);font-weight:600;border:2px solid var(--primary)" value="" />
-          <input maxlength="1" class="input" style="width:40px;height:48px;text-align:center;font-size:var(--fs-lg);font-weight:600" value="" />
-          <input maxlength="1" class="input" style="width:40px;height:48px;text-align:center;font-size:var(--fs-lg);font-weight:600" value="" />
+          <input maxlength="1" class="input" style="width:44px;height:44px;text-align:center;font-size:var(--fs-lg);font-weight:600;border-radius:var(--radius-lg);padding:0;border-color:#265152;border-width:2px" value="" />
+          <input maxlength="1" class="input" style="width:44px;height:44px;text-align:center;font-size:var(--fs-lg);font-weight:600;border-radius:var(--radius-lg);padding:0" value="" />
+          <input maxlength="1" class="input" style="width:44px;height:44px;text-align:center;font-size:var(--fs-lg);font-weight:600;border-radius:var(--radius-lg);padding:0" value="" />
         </div>
       </div>
       <div class="demo-code-bar">
@@ -5504,22 +5506,23 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   <div class="section">
     <div class="section-title">Default</div>
     <div class="demo-block">
-      <div class="demo-canvas">
-        <div style="display:flex;flex-direction:column;align-items:flex-start;gap:8px">
-          <button class="btn btn-secondary btn-sm">Open popover</button>
-          <div style="background:var(--popover);border-radius:var(--radius);padding:16px;width:280px;box-shadow:0 4px 16px rgba(0,0,0,0.3)">
-            <div style="font-size:var(--fs-sm);font-weight:600;color:var(--foreground);margin-bottom:4px">Dimensions</div>
-            <div style="font-size:var(--fs-xs);color:var(--muted-foreground);margin-bottom:12px">Set the dimensions for the layer.</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="demo-canvas" style="min-height:340px;align-items:flex-start">
+        <div style="display:inline-flex;flex-direction:column;align-items:flex-start;gap:8px">
+          <button class="btn btn-outline btn-sm">Date range</button>
+          <div class="wdd" style="width:240px;padding:16px">
+            <div style="font-size:var(--fs-sm);font-weight:600;color:var(--foreground);margin-bottom:4px">Filter by date</div>
+            <div style="font-size:var(--fs-xs);color:var(--muted-foreground);margin-bottom:12px">Set the report period for signal analysis.</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
               <div>
-                <label style="font-size:var(--fs-sm);color:var(--muted-foreground)">Width</label>
-                <input class="input" style="width:100%;margin-top:4px;box-sizing:border-box" value="100%" />
+                <label style="font-size:var(--fs-xs);color:var(--muted-foreground);display:block;margin-bottom:4px">From</label>
+                <input class="input" type="date" style="width:100%;color-scheme:dark" value="2024-06-01" />
               </div>
               <div>
-                <label style="font-size:var(--fs-sm);color:var(--muted-foreground)">Height</label>
-                <input class="input" style="width:100%;margin-top:4px;box-sizing:border-box" value="25px" />
+                <label style="font-size:var(--fs-xs);color:var(--muted-foreground);display:block;margin-bottom:4px">To</label>
+                <input class="input" type="date" style="width:100%;color-scheme:dark" value="2024-06-30" />
               </div>
             </div>
+            <button class="btn btn-sm" style="width:100%">Apply filter</button>
           </div>
         </div>
       </div>
@@ -5543,20 +5546,20 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="demo-canvas">
         <div style="width:320px;display:flex;flex-direction:column;gap:16px">
           <div>
-            <div style="display:flex;justify-content:space-between;font-size:var(--fs-xs);color:var(--muted-foreground);margin-bottom:6px"><span>Uploading…</span><span>25%</span></div>
-            <div style="height:8px;background:var(--muted);border-radius:var(--radius-full);overflow:hidden">
+            <div style="display:flex;justify-content:space-between;font-size:var(--fs-xs);color:var(--muted-foreground);margin-bottom:6px"><span>Scanning Nike mentions</span><span>25%</span></div>
+            <div style="height:6px;background:var(--muted);border-radius:var(--radius-full);overflow:hidden">
               <div style="width:25%;height:100%;background:var(--primary);border-radius:var(--radius-full)"></div>
             </div>
           </div>
           <div>
-            <div style="display:flex;justify-content:space-between;font-size:var(--fs-xs);color:var(--muted-foreground);margin-bottom:6px"><span>Processing…</span><span>60%</span></div>
-            <div style="height:8px;background:var(--muted);border-radius:var(--radius-full);overflow:hidden">
+            <div style="display:flex;justify-content:space-between;font-size:var(--fs-xs);color:var(--muted-foreground);margin-bottom:6px"><span>Analyzing sentiment</span><span>60%</span></div>
+            <div style="height:6px;background:var(--muted);border-radius:var(--radius-full);overflow:hidden">
               <div style="width:60%;height:100%;background:var(--primary);border-radius:var(--radius-full)"></div>
             </div>
           </div>
           <div>
-            <div style="display:flex;justify-content:space-between;font-size:var(--fs-xs);color:var(--muted-foreground);margin-bottom:6px"><span>Almost done</span><span>90%</span></div>
-            <div style="height:8px;background:var(--muted);border-radius:var(--radius-full);overflow:hidden">
+            <div style="display:flex;justify-content:space-between;font-size:var(--fs-xs);color:var(--muted-foreground);margin-bottom:6px"><span>Building intelligence report</span><span>90%</span></div>
+            <div style="height:6px;background:var(--muted);border-radius:var(--radius-full);overflow:hidden">
               <div style="width:90%;height:100%;background:var(--primary);border-radius:var(--radius-full)"></div>
             </div>
           </div>
@@ -5805,29 +5808,57 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="page-desc">A set of two-state buttons that can be toggled on or off.</div>
   </div>
   <div class="section">
-    <div class="section-title">Text Alignment</div>
+    <div class="section-title">View Mode</div>
     <div class="demo-block">
       <div class="demo-canvas">
-        <div style="display:flex;flex-direction:column;gap:16px;align-items:flex-start">
-          <div style="display:flex;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
-            <button style="padding:8px 16px;background:var(--accent);border:none;border-right:1px solid var(--border);color:var(--foreground);font-size:var(--fs-xs);cursor:pointer" title="Align Left">⬛ Left</button>
-            <button style="padding:8px 16px;background:transparent;border:none;border-right:1px solid var(--border);color:var(--muted-foreground);font-size:var(--fs-xs);cursor:pointer" title="Align Center">⬛ Center</button>
-            <button style="padding:8px 16px;background:transparent;border:none;color:var(--muted-foreground);font-size:var(--fs-xs);cursor:pointer" title="Align Right">⬛ Right</button>
-          </div>
-          <div style="display:flex;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
-            <button style="padding:7px 14px;background:var(--accent);border:none;border-right:1px solid var(--border);color:var(--foreground);font-size:var(--fs-sm);font-weight:700;cursor:pointer">B</button>
-            <button style="padding:7px 14px;background:var(--accent);border:none;border-right:1px solid var(--border);color:var(--foreground);font-size:var(--fs-sm);font-style:italic;cursor:pointer">I</button>
-            <button style="padding:7px 14px;background:transparent;border:none;color:var(--muted-foreground);font-size:var(--fs-sm);text-decoration:underline;cursor:pointer">U</button>
-          </div>
+        <div class="wseg" id="tg-view-seg" style="background:color-mix(in srgb,var(--foreground) 10%,transparent)">
+          <button class="wseg-opt active" onclick="tgSetView(this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          </button>
+          <button class="wseg-opt inactive" onclick="tgSetView(this)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
         </div>
       </div>
       <div class="demo-code-bar">
         <span class="demo-code-label">&lt;ToggleGroup type="single" /&gt;</span>
-        <button class="copy-btn" onclick="copyCode(this, '&lt;ToggleGroup type=&quot;single&quot; value={align} onValueChange={setAlign}&gt;\n  &lt;ToggleGroupItem value=&quot;left&quot;&gt;&lt;AlignLeft /&gt;&lt;/ToggleGroupItem&gt;\n  &lt;ToggleGroupItem value=&quot;center&quot;&gt;&lt;AlignCenter /&gt;&lt;/ToggleGroupItem&gt;\n  &lt;ToggleGroupItem value=&quot;right&quot;&gt;&lt;AlignRight /&gt;&lt;/ToggleGroupItem&gt;\n&lt;/ToggleGroup&gt;')">Copy</button>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;ToggleGroup type=&quot;single&quot; value={view} onValueChange={setView}&gt;\n  &lt;ToggleGroupItem value=&quot;grid&quot;&gt;&lt;LayoutGrid className=&quot;h-4 w-4&quot; /&gt;&lt;/ToggleGroupItem&gt;\n  &lt;ToggleGroupItem value=&quot;list&quot;&gt;&lt;List className=&quot;h-4 w-4&quot; /&gt;&lt;/ToggleGroupItem&gt;\n&lt;/ToggleGroup&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Text Formatting</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-secondary btn-sm" style="font-weight:700;border-radius:999px" onclick="tgFmtToggle(this)">B</button>
+          <button class="btn btn-outline btn-sm" style="font-style:italic;border-radius:999px" onclick="tgFmtToggle(this)">I</button>
+          <button class="btn btn-outline btn-sm" style="text-decoration:underline;border-radius:999px" onclick="tgFmtToggle(this)">U</button>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;ToggleGroup type="multiple" /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;ToggleGroup type=&quot;multiple&quot; value={formats} onValueChange={setFormats}&gt;\n  &lt;ToggleGroupItem value=&quot;bold&quot;&gt;B&lt;/ToggleGroupItem&gt;\n  &lt;ToggleGroupItem value=&quot;italic&quot;&gt;I&lt;/ToggleGroupItem&gt;\n  &lt;ToggleGroupItem value=&quot;underline&quot;&gt;U&lt;/ToggleGroupItem&gt;\n&lt;/ToggleGroup&gt;')">Copy</button>
       </div>
     </div>
   </div>
 </div>
+<script>
+(function(){
+  window.tgSetView = function(btn) {
+    var btns = btn.closest('.wseg').querySelectorAll('.wseg-opt');
+    btns.forEach(function(b) { b.className = 'wseg-opt inactive'; });
+    btn.className = 'wseg-opt active';
+  };
+  window.tgFmtToggle = function(btn) {
+    if (btn.classList.contains('btn-secondary')) {
+      btn.className = btn.className.replace('btn-secondary','btn-outline');
+    } else {
+      btn.className = btn.className.replace('btn-outline','btn-secondary');
+    }
+  };
+})();
+</script>
 
 
 <!-- Waldo Logo -->
@@ -6239,6 +6270,85 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 </div>
 
 
+<!-- Comment Card -->
+<div id="comp-comment-card" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Comment Card</div>
+    <div class="page-desc">Social mention card. Platform favicon, author, relative time, sentiment chip, text body, comment count. Used in brand mention feeds.</div>
+  </div>
+
+  <style>
+    .comment-card { background: var(--card); border-radius: var(--radius-xl); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; cursor: pointer; transition: background 0.12s; }
+    .comment-card:hover { background: color-mix(in srgb, var(--foreground) 6%, var(--card)); }
+    .comment-meta { display: flex; align-items: center; gap: 6px; }
+    .comment-favicon { width: 14px; height: 14px; border-radius: 2px; flex: none; }
+    .comment-author { font-size: var(--fs-sm); color: var(--muted-foreground); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .comment-time { font-size: var(--fs-xs); color: var(--muted-foreground); flex: none; opacity: 0.6; }
+    .comment-sentiment { font-size: 10px; font-weight: 600; letter-spacing: 0.04em; padding: 2px 7px; border-radius: 999px; flex: none; }
+    .comment-sentiment.pos { background: color-mix(in srgb, var(--primary) 12%, transparent); color: var(--primary); }
+    .comment-sentiment.neu { background: color-mix(in srgb, var(--muted-foreground) 12%, transparent); color: var(--muted-foreground); }
+    .comment-sentiment.neg { background: color-mix(in srgb, var(--destructive) 12%, transparent); color: var(--destructive); }
+    .comment-sentiment.mix { background: color-mix(in srgb, var(--warning) 12%, transparent); color: var(--warning); }
+    .comment-body { font-size: var(--fs-sm); color: var(--foreground); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .comment-foot { display: flex; align-items: center; justify-content: space-between; }
+    .comment-count { font-size: var(--fs-xs); color: var(--muted-foreground); opacity: 0.6; }
+    .comment-arrow { display: none; }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="display:flex;flex-direction:column;gap:8px;max-width:460px;width:100%">
+          <div class="comment-card">
+            <div class="comment-meta">
+              <img class="comment-favicon" src="https://www.google.com/s2/favicons?domain=reddit.com&sz=64" alt="Reddit">
+              <span class="comment-author">u/sneakerhead_nyc · r/Nike</span>
+              <span class="comment-time">2d ago</span>
+              <span class="comment-sentiment pos">POS</span>
+            </div>
+            <div class="comment-body">The Air Max 90 collab with Waldo just dropped and I can't believe how fast it sold out. Tracking mentions everywhere now 🔥</div>
+            <div class="comment-foot">
+              <span class="comment-count">142 comments</span>
+              <span class="comment-arrow">→</span>
+            </div>
+          </div>
+          <div class="comment-card">
+            <div class="comment-meta">
+              <img class="comment-favicon" src="https://www.google.com/s2/favicons?domain=twitter.com&sz=64" alt="X">
+              <span class="comment-author">@brandwatcher · X (Twitter)</span>
+              <span class="comment-time">5h ago</span>
+              <span class="comment-sentiment neg">NEG</span>
+            </div>
+            <div class="comment-body">Adidas campaign feels tone-deaf compared to what Nike pulled off last week. Sentiment tanks every time they ignore community feedback.</div>
+            <div class="comment-foot">
+              <span class="comment-count">38 comments</span>
+              <span class="comment-arrow">→</span>
+            </div>
+          </div>
+          <div class="comment-card">
+            <div class="comment-meta">
+              <img class="comment-favicon" src="https://www.google.com/s2/favicons?domain=tiktok.com&sz=64" alt="TikTok">
+              <span class="comment-author">@fitcheck.daily · TikTok</span>
+              <span class="comment-time">1h ago</span>
+              <span class="comment-sentiment neu">NEU</span>
+            </div>
+            <div class="comment-body">Spotify wrapped x Nike collab speculation everywhere. Not confirmed but share of voice is up 18% this week alone.</div>
+            <div class="comment-foot">
+              <span class="comment-count">21 comments</span>
+              <span class="comment-arrow">→</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;div class="comment-card" /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;comment-card&quot;&gt;\n  &lt;div class=&quot;comment-meta&quot;&gt;\n    &lt;img class=&quot;comment-favicon&quot; src=&quot;...&quot; alt=&quot;&quot;&gt;\n    &lt;span class=&quot;comment-author&quot;&gt;u/author · r/community&lt;/span&gt;\n    &lt;span class=&quot;comment-time&quot;&gt;2d ago&lt;/span&gt;\n    &lt;span class=&quot;comment-sentiment pos&quot;&gt;POS&lt;/span&gt;\n  &lt;/div&gt;\n  &lt;div class=&quot;comment-body&quot;&gt;Text...&lt;/div&gt;\n  &lt;div class=&quot;comment-foot&quot;&gt;\n    &lt;span class=&quot;comment-count&quot;&gt;142 comments&lt;/span&gt;\n    &lt;span class=&quot;comment-arrow&quot;&gt;→&lt;/span&gt;\n  &lt;/div&gt;\n&lt;/div&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Ad Copy Card -->
 <div id="comp-ad-copy-card" class="waldo-page">
   <div class="page-header">
@@ -6296,6 +6406,66 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   </div>
 </div>
 
+<!-- Theme Pill -->
+<div id="comp-theme-pill" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Theme Pill</div>
+    <div class="page-desc">Brand API custom component. A topic/theme chip colored by sentiment, with a frequency count. Variant of <code>Tag</code> with the sentiment palette. Text is one fixed size — volume is shown by the count, never by scaling the font.</div>
+  </div>
+
+  <style>
+    .theme-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .theme-pill { display: inline-flex; align-items: center; padding: 5px 11px; border-radius: 9999px; font-size: var(--fs-xs); font-weight: 500; letter-spacing: -0.02em; border: 1px solid transparent; }
+    .theme-pill.pos { background: color-mix(in srgb,var(--primary) 12%,transparent); color: var(--primary); border-color: color-mix(in srgb,var(--primary) 25%,transparent); }
+    .theme-pill.neu { background: color-mix(in srgb,var(--muted-foreground) 10%,transparent); color: var(--muted-foreground); border-color: color-mix(in srgb,var(--muted-foreground) 22%,transparent); }
+    .theme-pill.neg { background: color-mix(in srgb,var(--warning) 12%,transparent); color: var(--warning); border-color: color-mix(in srgb,var(--warning) 25%,transparent); }
+    .theme-pill.mix { background: color-mix(in srgb,var(--highlight) 12%,transparent); color: var(--highlight); border-color: color-mix(in srgb,var(--highlight) 25%,transparent); }
+    .theme-pill-freq { opacity: 0.7; margin-left: 6px; font-variant-numeric: tabular-nums; }
+  </style>
+
+  <div class="demo-section">
+    <div class="demo-label">Colored by sentiment — uniform text size</div>
+    <div class="demo-box">
+      <div class="theme-pills">
+        <span class="theme-pill pos">Gut health / prebiotic<span class="theme-pill-freq">2,145</span></span>
+        <span class="theme-pill pos">Soda alternative<span class="theme-pill-freq">1,410</span></span>
+        <span class="theme-pill pos">Cherry Limeade flavor<span class="theme-pill-freq">980</span></span>
+        <span class="theme-pill mix">Pepsi Prebiotic entrant<span class="theme-pill-freq">540</span></span>
+        <span class="theme-pill neu">Walmart pricing<span class="theme-pill-freq">430</span></span>
+        <span class="theme-pill neg">Lawsuit / settlement<span class="theme-pill-freq">610</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-label">Variants</div>
+    <div class="demo-box">
+      <div class="theme-pills">
+        <span class="theme-pill pos">Positive<span class="theme-pill-freq">1,204</span></span>
+        <span class="theme-pill neu">Neutral<span class="theme-pill-freq">812</span></span>
+        <span class="theme-pill neg">Negative<span class="theme-pill-freq">318</span></span>
+        <span class="theme-pill mix">Mixed<span class="theme-pill-freq">154</span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-label">Rules</div>
+    <div class="demo-box" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+      <div>One text size for every pill — never scale the font by volume. Volume lives in the count.</div>
+      <div>pos <code>var(--primary)</code> · neu <code>var(--muted-foreground)</code> · neg <code>var(--warning)</code> · mix <code>var(--highlight)</code>.</div>
+      <div>Negative is <code>--warning</code>, never <code>--destructive</code> — that token is only for irreversible actions.</div>
+      <div>Tint via <code>color-mix</code>: 12% fill + 25% border, text in the full token.</div>
+      <div>Fully rounded pill. The count uses tabular-nums at 0.7 opacity.</div>
+    </div>
+  </div>
+
+  <div class="demo-code-bar">
+    <span class="demo-code-label">&lt;span class="theme-pill pos" /&gt;</span>
+    <button class="copy-btn" onclick="copyCode(this, '&lt;span class=&quot;theme-pill pos&quot;&gt;Gut health&lt;span class=&quot;theme-pill-freq&quot;&gt;2,145&lt;/span&gt;&lt;/span&gt;')">Copy</button>
+  </div>
+</div>
+
 </div><!-- /#wb-main -->
 </div><!-- /#tb-panel-components -->
 
@@ -6314,7 +6484,9 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <button class="sb-item" onclick="switchChartPage('chart-page-tooltip',this)">Tooltip</button>
     <button class="sb-item" onclick="switchChartPage('chart-page-palette',this)">Chart Palette</button>
     <button class="sb-item" onclick="switchChartPage('chart-page-hbar',this)">HBar Track</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-proportion',this)">Proportion Bar</button>
     <button class="sb-item" onclick="switchChartPage('chart-page-trend',this)">Trend Line</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-sparkline',this)">Sparkline</button>
     <button class="sb-item" onclick="switchChartPage('chart-page-donut',this)">Donut Chart</button>
     <button class="sb-item" onclick="switchChartPage('chart-page-gantt',this)">Gantt / Timeline</button>
     </div>
@@ -6451,12 +6623,12 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <defs>
               <linearGradient id="ag4a" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#32a9a9" stop-opacity="0.5"/><stop offset="95%" stop-color="#32a9a9" stop-opacity="0.1"/></linearGradient>
-              <linearGradient id="ag4b" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#2a6c6d" stop-opacity="0.5"/><stop offset="95%" stop-color="#2a6c6d" stop-opacity="0.1"/></linearGradient>
+              <linearGradient id="ag4b" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" style="stop-color:var(--primary)" stop-opacity="0.5"/><stop offset="95%" style="stop-color:var(--primary)" stop-opacity="0.1"/></linearGradient>
             </defs>
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polygon points="20,70 60,55 100,60 140,40 180,50 220,30 220,100 20,100" fill="url(#ag4a)"/>
             <polygon points="20,85 60,75 100,78 140,65 180,70 220,55 220,70 180,50 140,40 100,60 60,55 20,70" fill="url(#ag4b)"/>
-            <polyline points="20,85 60,75 100,78 140,65 180,70 220,55" fill="none" stroke="#2a6c6d" stroke-width="1.5"/>
+            <polyline points="20,85 60,75 100,78 140,65 180,70 220,55" fill="none" style="stroke:var(--primary)" stroke-width="1.5"/>
             <polyline points="20,70 60,55 100,60 140,40 180,50 220,30" fill="none" stroke="#32a9a9" stroke-width="1.5"/>
           </svg>
           </div>
@@ -6479,13 +6651,13 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <defs>
               <linearGradient id="ag5a" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#32a9a9" stop-opacity="0.6"/><stop offset="95%" stop-color="#32a9a9" stop-opacity="0.2"/></linearGradient>
-              <linearGradient id="ag5b" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#2a6c6d" stop-opacity="0.6"/><stop offset="95%" stop-color="#2a6c6d" stop-opacity="0.2"/></linearGradient>
+              <linearGradient id="ag5b" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" style="stop-color:var(--primary)" stop-opacity="0.6"/><stop offset="95%" style="stop-color:var(--primary)" stop-opacity="0.2"/></linearGradient>
             </defs>
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <line x1="20" y1="10" x2="230" y2="10" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="3,3"/>
             <polygon points="20,10 230,10 230,100 20,100" fill="url(#ag5a)"/>
             <polygon points="20,10 60,15 100,18 140,12 180,20 220,10 220,55 180,50 140,48 100,52 60,50 20,50" fill="url(#ag5b)"/>
-            <polyline points="20,50 60,50 100,52 140,48 180,50 220,55" fill="none" stroke="#2a6c6d" stroke-width="1.5"/>
+            <polyline points="20,50 60,50 100,52 140,48 180,50 220,55" fill="none" style="stroke:var(--primary)" stroke-width="1.5"/>
           </svg>
           </div>
           <div class="chart-card-footer">
@@ -6512,7 +6684,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <polygon points="20,75 60,55 100,65 140,30 180,50 220,20 220,95 20,95" fill="url(#ag6)"/>
             <rect x="30" y="105" width="8" height="6" rx="2" fill="#32a9a9"/>
             <text x="42" y="111" font-size="8" fill="var(--muted-foreground)">Desktop</text>
-            <rect x="100" y="105" width="8" height="6" rx="2" fill="#2a6c6d"/>
+            <rect x="100" y="105" width="8" height="6" rx="2" style="fill:var(--primary)"/>
             <text x="112" y="111" font-size="8" fill="var(--muted-foreground)">Mobile</text>
           </svg>
           </div>
@@ -6540,7 +6712,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <polygon points="20,75 60,55 100,65 140,30 180,50 220,20 220,95 20,95" fill="url(#ag7)"/>
             <circle cx="30" cy="107" r="5" fill="none" stroke="#32a9a9" stroke-width="1.5"/>
             <text x="38" y="111" font-size="8" fill="var(--muted-foreground)">Desktop</text>
-            <circle cx="105" cy="107" r="5" fill="none" stroke="#2a6c6d" stroke-width="1.5"/>
+            <circle cx="105" cy="107" r="5" fill="none" style="stroke:var(--primary)" stroke-width="1.5"/>
             <text x="113" y="111" font-size="8" fill="var(--muted-foreground)">Mobile</text>
           </svg>
           </div>
@@ -6616,17 +6788,17 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <defs>
               <linearGradient id="ag10a" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#32a9a9" stop-opacity="0.4"/><stop offset="95%" stop-color="#32a9a9" stop-opacity="0.05"/></linearGradient>
-              <linearGradient id="ag10b" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stop-color="#2a6c6d" stop-opacity="0.4"/><stop offset="95%" stop-color="#2a6c6d" stop-opacity="0.05"/></linearGradient>
+              <linearGradient id="ag10b" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" style="stop-color:var(--primary)" stop-opacity="0.4"/><stop offset="95%" style="stop-color:var(--primary)" stop-opacity="0.05"/></linearGradient>
             </defs>
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polygon points="20,75 60,55 100,65 140,30 180,50 220,20 220,100 20,100" fill="url(#ag10a)"/>
             <polygon points="20,85 60,68 100,74 140,52 180,62 220,42 220,100 20,100" fill="url(#ag10b)"/>
             <polyline points="20,75 60,55 100,65 140,30 180,50 220,20" fill="none" stroke="#32a9a9" stroke-width="2"/>
-            <polyline points="20,85 60,68 100,74 140,52 180,62 220,42" fill="none" stroke="#2a6c6d" stroke-width="2"/>
+            <polyline points="20,85 60,68 100,74 140,52 180,62 220,42" fill="none" style="stroke:var(--primary)" stroke-width="2"/>
             <!-- tooltip indicator -->
             <line x1="140" y1="15" x2="140" y2="100" stroke="var(--muted-foreground)" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/>
             <circle cx="140" cy="30" r="3" fill="#32a9a9"/>
-            <circle cx="140" cy="52" r="3" fill="#2a6c6d"/>
+            <circle cx="140" cy="52" r="3" style="fill:var(--primary)"/>
           </svg>
           </div>
           <div class="chart-card-footer">
@@ -6713,15 +6885,15 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <line x1="20" y1="10" x2="20" y2="100" stroke="var(--border)" stroke-width="1"/>
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <rect x="27" y="45" width="14" height="55" rx="1" fill="#32a9a9"/>
-            <rect x="43" y="60" width="14" height="40" rx="1" fill="#2a6c6d"/>
+            <rect x="43" y="60" width="14" height="40" rx="1" style="fill:var(--primary)"/>
             <rect x="64" y="20" width="14" height="80" rx="1" fill="#32a9a9"/>
-            <rect x="80" y="35" width="14" height="65" rx="1" fill="#2a6c6d"/>
+            <rect x="80" y="35" width="14" height="65" rx="1" style="fill:var(--primary)"/>
             <rect x="101" y="35" width="14" height="65" rx="1" fill="#32a9a9"/>
-            <rect x="117" y="50" width="14" height="50" rx="1" fill="#2a6c6d"/>
+            <rect x="117" y="50" width="14" height="50" rx="1" style="fill:var(--primary)"/>
             <rect x="138" y="68" width="14" height="32" rx="1" fill="#32a9a9"/>
-            <rect x="154" y="72" width="14" height="28" rx="1" fill="#2a6c6d"/>
+            <rect x="154" y="72" width="14" height="28" rx="1" style="fill:var(--primary)"/>
             <rect x="175" y="30" width="14" height="70" rx="1" fill="#32a9a9"/>
-            <rect x="191" y="45" width="14" height="55" rx="1" fill="#2a6c6d"/>
+            <rect x="191" y="45" width="14" height="55" rx="1" style="fill:var(--primary)"/>
           </svg>
           </div>
           <div class="chart-card-footer">
@@ -6776,17 +6948,17 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <rect x="28" y="45" width="22" height="55" rx="2" fill="#32a9a9"/>
-            <rect x="28" y="38" width="22" height="10" rx="2" fill="#2a6c6d"/>
+            <rect x="28" y="38" width="22" height="10" rx="2" style="fill:var(--primary)"/>
             <rect x="62" y="20" width="22" height="80" rx="2" fill="#32a9a9"/>
-            <rect x="62" y="13" width="22" height="10" rx="2" fill="#2a6c6d"/>
+            <rect x="62" y="13" width="22" height="10" rx="2" style="fill:var(--primary)"/>
             <rect x="96" y="35" width="22" height="65" rx="2" fill="#32a9a9"/>
-            <rect x="96" y="28" width="22" height="10" rx="2" fill="#2a6c6d"/>
+            <rect x="96" y="28" width="22" height="10" rx="2" style="fill:var(--primary)"/>
             <rect x="130" y="68" width="22" height="32" rx="2" fill="#32a9a9"/>
-            <rect x="130" y="61" width="22" height="10" rx="2" fill="#2a6c6d"/>
+            <rect x="130" y="61" width="22" height="10" rx="2" style="fill:var(--primary)"/>
             <rect x="164" y="30" width="22" height="70" rx="2" fill="#32a9a9"/>
-            <rect x="164" y="23" width="22" height="10" rx="2" fill="#2a6c6d"/>
+            <rect x="164" y="23" width="22" height="10" rx="2" style="fill:var(--primary)"/>
             <rect x="198" y="28" width="22" height="72" rx="2" fill="#32a9a9"/>
-            <rect x="198" y="21" width="22" height="10" rx="2" fill="#2a6c6d"/>
+            <rect x="198" y="21" width="22" height="10" rx="2" style="fill:var(--primary)"/>
           </svg>
           </div>
           <div class="chart-card-footer">
@@ -6808,11 +6980,11 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <rect x="28" y="45" width="22" height="55" rx="2" fill="#32a9a9"/>
-            <rect x="62" y="20" width="22" height="80" rx="2" fill="#2a6c6d"/>
+            <rect x="62" y="20" width="22" height="80" rx="2" style="fill:var(--primary)"/>
             <rect x="96" y="35" width="22" height="65" rx="2" fill="#32a9a9"/>
-            <rect x="130" y="68" width="22" height="32" rx="2" fill="#4dbcbc"/>
+            <rect x="130" y="68" width="22" height="32" rx="2" style="fill:var(--primary)"/>
             <rect x="164" y="30" width="22" height="70" rx="2" fill="#32a9a9"/>
-            <rect x="198" y="28" width="22" height="72" rx="2" fill="#2a6c6d"/>
+            <rect x="198" y="28" width="22" height="72" rx="2" style="fill:var(--primary)"/>
           </svg>
           </div>
           <div class="chart-card-footer">
@@ -6834,17 +7006,17 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <rect x="28" y="65" width="22" height="35" rx="1" fill="#32a9a9"/>
-            <rect x="28" y="45" width="22" height="20" rx="1" fill="#2a6c6d"/>
+            <rect x="28" y="45" width="22" height="20" rx="1" style="fill:var(--primary)"/>
             <rect x="62" y="40" width="22" height="60" rx="1" fill="#32a9a9"/>
-            <rect x="62" y="20" width="22" height="20" rx="1" fill="#2a6c6d"/>
+            <rect x="62" y="20" width="22" height="20" rx="1" style="fill:var(--primary)"/>
             <rect x="96" y="50" width="22" height="50" rx="1" fill="#32a9a9"/>
-            <rect x="96" y="30" width="22" height="20" rx="1" fill="#2a6c6d"/>
+            <rect x="96" y="30" width="22" height="20" rx="1" style="fill:var(--primary)"/>
             <rect x="130" y="78" width="22" height="22" rx="1" fill="#32a9a9"/>
-            <rect x="130" y="60" width="22" height="18" rx="1" fill="#2a6c6d"/>
+            <rect x="130" y="60" width="22" height="18" rx="1" style="fill:var(--primary)"/>
             <rect x="164" y="45" width="22" height="55" rx="1" fill="#32a9a9"/>
-            <rect x="164" y="25" width="22" height="20" rx="1" fill="#2a6c6d"/>
+            <rect x="164" y="25" width="22" height="20" rx="1" style="fill:var(--primary)"/>
             <rect x="198" y="42" width="22" height="58" rx="1" fill="#32a9a9"/>
-            <rect x="198" y="22" width="22" height="20" rx="1" fill="#2a6c6d"/>
+            <rect x="198" y="22" width="22" height="20" rx="1" style="fill:var(--primary)"/>
           </svg>
           </div>
           <div class="chart-card-footer">
@@ -6892,11 +7064,11 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="60" x2="230" y2="60" stroke="var(--border)" stroke-width="1"/>
             <rect x="28" y="30" width="22" height="30" rx="2" fill="#32a9a9"/>
-            <rect x="62" y="60" width="22" height="40" rx="2" fill="#2a6c6d" opacity="0.7"/>
+            <rect x="62" y="60" width="22" height="40" rx="2" style="fill:var(--primary)" opacity="0.7"/>
             <rect x="96" y="25" width="22" height="35" rx="2" fill="#32a9a9"/>
-            <rect x="130" y="60" width="22" height="20" rx="2" fill="#2a6c6d" opacity="0.7"/>
+            <rect x="130" y="60" width="22" height="20" rx="2" style="fill:var(--primary)" opacity="0.7"/>
             <rect x="164" y="35" width="22" height="25" rx="2" fill="#32a9a9"/>
-            <rect x="198" y="60" width="22" height="35" rx="2" fill="#2a6c6d" opacity="0.7"/>
+            <rect x="198" y="60" width="22" height="35" rx="2" style="fill:var(--primary)" opacity="0.7"/>
           </svg>
           </div>
           <div class="chart-card-footer">
@@ -6918,15 +7090,15 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <rect x="28" y="45" width="14" height="55" rx="1" fill="#32a9a9"/>
-            <rect x="44" y="60" width="14" height="40" rx="1" fill="#2a6c6d"/>
+            <rect x="44" y="60" width="14" height="40" rx="1" style="fill:var(--primary)"/>
             <rect x="62" y="20" width="14" height="80" rx="1" fill="#32a9a9"/>
-            <rect x="78" y="35" width="14" height="65" rx="1" fill="#2a6c6d"/>
+            <rect x="78" y="35" width="14" height="65" rx="1" style="fill:var(--primary)"/>
             <rect x="96" y="35" width="14" height="65" rx="1" fill="#32a9a9"/>
-            <rect x="112" y="50" width="14" height="50" rx="1" fill="#2a6c6d"/>
+            <rect x="112" y="50" width="14" height="50" rx="1" style="fill:var(--primary)"/>
             <rect x="130" y="68" width="14" height="32" rx="1" fill="#32a9a9"/>
-            <rect x="146" y="72" width="14" height="28" rx="1" fill="#2a6c6d"/>
+            <rect x="146" y="72" width="14" height="28" rx="1" style="fill:var(--primary)"/>
             <rect x="164" y="30" width="14" height="70" rx="1" fill="#32a9a9"/>
-            <rect x="180" y="45" width="14" height="55" rx="1" fill="#2a6c6d"/>
+            <rect x="180" y="45" width="14" height="55" rx="1" style="fill:var(--primary)"/>
             <!-- tooltip -->
             <rect x="55" y="5" width="50" height="22" rx="3" fill="var(--card)" stroke="var(--border)" stroke-width="0.5"/>
             <text x="80" y="20" font-size="7" fill="var(--foreground)" text-anchor="middle">305 / 265</text>
@@ -7028,7 +7200,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
-            <polyline points="20,85 60,68 100,74 140,52 180,62 220,42" fill="none" stroke="#2a6c6d" stroke-width="2"/>
+            <polyline points="20,85 60,68 100,74 140,52 180,62 220,42" fill="none" style="stroke:var(--primary)" stroke-width="2"/>
           </svg>
           </div>
           <div class="chart-card-footer">
@@ -7155,10 +7327,10 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
-            <circle cx="20" cy="75" r="4" fill="#2a6c6d"/>
+            <circle cx="20" cy="75" r="4" style="fill:var(--primary)"/>
             <circle cx="60" cy="55" r="4" fill="#32a9a9"/>
-            <circle cx="100" cy="65" r="4" fill="#4dbcbc"/>
-            <circle cx="140" cy="28" r="4" fill="#2a6c6d"/>
+            <circle cx="100" cy="65" r="4" style="fill:var(--primary)"/>
+            <circle cx="140" cy="28" r="4" style="fill:var(--primary)"/>
             <circle cx="180" cy="48" r="4" fill="#32a9a9"/>
             <circle cx="220" cy="18" r="4" fill="#6dcece"/>
           </svg>
@@ -7182,10 +7354,10 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
-            <polyline points="20,85 60,68 100,74 140,52 180,62 220,42" fill="none" stroke="#2a6c6d" stroke-width="2"/>
+            <polyline points="20,85 60,68 100,74 140,52 180,62 220,42" fill="none" style="stroke:var(--primary)" stroke-width="2"/>
             <line x1="100" y1="10" x2="100" y2="100" stroke="var(--muted-foreground)" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/>
             <circle cx="100" cy="65" r="3" fill="#32a9a9"/>
-            <circle cx="100" cy="74" r="3" fill="#2a6c6d"/>
+            <circle cx="100" cy="74" r="3" style="fill:var(--primary)"/>
             <rect x="108" y="55" width="44" height="22" rx="3" fill="var(--card)" stroke="var(--border)" stroke-width="0.5"/>
             <text x="130" y="66" font-size="7" fill="var(--foreground)" text-anchor="middle">237 / 190</text>
           </svg>
@@ -7220,8 +7392,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,60)">
               <path d="M0,-48 A48,48 0 0,1 41.6,23 L0,0 Z" fill="#32a9a9"/>
-              <path d="M41.6,23 A48,48 0 0,1 -41.6,23 L0,0 Z" fill="#2a6c6d"/>
-              <path d="M-41.6,23 A48,48 0 0,1 0,-48 L0,0 Z" fill="#4dbcbc"/>
+              <path d="M41.6,23 A48,48 0 0,1 -41.6,23 L0,0 Z" style="fill:var(--primary)"/>
+              <path d="M-41.6,23 A48,48 0 0,1 0,-48 L0,0 Z" style="fill:var(--primary)"/>
             </g>
           </svg>
           </div>
@@ -7244,8 +7416,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,60)">
               <path d="M0,-44 A44,44 0 0,1 38.1,22 L0,0 Z" fill="#32a9a9"/>
-              <path d="M38.1,22 A44,44 0 0,1 -38.1,22 L0,0 Z" fill="#2a6c6d"/>
-              <path d="M-38.1,22 A44,44 0 0,1 0,-44 L0,0 Z" fill="#4dbcbc"/>
+              <path d="M38.1,22 A44,44 0 0,1 -38.1,22 L0,0 Z" style="fill:var(--primary)"/>
+              <path d="M-38.1,22 A44,44 0 0,1 0,-44 L0,0 Z" style="fill:var(--primary)"/>
               <text x="20" y="-22" font-size="8" fill="var(--foreground)" text-anchor="middle">40%</text>
               <text x="22" y="30" font-size="8" fill="var(--foreground)" text-anchor="middle">35%</text>
               <text x="-22" y="-8" font-size="8" fill="var(--foreground)" text-anchor="middle">25%</text>
@@ -7271,8 +7443,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,60)">
               <path d="M0,-44 A44,44 0 0,1 38.1,22 L0,0 Z" fill="#32a9a9"/>
-              <path d="M38.1,22 A44,44 0 0,1 -38.1,22 L0,0 Z" fill="#2a6c6d"/>
-              <path d="M-38.1,22 A44,44 0 0,1 0,-44 L0,0 Z" fill="#4dbcbc"/>
+              <path d="M38.1,22 A44,44 0 0,1 -38.1,22 L0,0 Z" style="fill:var(--primary)"/>
+              <path d="M-38.1,22 A44,44 0 0,1 0,-44 L0,0 Z" style="fill:var(--primary)"/>
               <line x1="22" y1="-22" x2="50" y2="-40" stroke="var(--border)" stroke-width="0.8"/>
               <text x="52" y="-37" font-size="7" fill="var(--muted-foreground)">Chrome</text>
               <line x1="24" y1="28" x2="52" y2="44" stroke="var(--border)" stroke-width="0.8"/>
@@ -7299,16 +7471,16 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(85,60)">
               <path d="M0,-44 A44,44 0 0,1 38.1,22 L0,0 Z" fill="#32a9a9"/>
-              <path d="M38.1,22 A44,44 0 0,1 -38.1,22 L0,0 Z" fill="#2a6c6d"/>
-              <path d="M-38.1,22 A44,44 0 0,1 0,-44 L0,0 Z" fill="#4dbcbc"/>
+              <path d="M38.1,22 A44,44 0 0,1 -38.1,22 L0,0 Z" style="fill:var(--primary)"/>
+              <path d="M-38.1,22 A44,44 0 0,1 0,-44 L0,0 Z" style="fill:var(--primary)"/>
             </g>
             <rect x="145" y="18" width="8" height="8" rx="2" fill="#32a9a9"/>
             <text x="157" y="25" font-size="8" fill="var(--foreground)">Chrome</text>
             <text x="157" y="34" font-size="7" fill="var(--muted-foreground)">40%</text>
-            <rect x="145" y="45" width="8" height="8" rx="2" fill="#2a6c6d"/>
+            <rect x="145" y="45" width="8" height="8" rx="2" style="fill:var(--primary)"/>
             <text x="157" y="52" font-size="8" fill="var(--foreground)">Safari</text>
             <text x="157" y="61" font-size="7" fill="var(--muted-foreground)">35%</text>
-            <rect x="145" y="72" width="8" height="8" rx="2" fill="#4dbcbc"/>
+            <rect x="145" y="72" width="8" height="8" rx="2" style="fill:var(--primary)"/>
             <text x="157" y="79" font-size="8" fill="var(--foreground)">Firefox</text>
             <text x="157" y="88" font-size="7" fill="var(--muted-foreground)">25%</text>
           </svg>
@@ -7332,14 +7504,14 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,55)">
               <path d="M0,-44 A44,44 0 0,1 38.1,22 L0,0 Z" fill="#32a9a9"/>
-              <path d="M38.1,22 A44,44 0 0,1 -38.1,22 L0,0 Z" fill="#2a6c6d"/>
-              <path d="M-38.1,22 A44,44 0 0,1 0,-44 L0,0 Z" fill="#4dbcbc"/>
+              <path d="M38.1,22 A44,44 0 0,1 -38.1,22 L0,0 Z" style="fill:var(--primary)"/>
+              <path d="M-38.1,22 A44,44 0 0,1 0,-44 L0,0 Z" style="fill:var(--primary)"/>
             </g>
             <rect x="62" y="107" width="8" height="6" rx="1" fill="#32a9a9"/>
             <text x="74" y="113" font-size="7" fill="var(--muted-foreground)">Chrome</text>
-            <rect x="122" y="107" width="8" height="6" rx="1" fill="#2a6c6d"/>
+            <rect x="122" y="107" width="8" height="6" rx="1" style="fill:var(--primary)"/>
             <text x="134" y="113" font-size="7" fill="var(--muted-foreground)">Safari</text>
-            <rect x="178" y="107" width="8" height="6" rx="1" fill="#4dbcbc"/>
+            <rect x="178" y="107" width="8" height="6" rx="1" style="fill:var(--primary)"/>
             <text x="190" y="113" font-size="7" fill="var(--muted-foreground)">FF</text>
           </svg>
           </div>
@@ -7362,8 +7534,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,60)">
               <path d="M0,-48 A48,48 0 0,1 41.6,23 L0,0 Z" fill="#32a9a9"/>
-              <path d="M41.6,23 A48,48 0 0,1 -41.6,23 L0,0 Z" fill="#2a6c6d"/>
-              <path d="M-41.6,23 A48,48 0 0,1 0,-48 L0,0 Z" fill="#4dbcbc"/>
+              <path d="M41.6,23 A48,48 0 0,1 -41.6,23 L0,0 Z" style="fill:var(--primary)"/>
+              <path d="M-41.6,23 A48,48 0 0,1 0,-48 L0,0 Z" style="fill:var(--primary)"/>
             </g>
           </svg>
           </div>
@@ -7386,8 +7558,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,60)">
               <path d="M0,-48 A48,48 0 0,1 41.6,23 L24,13 A28,28 0 0,0 0,-28 Z" fill="#32a9a9"/>
-              <path d="M41.6,23 A48,48 0 0,1 -41.6,23 L-24,13 A28,28 0 0,0 24,13 Z" fill="#2a6c6d"/>
-              <path d="M-41.6,23 A48,48 0 0,1 0,-48 L0,-28 A28,28 0 0,0 -24,13 Z" fill="#4dbcbc"/>
+              <path d="M41.6,23 A48,48 0 0,1 -41.6,23 L-24,13 A28,28 0 0,0 24,13 Z" style="fill:var(--primary)"/>
+              <path d="M-41.6,23 A48,48 0 0,1 0,-48 L0,-28 A28,28 0 0,0 -24,13 Z" style="fill:var(--primary)"/>
             </g>
           </svg>
           </div>
@@ -7410,8 +7582,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,60)">
               <path d="M0,-52 A52,52 0 0,1 45,26 L26,15 A30,30 0 0,0 0,-30 Z" fill="#32a9a9"/>
-              <path d="M41.6,23 A48,48 0 0,1 -41.6,23 L-24,13 A28,28 0 0,0 24,13 Z" fill="#2a6c6d" opacity="0.7"/>
-              <path d="M-41.6,23 A48,48 0 0,1 0,-48 L0,-28 A28,28 0 0,0 -24,13 Z" fill="#4dbcbc" opacity="0.7"/>
+              <path d="M41.6,23 A48,48 0 0,1 -41.6,23 L-24,13 A28,28 0 0,0 24,13 Z" style="fill:var(--primary)" opacity="0.7"/>
+              <path d="M-41.6,23 A48,48 0 0,1 0,-48 L0,-28 A28,28 0 0,0 -24,13 Z" style="fill:var(--primary)" opacity="0.7"/>
             </g>
           </svg>
           </div>
@@ -7434,8 +7606,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,60)">
               <path d="M0,-48 A48,48 0 0,1 41.6,23 L24,13 A28,28 0 0,0 0,-28 Z" fill="#32a9a9"/>
-              <path d="M41.6,23 A48,48 0 0,1 -41.6,23 L-24,13 A28,28 0 0,0 24,13 Z" fill="#2a6c6d"/>
-              <path d="M-41.6,23 A48,48 0 0,1 0,-48 L0,-28 A28,28 0 0,0 -24,13 Z" fill="#4dbcbc"/>
+              <path d="M41.6,23 A48,48 0 0,1 -41.6,23 L-24,13 A28,28 0 0,0 24,13 Z" style="fill:var(--primary)"/>
+              <path d="M-41.6,23 A48,48 0 0,1 0,-48 L0,-28 A28,28 0 0,0 -24,13 Z" style="fill:var(--primary)"/>
               <text x="0" y="-4" font-size="11" font-weight="600" fill="var(--foreground)" text-anchor="middle">1,234</text>
               <text x="0" y="9" font-size="8" fill="var(--muted-foreground)" text-anchor="middle">Visitors</text>
             </g>
@@ -7460,12 +7632,12 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(90,60)">
               <path d="M0,-42 A42,42 0 0,1 36.4,21 L21,12 A24,24 0 0,0 0,-24 Z" fill="#32a9a9"/>
-              <path d="M36.4,21 A42,42 0 0,1 -36.4,21 L-21,12 A24,24 0 0,0 21,12 Z" fill="#2a6c6d"/>
-              <path d="M-36.4,21 A42,42 0 0,1 0,-42 L0,-24 A24,24 0 0,0 -21,12 Z" fill="#4dbcbc"/>
+              <path d="M36.4,21 A42,42 0 0,1 -36.4,21 L-21,12 A24,24 0 0,0 21,12 Z" style="fill:var(--primary)"/>
+              <path d="M-36.4,21 A42,42 0 0,1 0,-42 L0,-24 A24,24 0 0,0 -21,12 Z" style="fill:var(--primary)"/>
             </g>
             <g transform="translate(160,60)">
               <path d="M0,-38 A38,38 0 0,1 32.9,19 L18,11 A20,20 0 0,0 0,-20 Z" fill="#32a9a9" opacity="0.7"/>
-              <path d="M32.9,19 A38,38 0 0,1 -32.9,19 L-18,11 A20,20 0 0,0 18,11 Z" fill="#2a6c6d" opacity="0.7"/>
+              <path d="M32.9,19 A38,38 0 0,1 -32.9,19 L-18,11 A20,20 0 0,0 18,11 Z" style="fill:var(--primary)" opacity="0.7"/>
               <path d="M-32.9,19 A38,38 0 0,1 0,-38 L0,-20 A20,20 0 0,0 -18,11 Z" fill="#6dcece" opacity="0.7"/>
             </g>
           </svg>
@@ -7489,8 +7661,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,60)">
               <path d="M0,-52 A52,52 0 0,1 45,26 L26,15 A30,30 0 0,0 0,-30 Z" fill="#32a9a9"/>
-              <path d="M41.6,23 A48,48 0 0,1 -41.6,23 L-24,13 A28,28 0 0,0 24,13 Z" fill="#2a6c6d"/>
-              <path d="M-41.6,23 A48,48 0 0,1 0,-48 L0,-28 A28,28 0 0,0 -24,13 Z" fill="#4dbcbc"/>
+              <path d="M41.6,23 A48,48 0 0,1 -41.6,23 L-24,13 A28,28 0 0,0 24,13 Z" style="fill:var(--primary)"/>
+              <path d="M-41.6,23 A48,48 0 0,1 0,-48 L0,-28 A28,28 0 0,0 -24,13 Z" style="fill:var(--primary)"/>
               <text x="0" y="-4" font-size="11" font-weight="600" fill="var(--foreground)" text-anchor="middle">40%</text>
               <text x="0" y="9" font-size="7" fill="var(--muted-foreground)" text-anchor="middle">Chrome</text>
             </g>
@@ -7582,7 +7754,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <polygon points="0,-50 47,-15 29,40 -29,40 -47,-15" fill="none" stroke="var(--border)" stroke-width="1"/>
               <polygon points="0,-35 33,-11 20,28 -20,28 -33,-11" fill="none" stroke="var(--border)" stroke-width="0.5"/>
               <polygon points="0,-42 38,-8 18,35 -25,32 -40,-10" fill="#32a9a9" fill-opacity="0.2" stroke="#32a9a9" stroke-width="1.5"/>
-              <polygon points="0,-30 30,-12 22,28 -22,25 -35,-5" fill="#2a6c6d" fill-opacity="0.2" stroke="#2a6c6d" stroke-width="1.5"/>
+              <polygon points="0,-30 30,-12 22,28 -22,25 -35,-5" style="fill:var(--primary)" fill-opacity="0.2" style="stroke:var(--primary)" stroke-width="1.5"/>
             </g>
           </svg>
           </div>
@@ -7857,11 +8029,11 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <g transform="translate(120,55)">
               <polygon points="0,-50 47,-15 29,40 -29,40 -47,-15" fill="none" stroke="var(--border)" stroke-width="1"/>
               <polygon points="0,-42 38,-8 18,35 -25,32 -40,-10" fill="#32a9a9" fill-opacity="0.2" stroke="#32a9a9" stroke-width="1.5"/>
-              <polygon points="0,-30 28,-12 16,28 -22,25 -35,-5" fill="#2a6c6d" fill-opacity="0.2" stroke="#2a6c6d" stroke-width="1.5"/>
+              <polygon points="0,-30 28,-12 16,28 -22,25 -35,-5" style="fill:var(--primary)" fill-opacity="0.2" style="stroke:var(--primary)" stroke-width="1.5"/>
             </g>
             <rect x="62" y="108" width="8" height="6" rx="1" fill="#32a9a9"/>
             <text x="74" y="114" font-size="7" fill="var(--muted-foreground)">Desktop</text>
-            <rect x="130" y="108" width="8" height="6" rx="1" fill="#2a6c6d"/>
+            <rect x="130" y="108" width="8" height="6" rx="1" style="fill:var(--primary)"/>
             <text x="142" y="114" font-size="7" fill="var(--muted-foreground)">Mobile</text>
           </svg>
           </div>
@@ -7921,7 +8093,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <circle cx="0" cy="0" r="38" fill="none" stroke="var(--border)" stroke-width="0.5"/>
               <circle cx="0" cy="0" r="26" fill="none" stroke="var(--border)" stroke-width="0.5"/>
               <path d="M-50,0 A50,50 0 0,1 43,-25" fill="none" stroke="#32a9a9" stroke-width="8" stroke-linecap="round"/>
-              <path d="M-38,0 A38,38 0 0,1 19,-33" fill="none" stroke="#2a6c6d" stroke-width="8" stroke-linecap="round"/>
+              <path d="M-38,0 A38,38 0 0,1 19,-33" fill="none" style="stroke:var(--primary)" stroke-width="8" stroke-linecap="round"/>
             </g>
           </svg>
           </div>
@@ -7969,8 +8141,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <g transform="translate(120,68)">
               <path d="M0,-50 A50,50 0 0,1 50,0 L35,0 A35,35 0 0,0 0,-35 Z" fill="#32a9a9" fill-opacity="0.8"/>
-              <path d="M50,0 A50,50 0 0,1 0,50 L0,35 A35,35 0 0,0 35,0 Z" fill="#2a6c6d" fill-opacity="0.8"/>
-              <path d="M0,50 A50,50 0 0,1 -50,0 L-35,0 A35,35 0 0,0 0,35 Z" fill="#4dbcbc" fill-opacity="0.8"/>
+              <path d="M50,0 A50,50 0 0,1 0,50 L0,35 A35,35 0 0,0 35,0 Z" style="fill:var(--primary)" fill-opacity="0.8"/>
+              <path d="M0,50 A50,50 0 0,1 -50,0 L-35,0 A35,35 0 0,0 0,35 Z" style="fill:var(--primary)" fill-opacity="0.8"/>
               <path d="M-50,0 A50,50 0 0,1 0,-50 L0,-35 A35,35 0 0,0 -35,0 Z" fill="#6dcece" fill-opacity="0.8"/>
             </g>
           </svg>
@@ -7996,9 +8168,9 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <circle cx="0" cy="0" r="50" fill="none" stroke="var(--border)" stroke-width="8"/>
               <path d="M0,-50 A50,50 0 1,1 -48,10" fill="none" stroke="#32a9a9" stroke-width="8" stroke-linecap="round"/>
               <circle cx="0" cy="0" r="38" fill="none" stroke="var(--border)" stroke-width="8"/>
-              <path d="M0,-38 A38,38 0 0,1 38,0" fill="none" stroke="#2a6c6d" stroke-width="8" stroke-linecap="round"/>
+              <path d="M0,-38 A38,38 0 0,1 38,0" fill="none" style="stroke:var(--primary)" stroke-width="8" stroke-linecap="round"/>
               <circle cx="0" cy="0" r="26" fill="none" stroke="var(--border)" stroke-width="8"/>
-              <path d="M0,-26 A26,26 0 0,1 13,22" fill="none" stroke="#4dbcbc" stroke-width="8" stroke-linecap="round"/>
+              <path d="M0,-26 A26,26 0 0,1 13,22" fill="none" style="stroke:var(--primary)" stroke-width="8" stroke-linecap="round"/>
             </g>
           </svg>
           </div>
@@ -8083,13 +8255,13 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
-            <polyline points="20,85 60,68 100,74 140,52 180,62 220,42" fill="none" stroke="#2a6c6d" stroke-width="2"/>
+            <polyline points="20,85 60,68 100,74 140,52 180,62 220,42" fill="none" style="stroke:var(--primary)" stroke-width="2"/>
             <line x1="140" y1="15" x2="140" y2="100" stroke="var(--muted-foreground)" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
             <rect x="148" y="15" width="66" height="42" rx="3" fill="var(--card)" stroke="var(--border)" stroke-width="0.8"/>
             <text x="181" y="26" font-size="7" font-weight="600" fill="var(--foreground)" text-anchor="middle">April</text>
             <line x1="154" y1="33" x2="154" y2="47" stroke="#32a9a9" stroke-width="2"/>
             <text x="159" y="38" font-size="7" fill="var(--muted-foreground)">Desktop: 73</text>
-            <line x1="154" y1="40" x2="154" y2="54" stroke="#2a6c6d" stroke-width="2"/>
+            <line x1="154" y1="40" x2="154" y2="54" style="stroke:var(--primary)" stroke-width="2"/>
             <text x="159" y="49" font-size="7" fill="var(--muted-foreground)">Mobile: 65</text>
           </svg>
           </div>
@@ -8244,14 +8416,14 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <svg viewBox="0 0 240 120" width="240" height="120">
             <line x1="20" y1="100" x2="230" y2="100" stroke="var(--border)" stroke-width="1"/>
             <polyline points="20,75 60,55 100,65 140,28 180,48 220,18" fill="none" stroke="#32a9a9" stroke-width="2"/>
-            <polyline points="20,85 60,68 100,74 140,52 180,62 220,42" fill="none" stroke="#2a6c6d" stroke-width="2"/>
+            <polyline points="20,85 60,68 100,74 140,52 180,62 220,42" fill="none" style="stroke:var(--primary)" stroke-width="2"/>
             <line x1="60" y1="15" x2="60" y2="100" stroke="var(--muted-foreground)" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
             <rect x="68" y="28" width="68" height="42" rx="3" fill="var(--card)" stroke="var(--border)" stroke-width="0.8"/>
             <text x="102" y="38" font-size="7" font-weight="600" fill="var(--foreground)" text-anchor="middle">February</text>
             <rect x="74" y="43" width="6" height="6" rx="1" fill="#32a9a9"/>
             <text x="83" y="49" font-size="7" fill="var(--foreground)">305</text>
             <text x="110" y="49" font-size="7" fill="var(--muted-foreground)" text-anchor="end">+20%</text>
-            <rect x="74" y="55" width="6" height="6" rx="1" fill="#2a6c6d"/>
+            <rect x="74" y="55" width="6" height="6" rx="1" style="fill:var(--primary)"/>
             <text x="83" y="61" font-size="7" fill="var(--foreground)">265</text>
             <text x="110" y="61" font-size="7" fill="var(--muted-foreground)" text-anchor="end">+15%</text>
           </svg>
@@ -8282,7 +8454,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <rect x="92" y="32" width="6" height="6" rx="1" fill="#32a9a9"/>
             <text x="101" y="38" font-size="7" fill="var(--foreground)">Desktop</text>
             <text x="158" y="38" font-size="7" font-weight="600" fill="var(--foreground)" text-anchor="end">209</text>
-            <rect x="92" y="45" width="6" height="6" rx="1" fill="#2a6c6d"/>
+            <rect x="92" y="45" width="6" height="6" rx="1" style="fill:var(--primary)"/>
             <text x="101" y="51" font-size="7" fill="var(--foreground)">Mobile</text>
             <text x="158" y="51" font-size="7" font-weight="600" fill="var(--foreground)" text-anchor="end">182</text>
             <line x1="90" y1="56" x2="162" y2="56" stroke="var(--border)" stroke-width="0.5"/>
@@ -8527,6 +8699,118 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   </div>
 </div><!-- /#chart-page-hbar -->
 
+<!-- Proportion Bar -->
+<div id="chart-page-proportion" class="chart-page">
+  <div class="chart-page-title">Proportion Bar</div>
+  <div class="chart-page-desc">Per-row 100% stacked bar showing tone composition. Color encodes meaning: positive <code>var(--primary)</code>, neutral <code>var(--muted-foreground)</code>, negative <code>var(--warning)</code>, mixed <code>var(--highlight)</code>. Negative is <code>--warning</code>, never <code>--destructive</code> (reserved for irreversible actions).</div>
+
+  <style>
+    .senti-row { display: flex; align-items: center; gap: 14px; padding: 7px 0; }
+    .senti-row.stacked { flex-direction: column; align-items: stretch; gap: 6px; padding: 8px 0; }
+    .senti-row.stacked .senti-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+    .senti-row.stacked .senti-label { width: auto; color: var(--foreground); }
+    .senti-row.stacked .senti-val { width: auto; }
+    .senti-row.stacked .senti-bar { flex: none; width: 100%; height: 10px; }
+    .senti-label { width: 72px; flex: none; font-size: var(--fs-sm); font-weight: 400; letter-spacing: -0.28px; color: var(--muted-foreground); }
+    .senti-bar { flex: 1; height: 10px; border-radius: 9999px; overflow: hidden; display: flex; background: var(--secondary); }
+    .senti-seg { height: 100%; }
+    .senti-seg.pos { background: var(--primary); }
+    .senti-seg.neu { background: var(--muted-foreground); }
+    .senti-seg.neg { background: var(--warning); }
+    .senti-seg.mix { background: var(--highlight); }
+    .senti-val { width: 40px; flex: none; text-align: right; font-size: var(--fs-sm); font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.28px; color: var(--muted-foreground); }
+    .senti-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+    .senti-legend-item { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); letter-spacing: -0.24px; color: color-mix(in srgb,var(--foreground) 70%,transparent); }
+    .senti-swatch { width: 14px; height: 8px; border-radius: 4px; flex: none; }
+    .senti-swatch.pos { background: var(--primary); }
+    .senti-swatch.neu { background: var(--muted-foreground); }
+    .senti-swatch.neg { background: var(--warning); }
+    .senti-swatch.mix { background: var(--highlight); }
+  </style>
+
+  <div class="comp-group">
+    <div class="comp-group-label">Inline — label, bar, value on one line</div>
+    <div class="ds-dashboard-card" style="max-width:460px;">
+      <div class="ds-dashboard-card-header">
+        <div class="ds-dashboard-card-title">Poppi · Sentiment by platform</div>
+        <div class="ds-dashboard-card-subtitle">Share of conversation by tone, last 30 days</div>
+      </div>
+      <div id="senti-rows"></div>
+      <div class="senti-legend">
+        <span class="senti-legend-item"><span class="senti-swatch pos"></span>Positive</span>
+        <span class="senti-legend-item"><span class="senti-swatch neu"></span>Neutral</span>
+        <span class="senti-legend-item"><span class="senti-swatch neg"></span>Negative</span>
+        <span class="senti-legend-item"><span class="senti-swatch mix"></span>Mixed</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="comp-group">
+    <div class="comp-group-label">Two-line — label above, full-width bar</div>
+    <div class="ds-dashboard-card" style="max-width:460px;">
+      <div class="ds-dashboard-card-header">
+        <div class="ds-dashboard-card-title">Poppi · Sentiment by platform</div>
+        <div class="ds-dashboard-card-subtitle">Share of conversation by tone, last 30 days</div>
+      </div>
+      <div id="senti-rows-stacked"></div>
+      <div class="senti-legend">
+        <span class="senti-legend-item"><span class="senti-swatch pos"></span>Positive</span>
+        <span class="senti-legend-item"><span class="senti-swatch neu"></span>Neutral</span>
+        <span class="senti-legend-item"><span class="senti-swatch neg"></span>Negative</span>
+        <span class="senti-legend-item"><span class="senti-swatch mix"></span>Mixed</span>
+      </div>
+    </div>
+    <script>
+    (function(){
+      var rows = [
+        { label:'TikTok',    pos:72, neu:21, neg:5,  mix:2 },
+        { label:'Instagram', pos:64, neu:24, neg:8,  mix:4 },
+        { label:'Reddit',    pos:51, neu:28, neg:16, mix:5 },
+        { label:'X',         pos:47, neu:31, neg:18, mix:4 },
+      ];
+      function segs(r){
+        return '<span class="senti-bar">'
+          +   '<span class="senti-seg pos" style="width:'+r.pos+'%"></span>'
+          +   '<span class="senti-seg neu" style="width:'+r.neu+'%"></span>'
+          +   '<span class="senti-seg neg" style="width:'+r.neg+'%"></span>'
+          +   '<span class="senti-seg mix" style="width:'+r.mix+'%"></span>'
+          + '</span>';
+      }
+      document.getElementById('senti-rows').innerHTML = rows.map(function(r){
+        return '<div class="senti-row">'
+          + '<span class="senti-label">'+r.label+'</span>'
+          + segs(r)
+          + '<span class="senti-val">'+r.pos+'%</span>'
+          + '</div>';
+      }).join('');
+      document.getElementById('senti-rows-stacked').innerHTML = rows.map(function(r){
+        return '<div class="senti-row stacked">'
+          + '<div class="senti-top"><span class="senti-label">'+r.label+'</span><span class="senti-val">'+r.pos+'%</span></div>'
+          + segs(r)
+          + '</div>';
+      }).join('');
+    })();
+    </script>
+  </div>
+
+  <div class="comp-group">
+    <div class="comp-group-label">Rules</div>
+    <div style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+      <div>Segments are a 100% composition — they always sum to the full bar.</div>
+      <div>pos <code>var(--primary)</code> · neu <code>var(--muted-foreground)</code> · neg <code>var(--warning)</code> · mix <code>var(--highlight)</code>.</div>
+      <div>Negative is <code>--warning</code>, never <code>--destructive</code> — that token is only for irreversible actions.</div>
+      <div>Track <code>var(--secondary)</code>, fully rounded, segments clipped by <code>overflow:hidden</code>.</div>
+      <div>Always show the legend — sentiment colors need decoding.</div>
+      <div>Trailing value is the positive share, tabular-nums, muted.</div>
+    </div>
+  </div>
+
+  <div class="demo-code-bar">
+    <span class="demo-code-label">Stacked bar</span>
+    <button class="copy-btn" onclick="copyCode(this, '// See Brand API dashboard doctrine — Proportion Bar recipe\n// docs/brand-api-dashboard-doctrine.md')">Copy</button>
+  </div>
+</div><!-- /#chart-page-proportion -->
+
 <!-- Trend Line Chart -->
 <div id="chart-page-trend" class="chart-page">
   <div class="chart-page-title">Trend Line</div>
@@ -8625,6 +8909,109 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <button class="copy-btn" onclick="copyCode(this, '// See Brand API dashboard doctrine for full implementation\n// docs/brand-api-dashboard-doctrine.md — SVG Trend Line Chart')">Copy</button>
   </div>
 </div><!-- /#chart-page-trend -->
+
+<!-- Sparkline -->
+<div id="chart-page-sparkline" class="chart-page">
+  <div class="chart-page-title">Sparkline</div>
+  <div class="chart-page-desc">Tiny single-series line, no axes, no legend, no labels. Lives <em>inside</em> something — a metric card, a table cell, a list row — to show a trajectory at a glance. Line color encodes direction: <code>var(--primary)</code> up, <code>var(--warning)</code> down. Use the full Trend Line chart when you need axes, gridlines, or a legend.</div>
+
+  <style>
+    .spk { width: 88px; height: 26px; flex: none; }
+    .spk svg { display: block; width: 100%; height: 100%; overflow: visible; }
+    .spk-delta { font-size: var(--fs-xs); font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.24px; }
+    .spk-delta.up { color: var(--primary); }
+    .spk-delta.dn { color: var(--warning); }
+
+    .spk-card { background: var(--card); border-radius: 16px; padding: 18px 20px; max-width: 360px; }
+    .spk-stat { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+    .spk-stat-main { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+    .spk-stat-label { font-size: var(--fs-xs); color: var(--muted-foreground); letter-spacing: -0.24px; }
+    .spk-stat-value { font-size: var(--fs-2xl); font-weight: 600; letter-spacing: -0.4px; line-height: 1; }
+    .spk-stat-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex: none; }
+
+    .spk-list { display: flex; flex-direction: column; max-width: 420px; }
+    .spk-row { display: grid; grid-template-columns: 100px 1fr auto 52px; gap: 14px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .spk-row:last-child { border-bottom: none; }
+    .spk-name { font-size: var(--fs-sm); font-weight: 600; letter-spacing: -0.28px; }
+    .spk-val { font-size: var(--fs-sm); font-variant-numeric: tabular-nums; color: var(--muted-foreground); text-align: right; }
+    .spk-delta-cell { text-align: right; }
+  </style>
+
+  <div class="comp-group">
+    <div class="comp-group-label">Inside a metric card</div>
+    <div class="spk-card">
+      <div class="spk-stat">
+        <div class="spk-stat-main">
+          <span class="spk-stat-label">Coca-Cola · Share of Voice</span>
+          <span class="spk-stat-value">32.4%</span>
+        </div>
+        <div class="spk-stat-right">
+          <div class="spk" data-spark="34,33,35,36,38,40,44,46" data-dir="up"></div>
+          <span class="spk-delta up">+6.2%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="comp-group">
+    <div class="comp-group-label">Small multiples — one row per brand</div>
+    <div class="spk-list" id="spk-list"></div>
+    <script>
+    (function(){
+      function sparkline(el){
+        var data = el.getAttribute('data-spark').split(',').map(Number);
+        var dir = el.getAttribute('data-dir');
+        var W = 88, H = 26, padX = 2, padY = 4;
+        var minV = Math.min.apply(null, data), maxV = Math.max.apply(null, data);
+        var span = (maxV - minV) || 1;
+        var cW = W - padX*2, cH = H - padY*2;
+        function xp(i){ return padX + (data.length<=1 ? 0 : (i/(data.length-1))*cW); }
+        function yp(v){ return padY + (1 - (v-minV)/span)*cH; }
+        var stroke = dir === 'dn' ? 'var(--warning)' : 'var(--primary)';
+        var d = 'M' + data.map(function(v,i){ return xp(i)+','+yp(v); }).join(' L');
+        el.innerHTML = '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" width="100%">'
+          + '<path d="'+d+'" fill="none" style="stroke:'+stroke+'" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>'
+          + '</svg>';
+      }
+
+      var brands = [
+        { name:'Coca-Cola', spark:'34,33,35,36,38,40,44,46', dir:'up', val:'32.4%', delta:'+6.2%' },
+        { name:'Pepsi',     spark:'40,41,39,40,38,37,36,35', dir:'dn', val:'24.1%', delta:'-1.4%' },
+        { name:'Poppi',     spark:'12,14,15,18,22,27,31,36', dir:'up', val:'14.8%', delta:'+18%'  },
+        { name:'Olipop',    spark:'20,21,20,22,21,22,23,22', dir:'up', val:'13.2%', delta:'+0.3%' },
+      ];
+      var list = document.getElementById('spk-list');
+      list.innerHTML = brands.map(function(b){
+        return '<div class="spk-row">'
+          + '<span class="spk-name">'+b.name+'</span>'
+          + '<div class="spk" data-spark="'+b.spark+'" data-dir="'+b.dir+'"></div>'
+          + '<span class="spk-val">'+b.val+'</span>'
+          + '<span class="spk-delta-cell"><span class="spk-delta '+b.dir+'">'+b.delta+'</span></span>'
+          + '</div>';
+      }).join('');
+
+      document.querySelectorAll('#chart-page-sparkline .spk').forEach(sparkline);
+    })();
+    </script>
+  </div>
+
+  <div class="comp-group">
+    <div class="comp-group-label">Rules</div>
+    <div style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+      <div>Single series only. No axes, no gridlines, no legend, no labels, no dots.</div>
+      <div>Always embedded — inside a card, a table cell, or a list row. Never standalone.</div>
+      <div>Each sparkline scales to its own min/max — it shows shape, not absolute value.</div>
+      <div>Line color: <code>var(--primary)</code> rising, <code>var(--warning)</code> falling. Never <code>--destructive</code> for a trend.</div>
+      <div>Stroke set via <code>style="stroke:…"</code> — SVG attributes don't resolve CSS vars.</div>
+      <div>Need axes, gridlines, or multiple series? Use the Trend Line chart instead.</div>
+    </div>
+  </div>
+
+  <div class="demo-code-bar">
+    <span class="demo-code-label">Sparkline — tiny embedded SVG</span>
+    <button class="copy-btn" onclick="copyCode(this, '// See Brand API dashboard doctrine — Sparkline recipe\n// docs/brand-api-dashboard-doctrine.md')">Copy</button>
+  </div>
+</div><!-- /#chart-page-sparkline -->
 
 <!-- Donut Chart -->
 <div id="chart-page-donut" class="chart-page">
@@ -9063,13 +9450,14 @@ npm run dev   # runs on :4502</pre>
               <tr><td><code class="doc-code">tools/lint-doctrine.js</code></td><td>Errors if a <code class="doc-code">.tsx</code> has no <code class="doc-code">usage-doctrine.yaml</code> entry. Now wired into the pre-commit guard. Infra-only files go in its <code class="doc-code">EXEMPT</code> set.</td></tr>
               <tr><td><code class="doc-code">tools/lint-index.js</code></td><td>Errors if a component demo in <code class="doc-code">index.html</code> (nav registry) has no backing <code class="doc-code">.tsx</code> in <code class="doc-code">waldo-ui/src/components/ui/</code>. Wired into the guard + CI.</td></tr>
               <tr><td><code class="doc-code">tools/build-waldo-ds.sh</code></td><td><code class="doc-code">waldo-ds.css</code> is <strong>generated</strong> = banner + <code class="doc-code">globals.css</code> (tokens) + <code class="doc-code">tools/waldo-ds.styles.css</code> (vanilla CSS) — never edit it by hand. <code class="doc-code">--check</code> in the guard + CI blocks the commit if it's stale vs its sources. <code class="doc-code">index.html</code> and the prototypes consume it via <code class="doc-code">&lt;link&gt;</code>.</td></tr>
+              <tr><td><code class="doc-code">tools/build-component-index.js</code></td><td><code class="doc-code">docs/component-index.md</code> is <strong>generated</strong> from <code class="doc-code">index.html</code> — the flat list of ALL consumables (60 components <code class="doc-code">#comp-*</code> + 13 charts <code class="doc-code">#chart-page-*</code>) so an agent reads it before deciding something is missing and rebuilding data-viz that already exists. <code class="doc-code">--check</code> in the guard + CI blocks the commit if it's stale. Never hand-edit the <code class="doc-code">.md</code>.</td></tr>
               <tr><td>Catalog derivation</td><td><strong>Still manual.</strong> Catalog says "derived from tokens.json" but nothing auto-syncs — change <code class="doc-code">tokens.json</code> and forget the catalog = silent drift.</td></tr>
               <tr><td>YAML integrity</td><td>A broken indent kills the live-rendered Doctrine / Token Catalog pages — the guard parses both YAML before each commit.</td></tr>
             </tbody>
           </table>
         </div>
         <div class="doc-section-title" style="margin-top:24px;">Pre-commit guard</div>
-        <p class="doc-p">Install once per clone: <code class="doc-code">bash tools/install-hooks.sh</code>. On every commit it runs <code class="doc-code">detect.js</code> on staged code + <code class="doc-code">lint-doctrine.js</code> + <code class="doc-code">lint-index.js</code> + <code class="doc-code">build-waldo-ds.sh --check</code> + a YAML parse of both catalogs, and <strong>blocks the commit on any error</strong>. <code class="doc-code">detect.js</code> skips <code class="doc-code">index.html</code> (the showcase reference), <code class="doc-code">tools/</code> (infra), and <code class="doc-code">waldo-labs/</code> (prototype labs). Bypass with <code class="doc-code">git commit --no-verify</code> only when you must.</p>
+        <p class="doc-p">Install once per clone: <code class="doc-code">bash tools/install-hooks.sh</code>. On every commit it runs <code class="doc-code">detect.js</code> on staged code + <code class="doc-code">lint-doctrine.js</code> + <code class="doc-code">lint-index.js</code> + <code class="doc-code">build-waldo-ds.sh --check</code> + <code class="doc-code">build-component-index.js --check</code> + a YAML parse of both catalogs, and <strong>blocks the commit on any error</strong>. <code class="doc-code">detect.js</code> skips <code class="doc-code">index.html</code> (the showcase reference), <code class="doc-code">tools/</code> (infra), and <code class="doc-code">waldo-labs/</code> (prototype labs). Bypass with <code class="doc-code">git commit --no-verify</code> only when you must.</p>
       </div>
     </div>
 

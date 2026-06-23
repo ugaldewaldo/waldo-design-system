@@ -5,7 +5,7 @@
 already exists in `index.html`. Consumables live in two sections — Components and
 Charts — so a comp-only scan will miss the charts. This is the flat list of both.
 
-## Components (60)
+## Components (62)
 
 - Button — `#comp-button`
 - Badge — `#comp-badge`
@@ -64,11 +64,13 @@ Charts — so a comp-only scan will miss the charts. This is the flat list of bo
 - Depth Pill — `#comp-depth-pill`
 - Leaderboard Row — `#comp-leaderboard`
 - KPI Stat Card — `#comp-kpi-card`
+- Comment Card — `#comp-comment-card`
 - Alert List Row — `#comp-alert-list`
 - Ad Copy Card — `#comp-ad-copy-card`
 - Live Status Badge — `#comp-live-badge`
+- Theme Pill — `#comp-theme-pill`
 
-## Charts / Data-viz (13)
+## Charts / Data-viz (14)
 
 - Area Charts — `#chart-page-area`
 - Bar Charts — `#chart-page-bar`
@@ -79,6 +81,7 @@ Charts — so a comp-only scan will miss the charts. This is the flat list of bo
 - Tooltip — `#chart-page-tooltip`
 - Chart Palette — `#chart-page-palette`
 - HBar Track — `#chart-page-hbar`
+- Proportion Bar — `#chart-page-proportion`
 - Trend Line — `#chart-page-trend`
 - Sparkline — `#chart-page-sparkline`
 - Donut Chart — `#chart-page-donut`
