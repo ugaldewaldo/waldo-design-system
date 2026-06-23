@@ -10,9 +10,9 @@ Implementa o corrige un componente del Waldo Design System con valores exactos d
 
 **Lee esto antes de tocar nada:**
 
-!`cat "CLAUDE.md"`
-!`cat "STATUS.md"`
-!`cat "waldo-ui/CLAUDE.md"`
+!`cat "/Users/miguelugalde/Desktop/waldo-design-system/CLAUDE.md"`
+!`cat "/Users/miguelugalde/Desktop/waldo-design-system/STATUS.md"`
+!`cat "/Users/miguelugalde/Desktop/waldo-design-system/waldo-ui/CLAUDE.md"`
 
 ---
 

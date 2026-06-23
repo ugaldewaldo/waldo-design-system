@@ -10,21 +10,29 @@ Añade o actualiza un token en el Waldo Design System manteniendo todas las capa
 
 **Lee esto antes de tocar nada:**
 
-!`cat "CLAUDE.md"`
+!`cat "/Users/miguelugalde/Desktop/waldo-design-system/CLAUDE.md"`
 
 ---
 
-## Las 4 capas — TODAS deben actualizarse
+## Las 5 capas — TODAS deben actualizarse
 
 ```
-figma/waldo.tokens.json   ← fuente de verdad absoluta (Tokens Studio)
+figma/waldo.tokens.json         ← fuente de verdad absoluta
        ↓
-waldo-ui/src/globals.css  ← CSS vars (primitivos + semánticos + shadcn)
+waldo-ui/src/globals.css        ← CSS vars (primitivos + semánticos + shadcn)
+       ↓  bash tools/build-waldo-ds.sh  ← OBLIGATORIO después de globals.css
+waldo-ds.css                    ← generado: banner + globals.css + tools/waldo-ds.styles.css
        ↓
-waldo-ui/tailwind.config.ts ← clases utilitarias de Tailwind
+waldo-ui/tailwind.config.ts     ← clases utilitarias de Tailwind
        ↓
 waldo-ui/src/components/ui/*.tsx ← componentes (usan tokens, nunca hex)
 ```
+
+**waldo-ds.css es generado** — nunca editarlo a mano. Después de cambiar `globals.css`, siempre correr:
+```bash
+bash tools/build-waldo-ds.sh
+```
+El pre-commit guard (`build-waldo-ds.sh --check`) frena el commit si waldo-ds.css está desactualizado.
 
 Si cambias una capa y no las demás → sistema desincronizado.
 
@@ -87,7 +95,7 @@ Formato para semántico nuevo (referencia al primitivo):
 }
 ```
 
-**No añadir nuevas colecciones top-level** — Tokens Studio crea una colección Figma por cada key top-level. Solo se permiten las 4 existentes.
+**No añadir nuevas colecciones top-level** — Figma tiene exactamente 4 colecciones de variables nativas. Solo se permiten las 4 existentes.
 
 ---
 
@@ -183,18 +191,25 @@ Para opacidades usa el modificador `/`: `bg-primary/12`, `text-destructive/10`, 
 
 ---
 
-## Paso 6 — Sincronizar Figma (si el JSON cambió)
+## Paso 6 — Regenerar waldo-ds.css
+
+Siempre después de editar `globals.css`:
+
+```bash
+bash tools/build-waldo-ds.sh
+```
+
+Esto regenera `waldo-ds.css` = banner + `waldo-ui/src/globals.css` + `tools/waldo-ds.styles.css`. Si no lo corres, el pre-commit te frena con "waldo-ds.css is stale".
+
+---
+
+## Paso 7 — Sincronizar Figma (si el JSON cambió)
 
 Solo necesario si modificaste `figma/waldo.tokens.json`.
 
-1. Abrir Tokens Studio en Figma
-2. Verificar que los 4 sets están activos: `primitives`, `brand`, `typography`, `semantic`
-3. Push → Options:
-   - Variables: Color ✓ · String ✓ · Number ✓ · Boolean ✓
-   - Styles: Typography ✓ (resto off)
-   - Update existing: ✓
-   - **Remove without connection: ❌ CRÍTICO — wipes cosas no en el JSON**
-4. Confirmar → verificar que siguen siendo exactamente 4 colecciones
+**El flujo es código-first vía MCP** — Tokens Studio está fuera del loop.
+
+Avisar a Figma Master para que actualice la variable nativa en Figma usando `use_figma` MCP, leyendo el valor actualizado de `figma/waldo.tokens.json`. Las 4 colecciones de variables en Figma se actualizan directamente vía Plugin API.
 
 ---
 
@@ -205,7 +220,8 @@ Solo necesario si modificaste `figma/waldo.tokens.json`.
 - [ ] Clase Tailwind existe en `tailwind.config.ts` (si el componente la necesita)
 - [ ] Componente usa clase Tailwind o CSS var — **cero hex hardcodeados**
 - [ ] `STATUS.md` actualizado si es un valor de referencia importante
-- [ ] Si el JSON cambió → push a Figma via Tokens Studio
+- [ ] `waldo-ds.css` regenerado con `bash tools/build-waldo-ds.sh` después de editar globals.css
+- [ ] Si el JSON cambió → avisar a Figma Master para sync vía `use_figma` MCP
 
 ---
 
