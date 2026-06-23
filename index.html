@@ -5343,13 +5343,20 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="demo-canvas">
         <div style="display:flex;flex-direction:column;gap:14px">
           <div style="display:flex;flex-direction:column;gap:6px">
-            <label style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground)">Email address</label>
-            <input type="email" class="input" style="width:260px" placeholder="name@example.com" />
+            <label for="lbl-brand" style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground);letter-spacing:-0.02em">Brand name</label>
+            <input id="lbl-brand" type="text" class="input" style="width:260px" placeholder="e.g. Nike, Apple, Tesla" />
           </div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <input type="checkbox" id="lbl-check" style="width:14px;height:14px;accent-color:var(--primary)" />
-            <label for="lbl-check" style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground);cursor:pointer">Accept terms and conditions</label>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <label for="lbl-url" style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground);letter-spacing:-0.02em">Website URL</label>
+            <input id="lbl-url" type="url" class="input" style="width:260px" placeholder="https://brand.com" />
           </div>
+          <label class="checkbox-label">
+            <input type="checkbox" checked />
+            <div class="checkbox-box">
+              <svg class="checkbox-check" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground);letter-spacing:-0.02em">Track mentions &amp; sentiment</span>
+          </label>
         </div>
       </div>
       <div class="demo-code-bar">
