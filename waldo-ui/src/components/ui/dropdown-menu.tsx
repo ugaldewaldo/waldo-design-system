@@ -24,7 +24,7 @@ const contentStyles = cn(
 );
 
 const itemStyles = cn(
-  "relative flex cursor-default select-none items-center gap-2",
+  "relative flex cursor-pointer select-none items-center gap-2",
   "px-4 py-2 text-sm font-normal tracking-[-0.02em]",
   "text-popover-foreground/70 outline-none",
   "transition-colors duration-100",

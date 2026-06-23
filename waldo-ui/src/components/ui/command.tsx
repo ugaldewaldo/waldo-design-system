@@ -99,7 +99,7 @@ const CommandItem = React.forwardRef<
   <CommandPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-default gap-2 select-none items-center rounded-sm",
+      "relative flex cursor-pointer gap-2 select-none items-center rounded-sm",
       "px-2 py-1.5 text-sm text-foreground outline-none",
       "transition-colors duration-100",
       "aria-selected:bg-accent aria-selected:text-accent-foreground",
