@@ -23,6 +23,7 @@ const UI_DIR = path.join(ROOT, 'waldo-ui', 'src', 'components', 'ui');
 const EXEMPT = new Set([
   'theme-pill',    // vanilla-only DS utility component, no React wrapper needed
   'comment-card',  // vanilla-only prototype component, consumed by waldo-labs
+  'quote-card',    // vanilla-only VoC card, no React wrapper needed
 ]);
 
 const norm = (s) => s.replace(/-/g, '').toLowerCase();

@@ -1125,6 +1125,25 @@ components:
     notes: |
       Brand API prototype component — not yet reviewed against Figma.
 
+  - component: Quote Card
+    use_when:
+      - Displaying a Voice-of-Customer cluster (verbatim quote + frequency)
+      - Showing what audiences love or pain about a brand
+    dont_use_when:
+      - Social mention with platform/author context — use Comment Card
+      - Generic testimonial without frequency data
+    prefer_over:
+      - Comment Card: when the content is an aggregated theme, not a single post
+    notes: |
+      Structure: sentiment label (love/pain) → title → verbatim quote → frequency bar.
+      Two sentiment variants: love = var(--primary), pain = var(--destructive).
+      Background: var(--card). Border-radius: var(--radius-xl). Same card shell as Comment Card.
+      Sentiment label: --fs-xs, uppercase, color matches variant.
+      Title: --fs-sm, var(--foreground), font-weight 500.
+      Quote: --fs-sm, var(--muted-foreground), italic, 2-line clamp.
+      Frequency bar: thin (4px), full width, fill color matches sentiment variant.
+      Frequency value: tabular nums, --fs-xs.
+
   - component: Comment Card
     use_when:
       - Displaying a social mention (Reddit, X, TikTok, Instagram, etc.)

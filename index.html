@@ -110,6 +110,7 @@
     <button class="sb-item" onclick="waldoGo('comp-depth-pill',this)">Depth Pill</button>
     <button class="sb-item" onclick="waldoGo('comp-leaderboard',this)">Leaderboard Row</button>
     <button class="sb-item" onclick="waldoGo('comp-kpi-card',this)">KPI Stat Card</button>
+    <button class="sb-item" onclick="waldoGo('comp-quote-card',this)">Quote Card</button>
     <button class="sb-item" onclick="waldoGo('comp-comment-card',this)">Comment Card</button>
     <button class="sb-item" onclick="waldoGo('comp-alert-list',this)">Alert List Row</button>
     <button class="sb-item" onclick="waldoGo('comp-ad-copy-card',this)">Ad Copy Card</button>
@@ -6269,6 +6270,104 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   </div>
 </div>
 
+
+<!-- Quote Card -->
+<div id="comp-quote-card" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Quote Card</div>
+    <div class="page-desc">Voice-of-customer cluster. Verbatim quote, theme title, frequency bar. Two variants: love (primary) and pain (destructive).</div>
+  </div>
+
+  <style>
+    .quote-card { background: var(--card); border-radius: var(--radius-xl); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+    .quote-title { font-size: var(--fs-sm); font-weight: 600; color: var(--foreground); }
+    .quote-text { font-size: var(--fs-sm); color: var(--muted-foreground); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5; }
+    .quote-foot { display: flex; align-items: center; gap: 10px; }
+    .quote-freq-label { font-size: var(--fs-xs); color: var(--muted-foreground); white-space: nowrap; }
+    .quote-freq-val { font-size: var(--fs-xs); font-weight: 600; color: var(--foreground); font-variant-numeric: tabular-nums; }
+    .quote-bar-track { flex: 1; height: 4px; border-radius: 999px; background: color-mix(in srgb, var(--foreground) 8%, transparent); overflow: hidden; }
+    .quote-bar-fill { height: 100%; border-radius: 999px; }
+    .quote-card.love .quote-bar-fill { background: var(--primary); }
+    .quote-card.pain .quote-bar-fill { background: var(--destructive); }
+    .quote-badge { font-size: var(--fs-xs); font-weight: 500; padding: 2px 8px; border-radius: 999px; }
+    .quote-card.love .quote-badge { background: color-mix(in srgb, var(--primary) 14%, transparent); color: var(--primary); }
+    .quote-card.pain .quote-badge { background: color-mix(in srgb, var(--destructive) 14%, transparent); color: var(--destructive); }
+    .quote-foot-badge { display: flex; align-items: center; justify-content: space-between; }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Con barra</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:560px;width:100%">
+          <div class="quote-card love">
+            <div class="quote-title">Replaced my energy drink habit</div>
+            <div class="quote-text">"haven't touched a Red Bull in 3 months, Nike's wellness push is real"</div>
+            <div class="quote-foot">
+              <span class="quote-freq-label">freq</span>
+              <span class="quote-freq-val">42%</span>
+              <div class="quote-bar-track"><div class="quote-bar-fill" style="width:42%"></div></div>
+            </div>
+          </div>
+          <div class="quote-card pain">
+            <div class="quote-title">Price creep at retail</div>
+            <div class="quote-text">"Adidas dropped quality but kept raising prices, feels like a bait and switch"</div>
+            <div class="quote-foot">
+              <span class="quote-freq-label">freq</span>
+              <span class="quote-freq-val">31%</span>
+              <div class="quote-bar-track"><div class="quote-bar-fill" style="width:31%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="quote-card love|pain" /&gt; + bar</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Con badge</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:560px;width:100%">
+          <div class="quote-card love">
+            <div class="quote-title">Community collabs feel authentic</div>
+            <div class="quote-text">"the Spotify x Nike run club integration is exactly what I needed"</div>
+            <div class="quote-foot-badge">
+              <span class="quote-badge">Love</span>
+            </div>
+          </div>
+          <div class="quote-card pain">
+            <div class="quote-title">Sizing inconsistent across lines</div>
+            <div class="quote-text">"ordered same size as always and it fit completely different, no trust left"</div>
+            <div class="quote-foot-badge">
+              <span class="quote-badge">Pain</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="quote-card love|pain" /&gt; + badge</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Sin nada</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:560px;width:100%">
+          <div class="quote-card love">
+            <div class="quote-title">Replaced my energy drink habit</div>
+            <div class="quote-text">"haven't touched a Red Bull in 3 months, Nike's wellness push is real"</div>
+          </div>
+          <div class="quote-card pain">
+            <div class="quote-title">Price creep at retail</div>
+            <div class="quote-text">"Adidas dropped quality but kept raising prices, feels like a bait and switch"</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="quote-card love|pain" /&gt;</span></div>
+    </div>
+  </div>
+</div>
 
 <!-- Comment Card -->
 <div id="comp-comment-card" class="waldo-page">
