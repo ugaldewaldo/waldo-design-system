@@ -45,6 +45,7 @@ const buttonVariants = cva(
     "transition-colors duration-100",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
     "disabled:pointer-events-none disabled:opacity-40",
+    "[&_svg]:opacity-60",
   ],
   {
     variants: {
