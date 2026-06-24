@@ -72,7 +72,7 @@ The topbar always uses the **Waldo SVG logo** — never text, never a placeholde
 <header class="topbar">
   <div class="topbar-inner">
     <div class="topbar-brand">
-      <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="var(--foreground)"/></svg>
+      <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" style="color:var(--foreground)" xmlns="http://www.w3.org/2000/svg"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
       <!-- NO product name, NO subtitle — only the SVG wordmark above -->
     </div>
     <nav class="topbar-nav">
@@ -123,6 +123,15 @@ The page title matches the prototype name (e.g. "Promo Radar", "Prospector"). Th
 ---
 
 ### Page shell
+
+**Required DS conflict overrides** — put these at the top of every prototype's `<style>` block:
+```css
+/* waldo-ds.css sets html,body{height:100%;overflow:hidden} — breaks scroll */
+html, body { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+/* waldo-ds.css sets body{display:flex!important;flex-direction:column!important} — breaks card widths */
+body { display: block !important; }
+```
+
 ```css
 /* content wrap — 1184px content area, centered */
 .wrap { max-width: 1184px; margin: 0 auto; padding: 32px 0 80px; }
@@ -188,7 +197,7 @@ A 4-up grid of summary metrics. No equivalent in core DS.
 .kpi { background: var(--card); border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 8px; }
 /* No border — elevation only */
 .kpi-top { display: flex; align-items: flex-start; justify-content: space-between; }
-.k-label { font-size: 14px; font-weight: 500; line-height: 20px; letter-spacing: -0.28px; color: var(--muted-foreground); text-transform: uppercase; font-size: 11px; letter-spacing: 0.04em; }
+.k-label { font-size: var(--fs-sm); font-weight: 500; line-height: 20px; letter-spacing: -0.28px; color: var(--muted-foreground); }
 .k-delta { font-size: 11px; font-weight: 600; padding: 2px 6px; border-radius: 6px; }
 .k-delta.up { color: var(--destructive); background: hsl(var(--destructive) / 0.12); }
 .k-delta.down { color: var(--primary); background: hsl(var(--primary) / 0.12); }
@@ -337,6 +346,85 @@ const area = `M${x(0)},${y(0)} L` + data.map((v,i) => `${x(i)},${y(v)}`).join(' 
 
 Always render with `width="100%"` and `preserveAspectRatio="xMidYMid meet"` for responsive scaling.
 
+### 5b. Sparkline
+
+The Trend Line chart's tiny sibling. **A sparkline is always embedded** — inside a metric card, a table cell, or a list row — never standalone. It shows shape, not values.
+
+Use a sparkline when:
+- Space is tight (a row, a cell, a corner of a card)
+- You only need the trajectory, not exact numbers or comparison across series
+
+Use the full Trend Line chart instead when you need axes, gridlines, a legend, or multiple overlaid series.
+
+Rules:
+- **Single series.** No axes, no gridlines, no legend, no labels, no dots.
+- Size is small — roughly `88×26`. `viewBox` with `preserveAspectRatio="none"` so it fills its slot.
+- Each sparkline scales to **its own** min/max (independent), since it conveys shape, not absolute value.
+- Stroke `1.5px`. Color encodes direction: `var(--primary)` rising, `var(--warning)` falling. Never `--destructive` for a trend.
+- Strokes via `style="stroke:…"` — SVG presentation attributes do not resolve CSS vars.
+
+```js
+function sparkline(data, dir) {
+  var W = 88, H = 26, padX = 2, padY = 4;
+  var min = Math.min(...data), max = Math.max(...data), span = (max - min) || 1;
+  var x = i => padX + (i / (data.length - 1)) * (W - padX * 2);
+  var y = v => padY + (1 - (v - min) / span) * (H - padY * 2);
+  var stroke = dir === 'dn' ? 'var(--warning)' : 'var(--primary)';
+  var d = 'M' + data.map((v, i) => `${x(i)},${y(v)}`).join(' L');
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" width="100%">`
+    + `<path d="${d}" fill="none" style="stroke:${stroke}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
+}
+```
+
+### 5c. Proportion Bar
+
+Per-row 100% stacked bar showing tone composition (positive / neutral / negative / mixed) across platforms or segments.
+
+Color encodes meaning — not chart palette:
+- positive → `var(--primary)`
+- neutral → `var(--muted-foreground)`
+- negative → `var(--warning)`
+- mixed → `var(--highlight)`
+
+**Negative is `--warning`, never `--destructive`.** `--destructive` is reserved for irreversible actions (delete, permanent loss) — a negative sentiment share is a metric, not an action.
+
+Rules:
+- Segments form a 100% composition — they always sum to the full bar.
+- Track `var(--secondary)`, height `16px`, fully rounded (`border-radius: 9999px`), `overflow: hidden` so segments clip to the pill.
+- Segments are flush (no gaps) — it's one whole, not separate bars.
+- Always render a legend — sentiment colors need decoding.
+- Row: fixed-width muted label + bar + trailing positive-share value (tabular-nums, muted).
+
+```html
+<div class="senti-bar">
+  <span class="senti-seg pos" style="width:72%"></span>
+  <span class="senti-seg neu" style="width:21%"></span>
+  <span class="senti-seg neg" style="width:5%"></span>
+  <span class="senti-seg mix" style="width:2%"></span>
+</div>
+```
+
+### 5d. Theme Pill
+
+A topic/theme chip colored by sentiment, with a frequency count. Variant of `Tag` with the sentiment palette. Use for theme clouds, topic breakdowns, "what people are talking about" surfaces.
+
+Color encodes sentiment (same mapping as the Sentiment Bar):
+- positive → `var(--primary)`
+- neutral → `var(--muted-foreground)`
+- negative → `var(--warning)`
+- mixed → `var(--highlight)`
+
+**Negative is `--warning`, never `--destructive`.**
+
+Rules:
+- **One fixed text size for every pill.** Never scale the font by volume — volume is shown by the count, not the type size.
+- Tint via `color-mix`: 12% fill + 25% border, text in the full token color.
+- Fully rounded pill. The count (`.theme-pill-freq`) uses tabular-nums at 0.7 opacity, 6px left margin.
+
+```html
+<span class="theme-pill pos">Gut health<span class="theme-pill-freq">2,145</span></span>
+```
+
 ---
 
 ## Interior page patterns
@@ -474,5 +562,7 @@ Common violations in dashboards:
 - Do not let a separator line appear below the page header — `waldo-ds.css` injects `border-bottom` on `.page-header`; always override with `border-bottom: none !important`
 - Do not hardcode actions in the page header (search pill, alert button, etc.) — include only what the specific dashboard design requires
 - Do not declare `html` or `body` with `height: 100%` or `overflow: hidden` — this breaks page scroll. Use `min-height: 100vh` on body only
+- Do not omit the required DS conflict overrides (`body { display: block !important }` etc.) — `waldo-ds.css` sets `body{display:flex!important}` which collapses card widths to their content size
 - Do not declare `--chart-1` through `--chart-12` in your own `:root` — they are already in `waldo-ds.css`. If you override them you may introduce hex values. Trust the DS file
 - Do not invent a chart component that already exists in the DS — copy the exact HTML/CSS from `index.html`
+- Do not write CSS for a UI element without first reading its definition in `index.html` — copy classes and styles verbatim, never create renamed variants (e.g. `.pulse-label` instead of `.k-label`). Any deviation silently breaks DS compliance (wrong weight, casing, spacing).

@@ -23,7 +23,7 @@
       "200": {
         "value": "#d2d3d3",
         "type": "color",
-        "description": "ANCHOR — text-primary"
+        "description": "ANCHOR \u2014 text-primary"
       },
       "300": {
         "value": "#b4b5b6",
@@ -32,7 +32,7 @@
       "400": {
         "value": "#8f9091",
         "type": "color",
-        "description": "ANCHOR — text-tertiary"
+        "description": "ANCHOR \u2014 text-tertiary"
       },
       "500": {
         "value": "#636465",
@@ -41,12 +41,12 @@
       "600": {
         "value": "#41454b",
         "type": "color",
-        "description": "ANCHOR — accent fills"
+        "description": "ANCHOR \u2014 accent fills"
       },
       "700": {
         "value": "#323539",
         "type": "color",
-        "description": "ANCHOR — popover"
+        "description": "ANCHOR \u2014 popover"
       },
       "750": {
         "value": "#2d2f33",
@@ -55,22 +55,22 @@
       "800": {
         "value": "#27282b",
         "type": "color",
-        "description": "ANCHOR — sunken"
+        "description": "ANCHOR \u2014 sunken"
       },
       "850": {
         "value": "#242528",
         "type": "color",
-        "description": "ANCHOR — sidebar"
+        "description": "ANCHOR \u2014 sidebar"
       },
       "900": {
         "value": "#202123",
         "type": "color",
-        "description": "ANCHOR — card / elevated"
+        "description": "ANCHOR \u2014 card / elevated"
       },
       "950": {
         "value": "#171819",
         "type": "color",
-        "description": "ANCHOR — app background"
+        "description": "ANCHOR \u2014 app background"
       }
     },
     "green": {
@@ -97,7 +97,7 @@
       "500": {
         "value": "#32a9a9",
         "type": "color",
-        "description": "ANCHOR — primary brand"
+        "description": "ANCHOR \u2014 primary brand"
       },
       "600": {
         "value": "#2c797a",
@@ -136,7 +136,7 @@
       "300": {
         "value": "#f7d371",
         "type": "color",
-        "description": "ANCHOR — highlight"
+        "description": "ANCHOR \u2014 highlight"
       },
       "400": {
         "value": "#f0c040",
@@ -191,12 +191,12 @@
       "500": {
         "value": "#e76638",
         "type": "color",
-        "description": "ANCHOR — bright orange"
+        "description": "ANCHOR \u2014 bright orange"
       },
       "600": {
         "value": "#c94e22",
         "type": "color",
-        "description": "ANCHOR — warning"
+        "description": "ANCHOR \u2014 warning"
       },
       "700": {
         "value": "#a83a18",
@@ -239,7 +239,7 @@
       "500": {
         "value": "#de3a28",
         "type": "color",
-        "description": "ANCHOR — destructive (red-leaning, hue 5°)"
+        "description": "ANCHOR \u2014 destructive (red-leaning, hue 5\u00b0)"
       },
       "600": {
         "value": "#ba2818",
@@ -726,7 +726,7 @@
       "on-brand": {
         "value": "#ffffff",
         "type": "color",
-        "description": "Text/icons on brand & destructive fills — ONLY allowed pure white (green-700 pairing, 6.06:1 AA). Maps to shadcn --primary-foreground."
+        "description": "Text/icons on brand & destructive fills \u2014 ONLY allowed pure white (green-700 pairing, 6.06:1 AA). Maps to shadcn --primary-foreground."
       }
     },
     "interactive": {
@@ -879,6 +879,10 @@
     },
     "full": {
       "value": "9999",
+      "type": "borderRadius"
+    },
+    "xs": {
+      "value": "2",
       "type": "borderRadius"
     }
   },

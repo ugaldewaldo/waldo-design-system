@@ -47,6 +47,22 @@ if [ "$IS_HTML" = true ]; then
   if [ -n "$FONT" ]; then
     VIOLATIONS+=("❌ NON-DS FONT in demo: $(echo "$FONT" | head -2)")
   fi
+
+  # 4b. Div/span styled as button — should use class="btn"
+  FAKE_BTN=$(grep -nE '<(div|span)[^>]*style="[^"]*background:[^"]*var\(--(primary|foreground)[^"]*cursor:pointer' "$FILE" 2>/dev/null | grep -v "demo-code\|copy-btn\|swatch")
+  if [ -n "$FAKE_BTN" ]; then
+    VIOLATIONS+=("❌ DIV/SPAN styled as button — use class=\"btn\" instead: $(echo "$FAKE_BTN" | head -2)")
+  fi
+
+  # 4c. Multiple primary buttons in same demo-canvas (ONE PRIMARY PER SURFACE rule)
+  while IFS= read -r block; do
+    COUNT=$(echo "$block" | grep -cE 'class="btn[^"]*"' || true)
+    PRIMARY=$(echo "$block" | grep -E 'class="btn[^"]*"' | grep -v 'btn-ghost\|btn-outline\|btn-secondary\|btn-destructive\|btn-white\|btn-solid' | wc -l | tr -d ' ')
+    if [ "$PRIMARY" -gt 1 ]; then
+      VIOLATIONS+=("❌ MULTIPLE PRIMARY BUTTONS in one demo-canvas — ONE PRIMARY PER SURFACE rule violated")
+      break
+    fi
+  done < <(grep -oP '(?s)<div class="demo-canvas".*?</div>' "$FILE" 2>/dev/null || true)
 fi
 
 # 5. Hardcoded px in class names (tsx only)
