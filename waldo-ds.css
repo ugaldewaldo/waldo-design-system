@@ -1095,7 +1095,7 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
 
       /* CodeBlock */
       .wcode-block { border-radius:12px;background:var(--card);border:1px solid color-mix(in srgb,var(--border) 8%,transparent);overflow:hidden; }
-      .wcode-block-header { display:flex;align-items:center;justify-content:flex-end;gap:4px;padding:8px 12px;border-bottom:1px solid color-mix(in srgb,var(--border) 8%,transparent); }
+      .wcode-block-header { display:flex;align-items:center;justify-content:flex-end;gap:4px;padding:8px 12px;border-bottom:1px solid color-mix(in srgb,var(--foreground) 12%,transparent); }
       .wcode-block-action { display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:9999px;font-size:12px;font-weight:500;letter-spacing:-0.02em;background:color-mix(in srgb,var(--foreground) 6%,transparent);color:color-mix(in srgb,var(--foreground) 60%,transparent);border:none;cursor:pointer;transition:background .1s,color .1s;font-family:inherit; }
       .wcode-block-action:hover { background:color-mix(in srgb,var(--foreground) 10%,transparent);color:color-mix(in srgb,var(--foreground) 80%,transparent); }
       .wcode-block-action.copied { color:var(--primary); }
