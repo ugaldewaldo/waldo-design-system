@@ -31,6 +31,8 @@ Enforced rule: **every component demo in `index.html` must be backed by a real `
 
 **`waldo-ds.css` is GENERATED — never edit it by hand.** It is `banner + waldo-ui/src/globals.css` (tokens) `+ tools/waldo-ds.styles.css` (vanilla CSS). Edit tokens in `globals.css`, vanilla styles in `tools/waldo-ds.styles.css`, then run `bash tools/build-waldo-ds.sh`. `index.html` and the `waldo-labs/` prototypes consume it via `<link>`. The guard + CI run `build-waldo-ds.sh --check` and block the commit if it's stale.
 
+**Opacity / color convention (vanilla layer & prototypes).** Solid color = `var(--token)` (hex). With opacity = `rgba(var(--token-rgb), a)`, where `--token-rgb` is the comma-channel companion. Every color token that's used with opacity MUST have its `-rgb` companion defined in `tools/waldo-ds.styles.css` (channels matching the hex). Don't redefine `-rgb` tokens locally in a prototype — they ship from the DS. `tools/detect.js` enforces this (`undefined-rgb-token`): a `var(--x-rgb)` with no DS or local definition is a hard error, because `rgba(var(--undefined), a)` is invalid CSS that silently fails. (The React `.tsx` layer is different: `globals.css` tokens are space-channels and Tailwind utilities like `bg-primary/12` handle opacity — no `-rgb` needed there.)
+
 ---
 
 ## 🧭 ARCHITECTURE & OWNERSHIP — read this, don't re-derive or ask another session
