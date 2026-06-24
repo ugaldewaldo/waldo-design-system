@@ -559,10 +559,10 @@ forbidden:
     - text: "Dark text on green-700 fill — 2.93:1 fails AA. Text color is married to the fill"
     - text: "#1b8c8c (brand-green-700) as product button fill — brand palette is marketing-only AND white on it fails AA (4.06:1)"
     - text: "Inline style= attributes for colors/backgrounds/spacing — define a class with tokens instead"
-    - text: "SVG stroke=\"var(--x)\" — presentation attributes don't resolve CSS vars; use style=\"stroke:var(--x)\" or currentColor"
+    - text: "Literal SVG element with stroke/fill=\"var(--x)\" — presentation attributes don't resolve CSS vars; use style=\"stroke:var(--x)\" or currentColor. (Recharts/JSX components like <Area stroke=\"var(--color-x)\"> are React props, NOT this — they resolve via ChartStyle, so the rule anchors on lowercase SVG element names only.)"
       rule: svg-var-attr
       severity: error
-      match: '(?:stroke|fill)="var\('
+      match: '<(?:path|circle|rect|line|polygon|polyline|ellipse|g|svg|stop|use|text|tspan)\b[^>]*(?:stroke|fill)="var\('
       suggestion: 'use style="stroke:var(--x)" or currentColor'
     - text: "box-shadow focus ring on inputs — single border only (border-waldo-green-800)"
     - text: "font-semibold on buttons — font-medium always"

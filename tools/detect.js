@@ -156,14 +156,28 @@ function scanFile(filePath, rules) {
   const add = (line, severity, rule, message, suggestion) =>
     findings.push({ file: filePath, line, severity, rule, message, suggestion: suggestion || null });
 
+  let inBlock = false; // inside a multi-line /* */ comment
+
   lines.forEach((rawLine, i) => {
     const n = i + 1;
 
-    // skip comment-only lines, and strip inline /* */ and <!-- --> comments so
-    // hex labels inside comments (e.g. `--chart-1: … /* #2DD4C4 */`) don't trip
-    // color rules. `//` is NOT stripped inline (would break https:// in URLs).
-    if (/^(\/\/|\/\*|\*\s|<!--)/.test(rawLine.trim())) return;
-    const line = rawLine.replace(/\/\*.*?\*\//g, '').replace(/<!--.*?-->/g, '');
+    // Multi-line /* */ block comments: skip lines inside them so example tokens
+    // or hexes in doc comments (e.g. `rgba(var(--token-rgb), a)`) don't trip rules.
+    let cur = rawLine;
+    if (inBlock) {
+      const close = cur.indexOf('*/');
+      if (close === -1) return;       // whole line still inside the comment
+      inBlock = false;
+      cur = cur.slice(close + 2);     // resume after the comment closes
+    }
+    // skip pure line / JSDoc-continuation comments
+    if (/^(\/\/|\*\s)/.test(cur.trim())) return;
+    // strip complete inline /* */ and <!-- --> comments (hex labels in comments
+    // shouldn't trip color rules). `//` is NOT stripped inline (breaks https://).
+    let line = cur.replace(/\/\*.*?\*\//g, '').replace(/<!--.*?-->/g, '');
+    // an unclosed /* opens a block: scan the part before it, then enter the block
+    const open = line.indexOf('/*');
+    if (open !== -1) { inBlock = true; line = line.slice(0, open); }
 
     // 0. undefined -rgb companion: var(--x-rgb) must be DS-shipped or defined locally,
     //    else rgba(var(--x-rgb),a) is invalid CSS and the opacity silently fails.
