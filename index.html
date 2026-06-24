@@ -117,6 +117,7 @@
     <button class="sb-item" onclick="waldoGo('comp-live-badge',this)">Live Status Badge</button>
     <button class="sb-item" onclick="waldoGo('comp-theme-pill',this)">Theme Pill</button>
     <button class="sb-item" onclick="waldoGo('comp-copy-link',this)">Copy Link</button>
+    <button class="sb-item" onclick="waldoGo('comp-code-block',this)">Code Block</button>
   </div>
   <div class="sb-no-results" id="sb-no-results">No results</div>
   <div class="sb-footer">Shadcn/ui · Inter · Dark-first</div>
@@ -3523,6 +3524,18 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     }
   }
 
+  function codeBlockCopy(btn, text) {
+    navigator.clipboard.writeText(text).catch(() => {});
+    btn.classList.add('copied');
+    const icon = btn.querySelector('svg');
+    if (icon) icon.outerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      const chk = btn.querySelector('svg');
+      if (chk) chk.outerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+    }, 2000);
+  }
+
   function copyLinkClick(el, url) {
     navigator.clipboard.writeText(url).catch(() => {});
     el.classList.add('copied');
@@ -6605,6 +6618,65 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   <div class="demo-code-bar">
     <span class="demo-code-label">&lt;div class="wcopy-link" /&gt;</span>
     <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;wcopy-link&quot; onclick=&quot;copyLinkClick(this,url)&quot;&gt;\n  &lt;span class=&quot;wcopy-link-url&quot;&gt;https://waldo.fyi/s/Bd9xKqT8aL&lt;/span&gt;\n  &lt;span class=&quot;wcopy-link-icon&quot;&gt;…copy svg…&lt;/span&gt;\n&lt;/div&gt;')">Copy</button>
+  </div>
+</div>
+
+<div id="comp-code-block" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Code Block</div>
+    <div class="page-desc">Preformatted text surface with optional copy actions in the header. Use for CLI commands, API prompts, or any multi-line code the user may need to copy. For single-line URLs use <code>CopyLink</code> instead. Waldo extension — no shadcn equivalent.</div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-label">With two copy actions</div>
+    <div class="demo-box">
+      <div class="wcode-block">
+        <div class="wcode-block-header">
+          <button class="wcode-block-action" onclick="codeBlockCopy(this,'# Waldo Brand Intelligence API — setup\nYou\'re setting up the Waldo Brand Intelligence API in Claude Code.\n## Step 1 — Get your API key (run this first)\nThis token is single-use and expires in 30 minutes. Fetch your credentials and save them to ~/.waldo/credentials.json:')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copy prompt
+          </button>
+          <button class="wcode-block-action" onclick="codeBlockCopy(this,'curl -X POST https://api.waldo.fyi/v1/credentials \\\n  -H \"Content-Type: application/json\" \\\n  -d \'{\"agent\":\"claude-code\"}\'')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copy Curl
+          </button>
+        </div>
+        <pre class="wcode-block-body"># Waldo Brand Intelligence API — setup
+You're setting up the Waldo Brand Intelligence API in Claude Code.
+## Step 1 — Get your API key (run this first)
+This token is single-use and expires in 30 minutes. Fetch your credentials and save them to ~/.waldo/credentials.json:</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-label">Single action</div>
+    <div class="demo-box">
+      <div class="wcode-block">
+        <div class="wcode-block-header">
+          <button class="wcode-block-action" onclick="codeBlockCopy(this,'npx shadcn@latest add @waldo/ui')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copy
+          </button>
+        </div>
+        <pre class="wcode-block-body">npx shadcn@latest add @waldo/ui</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-label">No header — content only</div>
+    <div class="demo-box">
+      <div class="wcode-block">
+        <pre class="wcode-block-body">WALDO_API_KEY=waldo_live_Bd9xKqT8aLmNpQrS
+WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-code-bar">
+    <span class="demo-code-label">&lt;div class="wcode-block"&gt;</span>
+    <button class="copy-btn" onclick="copyCode(this,'&lt;div class=&quot;wcode-block&quot;&gt;\n  &lt;div class=&quot;wcode-block-header&quot;&gt;\n    &lt;button class=&quot;wcode-block-action&quot; onclick=&quot;codeBlockCopy(this, text)&quot;&gt;Copy&lt;/button&gt;\n  &lt;/div&gt;\n  &lt;pre class=&quot;wcode-block-body&quot;&gt;...&lt;/pre&gt;\n&lt;/div&gt;')">Copy</button>
   </div>
 </div>
 

@@ -506,6 +506,23 @@ components:
       Click copies to clipboard and swaps copy icon → check icon for 2s.
       Figma node 83966:356556.
 
+  - component: CodeBlock
+    use_when:
+      - Displaying preformatted code, CLI commands, or prompt text the user may need to copy
+      - Showing multi-action copy options (e.g. "Copy prompt" + "Copy Curl") over the same content block
+    dont_use_when:
+      - Inline code snippets inside prose — use a bare <code> element instead
+      - Single-line copyable values (URLs, tokens) — use CopyLink instead
+    prefer_over:
+      - CopyLink: when content is multi-line code or commands, not a plain URL
+    notes: |
+      bg-card (zinc-900) container, border border/8%, rounded-xl.
+      Header row is optional — rendered only when actions[] is provided.
+      Action buttons use a ghost-sm style: foreground/6% fill, foreground/60% text, pill shape.
+      Copied state swaps icon to check and colors text primary for 2s.
+      Body is font-mono, text-sm, text-foreground/70, whitespace-pre-wrap.
+      Waldo extension — no shadcn equivalent.
+
 
   - component: AdvancedSection
     use_when:
