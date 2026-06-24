@@ -8,6 +8,13 @@ argument-hint: "[filename or path]"
 
 Run this on EVERY component before finishing. No exceptions.
 
+**Fastest path — the deterministic detector covers most of the manual checks below:**
+```bash
+node tools/detect.js <file>                 # one component/file
+bash tools/ds-audit.sh                       # full picture (components + index.html + prototypes)
+```
+`detect.js` flags hardcoded hex, raw rgba, legacy vars, wrong fonts, italic, `font-semibold`, arbitrary radii, `fill="var()"` in SVG, clickable `div/span`, and undefined `-rgb` tokens. Run it first, then eyeball the contextual items below that a regex can't judge.
+
 ## What to check
 
 ### 1. Hardcoded colors — ZERO tolerance

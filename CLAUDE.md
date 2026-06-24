@@ -33,6 +33,10 @@ Enforced rule: **every component demo in `index.html` must be backed by a real `
 
 **Opacity / color convention (vanilla layer & prototypes).** Solid color = `var(--token)` (hex). With opacity = `rgba(var(--token-rgb), a)`, where `--token-rgb` is the comma-channel companion. Every color token that's used with opacity MUST have its `-rgb` companion defined in `tools/waldo-ds.styles.css` (channels matching the hex). Don't redefine `-rgb` tokens locally in a prototype — they ship from the DS. `tools/detect.js` enforces this (`undefined-rgb-token`): a `var(--x-rgb)` with no DS or local definition is a hard error, because `rgba(var(--undefined), a)` is invalid CSS that silently fails. (The React `.tsx` layer is different: `globals.css` tokens are space-channels and Tailwind utilities like `bg-primary/12` handle opacity — no `-rgb` needed there.)
 
+**Color in SVG charts.** SVG presentation attributes (`fill=`, `stroke=`, `stop-color=`) do NOT resolve `var()`. Policy: a hardcoded hex in an SVG attribute is acceptable **only if it equals a real token's value** (e.g. `fill="#32a9a9"` == `--primary`); off-palette hexes are still flagged by `detect.js`. To make an SVG element track a token, use inline `style="fill:var(--token)"` or `currentColor` — `fill="var(--token)"` (the attribute form) is a hard error (`svg-var-attr`), it silently fails.
+
+**Auditing.** `bash tools/ds-audit.sh` is the full-picture report — run it before reporting DS work. It scans components + `index.html` + `waldo-labs/` prototypes (broader than the commit guard, which only scans changed files and skips the showcase + labs). It's a REPORT (exit 0); the gate that blocks new drift is the pre-commit hook / CI. The `ds-verify` skill points here.
+
 ---
 
 ## 🧭 ARCHITECTURE & OWNERSHIP — read this, don't re-derive or ask another session

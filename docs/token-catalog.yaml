@@ -576,6 +576,11 @@ forbidden:
       severity: warning
       match: '\bfont-mono\b'
       suggestion: 'Inter only — mono is for code/kbd/hex'
+    - text: "Clickable <div>/<span> (onclick) — use <button class=\"btn-link\"> for semantics + a11y"
+      rule: clickable-non-button
+      severity: warning
+      match: '<(?:div|span)[^>]*\bonclick='
+      suggestion: 'use <button class="btn-link"> (or add role + tabindex if truly not a button)'
     - text: "rounded-[Xpx] arbitrary radii — token classes only"
     - text: "--destructive color inside .wdd dropdown items — destructive only in dialogs/alerts/buttons"
     - text: "display-* typography in product UI — marketing heroes only"
