@@ -116,6 +116,7 @@
     <button class="sb-item" onclick="waldoGo('comp-ad-copy-card',this)">Ad Copy Card</button>
     <button class="sb-item" onclick="waldoGo('comp-live-badge',this)">Live Status Badge</button>
     <button class="sb-item" onclick="waldoGo('comp-theme-pill',this)">Theme Pill</button>
+    <button class="sb-item" onclick="waldoGo('comp-copy-link',this)">Copy Link</button>
   </div>
   <div class="sb-no-results" id="sb-no-results">No results</div>
   <div class="sb-footer">Shadcn/ui · Inter · Dark-first</div>
@@ -6562,6 +6563,48 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   <div class="demo-code-bar">
     <span class="demo-code-label">&lt;span class="theme-pill pos" /&gt;</span>
     <button class="copy-btn" onclick="copyCode(this, '&lt;span class=&quot;theme-pill pos&quot;&gt;Gut health&lt;span class=&quot;theme-pill-freq&quot;&gt;2,145&lt;/span&gt;&lt;/span&gt;')">Copy</button>
+  </div>
+</div>
+
+<div id="comp-copy-link" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Copy Link</div>
+    <div class="page-desc">Waldo extension — no shadcn equivalent. Displays a shareable URL in a pill container. Clicking copies the URL to the clipboard and swaps the copy icon to a check. Use inside dialog bodies or panels wherever a single shareable link is shown. For editable URLs use <code>Input</code> instead.</div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-label">Default</div>
+    <div class="demo-box">
+      <div class="wcopy-link" onclick="copyLinkClick(this,'https://waldo.fyi/s/Bd9xKqT8aL')">
+        <span class="wcopy-link-url">https://waldo.fyi/s/Bd9xKqT8aL</span>
+        <span class="wcopy-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-label">Long URL — truncates</div>
+    <div class="demo-box">
+      <div class="wcopy-link" onclick="copyLinkClick(this,'https://waldo.fyi/spaces/nike-vs-adidas/intelligence/share/2026-06-24?utm_source=share&utm_medium=link')">
+        <span class="wcopy-link-url">https://waldo.fyi/spaces/nike-vs-adidas/intelligence/share/2026-06-24?utm_source=share&utm_medium=link</span>
+        <span class="wcopy-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-label">Rules</div>
+    <div class="demo-box" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+      <div>URL text is always <code>text-primary</code> (teal). Container is <code>bg-secondary</code> + <code>rounded-2xl</code>, full width.</div>
+      <div>Use when showing a single shareable URL — inside dialog bodies or detail panels.</div>
+      <div>Don't use for editable URLs (use <code>Input</code>) or lists of links (use <code>ListItem</code>).</div>
+      <div>Click copies to clipboard and briefly shows a check icon.</div>
+    </div>
+  </div>
+
+  <div class="demo-code-bar">
+    <span class="demo-code-label">&lt;div class="wcopy-link" /&gt;</span>
+    <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;wcopy-link&quot; onclick=&quot;copyLinkClick(this,url)&quot;&gt;\n  &lt;span class=&quot;wcopy-link-url&quot;&gt;https://waldo.fyi/s/Bd9xKqT8aL&lt;/span&gt;\n  &lt;span class=&quot;wcopy-link-icon&quot;&gt;…copy svg…&lt;/span&gt;\n&lt;/div&gt;')">Copy</button>
   </div>
 </div>
 
