@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 // Live Status Badge — Brand API component
 // Indicates whether a brand is currently discounting.
-// active: destructive color + animated pulse dot
+// active: warning color + static dot
 // inactive: muted, no dot
 
 export interface LiveBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
@@ -19,7 +19,7 @@ const LiveBadge = React.forwardRef<HTMLSpanElement, LiveBadgeProps>(
         className={cn(
           "inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap tracking-[-0.015em]",
           active
-            ? "bg-destructive/10 text-destructive"
+            ? "bg-warning/10 text-warning"
             : "bg-secondary text-muted-foreground",
           className
         )}
@@ -27,7 +27,7 @@ const LiveBadge = React.forwardRef<HTMLSpanElement, LiveBadgeProps>(
       >
         {active && (
           <span
-            className="h-1.5 w-1.5 rounded-full bg-destructive shrink-0 motion-safe:animate-live-pulse"
+            className="h-1.5 w-1.5 rounded-full bg-warning shrink-0"
             aria-hidden
           />
         )}
@@ -39,8 +39,3 @@ const LiveBadge = React.forwardRef<HTMLSpanElement, LiveBadgeProps>(
 LiveBadge.displayName = "LiveBadge";
 
 export { LiveBadge };
-
-// Tailwind config must include:
-// theme.extend.keyframes['live-pulse'] = { '0%,100%':{ opacity:'1', transform:'scale(1)' }, '50%':{ opacity:'0.5', transform:'scale(1.4)' } }
-// theme.extend.animation['live-pulse'] = 'live-pulse 1.4s ease-in-out infinite'
-// prefers-reduced-motion handled via motion-safe: — dot renders static when reduced
