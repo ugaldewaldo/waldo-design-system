@@ -31,8 +31,8 @@ const DepthPill = React.forwardRef<HTMLSpanElement, DepthPillProps>(
           className
         )}
         style={{
-          color: `rgb(var(--yellow-300) / ${alpha})`,
-          background: `rgb(var(--yellow-300) / 0.10)`,
+          color: `rgba(var(--highlight-rgb), ${alpha})`,
+          background: `rgba(var(--highlight-rgb), 0.10)`,
           ...style,
         }}
         {...props}
