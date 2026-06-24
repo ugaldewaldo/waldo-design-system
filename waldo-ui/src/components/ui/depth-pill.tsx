@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 // Depth Pill — Brand API component
 // Encodes discount magnitude via text-color opacity.
 // Alpha formula: Math.max(0.30, Math.min(1, 0.30 + (depth / 60) * 0.70))
-// Base color: amber #f7d372 (--highlight-rgb: 247,211,113)
+// Base color: amber #f7d371 (--highlight-rgb: 247,211,113)
 
 /** @param maxDepth — denominator for the alpha scale (default 60; leaderboard uses 70) */
 function depthAlpha(depth: number, maxDepth = 60): number {

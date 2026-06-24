@@ -81,9 +81,7 @@ function SegmentedControl({
                 ? isSurface
                   ? "bg-zinc-200 text-zinc-950 drop-shadow-[0px_1px_1px_rgba(0,0,0,0.12)]"
                   : "bg-foreground/[0.12] text-foreground shadow-sm"
-                : isSurface
-                  ? "bg-transparent text-foreground/70"
-                  : "bg-transparent text-foreground/70",
+                : "bg-transparent text-foreground/70",
             )}
           >
             {opt.icon ?? opt.label}

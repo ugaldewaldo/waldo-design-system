@@ -80,8 +80,8 @@ const SelectContent = React.forwardRef<
         position === "popper" && [
           "data-[side=bottom]:translate-y-1",
           "data-[side=top]:-translate-y-1",
-          "max-h-[--radix-select-content-available-height]",
-          "w-[--radix-select-trigger-width]",
+          "max-h-(--radix-select-content-available-height)",
+          "w-(--radix-select-trigger-width)",
         ],
         className
       )}

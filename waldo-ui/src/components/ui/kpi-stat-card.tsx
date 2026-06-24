@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 
 // KPI Stat Card — Brand API component
 // 4-up grid of summary metrics.
-// delta: up = destructive (more discounting = pressure), down = primary (relief)
+// delta: up = warning (more discounting = pressure), down = primary (relief)
 
 export type KpiDelta = {
   direction: "up" | "down";
@@ -14,7 +14,7 @@ export type KpiDelta = {
 export interface KpiStatCardProps extends React.HTMLAttributes<HTMLDivElement> {
   label: string;
   value: string;
-  /** Supports plain strings or inline colored spans (e.g. <span className="text-destructive">▲ +4pp</span>) */
+  /** Supports plain strings or inline colored spans (e.g. <span className="text-warning">▲ +4pp</span>) */
   sub?: React.ReactNode;
   delta?: KpiDelta;
 }
@@ -35,7 +35,7 @@ const KpiStatCard = React.forwardRef<HTMLDivElement, KpiStatCardProps>(
             className={cn(
               "absolute top-4 right-4 border-none",
               delta.direction === "up"
-                ? "bg-destructive/[0.12] text-destructive"
+                ? "bg-warning/[0.12] text-warning"
                 : "bg-primary/[0.12] text-primary"
             )}
           >

@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 
 // Ad Copy Card — Brand API component
 // Quote card with amber-highlighted discount text, source meta, and detection badge.
-// Card bg is zinc-950 (#171819) — darker than var(--card) for visual nesting.
+// Card bg is var(--background) (#171819, zinc-950) — darker than var(--card) for visual nesting.
 
 export interface AdCopyCardProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
