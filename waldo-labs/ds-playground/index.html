@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<!--
+  DS Decision Playground — scratch surface to SEE component states side-by-side.
+  NOT index.html, NOT canonical. Tokens are the real channel values copied from
+  waldo-ui/src/globals.css (dark theme) so colors match what the .tsx components
+  render. Add clusters as decisions come up; delete freely.
+
+  RUN:  cd waldo-design-system && python3 -m http.server 8099
+        open http://127.0.0.1:8099/waldo-labs/ds-playground/
+  (file:// can misbehave; serve over http. This is a replica for visual/color
+   decisions — not the live React component. For behavior, use a real renderer.)
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DS Decision Playground</title>
+<style>
+  :root {
+    /* channel values from globals.css :root (dark) — keep in sync if they change */
+    --background: 23 24 25;
+    --foreground: 210 211 211;
+    --card: 32 33 35;
+    --primary: 50 169 169;        /* green-500 — product brand */
+    --secondary: 45 47 51;        /* zinc-750 */
+    --muted-foreground: 143 144 145;
+    --destructive: 222 58 40;     /* coral-500 */
+    --warning: 201 78 34;         /* orange-600 */
+    --border: 210 211 211;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 40px;
+    background: rgb(var(--background));
+    color: rgb(var(--foreground));
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1 { font-size: 20px; font-weight: 600; margin: 0 0 4px; letter-spacing: -0.02em; }
+  .subtle { color: rgb(var(--muted-foreground)); font-size: 13px; margin: 0 0 32px; }
+  .cluster { margin-bottom: 44px; }
+  .cluster > h2 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: rgb(var(--muted-foreground)); margin: 0 0 4px; }
+  .cluster > .note { font-size: 13px; color: rgb(var(--muted-foreground)); margin: 0 0 16px; max-width: 620px; line-height: 1.5; }
+  .row { display: flex; gap: 28px; flex-wrap: wrap; align-items: flex-start; }
+  .opt { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+  .opt .tag { font-size: 11px; color: rgb(var(--muted-foreground)); font-weight: 500; }
+  .opt .tag b { color: rgb(var(--foreground)); }
+
+  /* ── live-badge replica (from live-badge.tsx) ── */
+  .live-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 500;
+    padding: 4px 10px; border-radius: 9999px;
+    white-space: nowrap; letter-spacing: -0.015em;
+  }
+  .live-badge .dot {
+    height: 6px; width: 6px; border-radius: 9999px; flex-shrink: 0;
+    animation: live-pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes live-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.4); }
+  }
+  /* color variants */
+  .v-destructive { background: rgb(var(--destructive) / 0.10); color: rgb(var(--destructive)); }
+  .v-destructive .dot { background: rgb(var(--destructive)); }
+  .v-warning { background: rgb(var(--warning) / 0.10); color: rgb(var(--warning)); }
+  .v-warning .dot { background: rgb(var(--warning)); }
+  .v-primary { background: rgb(var(--primary) / 0.10); color: rgb(var(--primary)); }
+  .v-primary .dot { background: rgb(var(--primary)); }
+  .v-inactive { background: rgb(var(--secondary)); color: rgb(var(--muted-foreground)); }
+
+  /* ── kpi-stat-card replica (from kpi-stat-card.tsx) ── */
+  .kpi {
+    position: relative; background: rgb(var(--card)); border-radius: 12px;
+    padding: 24px; display: flex; flex-direction: column; gap: 8px;
+    width: 230px;
+  }
+  .kpi .k-label { font-size: 13px; color: rgb(var(--muted-foreground)); }
+  .kpi .k-value { font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1; }
+  .kpi .k-sub { font-size: 12px; color: rgb(var(--muted-foreground)); }
+  .delta {
+    position: absolute; top: 16px; right: 16px;
+    font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: 9999px;
+    display: inline-flex; align-items: center; gap: 3px;
+  }
+  .d-warning { background: rgb(var(--warning) / 0.12); color: rgb(var(--warning)); }
+  .d-primary { background: rgb(var(--primary) / 0.12); color: rgb(var(--primary)); }
+  .d-muted   { background: rgb(var(--secondary)); color: rgb(var(--muted-foreground)); }
+  .d-fg      { background: rgb(var(--foreground) / 0.08); color: rgb(var(--foreground)); }
+</style>
+</head>
+<body>
+  <h1>DS Decision Playground</h1>
+  <p class="subtle">PRO-2728 — live-badge color (#3) and kpi delta tints. Real channel tokens; replicas of the .tsx so colors match what ships.</p>
+
+  <!-- ─────────────────────────────────────────── -->
+  <div class="cluster">
+    <h2>#3 · live-badge — active color</h2>
+    <p class="note">Active state = colored pill + pulsing dot. Currently <b>destructive</b>. Doctrine forbids destructive for live/active indicators; it also forbids raw <b>primary</b> (brand green) in product UI except irreversible actions. So <b>warning</b> is the only doctrine-clean option. See them live:</p>
+    <div class="row">
+      <div class="opt">
+        <span class="tag"><b>destructive</b> — current (forbidden)</span>
+        <span class="live-badge v-destructive"><span class="dot"></span>Discounting now</span>
+      </div>
+      <div class="opt">
+        <span class="tag"><b>warning</b> — recommended</span>
+        <span class="live-badge v-warning"><span class="dot"></span>Discounting now</span>
+      </div>
+      <div class="opt">
+        <span class="tag"><b>primary</b> — Steve's other option (breaks rule)</span>
+        <span class="live-badge v-primary"><span class="dot"></span>Discounting now</span>
+      </div>
+      <div class="opt">
+        <span class="tag">inactive state (unchanged)</span>
+        <span class="live-badge v-inactive">No active discount</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────── -->
+  <div class="cluster">
+    <h2>#2 done + extra · kpi-stat-card — delta tints</h2>
+    <p class="note">Up-delta already fixed to <b>warning</b> (more discounting = pressure). The open question is the <b>down-delta</b> (relief / positive), which currently uses <b>primary</b> (brand green) — same rule tension as #3. Compare options for the down-delta:</p>
+    <div class="row">
+      <div class="opt">
+        <span class="tag">up-delta — <b>warning</b> (fixed ✓)</span>
+        <div class="kpi">
+          <span class="delta d-warning">▲ +4pp</span>
+          <span class="k-label">Avg. discount depth</span>
+          <span class="k-value">32%</span>
+          <span class="k-sub">vs. last 30 days</span>
+        </div>
+      </div>
+      <div class="opt">
+        <span class="tag">down-delta — <b>primary</b> (current)</span>
+        <div class="kpi">
+          <span class="delta d-primary">▼ −2pp</span>
+          <span class="k-label">Avg. discount depth</span>
+          <span class="k-value">28%</span>
+          <span class="k-sub">vs. last 30 days</span>
+        </div>
+      </div>
+      <div class="opt">
+        <span class="tag">down-delta — <b>muted</b> (neutral)</span>
+        <div class="kpi">
+          <span class="delta d-muted">▼ −2pp</span>
+          <span class="k-label">Avg. discount depth</span>
+          <span class="k-value">28%</span>
+          <span class="k-sub">vs. last 30 days</span>
+        </div>
+      </div>
+      <div class="opt">
+        <span class="tag">down-delta — <b>foreground/8</b> (subtle)</span>
+        <div class="kpi">
+          <span class="delta d-fg">▼ −2pp</span>
+          <span class="k-label">Avg. discount depth</span>
+          <span class="k-value">28%</span>
+          <span class="k-sub">vs. last 30 days</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
