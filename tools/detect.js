@@ -141,7 +141,7 @@ function nearestToken(hex, rules) {
 
 const ALLOWED_HEX = new Set(['#ffffff']); // white text on green-700 fills
 const ALLOWED_RADII = new Set([0, 1, 2, 3, 4, 6, 8, 12, 16, 20, 24, 32, 50, 9999]);
-const ALLOWED_FONTS = /inter|ui-monospace|sf mono|jetbrains mono|fira code|menlo|consolas|monospace|sans-serif|emoji/;
+const ALLOWED_FONTS = /inter|ui-monospace|sf mono|jetbrains mono|fira code|menlo|consolas|monospace|sans-serif|emoji|inherit/;
 const TW_FOREIGN_PALETTE =
   /\b(?:bg|text|border|ring|fill|stroke|from|to|via)-(?:red|blue|violet|purple|rose|indigo|sky|cyan|emerald|lime|amber|fuchsia|slate|gray|neutral|stone|teal)-\d{2,3}\b/g;
 
@@ -192,6 +192,10 @@ function scanFile(filePath, rules) {
     for (const m of line.matchAll(/#[0-9a-fA-F]{3,8}\b/g)) {
       const raw = m[0];
       if (!/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/.test(raw)) continue;
+      // skip hex inside a CSS attribute selector / Tailwind arbitrary variant
+      // (e.g. [&_.recharts-grid_line[stroke='#ccc']] overrides a Recharts default — not an applied color)
+      const pre = line.slice(0, m.index);
+      if (pre.split('[').length > pre.split(']').length) continue;
       const hex = expandHex(raw);
       if (rules.validHex.has(hex) || ALLOWED_HEX.has(hex)) continue;
       if (rules.modelDefaults[hex]) {

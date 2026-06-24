@@ -781,7 +781,7 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
       .btn-section-badge { font-size: var(--fs-xs); font-weight: 500; padding: 2px 7px; border-radius: var(--radius-full); letter-spacing: .04em; text-transform: uppercase; }
       .shadcn-core { background: rgba(50,169,169,.12); color: #4dbcbc; }
       .waldo-ext  { background: rgba(210,211,211,.08); color: color-mix(in srgb, var(--foreground) 45%, transparent); }
-      .note-chip { font-size: var(--fs-xs); color: color-mix(in srgb, var(--foreground) 45%, transparent); font-style: italic; padding: 2px 8px; background: rgba(247,211,113,.08); border-radius: 4px; border: 1px solid rgba(247,211,113,.15); color: #f7d371; }
+      .note-chip { font-size: var(--fs-xs); color: color-mix(in srgb, var(--foreground) 45%, transparent); padding: 2px 8px; background: rgba(247,211,113,.08); border-radius: 4px; border: 1px solid rgba(247,211,113,.15); color: #f7d371; }
 
 /* ── style block 3 ── */
 .chip {
