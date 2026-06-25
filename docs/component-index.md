@@ -5,32 +5,35 @@
 already exists in `index.html`. Consumables live in two sections — Components and
 Charts — so a comp-only scan will miss the charts. This is the flat list of both.
 
-## Components (65)
+## Components (70)
 
 - Button — `#comp-button`
 - Badge — `#comp-badge`
 - Input / Field — `#comp-input`
-- Checkbox · Switch — `#comp-checkbox`
-- Segmented Control — `#comp-segmented`
+- Checkbox — `#comp-checkbox`
+- Switch — `#comp-switch`
+- Segmented Control — `#comp-segmented-control`
 - Tag · TagInput — `#comp-tag`
-- File Input — `#comp-fileinput`
+- File Input — `#comp-file-input`
 - Avatar — `#comp-avatar`
 - Select / Dropdown — `#comp-select`
 - Dialog — `#comp-dialog`
-- Wizard Dialog — `#comp-wizard`
+- Wizard Dialog — `#comp-wizard-dialog`
+- Filter Chip — `#comp-filter-chip`
 - Filter Trigger — `#comp-filter-trigger`
-- Nav Item — `#comp-nav`
+- Nav Item — `#comp-nav-item`
 - Table — `#comp-table`
-- List Item — `#comp-listitem`
+- List Item — `#comp-list-item`
 - Separator — `#comp-separator`
 - Toast — `#comp-toast`
 - Alert — `#comp-alert`
-- Empty State — `#comp-empty`
+- Empty State — `#comp-empty-state`
 - Tabs — `#comp-tabs`
-- Icons — `#comp-icons`
-- Radio Group — `#comp-radio`
+- Icons — `#comp-icon`
+- Radio Group — `#comp-radio-group`
 - Slider — `#comp-slider`
 - Loader — `#comp-loader`
+- Status Spinner — `#comp-status-spinner`
 - Accordion — `#comp-accordion`
 - Alert Dialog — `#comp-alert-dialog`
 - Aspect Ratio — `#comp-aspect-ratio`
@@ -40,6 +43,7 @@ Charts — so a comp-only scan will miss the charts. This is the flat list of bo
 - Carousel — `#comp-carousel`
 - Collapsible — `#comp-collapsible`
 - Combobox — `#comp-combobox`
+- Command — `#comp-command`
 - Context Menu — `#comp-context-menu`
 - Drawer — `#comp-drawer`
 - Form — `#comp-form`
@@ -60,13 +64,14 @@ Charts — so a comp-only scan will miss the charts. This is the flat list of bo
 - Sonner — `#comp-sonner`
 - Toggle — `#comp-toggle`
 - Toggle Group — `#comp-toggle-group`
+- Tooltip — `#comp-tooltip`
 - Waldo Logo — `#comp-waldo-logo`
 - Depth Pill — `#comp-depth-pill`
-- Leaderboard Row — `#comp-leaderboard`
-- KPI Stat Card — `#comp-kpi-card`
+- Leaderboard Row — `#comp-leaderboard-row`
+- KPI Stat Card — `#comp-kpi-stat-card`
 - Quote Card — `#comp-quote-card`
 - Comment Card — `#comp-comment-card`
-- Alert List Row — `#comp-alert-list`
+- Alert List Row — `#comp-alert-list-row`
 - Ad Copy Card — `#comp-ad-copy-card`
 - Live Status Badge — `#comp-live-badge`
 - Theme Pill — `#comp-theme-pill`
