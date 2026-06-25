@@ -1313,6 +1313,27 @@ components:
       Footer (.rec-foot): border-top color-mix foreground 8%, padding-top 8px, space-between layout.
       Action icons (.rec-action): 28×28px, radius var(--radius-md), var(--muted-foreground) icons.
 
+  - component: Segmented Bar
+    use_when:
+      - Showing proportional distribution of topics, themes, or categories across a brand's content
+      - Comparing message mix between two brands side by side (one bar per brand)
+      - Sentiment breakdown where each segment's share matters visually
+    dont_use_when:
+      - Comparing absolute values between entities — use Benchmark Bar or Dual-Bar Row
+      - More than 6 segments — bar becomes unreadable; use a Donut Chart instead
+      - Single metric with no breakdown — use a KPI Stat Card
+    prefer_over:
+      - Pie Chart: more readable in narrow dashboards, easier to compare multiple bars vertically
+      - Proportion Bar: when you need a title, legend labels, and hover states (not just a tone strip)
+    notes: |
+      chart-page: chart-page-segbar (lives inside the Charts section, not as a standalone comp-*).
+      Shell: .segbar-wrap (flex column, gap 10px) > .segbar-track (height 48px, radius var(--radius-xl), overflow hidden)
+        + .segbar-legend (flex wrap, gap 6px 20px).
+      Each segment: .segbar-seg with width = percentage, background = var(--chart-N). Hover: opacity 0.82.
+      Legend item: colored % in font-weight 600 + muted category label. Color must match segment (same --chart-N).
+      Use --chart-1 through --chart-12 only — never hardcoded hex colors.
+      Gap between segments: none (overflow hidden on track handles clean joins).
+
 component_choice_logic:
 
   dialog_vs_drawer:
