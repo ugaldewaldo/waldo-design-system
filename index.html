@@ -6556,10 +6556,10 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   <style>
     .bench-bar { display: flex; flex-direction: column; gap: 6px; }
     .bench-bar-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
-    .bench-bar-label { font-size: var(--fs-sm); font-weight: 500; color: var(--foreground); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bench-bar-label { font-size: var(--fs-xs); font-weight: 400; color: var(--foreground); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .bench-bar-right { display: flex; align-items: baseline; gap: 5px; flex: none; }
-    .bench-bar-val { font-size: var(--fs-xs); font-weight: 600; color: var(--foreground); font-variant-numeric: tabular-nums; white-space: nowrap; }
-    .bench-bar-ref { font-size: var(--fs-xs); color: var(--muted-foreground); white-space: nowrap; }
+    .bench-bar-val { font-size: var(--fs-xs); font-weight: 400; color: var(--foreground); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .bench-bar-ref { font-size: var(--fs-xs); font-weight: 400; color: var(--muted-foreground); white-space: nowrap; }
     .bench-bar-track { position: relative; height: 6px; border-radius: 999px; background: color-mix(in srgb, var(--foreground) 8%, transparent); overflow: visible; }
     .bench-bar-fill { height: 100%; border-radius: 999px; transition: width 0.3s ease; }
     .bench-bar-marker { position: absolute; top: -3px; bottom: -3px; width: 2px; border-radius: 1px; background: color-mix(in srgb, var(--foreground) 30%, transparent); transform: translateX(-50%); }
@@ -6691,7 +6691,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   <style>
     .dbar-row { display: flex; flex-direction: column; gap: 5px; padding: 8px 12px; border-radius: var(--radius-lg); cursor: default; transition: background 0.12s; }
     .dbar-row:hover { background: var(--secondary); }
-    .dbar-metric { font-size: var(--fs-xs); color: var(--muted-foreground); margin-bottom: 2px; }
+    .dbar-metric { font-size: var(--fs-xs); font-weight: 600; color: var(--primary); margin-bottom: 2px; }
     .dbar-line { display: flex; align-items: center; gap: 8px; }
     .dbar-dot { width: 6px; height: 6px; border-radius: 999px; flex: none; }
     .dbar-dot.a { background: var(--primary); }
