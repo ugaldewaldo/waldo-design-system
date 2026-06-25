@@ -118,6 +118,7 @@
     <button class="sb-item" onclick="waldoGo('comp-quote-card',this)">Quote Card</button>
     <button class="sb-item" onclick="waldoGo('comp-benchmark-bar',this)">Benchmark Bar</button>
     <button class="sb-item" onclick="waldoGo('comp-bar-track',this)">Bar Track</button>
+    <button class="sb-item" onclick="waldoGo('comp-recommendation-card',this)">Recommendation Card</button>
     <button class="sb-item" onclick="waldoGo('comp-dual-bar-row',this)">Dual-Bar Row</button>
     <button class="sb-item" onclick="waldoGo('comp-media-tile',this)">Media Tile</button>
     <button class="sb-item" onclick="waldoGo('comp-comment-card',this)">Comment Card</button>
@@ -6821,8 +6822,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   </div>
 
   <style>
-    .bar-track { display: flex; flex-direction: column; gap: 5px; padding: 7px 0; cursor: default; border-radius: var(--radius-md); transition: background 0.1s; }
-    .bar-track:hover { background: color-mix(in srgb, var(--foreground) 4%, transparent); padding-left: 6px; padding-right: 6px; margin-left: -6px; margin-right: -6px; }
+    .bar-track { display: flex; flex-direction: column; gap: 5px; padding: 7px 6px; cursor: default; border-radius: var(--radius-md); transition: background 0.1s; }
+    .bar-track:hover { background: color-mix(in srgb, var(--foreground) 4%, transparent); }
     .bar-track-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
     .bar-track-label { font-size: var(--fs-xs); color: var(--muted-foreground); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .bar-track-val { font-size: var(--fs-xs); font-weight: 500; color: var(--foreground); font-variant-numeric: tabular-nums; white-space: nowrap; flex: none; }
@@ -6921,6 +6922,18 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     .mtile-thumb::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, color-mix(in srgb, #000 78%, transparent) 0%, color-mix(in srgb, #000 15%, transparent) 40%, transparent 70%); }
     .mtile-eng { position: absolute; top: 8px; right: 8px; z-index: 2; font-size: var(--fs-xs); font-weight: 600; color: #fff; background: rgba(0,0,0,0.50); border-radius: 999px; padding: 2px 7px; line-height: 1.4; display: flex; align-items: center; gap: 4px; }
     .mtile-caption { position: absolute; bottom: 8px; left: 10px; right: 10px; z-index: 2; font-size: var(--fs-xs); color: #fff; line-height: 1.4; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+
+    /* Social feed variant */
+    .mtile-row { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; width: 100%; max-width: 600px; }
+    .mtile-row::-webkit-scrollbar { display: none; }
+    .mtile-post { display: flex; flex-direction: column; gap: 7px; flex: none; width: 140px; cursor: pointer; }
+    .mtile-post .mtile { width: 100%; }
+    .mtile-brand { position: absolute; bottom: 8px; left: 8px; z-index: 2; display: flex; align-items: center; gap: 5px; }
+    .mtile-brand-logo { width: 18px; height: 18px; border-radius: 999px; background: var(--secondary); background-size: cover; background-position: center; flex: none; border: 1px solid rgba(255,255,255,0.25); }
+    .mtile-brand-name { font-size: var(--fs-xs); color: #fff; font-weight: 500; line-height: 1; }
+    .mtile-post-footer { display: flex; align-items: center; justify-content: space-between; padding: 0 2px; }
+    .mtile-post-eng { font-size: var(--fs-xs); color: var(--muted-foreground); display: flex; align-items: center; gap: 4px; }
+    .mtile-post-platform { font-size: var(--fs-xs); color: var(--muted-foreground); }
   </style>
 
   <div class="section">
@@ -6984,6 +6997,164 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         </div>
       </div>
       <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="mtile"&gt;</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Social feed (with footer)</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div class="mtile-row">
+
+          <div class="mtile-post">
+            <div class="mtile">
+              <div class="mtile-thumb" style="background-image:url('https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=300&h=375&fit=crop')"></div>
+              <div class="mtile-brand">
+                <div class="mtile-brand-logo" style="background-image:url('https://logo.clearbit.com/patagonia.com')"></div>
+                <span class="mtile-brand-name">patagonia</span>
+              </div>
+            </div>
+            <div class="mtile-post-footer">
+              <span class="mtile-post-eng">♡ 6.2K</span>
+              <span class="mtile-post-platform">Instagram</span>
+            </div>
+          </div>
+
+          <div class="mtile-post">
+            <div class="mtile">
+              <div class="mtile-thumb" style="background-image:url('https://images.unsplash.com/photo-1483721310020-03333e577078?w=300&h=375&fit=crop')"></div>
+              <div class="mtile-brand">
+                <div class="mtile-brand-logo" style="background-image:url('https://logo.clearbit.com/columbia.com')"></div>
+                <span class="mtile-brand-name">columbia1938</span>
+              </div>
+            </div>
+            <div class="mtile-post-footer">
+              <span class="mtile-post-eng">♡ 873</span>
+              <span class="mtile-post-platform">TikTok</span>
+            </div>
+          </div>
+
+          <div class="mtile-post">
+            <div class="mtile">
+              <div class="mtile-thumb" style="background-image:url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=375&fit=crop')"></div>
+              <div class="mtile-brand">
+                <div class="mtile-brand-logo" style="background-image:url('https://logo.clearbit.com/thenorthface.com')"></div>
+                <span class="mtile-brand-name">thenorthface</span>
+              </div>
+            </div>
+            <div class="mtile-post-footer">
+              <span class="mtile-post-eng">♡ 17.2K</span>
+              <span class="mtile-post-platform">Instagram</span>
+            </div>
+          </div>
+
+          <div class="mtile-post">
+            <div class="mtile">
+              <div class="mtile-thumb" style="background-image:url('https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=300&h=375&fit=crop')"></div>
+              <div class="mtile-brand">
+                <div class="mtile-brand-logo" style="background-image:url('https://logo.clearbit.com/arcteryx.com')"></div>
+                <span class="mtile-brand-name">arcteryx</span>
+              </div>
+            </div>
+            <div class="mtile-post-footer">
+              <span class="mtile-post-eng">♡ 17.2K</span>
+              <span class="mtile-post-platform">TikTok</span>
+            </div>
+          </div>
+
+          <div class="mtile-post">
+            <div class="mtile">
+              <div class="mtile-thumb" style="background-image:url('https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=375&fit=crop')"></div>
+              <div class="mtile-brand">
+                <div class="mtile-brand-logo" style="background-image:url('https://logo.clearbit.com/nike.com')"></div>
+                <span class="mtile-brand-name">nike</span>
+              </div>
+            </div>
+            <div class="mtile-post-footer">
+              <span class="mtile-post-eng">♡ 42.1K</span>
+              <span class="mtile-post-platform">Instagram</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="mtile-row"&gt; + &lt;div class="mtile-post"&gt;</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Recommendation Card -->
+<div id="comp-recommendation-card" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Recommendation Card</div>
+    <div class="page-desc">AI-generated brand insight with category tag, headline, supporting body, evidence quote, and feedback actions. Used in coaching / intelligence feeds.</div>
+  </div>
+
+  <style>
+    .rec-card { background: var(--card); border-radius: var(--radius-xl); padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; cursor: pointer; transition: background 0.12s; }
+    .rec-card:hover { background: color-mix(in srgb, var(--foreground) 5%, var(--card)); }
+    .rec-header { display: flex; align-items: center; gap: 8px; }
+    .rec-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 999px; flex: none; text-transform: uppercase; }
+    .rec-tag.campaign { background: color-mix(in srgb, var(--chart-3, #7c6af7) 14%, transparent); color: var(--chart-3, #7c6af7); }
+    .rec-tag.product  { background: color-mix(in srgb, var(--primary) 14%, transparent); color: var(--primary); }
+    .rec-tag.creative { background: color-mix(in srgb, var(--warning) 14%, transparent); color: var(--warning); }
+    .rec-tag.comms    { background: color-mix(in srgb, var(--destructive) 14%, transparent); color: var(--destructive); }
+    .rec-tag.retail   { background: color-mix(in srgb, var(--muted-foreground) 14%, transparent); color: var(--muted-foreground); }
+    .rec-date { font-size: var(--fs-xs); color: var(--muted-foreground); opacity: 0.6; margin-left: auto; flex: none; }
+    .rec-headline { font-size: var(--fs-sm); font-weight: 600; color: var(--foreground); line-height: 1.35; }
+    .rec-body { font-size: var(--fs-xs); color: var(--muted-foreground); line-height: 1.55; }
+    .rec-evidence { background: color-mix(in srgb, var(--foreground) 5%, transparent); border-radius: var(--radius-md); padding: 10px 12px; display: flex; flex-direction: column; gap: 3px; }
+    .rec-evidence-label { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-foreground); opacity: 0.6; }
+    .rec-evidence-text { font-size: var(--fs-xs); color: var(--muted-foreground); line-height: 1.5; }
+    .rec-foot { display: flex; align-items: center; gap: 2px; padding-top: 6px; border-top: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent); margin-top: 2px; }
+    .rec-action { width: 28px; height: 28px; background: transparent; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: var(--radius-md); color: var(--muted-foreground); transition: background 0.12s, color 0.12s; padding: 0; }
+    .rec-action:hover { background: color-mix(in srgb, var(--primary) 10%, transparent); color: var(--primary); }
+    .rec-action.down:hover { background: color-mix(in srgb, var(--destructive) 10%, transparent); color: var(--destructive); }
+    .rec-action svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Feed (stacked)</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="max-width:420px;width:100%;display:flex;flex-direction:column;gap:8px">
+          <div class="rec-card">
+            <div class="rec-header">
+              <span class="rec-tag comms">Comms</span>
+              <span class="rec-date">Jun 24</span>
+            </div>
+            <div class="rec-headline">Get ahead of the settlement narrative</div>
+            <div class="rec-body">Confusion is spreading on TikTok (+190%) and in brand search. A proactive FAQ post will own the narrative before negative press does.</div>
+            <div class="rec-evidence">
+              <span class="rec-evidence-label">Evidence</span>
+              <span class="rec-evidence-text">"Settlement email just landed and I am CONFUSED" — @healthyswaps, 82K reach</span>
+            </div>
+            <div class="rec-foot">
+              <button class="rec-action" aria-label="Save"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+              <button class="rec-action" aria-label="Helpful"><svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>
+              <button class="rec-action down" aria-label="Not helpful"><svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg></button>
+            </div>
+          </div>
+          <div class="rec-card">
+            <div class="rec-header">
+              <span class="rec-tag product">Product</span>
+              <span class="rec-date">Jun 23</span>
+            </div>
+            <div class="rec-headline">Wellness positioning resonates with Gen Z runners</div>
+            <div class="rec-body">Posts framing the brand as a running recovery drink are getting 3× the saves vs generic flavor content. Lean into this for the summer campaign.</div>
+            <div class="rec-evidence">
+              <span class="rec-evidence-label">Evidence</span>
+              <span class="rec-evidence-text">"My post-run recovery stack: Poppi + magnesium" — 14 saves, 0.9% engagement rate</span>
+            </div>
+            <div class="rec-foot">
+              <button class="rec-action" aria-label="Save"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
+              <button class="rec-action" aria-label="Helpful"><svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>
+              <button class="rec-action down" aria-label="Not helpful"><svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="rec-card"&gt; + .rec-tag.comms|product|campaign|creative|retail</span></div>
     </div>
   </div>
 </div>
