@@ -1142,6 +1142,24 @@ components:
     notes: |
       Brand API prototype component — not yet reviewed against Figma.
 
+  - component: Bar Track
+    use_when:
+      - Ranked list of brands/entities by a single metric (SoV, reach, engagement)
+      - Simple percentage breakdown without a reference point
+    dont_use_when:
+      - Metric needs a median/benchmark marker — use Benchmark Bar instead
+      - Only one value with no comparison context — use KPI Stat Card
+    prefer_over:
+      - Benchmark Bar: when there is no reference/median line, just a ranked fill
+    notes: |
+      Structure: .bar-track-label (left, fs-xs muted-foreground) + .bar-track-val (right, fs-xs foreground 500) + .bar-track-rail.
+      Rail: height 6px, radius 999px, background color-mix(var(--foreground) 8%).
+      Fill width set via inline style (width: N%). Default fill = var(--primary).
+      Variants: .muted → muted fill, .warn → var(--warning), .bad → var(--destructive).
+      List wrapper: .bar-track-list (var(--card) bg, radius-xl, padding 14px 16px).
+      Use .bar-track-list-title for the list heading (fs-xs, weight 600).
+      Bar widths should be relative to the max value in the list (max = 100%).
+
   - component: Benchmark Bar
     use_when:
       - Showing brand performance vs a reference point (category median, benchmark, competitor average)
@@ -1160,6 +1178,25 @@ components:
       Fill: .bench-bar-fill with inline width% style.
       Marker: .bench-bar-marker absolute at inline left% style — shows reference point (median/benchmark).
       .bench-stack: background var(--card), radius var(--radius-xl), padding 14px 16px, gap 14px.
+
+  - component: Media Tile
+    use_when:
+      - Displaying a social post thumbnail in a grid (image or video)
+      - Ad creative previews in a compact grid layout
+      - Brand owned/earned media feed grids
+    dont_use_when:
+      - Full article or blog post with long metadata — use Article Card
+      - Single featured image — use a plain image with aspect-ratio
+    prefer_over:
+      - Article Card: when content is a visual post thumbnail with minimal text overlay, not a structured editorial card
+    notes: |
+      Grid tile with 4:5 aspect ratio. Background: var(--secondary) as fallback, cover image via inline style.
+      Gradient scrim (bottom-to-top) for text legibility over images.
+      Engagement pill: top-right, var(--fs-xs), semibold white, semi-transparent dark bg, rounded-full.
+      Caption: bottom-left, var(--fs-xs), white, z-index above scrim.
+      Border-radius: var(--radius-xl). Overflow hidden.
+      Classes: .mtile, .mtile-thumb, .mtile-eng, .mtile-caption.
+      Grid wrapper: .mtile-grid (3 cols, gap 8px).
 
   - component: Dual-Bar Row
     use_when:

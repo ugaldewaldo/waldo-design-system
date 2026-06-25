@@ -117,7 +117,9 @@
     <button class="sb-item" onclick="waldoGo('comp-kpi-stat-card',this)">KPI Stat Card</button>
     <button class="sb-item" onclick="waldoGo('comp-quote-card',this)">Quote Card</button>
     <button class="sb-item" onclick="waldoGo('comp-benchmark-bar',this)">Benchmark Bar</button>
+    <button class="sb-item" onclick="waldoGo('comp-bar-track',this)">Bar Track</button>
     <button class="sb-item" onclick="waldoGo('comp-dual-bar-row',this)">Dual-Bar Row</button>
+    <button class="sb-item" onclick="waldoGo('comp-media-tile',this)">Media Tile</button>
     <button class="sb-item" onclick="waldoGo('comp-comment-card',this)">Comment Card</button>
     <button class="sb-item" onclick="waldoGo('comp-alert-list-row',this)">Alert List Row</button>
     <button class="sb-item" onclick="waldoGo('comp-ad-copy-card',this)">Ad Copy Card</button>
@@ -6807,6 +6809,181 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         </div>
       </div>
       <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="dbar-row"&gt;</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Bar Track -->
+<div id="comp-bar-track" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Bar Track</div>
+    <div class="page-desc">Simple labeled bar row for ranked lists. Label left, colored fill bar, value right. No reference marker — use Benchmark Bar when a median/benchmark line is needed.</div>
+  </div>
+
+  <style>
+    .bar-track { display: flex; flex-direction: column; gap: 5px; padding: 7px 0; cursor: default; border-radius: var(--radius-md); transition: background 0.1s; }
+    .bar-track:hover { background: color-mix(in srgb, var(--foreground) 4%, transparent); padding-left: 6px; padding-right: 6px; margin-left: -6px; margin-right: -6px; }
+    .bar-track-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+    .bar-track-label { font-size: var(--fs-xs); color: var(--muted-foreground); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bar-track-val { font-size: var(--fs-xs); font-weight: 500; color: var(--foreground); font-variant-numeric: tabular-nums; white-space: nowrap; flex: none; }
+    .bar-track-rail { height: 6px; border-radius: 999px; background: color-mix(in srgb, var(--foreground) 8%, transparent); overflow: hidden; }
+    .bar-track-fill { height: 100%; border-radius: 999px; background: var(--primary); }
+
+    /* color variants */
+    .bar-track.muted  .bar-track-fill { background: color-mix(in srgb, var(--muted-foreground) 55%, transparent); }
+    .bar-track.warn   .bar-track-fill { background: var(--warning); }
+    .bar-track.bad    .bar-track-fill { background: var(--destructive); }
+
+    /* list wrapper */
+    .bar-track-list { background: var(--card); border-radius: var(--radius-xl); padding: 14px 16px; display: flex; flex-direction: column; }
+    .bar-track-list-title { font-size: var(--fs-xs); font-weight: 600; color: var(--foreground); margin-bottom: 6px; }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Ranked list (card shell)</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div class="bar-track-list" style="max-width:340px;width:100%">
+          <div class="bar-track-list-title">Share of Voice</div>
+
+          <div class="bar-track">
+            <div class="bar-track-top">
+              <span class="bar-track-label">Nike</span>
+              <span class="bar-track-val">42%</span>
+            </div>
+            <div class="bar-track-rail"><div class="bar-track-fill" style="width:100%"></div></div>
+          </div>
+
+          <div class="bar-track muted">
+            <div class="bar-track-top">
+              <span class="bar-track-label">Adidas</span>
+              <span class="bar-track-val">28%</span>
+            </div>
+            <div class="bar-track-rail"><div class="bar-track-fill" style="width:67%"></div></div>
+          </div>
+
+          <div class="bar-track muted">
+            <div class="bar-track-top">
+              <span class="bar-track-label">New Balance</span>
+              <span class="bar-track-val">18%</span>
+            </div>
+            <div class="bar-track-rail"><div class="bar-track-fill" style="width:43%"></div></div>
+          </div>
+
+          <div class="bar-track muted">
+            <div class="bar-track-top">
+              <span class="bar-track-label">Under Armour</span>
+              <span class="bar-track-val">12%</span>
+            </div>
+            <div class="bar-track-rail"><div class="bar-track-fill" style="width:29%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="bar-track-list"&gt; + &lt;div class="bar-track"&gt;</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Single row variants</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="max-width:340px;width:100%;display:flex;flex-direction:column;gap:4px">
+          <div class="bar-track">
+            <div class="bar-track-top"><span class="bar-track-label">Positive sentiment</span><span class="bar-track-val">71%</span></div>
+            <div class="bar-track-rail"><div class="bar-track-fill" style="width:71%"></div></div>
+          </div>
+          <div class="bar-track warn">
+            <div class="bar-track-top"><span class="bar-track-label">Neutral mentions</span><span class="bar-track-val">22%</span></div>
+            <div class="bar-track-rail"><div class="bar-track-fill" style="width:22%"></div></div>
+          </div>
+          <div class="bar-track bad">
+            <div class="bar-track-top"><span class="bar-track-label">Negative sentiment</span><span class="bar-track-val">7%</span></div>
+            <div class="bar-track-rail"><div class="bar-track-fill" style="width:7%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="bar-track"&gt; / .warn / .bad</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Media Tile -->
+<div id="comp-media-tile" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Media Tile</div>
+    <div class="page-desc">Social post thumbnail tile for grids. 4:5 aspect ratio, gradient scrim, engagement pill (top-right), caption (bottom-left). Use in brand media feeds and ad creative grids.</div>
+  </div>
+
+  <style>
+    .mtile-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 460px; width: 100%; }
+    .mtile { position: relative; aspect-ratio: 4/5; border-radius: var(--radius-xl); overflow: hidden; background: var(--secondary); display: block; cursor: pointer; }
+    .mtile-thumb { position: absolute; inset: 0; background-size: cover; background-position: center; }
+    .mtile-thumb::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, color-mix(in srgb, #000 78%, transparent) 0%, color-mix(in srgb, #000 15%, transparent) 40%, transparent 70%); }
+    .mtile-eng { position: absolute; top: 8px; right: 8px; z-index: 2; font-size: var(--fs-xs); font-weight: 600; color: #fff; background: rgba(0,0,0,0.50); border-radius: 999px; padding: 2px 7px; line-height: 1.4; display: flex; align-items: center; gap: 4px; }
+    .mtile-caption { position: absolute; bottom: 8px; left: 10px; right: 10px; z-index: 2; font-size: var(--fs-xs); color: #fff; line-height: 1.4; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Grid (3 columns)</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div class="mtile-grid">
+
+          <div class="mtile">
+            <div class="mtile-thumb" style="background-color: #1a3a2a;background-image:linear-gradient(135deg,#1a3a2a 0%,#0d2015 100%)"></div>
+            <div class="mtile-eng">❤ 42.1k</div>
+            <div class="mtile-caption">Nike x Spotify Run Club — new drop just landed</div>
+          </div>
+
+          <div class="mtile">
+            <div class="mtile-thumb" style="background-color: #2a1a0a;background-image:linear-gradient(135deg,#3a2010 0%,#1a0a00 100%)"></div>
+            <div class="mtile-eng">▶ 8.3M</div>
+            <div class="mtile-caption">Behind the scenes with the design team</div>
+          </div>
+
+          <div class="mtile">
+            <div class="mtile-thumb" style="background-color: #0a1a3a;background-image:linear-gradient(135deg,#102040 0%,#050f20 100%)"></div>
+            <div class="mtile-eng">❤ 18.9k</div>
+            <div class="mtile-caption">Air Max 2026 colorways revealed</div>
+          </div>
+
+          <div class="mtile">
+            <div class="mtile-thumb" style="background-color: #1a1a2a;background-image:linear-gradient(135deg,#202030 0%,#0a0a18 100%)"></div>
+            <div class="mtile-eng">▶ 2.1M</div>
+            <div class="mtile-caption">How we built the campaign in 48h</div>
+          </div>
+
+          <div class="mtile">
+            <div class="mtile-thumb" style="background-color: #2a1a2a;background-image:linear-gradient(135deg,#301828 0%,#150810 100%)"></div>
+            <div class="mtile-eng">❤ 31.2k</div>
+            <div class="mtile-caption">Community collab — Spotify x Nike run club</div>
+          </div>
+
+          <div class="mtile">
+            <div class="mtile-thumb" style="background-color: #1a2a1a;background-image:linear-gradient(135deg,#182818 0%,#081008 100%)"></div>
+            <div class="mtile-eng">▶ 5.7M</div>
+            <div class="mtile-caption">Wellness push — 3 months without Red Bull</div>
+          </div>
+
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="mtile-grid"&gt; + &lt;div class="mtile"&gt;</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Single tile</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="width:140px">
+          <div class="mtile">
+            <div class="mtile-thumb" style="background-color:#1a3a2a;background-image:linear-gradient(135deg,#1a3a2a 0%,#0d2015 100%)"></div>
+            <div class="mtile-eng">❤ 42.1k</div>
+            <div class="mtile-caption">Nike x Spotify Run Club — new drop</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="mtile"&gt;</span></div>
     </div>
   </div>
 </div>
