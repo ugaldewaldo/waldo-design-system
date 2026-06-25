@@ -5663,34 +5663,64 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="page-title">Sheet</div>
     <div class="page-desc">Slide-in panel anchored to an edge of the viewport. Use for contextual detail, settings, or forms that don't warrant a full page. Right side is the default — use left only for navigation drawers.</div>
   </div>
-  <div class="section">
-    <div class="section-title">Right Side Panel</div>
-    <div class="demo-block">
-      <div class="demo-canvas">
-        <div style="position:relative;width:420px;height:240px;background:var(--background);border-radius:var(--radius);overflow:hidden">
-          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:var(--fs-xs);color:var(--muted-foreground);opacity:0.4">Page content</div>
-          <div style="position:absolute;top:0;right:0;bottom:0;width:240px;background:var(--card);border-left:1px solid var(--border);padding:20px">
-            <div style="font-size:var(--fs-sm);font-weight:600;color:var(--foreground);margin-bottom:4px">Edit Profile</div>
-            <div style="font-size:var(--fs-xs);color:var(--muted-foreground);margin-bottom:16px">Make changes to your profile here.</div>
-            <div style="display:flex;flex-direction:column;gap:10px">
-              <div>
-                <label style="font-size:var(--fs-sm);color:var(--muted-foreground)">Name</label>
-                <input class="input" style="width:100%;margin-top:4px;box-sizing:border-box" value="Miguel Ugalde" />
-              </div>
-              <div>
-                <label style="font-size:var(--fs-sm);color:var(--muted-foreground)">Username</label>
-                <input class="input" style="width:100%;margin-top:4px;box-sizing:border-box" value="@miguel" />
-              </div>
-            </div>
-            <button class="btn btn-sm" style="width:100%;margin-top:16px;box-sizing:border-box">Save changes</button>
+  <div class="demo-section">
+    <div class="demo-label">side="right" — detail / settings (default)</div>
+    <div class="demo-box">
+      <div style="position:relative;width:420px;height:220px;background:var(--background);border-radius:8px;overflow:hidden">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:var(--fs-xs);color:var(--muted-foreground);opacity:0.3">Page content</div>
+        <div style="position:absolute;top:0;right:0;bottom:0;width:220px;background:var(--card);border-left:1px solid var(--border);display:flex;flex-direction:column;gap:16px;padding:20px">
+          <div>
+            <div style="font-size:var(--fs-sm);font-weight:600;color:var(--foreground);margin-bottom:2px">Brand settings</div>
+            <div style="font-size:var(--fs-xs);color:var(--muted-foreground)">Update tracking preferences for Nike.</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <label style="font-size:var(--fs-xs);color:var(--muted-foreground)">Brand name</label>
+            <input class="input" style="width:100%;box-sizing:border-box" value="Nike" />
+            <label style="font-size:var(--fs-xs);color:var(--muted-foreground);margin-top:4px">Handle</label>
+            <input class="input" style="width:100%;box-sizing:border-box" value="@nike" />
+          </div>
+          <button class="btn btn-sm" style="width:100%;box-sizing:border-box">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-label">side="left" — navigation drawer</div>
+    <div class="demo-box">
+      <div style="position:relative;width:420px;height:180px;background:var(--background);border-radius:8px;overflow:hidden">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:var(--fs-xs);color:var(--muted-foreground);opacity:0.3">Page content</div>
+        <div style="position:absolute;top:0;left:0;bottom:0;width:200px;background:var(--card);border-right:1px solid var(--border);padding:16px;display:flex;flex-direction:column;gap:4px">
+          <div style="font-size:var(--fs-xs);font-weight:600;color:var(--muted-foreground);padding:4px 8px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px">Workspaces</div>
+          <div style="padding:6px 8px;border-radius:6px;font-size:var(--fs-xs);color:var(--foreground);background:var(--accent)">Nike competitive</div>
+          <div style="padding:6px 8px;border-radius:6px;font-size:var(--fs-xs);color:var(--muted-foreground)">Adidas monitor</div>
+          <div style="padding:6px 8px;border-radius:6px;font-size:var(--fs-xs);color:var(--muted-foreground)">Poppi health</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <div class="demo-label">side="bottom" — mobile action tray</div>
+    <div class="demo-box">
+      <div style="position:relative;width:300px;height:200px;background:var(--background);border-radius:8px;overflow:hidden">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:var(--fs-xs);color:var(--muted-foreground);opacity:0.3">Page content</div>
+        <div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:16px;display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:var(--fs-sm);font-weight:600;color:var(--foreground)">Export report</div>
+          <div style="font-size:var(--fs-xs);color:var(--muted-foreground)">Choose format for the Nike intelligence report.</div>
+          <div style="display:flex;gap:8px;margin-top:4px">
+            <button class="btn btn-outline btn-sm" style="flex:1">CSV</button>
+            <button class="btn btn-outline btn-sm" style="flex:1">PDF</button>
+            <button class="btn btn-sm" style="flex:1">Export</button>
           </div>
         </div>
       </div>
-      <div class="demo-code-bar">
-        <span class="demo-code-label">&lt;Sheet side="right" /&gt;</span>
-        <button class="copy-btn" onclick="copyCode(this, '&lt;Sheet&gt;\n  &lt;SheetTrigger&gt;Open&lt;/SheetTrigger&gt;\n  &lt;SheetContent side=&quot;right&quot;&gt;\n    &lt;SheetHeader&gt;\n      &lt;SheetTitle&gt;Edit Profile&lt;/SheetTitle&gt;\n    &lt;/SheetHeader&gt;\n  &lt;/SheetContent&gt;\n&lt;/Sheet&gt;')">Copy</button>
-      </div>
     </div>
+  </div>
+
+  <div class="demo-code-bar">
+    <span class="demo-code-label">&lt;SheetContent side="right" /&gt;</span>
+    <button class="copy-btn" onclick="copyCode(this, '&lt;Sheet&gt;\n  &lt;SheetTrigger asChild&gt;\n    &lt;Button variant=&quot;outline&quot;&gt;Open&lt;/Button&gt;\n  &lt;/SheetTrigger&gt;\n  &lt;SheetContent side=&quot;right&quot;&gt;\n    &lt;SheetHeader&gt;\n      &lt;SheetTitle&gt;Brand settings&lt;/SheetTitle&gt;\n      &lt;SheetDescription&gt;Update tracking preferences.&lt;/SheetDescription&gt;\n    &lt;/SheetHeader&gt;\n    &lt;SheetFooter&gt;\n      &lt;Button&gt;Save changes&lt;/Button&gt;\n    &lt;/SheetFooter&gt;\n  &lt;/SheetContent&gt;\n&lt;/Sheet&gt;')">Copy</button>
   </div>
 </div>
 
