@@ -6691,7 +6691,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   <style>
     .dbar-row { display: flex; flex-direction: column; gap: 5px; padding: 8px 12px; border-radius: var(--radius-lg); cursor: default; transition: background 0.12s; }
     .dbar-row:hover { background: var(--secondary); }
-    .dbar-metric { font-size: var(--fs-xs); font-weight: 600; color: var(--primary); margin-bottom: 2px; }
+    .dbar-metric { font-size: var(--fs-xs); font-weight: 600; color: var(--foreground); margin-bottom: 2px; }
     .dbar-line { display: flex; align-items: center; gap: 8px; }
     .dbar-dot { width: 6px; height: 6px; border-radius: 999px; flex: none; }
     .dbar-dot.a { background: var(--primary); }
@@ -6701,7 +6701,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     .dbar-fill { height: 100%; border-radius: 999px; }
     .dbar-fill.a { background: var(--primary); }
     .dbar-fill.b { background: color-mix(in srgb, var(--foreground) 35%, transparent); }
-    .dbar-val { font-size: var(--fs-xs); font-weight: 600; color: var(--foreground); font-variant-numeric: tabular-nums; min-width: 36px; text-align: right; flex: none; }
+    .dbar-val { font-size: var(--fs-xs); color: var(--foreground); font-variant-numeric: tabular-nums; min-width: 36px; text-align: right; flex: none; }
 
     /* Card wrapper for stacked layout */
     .dbar-stack { background: var(--card); border-radius: var(--radius-xl); padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
