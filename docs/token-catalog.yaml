@@ -574,7 +574,7 @@ forbidden:
     - text: "monospace for UI text/numbers/values — Inter only"
       rule: font-mono-class
       severity: warning
-      match: '\bfont-mono\b'
+      match: '(?<!-)\bfont-mono\b'
       suggestion: 'Inter only — mono is for code/kbd/hex'
     - text: "Clickable <div>/<span> (onclick) — use <button class=\"btn-link\"> for semantics + a11y"
       rule: clickable-non-button
