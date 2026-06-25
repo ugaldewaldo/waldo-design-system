@@ -196,6 +196,12 @@
                         8=32 10=40 12=48 14=56 16=64 20=80 24=96
     ──────────────────────────────────────────── */
 
+    /* ── Font families ──────────────────────
+       Source of truth: figma/waldo.tokens.json typography.fontFamily
+    ──────────────────────────────────────────── */
+    --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
     /* ── Typography scale ────────────────────
        Source of truth: figma/waldo.tokens.json typography.fontSize
        Named to match JSON keys (xs=12, sm=14, base=16, lg=18, xl=20,
