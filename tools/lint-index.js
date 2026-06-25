@@ -24,6 +24,8 @@ const EXEMPT = new Set([
   'theme-pill',        // vanilla-only DS utility component, no React wrapper needed
   'comment-card',      // vanilla-only prototype component, consumed by waldo-labs
   'quote-card',        // vanilla-only VoC card, no React wrapper needed
+  'benchmark-bar',     // vanilla-only competitive bar, no React wrapper needed
+  'dual-bar-row',      // vanilla-only dual comparison row, no React wrapper needed
   'chart',             // internal data-viz section, not a standalone component
   'advanced-section',  // internal DS section grouping, not a standalone component
 ]);

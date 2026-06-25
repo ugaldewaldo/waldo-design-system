@@ -116,6 +116,8 @@
     <button class="sb-item" onclick="waldoGo('comp-leaderboard-row',this)">Leaderboard Row</button>
     <button class="sb-item" onclick="waldoGo('comp-kpi-stat-card',this)">KPI Stat Card</button>
     <button class="sb-item" onclick="waldoGo('comp-quote-card',this)">Quote Card</button>
+    <button class="sb-item" onclick="waldoGo('comp-benchmark-bar',this)">Benchmark Bar</button>
+    <button class="sb-item" onclick="waldoGo('comp-dual-bar-row',this)">Dual-Bar Row</button>
     <button class="sb-item" onclick="waldoGo('comp-comment-card',this)">Comment Card</button>
     <button class="sb-item" onclick="waldoGo('comp-alert-list-row',this)">Alert List Row</button>
     <button class="sb-item" onclick="waldoGo('comp-ad-copy-card',this)">Ad Copy Card</button>
@@ -6540,6 +6542,271 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         </div>
       </div>
       <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="quote-card love|pain" /&gt;</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Benchmark Bar -->
+<div id="comp-benchmark-bar" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Benchmark Bar</div>
+    <div class="page-desc">Single metric row showing brand performance against a reference point (category median, benchmark). Stacked to compare multiple dimensions.</div>
+  </div>
+
+  <style>
+    .bench-bar { display: flex; flex-direction: column; gap: 6px; }
+    .bench-bar-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+    .bench-bar-label { font-size: var(--fs-sm); font-weight: 500; color: var(--foreground); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bench-bar-right { display: flex; align-items: baseline; gap: 5px; flex: none; }
+    .bench-bar-val { font-size: var(--fs-xs); font-weight: 600; color: var(--foreground); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .bench-bar-ref { font-size: var(--fs-xs); color: var(--muted-foreground); white-space: nowrap; }
+    .bench-bar-track { position: relative; height: 6px; border-radius: 999px; background: color-mix(in srgb, var(--foreground) 8%, transparent); overflow: visible; }
+    .bench-bar-fill { height: 100%; border-radius: 999px; transition: width 0.3s ease; }
+    .bench-bar-marker { position: absolute; top: -3px; bottom: -3px; width: 2px; border-radius: 1px; background: color-mix(in srgb, var(--foreground) 30%, transparent); transform: translateX(-50%); }
+
+    /* Semantic variants */
+    .bench-bar.good .bench-bar-fill { background: var(--primary); }
+    .bench-bar.bad  .bench-bar-fill { background: var(--destructive); }
+    .bench-bar.warn .bench-bar-fill { background: var(--warning); }
+    .bench-bar.neutral .bench-bar-fill { background: color-mix(in srgb, var(--muted-foreground) 50%, transparent); }
+
+    /* Stack wrapper */
+    .bench-stack { background: var(--card); border-radius: var(--radius-xl); padding: 14px 16px; display: flex; flex-direction: column; gap: 14px; }
+    .bench-stack-title { font-size: var(--fs-sm); font-weight: 600; color: var(--foreground); margin-bottom: 2px; }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Stacked (card shell)</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div class="bench-stack" style="max-width:380px;width:100%">
+          <div class="bench-stack-title">Nike vs Category</div>
+
+          <div class="bench-bar good">
+            <div class="bench-bar-top">
+              <span class="bench-bar-label">Brand Sentiment</span>
+              <div class="bench-bar-right">
+                <span class="bench-bar-val">78%</span>
+                <span class="bench-bar-ref">median 61%</span>
+              </div>
+            </div>
+            <div class="bench-bar-track">
+              <div class="bench-bar-fill" style="width:78%"></div>
+              <div class="bench-bar-marker" style="left:61%"></div>
+            </div>
+          </div>
+
+          <div class="bench-bar good">
+            <div class="bench-bar-top">
+              <span class="bench-bar-label">Share of Voice</span>
+              <div class="bench-bar-right">
+                <span class="bench-bar-val">42%</span>
+                <span class="bench-bar-ref">median 28%</span>
+              </div>
+            </div>
+            <div class="bench-bar-track">
+              <div class="bench-bar-fill" style="width:42%"></div>
+              <div class="bench-bar-marker" style="left:28%"></div>
+            </div>
+          </div>
+
+          <div class="bench-bar warn">
+            <div class="bench-bar-top">
+              <span class="bench-bar-label">Engagement Rate</span>
+              <div class="bench-bar-right">
+                <span class="bench-bar-val">3.1%</span>
+                <span class="bench-bar-ref">median 3.8%</span>
+              </div>
+            </div>
+            <div class="bench-bar-track">
+              <div class="bench-bar-fill" style="width:31%"></div>
+              <div class="bench-bar-marker" style="left:38%"></div>
+            </div>
+          </div>
+
+          <div class="bench-bar bad">
+            <div class="bench-bar-top">
+              <span class="bench-bar-label">Negative Mentions</span>
+              <div class="bench-bar-right">
+                <span class="bench-bar-val">18%</span>
+                <span class="bench-bar-ref">median 11%</span>
+              </div>
+            </div>
+            <div class="bench-bar-track">
+              <div class="bench-bar-fill" style="width:18%"></div>
+              <div class="bench-bar-marker" style="left:11%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="bench-stack"&gt; + &lt;div class="bench-bar good|bad|warn|neutral"&gt;</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Single row (no card)</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="max-width:380px;width:100%;display:flex;flex-direction:column;gap:14px">
+          <div class="bench-bar good">
+            <div class="bench-bar-top">
+              <span class="bench-bar-label">Reputation Score</span>
+              <div class="bench-bar-right">
+                <span class="bench-bar-val">72nd pct</span>
+                <span class="bench-bar-ref">vs median 55th</span>
+              </div>
+            </div>
+            <div class="bench-bar-track">
+              <div class="bench-bar-fill" style="width:72%"></div>
+              <div class="bench-bar-marker" style="left:55%"></div>
+            </div>
+          </div>
+          <div class="bench-bar neutral">
+            <div class="bench-bar-top">
+              <span class="bench-bar-label">Active Ads</span>
+              <div class="bench-bar-right">
+                <span class="bench-bar-val">34</span>
+                <span class="bench-bar-ref">median 36</span>
+              </div>
+            </div>
+            <div class="bench-bar-track">
+              <div class="bench-bar-fill" style="width:48%"></div>
+              <div class="bench-bar-marker" style="left:51%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="bench-bar good|neutral"&gt;</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Dual-Bar Row -->
+<div id="comp-dual-bar-row" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Dual-Bar Row</div>
+    <div class="page-desc">Competitive comparison row. Same metric, two brands side by side — each with a color dot, name, bar track, and value. Stack inside a card for multi-metric comparisons.</div>
+  </div>
+
+  <style>
+    .dbar-row { display: flex; flex-direction: column; gap: 5px; padding: 8px 12px; border-radius: var(--radius-lg); cursor: default; transition: background 0.12s; }
+    .dbar-row:hover { background: var(--secondary); }
+    .dbar-metric { font-size: var(--fs-xs); color: var(--muted-foreground); margin-bottom: 2px; }
+    .dbar-line { display: flex; align-items: center; gap: 8px; }
+    .dbar-dot { width: 6px; height: 6px; border-radius: 999px; flex: none; }
+    .dbar-dot.a { background: var(--primary); }
+    .dbar-dot.b { background: color-mix(in srgb, var(--foreground) 35%, transparent); }
+    .dbar-name { font-size: var(--fs-xs); color: var(--muted-foreground); width: 52px; flex: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .dbar-track { flex: 1; height: 6px; border-radius: 999px; background: color-mix(in srgb, var(--foreground) 8%, transparent); overflow: hidden; }
+    .dbar-fill { height: 100%; border-radius: 999px; }
+    .dbar-fill.a { background: var(--primary); }
+    .dbar-fill.b { background: color-mix(in srgb, var(--foreground) 35%, transparent); }
+    .dbar-val { font-size: var(--fs-xs); font-weight: 600; color: var(--foreground); font-variant-numeric: tabular-nums; min-width: 36px; text-align: right; flex: none; }
+
+    /* Card wrapper for stacked layout */
+    .dbar-stack { background: var(--card); border-radius: var(--radius-xl); padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+    .dbar-stack-title { font-size: var(--fs-sm); font-weight: 600; color: var(--foreground); padding: 0 12px; margin-bottom: 4px; }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Stacked (card shell)</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div class="dbar-stack" style="max-width:380px;width:100%">
+          <div class="dbar-stack-title">Nike vs Adidas</div>
+
+          <div class="dbar-row">
+            <div class="dbar-metric">Brand Sentiment</div>
+            <div class="dbar-line">
+              <div class="dbar-dot a"></div>
+              <div class="dbar-name">Nike</div>
+              <div class="dbar-track"><div class="dbar-fill a" style="width:78%"></div></div>
+              <div class="dbar-val">78%</div>
+            </div>
+            <div class="dbar-line">
+              <div class="dbar-dot b"></div>
+              <div class="dbar-name">Adidas</div>
+              <div class="dbar-track"><div class="dbar-fill b" style="width:61%"></div></div>
+              <div class="dbar-val">61%</div>
+            </div>
+          </div>
+
+          <div class="dbar-row">
+            <div class="dbar-metric">Share of Voice</div>
+            <div class="dbar-line">
+              <div class="dbar-dot a"></div>
+              <div class="dbar-name">Nike</div>
+              <div class="dbar-track"><div class="dbar-fill a" style="width:42%"></div></div>
+              <div class="dbar-val">42%</div>
+            </div>
+            <div class="dbar-line">
+              <div class="dbar-dot b"></div>
+              <div class="dbar-name">Adidas</div>
+              <div class="dbar-track"><div class="dbar-fill b" style="width:35%"></div></div>
+              <div class="dbar-val">35%</div>
+            </div>
+          </div>
+
+          <div class="dbar-row">
+            <div class="dbar-metric">Engagement Rate</div>
+            <div class="dbar-line">
+              <div class="dbar-dot a"></div>
+              <div class="dbar-name">Nike</div>
+              <div class="dbar-track"><div class="dbar-fill a" style="width:31%"></div></div>
+              <div class="dbar-val">3.1%</div>
+            </div>
+            <div class="dbar-line">
+              <div class="dbar-dot b"></div>
+              <div class="dbar-name">Adidas</div>
+              <div class="dbar-track"><div class="dbar-fill b" style="width:48%"></div></div>
+              <div class="dbar-val">4.8%</div>
+            </div>
+          </div>
+
+          <div class="dbar-row">
+            <div class="dbar-metric">Active Ads</div>
+            <div class="dbar-line">
+              <div class="dbar-dot a"></div>
+              <div class="dbar-name">Nike</div>
+              <div class="dbar-track"><div class="dbar-fill a" style="width:68%"></div></div>
+              <div class="dbar-val">136</div>
+            </div>
+            <div class="dbar-line">
+              <div class="dbar-dot b"></div>
+              <div class="dbar-name">Adidas</div>
+              <div class="dbar-track"><div class="dbar-fill b" style="width:52%"></div></div>
+              <div class="dbar-val">104</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="dbar-stack"&gt; + &lt;div class="dbar-row"&gt;</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Single row (no card)</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="max-width:380px;width:100%">
+          <div class="dbar-row">
+            <div class="dbar-metric">Reach</div>
+            <div class="dbar-line">
+              <div class="dbar-dot a"></div>
+              <div class="dbar-name">Tesla</div>
+              <div class="dbar-track"><div class="dbar-fill a" style="width:84%"></div></div>
+              <div class="dbar-val">84%</div>
+            </div>
+            <div class="dbar-line">
+              <div class="dbar-dot b"></div>
+              <div class="dbar-name">Rivian</div>
+              <div class="dbar-track"><div class="dbar-fill b" style="width:29%"></div></div>
+              <div class="dbar-val">29%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="dbar-row"&gt;</span></div>
     </div>
   </div>
 </div>

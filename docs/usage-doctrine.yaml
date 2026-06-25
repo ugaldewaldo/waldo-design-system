@@ -1142,6 +1142,43 @@ components:
     notes: |
       Brand API prototype component — not yet reviewed against Figma.
 
+  - component: Benchmark Bar
+    use_when:
+      - Showing brand performance vs a reference point (category median, benchmark, competitor average)
+      - Comparing multiple metrics in a stacked layout (sentiment, SoV, engagement, etc.)
+    dont_use_when:
+      - Simple percentage with no reference marker — use Quote Card frequency bar instead
+      - Binary pass/fail metric — use Badge or Alert
+    prefer_over:
+      - Raw progress bars: when the metric needs a reference marker (median line)
+      - KPI Stat Card: when multiple metrics need to be compared against a benchmark simultaneously
+    notes: |
+      Two classes: .bench-bar (single row) and .bench-stack (card shell wrapper for stacked layout).
+      .bench-bar variants: .good → var(--primary), .bad → var(--destructive), .warn → var(--warning), .neutral → muted fill.
+      Structure: .bench-bar-label (left, fs-sm 500) + .bench-bar-right (.bench-bar-val + .bench-bar-ref) + .bench-bar-track.
+      Track: height 6px, radius 999px, background color-mix(var(--foreground) 8%).
+      Fill: .bench-bar-fill with inline width% style.
+      Marker: .bench-bar-marker absolute at inline left% style — shows reference point (median/benchmark).
+      .bench-stack: background var(--card), radius var(--radius-xl), padding 14px 16px, gap 14px.
+
+  - component: Dual-Bar Row
+    use_when:
+      - Comparing the same metric between two brands/entities side by side (e.g. Nike 68% vs Adidas 52%)
+      - Competitive snapshot rows inside a card or list
+    dont_use_when:
+      - Single brand metric with no comparison — use Benchmark Bar instead
+      - More than two entities — use a chart
+    prefer_over:
+      - Benchmark Bar: when comparing two named entities rather than a brand vs a reference marker
+    notes: |
+      Structure: metric label → two bar rows (A and B), each with: color dot · brand name · bar track · value.
+      Color dot: 6px circle. Brand A = var(--primary), Brand B = color-mix(in srgb, var(--foreground) 35%, transparent).
+      Track: height 6px, radius 999px, background color-mix(in srgb, var(--foreground) 8%, transparent).
+      Bar values: --fs-xs, tabular nums, min-width 36px, right-aligned.
+      Metric label: --fs-xs, var(--muted-foreground), margin-bottom 4px.
+      Row hover: background var(--secondary). Padding 8px 12px, radius var(--radius-lg).
+      Class: .dbar-row, .dbar-metric, .dbar-line, .dbar-dot, .dbar-name, .dbar-track, .dbar-fill, .dbar-val.
+
   - component: Quote Card
     use_when:
       - Displaying a Voice-of-Customer cluster (verbatim quote + frequency)
