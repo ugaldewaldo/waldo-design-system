@@ -118,6 +118,7 @@
     <button class="sb-item" onclick="waldoGo('comp-quote-card',this)">Quote Card</button>
     <button class="sb-item" onclick="waldoGo('comp-benchmark-bar',this)">Benchmark Bar</button>
     <button class="sb-item" onclick="waldoGo('comp-bar-track',this)">Bar Track</button>
+    <button class="sb-item" onclick="waldoGo('comp-intel-brief',this)">Intel Brief</button>
     <button class="sb-item" onclick="waldoGo('comp-recommendation-card',this)">Recommendation Card</button>
     <button class="sb-item" onclick="waldoGo('comp-dual-bar-row',this)">Dual-Bar Row</button>
     <button class="sb-item" onclick="waldoGo('comp-media-tile',this)">Media Tile</button>
@@ -7083,6 +7084,100 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   </div>
 </div>
 
+<!-- Intel Brief -->
+<div id="comp-intel-brief" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Intel Brief</div>
+    <div class="page-desc">Full-width AI-generated brand intelligence card. Three fixed sections: Summary Insight (narrative bullets), Supporting Data (metric evidence), So What (actionable next steps). Used at the top of brand overview pages and weekly digests.</div>
+  </div>
+
+  <style>
+    .intel-brief { background: var(--card); border-radius: var(--radius-xl); padding: 20px 24px; display: flex; flex-direction: column; gap: 0; width: 100%; box-sizing: border-box; }
+    .intel-section { display: flex; flex-direction: column; gap: 10px; padding: 16px 0; }
+    .intel-section:first-child { padding-top: 0; }
+    .intel-section:last-child { padding-bottom: 0; }
+    .intel-section + .intel-section { border-top: 1px solid color-mix(in srgb, var(--foreground) 7%, transparent); }
+    .intel-section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; color: var(--muted-foreground); opacity: 0.55; }
+    .intel-list { display: flex; flex-direction: column; gap: 7px; list-style: none; padding: 0; margin: 0; }
+    .intel-item { display: flex; gap: 10px; align-items: flex-start; font-size: var(--fs-xs); color: var(--foreground); line-height: 1.55; }
+    .intel-item::before { content: ''; width: 5px; height: 5px; border-radius: 999px; background: var(--muted-foreground); opacity: 0.4; flex: none; margin-top: 6px; }
+    .intel-item em { font-style: normal; color: var(--primary); font-weight: 600; }
+    .intel-data-row { display: flex; flex-wrap: wrap; gap: 6px 20px; }
+    .intel-stat { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); }
+    .intel-stat-label { color: var(--muted-foreground); }
+    .intel-stat-value { font-weight: 600; color: var(--foreground); }
+    .intel-stat-value.up { color: var(--primary); }
+    .intel-stat-value.down { color: var(--warning); }
+    .intel-sowhat-item { display: flex; gap: 10px; align-items: flex-start; font-size: var(--fs-xs); color: var(--muted-foreground); line-height: 1.55; }
+    .intel-sowhat-item::before { content: '→'; color: var(--primary); font-weight: 700; flex: none; margin-top: 0; }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="width:100%;max-width:740px">
+          <div class="intel-brief">
+
+            <div class="intel-section">
+              <span class="intel-section-label">Summary Insight</span>
+              <ul class="intel-list">
+                <li class="intel-item">Patagonia brand conversation is heavily anchored in sustainability and PAW-free leadership, with unusually high authenticity coverage and a content mix where <em>~71% of Instagram</em> and ~68% of X posts are also environmental.</li>
+                <li class="intel-item">However, performance metrics are clearly disappointing (content is down −4.5% reach), and Patagonia holds only ~25% share of Waldo conversations on "No North Face or REI" Signaling weaker traction in the offline vs competitor narrative despite stronger digital sentiment.</li>
+                <li class="intel-item">Significant conversation spikes around the Patagonia x Waldo collab with TikTok +190%. Columbia 51% — Arc'teryx 52%.</li>
+              </ul>
+            </div>
+
+            <div class="intel-section">
+              <span class="intel-section-label">Supporting Data</span>
+              <div class="intel-data-row">
+                <div class="intel-stat"><span class="intel-stat-label">Share of Voice</span><span class="intel-stat-value up">+14%</span></div>
+                <div class="intel-stat"><span class="intel-stat-label">Reach</span><span class="intel-stat-value down">−4.5%</span></div>
+                <div class="intel-stat"><span class="intel-stat-label">Authenticity</span><span class="intel-stat-value up">71%</span></div>
+                <div class="intel-stat"><span class="intel-stat-label">Active programs</span><span class="intel-stat-value">5 (↑ high)</span></div>
+                <div class="intel-stat"><span class="intel-stat-label">Sustainability conv.</span><span class="intel-stat-value up">TikTok +190%</span></div>
+                <div class="intel-stat"><span class="intel-stat-label">Top competitor</span><span class="intel-stat-value">Arc'teryx 52%</span></div>
+              </div>
+            </div>
+
+            <div class="intel-section">
+              <span class="intel-section-label">So What</span>
+              <ul class="intel-list">
+                <li class="intel-sowhat-item">The category is shifting toward city-to-trail identity where style, speed, and technical performance meet.</li>
+                <li class="intel-sowhat-item">Patagonia is winning the cultural momentum through creator ecosystem momentum.</li>
+                <li class="intel-sowhat-item">The emerging brand voice is authentic, rugged, purpose-led — a natural fit for Patagonia's community positioning.</li>
+                <li class="intel-sowhat-item">Patagonia has strong authenticity credentials; apply a right-now ready design would help into Patagonia's origin visibility and relevance in the trail segment.</li>
+              </ul>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">.intel-brief > .intel-section (.intel-section-label + .intel-list | .intel-data-row | sowhat list)</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Compact (single section)</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="width:100%;max-width:480px">
+          <div class="intel-brief">
+            <div class="intel-section">
+              <span class="intel-section-label">Summary Insight</span>
+              <ul class="intel-list">
+                <li class="intel-item">Nike share of voice at <em>68%</em> — highest in 6 weeks. Sentiment driven by Air Max 95 restocks and creator-led unboxings.</li>
+                <li class="intel-item">Adidas losing ground in the 18–24 segment; engagement rate fell to <em>1.2%</em> vs Nike's 3.4% this week.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">.intel-brief > .intel-section (single section, e.g. in a side panel)</span></div>
+    </div>
+  </div>
+</div>
+
 <!-- Recommendation Card -->
 <div id="comp-recommendation-card" class="waldo-page">
   <div class="page-header">
@@ -7094,7 +7189,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     .rec-card { background: var(--card); border-radius: var(--radius-xl); padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; cursor: pointer; transition: background 0.12s; }
     .rec-card:hover { background: color-mix(in srgb, var(--foreground) 5%, var(--card)); }
     .rec-header { display: flex; align-items: center; gap: 8px; }
-    .rec-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 999px; flex: none; text-transform: uppercase; }
+    .rec-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.02em; padding: 2px 8px; border-radius: 999px; flex: none; }
     .rec-tag.campaign { background: color-mix(in srgb, var(--chart-3, #7c6af7) 14%, transparent); color: var(--chart-3, #7c6af7); }
     .rec-tag.product  { background: color-mix(in srgb, var(--primary) 14%, transparent); color: var(--primary); }
     .rec-tag.creative { background: color-mix(in srgb, var(--warning) 14%, transparent); color: var(--warning); }
