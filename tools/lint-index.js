@@ -27,8 +27,9 @@ const EXEMPT = new Set([
   'benchmark-bar',     // vanilla-only competitive bar, no React wrapper needed
   'bar-track',         // vanilla-only ranked bar list, no React wrapper needed
   'media-tile',        // vanilla-only media card, no React wrapper needed
-  'dual-bar-row',      // vanilla-only dual comparison row, no React wrapper needed
-  'chart',             // internal data-viz section, not a standalone component
+  'dual-bar-row',          // vanilla-only dual comparison row, no React wrapper needed
+  'recommendation-card',   // vanilla-only recommendation card, no React wrapper needed
+  'chart',                 // internal data-viz section, not a standalone component
   'advanced-section',  // internal DS section grouping, not a standalone component
 ]);
 

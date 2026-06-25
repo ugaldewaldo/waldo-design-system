@@ -1289,6 +1289,30 @@ components:
       Brand API prototype component — not yet reviewed against Figma.
       motion-safe: for reduced-motion.
 
+  - component: Recommendation Card
+    use_when:
+      - Surfacing an AI-generated strategic recommendation (comms, product, campaign, etc.)
+      - Presenting actionable insights with supporting evidence quotes in a feed or panel
+    dont_use_when:
+      - Static data metric with no action — use KPI Stat Card or Benchmark Bar
+      - Simple alert or signal without contextual evidence — use Alert List Row
+    prefer_over:
+      - Comment Card: when the content is an AI recommendation with category + evidence, not a raw mention
+      - Quote Card: when the content is an actionable insight rather than a VoC theme
+    notes: |
+      Structure: category tag pill → headline → body → evidence block → footer (action icons).
+      Card shell: .rec-card — background var(--card), radius var(--radius-xl), padding 16px 18px, flex column.
+      Hover: background color-mix(in srgb, var(--foreground) 5%, var(--card)).
+      Category tags (.rec-tag): .comms → var(--destructive) tint, .product → var(--primary) tint,
+        .campaign / .creative / .retail → use the most relevant token. Font-size 10px, uppercase, letter-spacing 0.06em.
+      Headline (.rec-headline): --fs-sm, font-weight 600, var(--foreground).
+      Body (.rec-body): --fs-xs, var(--muted-foreground).
+      Evidence block (.rec-evidence): secondary tinted background (color-mix foreground 5%), radius var(--radius-md),
+        padding 10px 12px. Contains .rec-ev-label (--fs-xs, muted, uppercase, 0.05em tracking) and quote text.
+        NEVER use border-left (banned by DS rules).
+      Footer (.rec-foot): border-top color-mix foreground 8%, padding-top 8px, space-between layout.
+      Action icons (.rec-action): 28×28px, radius var(--radius-md), var(--muted-foreground) icons.
+
 component_choice_logic:
 
   dialog_vs_drawer:
