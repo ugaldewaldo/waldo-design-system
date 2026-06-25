@@ -1334,6 +1334,25 @@ components:
       Use --chart-1 through --chart-12 only — never hardcoded hex colors.
       Gap between segments: none (overflow hidden on track handles clean joins).
 
+  - component: Column Cards
+    use_when:
+      - Week-over-week or period comparison of engagement metrics (posts, interactions, delta %)
+      - When the magnitude of each period should be visually encoded by card height
+    dont_use_when:
+      - More than 8 periods — cards become too narrow; use a Bar Chart instead
+      - Comparing multiple brands in the same chart — use grouped Bar Chart
+      - Single metric with no period comparison — use KPI Stat Card
+    prefer_over:
+      - Bar Chart: when each bar needs rich content inside (secondary metric + delta), not just a value
+    notes: |
+      chart-page: chart-page-column-card (lives inside Charts section).
+      Shell: .colcard-row (flex, align-items flex-end, gap 10px) > .colcard-col (flex column, align center).
+      Card: .colcard-card.pos (var(--chart-2) bg) or .colcard-card.neg (warning tint).
+      Height is set inline per data point — no fixed height class.
+      Content (bottom-aligned via justify-content flex-end): .colcard-secondary, .colcard-primary, .colcard-delta (22px bold white).
+      border-radius: 22px (intentionally larger than var(--radius-xl) to match Figma pillow shape).
+      Never use hardcoded hex for card background — always var(--chart-N) or var(--warning).
+
 component_choice_logic:
 
   dialog_vs_drawer:

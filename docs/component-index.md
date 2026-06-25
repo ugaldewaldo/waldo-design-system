@@ -83,7 +83,7 @@ Charts — so a comp-only scan will miss the charts. This is the flat list of bo
 - Copy Link — `#comp-copy-link`
 - Code Block — `#comp-code-block`
 
-## Charts / Data-viz (15)
+## Charts / Data-viz (16)
 
 - Area Charts — `#chart-page-area`
 - Bar Charts — `#chart-page-bar`
@@ -100,3 +100,4 @@ Charts — so a comp-only scan will miss the charts. This is the flat list of bo
 - Donut Chart — `#chart-page-donut`
 - Gantt / Timeline — `#chart-page-gantt`
 - Segmented Bar — `#chart-page-segbar`
+- Column Cards — `#chart-page-column-card`

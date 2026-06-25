@@ -7107,6 +7107,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     .rec-evidence-label { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-foreground); opacity: 0.6; }
     .rec-evidence-text { font-size: var(--fs-xs); color: var(--muted-foreground); line-height: 1.5; }
     .rec-foot { display: flex; align-items: center; gap: 2px; padding-top: 6px; border-top: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent); margin-top: 2px; }
+    .rec-foot-tag { margin-left: auto; }
     .rec-action { width: 28px; height: 28px; background: transparent; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: var(--radius-md); color: var(--muted-foreground); transition: background 0.12s, color 0.12s; padding: 0; }
     .rec-action:hover { background: color-mix(in srgb, var(--primary) 10%, transparent); color: var(--primary); }
     .rec-action.down:hover { background: color-mix(in srgb, var(--destructive) 10%, transparent); color: var(--destructive); }
@@ -7119,10 +7120,6 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="demo-canvas">
         <div style="max-width:420px;width:100%;display:flex;flex-direction:column;gap:8px">
           <div class="rec-card">
-            <div class="rec-header">
-              <span class="rec-tag comms">Comms</span>
-              <span class="rec-date">Jun 24</span>
-            </div>
             <div class="rec-headline">Get ahead of the settlement narrative</div>
             <div class="rec-body">Confusion is spreading on TikTok (+190%) and in brand search. A proactive FAQ post will own the narrative before negative press does.</div>
             <div class="rec-evidence">
@@ -7133,13 +7130,10 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <button class="rec-action" aria-label="Save"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
               <button class="rec-action" aria-label="Helpful"><svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>
               <button class="rec-action down" aria-label="Not helpful"><svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg></button>
+              <span class="rec-tag comms rec-foot-tag">Comms</span>
             </div>
           </div>
           <div class="rec-card">
-            <div class="rec-header">
-              <span class="rec-tag product">Product</span>
-              <span class="rec-date">Jun 23</span>
-            </div>
             <div class="rec-headline">Wellness positioning resonates with Gen Z runners</div>
             <div class="rec-body">Posts framing the brand as a running recovery drink are getting 3× the saves vs generic flavor content. Lean into this for the summer campaign.</div>
             <div class="rec-evidence">
@@ -7150,6 +7144,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <button class="rec-action" aria-label="Save"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>
               <button class="rec-action" aria-label="Helpful"><svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>
               <button class="rec-action down" aria-label="Not helpful"><svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg></button>
+              <span class="rec-tag product rec-foot-tag">Product</span>
             </div>
           </div>
         </div>
@@ -7480,6 +7475,7 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
     <button class="sb-item" onclick="switchChartPage('chart-page-donut',this)">Donut Chart</button>
     <button class="sb-item" onclick="switchChartPage('chart-page-gantt',this)">Gantt / Timeline</button>
     <button class="sb-item" onclick="switchChartPage('chart-page-segbar',this)">Segmented Bar</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-column-card',this)">Column Cards</button>
     </div>
   </div>
 </div>
@@ -10246,6 +10242,72 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
     <div class="demo-code-bar"><span class="demo-code-label">.segbar-wrap &gt; .segbar-track (.segbar-seg × N) + .segbar-legend</span></div>
   </div>
 </div><!-- /#chart-page-segbar -->
+
+<div id="chart-page-column-card" class="chart-page">
+  <div class="chart-page-title">Column Cards</div>
+  <div class="chart-page-desc">Vertical bar chart where each bar is a rich metric card. Card height encodes the value proportionally. Content inside: secondary metric (posts), primary metric (interactions), delta % large. Positive delta = <code>var(--chart-2)</code>, negative = <code>var(--warning)</code>. Label below. Use for week-over-week or period comparison of engagement.</div>
+
+  <style>
+    .colcard-row { display: flex; align-items: flex-end; gap: 10px; }
+    .colcard-col { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
+    .colcard-card { width: 100%; border-radius: 22px; display: flex; flex-direction: column; justify-content: flex-end; padding: 14px; box-sizing: border-box; transition: opacity 0.15s; cursor: pointer; min-height: 80px; }
+    .colcard-card:hover { opacity: 0.88; }
+    .colcard-card.pos { background: var(--chart-2); }
+    .colcard-card.neg { background: color-mix(in srgb, var(--warning) 70%, var(--card)); }
+    .colcard-secondary { font-size: var(--fs-xs); color: rgba(255,255,255,0.75); font-weight: 400; margin-bottom: 1px; }
+    .colcard-primary { font-size: var(--fs-xs); font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .colcard-delta { font-size: 22px; font-weight: 700; color: #fff; line-height: 1; }
+    .colcard-label { font-size: var(--fs-xs); color: var(--muted-foreground); text-align: center; }
+  </style>
+
+  <div class="chart-demo-block">
+    <div class="chart-demo-label">Weekly engagement</div>
+    <div class="demo-canvas">
+      <div style="width:100%;max-width:520px">
+        <div class="colcard-row">
+
+          <div class="colcard-col">
+            <div class="colcard-card pos" style="height:140px">
+              <span class="colcard-secondary">14 Posts</span>
+              <span class="colcard-primary">54.8K Interactions</span>
+              <span class="colcard-delta">+1%</span>
+            </div>
+            <span class="colcard-label">Week 45</span>
+          </div>
+
+          <div class="colcard-col">
+            <div class="colcard-card pos" style="height:200px">
+              <span class="colcard-secondary">18 Posts</span>
+              <span class="colcard-primary">71.2K Interactions</span>
+              <span class="colcard-delta">+8%</span>
+            </div>
+            <span class="colcard-label">Week 46</span>
+          </div>
+
+          <div class="colcard-col">
+            <div class="colcard-card neg" style="height:110px">
+              <span class="colcard-secondary">11 Posts</span>
+              <span class="colcard-primary">39.4K Interactions</span>
+              <span class="colcard-delta">-8%</span>
+            </div>
+            <span class="colcard-label">Week 47</span>
+          </div>
+
+          <div class="colcard-col">
+            <div class="colcard-card pos" style="height:145px">
+              <span class="colcard-secondary">14 Posts</span>
+              <span class="colcard-primary">54.8K Interactions</span>
+              <span class="colcard-delta">+1%</span>
+            </div>
+            <span class="colcard-label">Week 48</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="demo-code-bar"><span class="demo-code-label">.colcard-row > .colcard-col (.colcard-card.pos|neg + .colcard-label)</span></div>
+  </div>
+</div><!-- /#chart-page-column-card -->
 
 </div><!-- /#wb-charts-main -->
 </div><!-- /#tb-panel-charts -->
