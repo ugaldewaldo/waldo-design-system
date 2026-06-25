@@ -123,6 +123,7 @@
     <button class="sb-item" onclick="waldoGo('comp-media-tile',this)">Media Tile</button>
     <button class="sb-item" onclick="waldoGo('comp-comment-card',this)">Comment Card</button>
     <button class="sb-item" onclick="waldoGo('comp-alert-list-row',this)">Alert List Row</button>
+    <button class="sb-item" onclick="waldoGo('comp-brand-column',this)">Brand Column</button>
     <button class="sb-item" onclick="waldoGo('comp-ad-copy-card',this)">Ad Copy Card</button>
     <button class="sb-item" onclick="waldoGo('comp-live-badge',this)">Live Status Badge</button>
     <button class="sb-item" onclick="waldoGo('comp-theme-pill',this)">Theme Pill</button>
@@ -7154,6 +7155,108 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   </div>
 </div>
 
+<!-- Brand Column -->
+<div id="comp-brand-column" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Brand Column</div>
+    <div class="page-desc">Height-encoded competitive card. Two zones: light gradient body with insight text, dark footer with large delta % and brand identity. Height encodes relative share. Use in competitive overview grids.</div>
+  </div>
+
+  <style>
+    .brcol-row { display: flex; align-items: flex-end; gap: 10px; }
+    .brcol-col { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
+    .brcol-card { width: 100%; border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: opacity 0.15s; }
+    .brcol-card:hover { opacity: 0.9; }
+    .brcol-body { flex: 1; padding: 14px 14px 12px; display: flex; flex-direction: column; gap: 6px; background: linear-gradient(to bottom, color-mix(in srgb, var(--chart-2) 28%, #fff), color-mix(in srgb, var(--chart-2) 48%, #fff)); }
+    .brcol-text { font-size: var(--fs-xs); color: rgba(255,255,255,0.9); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+    .brcol-seemore { font-size: var(--fs-xs); color: rgba(255,255,255,0.45); }
+    .brcol-foot { background: var(--secondary); padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 8px; }
+    .brcol-delta { font-size: 36px; font-weight: 700; color: #fff; line-height: 1; }
+    .brcol-brand { display: flex; align-items: center; gap: 8px; }
+    .brcol-logo { width: 28px; height: 28px; border-radius: 999px; background: #fff; background-size: cover; background-position: center; flex: none; overflow: hidden; }
+    .brcol-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 999px; }
+    .brcol-name { font-size: var(--fs-xs); font-weight: 600; color: #fff; }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Competitive overview</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="width:100%;max-width:640px">
+          <div class="brcol-row">
+
+            <div class="brcol-col">
+              <div class="brcol-card" style="height:280px">
+                <div class="brcol-body">
+                  <span class="brcol-text">Eco-debates peaked mid-Oct; Nov uptick from repair program buzz. Steady ~20% share.</span>
+                  <span class="brcol-seemore">see more</span>
+                </div>
+                <div class="brcol-foot">
+                  <span class="brcol-delta">+12%</span>
+                  <div class="brcol-brand">
+                    <div class="brcol-logo"><img src="https://logo.clearbit.com/patagonia.com" alt="Patagonia"></div>
+                    <span class="brcol-name">Patagonia</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="brcol-col">
+              <div class="brcol-card" style="height:340px">
+                <div class="brcol-body">
+                  <span class="brcol-text">Oct sales +35% YoY; Nov Korean market push (+20% search). Dominates at ~50%.</span>
+                  <span class="brcol-seemore">see more</span>
+                </div>
+                <div class="brcol-foot">
+                  <span class="brcol-delta">+25%</span>
+                  <div class="brcol-brand">
+                    <div class="brcol-logo"><img src="https://logo.clearbit.com/thenorthface.com" alt="The North Face"></div>
+                    <span class="brcol-name">The North Face</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="brcol-col">
+              <div class="brcol-card" style="height:300px">
+                <div class="brcol-body">
+                  <span class="brcol-text">Affordable winter gear drove Oct; Nov corporate buzz.</span>
+                  <span class="brcol-seemore">see more</span>
+                </div>
+                <div class="brcol-foot">
+                  <span class="brcol-delta">+22%</span>
+                  <div class="brcol-brand">
+                    <div class="brcol-logo"><img src="https://logo.clearbit.com/columbia.com" alt="Columbia"></div>
+                    <span class="brcol-name">Columbia</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="brcol-col">
+              <div class="brcol-card" style="height:260px">
+                <div class="brcol-body">
+                  <span class="brcol-text">Oct climber focus; Nov game tie-ins (ARC Raiders) +11% search. ~15% share.</span>
+                  <span class="brcol-seemore">see more</span>
+                </div>
+                <div class="brcol-foot">
+                  <span class="brcol-delta">+33%</span>
+                  <div class="brcol-brand">
+                    <div class="brcol-logo"><img src="https://logo.clearbit.com/arcteryx.com" alt="Arc'teryx"></div>
+                    <span class="brcol-name">Arc'teryx</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">.brcol-row > .brcol-col > .brcol-card (.brcol-body + .brcol-foot)</span></div>
+    </div>
+  </div>
+</div>
+
 <!-- Comment Card -->
 <div id="comp-comment-card" class="waldo-page">
   <div class="page-header">
@@ -10165,14 +10268,14 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
   <div class="chart-page-desc">Full-width proportional bar split into labeled color segments. Each segment width = its % share. Labels render below with <code>var(--chart-N)</code> color + percentage + category name. Use for topic distribution, message themes, sentiment breakdown. Never use for comparing absolute values across entities — use Benchmark Bar or Dual-Bar Row instead.</div>
 
   <style>
-    .segbar-wrap { display: flex; flex-direction: column; gap: 10px; width: 100%; }
-    .segbar-track { display: flex; width: 100%; height: 48px; border-radius: var(--radius-xl); overflow: hidden; }
+    .segbar-wrap { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+    .segbar-track { display: flex; width: 100%; height: 72px; border-radius: var(--radius-xl); overflow: hidden; }
     .segbar-seg { height: 100%; transition: opacity 0.15s; }
     .segbar-seg:hover { opacity: 0.82; }
-    .segbar-legend { display: flex; flex-wrap: wrap; gap: 6px 20px; padding: 0 2px; }
-    .segbar-legend-item { display: flex; align-items: center; gap: 6px; }
-    .segbar-legend-pct { font-size: var(--fs-xs); font-weight: 600; }
-    .segbar-legend-label { font-size: var(--fs-xs); color: var(--muted-foreground); }
+    .segbar-legend { display: flex; flex-wrap: wrap; gap: 4px 24px; padding: 0 2px; }
+    .segbar-legend-item { display: flex; align-items: center; gap: 5px; }
+    .segbar-legend-pct { font-size: var(--fs-xs); font-weight: 700; }
+    .segbar-legend-label { font-size: var(--fs-xs); }
     .segbar-title { font-size: var(--fs-sm); font-weight: 600; color: var(--foreground); }
   </style>
 
@@ -10190,20 +10293,20 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
             <div class="segbar-seg" style="width:21%;background:var(--chart-4)"></div>
           </div>
           <div class="segbar-legend">
-            <div class="segbar-legend-item">
-              <span class="segbar-legend-pct" style="color:var(--chart-1)">33%</span>
+            <div class="segbar-legend-item" style="color:var(--chart-1)">
+              <span class="segbar-legend-pct">33%</span>
               <span class="segbar-legend-label">Environmental Activism</span>
             </div>
-            <div class="segbar-legend-item">
-              <span class="segbar-legend-pct" style="color:var(--chart-2)">23%</span>
+            <div class="segbar-legend-item" style="color:var(--chart-2)">
+              <span class="segbar-legend-pct">23%</span>
               <span class="segbar-legend-label">Outdoor Adventure</span>
             </div>
-            <div class="segbar-legend-item">
-              <span class="segbar-legend-pct" style="color:var(--chart-5)">23%</span>
+            <div class="segbar-legend-item" style="color:var(--chart-5)">
+              <span class="segbar-legend-pct">23%</span>
               <span class="segbar-legend-label">Sustainability</span>
             </div>
-            <div class="segbar-legend-item">
-              <span class="segbar-legend-pct" style="color:var(--chart-4)">21%</span>
+            <div class="segbar-legend-item" style="color:var(--chart-4)">
+              <span class="segbar-legend-pct">21%</span>
               <span class="segbar-legend-label">Community &amp; Events</span>
             </div>
           </div>
@@ -10218,20 +10321,20 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
             <div class="segbar-seg" style="width:13%;background:var(--chart-4)"></div>
           </div>
           <div class="segbar-legend">
-            <div class="segbar-legend-item">
-              <span class="segbar-legend-pct" style="color:var(--chart-1)">41%</span>
+            <div class="segbar-legend-item" style="color:var(--chart-1)">
+              <span class="segbar-legend-pct">41%</span>
               <span class="segbar-legend-label">Performance & Sport</span>
             </div>
-            <div class="segbar-legend-item">
-              <span class="segbar-legend-pct" style="color:var(--chart-2)">28%</span>
+            <div class="segbar-legend-item" style="color:var(--chart-2)">
+              <span class="segbar-legend-pct">28%</span>
               <span class="segbar-legend-label">Collaborations</span>
             </div>
-            <div class="segbar-legend-item">
-              <span class="segbar-legend-pct" style="color:var(--chart-5)">18%</span>
+            <div class="segbar-legend-item" style="color:var(--chart-5)">
+              <span class="segbar-legend-pct">18%</span>
               <span class="segbar-legend-label">Sustainability</span>
             </div>
-            <div class="segbar-legend-item">
-              <span class="segbar-legend-pct" style="color:var(--chart-4)">13%</span>
+            <div class="segbar-legend-item" style="color:var(--chart-4)">
+              <span class="segbar-legend-pct">13%</span>
               <span class="segbar-legend-label">Community</span>
             </div>
           </div>
@@ -10252,8 +10355,8 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
     .colcard-col { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
     .colcard-card { width: 100%; border-radius: 22px; display: flex; flex-direction: column; justify-content: flex-end; padding: 14px; box-sizing: border-box; transition: opacity 0.15s; cursor: pointer; min-height: 80px; }
     .colcard-card:hover { opacity: 0.88; }
-    .colcard-card.pos { background: var(--chart-2); }
-    .colcard-card.neg { background: color-mix(in srgb, var(--warning) 70%, var(--card)); }
+    .colcard-card.pos { background: var(--chart-1); }
+    .colcard-card.neg { background: var(--chart-3); }
     .colcard-secondary { font-size: var(--fs-xs); color: rgba(255,255,255,0.75); font-weight: 400; margin-bottom: 1px; }
     .colcard-primary { font-size: var(--fs-xs); font-weight: 700; color: #fff; margin-bottom: 6px; }
     .colcard-delta { font-size: 22px; font-weight: 700; color: #fff; line-height: 1; }
