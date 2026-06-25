@@ -1289,30 +1289,6 @@ components:
       Brand API prototype component — not yet reviewed against Figma.
       motion-safe: for reduced-motion.
 
-  - component: Intel Brief
-    use_when:
-      - Top of a brand overview page or weekly digest — full AI-generated narrative summary
-      - When the output needs three distinct layers: narrative + evidence data + actionable next steps
-      - Side panel or drawer summary of a brand's week in a compact single-section form
-    dont_use_when:
-      - Single actionable recommendation with one evidence quote — use Recommendation Card
-      - Raw social mention or quote — use Comment Card or Quote Card
-      - Metric-only summary with no narrative — use KPI Stat Card grid
-    prefer_over:
-      - Recommendation Card: when content spans multiple insight types (narrative + data + actions) not a single focused rec
-      - Quote Card: when content is AI-generated analysis, not a VoC theme
-    notes: |
-      Structure: .intel-brief (card shell) > N × .intel-section separated by subtle dividers.
-      Standard 3-section pattern: "Summary Insight" (narrative bullets) → "Supporting Data" (stat row) → "So What" (action arrows).
-      Card shell: var(--card) bg, var(--radius-xl) radius, padding 20px 24px.
-      Section divider: border-top color-mix(in srgb, var(--foreground) 7%, transparent).
-      Section label (.intel-section-label): 10px, 700, 0.10em tracking, uppercase, muted 55% opacity.
-      Bullet items (.intel-item): use ::before dot (5px circle, muted 40%). Highlight key numbers with <em> → var(--primary) color.
-      Supporting data (.intel-data-row): flex-wrap row of .intel-stat pairs (label + value). .up = var(--primary), .down = var(--warning).
-      So What items (.intel-sowhat-item): ::before arrow "→" in var(--primary). Body text is muted-foreground.
-      Single-section compact variant: one .intel-section only, same card shell. Use in side panels.
-      NEVER use border-left accent (DS ban). No hardcoded hex.
-
   - component: Recommendation Card
     use_when:
       - Surfacing an AI-generated strategic recommendation (comms, product, campaign, etc.)

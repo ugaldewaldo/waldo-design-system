@@ -29,7 +29,6 @@ const EXEMPT = new Set([
   'media-tile',        // vanilla-only media card, no React wrapper needed
   'dual-bar-row',          // vanilla-only dual comparison row, no React wrapper needed
   'recommendation-card',   // vanilla-only recommendation card, no React wrapper needed
-  'intel-brief',           // vanilla-only AI intelligence brief, no React wrapper needed
   'chart',                 // internal data-viz section, not a standalone component
   'advanced-section',  // internal DS section grouping, not a standalone component
 ]);
