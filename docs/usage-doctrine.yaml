@@ -1289,6 +1289,22 @@ components:
       Brand API prototype component — not yet reviewed against Figma.
       motion-safe: for reduced-motion.
 
+  - component: Brand Column
+    use_when:
+      - Competitive overview grid showing brand share with supporting insight text
+      - Height-encoded comparison of 3-5 brands where taller = higher share/metric
+    dont_use_when:
+      - More than 6 brands — too narrow; use a bar chart
+      - No insight text needed — use Column Cards instead
+    prefer_over:
+      - Column Cards: when each column represents a brand (with logo + name) rather than a time period
+    notes: |
+      Two-zone card: .brcol-body (gradient top, insight text + see more) + .brcol-foot (dark bg, delta % + brand logo/name).
+      Body gradient: linear-gradient top→bottom, color-mix chart-2 28%→48% with white.
+      Footer: var(--secondary) background. Delta: 36px bold white. Logo: 28px circle via clearbit.
+      Height set inline per data point. border-radius: 22px. overflow: hidden on card.
+      NEVER use border-left accent. Use only DS chart tokens for gradient base.
+
   - component: Recommendation Card
     use_when:
       - Surfacing an AI-generated strategic recommendation (comms, product, campaign, etc.)
