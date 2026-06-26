@@ -5673,20 +5673,21 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   <div class="section">
     <div class="section-title">side="right" — detail / settings (default)</div>
     <div class="demo-block">
-      <div class="demo-canvas">
-        <div style="position:relative;width:440px;height:240px;background:var(--background);border-radius:8px;overflow:hidden;border:1px solid var(--border-md)">
-          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:var(--fs-xs);color:var(--muted-foreground);opacity:0.3">Page content</div>
-          <div style="position:absolute;top:0;right:0;bottom:0;width:230px;background:var(--card);border-left:1px solid var(--border-md);display:flex;flex-direction:column;gap:16px;padding:20px">
-            <div>
-              <div style="font-size:var(--fs-sm);font-weight:600;color:var(--foreground);margin-bottom:4px">Brand settings</div>
-              <div style="font-size:var(--fs-xs);color:var(--muted-foreground)">Update tracking preferences for Nike.</div>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:6px">
-              <label style="font-size:var(--fs-xs);color:var(--muted-foreground)">Brand name</label>
-              <input class="input" value="Nike" />
-              <label style="font-size:var(--fs-xs);color:var(--muted-foreground);margin-top:2px">Handle</label>
-              <input class="input" value="@nike" />
-            </div>
+      <div class="demo-canvas" style="align-items:flex-start;gap:16px">
+        <button class="btn btn-outline btn-sm">Open settings</button>
+        <div class="wsheet wsheet-right">
+          <div class="wsheet-header">
+            <div class="wsheet-title">Brand settings</div>
+            <div class="wsheet-desc">Update tracking preferences for Nike.</div>
+          </div>
+          <div class="wsheet-body">
+            <label class="wsheet-desc">Brand name</label>
+            <input class="input" value="Nike" />
+            <label class="wsheet-desc">Handle</label>
+            <input class="input" value="@nike" />
+          </div>
+          <div class="wsheet-footer">
+            <button class="btn btn-ghost btn-sm">Cancel</button>
             <button class="btn btn-sm">Save changes</button>
           </div>
         </div>
@@ -5701,11 +5702,12 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   <div class="section">
     <div class="section-title">side="left" — navigation drawer</div>
     <div class="demo-block">
-      <div class="demo-canvas">
-        <div style="position:relative;width:440px;height:200px;background:var(--background);border-radius:8px;overflow:hidden;border:1px solid var(--border-md)">
-          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:var(--fs-xs);color:var(--muted-foreground);opacity:0.3">Page content</div>
-          <div style="position:absolute;top:0;left:0;bottom:0;width:210px;background:var(--card);border-right:1px solid var(--border-md);padding:16px;display:flex;flex-direction:column;gap:4px">
-            <div style="font-size:var(--fs-xs);font-weight:600;color:var(--muted-foreground);padding:4px 8px;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px">Workspaces</div>
+      <div class="demo-canvas" style="align-items:flex-start">
+        <div class="wsheet wsheet-left">
+          <div class="wsheet-header">
+            <div class="wsheet-title">Workspaces</div>
+          </div>
+          <div class="wsheet-body" style="gap:4px">
             <div style="padding:6px 8px;border-radius:6px;font-size:var(--fs-xs);color:var(--foreground);background:var(--accent)">Nike competitive</div>
             <div style="padding:6px 8px;border-radius:6px;font-size:var(--fs-xs);color:var(--muted-foreground)">Adidas monitor</div>
             <div style="padding:6px 8px;border-radius:6px;font-size:var(--fs-xs);color:var(--muted-foreground)">Poppi health</div>
@@ -5722,17 +5724,16 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   <div class="section">
     <div class="section-title">side="bottom" — mobile action tray</div>
     <div class="demo-block">
-      <div class="demo-canvas">
-        <div style="position:relative;width:320px;height:210px;background:var(--background);border-radius:8px;overflow:hidden;border:1px solid var(--border-md)">
-          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:var(--fs-xs);color:var(--muted-foreground);opacity:0.3">Page content</div>
-          <div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border-md);padding:16px;display:flex;flex-direction:column;gap:8px">
-            <div style="font-size:var(--fs-sm);font-weight:600;color:var(--foreground)">Export report</div>
-            <div style="font-size:var(--fs-xs);color:var(--muted-foreground)">Choose format for the Nike intelligence report.</div>
-            <div style="display:flex;gap:8px;margin-top:4px">
-              <button class="btn btn-outline btn-sm" style="flex:1">CSV</button>
-              <button class="btn btn-outline btn-sm" style="flex:1">PDF</button>
-              <button class="btn btn-sm" style="flex:1">Export</button>
-            </div>
+      <div class="demo-canvas" style="align-items:flex-end;padding:0">
+        <div class="wsheet wsheet-bottom">
+          <div class="wsheet-header">
+            <div class="wsheet-title">Export report</div>
+            <div class="wsheet-desc">Choose format for the Nike intelligence report.</div>
+          </div>
+          <div class="wsheet-footer">
+            <button class="btn btn-outline btn-sm">CSV</button>
+            <button class="btn btn-outline btn-sm">PDF</button>
+            <button class="btn btn-sm">Export</button>
           </div>
         </div>
       </div>
