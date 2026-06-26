@@ -88,6 +88,19 @@
   .d-primary { background: rgb(var(--primary) / 0.12); color: rgb(var(--primary)); }
   .d-muted   { background: rgb(var(--secondary)); color: rgb(var(--muted-foreground)); }
   .d-fg      { background: rgb(var(--foreground) / 0.08); color: rgb(var(--foreground)); }
+
+  /* ── toggle-group replica ── */
+  :root {
+    --accent:     65 69 75;   /* zinc-600 */
+    --secondary:  45 47 51;   /* zinc-750 */
+    --card:       32 33 35;   /* zinc-900 */
+  }
+  /* wseg replica — exact copy of current DS CSS */
+  .wseg { display:inline-flex;align-items:center;background:color-mix(in srgb,#d2d3d3 8%,transparent);border-radius:999px;padding:3px; }
+  .wseg-opt { display:flex;align-items:center;justify-content:center;padding:6px 16px;border-radius:999px;border:none;cursor:pointer;font-size:14px;transition:background .1s,color .1s; }
+  .wseg-opt.active { background:color-mix(in srgb,#d2d3d3 18%,transparent);color:#d2d3d3; }
+  .wseg-opt.inactive { background:transparent;color:color-mix(in srgb,#d2d3d3 50%,transparent); }
+  .wseg-opt svg { width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2; }
 </style>
 </head>
 <body>
@@ -157,6 +170,32 @@
           <span class="k-label">Avg. discount depth</span>
           <span class="k-value">28%</span>
           <span class="k-sub">vs. last 30 days</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ─────────────────────────────────────────── -->
+  <div class="cluster">
+    <h2>SegmentedControl (wseg) — active state</h2>
+    <p class="note">Container: foreground/8%. Active pill: foreground/18%. Inactive: foreground/50% text, transparent bg.</p>
+    <div class="row">
+      <div class="opt">
+        <span class="tag">icons only</span>
+        <div class="wseg">
+          <button class="wseg-opt active">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          </button>
+          <button class="wseg-opt inactive">
+            <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="opt">
+        <span class="tag">text labels</span>
+        <div class="wseg">
+          <button class="wseg-opt active">Grid</button>
+          <button class="wseg-opt inactive">List</button>
+          <button class="wseg-opt inactive">Table</button>
         </div>
       </div>
     </div>
