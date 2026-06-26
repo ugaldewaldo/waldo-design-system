@@ -1181,6 +1181,16 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
 .wsheet-body   { padding:16px;flex:1;display:flex;flex-direction:column;gap:10px; }
 .wsheet-footer { padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end; }
 
+/* ── Drawer panel — Vaul bottom sheet: handle + header + body + footer ── */
+.wdrawer        { background:var(--card);display:flex;flex-direction:column;overflow:hidden; }
+.wdrawer-bottom { border-top:1px solid var(--border-md);border-radius:20px 20px 0 0;width:360px; }
+.wdrawer-handle { width:36px;height:4px;background:color-mix(in srgb,var(--muted-foreground) 35%,transparent);border-radius:99px;margin:12px auto; }
+.wdrawer-header { padding:0 20px 14px;display:flex;flex-direction:column;gap:4px; }
+.wdrawer-title  { font-size:var(--fs-sm);font-weight:600;color:var(--foreground); }
+.wdrawer-desc   { font-size:var(--fs-xs);color:var(--muted-foreground); }
+.wdrawer-body   { padding:0 20px 12px;flex:1;display:flex;flex-direction:column;gap:10px; }
+.wdrawer-footer { padding:4px 20px 20px;display:flex;gap:8px;justify-content:flex-end; }
+
 /* ── style block 6 ── */
 .wav { display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--background);font-weight:500;letter-spacing:-0.01em;color:color-mix(in srgb, var(--foreground) 68%, transparent);flex-shrink:0; }
       .wav-round  { border-radius:999px; }

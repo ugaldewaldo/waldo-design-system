@@ -5155,89 +5155,60 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 <div id="comp-drawer" class="waldo-page">
   <div class="page-header">
     <div class="page-title">Drawer</div>
-    <div class="page-desc">A drawer component for React, built on top of Vaul.</div>
+    <div class="page-desc">Mobile-style slide-up panel built on Vaul. Use for quick actions, export flows, and contextual forms. For side panels use Sheet.</div>
   </div>
 
-  <!-- Bottom Drawer -->
-  <div class="section">
-    <div class="section-title">Bottom Drawer</div>
+  <!-- Bottom — export -->
+  <div class="comp-section">
+    <div class="comp-section-title">Bottom — export, share, quick actions</div>
     <div class="demo-block">
       <div class="demo-canvas">
-        <div style="position:relative;width:380px;height:240px;background:var(--background);border-radius:var(--radius-lg);overflow:hidden">
-          <!-- dimmed bg -->
-          <div style="position:absolute;inset:0;background:rgba(0,0,0,0.45)"></div>
-          <!-- page content hint -->
-          <div style="position:absolute;top:16px;left:16px;right:16px;opacity:0.18;font-size:var(--fs-xs);color:var(--foreground)">Brand Intelligence</div>
-          <!-- drawer panel -->
-          <div style="position:absolute;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);border-radius:20px 20px 0 0;padding:16px 20px 20px">
-            <div style="width:36px;height:4px;background:var(--muted-foreground);border-radius:99px;margin:0 auto 16px;opacity:0.35"></div>
-            <div style="font-size:var(--fs-sm);font-weight:600;color:var(--foreground);margin-bottom:4px">Export Report</div>
-            <div style="font-size:var(--fs-xs);color:var(--muted-foreground);margin-bottom:14px">Choose format and date range for the export.</div>
-            <div class="wseg full" style="margin-bottom:14px" id="drawer-fmt">
+        <div class="wdrawer wdrawer-bottom">
+          <div class="wdrawer-handle"></div>
+          <div class="wdrawer-header">
+            <span class="wdrawer-title">Export Report</span>
+            <span class="wdrawer-desc">Choose format and date range for the export.</span>
+          </div>
+          <div class="wdrawer-body">
+            <div class="wseg full" id="drawer-fmt">
               <button class="wseg-opt active" onclick="switchSegTab('drawer-fmt',this)">PDF</button>
               <button class="wseg-opt inactive" onclick="switchSegTab('drawer-fmt',this)">CSV</button>
               <button class="wseg-opt inactive" onclick="switchSegTab('drawer-fmt',this)">PPTX</button>
             </div>
-            <button class="btn" style="width:100%">Export</button>
+          </div>
+          <div class="wdrawer-footer">
+            <button class="btn btn-ghost btn-sm">Cancel</button>
+            <button class="btn btn-sm">Export</button>
           </div>
         </div>
       </div>
       <div class="demo-code-bar">
-        <span class="demo-code-label">&lt;Drawer /&gt;</span>
-        <button class="copy-btn" onclick="copyCode(this, '&lt;Drawer&gt;\n  &lt;DrawerTrigger&gt;Export&lt;/DrawerTrigger&gt;\n  &lt;DrawerContent&gt;\n    &lt;DrawerHeader&gt;\n      &lt;DrawerTitle&gt;Export Report&lt;/DrawerTitle&gt;\n    &lt;/DrawerHeader&gt;\n    &lt;DrawerFooter&gt;\n      &lt;Button&gt;Export&lt;/Button&gt;\n    &lt;/DrawerFooter&gt;\n  &lt;/DrawerContent&gt;\n&lt;/Drawer&gt;')">Copy</button>
+        <span class="demo-code-label">&lt;Drawer&gt;&lt;DrawerContent&gt;&lt;DrawerHeader&gt;&lt;DrawerTitle&gt;Export Report&lt;/DrawerTitle&gt;&lt;/DrawerHeader&gt;&lt;/DrawerContent&gt;&lt;/Drawer&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this,'&lt;Drawer&gt;\n  &lt;DrawerTrigger asChild&gt;\n    &lt;Button&gt;Export&lt;/Button&gt;\n  &lt;/DrawerTrigger&gt;\n  &lt;DrawerContent&gt;\n    &lt;DrawerHeader&gt;\n      &lt;DrawerTitle&gt;Export Report&lt;/DrawerTitle&gt;\n      &lt;DrawerDescription&gt;Choose format and date range.&lt;/DrawerDescription&gt;\n    &lt;/DrawerHeader&gt;\n    &lt;DrawerFooter&gt;\n      &lt;Button&gt;Export&lt;/Button&gt;\n      &lt;DrawerClose asChild&gt;&lt;Button variant=&quot;ghost&quot;&gt;Cancel&lt;/Button&gt;&lt;/DrawerClose&gt;\n    &lt;/DrawerFooter&gt;\n  &lt;/DrawerContent&gt;\n&lt;/Drawer&gt;')">Copy</button>
       </div>
     </div>
   </div>
 
-  <!-- Side Drawer -->
-  <div class="section">
-    <div class="section-title">Side Drawer</div>
+  <!-- Bottom — confirm destructive -->
+  <div class="comp-section">
+    <div class="comp-section-title">Confirm — destructive action</div>
     <div class="demo-block">
       <div class="demo-canvas">
-        <div style="position:relative;width:500px;height:300px;background:var(--background);border-radius:var(--radius-lg);overflow:hidden">
-          <!-- dimmed bg -->
-          <div style="position:absolute;inset:0;background:rgba(0,0,0,0.4)"></div>
-          <!-- page content hint -->
-          <div style="position:absolute;top:16px;left:20px;opacity:0.18;font-size:var(--fs-xs);color:var(--foreground)">Brand Intelligence</div>
-          <!-- side panel -->
-          <div style="position:absolute;top:0;right:0;bottom:0;width:240px;background:var(--card);display:flex;flex-direction:column">
-            <div style="padding:16px 16px 12px;display:flex;align-items:center;justify-content:space-between">
-              <div style="font-size:var(--fs-sm);font-weight:600;color:var(--foreground)">Brand Details</div>
-              <div style="font-size:var(--fs-xs);color:var(--muted-foreground);cursor:pointer">✕</div>
-            </div>
-            <div style="padding:14px 16px;flex:1;display:flex;flex-direction:column;gap:12px;overflow:auto">
-              <div style="display:flex;align-items:center;gap:10px">
-                <div style="width:32px;height:32px;border-radius:var(--radius-full);background:var(--primary);display:flex;align-items:center;justify-content:center;color:var(--primary-foreground);font-size:var(--fs-xs);font-weight:700;flex-shrink:0">N</div>
-                <div>
-                  <div style="font-size:var(--fs-sm);font-weight:600;color:var(--foreground)">Nike</div>
-                  <div style="font-size:var(--fs-xs);color:var(--muted-foreground)">Sports &amp; Apparel</div>
-                </div>
-              </div>
-              <div style="display:flex;flex-direction:column;gap:8px">
-                <div style="display:flex;justify-content:space-between;align-items:center">
-                  <span style="font-size:var(--fs-xs);color:var(--muted-foreground)">Share of Voice</span>
-                  <span style="font-size:var(--fs-xs);font-weight:600;color:var(--foreground)">34.2%</span>
-                </div>
-                <div style="display:flex;justify-content:space-between;align-items:center">
-                  <span style="font-size:var(--fs-xs);color:var(--muted-foreground)">Sentiment</span>
-                  <span style="font-size:var(--fs-xs);font-weight:600;color:var(--primary)">+12%</span>
-                </div>
-                <div style="display:flex;justify-content:space-between;align-items:center">
-                  <span style="font-size:var(--fs-xs);color:var(--muted-foreground)">Active Ads</span>
-                  <span style="font-size:var(--fs-xs);font-weight:600;color:var(--foreground)">148</span>
-                </div>
-              </div>
-            </div>
-            <div style="padding:12px 16px;display:flex;gap:8px">
-              <button class="btn btn-outline" style="flex:1;font-size:var(--fs-xs)">Dismiss</button>
-              <button class="btn" style="flex:1;font-size:var(--fs-xs)">View Full</button>
-            </div>
+        <div class="wdrawer wdrawer-bottom">
+          <div class="wdrawer-handle"></div>
+          <div class="wdrawer-header">
+            <span class="wdrawer-title">Remove Brand</span>
+            <span class="wdrawer-desc">Nike will be removed from your watchlist. This cannot be undone.</span>
+          </div>
+          <div class="wdrawer-footer">
+            <button class="btn btn-ghost btn-sm">Cancel</button>
+            <button class="btn btn-destructive btn-sm">Remove</button>
           </div>
         </div>
       </div>
       <div class="demo-code-bar">
-        <span class="demo-code-label">&lt;Sheet /&gt;</span>
-        <button class="copy-btn" onclick="copyCode(this, '&lt;Sheet&gt;\n  &lt;SheetTrigger&gt;Open&lt;/SheetTrigger&gt;\n  &lt;SheetContent side=&quot;right&quot;&gt;\n    &lt;SheetHeader&gt;\n      &lt;SheetTitle&gt;Brand Details&lt;/SheetTitle&gt;\n    &lt;/SheetHeader&gt;\n  &lt;/SheetContent&gt;\n&lt;/Sheet&gt;')">Copy</button>
+        <span class="demo-code-label">&lt;Drawer&gt; — confirm destructive pattern</span>
+        <button class="copy-btn" onclick="copyCode(this,'&lt;Drawer&gt;\n  &lt;DrawerContent&gt;\n    &lt;DrawerHeader&gt;\n      &lt;DrawerTitle&gt;Remove Brand&lt;/DrawerTitle&gt;\n      &lt;DrawerDescription&gt;This cannot be undone.&lt;/DrawerDescription&gt;\n    &lt;/DrawerHeader&gt;\n    &lt;DrawerFooter&gt;\n      &lt;Button variant=&quot;destructive&quot;&gt;Remove&lt;/Button&gt;\n      &lt;DrawerClose asChild&gt;&lt;Button variant=&quot;ghost&quot;&gt;Cancel&lt;/Button&gt;&lt;/DrawerClose&gt;\n    &lt;/DrawerFooter&gt;\n  &lt;/DrawerContent&gt;\n&lt;/Drawer&gt;')">Copy</button>
       </div>
     </div>
   </div>
@@ -5816,57 +5787,91 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="page-desc">Opinionated toast notifications via the Sonner library. Preferred over shadcn Toast for its stacking behaviour and cleaner API. Renders via <code>&lt;Toaster /&gt;</code> in the app root; trigger anywhere with <code>toast()</code>.</div>
   </div>
   <div class="section">
-    <div class="section-title">Types</div>
+    <div class="section-title">Stacked (bottom-right)</div>
     <div class="demo-block">
-      <div class="demo-canvas" style="flex-direction:column;align-items:flex-start;gap:6px">
-        <!-- default -->
-        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--popover);border:1px solid var(--border-md);border-radius:var(--radius);box-shadow:var(--shadow-popover);width:320px">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--foreground)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;opacity:0.7"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-          <div style="flex:1">
-            <div style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground)">Report exported</div>
-            <div style="font-size:var(--fs-xs);color:var(--muted-foreground);margin-top:1px">Your brand report has been saved.</div>
+      <div class="demo-canvas" style="min-height:260px;position:relative;">
+        <div style="font-size:var(--fs-xs);color:var(--muted-foreground);opacity:0.2;position:absolute;top:50%;left:40%;transform:translate(-50%,-50%)">App content</div>
+        <div style="position:absolute;bottom:16px;right:16px;display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+          <div class="wtoast">
+            <div class="wtoast-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="stroke:var(--primary)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="wtoast-body"><span class="wtoast-title">Brand added successfully</span><span class="wtoast-action">View brand</span></div>
+            <button class="wtoast-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
           </div>
-          <button style="background:transparent;border:none;color:var(--muted-foreground);cursor:pointer;line-height:1;padding:2px 4px;font-size:16px">×</button>
-        </div>
-        <!-- success -->
-        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--popover);border:1px solid var(--border-md);border-radius:var(--radius);box-shadow:var(--shadow-popover);width:320px">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#32a9a9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-          <div style="flex:1">
-            <div style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground)">Brand added to watchlist</div>
-            <div style="font-size:var(--fs-xs);color:var(--muted-foreground);margin-top:1px">Nike is now being tracked.</div>
+          <div class="wtoast" style="opacity:0.7;transform:scaleX(0.96);transform-origin:right center">
+            <div class="wtoast-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="stroke:var(--destructive)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+            <div class="wtoast-body"><span class="wtoast-title">Could not save changes</span><span class="wtoast-action" style="color:var(--destructive)">Retry</span></div>
+            <button class="wtoast-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
           </div>
-          <button style="background:transparent;border:none;color:var(--muted-foreground);cursor:pointer;line-height:1;padding:2px 4px;font-size:16px">×</button>
-        </div>
-        <!-- error -->
-        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--popover);border:1px solid var(--border-md);border-radius:var(--radius);box-shadow:var(--shadow-popover);width:320px">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#de3a28" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <div style="flex:1">
-            <div style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground)">Rate limit reached</div>
-            <div style="font-size:var(--fs-xs);color:var(--muted-foreground);margin-top:1px">Try again in 60 seconds.</div>
+          <div class="wtoast" style="opacity:0.45;transform:scaleX(0.92);transform-origin:right center">
+            <div class="wtoast-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></div>
+            <div class="wtoast-body"><span class="wtoast-title">Insight saved</span><span class="wtoast-action">Share to Slack</span></div>
+            <button class="wtoast-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/></svg></button>
           </div>
-          <button style="background:transparent;border:none;color:var(--muted-foreground);cursor:pointer;line-height:1;padding:2px 4px;font-size:16px">×</button>
-        </div>
-        <!-- warning -->
-        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--popover);border:1px solid var(--border-md);border-radius:var(--radius);box-shadow:var(--shadow-popover);width:320px">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c94e22" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div style="flex:1">
-            <div style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground)">Signal coverage low</div>
-            <div style="font-size:var(--fs-xs);color:var(--muted-foreground);margin-top:1px">Less than 3 days of data available.</div>
-          </div>
-          <button style="background:transparent;border:none;color:var(--muted-foreground);cursor:pointer;line-height:1;padding:2px 4px;font-size:16px">×</button>
-        </div>
-        <!-- info -->
-        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--popover);border:1px solid var(--border-md);border-radius:var(--radius);box-shadow:var(--shadow-popover);width:320px">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted-foreground)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          <div style="flex:1">
-            <div style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground)">New signals available</div>
-          </div>
-          <button style="background:transparent;border:none;color:var(--muted-foreground);cursor:pointer;line-height:1;padding:2px 4px;font-size:16px">×</button>
         </div>
       </div>
       <div class="demo-code-bar">
-        <span class="demo-code-label">&lt;Toaster /&gt; + toast()</span>
-        <button class="copy-btn" onclick="copyCode(this, &quot;import { toast } from 'sonner'\n\ntoast('Report exported')\ntoast.success('Brand added to watchlist')\ntoast.error('Rate limit reached')\ntoast.warning('Signal coverage low')\ntoast.info('New signals available')\n\n// In your app root:\n&lt;Toaster /&gt;&quot;)">Copy</button>
+        <span class="demo-code-label">&lt;Toaster /&gt; in app root — toasts stack automatically</span>
+        <button class="copy-btn" onclick="copyCode(this, &quot;// In your app root (once):\n&lt;Toaster position=&quot;bottom-right&quot; /&gt;\n\n// Trigger from anywhere:\nimport { toast } from 'sonner'\ntoast.success('Brand added successfully', { action: { label: 'View brand', onClick: handleView } })&quot;)">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Types</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="flex-direction:column;align-items:flex-start;gap:8px">
+        <div class="wtoast">
+          <div class="wtoast-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+          </div>
+          <div class="wtoast-body">
+            <span class="wtoast-title">Insight saved</span>
+            <span class="wtoast-action">Share to Slack</span>
+          </div>
+          <button class="wtoast-btn">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="wtoast">
+          <div class="wtoast-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="stroke:var(--primary)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="wtoast-body">
+            <span class="wtoast-title">Brand added successfully</span>
+            <span class="wtoast-action">View brand</span>
+          </div>
+          <button class="wtoast-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="wtoast">
+          <div class="wtoast-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="stroke:var(--destructive)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          </div>
+          <div class="wtoast-body">
+            <span class="wtoast-title">Could not save changes</span>
+            <span class="wtoast-action" style="color:var(--destructive)">Retry</span>
+          </div>
+          <button class="wtoast-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="wtoast">
+          <div class="wtoast-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="stroke:var(--warning)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="wtoast-body">
+            <span class="wtoast-title">Export limit almost reached</span>
+            <span class="wtoast-action" style="color:var(--warning)">Upgrade plan</span>
+          </div>
+          <button class="wtoast-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">toast() / toast.success() / toast.error() / toast.warning()</span>
+        <button class="copy-btn" onclick="copyCode(this, &quot;import { toast } from 'sonner'\n\ntoast('Insight saved', { action: { label: 'Share to Slack', onClick: handleShare } })\ntoast.success('Brand added successfully', { action: { label: 'View brand', onClick: handleView } })\ntoast.error('Could not save changes', { action: { label: 'Retry', onClick: handleRetry } })\ntoast.warning('Export limit almost reached', { action: { label: 'Upgrade plan', onClick: handleUpgrade } })&quot;)">Copy</button>
       </div>
     </div>
   </div>
