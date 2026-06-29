@@ -6275,7 +6275,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="demo-canvas" style="display:flex;align-items:center;gap:16px;">
         <div class="wslider" id="depth-slider" style="flex:1" onmousedown="depthStartDrag(event)">
           <div class="wslider-track">
-            <div class="wslider-range" id="depth-range" style="width:35%"></div>
+            <div class="wslider-range" id="depth-range" style="width:35%;background:var(--highlight)"></div>
           </div>
           <div class="wslider-thumb" id="depth-thumb" style="left:35%;background:var(--highlight)"></div>
         </div>
@@ -6341,8 +6341,10 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
   <style>
     .lb { display: flex; flex-direction: column; }
-    .lb-row { display: flex; gap: 14px; align-items: flex-start; padding: 12px 8px; cursor: pointer; transition: background 0.12s; border-radius: 8px; }
+    .lb-row { display: flex; gap: 14px; align-items: flex-start; padding: 12px 8px 0; margin-bottom: 12px; cursor: pointer; transition: background 0.12s; border-radius: 8px; }
+    .lb-row:last-child { margin-bottom: 0; }
     .lb-row:hover { background: var(--secondary); }
+    .lb-row:hover .lb-main { border-bottom-color: transparent; }
     .lb-rank { width: 24px; flex: none; font-size: var(--fs-lg); font-weight: 600; line-height: 28px; letter-spacing: -0.36px; color: var(--foreground); text-align: center; }
     .lb-main { flex: 1; min-width: 0; border-bottom: 1px solid var(--border); padding-bottom: 12px; display: flex; flex-direction: column; gap: 3px; }
     .lb-row:last-child .lb-main { border-bottom: none; }
