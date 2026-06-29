@@ -6260,12 +6260,12 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="section-title">Opacity scale — 10% → 60%+</div>
     <div class="demo-block">
       <div class="demo-canvas" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-      <span class="depth-pill" style="color:rgb(var(--yellow-300) / 0.30);background:rgb(var(--yellow-300) / 0.10);">10% off</span>
-      <span class="depth-pill" style="color:rgb(var(--yellow-300) / 0.47);background:rgb(var(--yellow-300) / 0.10);">20% off</span>
-      <span class="depth-pill" style="color:rgb(var(--yellow-300) / 0.65);background:rgb(var(--yellow-300) / 0.10);">30% off</span>
-      <span class="depth-pill" style="color:rgb(var(--yellow-300) / 0.77);background:rgb(var(--yellow-300) / 0.10);">40% off</span>
-      <span class="depth-pill" style="color:rgb(var(--yellow-300) / 0.88);background:rgb(var(--yellow-300) / 0.10);">50% off</span>
-      <span class="depth-pill" style="color:rgb(var(--yellow-300) / 1.00);background:rgb(var(--yellow-300) / 0.10);">60%+ off</span>
+      <span class="depth-pill" style="color:rgb(var(--yellow-300) / 0.30);">10% off</span>
+      <span class="depth-pill" style="color:rgb(var(--yellow-300) / 0.47);">20% off</span>
+      <span class="depth-pill" style="color:rgb(var(--yellow-300) / 0.65);">30% off</span>
+      <span class="depth-pill" style="color:rgb(var(--yellow-300) / 0.77);">40% off</span>
+      <span class="depth-pill" style="color:rgb(var(--yellow-300) / 0.88);">50% off</span>
+      <span class="depth-pill" style="color:rgb(var(--yellow-300) / 1.00);">60%+ off</span>
     </div>
   </div>
 
@@ -6275,7 +6275,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="demo-canvas" style="display:flex;align-items:center;gap:16px;">
         <div class="wslider" id="depth-slider" style="flex:1" onmousedown="depthStartDrag(event)">
           <div class="wslider-track">
-            <div class="wslider-range" id="depth-range" style="width:35%;background:var(--highlight)"></div>
+            <div class="wslider-range" id="depth-range" style="width:35%"></div>
           </div>
           <div class="wslider-thumb" id="depth-thumb" style="left:35%;background:var(--highlight)"></div>
         </div>
@@ -6293,7 +6293,6 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
           var el = document.getElementById('depth-output');
           el.textContent = val + '% off';
           el.style.color = 'rgba(var(--highlight-rgb), ' + a + ')';
-          el.style.background = 'rgba(var(--highlight-rgb), 0.10)';
           document.getElementById('depth-alpha-label').textContent = 'α = ' + a;
         }
         window.depthStartDrag = function(e){
