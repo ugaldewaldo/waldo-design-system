@@ -6273,27 +6273,45 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="section-title">Live alpha calculator</div>
     <div class="demo-block">
       <div class="demo-canvas" style="display:flex;align-items:center;gap:16px;">
-      <input id="depth-input" type="range" min="0" max="100" value="35" style="flex:1;accent-color:rgb(var(--yellow-300) / 0.9);">
-      <span id="depth-output" class="depth-pill" style="min-width:72px;text-align:center;"></span>
-      <span id="depth-alpha-label" style="font-size:var(--fs-xs);color:var(--muted-foreground);width:80px;text-align:right;"></span>
-    </div>
-    <script>
+        <div class="wslider" id="depth-slider" style="flex:1" onmousedown="depthStartDrag(event)">
+          <div class="wslider-track">
+            <div class="wslider-range" id="depth-range" style="width:35%;background:var(--highlight)"></div>
+          </div>
+          <div class="wslider-thumb" id="depth-thumb" style="left:35%;background:var(--highlight)"></div>
+        </div>
+        <span id="depth-output" class="depth-pill" style="min-width:72px;text-align:center;"></span>
+        <span id="depth-alpha-label" style="font-size:var(--fs-xs);color:var(--muted-foreground);width:80px;text-align:right;"></span>
+      </div>
+      <script>
       (function(){
+        var val = 35;
         function depthAlpha(d){ return Math.max(0.30, Math.min(1, 0.30 + (d / 60) * 0.70)); }
         function update(){
-          var d = +document.getElementById('depth-input').value;
-          var a = depthAlpha(d).toFixed(2);
+          var a = depthAlpha(val).toFixed(2);
+          document.getElementById('depth-range').style.width = val + '%';
+          document.getElementById('depth-thumb').style.left = val + '%';
           var el = document.getElementById('depth-output');
-          el.textContent = d + '% off';
-          el.style.color = 'rgb(var(--yellow-300) / ' + a + ')';
-          el.style.background = 'rgb(var(--yellow-300) / 0.10)';
+          el.textContent = val + '% off';
+          el.style.color = 'rgba(var(--highlight-rgb), ' + a + ')';
+          el.style.background = 'rgba(var(--highlight-rgb), 0.10)';
           document.getElementById('depth-alpha-label').textContent = 'α = ' + a;
         }
-        document.getElementById('depth-input').addEventListener('input', update);
+        window.depthStartDrag = function(e){
+          e.preventDefault();
+          function move(ev){
+            var rect = document.getElementById('depth-slider').getBoundingClientRect();
+            val = Math.round(Math.max(0, Math.min(100, (ev.clientX - rect.left) / rect.width * 100)));
+            update();
+          }
+          function up(){ document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); }
+          document.addEventListener('mousemove', move);
+          document.addEventListener('mouseup', up);
+          move(e);
+        };
         update();
       })();
-    </script>
-  </div>
+      </script>
+    </div>
 
   <div class="section">
     <div class="section-title">Rules</div>
