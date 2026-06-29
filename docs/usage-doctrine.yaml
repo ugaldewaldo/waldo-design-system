@@ -1369,6 +1369,27 @@ components:
       border-radius: 22px (intentionally larger than var(--radius-xl) to match Figma pillow shape).
       Never use hardcoded hex for card background — always var(--chart-N) or var(--warning).
 
+  - component: Article Card
+    use_when:
+      - Displaying a press or news item mentioning a brand (media monitoring feeds)
+      - Showing earned media coverage with source, headline, and snippet
+    dont_use_when:
+      - Social post (Reddit, X, TikTok) — use Comment Card instead
+      - Internal alert or signal — use Alert List Row
+    prefer_over:
+      - Comment Card: when the content is a structured press article with a named publication, not a social post
+      - Quote Card: when the content has a source, headline, and link out to external coverage
+    notes: |
+      Horizontal layout: publication favicon (32×32, var(--radius-md)) left + content column right.
+      Background: var(--card). Border-radius: var(--radius-xl). Padding: 14px 16px. Gap: 14px.
+      Hover: color-mix(in srgb, var(--foreground) 5%, var(--card)). Transition: background 0.12s.
+      Meta row: source (--fs-xs, 600, foreground) · separator dot · time (--fs-xs, muted) · category tag (right).
+      Title: --fs-sm, font-weight 600, 2-line clamp.
+      Snippet: --fs-xs, muted-foreground, 2-line clamp.
+      Category tag: color-mix tint using --primary (neutral/default) or --warning (competitor/negative).
+      Element is <a> — renders as clickable link, cursor pointer.
+      Classes: .art-card, .art-favicon, .art-body, .art-meta, .art-source, .art-time, .art-tag, .art-title, .art-snippet.
+
 component_choice_logic:
 
   dialog_vs_drawer:

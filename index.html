@@ -119,6 +119,7 @@
     <button class="sb-item" onclick="waldoGo('comp-benchmark-bar',this)">Benchmark Bar</button>
     <button class="sb-item" onclick="waldoGo('comp-bar-track',this)">Bar Track</button>
     <button class="sb-item" onclick="waldoGo('comp-recommendation-card',this)">Recommendation Card</button>
+    <button class="sb-item" onclick="waldoGo('comp-article-card',this)">Article Card</button>
     <button class="sb-item" onclick="waldoGo('comp-dual-bar-row',this)">Dual-Bar Row</button>
     <button class="sb-item" onclick="waldoGo('comp-media-tile',this)">Media Tile</button>
     <button class="sb-item" onclick="waldoGo('comp-comment-card',this)">Comment Card</button>
@@ -145,7 +146,7 @@
   <p class="section-sub">Shadcn components using Waldo tokens.</p>
 
   <!-- BUTTONS -->
-  <div class="comp-group">
+  <div class="section">
     <h3 class="section-title" style="font-size:var(--fs-base);margin-bottom:4px">Buttons</h3>
     <p class="section-sub" style="margin-bottom:28px">border-radius: 24px · font-medium · sizes: sm=28 · default=40 · lg=44 · icon=40 · focus-visible ring: green-500</p>
 
@@ -276,7 +277,7 @@
   </div>
 
   <!-- CHIPS / DROPDOWN TRIGGERS -->
-  <div class="comp-group">
+  <div class="section">
     <h3 class="section-title" style="font-size:var(--fs-base);margin-bottom:4px">Chips / Dropdown Triggers</h3>
     <p class="section-sub" style="margin-bottom:28px">Base: CHIP/MASTA · bg zinc-800 · font-normal 14px · text zinc-200/47% · icon left + chevron right</p>
 
@@ -339,7 +340,7 @@
     </div>
   </div>
 
-  <div class="comp-group">
+  <div class="section">
     <div class="comp-label">Badges</div>
     <div class="comp-row">
       <span class="badge" class="badge badge-active">Active</span>
@@ -351,7 +352,7 @@
     </div>
   </div>
 
-  <div class="comp-group">
+  <div class="section">
     <div class="comp-label">Input</div>
     <div class="comp-row">
       <input class="inp" placeholder="Search agents…" />
@@ -359,7 +360,7 @@
     </div>
   </div>
 
-  <div class="comp-group">
+  <div class="section">
     <div class="comp-label">Cards</div>
     <div class="comp-row" style="align-items:flex-start">
       <div class="card" style="width:240px">
@@ -387,7 +388,7 @@
     </div>
   </div>
 
-  <div class="comp-group">
+  <div class="section">
     <div class="comp-label">Border Radius</div>
     <div class="comp-row" style="align-items:flex-end;gap:20px">
       <div class="r-box"><div class="r-demo" style="border-radius:4px"></div><span style="font-size:var(--fs-sm);color:var(--muted-foreground)">rounded-sm</span></div>
@@ -830,8 +831,8 @@ window.addEventListener('load', function(){
             </div>
             <input class="input" placeholder="Search agents…" />
           </div>
-          <div class="input-with-icon" style="width:100%">
-            <input class="input has-suffix" placeholder="waldo.fyi/spaces/" />
+          <div class="input-with-icon">
+            <input class="input has-suffix" value="my-space" style="width:247px;padding-left:12px" />
             <div class="input-suffix">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
             </div>
@@ -853,8 +854,8 @@ window.addEventListener('load', function(){
     </div>
 
 
-    <div class="comp-section">
-      <div class="comp-section-title">Checkbox — green (brand)</div>
+    <div class="section">
+      <div class="section-title">Checkbox — green (brand)</div>
       <div class="demo-block">
         <div class="demo-canvas" style="gap:20px">
           <label class="wchk">
@@ -882,8 +883,8 @@ window.addEventListener('load', function(){
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">Checkbox — mono (muted)</div>
+    <div class="section">
+      <div class="section-title">Checkbox — mono (muted)</div>
       <div class="demo-block">
         <div class="demo-canvas" style="gap:20px">
           <label class="wchk">
@@ -906,8 +907,8 @@ window.addEventListener('load', function(){
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">Switch — 32×18px · green-700 ON</div>
+    <div class="section">
+      <div class="section-title">Switch — 32×18px · green-700 ON</div>
       <div class="demo-block">
         <div class="demo-canvas" style="gap:24px">
           <label class="wswitch">
@@ -966,8 +967,8 @@ window.addEventListener('load', function(){
       .wseg-surface-opt.inactive { background:transparent;color:color-mix(in srgb,var(--foreground) 70%,transparent); }
     </style>
 
-    <div class="comp-section">
-      <div class="comp-section-title">Text options</div>
+    <div class="section">
+      <div class="section-title">Text options</div>
       <div class="demo-block">
         <div class="demo-canvas" style="gap:16px;flex-wrap:wrap">
           <div class="wseg" id="seg-demo-1">
@@ -991,8 +992,8 @@ window.addEventListener('load', function(){
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">Surface variant — navigation tabs (Brand API)</div>
+    <div class="section">
+      <div class="section-title">Surface variant — navigation tabs (Brand API)</div>
       <div class="demo-block">
         <div class="demo-canvas" style="overflow-x:auto;padding-bottom:4px;">
           <div class="wseg-surface" id="seg-demo-surface">
@@ -1012,8 +1013,8 @@ window.addEventListener('load', function(){
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">Full width</div>
+    <div class="section">
+      <div class="section-title">Full width</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="max-width:480px;gap:10px">
           <div class="wseg full" id="seg-demo-4">
@@ -1042,8 +1043,8 @@ window.addEventListener('load', function(){
       <div class="page-desc">Drag & drop zone with file list. Click or drag to upload. Two sizes: default (68px) and slim (52px).</div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">Default — 68px</div>
+    <div class="section">
+      <div class="section-title">Default — 68px</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="max-width:500px;gap:0">
           <div class="wfile-zone" onclick="document.getElementById('wfInput1').click()"
@@ -1063,8 +1064,8 @@ window.addEventListener('load', function(){
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">Slim — 52px</div>
+    <div class="section">
+      <div class="section-title">Slim — 52px</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="max-width:500px;gap:0">
           <div class="wfile-zone" style="padding:8px 16px;" onclick="document.getElementById('wfInput3').click()"
@@ -1084,8 +1085,8 @@ window.addEventListener('load', function(){
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">With files</div>
+    <div class="section">
+      <div class="section-title">With files</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="max-width:500px;gap:0">
           <div class="wfile-zone" onclick="document.getElementById('wfInput2').click()"
@@ -1116,8 +1117,8 @@ window.addEventListener('load', function(){
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">Error state</div>
+    <div class="section">
+      <div class="section-title">Error state</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="max-width:500px;gap:0">
           <div class="wfile-zone" onclick="document.getElementById('wfInput4').click()"
@@ -1160,8 +1161,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
 
 
-    <div class="comp-section">
-      <div class="comp-section-title">Round — people · users</div>
+    <div class="section">
+      <div class="section-title">Round — people · users</div>
       <div class="demo-block">
         <div class="demo-canvas" style="align-items:center;gap:12px">
           <div class="wav wav-round wav-16">M</div>
@@ -1176,8 +1177,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">Square — brands · logos</div>
+    <div class="section">
+      <div class="section-title">Square — brands · logos</div>
       <div class="demo-block">
         <div class="demo-canvas" style="align-items:center;gap:12px">
           <div class="wav wav-square wav-16">B</div>
@@ -1192,8 +1193,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">AvatarGroup — with overflow</div>
+    <div class="section">
+      <div class="section-title">AvatarGroup — with overflow</div>
       <div class="demo-block">
         <div class="demo-canvas" style="gap:24px;align-items:center">
           <div class="wav-group">
@@ -1220,8 +1221,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">Mixed — brand + person (SQR + ROUND)</div>
+    <div class="section">
+      <div class="section-title">Mixed — brand + person (SQR + ROUND)</div>
       <p class="comp-sub" style="margin-bottom:10px">Used in Waldo to show a brand alongside the person associated with it.</p>
       <div class="demo-block">
         <div class="demo-canvas" style="gap:20px;align-items:center">
@@ -1260,8 +1261,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
 
 
-    <div class="comp-section">
-      <div class="comp-section-title">Simple list · Separator</div>
+    <div class="section">
+      <div class="section-title">Simple list · Separator</div>
       <div class="demo-block">
         <div class="demo-canvas" style="align-items:flex-start;gap:16px">
           <!-- No icons, with selected -->
@@ -1292,8 +1293,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">With search + brands / people</div>
+    <div class="section">
+      <div class="section-title">With search + brands / people</div>
       <div class="demo-block">
         <div class="demo-canvas" style="align-items:flex-start;gap:16px">
           <div class="wdd wdd-has-search">
@@ -1320,8 +1321,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">Multi-select (checkmarks) · Single-select (radio)</div>
+    <div class="section">
+      <div class="section-title">Multi-select (checkmarks) · Single-select (radio)</div>
       <div class="demo-block">
         <div class="demo-canvas" style="align-items:flex-start;gap:16px">
           <div class="wdd wdd-has-search">
@@ -1348,8 +1349,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">With header action</div>
+    <div class="section">
+      <div class="section-title">With header action</div>
       <div class="demo-block">
         <div class="demo-canvas" style="align-items:flex-start">
           <div class="wdd">
@@ -1368,8 +1369,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">Items with inline actions (···)</div>
+    <div class="section">
+      <div class="section-title">Items with inline actions (···)</div>
       <p class="sub">Each item shows a contextual action button on hover. Use for lists where items have individual actions (rename, delete, open).</p>
       <div class="demo-block">
         <div class="demo-canvas" style="align-items:flex-start">
@@ -1417,8 +1418,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
 
 
     <!-- Anatomy -->
-    <div class="comp-section">
-      <div class="comp-section-title">Anatomy — Header · Body · Footer</div>
+    <div class="section">
+      <div class="section-title">Anatomy — Header · Body · Footer</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:center">
           <div class="wdialog wdialog-md">
@@ -1443,8 +1444,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
 
     <!-- Sizes -->
-    <div class="comp-section">
-      <div class="comp-section-title">Sizes</div>
+    <div class="section">
+      <div class="section-title">Sizes</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="gap:8px;align-items:stretch">
           <div class="wdialog wdialog-sm"><div class="wdialog-header"><span class="wdialog-title">sm — 560px</span><button class="wdialog-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><div class="wdialog-body" style="font-size:var(--fs-xs);color:var(--muted-foreground)">Confirmations, warnings, simple forms</div></div>
@@ -1459,8 +1460,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
 
     <!-- Recipe: Confirmation -->
-    <div class="comp-section">
-      <div class="comp-section-title">Recipe — Confirmation / Warning</div>
+    <div class="section">
+      <div class="section-title">Recipe — Confirmation / Warning</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:center">
           <div class="wdialog wdialog-sm">
@@ -1486,8 +1487,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
 
     <!-- Recipe: Success -->
-    <div class="comp-section">
-      <div class="comp-section-title">Recipe — Success / Completion</div>
+    <div class="section">
+      <div class="section-title">Recipe — Success / Completion</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:center">
           <div class="wdialog wdialog-sm">
@@ -1509,8 +1510,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
 
     <!-- Recipe: Form -->
-    <div class="comp-section">
-      <div class="comp-section-title">Recipe — Form</div>
+    <div class="section">
+      <div class="section-title">Recipe — Form</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:center">
           <div class="wdialog wdialog-sm">
@@ -1547,8 +1548,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
 
     <!-- Recipe: Share / Invite -->
-    <div class="comp-section">
-      <div class="comp-section-title">Recipe — Share / Invite</div>
+    <div class="section">
+      <div class="section-title">Recipe — Share / Invite</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:center">
           <div class="wdialog wdialog-md">
@@ -1589,8 +1590,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
 
     <!-- Recipe: Select your team -->
-    <div class="comp-section">
-      <div class="comp-section-title">Recipe — Select your team · ListItem + Switch</div>
+    <div class="section">
+      <div class="section-title">Recipe — Select your team · ListItem + Switch</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:center">
           <div class="wdialog wdialog-md">
@@ -1640,8 +1641,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
 
     <!-- Recipe: Add a signal -->
-    <div class="comp-section">
-      <div class="comp-section-title">Recipe — Add a signal · checklist + toggles</div>
+    <div class="section">
+      <div class="section-title">Recipe — Add a signal · checklist + toggles</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:center">
           <div class="wdialog wdialog-md">
@@ -1681,8 +1682,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
 
     <!-- Recipe: Upload file -->
-    <div class="comp-section">
-      <div class="comp-section-title">Recipe — Upload file · FileInput inside dialog</div>
+    <div class="section">
+      <div class="section-title">Recipe — Upload file · FileInput inside dialog</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:center">
           <div class="wdialog wdialog-md">
@@ -1721,8 +1722,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
 
     <!-- Recipe: Shareable link -->
-    <div class="comp-section">
-      <div class="comp-section-title">Recipe — Shareable link · URL + copy + toggle</div>
+    <div class="section">
+      <div class="section-title">Recipe — Shareable link · URL + copy + toggle</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:center">
           <div class="wdialog wdialog-sm">
@@ -1751,8 +1752,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
 
     <!-- Recipe 9: Ask to collaborate -->
-    <div class="comp-section">
-      <div class="comp-section-title">Recipe — Ask to collaborate</div>
+    <div class="section">
+      <div class="section-title">Recipe — Ask to collaborate</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:center">
           <div class="wdialog wdialog-sm">
@@ -1777,8 +1778,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
 
     <!-- Recipe 10: Audience -->
-    <div class="comp-section">
-      <div class="comp-section-title">Recipe — Audience · info + link</div>
+    <div class="section">
+      <div class="section-title">Recipe — Audience · info + link</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:center">
           <div class="wdialog wdialog-sm">
@@ -1807,8 +1808,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
 
     <!-- Recipe 11: Competitors -->
-    <div class="comp-section">
-      <div class="comp-section-title">Recipe — Competitors · list + checkbox</div>
+    <div class="section">
+      <div class="section-title">Recipe — Competitors · list + checkbox</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:center">
           <div class="wdialog wdialog-sm">
@@ -1840,8 +1841,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
 
     <!-- Recipe 12: Add persona -->
-    <div class="comp-section">
-      <div class="comp-section-title">Recipe — Add persona · multi-field form</div>
+    <div class="section">
+      <div class="section-title">Recipe — Add persona · multi-field form</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:center">
           <div class="wdialog wdialog-md">
@@ -1877,8 +1878,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
 
     <!-- Recipe 13: Invite collaborators & guests -->
-    <div class="comp-section">
-      <div class="comp-section-title">Recipe — Invite collaborators & guests · tabbed form</div>
+    <div class="section">
+      <div class="section-title">Recipe — Invite collaborators & guests · tabbed form</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:center">
           <div class="wdialog wdialog-md">
@@ -1930,8 +1931,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
 
     <!-- Recipe 14: Brand Audit -->
-    <div class="comp-section">
-      <div class="comp-section-title">Recipe — Brand Audit · structured form + file upload</div>
+    <div class="section">
+      <div class="section-title">Recipe — Brand Audit · structured form + file upload</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:center">
           <div class="wdialog wdialog-md">
@@ -1972,8 +1973,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
 
     <!-- Pattern: Advanced Section -->
-    <div class="comp-section">
-      <div class="comp-section-title">Pattern — Advanced section · collapsible fields</div>
+    <div class="section">
+      <div class="section-title">Pattern — Advanced section · collapsible fields</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="max-width:560px;gap:0">
           <div class="wdialog" style="width:100%;padding:32px;gap:16px;display:flex;flex-direction:column">
@@ -2003,8 +2004,8 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
 
     <!-- Recipe 15: Report builder -->
-    <div class="comp-section">
-      <div class="comp-section-title">Recipe — Report builder · filters + time range</div>
+    <div class="section">
+      <div class="section-title">Recipe — Report builder · filters + time range</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:center">
           <div class="wdialog wdialog-lg">
@@ -2625,8 +2626,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
 
-    <div class="comp-section">
-      <div class="comp-section-title">Sizes</div>
+    <div class="section">
+      <div class="section-title">Sizes</div>
       <div class="demo-block">
         <div class="demo-canvas" style="gap:8px;align-items:center">
           <span class="wtag wtag-sm">Small</span>
@@ -2643,8 +2644,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">With remove (onRemove)</div>
+    <div class="section">
+      <div class="section-title">With remove (onRemove)</div>
       <div class="demo-block">
         <div class="demo-canvas" style="gap:8px;align-items:center">
           <span class="wtag wtag-sm">
@@ -2671,8 +2672,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">TagInput — multi-value input</div>
+    <div class="section">
+      <div class="section-title">TagInput — multi-value input</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="max-width:440px;gap:12px">
           <div class="wtag-input" id="tagInputDemo" onclick="document.getElementById('tagInputField').focus()">
@@ -2705,8 +2706,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
 
     <!-- Pattern 1: People -->
-    <div class="comp-section">
-      <div class="comp-section-title">People — contacts, executives, team members</div>
+    <div class="section">
+      <div class="section-title">People — contacts, executives, team members</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="padding:0;background:var(--card);border-radius:var(--radius-lg);overflow:hidden;width:100%;max-width:520px">
           <div class="wli wli-sel">
@@ -2764,8 +2765,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Pattern 2: Entity with status dot -->
-    <div class="comp-section">
-      <div class="comp-section-title">Entity — brands, accounts · status dot + metadata always visible</div>
+    <div class="section">
+      <div class="section-title">Entity — brands, accounts · status dot + metadata always visible</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="padding:0;background:var(--card);border-radius:var(--radius-lg);overflow:hidden;width:100%;max-width:520px">
           <div class="wli">
@@ -2836,8 +2837,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Pattern 3: Strategy -->
-    <div class="comp-section">
-      <div class="comp-section-title">Strategy — agents, briefs · label + avatar stack + actions</div>
+    <div class="section">
+      <div class="section-title">Strategy — agents, briefs · label + avatar stack + actions</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="padding:0;background:var(--card);border-radius:var(--radius-lg);overflow:hidden;width:100%;max-width:520px">
           <div class="wli">
@@ -2890,8 +2891,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- ListView grouped -->
-    <div class="comp-section">
-      <div class="comp-section-title">ListView — grouped with section headers</div>
+    <div class="section">
+      <div class="section-title">ListView — grouped with section headers</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="padding:0;width:100%;max-width:520px">
           <div class="wlv">
@@ -2933,8 +2934,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
 
-    <div class="comp-section">
-      <div class="comp-section-title">Horizontal</div>
+    <div class="section">
+      <div class="section-title">Horizontal</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="gap:16px;width:100%;max-width:480px">
           <span style="font-size:var(--fs-sm);color:var(--foreground)">Section A</span>
@@ -2950,8 +2951,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">Vertical</div>
+    <div class="section">
+      <div class="section-title">Vertical</div>
       <div class="demo-block">
         <div class="demo-canvas" style="gap:16px;height:40px;align-items:center">
           <span style="font-size:var(--fs-sm);color:var(--foreground)">Files</span>
@@ -2967,8 +2968,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">In context — inside a menu</div>
+    <div class="section">
+      <div class="section-title">In context — inside a menu</div>
       <div class="demo-block">
         <div class="demo-canvas" style="align-items:flex-start">
           <div class="wdd" style="width:200px">
@@ -2995,8 +2996,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
 
     <!-- Notification -->
-    <div class="comp-section">
-      <div class="comp-section-title">Notification — user actions (saved, shared, created)</div>
+    <div class="section">
+      <div class="section-title">Notification — user actions (saved, shared, created)</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="gap:8px;align-items:flex-start">
 
@@ -3065,8 +3066,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Banner -->
-    <div class="comp-section">
-      <div class="comp-section-title">Banner — system alerts (limits, extension, connectivity)</div>
+    <div class="section">
+      <div class="section-title">Banner — system alerts (limits, extension, connectivity)</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="gap:8px;align-items:stretch">
 
@@ -3100,8 +3101,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Live demo -->
-    <div class="comp-section">
-      <div class="comp-section-title">Live — trigger toasts</div>
+    <div class="section">
+      <div class="section-title">Live — trigger toasts</div>
       <div class="demo-block">
         <div class="demo-canvas" style="gap:8px;flex-wrap:wrap">
           <button class="btn btn-secondary" onclick="triggerToast('default')">Default</button>
@@ -3186,8 +3187,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
 
     <!-- Variants -->
-    <div class="comp-section">
-      <div class="comp-section-title">Variants — info, success, warning, error</div>
+    <div class="section">
+      <div class="section-title">Variants — info, success, warning, error</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="gap:8px;width:100%;max-width:560px">
 
@@ -3234,8 +3235,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Size sm — inline / form -->
-    <div class="comp-section">
-      <div class="comp-section-title">Size sm — inline, form hints, field-level errors</div>
+    <div class="section">
+      <div class="section-title">Size sm — inline, form hints, field-level errors</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="gap:6px;width:100%;max-width:440px">
           <div class="walert walert-sm walert-destructive">
@@ -3259,8 +3260,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Without icon -->
-    <div class="comp-section">
-      <div class="comp-section-title">Without icon — plain text with border color</div>
+    <div class="section">
+      <div class="section-title">Without icon — plain text with border color</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="gap:8px;width:100%;max-width:560px">
           <div class="walert walert-info" style="display:block">
@@ -3286,8 +3287,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
 
     <!-- Page -->
-    <div class="comp-section">
-      <div class="comp-section-title">Page — full view with no data</div>
+    <div class="section">
+      <div class="section-title">Page — full view with no data</div>
       <div class="demo-block">
         <div class="demo-canvas" style="background:var(--background);min-height:320px">
           <div class="wempty wempty-page">
@@ -3306,8 +3307,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Section — inside table -->
-    <div class="comp-section">
-      <div class="comp-section-title">Section — inside a table or panel</div>
+    <div class="section">
+      <div class="section-title">Section — inside a table or panel</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="padding:0;width:100%;max-width:560px">
           <div class="table-wrap" style="border:none;border-radius:0">
@@ -3337,8 +3338,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Inline — dropdown / combobox -->
-    <div class="comp-section">
-      <div class="comp-section-title">Inline — dropdown, search, combobox</div>
+    <div class="section">
+      <div class="section-title">Inline — dropdown, search, combobox</div>
       <div class="demo-block">
         <div class="demo-canvas" style="align-items:flex-start;gap:16px">
           <!-- Dropdown with empty search -->
@@ -3370,8 +3371,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Without icon -->
-    <div class="comp-section">
-      <div class="comp-section-title">Without icon — text only</div>
+    <div class="section">
+      <div class="section-title">Without icon — text only</div>
       <div class="demo-block">
         <div class="demo-canvas" style="background:var(--background);min-height:180px">
           <div class="wempty wempty-section">
@@ -3397,8 +3398,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
 
     <!-- Text variant -->
-    <div class="comp-section">
-      <div class="comp-section-title">Text — page navigation, section headers</div>
+    <div class="section">
+      <div class="section-title">Text — page navigation, section headers</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:flex-start;gap:0;padding:0">
           <div style="padding:16px 24px;border-bottom:1px solid var(--border);width:100%">
@@ -3419,8 +3420,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Text with count badge -->
-    <div class="comp-section">
-      <div class="comp-section-title">Text — with count</div>
+    <div class="section">
+      <div class="section-title">Text — with count</div>
       <div class="demo-block">
         <div class="demo-canvas" style="align-items:flex-start">
           <div class="wtabs-text">
@@ -3446,8 +3447,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Pill variant -->
-    <div class="comp-section">
-      <div class="comp-section-title">Pill — inline filters, view toggles</div>
+    <div class="section">
+      <div class="section-title">Pill — inline filters, view toggles</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="gap:16px;align-items:flex-start">
           <!-- Default size -->
@@ -3472,8 +3473,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Disabled state -->
-    <div class="comp-section">
-      <div class="comp-section-title">Disabled tab</div>
+    <div class="section">
+      <div class="section-title">Disabled tab</div>
       <div class="demo-block">
         <div class="demo-canvas" style="gap:24px;align-items:flex-start">
           <div class="wtabs-text">
@@ -3586,8 +3587,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
 
     <!-- Size reference -->
-    <div class="comp-section">
-      <div class="comp-section-title">Size reference</div>
+    <div class="section">
+      <div class="section-title">Size reference</div>
       <div class="demo-block">
         <div class="demo-canvas" style="gap:32px">
           <div class="icon-size-item">
@@ -3626,8 +3627,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Custom Waldo icons -->
-    <div class="comp-section">
-      <div class="comp-section-title">Custom — Waldo icons · canvas 16px</div>
+    <div class="section">
+      <div class="section-title">Custom — Waldo icons · canvas 16px</div>
       <p class="sub">14 custom icons from the Waldo DS. Always 14px (h-3.5 w-3.5). Use currentColor — inherits any Tailwind text color.</p>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:stretch;padding:16px">
@@ -3669,8 +3670,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Icon library -->
-    <div class="comp-section">
-      <div class="comp-section-title">Icon library — Lucide (curated set)</div>
+    <div class="section">
+      <div class="section-title">Icon library — Lucide (curated set)</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="padding:16px;align-items:stretch">
           <div id="icon-library"></div>
@@ -3747,8 +3748,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
 
-    <div class="comp-section">
-      <div class="comp-section-title">Green variant (default)</div>
+    <div class="section">
+      <div class="section-title">Green variant (default)</div>
       <div class="demo-block">
         <div class="demo-canvas" style="gap:32px;align-items:flex-start">
           <div class="wradio-group" id="rg-green">
@@ -3792,8 +3793,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">Mono variant</div>
+    <div class="section">
+      <div class="section-title">Mono variant</div>
       <div class="demo-block">
         <div class="demo-canvas" style="gap:32px;align-items:flex-start">
           <div class="wradio-group" id="rg-mono">
@@ -3827,8 +3828,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
 
-    <div class="comp-section">
-      <div class="comp-section-title">Single value</div>
+    <div class="section">
+      <div class="section-title">Single value</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="gap:20px;max-width:400px">
           <div class="wslider-wrap">
@@ -3860,8 +3861,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">Range (two thumbs)</div>
+    <div class="section">
+      <div class="section-title">Range (two thumbs)</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="gap:20px;max-width:400px">
           <div class="wslider-wrap">
@@ -3964,8 +3965,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </style>
 
     <!-- Type A: Dots -->
-    <div class="comp-section">
-      <div class="comp-section-title">Status Spinner — loading → success · error · warning</div>
+    <div class="section">
+      <div class="section-title">Status Spinner — loading → success · error · warning</div>
       <div class="demo-block">
         <div class="demo-canvas" style="gap:32px;align-items:center;flex-wrap:wrap">
 
@@ -4021,8 +4022,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       </div>
     </div>
 
-    <div class="comp-section">
-      <div class="comp-section-title">Type A — Three dots · 2 sizes</div>
+    <div class="section">
+      <div class="section-title">Type A — Three dots · 2 sizes</div>
       <div class="demo-block">
         <div class="demo-canvas" style="gap:32px;align-items:center">
           <!-- zinc -->
@@ -4064,8 +4065,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Type B: Text shimmer -->
-    <div class="comp-section">
-      <div class="comp-section-title">Type B — Text shimmer · Claude-style</div>
+    <div class="section">
+      <div class="section-title">Type B — Text shimmer · Claude-style</div>
       <style>
         @keyframes wshimmer {
           0%   { background-position: -200% center; }
@@ -4147,8 +4148,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
 
     <!-- Anatomy -->
-    <div class="comp-section">
-      <div class="comp-section-title">Anatomy — split layout</div>
+    <div class="section">
+      <div class="section-title">Anatomy — split layout</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:center">
           <div class="wwizard">
@@ -4185,8 +4186,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Step 1: Brands -->
-    <div class="comp-section">
-      <div class="comp-section-title">Step 1 — Brand setup · input + relationship tags</div>
+    <div class="section">
+      <div class="section-title">Step 1 — Brand setup · input + relationship tags</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:center">
           <div class="wwizard">
@@ -4228,8 +4229,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Step 2: Goals -->
-    <div class="comp-section">
-      <div class="comp-section-title">Step 2 — Goals · radio choices</div>
+    <div class="section">
+      <div class="section-title">Step 2 — Goals · radio choices</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:center">
           <div class="wwizard">
@@ -4285,8 +4286,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Step 3: Team -->
-    <div class="comp-section">
-      <div class="comp-section-title">Step 3 — Add collaborators · member list + invite</div>
+    <div class="section">
+      <div class="section-title">Step 3 — Add collaborators · member list + invite</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:center">
           <div class="wwizard">
@@ -4326,8 +4327,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Progress component -->
-    <div class="comp-section">
-      <div class="comp-section-title">WizardProgress — step indicator</div>
+    <div class="section">
+      <div class="section-title">WizardProgress — step indicator</div>
       <div class="demo-block">
         <div class="demo-canvas" style="gap:32px">
           <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
@@ -4361,8 +4362,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
 
     <!-- Default vs active state -->
-    <div class="comp-section">
-      <div class="comp-section-title">Default · Active (with value)</div>
+    <div class="section">
+      <div class="section-title">Default · Active (with value)</div>
       <div class="demo-block">
         <div class="demo-canvas" style="gap:32px">
           <div class="wft wft-default">
@@ -4383,8 +4384,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- In context: Insights search panel -->
-    <div class="comp-section">
-      <div class="comp-section-title">In context — Insights search panel</div>
+    <div class="section">
+      <div class="section-title">In context — Insights search panel</div>
       <div class="demo-block">
         <div class="demo-canvas" style="align-items:flex-start">
           <div class="wnav-panel" style="width:220px;padding:8px 0">
@@ -4428,8 +4429,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
 
     <!-- Pill items — Workflows pattern -->
-    <div class="comp-section">
-      <div class="comp-section-title">Pill items — label + hover ellipsis action · Workflows pattern</div>
+    <div class="section">
+      <div class="section-title">Pill items — label + hover ellipsis action · Workflows pattern</div>
       <div class="demo-block">
         <div class="demo-canvas" style="align-items:flex-start">
           <div class="wnav-panel">
@@ -4489,8 +4490,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Insights panel -->
-    <div class="comp-section">
-      <div class="comp-section-title">Insights panel — search + filter triggers + nav items</div>
+    <div class="section">
+      <div class="section-title">Insights panel — search + filter triggers + nav items</div>
       <div class="demo-block">
         <div class="demo-canvas" style="align-items:flex-start;gap:24px">
           <!-- Default state -->
@@ -4551,8 +4552,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Settings panel -->
-    <div class="comp-section">
-      <div class="comp-section-title">Settings panel — label + trailing icon + active state + sub-items</div>
+    <div class="section">
+      <div class="section-title">Settings panel — label + trailing icon + active state + sub-items</div>
       <div class="demo-block">
         <div class="demo-canvas" style="align-items:flex-start;gap:24px">
           <div class="wnav-panel">
@@ -4597,8 +4598,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- With action button on hover -->
-    <div class="comp-section">
-      <div class="comp-section-title">With action on hover · + button</div>
+    <div class="section">
+      <div class="section-title">With action on hover · + button</div>
       <div class="demo-block">
         <div class="demo-canvas" style="align-items:flex-start">
           <div class="wnav-panel">
@@ -4627,8 +4628,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
     <!-- Report builder with checkboxes -->
-    <div class="comp-section">
-      <div class="comp-section-title">Report builder · label + badge count right</div>
+    <div class="section">
+      <div class="section-title">Report builder · label + badge count right</div>
       <div class="demo-block">
         <div class="demo-canvas" style="align-items:flex-start">
           <div class="wnav-panel">
@@ -5816,57 +5817,63 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="page-desc">Opinionated toast notifications via the Sonner library. Preferred over shadcn Toast for its stacking behaviour and cleaner API. Renders via <code>&lt;Toaster /&gt;</code> in the app root; trigger anywhere with <code>toast()</code>.</div>
   </div>
   <div class="section">
-    <div class="section-title">Types</div>
+    <div class="section-title">Stacked (bottom-right)</div>
     <div class="demo-block">
-      <div class="demo-canvas" style="flex-direction:column;align-items:flex-start;gap:6px">
-        <!-- default -->
-        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--popover);border:1px solid var(--border-md);border-radius:var(--radius);box-shadow:var(--shadow-popover);width:320px">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--foreground)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;opacity:0.7"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-          <div style="flex:1">
-            <div style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground)">Report exported</div>
-            <div style="font-size:var(--fs-xs);color:var(--muted-foreground);margin-top:1px">Your brand report has been saved.</div>
+      <div class="demo-canvas" style="min-height:260px;position:relative;">
+        <div style="font-size:var(--fs-xs);color:var(--muted-foreground);opacity:0.2;position:absolute;top:50%;left:40%;transform:translate(-50%,-50%)">App content</div>
+        <div style="position:absolute;bottom:16px;right:16px;display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+          <div class="wtoast">
+            <div class="wtoast-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="stroke:var(--primary)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="wtoast-body"><span class="wtoast-title">Brand added successfully</span><span class="wtoast-action">View brand</span></div>
+            <button class="wtoast-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
           </div>
-          <button style="background:transparent;border:none;color:var(--muted-foreground);cursor:pointer;line-height:1;padding:2px 4px;font-size:16px">×</button>
-        </div>
-        <!-- success -->
-        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--popover);border:1px solid var(--border-md);border-radius:var(--radius);box-shadow:var(--shadow-popover);width:320px">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#32a9a9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-          <div style="flex:1">
-            <div style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground)">Brand added to watchlist</div>
-            <div style="font-size:var(--fs-xs);color:var(--muted-foreground);margin-top:1px">Nike is now being tracked.</div>
+          <div class="wtoast" style="opacity:0.7;transform:scaleX(0.96);transform-origin:right center">
+            <div class="wtoast-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="stroke:var(--destructive)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+            <div class="wtoast-body"><span class="wtoast-title">Could not save changes</span><span class="wtoast-action" style="color:var(--destructive)">Retry</span></div>
+            <button class="wtoast-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
           </div>
-          <button style="background:transparent;border:none;color:var(--muted-foreground);cursor:pointer;line-height:1;padding:2px 4px;font-size:16px">×</button>
-        </div>
-        <!-- error -->
-        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--popover);border:1px solid var(--border-md);border-radius:var(--radius);box-shadow:var(--shadow-popover);width:320px">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#de3a28" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          <div style="flex:1">
-            <div style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground)">Rate limit reached</div>
-            <div style="font-size:var(--fs-xs);color:var(--muted-foreground);margin-top:1px">Try again in 60 seconds.</div>
+          <div class="wtoast" style="opacity:0.45;transform:scaleX(0.92);transform-origin:right center">
+            <div class="wtoast-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></div>
+            <div class="wtoast-body"><span class="wtoast-title">Insight saved</span><span class="wtoast-action">Share to Slack</span></div>
+            <button class="wtoast-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/></svg></button>
           </div>
-          <button style="background:transparent;border:none;color:var(--muted-foreground);cursor:pointer;line-height:1;padding:2px 4px;font-size:16px">×</button>
-        </div>
-        <!-- warning -->
-        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--popover);border:1px solid var(--border-md);border-radius:var(--radius);box-shadow:var(--shadow-popover);width:320px">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c94e22" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-          <div style="flex:1">
-            <div style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground)">Signal coverage low</div>
-            <div style="font-size:var(--fs-xs);color:var(--muted-foreground);margin-top:1px">Less than 3 days of data available.</div>
-          </div>
-          <button style="background:transparent;border:none;color:var(--muted-foreground);cursor:pointer;line-height:1;padding:2px 4px;font-size:16px">×</button>
-        </div>
-        <!-- info -->
-        <div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--popover);border:1px solid var(--border-md);border-radius:var(--radius);box-shadow:var(--shadow-popover);width:320px">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--muted-foreground)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-          <div style="flex:1">
-            <div style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground)">New signals available</div>
-          </div>
-          <button style="background:transparent;border:none;color:var(--muted-foreground);cursor:pointer;line-height:1;padding:2px 4px;font-size:16px">×</button>
         </div>
       </div>
       <div class="demo-code-bar">
-        <span class="demo-code-label">&lt;Toaster /&gt; + toast()</span>
-        <button class="copy-btn" onclick="copyCode(this, &quot;import { toast } from 'sonner'\n\ntoast('Report exported')\ntoast.success('Brand added to watchlist')\ntoast.error('Rate limit reached')\ntoast.warning('Signal coverage low')\ntoast.info('New signals available')\n\n// In your app root:\n&lt;Toaster /&gt;&quot;)">Copy</button>
+        <span class="demo-code-label">&lt;Toaster /&gt; in app root — toasts stack automatically</span>
+        <button class="copy-btn" onclick="copyCode(this, &quot;// In your app root (once):\n&lt;Toaster position=&quot;bottom-right&quot; /&gt;\n\n// Trigger from anywhere:\nimport { toast } from 'sonner'\ntoast.success('Brand added successfully', { action: { label: 'View brand', onClick: handleView } })&quot;)">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Types</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="flex-direction:column;align-items:flex-start;gap:8px">
+        <div class="wtoast">
+          <div class="wtoast-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></div>
+          <div class="wtoast-body"><span class="wtoast-title">Insight saved</span><span class="wtoast-action">Share to Slack</span></div>
+          <button class="wtoast-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="14" y2="18"/></svg></button>
+        </div>
+        <div class="wtoast">
+          <div class="wtoast-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="stroke:var(--primary)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="wtoast-body"><span class="wtoast-title">Brand added successfully</span><span class="wtoast-action">View brand</span></div>
+          <button class="wtoast-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="wtoast">
+          <div class="wtoast-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="stroke:var(--destructive)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+          <div class="wtoast-body"><span class="wtoast-title">Could not save changes</span><span class="wtoast-action" style="color:var(--destructive)">Retry</span></div>
+          <button class="wtoast-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <div class="wtoast">
+          <div class="wtoast-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="stroke:var(--warning)" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div class="wtoast-body"><span class="wtoast-title">Export limit almost reached</span><span class="wtoast-action" style="color:var(--warning)">Upgrade plan</span></div>
+          <button class="wtoast-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">toast() / toast.success() / toast.error() / toast.warning()</span>
+        <button class="copy-btn" onclick="copyCode(this, &quot;import { toast } from 'sonner'\n\ntoast('Insight saved', { action: { label: 'Share to Slack', onClick: handleShare } })\ntoast.success('Brand added successfully', { action: { label: 'View brand', onClick: handleView } })\ntoast.error('Could not save changes', { action: { label: 'Retry', onClick: handleRetry } })\ntoast.warning('Export limit almost reached', { action: { label: 'Upgrade plan', onClick: handleUpgrade } })&quot;)">Copy</button>
       </div>
     </div>
   </div>
@@ -5962,29 +5969,31 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="page-title">Switch</div>
     <div class="page-desc">32×18px pill toggle. ON track uses <code>--primary</code> (teal). OFF track uses <code>--muted</code>. Thumb is white, 14px. Use for binary settings — not for multi-state or in-form choices (use Checkbox instead).</div>
   </div>
-  <div class="demo-section">
-    <div class="demo-label">States</div>
-    <div class="demo-box" style="display:flex;flex-direction:column;gap:16px;">
-      <label class="wswitch">
-        <input type="checkbox">
-        <span class="wswitch-track"><span class="wswitch-thumb"></span></span>
-        <span style="font-size:var(--fs-sm);color:var(--foreground)">Notifications</span>
-      </label>
-      <label class="wswitch">
-        <input type="checkbox" checked>
-        <span class="wswitch-track"><span class="wswitch-thumb"></span></span>
-        <span style="font-size:var(--fs-sm);color:var(--foreground)">Auto-refresh</span>
-      </label>
-      <label class="wswitch disabled">
-        <input type="checkbox" disabled>
-        <span class="wswitch-track"><span class="wswitch-thumb"></span></span>
-        <span style="font-size:var(--fs-sm);color:var(--foreground)">Disabled</span>
-      </label>
+  <div class="section">
+    <div class="section-title">States</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="flex-direction:column;gap:16px;align-items:flex-start">
+        <label class="wswitch">
+          <input type="checkbox">
+          <span class="wswitch-track"><span class="wswitch-thumb"></span></span>
+          <span style="font-size:var(--fs-sm);color:var(--foreground)">Notifications</span>
+        </label>
+        <label class="wswitch">
+          <input type="checkbox" checked>
+          <span class="wswitch-track"><span class="wswitch-thumb"></span></span>
+          <span style="font-size:var(--fs-sm);color:var(--foreground)">Auto-refresh</span>
+        </label>
+        <label class="wswitch disabled">
+          <input type="checkbox" disabled>
+          <span class="wswitch-track"><span class="wswitch-thumb"></span></span>
+          <span style="font-size:var(--fs-sm);color:var(--foreground)">Disabled</span>
+        </label>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;Switch checked onCheckedChange={setChecked} /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this,'&lt;Switch checked onCheckedChange={setChecked} /&gt;')">Copy</button>
+      </div>
     </div>
-  </div>
-  <div class="demo-code-bar">
-    <span class="demo-code-label">&lt;Switch /&gt;</span>
-    <button class="copy-btn" onclick="copyCode(this,'&lt;Switch checked onCheckedChange={setChecked} /&gt;')">Copy</button>
   </div>
 </div>
 
@@ -5994,30 +6003,32 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="page-title">Status Spinner</div>
     <div class="page-desc">16px animated indicator for async operations. Transitions: <code>loading</code> → <code>success</code> / <code>error</code> / <code>warning</code>. Ring color and fill change per state. Icon pops in on state change.</div>
   </div>
-  <div class="demo-section">
-    <div class="demo-label">All states</div>
-    <div class="demo-box" style="display:flex;gap:24px;align-items:center;">
-      <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
-        <div class="wspinner loading"></div>
-        <span style="font-size:var(--fs-xs);color:var(--muted-foreground)">loading</span>
+  <div class="section">
+    <div class="section-title">All states</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="gap:24px;align-items:center">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+          <div class="wspinner loading"></div>
+          <span style="font-size:var(--fs-xs);color:var(--muted-foreground)">loading</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+          <div class="wspinner success"><span class="wspinner-icon"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+          <span style="font-size:var(--fs-xs);color:var(--muted-foreground)">success</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+          <div class="wspinner error"><span class="wspinner-icon"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg></span></div>
+          <span style="font-size:var(--fs-xs);color:var(--muted-foreground)">error</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+          <div class="wspinner warning"><span class="wspinner-icon"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><path d="M6 2v4M6 8.5v.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg></span></div>
+          <span style="font-size:var(--fs-xs);color:var(--muted-foreground)">warning</span>
+        </div>
       </div>
-      <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
-        <div class="wspinner success"><span class="wspinner-icon"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-        <span style="font-size:var(--fs-xs);color:var(--muted-foreground)">success</span>
-      </div>
-      <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
-        <div class="wspinner error"><span class="wspinner-icon"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg></span></div>
-        <span style="font-size:var(--fs-xs);color:var(--muted-foreground)">error</span>
-      </div>
-      <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
-        <div class="wspinner warning"><span class="wspinner-icon"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><path d="M6 2v4M6 8.5v.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg></span></div>
-        <span style="font-size:var(--fs-xs);color:var(--muted-foreground)">warning</span>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;StatusSpinner status={status} /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this,'&lt;StatusSpinner status={status} /&gt;')">Copy</button>
       </div>
     </div>
-  </div>
-  <div class="demo-code-bar">
-    <span class="demo-code-label">&lt;StatusSpinner status="loading" /&gt;</span>
-    <button class="copy-btn" onclick="copyCode(this,'&lt;StatusSpinner status={status} /&gt;')">Copy</button>
   </div>
 </div>
 
@@ -6027,51 +6038,59 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="page-title">Filter Chip</div>
     <div class="page-desc">Pill filter control for filter bars. Two shapes: on/off toggle and dropdown trigger (add <code>showChevron</code>). Active state uses primary teal tint. Composes under <code>PopoverTrigger asChild</code> for dropdowns.</div>
   </div>
-  <div class="demo-section">
-    <div class="demo-label">Toggle chips</div>
-    <div class="demo-box" style="display:flex;gap:8px;flex-wrap:wrap;">
-      <button class="chip" onclick="this.classList.toggle('chip-selected')">
-        <span class="chip-inner">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          Favorites
-        </span>
-      </button>
-      <button class="chip chip-selected" onclick="this.classList.toggle('chip-selected')">
-        <span class="chip-inner">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          Nike
-        </span>
-      </button>
-      <button class="chip chip-selected" onclick="this.classList.toggle('chip-selected')">
-        <span class="chip-inner">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          Adidas
-        </span>
-      </button>
+  <div class="section">
+    <div class="section-title">Toggle chips</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="gap:8px;flex-wrap:wrap">
+        <button class="chip" onclick="this.classList.toggle('chip-selected')">
+          <span class="chip-inner">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Favorites
+          </span>
+        </button>
+        <button class="chip chip-selected" onclick="this.classList.toggle('chip-selected')">
+          <span class="chip-inner">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Nike
+          </span>
+        </button>
+        <button class="chip chip-selected" onclick="this.classList.toggle('chip-selected')">
+          <span class="chip-inner">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Adidas
+          </span>
+        </button>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;FilterChip active={active} icon={&lt;Tag/&gt;} onClick={toggle}&gt;Favorites&lt;/FilterChip&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this,'&lt;FilterChip active={active} icon={&lt;Tag/&gt;} onClick={toggle}&gt;Favorites&lt;/FilterChip&gt;')">Copy</button>
+      </div>
     </div>
   </div>
-  <div class="demo-section">
-    <div class="demo-label">Dropdown trigger</div>
-    <div class="demo-box" style="display:flex;gap:8px;">
-      <button class="chip chip-active">
-        <span class="chip-inner">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 12h8M11 18h2"/></svg>
-          Platform: Instagram
-        </span>
-        <svg class="chip-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <button class="chip">
-        <span class="chip-inner">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          Date range
-        </span>
-        <svg class="chip-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
+  <div class="section">
+    <div class="section-title">Dropdown trigger</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="gap:8px">
+        <button class="chip chip-active">
+          <span class="chip-inner">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 12h8M11 18h2"/></svg>
+            Platform: Instagram
+          </span>
+          <svg class="chip-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <button class="chip">
+          <span class="chip-inner">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Date range
+          </span>
+          <svg class="chip-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;FilterChip showChevron active={active} icon={&lt;Tag/&gt;}&gt;Platform: Instagram&lt;/FilterChip&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this,'&lt;FilterChip showChevron active={active}&gt;Platform: Instagram&lt;/FilterChip&gt;')">Copy</button>
+      </div>
     </div>
-  </div>
-  <div class="demo-code-bar">
-    <span class="demo-code-label">&lt;FilterChip active={active} icon={&lt;Tag/&gt;}&gt;Label&lt;/FilterChip&gt;</span>
-    <button class="copy-btn" onclick="copyCode(this,'&lt;FilterChip active={active} icon={&lt;Tag/&gt;} onClick={toggle}&gt;Favorites&lt;/FilterChip&gt;')">Copy</button>
   </div>
 </div>
 
@@ -6084,9 +6103,10 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="page-desc">The Waldo wordmark. Uses <code>currentColor</code> — color controlled via CSS <code>color</code> property or <code>fill</code> override. Default: <code>var(--foreground)</code>. Scale via <code>width</code> prop; height adjusts proportionally (ratio 69.75:18).</div>
   </div>
 
-  <div class="demo-section">
-    <div class="demo-label">Sizes</div>
-    <div class="demo-box" style="display:flex;align-items:center;gap:32px;flex-wrap:wrap;">
+  <div class="section">
+    <div class="section-title">Sizes</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="display:flex;align-items:center;gap:32px;flex-wrap:wrap;">
       <div style="display:flex;flex-direction:column;align-items:flex-start;gap:6px;">
         <svg width="48" height="12" viewBox="0 0 69.75 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Waldo"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
         <span style="font-size:var(--fs-sm);color:var(--muted-foreground)">48px</span>
@@ -6102,9 +6122,10 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
   </div>
 
-  <div class="demo-section">
-    <div class="demo-label">Color variants</div>
-    <div class="demo-box" style="display:flex;align-items:center;gap:32px;flex-wrap:wrap;">
+  <div class="section">
+    <div class="section-title">Color variants</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="display:flex;align-items:center;gap:32px;flex-wrap:wrap;">
       <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start;">
         <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
         <span style="font-size:var(--fs-sm);color:var(--muted-foreground)">foreground (default)</span>
@@ -6118,15 +6139,17 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         <span style="font-size:var(--fs-sm);color:var(--muted-foreground)">on white</span>
       </div>
     </div>
-  </div>
 
   <div class="demo-code-bar">
     <span class="demo-code-label">&lt;WaldoLogo /&gt;</span>
     <button class="copy-btn" onclick="copyCode(this, '&lt;WaldoLogo /&gt;\n&lt;WaldoLogo width={100} /&gt;\n&lt;WaldoLogo className=&quot;text-primary&quot; /&gt;')">Copy</button>
   </div>
+  </div>
 </div>
 
 <!-- Live Status Badge -->
+</div>
+</div>
 <div id="comp-live-badge" class="waldo-page">
   <div class="page-header">
     <div class="page-title">Live Status Badge</div>
@@ -6143,17 +6166,19 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     @media (prefers-reduced-motion: reduce) { .live-dot.pulse { animation: none; } }
   </style>
 
-  <div class="demo-section">
-    <div class="demo-label">States</div>
-    <div class="demo-box" style="display:flex;align-items:center;gap:16px;">
+  <div class="section">
+    <div class="section-title">States</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="display:flex;align-items:center;gap:16px;">
       <span class="live-badge active"><span class="live-dot pulse"></span>Discounting now</span>
       <span class="live-badge inactive">No active discount</span>
     </div>
   </div>
 
-  <div class="demo-section">
-    <div class="demo-label">In context — brand header</div>
-    <div class="demo-box" style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;">
+  <div class="section">
+    <div class="section-title">In context — brand header</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;">
       <div style="display:flex;flex-direction:column;gap:4px;">
         <div style="font-size:var(--fs-3xl);font-weight:600;letter-spacing:-0.56px;line-height:34px;">Zara</div>
         <div style="font-size:var(--fs-sm);color:var(--muted-foreground);">Apparel &amp; Fashion · <span style="color:var(--primary);cursor:pointer;">view category</span></div>
@@ -6162,23 +6187,27 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
   </div>
 
-  <div class="demo-section">
-    <div class="demo-label">Rules</div>
-    <div class="demo-box" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+  <div class="section">
+    <div class="section-title">Rules</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
       <div>Active: <code>var(--destructive)</code> text + 10% bg + animated pulse dot.</div>
       <div>Inactive: <code>var(--secondary)</code> bg + muted text, no dot.</div>
       <div>Pulse animation respects <code>prefers-reduced-motion</code> — static dot when reduced.</div>
       <div>Never use for general status — only for live/active promo detection.</div>
     </div>
-  </div>
 
   <div class="demo-code-bar">
     <span class="demo-code-label">&lt;span class="live-badge active" /&gt;</span>
     <button class="copy-btn" onclick="copyCode(this, '&lt;span class=&quot;live-badge active&quot;&gt;\n  &lt;span class=&quot;live-dot pulse&quot;&gt;&lt;/span&gt;Discounting now\n&lt;/span&gt;\n\n&lt;span class=&quot;live-badge inactive&quot;&gt;No active discount&lt;/span&gt;')">Copy</button>
   </div>
+  </div>
 </div>
 
 <!-- KPI Stat Card -->
+</div>
+</div>
+</div>
 <div id="comp-kpi-stat-card" class="waldo-page">
   <div class="page-header">
     <div class="page-title">KPI Stat Card</div>
@@ -6196,9 +6225,10 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     .k-header { display: flex; gap: 10px; align-items: center; justify-content: space-between; }
   </style>
 
-  <div class="demo-section">
-    <div class="demo-label">4-up grid</div>
-    <div class="demo-box">
+  <div class="section">
+    <div class="section-title">4-up grid</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
       <div class="kpi-grid">
         <div class="kpi">
           <div class="k-label">Brands discounting now</div>
@@ -6241,9 +6271,10 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
   </div>
 
-  <div class="demo-section">
-    <div class="demo-label">Signal semantics</div>
-    <div class="demo-box" style="display:flex;gap:24px;">
+  <div class="section">
+    <div class="section-title">Signal semantics</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="display:flex;gap:24px;">
       <div class="kpi" style="flex:1;">
         <div class="k-label">More discounting</div>
         <div class="k-value">▲ up</div>
@@ -6257,23 +6288,27 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
   </div>
 
-  <div class="demo-section">
-    <div class="demo-label">Rules</div>
-    <div class="demo-box" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+  <div class="section">
+    <div class="section-title">Rules</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
       <div>Max 4 cards per row. Collapse to 2 on mobile.</div>
       <div>No border — cards distinguished by surface elevation only (<code>var(--card)</code>).</div>
       <div>Up = <code>var(--destructive)</code> (red) — more discounting is a pressure signal, not a positive.</div>
       <div>Down = <code>var(--primary)</code> (teal) — less discounting is a relief signal.</div>
     </div>
-  </div>
 
   <div class="demo-code-bar">
     <span class="demo-code-label">&lt;div class="kpi-grid" /&gt;</span>
     <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;kpi-grid&quot;&gt;\n  &lt;div class=&quot;kpi&quot;&gt;\n    &lt;div class=&quot;k-label&quot;&gt;Avg Discount Depth&lt;/div&gt;\n    &lt;div class=&quot;k-value&quot;&gt;36%&lt;/div&gt;\n    &lt;div class=&quot;k-sub&quot;&gt;&lt;span class=&quot;k-up&quot;&gt;▲ +4pp&lt;/span&gt; vs last month&lt;/div&gt;\n  &lt;/div&gt;\n&lt;/div&gt;')">Copy</button>
   </div>
+  </div>
 </div>
 
 <!-- Depth Pill -->
+</div>
+</div>
+</div>
 <div id="comp-depth-pill" class="waldo-page">
   <div class="page-header">
     <div class="page-title">Depth Pill</div>
@@ -6284,9 +6319,10 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     .depth-pill { font-size: var(--fs-sm); font-weight: 700; padding: 4px 10px; border-radius: 8px; white-space: nowrap; }
   </style>
 
-  <div class="demo-section">
-    <div class="demo-label">Opacity scale — 10% → 60%+</div>
-    <div class="demo-box" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+  <div class="section">
+    <div class="section-title">Opacity scale — 10% → 60%+</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
       <span class="depth-pill" style="color:rgb(var(--yellow-300) / 0.30);background:rgb(var(--yellow-300) / 0.10);">10% off</span>
       <span class="depth-pill" style="color:rgb(var(--yellow-300) / 0.47);background:rgb(var(--yellow-300) / 0.10);">20% off</span>
       <span class="depth-pill" style="color:rgb(var(--yellow-300) / 0.65);background:rgb(var(--yellow-300) / 0.10);">30% off</span>
@@ -6296,9 +6332,10 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
   </div>
 
-  <div class="demo-section">
-    <div class="demo-label">Live alpha calculator</div>
-    <div class="demo-box" style="display:flex;align-items:center;gap:16px;">
+  <div class="section">
+    <div class="section-title">Live alpha calculator</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="display:flex;align-items:center;gap:16px;">
       <input id="depth-input" type="range" min="0" max="100" value="35" style="flex:1;accent-color:rgb(var(--yellow-300) / 0.9);">
       <span id="depth-output" class="depth-pill" style="min-width:72px;text-align:center;"></span>
       <span id="depth-alpha-label" style="font-size:var(--fs-xs);color:var(--muted-foreground);width:80px;text-align:right;"></span>
@@ -6321,23 +6358,27 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </script>
   </div>
 
-  <div class="demo-section">
-    <div class="demo-label">Rules</div>
-    <div class="demo-box" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+  <div class="section">
+    <div class="section-title">Rules</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
       <div>Alpha formula: <code>Math.max(0.30, Math.min(1, 0.30 + (depth / 60) * 0.70))</code></div>
       <div>Background is always <code>rgba(var(--highlight-rgb), 0.10)</code> — fixed.</div>
       <div>Use only for discount depth or comparable magnitude metrics. Never repurpose for status.</div>
       <div>Never use <code>--chart-*</code> colors in a depth pill.</div>
     </div>
-  </div>
 
   <div class="demo-code-bar">
     <span class="demo-code-label">&lt;span class="depth-pill" /&gt;</span>
     <button class="copy-btn" onclick="copyCode(this, '&lt;span class=&quot;depth-pill&quot; style=&quot;color:rgba(var(--highlight-rgb),{alpha});background:rgba(var(--highlight-rgb),0.10);&quot;&gt;{value}% off&lt;/span&gt;\n\n// alpha = Math.max(0.30, Math.min(1, 0.30 + (depth / 60) * 0.70))')">Copy</button>
   </div>
+  </div>
 </div>
 
 <!-- Leaderboard Row -->
+</div>
+</div>
+</div>
 <div id="comp-leaderboard-row" class="waldo-page">
   <div class="page-header">
     <div class="page-title">Leaderboard Row</div>
@@ -6358,9 +6399,10 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     .lb-category { font-size: var(--fs-sm); font-weight: 400; line-height: 16px; letter-spacing: -0.22px; color: var(--muted-foreground); opacity: 0.6; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
   </style>
 
-  <div class="demo-section">
-    <div class="demo-label">Live demo — Top 5 brands by discount depth</div>
-    <div class="demo-box" style="max-width:520px;">
+  <div class="section">
+    <div class="section-title">Live demo — Top 5 brands by discount depth</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="max-width:520px;">
       <div class="lb" id="lb-demo"></div>
     </div>
     <script>
@@ -6395,25 +6437,28 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </script>
   </div>
 
-  <div class="demo-section">
-    <div class="demo-label">Rules</div>
-    <div class="demo-box" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+  <div class="section">
+    <div class="section-title">Rules</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
       <div>Rank number is muted — structural, not the focus.</div>
       <div>Brand name is the dominant element (600 weight).</div>
       <div>Depth pill is always right-aligned, uses alpha-encoding (see Depth Pill).</div>
       <div>Last row has no bottom border (<code>.lb-row:last-child .lb-main { border-bottom: none; }</code>).</div>
       <div>Use <code>var(--secondary)</code> for hover — never a custom bg color.</div>
     </div>
-  </div>
 
   <div class="demo-code-bar">
     <span class="demo-code-label">&lt;div class="lb-row" /&gt;</span>
     <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;lb&quot;&gt;\n  &lt;div class=&quot;lb-row&quot;&gt;\n    &lt;div class=&quot;lb-rank&quot;&gt;1&lt;/div&gt;\n    &lt;div class=&quot;lb-main&quot;&gt;\n      &lt;div class=&quot;lb-brand&quot;&gt;Zara&lt;/div&gt;\n      &lt;div class=&quot;lb-meta&quot;&gt;\n        &lt;span class=&quot;lb-type-tag&quot;&gt;Sitewide sale&lt;/span&gt;\n        &lt;span&gt;Up to 50% off&lt;/span&gt;\n      &lt;/div&gt;\n    &lt;/div&gt;\n    &lt;span class=&quot;depth-pill&quot; style=&quot;color:rgb(var(--yellow-300) / 0.88);background:rgb(var(--yellow-300) / 0.10);&quot;&gt;50%&lt;/span&gt;\n  &lt;/div&gt;\n&lt;/div&gt;')">Copy</button>
   </div>
+  </div>
 </div>
 
 
 <!-- Alert List Row -->
+</div>
+</div>
 <div id="comp-alert-list-row" class="waldo-page">
   <div class="page-header">
     <div class="page-title">Alert List Row</div>
@@ -6436,9 +6481,10 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     .alert-delete:hover { color: var(--destructive); opacity: 1; }
   </style>
 
-  <div class="demo-section">
-    <div class="demo-label">Live demo</div>
-    <div class="demo-box" style="max-width:560px;">
+  <div class="section">
+    <div class="section-title">Live demo</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="max-width:560px;">
       <div class="ds-dashboard-card" style="width:100%;">
         <div class="ds-dashboard-card-header">
           <div class="ds-dashboard-card-title">your alerts</div>
@@ -6468,25 +6514,28 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </script>
   </div>
 
-  <div class="demo-section">
-    <div class="demo-label">Rules</div>
-    <div class="demo-box" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+  <div class="section">
+    <div class="section-title">Rules</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
       <div>Teal dot = active alert. Always <code>var(--primary)</code> — never hardcoded.</div>
       <div>Line 1: entity name in <code>var(--foreground)</code> + condition detail in <code>var(--muted-foreground)</code> — same element, mixed spans.</div>
       <div>Line 2: delivery address in muted/60% — email or phone.</div>
       <div>Trash icon: 16×16, muted 40% at rest, <code>var(--destructive)</code> on hover.</div>
       <div>Last row has no border-bottom.</div>
     </div>
-  </div>
 
   <div class="demo-code-bar">
     <span class="demo-code-label">&lt;div class="alert-item" /&gt;</span>
     <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;alert-list&quot;&gt;\n  &lt;div class=&quot;alert-item&quot;&gt;\n    &lt;div class=&quot;alert-dot-col&quot;&gt;&lt;div class=&quot;alert-dot&quot;&gt;&lt;/div&gt;&lt;/div&gt;\n    &lt;div class=&quot;alert-content&quot;&gt;\n      &lt;div class=&quot;alert-condition&quot;&gt;\n        &lt;span class=&quot;alert-condition-main&quot;&gt;Apparel &amp;amp; Fashion&lt;/span&gt;\n        &lt;span class=&quot;alert-condition-detail&quot;&gt;  any discount → email&lt;/span&gt;\n      &lt;/div&gt;\n      &lt;div class=&quot;alert-delivery&quot;&gt;team@acme.com&lt;/div&gt;\n    &lt;/div&gt;\n    &lt;svg class=&quot;alert-delete&quot; ...&gt;&lt;/svg&gt;\n  &lt;/div&gt;\n&lt;/div&gt;')">Copy</button>
   </div>
+  </div>
 </div>
 
 
 <!-- Quote Card -->
+</div>
+</div>
 <div id="comp-quote-card" class="waldo-page">
   <div class="page-header">
     <div class="page-title">Quote Card</div>
@@ -7201,10 +7250,10 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     .brcol-col { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
     .brcol-card { width: 100%; border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: opacity 0.15s; }
     .brcol-card:hover { opacity: 0.9; }
-    .brcol-body { flex: 1; padding: 14px 14px 12px; display: flex; flex-direction: column; gap: 6px; background: linear-gradient(to bottom, color-mix(in srgb, var(--chart-2) 28%, #fff), color-mix(in srgb, var(--chart-2) 48%, #fff)); }
+    .brcol-body { flex: 1; padding: 14px 14px 12px; display: flex; flex-direction: column; gap: 6px; background: linear-gradient(to bottom, color-mix(in srgb, var(--chart-1) 45%, #000), color-mix(in srgb, var(--chart-1) 70%, #000)); }
     .brcol-text { font-size: var(--fs-xs); color: rgba(255,255,255,0.9); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
-    .brcol-seemore { font-size: var(--fs-xs); color: rgba(255,255,255,0.45); }
-    .brcol-foot { background: var(--secondary); padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 8px; }
+    .brcol-seemore { font-size: var(--fs-xs); color: rgba(255,255,255,0.5); }
+    .brcol-foot { background: color-mix(in srgb, var(--chart-1) 75%, #000); padding: 12px 14px 14px; border-radius: 0 0 22px 22px; display: flex; flex-direction: column; gap: 8px; }
     .brcol-delta { font-size: 36px; font-weight: 700; color: #fff; line-height: 1; }
     .brcol-brand { display: flex; align-items: center; gap: 8px; }
     .brcol-logo { width: 28px; height: 28px; border-radius: 999px; background: #fff; background-size: cover; background-position: center; flex: none; overflow: hidden; }
@@ -7220,7 +7269,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
           <div class="brcol-row">
 
             <div class="brcol-col">
-              <div class="brcol-card" style="height:280px">
+              <div class="brcol-card" style="height:240px">
                 <div class="brcol-body">
                   <span class="brcol-text">Eco-debates peaked mid-Oct; Nov uptick from repair program buzz. Steady ~20% share.</span>
                   <span class="brcol-seemore">see more</span>
@@ -7236,7 +7285,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             </div>
 
             <div class="brcol-col">
-              <div class="brcol-card" style="height:340px">
+              <div class="brcol-card" style="height:327px">
                 <div class="brcol-body">
                   <span class="brcol-text">Oct sales +35% YoY; Nov Korean market push (+20% search). Dominates at ~50%.</span>
                   <span class="brcol-seemore">see more</span>
@@ -7252,7 +7301,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             </div>
 
             <div class="brcol-col">
-              <div class="brcol-card" style="height:300px">
+              <div class="brcol-card" style="height:307px">
                 <div class="brcol-body">
                   <span class="brcol-text">Affordable winter gear drove Oct; Nov corporate buzz.</span>
                   <span class="brcol-seemore">see more</span>
@@ -7268,7 +7317,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             </div>
 
             <div class="brcol-col">
-              <div class="brcol-card" style="height:260px">
+              <div class="brcol-card" style="height:380px">
                 <div class="brcol-body">
                   <span class="brcol-text">Oct climber focus; Nov game tie-ins (ARC Raiders) +11% search. ~15% share.</span>
                   <span class="brcol-seemore">see more</span>
@@ -7287,6 +7336,81 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         </div>
       </div>
       <div class="demo-code-bar"><span class="demo-code-label">.brcol-row > .brcol-col > .brcol-card (.brcol-body + .brcol-foot)</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Article Card -->
+<div id="comp-article-card" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Article Card</div>
+    <div class="page-desc">Press and earned media card. Publication favicon, source, time, category tag, headline, snippet. Links out to coverage.</div>
+  </div>
+
+  <style>
+    .art-card { display: flex; gap: 14px; background: var(--card); border-radius: var(--radius-xl); padding: 14px 16px; text-decoration: none; color: inherit; cursor: pointer; transition: background 0.12s; }
+    .art-card:hover { background: color-mix(in srgb, var(--foreground) 5%, var(--card)); }
+    .art-favicon { width: 32px; height: 32px; border-radius: var(--radius-md); background: var(--secondary); flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .art-favicon img { width: 20px; height: 20px; object-fit: contain; }
+    .art-body { display: flex; flex-direction: column; gap: 5px; min-width: 0; flex: 1; }
+    .art-meta { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); color: var(--muted-foreground); flex-wrap: wrap; }
+    .art-source { font-weight: 600; color: var(--foreground); }
+    .art-dot { opacity: 0.4; }
+    .art-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.02em; padding: 1px 7px; border-radius: 999px; margin-left: auto; flex-shrink: 0; }
+    .art-tag.neutral { background: color-mix(in srgb, var(--primary) 14%, transparent); color: var(--primary); }
+    .art-tag.competitor { background: color-mix(in srgb, var(--warning) 14%, transparent); color: var(--warning); }
+    .art-tag.negative { background: color-mix(in srgb, var(--destructive) 14%, transparent); color: var(--destructive); }
+    .art-title { font-size: var(--fs-sm); font-weight: 600; color: var(--foreground); line-height: 1.4; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .art-snippet { font-size: var(--fs-xs); color: var(--muted-foreground); line-height: 1.5; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Feed (stacked)</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="max-width:480px;width:100%;display:flex;flex-direction:column;gap:6px;">
+          <a class="art-card">
+            <div class="art-favicon"><img src="https://www.google.com/s2/favicons?domain=cnbc.com&sz=64" alt="CNBC"></div>
+            <div class="art-body">
+              <div class="art-meta">
+                <span class="art-source">CNBC</span>
+                <span class="art-dot">·</span>
+                <span class="art-time">4d ago</span>
+                <span class="art-tag neutral">Industry</span>
+              </div>
+              <div class="art-title">Pepsi launches national Prebiotic line — Poppi and Olipop face their first big-soda challenger</div>
+              <div class="art-snippet">Wall Street sees this as validation for the functional-soda category, but pressure on incumbents is mounting.</div>
+            </div>
+          </a>
+          <a class="art-card">
+            <div class="art-favicon"><img src="https://www.google.com/s2/favicons?domain=forbes.com&sz=64" alt="Forbes"></div>
+            <div class="art-body">
+              <div class="art-meta">
+                <span class="art-source">Forbes</span>
+                <span class="art-dot">·</span>
+                <span class="art-time">6d ago</span>
+                <span class="art-tag competitor">Competitor</span>
+              </div>
+              <div class="art-title">Olipop raises $50M Series C as prebiotic soda wars heat up</div>
+              <div class="art-snippet">The funding will go toward retail expansion and a new marketing push targeting Gen Z health-conscious consumers.</div>
+            </div>
+          </a>
+          <a class="art-card">
+            <div class="art-favicon"><img src="https://www.google.com/s2/favicons?domain=adweek.com&sz=64" alt="Adweek"></div>
+            <div class="art-body">
+              <div class="art-meta">
+                <span class="art-source">Adweek</span>
+                <span class="art-dot">·</span>
+                <span class="art-time">1w ago</span>
+                <span class="art-tag neutral">Brand</span>
+              </div>
+              <div class="art-title">How Poppi's BÉIS collab turned a product drop into a cultural moment</div>
+              <div class="art-snippet">The limited-edition collaboration generated 140K organic mentions in 48 hours, outpacing paid reach by 4×.</div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">&lt;a class="art-card"&gt; + .art-tag.neutral|competitor|negative</span></div>
     </div>
   </div>
 </div>
@@ -7386,9 +7510,10 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     .ad-copy-meta { font-size: var(--fs-sm); font-weight: 400; line-height: 20px; letter-spacing: -0.28px; color: var(--muted-foreground); }
   </style>
 
-  <div class="demo-section">
-    <div class="demo-label">Live demo</div>
-    <div class="demo-box">
+  <div class="section">
+    <div class="section-title">Live demo</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
       <div class="ds-dashboard-card" style="width:100%;">
         <div class="ds-dashboard-card-header">
           <div>
@@ -7415,16 +7540,19 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       </div>
     </div>
   </div>
+  </div>
 
-  <div class="demo-section">
-    <div class="demo-label">Rules</div>
-    <div class="demo-box" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+  <div class="section">
+    <div class="section-title">Rules</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
       <div>Card bg: <code>#171819</code> (zinc-950) — darker than <code>var(--card)</code> surface for visual nesting.</div>
       <div>Quote highlight: <code>#f7d372</code> (amber) — always spans only the discount/number portion.</div>
       <div>Badge: <code>badge badge-secondary</code> — always "Detected in ad copy".</div>
       <div>Cards are flex-1 inside a 16px-gap row — always paired side by side.</div>
     </div>
   </div>
+</div>
 </div>
 
 <!-- Theme Pill -->
@@ -7444,9 +7572,10 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     .theme-pill-freq { opacity: 0.7; margin-left: 6px; font-variant-numeric: tabular-nums; }
   </style>
 
-  <div class="demo-section">
-    <div class="demo-label">Colored by sentiment — uniform text size</div>
-    <div class="demo-box">
+  <div class="section">
+    <div class="section-title">Colored by sentiment — uniform text size</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
       <div class="theme-pills">
         <span class="theme-pill pos">Gut health / prebiotic<span class="theme-pill-freq">2,145</span></span>
         <span class="theme-pill pos">Soda alternative<span class="theme-pill-freq">1,410</span></span>
@@ -7457,10 +7586,12 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       </div>
     </div>
   </div>
+  </div>
 
-  <div class="demo-section">
-    <div class="demo-label">Variants</div>
-    <div class="demo-box">
+  <div class="section">
+    <div class="section-title">Variants</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
       <div class="theme-pills">
         <span class="theme-pill pos">Positive<span class="theme-pill-freq">1,204</span></span>
         <span class="theme-pill neu">Neutral<span class="theme-pill-freq">812</span></span>
@@ -7469,22 +7600,25 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       </div>
     </div>
   </div>
+  </div>
 
-  <div class="demo-section">
-    <div class="demo-label">Rules</div>
-    <div class="demo-box" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+  <div class="section">
+    <div class="section-title">Rules</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
       <div>One text size for every pill — never scale the font by volume. Volume lives in the count.</div>
       <div>pos <code>var(--primary)</code> · neu <code>var(--muted-foreground)</code> · neg <code>var(--warning)</code> · mix <code>var(--highlight)</code>.</div>
       <div>Negative is <code>--warning</code>, never <code>--destructive</code> — that token is only for irreversible actions.</div>
       <div>Tint via <code>color-mix</code>: 12% fill + 25% border, text in the full token.</div>
       <div>Fully rounded pill. The count uses tabular-nums at 0.7 opacity.</div>
     </div>
-  </div>
 
   <div class="demo-code-bar">
     <span class="demo-code-label">&lt;span class="theme-pill pos" /&gt;</span>
     <button class="copy-btn" onclick="copyCode(this, '&lt;span class=&quot;theme-pill pos&quot;&gt;Gut health&lt;span class=&quot;theme-pill-freq&quot;&gt;2,145&lt;/span&gt;&lt;/span&gt;')">Copy</button>
   </div>
+  </div>
+</div>
 </div>
 
 <div id="comp-copy-link" class="waldo-page">
@@ -7493,40 +7627,46 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="page-desc">Waldo extension — no shadcn equivalent. Displays a shareable URL in a pill container. Clicking copies the URL to the clipboard and swaps the copy icon to a check. Use inside dialog bodies or panels wherever a single shareable link is shown. For editable URLs use <code>Input</code> instead.</div>
   </div>
 
-  <div class="demo-section">
-    <div class="demo-label">Default</div>
-    <div class="demo-box">
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
       <div class="wcopy-link" onclick="copyLinkClick(this,'https://waldo.fyi/s/Bd9xKqT8aL')">
         <span class="wcopy-link-url">https://waldo.fyi/s/Bd9xKqT8aL</span>
         <span class="wcopy-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></span>
       </div>
     </div>
   </div>
+  </div>
 
-  <div class="demo-section">
-    <div class="demo-label">Long URL — truncates</div>
-    <div class="demo-box">
+  <div class="section">
+    <div class="section-title">Long URL — truncates</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
       <div class="wcopy-link" onclick="copyLinkClick(this,'https://waldo.fyi/spaces/nike-vs-adidas/intelligence/share/2026-06-24?utm_source=share&utm_medium=link')">
         <span class="wcopy-link-url">https://waldo.fyi/spaces/nike-vs-adidas/intelligence/share/2026-06-24?utm_source=share&utm_medium=link</span>
         <span class="wcopy-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></span>
       </div>
     </div>
   </div>
+  </div>
 
-  <div class="demo-section">
-    <div class="demo-label">Rules</div>
-    <div class="demo-box" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+  <div class="section">
+    <div class="section-title">Rules</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
       <div>URL text is always <code>text-primary</code> (teal). Container is <code>bg-secondary</code> + <code>rounded-2xl</code>, full width.</div>
       <div>Use when showing a single shareable URL — inside dialog bodies or detail panels.</div>
       <div>Don't use for editable URLs (use <code>Input</code>) or lists of links (use <code>ListItem</code>).</div>
       <div>Click copies to clipboard and briefly shows a check icon.</div>
     </div>
-  </div>
 
   <div class="demo-code-bar">
     <span class="demo-code-label">&lt;div class="wcopy-link" /&gt;</span>
     <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;wcopy-link&quot; onclick=&quot;copyLinkClick(this,url)&quot;&gt;\n  &lt;span class=&quot;wcopy-link-url&quot;&gt;https://waldo.fyi/s/Bd9xKqT8aL&lt;/span&gt;\n  &lt;span class=&quot;wcopy-link-icon&quot;&gt;…copy svg…&lt;/span&gt;\n&lt;/div&gt;')">Copy</button>
   </div>
+  </div>
+</div>
 </div>
 
 <div id="comp-code-block" class="waldo-page">
@@ -7535,9 +7675,10 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="page-desc">Preformatted text surface with optional copy actions in the header. Use for CLI commands, API prompts, or any multi-line code the user may need to copy. For single-line URLs use <code>CopyLink</code> instead. Waldo extension — no shadcn equivalent.</div>
   </div>
 
-  <div class="demo-section">
-    <div class="demo-label">With two copy actions</div>
-    <div class="demo-box">
+  <div class="section">
+    <div class="section-title">With two copy actions</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
       <div class="wcode-block">
         <div class="wcode-block-header">
           <button class="wcode-block-action" onclick="codeBlockCopy(this,'# Waldo Brand Intelligence API — setup\nYou\'re setting up the Waldo Brand Intelligence API in Claude Code.\n## Step 1 — Get your API key (run this first)\nThis token is single-use and expires in 30 minutes. Fetch your credentials and save them to ~/.waldo/credentials.json:')">
@@ -7557,9 +7698,10 @@ This token is single-use and expires in 30 minutes. Fetch your credentials and s
     </div>
   </div>
 
-  <div class="demo-section">
-    <div class="demo-label">Single action</div>
-    <div class="demo-box">
+  <div class="section">
+    <div class="section-title">Single action</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
       <div class="wcode-block">
         <div class="wcode-block-header">
           <button class="wcode-block-action" onclick="codeBlockCopy(this,'npx shadcn@latest add @waldo/ui')">
@@ -7572,19 +7714,20 @@ This token is single-use and expires in 30 minutes. Fetch your credentials and s
     </div>
   </div>
 
-  <div class="demo-section">
-    <div class="demo-label">No header — content only</div>
-    <div class="demo-box">
+  <div class="section">
+    <div class="section-title">No header — content only</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
       <div class="wcode-block">
         <pre class="wcode-block-body">WALDO_API_KEY=waldo_live_Bd9xKqT8aLmNpQrS
 WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
       </div>
     </div>
-  </div>
 
   <div class="demo-code-bar">
     <span class="demo-code-label">&lt;div class="wcode-block"&gt;</span>
     <button class="copy-btn" onclick="copyCode(this,'&lt;div class=&quot;wcode-block&quot;&gt;\n  &lt;div class=&quot;wcode-block-header&quot;&gt;\n    &lt;button class=&quot;wcode-block-action&quot; onclick=&quot;codeBlockCopy(this, text)&quot;&gt;Copy&lt;/button&gt;\n  &lt;/div&gt;\n  &lt;pre class=&quot;wcode-block-body&quot;&gt;...&lt;/pre&gt;\n&lt;/div&gt;')">Copy</button>
+  </div>
   </div>
 </div>
 
@@ -9733,7 +9876,7 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
   </style>
 
   <!-- Stacked layout (primary) -->
-  <div class="comp-group">
+  <div class="section">
     <div class="comp-group-label">Stacked — label above bar</div>
     <div class="comp-group-desc">Label on its own line above the track. Default layout for category comparisons.</div>
     <div class="ds-dashboard-card">
@@ -9773,7 +9916,7 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
   </div>
 
   <!-- Inline layout -->
-  <div class="comp-group">
+  <div class="section">
     <div class="comp-group-label">Inline — label left of bar</div>
     <div class="comp-group-desc">Label fixed-width on the left, bar + value on the same line. Use for compact lists with short labels.</div>
     <div class="ds-dashboard-card">
@@ -9810,7 +9953,7 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
   </div>
 
   <!-- Usage rules -->
-  <div class="comp-group">
+  <div class="section">
     <div class="comp-group-label">Rules</div>
     <ul style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;padding-left:16px;">
       <li>Default fill: <code>linear-gradient(to right, var(--primary), transparent)</code>.</li>
@@ -9852,7 +9995,7 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
     .senti-swatch.mix { background: var(--highlight); }
   </style>
 
-  <div class="comp-group">
+  <div class="section">
     <div class="comp-group-label">Inline — label, bar, value on one line</div>
     <div class="ds-dashboard-card" style="max-width:460px;">
       <div class="ds-dashboard-card-header">
@@ -9869,7 +10012,7 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
     </div>
   </div>
 
-  <div class="comp-group">
+  <div class="section">
     <div class="comp-group-label">Two-line — label above, full-width bar</div>
     <div class="ds-dashboard-card" style="max-width:460px;">
       <div class="ds-dashboard-card-header">
@@ -9917,7 +10060,7 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
     </script>
   </div>
 
-  <div class="comp-group">
+  <div class="section">
     <div class="comp-group-label">Rules</div>
     <div style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
       <div>Segments are a 100% composition — they always sum to the full bar.</div>
@@ -9949,7 +10092,7 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
     .trend-swatch { width: 14px; height: 6px; border-radius: 4px; flex: none; }
   </style>
 
-  <div class="comp-group">
+  <div class="section">
     <div class="ds-dashboard-card" style="width:703px;">
       <div class="ds-dashboard-card-header">
         <div class="ds-dashboard-card-title">Discount share over time</div>
@@ -10018,7 +10161,7 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
     </script>
   </div>
 
-  <div class="comp-group">
+  <div class="section">
     <div class="comp-group-label">Rules</div>
     <div style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
       <div>No area fill — lines only. Width 1.5px, round join/cap.</div>
@@ -10061,7 +10204,7 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
     .spk-delta-cell { text-align: right; }
   </style>
 
-  <div class="comp-group">
+  <div class="section">
     <div class="comp-group-label">Inside a metric card</div>
     <div class="spk-card">
       <div class="spk-stat">
@@ -10077,7 +10220,7 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
     </div>
   </div>
 
-  <div class="comp-group">
+  <div class="section">
     <div class="comp-group-label">Small multiples — one row per brand</div>
     <div class="spk-list" id="spk-list"></div>
     <script>
@@ -10119,7 +10262,7 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
     </script>
   </div>
 
-  <div class="comp-group">
+  <div class="section">
     <div class="comp-group-label">Rules</div>
     <div style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
       <div>Single series only. No axes, no gridlines, no legend, no labels, no dots.</div>
@@ -10152,9 +10295,10 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
     .donut-legend-val { font-weight: 500; font-size: var(--fs-xs); color: var(--foreground); }
   </style>
 
-  <div class="demo-section">
-    <div class="demo-label">Discount type mix — 8 segments</div>
-    <div class="demo-box">
+  <div class="section">
+    <div class="section-title">Discount type mix — 8 segments</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
       <div class="donut-wrap">
         <div class="donut-chart-row">
           <div id="donut-svg-wrap" style="width:280px;height:280px;flex:none;position:relative;"></div>
@@ -10211,9 +10355,10 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
     </script>
   </div>
 
-  <div class="demo-section">
-    <div class="demo-label">Rules</div>
-    <div class="demo-box" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
+  <div class="section">
+    <div class="section-title">Rules</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
       <div>Segments: only <code>--chart-1</code> through <code>--chart-12</code>. Never hardcode hex.</div>
       <div>Small gap between segments (0.018 rad) for visual separation — never 0.</div>
       <div>Center: total value or primary metric. Two lines max.</div>
@@ -10242,9 +10387,10 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
     .gantt-month { flex: 1; font-size: var(--fs-xs); font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted-foreground); text-align: center; }
   </style>
 
-  <div class="demo-section">
-    <div class="demo-label">Discount history — 6 brands, 8 months</div>
-    <div class="demo-box">
+  <div class="section">
+    <div class="section-title">Discount history — 6 brands, 8 months</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
       <div id="gantt-chart"></div>
     </div>
     <script>
@@ -10281,9 +10427,10 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
     </script>
   </div>
 
-  <div class="demo-section" style="margin-top:8px;">
-    <div class="demo-label">Rules</div>
-    <div class="demo-box" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;margin-top:0;">
+  <div class="section" style="margin-top:8px;">
+    <div class="section-title">Rules</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;margin-top:0;">
       <div>Bars: solid <code>var(--primary)</code> — no gradient, no opacity variation.</div>
       <div>Month labels: muted, uppercase, small, evenly distributed below the track area.</div>
       <div>Label column: fixed width (110px), right-aligned, text truncated on overflow.</div>
@@ -12116,4 +12263,7 @@ function loadILCatalog(){
   }, function(){ ilFail(el, 'docs/token-catalog.yaml'); });
 }
 </script>
-</body>
+</body></div>
+</div>
+</div>
+</div>

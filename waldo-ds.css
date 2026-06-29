@@ -382,10 +382,10 @@
     .section-sub   { font-size: var(--fs-sm); color: var(--muted-foreground); margin-bottom: 40px; }
 
     /* ── Palette table ── */
-    .chip { width: 100%; height: 44px; border-radius: 6px; position: relative; cursor: default; transition: transform .1s; display: block; }
-    .chip:hover { transform: scaleY(1.06); z-index: 2; }
-    .chip-tip { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--popover); color: var(--foreground); border: 1px solid var(--border-md); border-radius: 4px; padding: 4px 8px; font-size: var(--fs-xs); white-space: nowrap; z-index: 10; }
-    .chip:hover .chip-tip { display: block; }
+    .palette-chip { width: 100%; height: 44px; border-radius: 6px; position: relative; cursor: default; transition: transform .1s; display: block; }
+    .palette-chip:hover { transform: scaleY(1.06); z-index: 2; }
+    .palette-chip-tip { display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--popover); color: var(--foreground); border: 1px solid var(--border-md); border-radius: 4px; padding: 4px 8px; font-size: var(--fs-xs); white-space: nowrap; z-index: 10; }
+    .chip:hover .palette-chip-tip { display: block; }
     .anchor-dot { position: absolute; top: 4px; right: 4px; width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,.55); }
 
     /* ── Semantic tokens ── */
@@ -1075,7 +1075,7 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
         padding: 8px 16px; cursor: pointer; border: none;
         font-family: 'Inter', sans-serif; font-size: var(--fs-sm); font-weight: 400;
         color: rgba(210,211,211,0.47); transition: background .15s;
-        white-space: nowrap;
+        white-space: nowrap; width: auto;
       }
       .chip:hover { background: var(--popover); }
       .chip-inner { display: flex; align-items: center; gap: 6px; }
