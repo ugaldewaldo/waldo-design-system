@@ -1114,7 +1114,8 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
       .wcopy-link-icon { flex-shrink:0;color:var(--muted-foreground);transition:color .1s; }
       .wcopy-link.copied .wcopy-link-icon { color:var(--primary); }
 
-      .wfile-zone { display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border-radius:24px;height:36px;padding:0 16px;background:var(--muted);cursor:pointer;user-select:none;transition:background .1s; }
+      .wfile-zone { display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border-radius:24px;height:68px;padding:0 16px;background:var(--muted);cursor:pointer;user-select:none;transition:background .1s; }
+      .wfile-zone.slim { height:52px; }
       .wfile-zone:hover { background:var(--secondary); }
       .wfile-zone.drag  { background:var(--secondary);outline:1px solid #265152; }
       .wfile-zone-label { font-size:var(--fs-sm);font-weight:400;letter-spacing:-0.02em;color:var(--primary); }
