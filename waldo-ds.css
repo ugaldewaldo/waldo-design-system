@@ -755,7 +755,7 @@
 .badge-warning     { background: rgba(201,78,34,0.10); color: var(--warning);  }
 .badge-highlight   { background: rgba(247,211,113,0.10); color: #f7d371;  }
 .badge-active      { background: rgba(50,169,169,0.12); color: var(--primary);  }
-.badge-sm { padding: 0 6px; font-size: var(--fs-xs); line-height: 20px; border-radius: 3px; }
+.badge-sm { padding: 0 6px; font-size: var(--fs-xs); line-height: 20px; }
 .badge-lg { padding: 4px 10px; font-size: var(--fs-sm); }
 
 /* ── Input ───────────────────────────────────── */
