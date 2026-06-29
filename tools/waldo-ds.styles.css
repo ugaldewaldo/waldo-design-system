@@ -757,6 +757,13 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
 ::-webkit-scrollbar-thumb { background: var(--popover); border-radius: 99px; }
 ::-webkit-scrollbar-thumb:hover { background: #3f4246; }
 
+.wscroll { overflow-y: auto; scrollbar-width: thin; scrollbar-color: transparent transparent; }
+.wscroll:hover { scrollbar-color: var(--border) transparent; }
+.wscroll::-webkit-scrollbar { width: 5px; }
+.wscroll::-webkit-scrollbar-track { background: transparent; }
+.wscroll::-webkit-scrollbar-thumb { background: transparent; border-radius: 999px; transition: background .15s; }
+.wscroll:hover::-webkit-scrollbar-thumb { background: var(--border); }
+
 /* ── Content pages ───────────────────────────── */
 .page { display: none; }
 .page.active { display: block; }
