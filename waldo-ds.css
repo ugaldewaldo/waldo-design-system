@@ -950,36 +950,36 @@ textarea.input {
 
 /* ── Command ─────────────────────────────────── */
 .command-dialog {
-  background: var(--popover); border: 1px solid var(--border);
-  border-radius: var(--radius); overflow: hidden; width: 100%; max-width: 380px;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+  background: var(--card); border: none;
+  border-radius: 20px; overflow: hidden; width: 100%; max-width: 380px;
+  box-shadow: var(--shadow-dialog);
 }
 .cmd-input-row {
   display: flex; align-items: center; gap: 8px;
-  padding: 0 14px; border-bottom: 1px solid var(--border);
+  padding: 0 16px; border-bottom: 1px solid rgba(210,211,211,0.08);
 }
 .cmd-input {
-  height: 44px; background: none; border: none;
+  height: 48px; background: none; border: none;
   font-size: var(--fs-sm); color: var(--foreground); font-family: inherit;
   outline: none; flex: 1;
 }
 .cmd-input::placeholder { color: var(--muted-foreground); }
-.cmd-list { padding: 4px; max-height: 280px; overflow-y: auto; }
-.cmd-group-label { padding: 8px 8px 3px; font-size: var(--fs-xs); font-weight: 500; color: var(--muted-foreground); letter-spacing: -0.01em; }
+.cmd-list { padding: 6px; max-height: 280px; overflow-y: auto; }
+.cmd-group-label { padding: 8px 10px 4px; font-size: var(--fs-xs); font-weight: 500; color: var(--muted-foreground); letter-spacing: -0.01em; }
 .cmd-item {
   display: flex; align-items: center; gap: 8px;
-  padding: 7px 8px; border-radius: var(--radius-sm); font-size: var(--fs-sm); color: var(--foreground);
+  padding: 8px 10px; border-radius: 10px; font-size: var(--fs-sm); color: var(--foreground);
   cursor: pointer; transition: background 0.08s;
 }
 .cmd-item:hover, .cmd-item.selected { background: var(--secondary); }
 .cmd-item-icon { color: var(--muted-foreground); flex-shrink: 0; }
 .cmd-shortcut { margin-left: auto; font-size: var(--fs-xs); color: var(--muted-foreground); }
 .cmd-footer {
-  padding: 8px 12px; border-top: 1px solid var(--border);
+  padding: 10px 14px; border-top: 1px solid rgba(210,211,211,0.08);
   display: flex; gap: 12px; align-items: center;
 }
 .cmd-hint { display: flex; align-items: center; gap: 4px; font-size: var(--fs-xs); color: var(--muted-foreground); }
-.kbd { background: var(--muted); border: 1px solid var(--border); border-radius: var(--radius-xs); padding: 1px 5px; font-size: var(--fs-xs); font-family: inherit; }
+.kbd { background: var(--muted); border: 1px solid rgba(210,211,211,0.12); border-radius: 6px; padding: 1px 5px; font-size: var(--fs-xs); font-family: inherit; }
 
 /* ── Tooltip ─────────────────────────────────── */
 .tooltip-wrap { position: relative; display: inline-flex; }
