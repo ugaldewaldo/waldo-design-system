@@ -7310,8 +7310,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   <style>
     .art-card { display: flex; gap: 14px; background: var(--card); border-radius: var(--radius-xl); padding: 14px 16px; text-decoration: none; color: inherit; cursor: pointer; transition: background 0.12s; }
     .art-card:hover { background: color-mix(in srgb, var(--foreground) 5%, var(--card)); }
-    .art-favicon { width: 32px; height: 32px; border-radius: var(--radius-md); background: var(--secondary); flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .art-favicon img { width: 20px; height: 20px; object-fit: contain; }
+    .art-favicon { width: 32px; height: 32px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .art-favicon img { width: 20px; height: 20px; object-fit: contain; display: block; }
     .art-body { display: flex; flex-direction: column; gap: 5px; min-width: 0; flex: 1; }
     .art-meta { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); color: var(--muted-foreground); flex-wrap: wrap; }
     .art-source { font-weight: 600; color: var(--foreground); }
