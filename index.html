@@ -6422,12 +6422,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   </div>
 
   <style>
-    /* Card wrapper */
-    .alert-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-    .alert-card-header { padding: 12px 16px 10px; border-bottom: 1px solid var(--border); }
-    .alert-card-title { font-size: var(--fs-xs); font-weight: 500; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 0.06em; }
-    /* Row */
-    .alert-list { display: flex; flex-direction: column; padding: 4px 0; }
+    .alert-list { display: flex; flex-direction: column; }
     .alert-item { display: flex; gap: 14px; align-items: flex-start; padding: 12px 16px 0 12px; cursor: pointer; transition: background 0.12s; }
     .alert-item:hover { background: var(--secondary); }
     .alert-item:hover .alert-inner { border-bottom-color: transparent; }
@@ -6452,12 +6447,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="section-title">Live demo</div>
     <div class="demo-block">
       <div class="demo-canvas" style="max-width:560px;">
-      <div class="alert-card" style="width:100%;">
-        <div class="alert-card-header">
-          <div class="alert-card-title">Your alerts</div>
-        </div>
-        <div class="alert-list" id="alert-list-demo"></div>
-      </div>
+      <div class="alert-list" id="alert-list-demo"></div>
     </div>
     <script>
       (function(){
