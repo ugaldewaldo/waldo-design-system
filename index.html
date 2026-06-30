@@ -6341,7 +6341,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
   <style>
     .lb { display: flex; flex-direction: column; }
-    .lb-row { display: flex; gap: 14px; align-items: flex-start; padding: 12px 16px 0 8px; margin-bottom: 12px; cursor: pointer; transition: background 0.12s; border-radius: 8px; }
+    .lb-row { display: flex; gap: 14px; align-items: flex-start; padding: 12px 8px 0; margin-bottom: 12px; cursor: pointer; transition: background 0.12s; border-radius: 8px; }
     .lb-row:last-child { margin-bottom: 0; }
     .lb-row:hover { background: var(--secondary); }
     .lb-row:hover .lb-main { border-bottom-color: transparent; }
@@ -6422,29 +6422,18 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   </div>
 
   <style>
-    /* Card wrapper */
-    .alert-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
-    .alert-card-header { padding: 12px 16px 10px; border-bottom: 1px solid var(--border); }
-    .alert-card-title { font-size: var(--fs-xs); font-weight: 500; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: 0.06em; }
-    /* Row */
-    .alert-list { display: flex; flex-direction: column; padding: 4px 0; }
-    .alert-item { display: flex; gap: 14px; align-items: flex-start; padding: 12px 16px 0 12px; cursor: pointer; transition: background 0.12s; }
-    .alert-item:hover { background: var(--secondary); }
-    .alert-item:hover .alert-inner { border-bottom-color: transparent; }
-    /* Dot */
-    .alert-dot-col { width: 8px; flex: none; display: flex; align-items: center; justify-content: center; padding-top: 4px; }
+    .alert-list { display: flex; flex-direction: column; }
+    .alert-item { display: flex; gap: 10px; min-height: 40px; align-items: flex-start; border-bottom: 1px solid var(--border); padding: 10px 0; cursor: default; border-radius: 8px; transition: background 0.12s; }
+    .alert-item:hover { background: var(--secondary); padding-left: 8px; padding-right: 8px; }
+    .alert-item:last-child { border-bottom: none; }
+    .alert-dot-col { width: 8px; flex: none; display: flex; align-items: center; justify-content: center; padding-top: 3px; }
     .alert-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); flex: none; }
-    /* Inner content row — carries the separator */
-    .alert-inner { flex: 1; min-width: 0; display: flex; gap: 10px; align-items: flex-start; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
-    .alert-item:last-child .alert-inner { border-bottom: none; }
-    /* Content */
-    .alert-content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-    .alert-condition { font-size: var(--fs-sm); line-height: 20px; letter-spacing: -0.28px; }
-    .alert-condition-main { color: var(--foreground); font-weight: 600; }
-    .alert-condition-detail { color: var(--muted-foreground); font-weight: 400; }
-    .alert-delivery { font-size: var(--fs-xs); font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: var(--muted-foreground); opacity: 0.6; }
-    /* Delete icon */
-    .alert-delete { width: 16px; height: 16px; flex: none; color: var(--muted-foreground); cursor: pointer; opacity: 0.4; transition: color 0.12s, opacity 0.12s; margin-top: 2px; }
+    .alert-content { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+    .alert-condition { font-size: var(--fs-sm); font-weight: 400; line-height: 20px; letter-spacing: -0.28px; }
+    .alert-condition-main { color: var(--foreground); }
+    .alert-condition-detail { color: var(--muted-foreground); }
+    .alert-delivery { font-size: var(--fs-sm); font-weight: 400; line-height: 20px; letter-spacing: -0.28px; color: var(--muted-foreground); opacity: 0.6; }
+    .alert-delete { width: 16px; height: 16px; flex: none; color: var(--muted-foreground); cursor: pointer; opacity: 0.4; transition: color 0.12s, opacity 0.12s; margin-top: 3px; }
     .alert-delete:hover { color: var(--destructive); opacity: 1; }
   </style>
 
@@ -6452,9 +6441,9 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="section-title">Live demo</div>
     <div class="demo-block">
       <div class="demo-canvas" style="max-width:560px;">
-      <div class="alert-card" style="width:100%;">
-        <div class="alert-card-header">
-          <div class="alert-card-title">Your alerts</div>
+      <div class="ds-dashboard-card" style="width:100%;">
+        <div class="ds-dashboard-card-header">
+          <div class="ds-dashboard-card-title">your alerts</div>
         </div>
         <div class="alert-list" id="alert-list-demo"></div>
       </div>
@@ -6470,13 +6459,11 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         el.innerHTML = alerts.map(function(a){
           return '<div class="alert-item">'
             + '<div class="alert-dot-col"><div class="alert-dot"></div></div>'
-            + '<div class="alert-inner">'
             + '<div class="alert-content">'
             + '<div class="alert-condition"><span class="alert-condition-main">' + a.main + '</span><span class="alert-condition-detail">' + a.detail + '</span></div>'
             + '<div class="alert-delivery">' + a.delivery + '</div>'
             + '</div>'
             + '<svg class="alert-delete" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 4V2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5V4M6 7v5M10 7v5M3 4l.8 8.5a.5.5 0 0 0 .5.5h7.4a.5.5 0 0 0 .5-.5L13 4"/></svg>'
-            + '</div>'
             + '</div>';
         }).join('');
       })();
