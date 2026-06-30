@@ -287,10 +287,14 @@ function scanFile(filePath, rules) {
   return findings;
 }
 
-function collectFiles(target) {
+function collectFiles(target, allowLabs) {
   const out = [];
   const stat = fs.statSync(target);
-  if (!includeLabs && SKIP_PATH_SEGMENTS.some(seg => target.split(path.sep).includes(seg))) return out;
+  // Skip waldo-labs only on a BROAD scan (`detect.js .`), where we hit it by recursion.
+  // When the explicit target path is itself inside waldo-labs (e.g. the /new-prototype
+  // scaffold runs `detect.js waldo-labs/<proto>/`), allowLabs propagates true and we scan
+  // the whole subtree. --include-labs forces scanning everywhere regardless.
+  if (!includeLabs && !allowLabs && SKIP_PATH_SEGMENTS.some(seg => target.split(path.sep).includes(seg))) return out;
   if (SKIP_FILES.has(path.basename(target))) return out;
   if (stat.isFile()) {
     if (SCAN_EXTENSIONS.has(path.extname(target))) out.push(target);
@@ -298,7 +302,7 @@ function collectFiles(target) {
   }
   for (const entry of fs.readdirSync(target)) {
     if (SKIP_DIRS.has(entry)) continue;
-    out.push(...collectFiles(path.join(target, entry)));
+    out.push(...collectFiles(path.join(target, entry), allowLabs));
   }
   return out;
 }
@@ -317,7 +321,8 @@ if (!targets.length) {
 }
 
 const rules = loadRules(fs.readFileSync(CATALOG_PATH, 'utf8'));
-const files = targets.flatMap(collectFiles);
+const files = targets.flatMap((t) =>
+  collectFiles(t, SKIP_PATH_SEGMENTS.some((seg) => t.split(path.sep).includes(seg))));
 const all = files.flatMap((f) => scanFile(f, rules));
 
 const errors = all.filter((f) => f.severity === 'error');
