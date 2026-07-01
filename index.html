@@ -4980,14 +4980,14 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     .dp-label { flex:1; text-align:left; font-size:var(--fs-sm); letter-spacing:-0.02em; }
     .dp-placeholder { color:var(--muted-foreground); }
     .dp-popover { position:absolute; top:calc(100% + 6px); left:0; z-index:50; background:var(--card); border:1px solid rgba(210,211,211,0.08); border-radius:16px; box-shadow:var(--shadow-dialog); padding:12px; width:252px; }
-    .dp-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
-    .dp-month-label { font-size:var(--fs-sm); font-weight:500; color:var(--foreground); letter-spacing:-0.02em; }
+    .dp-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+    .dp-month-label { font-size:var(--fs-base); font-weight:500; color:var(--foreground); letter-spacing:-0.01em; }
     .dp-nav { width:28px; height:28px; padding:0; display:flex; align-items:center; justify-content:center; }
     .dp-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; text-align:center; }
-    .dp-weekdays { font-size:var(--fs-xs); color:var(--muted-foreground); margin-bottom:4px; letter-spacing:-0.02em; }
-    .dp-day { padding:6px 0; font-size:var(--fs-sm); color:var(--foreground); border-radius:6px; cursor:pointer; transition:background 0.08s; letter-spacing:-0.02em; }
-    .dp-day:hover { background:var(--secondary); }
-    .dp-day.dp-selected { background:var(--primary); color:var(--background); font-weight:500; }
+    .dp-weekdays { font-size:var(--fs-sm); color:var(--muted-foreground); margin-bottom:4px; letter-spacing:-0.01em; }
+    .dp-day { padding:5px 0; font-size:var(--fs-sm); color:var(--foreground); border-radius:var(--radius-full); cursor:pointer; transition:background 0.08s; letter-spacing:-0.01em; }
+    .dp-day:hover { background:var(--accent); }
+    .dp-day.dp-selected { background:var(--primary); color:var(--primary-foreground); font-weight:500; }
     .dp-day.dp-muted { color:var(--muted-foreground); opacity:0.35; pointer-events:none; }
   </style>
   <script>
