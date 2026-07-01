@@ -2351,42 +2351,40 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
           <div class="dt-toolbar">
             <input class="input dt-filter-input" placeholder="Filter by brand…" oninput="dtFilterFn(this.value)" />
           </div>
-          <div class="table-wrap" style="border:none;border-radius:0">
-            <table class="wt" id="dtTable">
-              <thead>
-                <tr>
-                  <th class="wt-th"><button class="btn btn-ghost btn-sm dt-sort-btn" onclick="dtSort('brand')">Brand <span class="dt-sort-icon">↕</span></button></th>
-                  <th class="wt-th"><button class="btn btn-ghost btn-sm dt-sort-btn" onclick="dtSort('mentions')">Mentions <span class="dt-sort-icon">↕</span></button></th>
-                  <th class="wt-th"><button class="btn btn-ghost btn-sm dt-sort-btn" onclick="dtSort('sentiment')">Sentiment <span class="dt-sort-icon">↕</span></button></th>
-                  <th class="wt-th"><button class="btn btn-ghost btn-sm dt-sort-btn" onclick="dtSort('sov')">Share of Voice <span class="dt-sort-icon">↕</span></button></th>
-                  <th class="wt-th">Status</th>
-                </tr>
-              </thead>
-              <tbody id="dtBody"></tbody>
-            </table>
-          </div>
+          <table class="wui-table" id="dtTable">
+            <thead>
+              <tr>
+                <th class="sortable" onclick="dtSort('brand')">Brand <span class="dt-si" data-col="brand">↕</span></th>
+                <th class="sortable" style="text-align:right" onclick="dtSort('mentions')">Mentions <span class="dt-si" data-col="mentions">↕</span></th>
+                <th class="sortable" style="text-align:right" onclick="dtSort('sentiment')">Sentiment <span class="dt-si" data-col="sentiment">↕</span></th>
+                <th class="sortable" style="text-align:right" onclick="dtSort('sov')">Share of Voice <span class="dt-si" data-col="sov">↕</span></th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="dtBody"></tbody>
+          </table>
           <div class="dt-footer">
             <span class="dt-count" id="dtCount"></span>
             <div class="dt-pagination">
+              <span class="dt-page" id="dtPage"></span>
               <button class="btn btn-outline btn-sm" id="dtPrev" onclick="dtPageFn(-1)">Previous</button>
               <button class="btn btn-outline btn-sm" id="dtNext" onclick="dtPageFn(1)">Next</button>
             </div>
           </div>
         </div>
         <style>
-          .dt-toolbar { padding:14px 16px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px; }
-          .dt-filter-input { max-width:240px; }
-          .dt-sort-btn { margin:-2px 0; padding:4px 6px; }
-          .dt-sort-icon { opacity:0.4; }
-          .dt-sort-btn.dt-asc .dt-sort-icon::after { content:'↑'; }
-          .dt-sort-btn.dt-desc .dt-sort-icon::after { content:'↓'; }
-          .dt-footer { padding:10px 16px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+          .dt-toolbar { padding:12px 12px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px; }
+          .dt-filter-input { max-width:260px; }
+          .dt-si { opacity:0.4; font-size:var(--fs-xs); }
+          .dt-num { text-align:right; font-variant-numeric:tabular-nums; }
+          .dt-brand { font-weight:500; color:var(--foreground); }
+          .dt-footer { padding:10px 12px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
           .dt-count { font-size:var(--fs-xs); color:var(--muted-foreground); }
-          .dt-pagination { display:flex; gap:8px; }
-          .dt-brand { font-weight:500; }
-          .dt-sentiment-good { color:var(--primary); font-weight:500; }
-          .dt-sentiment-mid { color:var(--warning); font-weight:500; }
-          .dt-sentiment-bad { color:var(--destructive); font-weight:500; }
+          .dt-pagination { display:flex; gap:8px; align-items:center; }
+          .dt-page { font-size:var(--fs-xs); color:var(--muted-foreground); margin-right:4px; }
+          .dt-sent-good { color:var(--primary); }
+          .dt-sent-mid { color:var(--warning); }
+          .dt-sent-bad { color:var(--destructive); }
         </style>
         <div class="demo-code-bar">
           <span class="demo-code-label">&lt;DataTable columns={columns} data={data} filterColumn="brand" /&gt;</span>
@@ -2415,16 +2413,18 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
       function dtRender(){
         var rows=dtGetRows(), total=rows.length, pages=Math.max(1,Math.ceil(total/DT_PAGE));
         if(dtPageIdx>=pages) dtPageIdx=pages-1;
-        var slice=rows.slice(dtPageIdx*DT_PAGE,(dtPageIdx+1)*DT_PAGE);
-        var sentClass=s=>s>=70?'dt-sentiment-good':s>=55?'dt-sentiment-mid':'dt-sentiment-bad';
-        var statusBadge=s=>s==='active'?'<span class="badge badge-active">Active</span>':'<span class="badge badge-secondary">Paused</span>';
-        document.getElementById('dtBody').innerHTML=slice.map(r=>`<tr class="wt-row"><td class="wt-td dt-brand">${r.brand}</td><td class="wt-td">${r.mentions.toLocaleString()}</td><td class="wt-td ${sentClass(r.sentiment)}">${r.sentiment}%</td><td class="wt-td">${r.sov}</td><td class="wt-td">${statusBadge(r.status)}</td></tr>`).join('');
-        document.getElementById('dtCount').textContent=total+' row(s)';
+        var start=dtPageIdx*DT_PAGE, slice=rows.slice(start,start+DT_PAGE);
+        var sentClass=s=>s>=70?'dt-sent-good':s>=55?'dt-sent-mid':'dt-sent-bad';
+        var statusBadge=s=>s==='active'?'<span class="badge badge-active badge-sm">Active</span>':'<span class="badge badge-secondary badge-sm">Paused</span>';
+        document.getElementById('dtBody').innerHTML=slice.length?slice.map(r=>`<tr><td class="dt-brand">${r.brand}</td><td class="dt-num">${r.mentions.toLocaleString()}</td><td class="dt-num ${sentClass(r.sentiment)}">${r.sentiment}%</td><td class="dt-num">${r.sov}</td><td>${statusBadge(r.status)}</td></tr>`).join('')
+          :'<tr><td colspan="5" style="text-align:center;padding:32px 12px;color:var(--muted-foreground)">No brands match your filter.</td></tr>';
+        document.getElementById('dtCount').textContent=total?`${start+1}–${start+slice.length} of ${total}`:'0 rows';
+        document.getElementById('dtPage').textContent=`Page ${dtPageIdx+1} of ${pages}`;
         document.getElementById('dtPrev').disabled=dtPageIdx===0;
         document.getElementById('dtNext').disabled=dtPageIdx>=pages-1;
-        document.querySelectorAll('.dt-sort-btn').forEach(function(b){ b.classList.remove('dt-asc','dt-desc'); });
-        var activeBtn=document.querySelector('.dt-sort-btn[onclick="dtSort(\''+dtSortCol+'\')"]');
-        if(activeBtn) activeBtn.classList.add(dtSortAsc?'dt-asc':'dt-desc');
+        document.querySelectorAll('.dt-si').forEach(function(s){ s.textContent='↕'; s.style.opacity='0.4'; });
+        var active=document.querySelector('.dt-si[data-col="'+dtSortCol+'"]');
+        if(active){ active.textContent=dtSortAsc?'↑':'↓'; active.style.opacity='0.9'; }
       }
       function dtFilterFn(v){dtFilterVal=v;dtPageIdx=0;dtRender();}
       function dtSort(col){if(dtSortCol===col)dtSortAsc=!dtSortAsc;else{dtSortCol=col;dtSortAsc=false;}dtRender();}
