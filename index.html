@@ -465,6 +465,7 @@ function waldoGo(id,el,skipHash){
   document.querySelectorAll('.sb-item').forEach(function(a){a.classList.remove('active');});
   var p=document.getElementById(id);if(p)p.classList.add('active');
   if(el)el.classList.add('active');
+  var panel=document.getElementById('tb-panel-components');if(panel)panel.classList.remove('charts-active');
   var m=document.getElementById('wb-main');if(m)m.scrollTop=0;
   var f=document.getElementById('wb-foundations-main');if(f)f.scrollTop=0;
   if(!skipHash) history.replaceState(null,'','#'+id);
@@ -503,6 +504,8 @@ function switchTopTab(name, el, skipHash) {
 }
 
 function switchChartPage(pageId, el, skipHash) {
+  var panel = document.getElementById('tb-panel-components');
+  if(panel) panel.classList.add('charts-active');
   document.querySelectorAll('#wb-charts-sidebar .sb-item').forEach(function(i){i.classList.remove('active');});
   if(el) el.classList.add('active');
   else {
