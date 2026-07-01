@@ -22,6 +22,10 @@
    PRIMITIVES — full 50→950 scales
    ══════════════════════════════════════════════════════ */
 :root {
+  /* type scale + radius-full (vendored for the vanilla layer) */
+  --fs-xs: 12px; --fs-sm: 14px; --fs-base: 16px; --fs-lg: 18px; --fs-xl: 20px; --fs-2xl: 24px; --fs-5xl: 32px;
+  --radius-full: 9999px;
+
 
   /* ── zinc (Waldo dark neutral) ── */
   --zinc-50:   #f8f8f9;   /* DERIVED */
