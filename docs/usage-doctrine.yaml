@@ -908,6 +908,38 @@ components:
       text-primary-foreground; range middle and today use bg-accent. NOTE: selected-day white-on-teal
       combo pending the green-700 contrast review applied to Button.
 
+  - component: DatePicker
+    use_when:
+      - Selecting a single date for scheduling (report delivery, digest start date, export date)
+      - Selecting a date range for filtering signals, mentions, or brand timeline data
+    dont_use_when:
+      - Choosing preset periods like "Last 7 days / 30 days" — use SegmentedControl or Select
+      - Showing a read-only date on a card — plain text is enough
+      - Picking a year or month only — use Select
+    prefer_over:
+      - Calendar: when a compact trigger button is needed — DatePicker wraps Calendar in a Popover so it stays out of the way until clicked
+      - Input: when day-level precision and calendar affordance matter more than free-text entry
+    notes: |
+      Composed from Button + Popover + Calendar (react-day-picker). Single-date variant: DatePicker.
+      Range variant: DateRangePicker (shows two months). Both in date-picker.tsx.
+      Waldo extension — no shadcn equivalent (shadcn ships DatePicker as a recipe, not a component).
+
+  - component: DataTable
+    use_when:
+      - Displaying a list of brands, mentions, or campaigns where the user needs to sort, filter, or paginate
+      - Any tabular data set with more than ~15 rows where filtering by a column is useful
+      - Tables that need column-visibility toggling (e.g. dashboard config views)
+    dont_use_when:
+      - Simple read-only tables with ≤10 fixed rows — use Table directly
+      - Single-column lists — use ListView / ListItem
+      - Leaderboard-style ranked rows — use LeaderboardRow
+    prefer_over:
+      - Table: when sorting, filtering, or pagination are needed — DataTable adds those on top of Table's markup
+    notes: |
+      Built on @tanstack/react-table v8. Exposes ColumnDef from tanstack so consumer column definitions
+      are type-safe. sortableHeader() helper wraps a column header in a sort-toggle button.
+      Toolbar is optional: set filterColumn and/or showColumnToggle as needed. Page size defaults to 10.
+
   - component: Carousel
     use_when:
       - Swiping through ad creatives or post media attached to a single signal

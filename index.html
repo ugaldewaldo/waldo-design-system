@@ -65,6 +65,7 @@
     <button class="sb-item" onclick="waldoGo('comp-filter-trigger',this)">Filter Trigger</button>
     <button class="sb-item" onclick="waldoGo('comp-nav-item',this)">Nav Item</button>
     <button class="sb-item" onclick="waldoGo('comp-table',this)">Table</button>
+    <button class="sb-item" onclick="waldoGo('comp-data-table',this)">Data Table</button>
     <button class="sb-item" onclick="waldoGo('comp-list-item',this)">List Item</button>
     <button class="sb-item" onclick="waldoGo('comp-separator',this)">Separator</button>
     <button class="sb-item" onclick="waldoGo('comp-toast',this)">Toast</button>
@@ -81,6 +82,7 @@
     <button class="sb-item" onclick="waldoGo('comp-aspect-ratio',this)">Aspect Ratio</button>
     <button class="sb-item" onclick="waldoGo('comp-breadcrumb',this)">Breadcrumb</button>
     <button class="sb-item" onclick="waldoGo('comp-calendar',this)">Calendar</button>
+    <button class="sb-item" onclick="waldoGo('comp-date-picker',this)">Date Picker</button>
     <button class="sb-item" onclick="waldoGo('comp-card',this)">Card</button>
     <button class="sb-item" onclick="waldoGo('comp-carousel',this)">Carousel</button>
     <button class="sb-item" onclick="waldoGo('comp-collapsible',this)">Collapsible</button>
@@ -2334,6 +2336,84 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- ── DATA TABLE ── -->
+  <div id="comp-data-table" class="waldo-page">
+    <div class="page-header">
+      <div class="page-title">Data Table</div>
+      <div class="page-desc">Sortable, filterable, paginated table built on @tanstack/react-table and Radix primitives.</div>
+    </div>
+    <div class="section">
+      <div class="section-title">Brand mentions</div>
+      <div class="demo-block">
+        <div class="demo-canvas" style="padding:0;display:block">
+          <div style="padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+            <input class="input" placeholder="Filter by brand…" style="max-width:240px" oninput="dtFilter(this.value)" />
+            <button class="btn btn-outline btn-sm" style="margin-left:auto" onclick="dtToggleCols()" id="dtColBtn">Columns ▾</button>
+          </div>
+          <div class="table-wrap" style="border:none;border-radius:0">
+            <table class="wt" id="dtTable">
+              <thead>
+                <tr>
+                  <th class="wt-th"><button class="btn btn-ghost btn-sm" style="margin:-2px 0;padding:4px 6px" onclick="dtSort('brand')">Brand <span style="opacity:0.4">↕</span></button></th>
+                  <th class="wt-th"><button class="btn btn-ghost btn-sm" style="margin:-2px 0;padding:4px 6px" onclick="dtSort('mentions')">Mentions <span style="opacity:0.4">↕</span></button></th>
+                  <th class="wt-th"><button class="btn btn-ghost btn-sm" style="margin:-2px 0;padding:4px 6px" onclick="dtSort('sentiment')">Sentiment <span style="opacity:0.4">↕</span></button></th>
+                  <th class="wt-th"><button class="btn btn-ghost btn-sm" style="margin:-2px 0;padding:4px 6px" onclick="dtSort('sov')">Share of Voice <span style="opacity:0.4">↕</span></button></th>
+                  <th class="wt-th">Status</th>
+                </tr>
+              </thead>
+              <tbody id="dtBody"></tbody>
+            </table>
+          </div>
+          <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:var(--fs-xs);color:var(--muted-foreground)" id="dtCount"></span>
+            <div style="display:flex;gap:8px">
+              <button class="btn btn-outline btn-sm" id="dtPrev" onclick="dtPage(-1)">Previous</button>
+              <button class="btn btn-outline btn-sm" id="dtNext" onclick="dtPage(1)">Next</button>
+            </div>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;DataTable columns={columns} data={data} filterColumn="brand" /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;DataTable\n  columns={columns}\n  data={data}\n  filterColumn=&quot;brand&quot;\n  filterPlaceholder=&quot;Filter by brand…&quot;\n/&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      var DT_DATA = [
+        {brand:'Nike',mentions:4821,sentiment:72,sov:'28.4%',status:'active'},
+        {brand:'Adidas',mentions:3104,sentiment:65,sov:'18.2%',status:'active'},
+        {brand:'Puma',mentions:1892,sentiment:58,sov:'11.1%',status:'active'},
+        {brand:'New Balance',mentions:2540,sentiment:80,sov:'14.9%',status:'active'},
+        {brand:'Vans',mentions:1340,sentiment:74,sov:'7.9%',status:'paused'},
+        {brand:'Under Armour',mentions:987,sentiment:51,sov:'5.8%',status:'active'},
+        {brand:'Reebok',mentions:764,sentiment:60,sov:'4.5%',status:'paused'},
+        {brand:'ASICS',mentions:612,sentiment:77,sov:'3.6%',status:'active'},
+        {brand:'Converse',mentions:890,sentiment:83,sov:'5.2%',status:'active'},
+        {brand:'Skechers',mentions:430,sentiment:55,sov:'2.5%',status:'paused'},
+      ];
+      var dtFilter='', dtSortCol='mentions', dtSortAsc=false, dtPage_=0, DT_PAGE=5;
+      function dtGetRows(){
+        return DT_DATA.filter(r=>r.brand.toLowerCase().includes(dtFilter.toLowerCase()))
+          .sort((a,b)=>{ var v=a[dtSortCol]>b[dtSortCol]?1:-1; return dtSortAsc?v:-v; });
+      }
+      function dtRender(){
+        var rows=dtGetRows(), total=rows.length, pages=Math.ceil(total/DT_PAGE);
+        if(dtPage_>=pages) dtPage_=Math.max(0,pages-1);
+        var slice=rows.slice(dtPage_*DT_PAGE,(dtPage_+1)*DT_PAGE);
+        var sentColor=s=>s>=70?'var(--primary)':s>=55?'var(--warning)':'var(--destructive)';
+        var statusBadge=s=>s==='active'?'<span class="badge badge-active">Active</span>':'<span class="badge badge-secondary">Paused</span>';
+        document.getElementById('dtBody').innerHTML=slice.map(r=>`<tr class="wt-row"><td class="wt-td" style="font-weight:500">${r.brand}</td><td class="wt-td">${r.mentions.toLocaleString()}</td><td class="wt-td" style="color:${sentColor(r.sentiment)};font-weight:500">${r.sentiment}%</td><td class="wt-td">${r.sov}</td><td class="wt-td">${statusBadge(r.status)}</td></tr>`).join('');
+        document.getElementById('dtCount').textContent=total+' row(s)';
+        document.getElementById('dtPrev').disabled=dtPage_===0;
+        document.getElementById('dtNext').disabled=dtPage_>=pages-1;
+      }
+      function dtFilter(v){dtFilter=v;dtPage_=0;dtRender();}
+      function dtSort(col){if(dtSortCol===col)dtSortAsc=!dtSortAsc;else{dtSortCol=col;dtSortAsc=false;}dtRender();}
+      function dtPage(d){dtPage_+=d;dtRender();}
+      dtRender();
+    </script>
   </div>
 
   <!-- ── COLORS ── -->
@@ -4747,6 +4827,97 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       </div>
     </div>
   </div>
+</div>
+
+<!-- ══ DATE PICKER ══ -->
+<div id="comp-date-picker" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Date Picker</div>
+    <div class="page-desc">Popover-based date selection built on Calendar + Radix Popover. Single date and date range variants.</div>
+  </div>
+  <div class="section">
+    <div class="section-title">Single date</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="gap:16px">
+        <div class="dp-trigger" id="dpTrigger" onclick="toggleDp()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span id="dpLabel" style="color:var(--muted-foreground)">Pick a date</span>
+        </div>
+        <div class="dp-popover" id="dpPopover" style="display:none">
+          <div class="dp-header">
+            <button class="btn btn-ghost dp-nav" onclick="dpNav(-1)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <span id="dpMonth" style="font-size:var(--fs-sm);font-weight:500;color:var(--foreground)">July 2026</span>
+            <button class="btn btn-ghost dp-nav" onclick="dpNav(1)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+          <div class="dp-grid dp-weekdays">
+            <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+          </div>
+          <div class="dp-grid" id="dpDays"></div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;DatePicker value={date} onChange={setDate} /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;DatePicker value={date} onChange={setDate} placeholder=&quot;Pick a date&quot; /&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">Date range</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div class="dp-trigger" style="width:300px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:0.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span style="color:var(--foreground)">Jun 1, 2026 – Jun 30, 2026</span>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;DateRangePicker value={range} onChange={setRange} /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;DateRangePicker value={range} onChange={setRange} /&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+  <style>
+    .dp-trigger { display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 16px; border-radius:999px; border:1px solid color-mix(in srgb,var(--foreground) 12%,transparent); font-size:var(--fs-sm); cursor:pointer; min-width:240px; transition:border-color 0.1s; }
+    .dp-trigger:hover { border-color:var(--primary); }
+    .dp-popover { background:var(--card); border:1px solid rgba(210,211,211,0.08); border-radius:16px; box-shadow:var(--shadow-dialog); padding:12px; width:252px; }
+    .dp-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+    .dp-nav { width:28px; height:28px; padding:0; display:flex; align-items:center; justify-content:center; }
+    .dp-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:2px; text-align:center; }
+    .dp-weekdays { font-size:var(--fs-xs); color:var(--muted-foreground); margin-bottom:4px; letter-spacing:-0.01em; }
+    .dp-day { padding:5px 0; font-size:var(--fs-sm); color:var(--foreground); border-radius:6px; cursor:pointer; transition:background 0.08s; letter-spacing:-0.01em; }
+    .dp-day:hover { background:var(--secondary); }
+    .dp-day.selected { background:var(--primary); color:#fff; font-weight:500; }
+    .dp-day.muted { color:var(--muted-foreground); opacity:0.4; }
+  </style>
+  <script>
+    var dpDate = null, dpViewYear = 2026, dpViewMonth = 6;
+    var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    function toggleDp() { var p = document.getElementById('dpPopover'); p.style.display = p.style.display === 'none' ? 'block' : 'none'; renderDp(); }
+    function dpNav(d) { dpViewMonth += d; if (dpViewMonth > 11) { dpViewMonth = 0; dpViewYear++; } if (dpViewMonth < 0) { dpViewMonth = 11; dpViewYear--; } renderDp(); }
+    function renderDp() {
+      document.getElementById('dpMonth').textContent = MONTHS[dpViewMonth] + ' ' + dpViewYear;
+      var first = new Date(dpViewYear, dpViewMonth, 1).getDay();
+      var days = new Date(dpViewYear, dpViewMonth + 1, 0).getDate();
+      var html = '';
+      for (var i = 0; i < first; i++) html += '<span></span>';
+      for (var d = 1; d <= days; d++) {
+        var sel = dpDate && dpDate.getFullYear() === dpViewYear && dpDate.getMonth() === dpViewMonth && dpDate.getDate() === d;
+        html += '<div class="dp-day' + (sel ? ' selected' : '') + '" onclick="dpSelect(' + d + ')">' + d + '</div>';
+      }
+      document.getElementById('dpDays').innerHTML = html;
+    }
+    function dpSelect(d) {
+      dpDate = new Date(dpViewYear, dpViewMonth, d);
+      var opts = { month: 'short', day: 'numeric', year: 'numeric' };
+      document.getElementById('dpLabel').textContent = dpDate.toLocaleDateString('en-US', opts);
+      document.getElementById('dpLabel').style.color = 'var(--foreground)';
+      document.getElementById('dpPopover').style.display = 'none';
+    }
+  </script>
 </div>
 
 <!-- ══ CARD ══ -->
