@@ -506,11 +506,9 @@ function switchTopTab(name, el, skipHash) {
 function switchChartPage(pageId, el, skipHash) {
   var panel = document.getElementById('tb-panel-components');
   if(panel) panel.classList.add('charts-active');
-  document.querySelectorAll('#wb-sidebar .sb-item[onclick*="switchChartPage"]').forEach(function(i){i.classList.remove('active');});
-  document.querySelectorAll('#wb-charts-sidebar .sb-item').forEach(function(i){i.classList.remove('active');});
-  document.querySelectorAll('#wb-charts-sidebar .sb-item').forEach(function(i){
-    if(i.getAttribute('onclick').indexOf("'"+pageId+"'")>-1) i.classList.add('active');
-  });
+  document.querySelectorAll('#wb-sidebar .sb-item').forEach(function(i){i.classList.remove('active');});
+  var activeBtn = el || document.querySelector('#wb-sidebar .sb-item[onclick*="\''+pageId+'\'"]');
+  if(activeBtn) activeBtn.classList.add('active');
   document.querySelectorAll('#wb-charts-main .chart-page').forEach(function(p){p.classList.remove('active');});
   var p = document.getElementById(pageId);
   if(p) { p.classList.add('active'); document.getElementById('wb-charts-main').scrollTop = 0; }
@@ -4625,11 +4623,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <span class="wnav-action"><button class="wli-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></span>
             </div>
             <div class="wnav-item">
-              <span class="wnav-label">Benchmark Campaign Finder</span>
-              <span class="wnav-action"><button class="wli-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></span>
-            </div>
-            <div class="wnav-item">
-              <span class="wnav-label">Four C's</span>
+              <span class="wnav-label">Whitespace Analysis</span>
               <span class="wnav-action"><button class="wli-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></span>
             </div>
             <div class="wnav-item">
@@ -4637,7 +4631,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <span class="wnav-action"><button class="wli-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></span>
             </div>
             <div class="wnav-item">
-              <span class="wnav-label">Buyer Persona</span>
+              <span class="wnav-label">Competitive Set</span>
               <span class="wnav-action"><button class="wli-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button></span>
             </div>
             <div class="wnav-item">
@@ -4747,8 +4741,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <div class="wnav-section">Report Builder</div>
             <div class="wnav-items-wrap">
             <div class="wnav-item active"><span class="wnav-label">Week Summary</span><span class="wnav-badge">4</span></div>
-            <div class="wnav-item"><span class="wnav-label">Brand mentions</span><span class="wnav-badge wnav-badge--ghost">M</span></div>
-            <div class="wnav-item"><span class="wnav-label">Audience canvas</span><span class="wnav-badge wnav-badge--ghost">A</span></div>
+            <div class="wnav-item"><span class="wnav-label">Brand mentions</span><span class="wnav-badge">8</span></div>
+            <div class="wnav-item"><span class="wnav-label">Audience canvas</span><span class="wnav-badge">3</span></div>
             <div class="wnav-item"><span class="wnav-label">Market trends</span><span class="wnav-badge wnav-badge--ghost">0</span></div>
             <div class="wnav-sep"></div>
             <div class="wnav-section">Client Sync</div>
@@ -5959,26 +5953,36 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="page-desc">A composable, themeable sidebar component with collapsible support.</div>
   </div>
   <div class="section">
-    <div class="section-title">Default</div>
+    <div class="section-title">App shell — grouped navigation with active route</div>
     <div class="demo-block">
-      <div class="demo-canvas">
-        <div style="display:flex;width:380px;height:260px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
-          <div style="width:180px;background:var(--card);border-right:1px solid var(--border);padding:12px;display:flex;flex-direction:column;gap:2px">
-            <div style="font-size:var(--fs-xs);font-weight:600;color:var(--muted-foreground);padding:4px 8px;text-transform:uppercase;letter-spacing:.06em">Platform</div>
-            <div style="padding:6px 8px;border-radius:var(--radius-sm);font-size:var(--fs-xs);color:var(--foreground);background:var(--accent);display:flex;align-items:center;gap:6px"><span>◉</span> Dashboard</div>
-            <div style="padding:6px 8px;border-radius:var(--radius-sm);font-size:var(--fs-xs);color:var(--muted-foreground);display:flex;align-items:center;gap:6px"><span>◎</span> Analytics</div>
-            <div style="padding:6px 8px;border-radius:var(--radius-sm);font-size:var(--fs-xs);color:var(--muted-foreground);display:flex;align-items:center;gap:6px"><span>◎</span> Reports</div>
-            <div style="height:1px;background:var(--border);margin:6px 0"></div>
-            <div style="font-size:var(--fs-xs);font-weight:600;color:var(--muted-foreground);padding:4px 8px;text-transform:uppercase;letter-spacing:.06em">Settings</div>
-            <div style="padding:6px 8px;border-radius:var(--radius-sm);font-size:var(--fs-xs);color:var(--muted-foreground);display:flex;align-items:center;gap:6px"><span>◎</span> Profile</div>
-            <div style="padding:6px 8px;border-radius:var(--radius-sm);font-size:var(--fs-xs);color:var(--muted-foreground);display:flex;align-items:center;gap:6px"><span>◎</span> Billing</div>
+      <div class="demo-canvas" style="align-items:flex-start">
+        <div class="wnav-panel">
+          <div class="wnav-items-wrap">
+            <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg></span><span class="wnav-label">Waldo Marketing</span><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="7 15 12 20 17 15"/><polyline points="7 9 12 4 17 9"/></svg></span></div>
           </div>
-          <div style="flex:1;background:var(--background);padding:16px;display:flex;align-items:center;justify-content:center;font-size:var(--fs-xs);color:var(--muted-foreground)">Main content</div>
+          <div class="wnav-section">Platform</div>
+          <div class="wnav-items-wrap">
+            <div class="wnav-item active"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></span><span class="wnav-label">Dashboard</span></div>
+            <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></span><span class="wnav-label">Brands</span></div>
+            <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span><span class="wnav-label">Audiences</span></div>
+            <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg></span><span class="wnav-label">Categories</span></div>
+          </div>
+          <div class="wnav-section">Intelligence</div>
+          <div class="wnav-items-wrap">
+            <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span><span class="wnav-label">Signals</span><span class="wnav-count">12</span></div>
+            <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><span class="wnav-label">Reports</span></div>
+            <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></span><span class="wnav-label">Watchlist</span></div>
+          </div>
+          <div class="wnav-sep"></div>
+          <div class="wnav-items-wrap">
+            <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span><span class="wnav-label">Settings</span></div>
+            <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span><span class="wnav-label">Help &amp; Support</span></div>
+          </div>
         </div>
       </div>
       <div class="demo-code-bar">
-        <span class="demo-code-label">&lt;SidebarProvider /&gt;</span>
-        <button class="copy-btn" onclick="copyCode(this, '&lt;SidebarProvider&gt;\n  &lt;AppSidebar /&gt;\n  &lt;SidebarInset&gt;\n    &lt;main&gt;Main content&lt;/main&gt;\n  &lt;/SidebarInset&gt;\n&lt;/SidebarProvider&gt;')">Copy</button>
+        <span class="demo-code-label">&lt;Sidebar&gt; · SidebarGroup · SidebarMenuButton isActive</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;Sidebar&gt;\n  &lt;SidebarContent&gt;\n    &lt;SidebarGroup&gt;\n      &lt;SidebarGroupLabel&gt;Platform&lt;/SidebarGroupLabel&gt;\n      &lt;SidebarMenu&gt;\n        &lt;SidebarMenuItem&gt;\n          &lt;SidebarMenuButton isActive&gt;&lt;LayoutGrid /&gt;Dashboard&lt;/SidebarMenuButton&gt;\n        &lt;/SidebarMenuItem&gt;\n      &lt;/SidebarMenu&gt;\n    &lt;/SidebarGroup&gt;\n  &lt;/SidebarContent&gt;\n&lt;/Sidebar&gt;')">Copy</button>
       </div>
     </div>
   </div>
@@ -6345,22 +6349,6 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
 
 </div><!-- /#wb-main -->
-<div id="wb-charts-sidebar" class="wnav-panel" style="margin:8px 8px 8px 40px;height:calc(100vh - 16px);border-radius:var(--radius-3xl);padding:8px 0;">
-  <div class="sb-group">
-    <div class="sb-group-label">Charts</div>
-    <div class="sb-items-wrap">
-    <button class="sb-item active" onclick="switchChartPage('chart-page-area',this)">Area Charts</button>
-    <button class="sb-item" onclick="switchChartPage('chart-page-bar',this)">Bar Charts</button>
-    <button class="sb-item" onclick="switchChartPage('chart-page-palette',this)">Chart Palette</button>
-    <button class="sb-item" onclick="switchChartPage('chart-page-tooltip',this)">Chart Tooltip</button>
-    <button class="sb-item" onclick="switchChartPage('chart-page-donut',this)">Donut Chart</button>
-    <button class="sb-item" onclick="switchChartPage('chart-page-line',this)">Line Charts</button>
-    <button class="sb-item" onclick="switchChartPage('chart-page-pie',this)">Pie Charts</button>
-    <button class="sb-item" onclick="switchChartPage('chart-page-radar',this)">Radar Charts</button>
-    <button class="sb-item" onclick="switchChartPage('chart-page-radial',this)">Radial Charts</button>
-    </div>
-  </div>
-</div>
 <div id="wb-charts-main">
 
 <!-- ══ AREA PAGE ══ -->
@@ -9588,6 +9576,14 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     .lb-meta { display: flex; gap: 8px; align-items: center; overflow: hidden; }
     .lb-offer { font-size: var(--fs-xs); font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: var(--muted-foreground); white-space: nowrap; flex: none; }
     .lb-category { font-size: var(--fs-sm); font-weight: 400; line-height: 16px; letter-spacing: -0.22px; color: var(--muted-foreground); opacity: 0.6; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+    /* trend variant — same row skin, right cell swaps depth pill for volume + directional delta */
+    .lb-head { display: flex; align-items: center; gap: 10px; padding: 0 8px 12px; }
+    .lb-head-title { font-size: var(--fs-sm); font-weight: 600; color: var(--foreground); }
+    .lb-head-sub { font-size: var(--fs-xs); color: var(--muted-foreground); margin-left: auto; font-variant-numeric: tabular-nums; }
+    .lb-vol { font-size: var(--fs-xs); font-weight: 500; line-height: 16px; letter-spacing: -0.24px; color: var(--muted-foreground); white-space: nowrap; flex: none; font-variant-numeric: tabular-nums; }
+    .lb-delta { font-size: var(--fs-xs); font-weight: 600; white-space: nowrap; flex: none; font-variant-numeric: tabular-nums; }
+    .lb-delta.up { color: var(--primary); }
+    .lb-delta.dn { color: var(--warning); }
   </style>
 
   <div class="section">
@@ -9629,12 +9625,45 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   </div>
 
   <div class="section">
+    <div class="section-title">Trend variant — volume + delta</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="max-width:520px;">
+      <div class="lb">
+        <div class="lb-head"><span class="lb-head-title">TikTok hashtags</span><span class="lb-head-sub">last 7 days</span></div>
+        <div class="lb-row">
+          <div class="lb-rank">1</div>
+          <div class="lb-main">
+            <div class="lb-name-row"><span class="lb-brand">#guttok</span><span class="lb-delta up">▲ +34%</span></div>
+            <div class="lb-meta"><span class="lb-vol">4.4M</span><span class="lb-category">· Prebiotic vs probiotic explainers</span></div>
+          </div>
+        </div>
+        <div class="lb-row">
+          <div class="lb-rank">2</div>
+          <div class="lb-main">
+            <div class="lb-name-row"><span class="lb-brand">#drinkpoppi</span><span class="lb-delta up">▲ +18%</span></div>
+            <div class="lb-meta"><span class="lb-vol">2.1M</span><span class="lb-category">· Mini-can unboxings dominate</span></div>
+          </div>
+        </div>
+        <div class="lb-row">
+          <div class="lb-rank">3</div>
+          <div class="lb-main">
+            <div class="lb-name-row"><span class="lb-brand">#sodaalternative</span><span class="lb-delta dn">▼ −4%</span></div>
+            <div class="lb-meta"><span class="lb-vol">890K</span><span class="lb-category">· Comparisons to Olipop</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
     <div class="section-title">Rules</div>
     <div class="demo-block">
       <div class="demo-canvas" style="font-size:var(--fs-sm);line-height:20px;color:var(--muted-foreground);display:flex;flex-direction:column;gap:6px;">
       <div>Rank number is muted — structural, not the focus.</div>
       <div>Brand name is the dominant element (600 weight).</div>
-      <div>Depth pill is always right-aligned, uses alpha-encoding (see Depth Pill).</div>
+      <div><b>depth</b> variant: right cell is a depth pill, alpha-encoded (see Depth Pill).</div>
+      <div><b>trend</b> variant: right cell is a directional delta — up <code>var(--primary)</code>, down <code>var(--warning)</code>, never <code>--destructive</code>. Volume goes in the meta line; add <code>.lb-head</code> to label the source and compose columns side by side.</div>
+      <div>Both variants share the same row skin — only the right cell changes, so lists stay visually consistent.</div>
       <div>Last row has no bottom border (<code>.lb-row:last-child .lb-main { border-bottom: none; }</code>).</div>
       <div>Use <code>var(--secondary)</code> for hover — never a custom bg color.</div>
     </div>
