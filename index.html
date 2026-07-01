@@ -9037,15 +9037,15 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   </div>
 
   <style>
-    .brcol-row { display: flex; align-items: flex-end; gap: 10px; }
-    .brcol-col { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
-    .brcol-card { width: 100%; border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: opacity 0.15s; }
-    .brcol-card:hover { opacity: 0.9; }
-    .brcol-body { flex: 1; padding: 14px 14px 12px; display: flex; flex-direction: column; gap: 6px; background: linear-gradient(to bottom, color-mix(in srgb, var(--chart-1) 45%, #000), color-mix(in srgb, var(--chart-1) 70%, #000)); }
-    .brcol-text { font-size: var(--fs-xs); color: rgba(255,255,255,0.9); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+    .brcol-row { display: flex; align-items: stretch; gap: 12px; }
+    .brcol-col { display: flex; flex: 1; }
+    .brcol-card { position: relative; width: 100%; height: 380px; border-radius: 24px; padding: 6px; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; transition: opacity 0.15s; background: linear-gradient(to bottom, color-mix(in srgb, var(--chart-1) 60%, #000), color-mix(in srgb, var(--chart-1) 44%, #000)); }
+    .brcol-card:hover { opacity: 0.92; }
+    .brcol-body { flex: 1; min-height: 0; padding: 12px 12px 10px; display: flex; flex-direction: column; gap: 6px; }
+    .brcol-text { font-size: var(--fs-xs); color: rgba(255,255,255,0.92); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
     .brcol-seemore { font-size: var(--fs-xs); color: rgba(255,255,255,0.5); }
-    .brcol-foot { background: color-mix(in srgb, var(--chart-1) 75%, #000); padding: 12px 14px 14px; border-radius: 22px 22px 0 0; display: flex; flex-direction: column; gap: 8px; }
-    .brcol-delta { font-size: 36px; font-weight: 700; color: #fff; line-height: 1; }
+    .brcol-foot { flex: none; margin: 0 -6px -6px; border-radius: 18px 18px 0 0; background: color-mix(in srgb, var(--chart-1) 30%, #000); padding: 14px 16px 16px; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; }
+    .brcol-delta { font-size: 34px; font-weight: 700; color: #fff; line-height: 1; }
     .brcol-brand { display: flex; align-items: center; gap: 8px; }
     .brcol-logo { width: 28px; height: 28px; border-radius: 999px; background: #fff; background-size: cover; background-position: center; flex: none; overflow: hidden; }
     .brcol-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 999px; }
@@ -9060,12 +9060,12 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
           <div class="brcol-row">
 
             <div class="brcol-col">
-              <div class="brcol-card" style="height:240px">
+              <div class="brcol-card">
                 <div class="brcol-body">
                   <span class="brcol-text">Eco-debates peaked mid-Oct; Nov uptick from repair program buzz. Steady ~20% share.</span>
                   <span class="brcol-seemore">see more</span>
                 </div>
-                <div class="brcol-foot">
+                <div class="brcol-foot" style="height:96px">
                   <span class="brcol-delta">+12%</span>
                   <div class="brcol-brand">
                     <div class="brcol-logo"><img src="https://logo.clearbit.com/patagonia.com" alt="Patagonia"></div>
@@ -9076,12 +9076,12 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             </div>
 
             <div class="brcol-col">
-              <div class="brcol-card" style="height:327px">
+              <div class="brcol-card">
                 <div class="brcol-body">
                   <span class="brcol-text">Oct sales +35% YoY; Nov Korean market push (+20% search). Dominates at ~50%.</span>
                   <span class="brcol-seemore">see more</span>
                 </div>
-                <div class="brcol-foot">
+                <div class="brcol-foot" style="height:132px">
                   <span class="brcol-delta">+25%</span>
                   <div class="brcol-brand">
                     <div class="brcol-logo"><img src="https://logo.clearbit.com/thenorthface.com" alt="The North Face"></div>
@@ -9092,12 +9092,12 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             </div>
 
             <div class="brcol-col">
-              <div class="brcol-card" style="height:307px">
+              <div class="brcol-card">
                 <div class="brcol-body">
                   <span class="brcol-text">Affordable winter gear drove Oct; Nov corporate buzz.</span>
                   <span class="brcol-seemore">see more</span>
                 </div>
-                <div class="brcol-foot">
+                <div class="brcol-foot" style="height:122px">
                   <span class="brcol-delta">+22%</span>
                   <div class="brcol-brand">
                     <div class="brcol-logo"><img src="https://logo.clearbit.com/columbia.com" alt="Columbia"></div>
@@ -9108,12 +9108,12 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             </div>
 
             <div class="brcol-col">
-              <div class="brcol-card" style="height:380px">
+              <div class="brcol-card">
                 <div class="brcol-body">
                   <span class="brcol-text">Oct climber focus; Nov game tie-ins (ARC Raiders) +11% search. ~15% share.</span>
                   <span class="brcol-seemore">see more</span>
                 </div>
-                <div class="brcol-foot">
+                <div class="brcol-foot" style="height:158px">
                   <span class="brcol-delta">+33%</span>
                   <div class="brcol-brand">
                     <div class="brcol-logo"><img src="https://logo.clearbit.com/arcteryx.com" alt="Arc'teryx"></div>
