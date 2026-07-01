@@ -8,7 +8,7 @@ Design rules for Brand API prototypes (Promo Radar, Prospector, Moodtape, Poppi 
 
 ## What these prototypes are
 
-Vanilla HTML single-file dashboards. No framework, no build step. They link to `../../waldo-ds.css` and use Waldo DS tokens. They live in `waldo-labs/<prototype-name>/`. They are sales tools — the visual bar is high.
+Vanilla HTML single-file dashboards. No framework, no build step. They link to `../_waldo/waldo-ds.css` and use Waldo DS tokens. They live in `waldo-labs/<prototype-name>/`. They are sales tools — the visual bar is high.
 
 ---
 
@@ -55,6 +55,30 @@ Use DS semantic tokens only — never the prototype legacy vars.
 
 `--highlight-rgb: 247,211,113` — use for `rgba(var(--highlight-rgb), alpha)` when you need opacity-based encoding.
 
+### Opacity patterns — always use rgba(var(--*-rgb), alpha)
+
+`waldo-ds.css` defines token variables as hex strings, not HSL. `hsl(var(--primary) / 0.12)` is **invalid** and produces no output. Always use the `rgba()` form:
+
+```css
+/* WRONG — --primary is hex, not hsl() */
+background: hsl(var(--primary) / 0.12);
+
+/* CORRECT */
+background: rgba(var(--primary-rgb), 0.12);
+```
+
+**Pre-defined RGB helpers in `waldo-ds.css`** (use without declaring):
+- `--primary-rgb: 50,169,169`
+- `--highlight-rgb: 247,211,113`
+
+**Must declare in prototype `:root`** (not in DS):
+```css
+:root {
+  --destructive-rgb: 222,58,40;
+  --warning-rgb: 217,119,6;
+}
+```
+
 ### Typography
 - UI text: **Inter** (default, no font-family declaration needed)
 - Numbers, metric values, IDs: **Inter** — NOT JetBrains Mono
@@ -63,6 +87,8 @@ Use DS semantic tokens only — never the prototype legacy vars.
 ---
 
 ## Layout
+
+> **Reconstruction vs. new dashboard:** When rebuilding an existing prototype, preserve the source layout (rings, hero, custom tabs, etc.) — use DS tokens and components for every element but keep the visual structure. The grid-of-cards shell below is the default only for **new dashboards** built from scratch. In both cases, tokens, components, and rules below apply without exception.
 
 ### Topbar
 
@@ -130,6 +156,8 @@ The page title matches the prototype name (e.g. "Promo Radar", "Prospector"). Th
 html, body { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
 /* waldo-ds.css sets body{display:flex!important;flex-direction:column!important} — breaks card widths */
 body { display: block !important; }
+/* waldo-ds.css sets svg{display:block} — collapses ring/icon SVGs inside flex containers */
+svg { flex: none; min-height: fit-content; }
 ```
 
 ```css
@@ -199,8 +227,8 @@ A 4-up grid of summary metrics. No equivalent in core DS.
 .kpi-top { display: flex; align-items: flex-start; justify-content: space-between; }
 .k-label { font-size: var(--fs-sm); font-weight: 500; line-height: 20px; letter-spacing: -0.28px; color: var(--muted-foreground); }
 .k-delta { font-size: 11px; font-weight: 600; padding: 2px 6px; border-radius: 6px; }
-.k-delta.up { color: var(--destructive); background: hsl(var(--destructive) / 0.12); }
-.k-delta.down { color: var(--primary); background: hsl(var(--primary) / 0.12); }
+.k-delta.up { color: var(--destructive); background: rgba(var(--destructive-rgb), 0.12); }
+.k-delta.down { color: var(--primary); background: rgba(var(--primary-rgb), 0.12); }
 .k-value { font-size: 30px; font-weight: 600; line-height: 36px; letter-spacing: -0.6px; }
 .k-sub { font-size: 12px; font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: var(--muted-foreground); }
 ```
@@ -209,7 +237,7 @@ Rules:
 - Max 4 cards per row. Collapse to 2 on mobile.
 - Delta badge sits **top-right** of the card — never inline below the value.
 - Value is always the dominant element — large, bold, tight tracking.
-- Up = destructive (red) because more discounting = pressure signal. Down = primary (teal) because less discounting = relief signal.
+- **Promo Radar only:** Up = destructive (red) because more discounting = pressure signal. Down = primary (teal) because less discounting = relief signal. **Brand Health uses the opposite:** up trend = good = `var(--primary)`; down trend = bad = `var(--destructive)`. Always match the dashboard's semantic context.
 - Use `comp-segmented` from DS for any time-range toggle (This week / 30 days / 90 days) — never custom buttons.
 
 ---
@@ -237,11 +265,11 @@ Used for category/brand comparisons. Encodes significance via fill opacity, not 
 .hbar-name { font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: -0.28px; color: var(--muted-foreground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 180px; }
 .hbar-inner { display: flex; align-items: center; gap: 12px; }
 .hbar-track { flex: 1; height: 6px; background: var(--secondary); border-radius: 12px; overflow: hidden; }
-.hbar-fill { height: 100%; border-radius: 15px; background: linear-gradient(to left, hsl(var(--primary)), hsl(var(--primary) / 0.15)); }
+.hbar-fill { height: 100%; border-radius: 15px; background: linear-gradient(to left, rgba(var(--primary-rgb), 1), rgba(var(--primary-rgb), 0.15)); }
 .hbar-val { font-size: 12px; font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: var(--muted-foreground); text-align: right; width: 46px; }
 ```
 
-**Alpha-fill encoding rule:** the fill color is `hsl(var(--primary) / alpha)` where alpha = `0.30 + (value/max * 0.70)`. The highest value gets full opacity, the lowest gets 30%. This encodes magnitude without introducing multiple hues. Use this system consistently across all bars in a chart — never mix with `--chart-*` colors in the same bar set.
+**Alpha-fill encoding rule:** the fill color is `rgba(var(--primary-rgb), alpha)` where alpha = `0.30 + (value/max * 0.70)`. The highest value gets full opacity, the lowest gets 30%. This encodes magnitude without introducing multiple hues. Use this system consistently across all bars in a chart — never mix with `--chart-*` colors in the same bar set.
 
 **HBars are always teal (`var(--primary)`) — never yellow.** The highlight/yellow color (`--highlight-rgb`) is reserved exclusively for the Depth Pill. Do not use it for bars.
 
@@ -496,7 +524,7 @@ Fields animate in as they appear. Never jump — transition smoothly.
 ```css
 .seg { display: flex; gap: 8px; flex-wrap: wrap; }
 .seg button { background: var(--secondary); border: 1px solid var(--border); color: var(--muted-foreground); border-radius: 10px; padding: 10px 14px; font-size: 13px; font-weight: 600; }
-.seg button.on { background: hsl(var(--primary) / 0.12); border-color: hsl(var(--primary)); color: hsl(var(--primary)); }
+.seg button.on { background: rgba(var(--primary-rgb), 0.12); border-color: var(--primary); color: var(--primary); }
 ```
 
 ### Toast notification
@@ -508,7 +536,7 @@ Fixed bottom-center. Appears on user action. 2.6s auto-dismiss. Never use for er
   <span class="pulse"></span>Discounting now
 </span>
 ```
-`background: hsl(var(--destructive) / 0.12)` + animated dot. Use only for genuinely real-time states.
+`background: rgba(var(--destructive-rgb), 0.12)` + animated dot. Use only for genuinely real-time states.
 
 ---
 
@@ -527,7 +555,7 @@ waldo-design-system/
     usage-doctrine.yaml              ← Intelligence Layer owns — core DS components
 ```
 
-Do not copy CSS between prototype files — always link to `../../waldo-ds.css`.
+Do not copy CSS between prototype files — always link to `../_waldo/waldo-ds.css` (the `_waldo/` folder is the vendored DS convention in labs, same as `waldo-theme.css`).
 
 ---
 
@@ -536,6 +564,12 @@ Do not copy CSS between prototype files — always link to `../../waldo-ds.css`.
 ```bash
 node tools/detect.js waldo-labs/<prototype>/index-ds.html
 ```
+
+> **detect.js skips `waldo-labs/`** — the validator has `SKIP_PATH_SEGMENTS=['waldo-labs']` hardcoded. Running it against a path inside `waldo-labs/` always reports zero violations, even for broken files. To get real results, copy the file outside that directory first:
+> ```bash
+> cp waldo-labs/<prototype>/index-ds.html /tmp/test-ds.html
+> node tools/detect.js /tmp/test-ds.html
+> ```
 
 Common violations in dashboards:
 - Hardcoded hex in JS-generated inline styles → replace with `var(--token)` or `rgba(var(--token-rgb), alpha)`
@@ -557,7 +591,7 @@ Common violations in dashboards:
 - Do not put the KPI delta inline below the value — it goes as a badge top-right of the card
 - Do not render trend line dots as always-visible — dots only on hover
 - Do not use custom buttons for time-range toggles — use `comp-segmented` from DS
-- Do not use yellow/highlight color (`--highlight-rgb`) for HBar fills — HBars are always teal (`hsl(var(--primary) / alpha)`)
+- Do not use yellow/highlight color (`--highlight-rgb`) for HBar fills — HBars are always teal (`rgba(var(--primary-rgb), alpha)`)
 - Do not add `border` to cards — ever. Cards are distinguished by background elevation (`var(--card)` vs `var(--background)`), not by borders
 - Do not let a separator line appear below the page header — `waldo-ds.css` injects `border-bottom` on `.page-header`; always override with `border-bottom: none !important`
 - Do not hardcode actions in the page header (search pill, alert button, etc.) — include only what the specific dashboard design requires
@@ -566,3 +600,5 @@ Common violations in dashboards:
 - Do not declare `--chart-1` through `--chart-12` in your own `:root` — they are already in `waldo-ds.css`. If you override them you may introduce hex values. Trust the DS file
 - Do not invent a chart component that already exists in the DS — copy the exact HTML/CSS from `index.html`
 - Do not write CSS for a UI element without first reading its definition in `index.html` — copy classes and styles verbatim, never create renamed variants (e.g. `.pulse-label` instead of `.k-label`). Any deviation silently breaks DS compliance (wrong weight, casing, spacing).
+- Do not embed full component CSS snippets in this doctrine as a substitute for reading the source. The CSS blocks in this file are illustrative; the **authoritative** spec lives in `index.html` under `#comp-*` / `#chart-page-*` IDs. When in doubt, read the source file first.
+- Do not use `hsl(var(--token) / alpha)` for opacity — DS tokens are hex, not HSL. Use `rgba(var(--token-rgb), alpha)` instead (see Opacity patterns section above).
