@@ -2346,19 +2346,33 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
     <div class="section">
       <div class="section-title">Brand mentions</div>
-      <div class="demo-block">
+      <div class="demo-block" style="overflow:visible">
         <div class="demo-canvas" style="padding:0;display:block">
           <div class="dt-toolbar">
-            <input class="input dt-filter-input" placeholder="Filter by brand…" oninput="dtFilterFn(this.value)" />
+            <input class="input dt-filter-input" placeholder="Filter brands…" oninput="dtFilterFn(this.value)" />
+            <div class="dt-cols-wrap">
+              <button class="btn btn-outline btn-sm" id="dtColsBtn" onclick="dtToggleColsMenu(event)">
+                Columns
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="wdd dt-cols-menu" id="dtColsMenu" style="display:none">
+                <div class="wdd-item wdd-active" onclick="dtToggleCol('status',this)">Status
+                  <svg class="wdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div class="wdd-item wdd-active" onclick="dtToggleCol('mentions',this)">Mentions
+                  <svg class="wdd-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+              </div>
+            </div>
           </div>
           <table class="wui-table" id="dtTable">
             <thead>
               <tr>
+                <th class="dt-check-cell"><div class="dt-check" id="dtSelectAll" onclick="dtToggleAll()"></div></th>
                 <th class="sortable" onclick="dtSort('brand')">Brand <span class="dt-si" data-col="brand">↕</span></th>
-                <th class="sortable" style="text-align:right" onclick="dtSort('mentions')">Mentions <span class="dt-si" data-col="mentions">↕</span></th>
-                <th class="sortable" style="text-align:right" onclick="dtSort('sentiment')">Sentiment <span class="dt-si" data-col="sentiment">↕</span></th>
-                <th class="sortable" style="text-align:right" onclick="dtSort('sov')">Share of Voice <span class="dt-si" data-col="sov">↕</span></th>
-                <th>Status</th>
+                <th data-col="status">Status</th>
+                <th class="sortable dt-num" data-col="mentions" onclick="dtSort('mentions')">Mentions <span class="dt-si" data-col="mentions">↕</span></th>
+                <th class="dt-actions-cell"></th>
               </tr>
             </thead>
             <tbody id="dtBody"></tbody>
@@ -2366,25 +2380,28 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
           <div class="dt-footer">
             <span class="dt-count" id="dtCount"></span>
             <div class="dt-pagination">
-              <span class="dt-page" id="dtPage"></span>
               <button class="btn btn-outline btn-sm" id="dtPrev" onclick="dtPageFn(-1)">Previous</button>
               <button class="btn btn-outline btn-sm" id="dtNext" onclick="dtPageFn(1)">Next</button>
             </div>
           </div>
         </div>
         <style>
-          .dt-toolbar { padding:12px 12px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:8px; }
+          .dt-toolbar { padding:12px 12px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:8px; }
           .dt-filter-input { max-width:260px; }
+          .dt-cols-wrap { position:relative; }
+          .dt-cols-menu { position:absolute; top:calc(100% + 6px); right:0; z-index:50; width:180px; }
           .dt-si { opacity:0.4; font-size:var(--fs-xs); }
           .dt-num { text-align:right; font-variant-numeric:tabular-nums; }
           .dt-brand { font-weight:500; color:var(--foreground); }
-          .dt-footer { padding:10px 12px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
-          .dt-count { font-size:var(--fs-xs); color:var(--muted-foreground); }
+          .dt-check-cell { width:36px; }
+          .dt-actions-cell { width:44px; }
+          .dt-check { width:14px; height:14px; border-radius:var(--radius-xs); border:1px solid var(--border-strong); background:var(--muted); cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:background .1s,border-color .1s; }
+          .dt-check.checked { background:var(--primary); border-color:var(--primary); }
+          .dt-check.checked::after { content:''; width:3px; height:6px; border:solid var(--background); border-width:0 2px 2px 0; transform:rotate(45deg); margin-top:-1px; }
+          .dt-actions-btn { height:26px; width:26px; padding:0; display:flex; align-items:center; justify-content:center; }
+          .dt-footer { padding:12px 12px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+          .dt-count { font-size:var(--fs-sm); color:var(--muted-foreground); letter-spacing:-0.02em; }
           .dt-pagination { display:flex; gap:8px; align-items:center; }
-          .dt-page { font-size:var(--fs-xs); color:var(--muted-foreground); margin-right:4px; }
-          .dt-sent-good { color:var(--primary); }
-          .dt-sent-mid { color:var(--warning); }
-          .dt-sent-bad { color:var(--destructive); }
         </style>
         <div class="demo-code-bar">
           <span class="demo-code-label">&lt;DataTable columns={columns} data={data} filterColumn="brand" /&gt;</span>
@@ -2394,34 +2411,50 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
     </div>
     <script>
       var DT_DATA = [
-        {brand:'Nike',mentions:4821,sentiment:72,sov:'28.4%',status:'active'},
-        {brand:'Adidas',mentions:3104,sentiment:65,sov:'18.2%',status:'active'},
-        {brand:'Puma',mentions:1892,sentiment:58,sov:'11.1%',status:'active'},
-        {brand:'New Balance',mentions:2540,sentiment:80,sov:'14.9%',status:'active'},
-        {brand:'Vans',mentions:1340,sentiment:74,sov:'7.9%',status:'paused'},
-        {brand:'Under Armour',mentions:987,sentiment:51,sov:'5.8%',status:'active'},
-        {brand:'Reebok',mentions:764,sentiment:60,sov:'4.5%',status:'paused'},
-        {brand:'ASICS',mentions:612,sentiment:77,sov:'3.6%',status:'active'},
-        {brand:'Converse',mentions:890,sentiment:83,sov:'5.2%',status:'active'},
-        {brand:'Skechers',mentions:430,sentiment:55,sov:'2.5%',status:'paused'},
+        {brand:'Nike',mentions:4821,status:'active'},
+        {brand:'Adidas',mentions:3104,status:'active'},
+        {brand:'Puma',mentions:1892,status:'processing'},
+        {brand:'New Balance',mentions:2540,status:'active'},
+        {brand:'Vans',mentions:1340,status:'failed'},
+        {brand:'Under Armour',mentions:987,status:'active'},
+        {brand:'Reebok',mentions:764,status:'processing'},
+        {brand:'ASICS',mentions:612,status:'active'},
+        {brand:'Converse',mentions:890,status:'active'},
+        {brand:'Skechers',mentions:430,status:'failed'},
       ];
       var dtFilterVal='', dtSortCol='mentions', dtSortAsc=false, dtPageIdx=0, DT_PAGE=5;
+      var dtSel={}, dtCols={status:true,mentions:true};
       function dtGetRows(){
         return DT_DATA.filter(r=>r.brand.toLowerCase().includes(dtFilterVal.toLowerCase()))
           .sort((a,b)=>{ var v=a[dtSortCol]>b[dtSortCol]?1:-1; return dtSortAsc?v:-v; });
+      }
+      function dtStatusBadge(s){
+        if(s==='active') return '<span class="badge badge-active badge-sm">Active</span>';
+        if(s==='processing') return '<span class="badge badge-secondary badge-sm">Processing</span>';
+        return '<span class="badge badge-destructive badge-sm">Failed</span>';
       }
       function dtRender(){
         var rows=dtGetRows(), total=rows.length, pages=Math.max(1,Math.ceil(total/DT_PAGE));
         if(dtPageIdx>=pages) dtPageIdx=pages-1;
         var start=dtPageIdx*DT_PAGE, slice=rows.slice(start,start+DT_PAGE);
-        var sentClass=s=>s>=70?'dt-sent-good':s>=55?'dt-sent-mid':'dt-sent-bad';
-        var statusBadge=s=>s==='active'?'<span class="badge badge-active badge-sm">Active</span>':'<span class="badge badge-secondary badge-sm">Paused</span>';
-        document.getElementById('dtBody').innerHTML=slice.length?slice.map(r=>`<tr><td class="dt-brand">${r.brand}</td><td class="dt-num">${r.mentions.toLocaleString()}</td><td class="dt-num ${sentClass(r.sentiment)}">${r.sentiment}%</td><td class="dt-num">${r.sov}</td><td>${statusBadge(r.status)}</td></tr>`).join('')
-          :'<tr><td colspan="5" style="text-align:center;padding:32px 12px;color:var(--muted-foreground)">No brands match your filter.</td></tr>';
-        document.getElementById('dtCount').textContent=total?`${start+1}–${start+slice.length} of ${total}`:'0 rows';
-        document.getElementById('dtPage').textContent=`Page ${dtPageIdx+1} of ${pages}`;
+        var cols=3+(dtCols.status?1:0)+(dtCols.mentions?1:0);
+        document.getElementById('dtBody').innerHTML=slice.length?slice.map(function(r){
+          var sel=!!dtSel[r.brand];
+          return '<tr'+(sel?' class="row-selected"':'')+'>'
+            +'<td class="dt-check-cell"><div class="dt-check'+(sel?' checked':'')+'" onclick="dtToggleRow(\''+r.brand+'\')"></div></td>'
+            +'<td class="dt-brand">'+r.brand+'</td>'
+            +(dtCols.status?'<td>'+dtStatusBadge(r.status)+'</td>':'')
+            +(dtCols.mentions?'<td class="dt-num">'+r.mentions.toLocaleString()+'</td>':'')
+            +'<td class="dt-actions-cell"><button class="btn btn-outline dt-actions-btn" aria-label="Row actions"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg></button></td>'
+            +'</tr>';
+        }).join(''):'<tr><td colspan="'+cols+'" style="text-align:center;padding:32px 12px;color:var(--muted-foreground)">No brands match your filter.</td></tr>';
+        var selCount=rows.filter(function(r){return dtSel[r.brand];}).length;
+        document.getElementById('dtCount').textContent=selCount+' of '+total+' row(s) selected.';
+        var allSel=slice.length>0&&slice.every(function(r){return dtSel[r.brand];});
+        document.getElementById('dtSelectAll').classList.toggle('checked',allSel);
         document.getElementById('dtPrev').disabled=dtPageIdx===0;
         document.getElementById('dtNext').disabled=dtPageIdx>=pages-1;
+        document.querySelectorAll('th[data-col]').forEach(function(th){ th.style.display=dtCols[th.dataset.col]?'':'none'; });
         document.querySelectorAll('.dt-si').forEach(function(s){ s.textContent='↕'; s.style.opacity='0.4'; });
         var active=document.querySelector('.dt-si[data-col="'+dtSortCol+'"]');
         if(active){ active.textContent=dtSortAsc?'↑':'↓'; active.style.opacity='0.9'; }
@@ -2429,6 +2462,19 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
       function dtFilterFn(v){dtFilterVal=v;dtPageIdx=0;dtRender();}
       function dtSort(col){if(dtSortCol===col)dtSortAsc=!dtSortAsc;else{dtSortCol=col;dtSortAsc=false;}dtRender();}
       function dtPageFn(d){dtPageIdx+=d;dtRender();}
+      function dtToggleRow(b){dtSel[b]=!dtSel[b];dtRender();}
+      function dtToggleAll(){
+        var rows=dtGetRows(), start=dtPageIdx*DT_PAGE, slice=rows.slice(start,start+DT_PAGE);
+        var allSel=slice.length>0&&slice.every(function(r){return dtSel[r.brand];});
+        slice.forEach(function(r){dtSel[r.brand]=!allSel;});
+        dtRender();
+      }
+      function dtToggleColsMenu(e){e.stopPropagation();var m=document.getElementById('dtColsMenu');m.style.display=m.style.display==='none'?'block':'none';}
+      function dtToggleCol(col,el){dtCols[col]=!dtCols[col];el.classList.toggle('wdd-active',dtCols[col]);dtRender();}
+      document.addEventListener('click',function(e){
+        var w=document.getElementById('dtColsMenu');
+        if(w&&w.style.display==='block'&&!e.target.closest('.dt-cols-wrap')) w.style.display='none';
+      });
       dtRender();
     </script>
   </div>
