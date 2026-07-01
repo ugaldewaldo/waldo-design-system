@@ -56,6 +56,13 @@ Ownership (don't edit across the line — pass a change request to the owner ins
 - The Figma Master DS file + its variables → **Figma Master**
 - `waldo-labs/` prototypes → **Brand API Prototypes**
 
+**Which session are you?** (root is shared, so state your role at the start of a session by what you work on):
+- cwd inside `waldo-labs/` → you are **Brand API Prototypes** (also read `waldo-labs/CLAUDE.md`).
+- working `tools/detect.js` · `token-catalog.yaml` · `build-waldo-ds.sh`/`waldo-ds.css` · the guard/CI/sync → you are **Validador** (also read `tools/CLAUDE.md`).
+- working `.tsx` components · `globals.css` · `tailwind.config.ts` (+ their demos in `index.html`) → you are **Component Library**.
+- working `usage-doctrine.yaml` · `lint-doctrine.js` · `/ds-*` skills → you are **Intelligence Layer**.
+Only Brand API is dir-scoped (`waldo-labs/`); Validador / Component Library / Intelligence Layer all work from the repo root and are distinguished by the files above, not by folder.
+
 To change a color/token: edit `tokens.json` → `globals.css` → `tailwind.config.ts`, fix any hardcoded `.tsx`, run `bash tools/build-waldo-ds.sh`, `/ds-verify`, commit/push; ask Validador to add the token to `token-catalog.yaml`; ask Figma Master to write it to Figma via MCP. The guard blocks the commit if any of this is incomplete.
 
 **Before deciding any component or chart is missing**, read `docs/component-index.md` — the flat list of ALL consumables (60 components + 13 charts). Consumables live in two sections of `index.html` (Components `#comp-*` AND Charts `#chart-page-*`); a comp-only scan misses the charts and leads to rebuilding data-viz that already exists. The index is GENERATED from `index.html` (`node tools/build-component-index.js`) and drift-checked by the guard — never hand-edit it.
