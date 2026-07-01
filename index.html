@@ -506,13 +506,11 @@ function switchTopTab(name, el, skipHash) {
 function switchChartPage(pageId, el, skipHash) {
   var panel = document.getElementById('tb-panel-components');
   if(panel) panel.classList.add('charts-active');
-  document.querySelectorAll('#wb-charts-sidebar .sb-item').forEach(function(i){i.classList.remove('active');});
+  document.querySelectorAll('#wb-charts-sidebar .sb-item, #wb-sidebar .sb-item').forEach(function(i){i.classList.remove('active');});
   if(el) el.classList.add('active');
-  else {
-    document.querySelectorAll('#wb-charts-sidebar .sb-item').forEach(function(i){
-      if(i.getAttribute('onclick') && i.getAttribute('onclick').indexOf("'"+pageId+"'")>-1) i.classList.add('active');
-    });
-  }
+  document.querySelectorAll('#wb-charts-sidebar .sb-item, #wb-sidebar .sb-item').forEach(function(i){
+    if(i.getAttribute('onclick') && i.getAttribute('onclick').indexOf("'"+pageId+"'")>-1) i.classList.add('active');
+  });
   document.querySelectorAll('#wb-charts-main .chart-page').forEach(function(p){p.classList.remove('active');});
   var p = document.getElementById(pageId);
   if(p) { p.classList.add('active'); document.getElementById('wb-charts-main').scrollTop = 0; }
