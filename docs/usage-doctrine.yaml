@@ -1138,16 +1138,26 @@ components:
 
   - component: Leaderboard Row
     use_when:
-      - One row in a ranked list (rank, entity, value, optional bar)
-      - Comparing entities ordered by a metric
+      - Any ranked list — rank + entity + a right-hand value, one item per row
+      - Comparing entities ordered by a metric (magnitude OR trend/momentum)
+      - Trending items per source (hashtags, topics, subreddits) — use the trend variant + .lb-head
+      - Multi-source comparison — one .lb column per source, composed side by side
     dont_use_when:
       - Non-ranked tabular data — use Table
       - A single headline metric — use KPI Stat Card
+      - A simple percentage breakdown with a fill bar — use Bar Track
     prefer_over:
-      - ListItem: when rows are ranked and carry a comparative value/bar
+      - ListItem: when rows are ranked and carry a comparative value
     notes: |
       Brand API prototype dashboard component — not yet reviewed against Figma.
-      Divider at /70, gap 3px, explicit text-foreground.
+      ONE component, two right-cell variants that share the same row skin (so lists stay visually consistent):
+        - depth  → right cell is a depth pill, alpha-encoded (see Depth Pill). Static magnitude.
+        - trend  → right cell is a directional delta (.lb-delta up|dn); volume in the meta line (.lb-vol);
+                   optional source header (.lb-head + .lb-head-title/.lb-head-sub) to label the source and compose columns.
+      Trend delta is a TREND, not a status: up = var(--primary), down = var(--warning) — never --destructive.
+      Structure: .lb > [.lb-head] + .lb-row(.lb-rank + .lb-main(.lb-name-row + .lb-meta)).
+      Divider at /70, gap 3px, explicit text-foreground. Rank/volume/delta all tabular-nums.
+      There is NO separate "Trend Column" component — it is this component's trend variant.
 
   - component: Depth Pill
     use_when:
