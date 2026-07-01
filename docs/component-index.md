@@ -5,7 +5,7 @@
 already exists in `index.html`. Consumables live in two sections — Components and
 Charts — so a comp-only scan will miss the charts. This is the flat list of both.
 
-## Components (79)
+## Components (60)
 
 - Accordion — `#comp-accordion`
 - Alert — `#comp-alert`
@@ -67,25 +67,6 @@ Charts — so a comp-only scan will miss the charts. This is the flat list of bo
 - Toggle Group — `#comp-toggle-group`
 - Tooltip — `#comp-tooltip`
 - Wizard Dialog — `#comp-wizard-dialog`
-- Ad Copy Card — `#comp-ad-copy-card`
-- Alert List Row — `#comp-alert-list-row`
-- Article Card — `#comp-article-card`
-- Bar Track — `#comp-bar-track`
-- Benchmark Bar — `#comp-benchmark-bar`
-- Brand Column — `#comp-brand-column`
-- Comment Card — `#comp-comment-card`
-- Copy Link — `#comp-copy-link`
-- Depth Pill — `#comp-depth-pill`
-- Dual-Bar Row — `#comp-dual-bar-row`
-- KPI Stat Card — `#comp-kpi-stat-card`
-- Leaderboard Row — `#comp-leaderboard-row`
-- Live Badge — `#comp-live-badge`
-- Media Tile — `#comp-media-tile`
-- Quote Card — `#comp-quote-card`
-- Recommendation Card — `#comp-recommendation-card`
-- Theme Pill — `#comp-theme-pill`
-- Waldo Logo — `#comp-waldo-logo`
-- Code Block — `#comp-code-block`
 
 ## Charts / Data-viz (16)
 
@@ -97,11 +78,11 @@ Charts — so a comp-only scan will miss the charts. This is the flat list of bo
 - Radial Charts — `#chart-page-radial`
 - Chart Tooltip — `#chart-page-tooltip`
 - Chart Palette — `#chart-page-palette`
+- Donut Chart — `#chart-page-donut`
 - Horizontal Bar — `#chart-page-hbar`
 - Proportion Bar — `#chart-page-proportion`
 - Trend Line — `#chart-page-trend`
 - Sparkline — `#chart-page-sparkline`
-- Donut Chart — `#chart-page-donut`
 - Gantt — `#chart-page-gantt`
 - Segmented Bar — `#chart-page-segbar`
 - Column Cards — `#chart-page-column-card`
