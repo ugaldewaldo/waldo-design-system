@@ -7,66 +7,66 @@ Charts — so a comp-only scan will miss the charts. This is the flat list of bo
 
 ## Components (79)
 
-- Button — `#comp-button`
-- Badge — `#comp-badge`
-- Input / Field — `#comp-input`
-- Checkbox — `#comp-checkbox`
-- Switch — `#comp-switch`
-- Segmented Control — `#comp-segmented-control`
-- Tag · TagInput — `#comp-tag`
-- File Input — `#comp-file-input`
-- Avatar — `#comp-avatar`
-- Select / Dropdown — `#comp-select`
-- Dialog — `#comp-dialog`
-- Wizard Dialog — `#comp-wizard-dialog`
-- Filter Chip — `#comp-filter-chip`
-- Filter Trigger — `#comp-filter-trigger`
-- Nav Item — `#comp-nav-item`
-- Table — `#comp-table`
-- Data Table — `#comp-data-table`
-- List Item — `#comp-list-item`
-- Separator — `#comp-separator`
-- Toast — `#comp-toast`
-- Alert — `#comp-alert`
-- Empty State — `#comp-empty-state`
-- Tabs — `#comp-tabs`
-- Icons — `#comp-icon`
-- Radio Group — `#comp-radio-group`
-- Slider — `#comp-slider`
-- Loader — `#comp-loader`
-- Status Spinner — `#comp-status-spinner`
 - Accordion — `#comp-accordion`
+- Alert — `#comp-alert`
 - Alert Dialog — `#comp-alert-dialog`
 - Aspect Ratio — `#comp-aspect-ratio`
+- Avatar — `#comp-avatar`
+- Badge — `#comp-badge`
 - Breadcrumb — `#comp-breadcrumb`
+- Button — `#comp-button`
 - Calendar — `#comp-calendar`
-- Date Picker — `#comp-date-picker`
 - Card — `#comp-card`
 - Carousel — `#comp-carousel`
+- Checkbox — `#comp-checkbox`
 - Collapsible — `#comp-collapsible`
 - Combobox — `#comp-combobox`
 - Command — `#comp-command`
 - Context Menu — `#comp-context-menu`
+- Data Table — `#comp-data-table`
+- Date Picker — `#comp-date-picker`
+- Dialog — `#comp-dialog`
 - Drawer — `#comp-drawer`
+- Empty State — `#comp-empty-state`
+- File Input — `#comp-file-input`
+- Filter Chip — `#comp-filter-chip`
+- Filter Trigger — `#comp-filter-trigger`
 - Form — `#comp-form`
 - Hover Card — `#comp-hover-card`
+- Icon — `#comp-icon`
+- Input — `#comp-input`
 - Input OTP — `#comp-input-otp`
 - Kbd — `#comp-kbd`
 - Label — `#comp-label`
+- List Item — `#comp-list-item`
+- Loader — `#comp-loader`
 - Menubar — `#comp-menubar`
+- Nav Item — `#comp-nav-item`
 - Navigation Menu — `#comp-navigation-menu`
 - Pagination — `#comp-pagination`
 - Popover — `#comp-popover`
 - Progress — `#comp-progress`
+- Radio Group — `#comp-radio-group`
 - Resizable — `#comp-resizable`
 - Scroll Area — `#comp-scroll-area`
+- Segmented Control — `#comp-segmented-control`
+- Select — `#comp-select`
+- Separator — `#comp-separator`
 - Sheet — `#comp-sheet`
 - Sidebar — `#comp-sidebar`
 - Skeleton — `#comp-skeleton`
+- Slider — `#comp-slider`
 - Sonner — `#comp-sonner`
+- Status Spinner — `#comp-status-spinner`
+- Switch — `#comp-switch`
+- Table — `#comp-table`
+- Tabs — `#comp-tabs`
+- Tag — `#comp-tag`
+- Toast — `#comp-toast`
 - Toggle — `#comp-toggle`
 - Toggle Group — `#comp-toggle-group`
 - Tooltip — `#comp-tooltip`
+- Wizard Dialog — `#comp-wizard-dialog`
 - Waldo Logo — `#comp-waldo-logo`
 - Depth Pill — `#comp-depth-pill`
 - Leaderboard Row — `#comp-leaderboard-row`
