@@ -608,7 +608,7 @@
     #wb-brand-api-main{flex:1;overflow-y:auto;padding:48px 52px 100px 52px;}
     #wb-brand-api-main::-webkit-scrollbar{width:5px;}#wb-brand-api-main::-webkit-scrollbar-thumb{background:var(--secondary);border-radius:99px;}
     #wb-brand-api-sidebar::-webkit-scrollbar{width:0;}#wb-brand-api-sidebar{scrollbar-width:none;}
-    .chart-page{display:none;} .chart-page.active{display:block;}
+    .chart-page{display:none;} .chart-page.active{display:block;width:100%;}
     .chart-page-header{margin-bottom:28px;padding-bottom:18px;border-bottom:1px solid var(--border);}
     .chart-page-title{font-size:var(--fs-xl);font-weight:600;letter-spacing:-0.02em;margin-bottom:4px;}
     .chart-page-desc{font-size:var(--fs-sm);color:var(--muted-foreground);}
