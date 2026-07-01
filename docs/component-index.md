@@ -67,24 +67,24 @@ Charts — so a comp-only scan will miss the charts. This is the flat list of bo
 - Toggle Group — `#comp-toggle-group`
 - Tooltip — `#comp-tooltip`
 - Wizard Dialog — `#comp-wizard-dialog`
-- Waldo Logo — `#comp-waldo-logo`
-- Depth Pill — `#comp-depth-pill`
-- Leaderboard Row — `#comp-leaderboard-row`
-- KPI Stat Card — `#comp-kpi-stat-card`
-- Quote Card — `#comp-quote-card`
-- Benchmark Bar — `#comp-benchmark-bar`
-- Bar Track — `#comp-bar-track`
-- Recommendation Card — `#comp-recommendation-card`
-- Article Card — `#comp-article-card`
-- Dual-Bar Row — `#comp-dual-bar-row`
-- Media Tile — `#comp-media-tile`
-- Comment Card — `#comp-comment-card`
-- Alert List Row — `#comp-alert-list-row`
-- Brand Column — `#comp-brand-column`
 - Ad Copy Card — `#comp-ad-copy-card`
-- Live Status Badge — `#comp-live-badge`
-- Theme Pill — `#comp-theme-pill`
+- Alert List Row — `#comp-alert-list-row`
+- Article Card — `#comp-article-card`
+- Bar Track — `#comp-bar-track`
+- Benchmark Bar — `#comp-benchmark-bar`
+- Brand Column — `#comp-brand-column`
+- Comment Card — `#comp-comment-card`
 - Copy Link — `#comp-copy-link`
+- Depth Pill — `#comp-depth-pill`
+- Dual-Bar Row — `#comp-dual-bar-row`
+- KPI Stat Card — `#comp-kpi-stat-card`
+- Leaderboard Row — `#comp-leaderboard-row`
+- Live Badge — `#comp-live-badge`
+- Media Tile — `#comp-media-tile`
+- Quote Card — `#comp-quote-card`
+- Recommendation Card — `#comp-recommendation-card`
+- Theme Pill — `#comp-theme-pill`
+- Waldo Logo — `#comp-waldo-logo`
 - Code Block — `#comp-code-block`
 
 ## Charts / Data-viz (16)
@@ -95,13 +95,13 @@ Charts — so a comp-only scan will miss the charts. This is the flat list of bo
 - Pie Charts — `#chart-page-pie`
 - Radar Charts — `#chart-page-radar`
 - Radial Charts — `#chart-page-radial`
-- Tooltip — `#chart-page-tooltip`
+- Chart Tooltip — `#chart-page-tooltip`
 - Chart Palette — `#chart-page-palette`
-- HBar Track — `#chart-page-hbar`
+- Horizontal Bar — `#chart-page-hbar`
 - Proportion Bar — `#chart-page-proportion`
 - Trend Line — `#chart-page-trend`
 - Sparkline — `#chart-page-sparkline`
 - Donut Chart — `#chart-page-donut`
-- Gantt / Timeline — `#chart-page-gantt`
+- Gantt — `#chart-page-gantt`
 - Segmented Bar — `#chart-page-segbar`
 - Column Cards — `#chart-page-column-card`

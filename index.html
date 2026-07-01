@@ -113,24 +113,24 @@
   </div>
   <div class="sb-group">
     <div class="sb-group-label">Brand API</div>
-    <button class="sb-item" onclick="waldoGo('comp-waldo-logo',this)">Waldo Logo</button>
-    <button class="sb-item" onclick="waldoGo('comp-depth-pill',this)">Depth Pill</button>
-    <button class="sb-item" onclick="waldoGo('comp-leaderboard-row',this)">Leaderboard Row</button>
-    <button class="sb-item" onclick="waldoGo('comp-kpi-stat-card',this)">KPI Stat Card</button>
-    <button class="sb-item" onclick="waldoGo('comp-quote-card',this)">Quote Card</button>
-    <button class="sb-item" onclick="waldoGo('comp-benchmark-bar',this)">Benchmark Bar</button>
-    <button class="sb-item" onclick="waldoGo('comp-bar-track',this)">Bar Track</button>
-    <button class="sb-item" onclick="waldoGo('comp-recommendation-card',this)">Recommendation Card</button>
-    <button class="sb-item" onclick="waldoGo('comp-article-card',this)">Article Card</button>
-    <button class="sb-item" onclick="waldoGo('comp-dual-bar-row',this)">Dual-Bar Row</button>
-    <button class="sb-item" onclick="waldoGo('comp-media-tile',this)">Media Tile</button>
-    <button class="sb-item" onclick="waldoGo('comp-comment-card',this)">Comment Card</button>
-    <button class="sb-item" onclick="waldoGo('comp-alert-list-row',this)">Alert List Row</button>
-    <button class="sb-item" onclick="waldoGo('comp-brand-column',this)">Brand Column</button>
     <button class="sb-item" onclick="waldoGo('comp-ad-copy-card',this)">Ad Copy Card</button>
-    <button class="sb-item" onclick="waldoGo('comp-live-badge',this)">Live Status Badge</button>
-    <button class="sb-item" onclick="waldoGo('comp-theme-pill',this)">Theme Pill</button>
+    <button class="sb-item" onclick="waldoGo('comp-alert-list-row',this)">Alert List Row</button>
+    <button class="sb-item" onclick="waldoGo('comp-article-card',this)">Article Card</button>
+    <button class="sb-item" onclick="waldoGo('comp-bar-track',this)">Bar Track</button>
+    <button class="sb-item" onclick="waldoGo('comp-benchmark-bar',this)">Benchmark Bar</button>
+    <button class="sb-item" onclick="waldoGo('comp-brand-column',this)">Brand Column</button>
+    <button class="sb-item" onclick="waldoGo('comp-comment-card',this)">Comment Card</button>
     <button class="sb-item" onclick="waldoGo('comp-copy-link',this)">Copy Link</button>
+    <button class="sb-item" onclick="waldoGo('comp-depth-pill',this)">Depth Pill</button>
+    <button class="sb-item" onclick="waldoGo('comp-dual-bar-row',this)">Dual-Bar Row</button>
+    <button class="sb-item" onclick="waldoGo('comp-kpi-stat-card',this)">KPI Stat Card</button>
+    <button class="sb-item" onclick="waldoGo('comp-leaderboard-row',this)">Leaderboard Row</button>
+    <button class="sb-item" onclick="waldoGo('comp-live-badge',this)">Live Badge</button>
+    <button class="sb-item" onclick="waldoGo('comp-media-tile',this)">Media Tile</button>
+    <button class="sb-item" onclick="waldoGo('comp-quote-card',this)">Quote Card</button>
+    <button class="sb-item" onclick="waldoGo('comp-recommendation-card',this)">Recommendation Card</button>
+    <button class="sb-item" onclick="waldoGo('comp-theme-pill',this)">Theme Pill</button>
+    <button class="sb-item" onclick="waldoGo('comp-waldo-logo',this)">Waldo Logo</button>
     <button class="sb-item" onclick="waldoGo('comp-code-block',this)">Code Block</button>
   </div>
   <div class="sb-no-results" id="sb-no-results">No results</div>
@@ -6255,12 +6255,12 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   </div>
 </div>
 
-<!-- Live Status Badge -->
+<!-- Live Badge -->
 </div>
 </div>
 <div id="comp-live-badge" class="waldo-page">
   <div class="page-header">
-    <div class="page-title">Live Status Badge</div>
+    <div class="page-title">Live Badge</div>
     <div class="page-desc">Brand API custom component. Indicates whether a brand is currently discounting. Active state uses destructive color + animated pulse dot. Inactive is muted with no dot.</div>
   </div>
 
@@ -7873,20 +7873,20 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
     <div class="sb-items-wrap">
     <button class="sb-item active" onclick="switchChartPage('chart-page-area',this)">Area Charts</button>
     <button class="sb-item" onclick="switchChartPage('chart-page-bar',this)">Bar Charts</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-palette',this)">Chart Palette</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-tooltip',this)">Chart Tooltip</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-column-card',this)">Column Cards</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-donut',this)">Donut Chart</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-gantt',this)">Gantt</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-hbar',this)">Horizontal Bar</button>
     <button class="sb-item" onclick="switchChartPage('chart-page-line',this)">Line Charts</button>
     <button class="sb-item" onclick="switchChartPage('chart-page-pie',this)">Pie Charts</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-proportion',this)">Proportion Bar</button>
     <button class="sb-item" onclick="switchChartPage('chart-page-radar',this)">Radar Charts</button>
     <button class="sb-item" onclick="switchChartPage('chart-page-radial',this)">Radial Charts</button>
-    <button class="sb-item" onclick="switchChartPage('chart-page-tooltip',this)">Tooltip</button>
-    <button class="sb-item" onclick="switchChartPage('chart-page-palette',this)">Chart Palette</button>
-    <button class="sb-item" onclick="switchChartPage('chart-page-hbar',this)">HBar Track</button>
-    <button class="sb-item" onclick="switchChartPage('chart-page-proportion',this)">Proportion Bar</button>
-    <button class="sb-item" onclick="switchChartPage('chart-page-trend',this)">Trend Line</button>
-    <button class="sb-item" onclick="switchChartPage('chart-page-sparkline',this)">Sparkline</button>
-    <button class="sb-item" onclick="switchChartPage('chart-page-donut',this)">Donut Chart</button>
-    <button class="sb-item" onclick="switchChartPage('chart-page-gantt',this)">Gantt / Timeline</button>
     <button class="sb-item" onclick="switchChartPage('chart-page-segbar',this)">Segmented Bar</button>
-    <button class="sb-item" onclick="switchChartPage('chart-page-column-card',this)">Column Cards</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-sparkline',this)">Sparkline</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-trend',this)">Trend Line</button>
     </div>
   </div>
 </div>
@@ -9609,7 +9609,7 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
 <!-- ══ TOOLTIP PAGE ══ -->
 <div id="chart-page-tooltip" class="chart-page">
   <div class="chart-page-header">
-    <div class="chart-page-title">Tooltip</div>
+    <div class="chart-page-title">Chart Tooltip</div>
     <div class="chart-page-desc">Default, indicator, label, icons, formatter and advanced tooltip variants.</div>
   </div>
   <div class="chart-cards-grid">
@@ -9966,7 +9966,7 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
 <!-- ══ HBAR TRACK PAGE ══ -->
 <div id="chart-page-hbar" class="chart-page">
   <div class="chart-page-header">
-    <div class="chart-page-title">HBar Track</div>
+    <div class="chart-page-title">Horizontal Bar</div>
     <div class="chart-page-desc">Horizontal bar chart with track background. Default fill: primary gradient (teal). Used for category/brand comparisons in Brand API dashboards.</div>
   </div>
 
@@ -10503,9 +10503,9 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
   </div>
 </div><!-- /#chart-page-donut -->
 
-<!-- Gantt / Timeline -->
+<!-- Gantt -->
 <div id="chart-page-gantt" class="chart-page">
-  <div class="chart-page-title">Gantt / Timeline</div>
+  <div class="chart-page-title">Gantt</div>
   <div class="chart-page-desc">Discount history timeline. Label on left, solid teal bar per period, month labels below. No gradient, no opacity variation — bars are uniform <code>var(--primary)</code>.</div>
 
   <style>
