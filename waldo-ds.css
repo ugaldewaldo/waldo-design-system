@@ -600,7 +600,6 @@
     .doc-danger .doc-section-title { color: color-mix(in srgb, var(--destructive) 80%, transparent); border-color: color-mix(in srgb, var(--destructive) 20%, transparent); }
     #wb-charts-sidebar::-webkit-scrollbar{width:0;}#wb-charts-sidebar{scrollbar-width:none;}
     #wb-charts-sidebar, #wb-charts-main { display: none; }
-    #tb-panel-components.charts-active #wb-charts-sidebar { display: flex; }
     #tb-panel-components.charts-active #wb-charts-main { display: flex; flex: 1; overflow-y: auto; padding: 32px 40px; }
     #tb-panel-components.charts-active #wb-main { display: none; }
     #wb-charts-main{flex:1;overflow-y:auto;padding:32px 40px;}
