@@ -1007,7 +1007,7 @@ textarea.input {
 }
 
 /* ── Table ───────────────────────────────────── */
-.table-wrap { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.table-wrap { overflow-x: auto; }
 table.wui-table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
 table.wui-table thead { border-bottom: 1px solid var(--border-md); }
 table.wui-table th {
@@ -1732,3 +1732,12 @@ table.wui-table tbody tr.row-selected td { background: rgba(50,169,169,0.04); }
     .mig-section { font-size:var(--fs-xs); font-weight:600; color:var(--muted-foreground); text-transform:uppercase; letter-spacing:.08em; padding:20px 12px 8px; background:var(--background); }
     .mig-legend { display:flex; gap:16px; flex-wrap:wrap; margin-bottom:32px; }
     .mig-legend-item { display:flex; align-items:center; gap:7px; font-size:var(--fs-xs); color:var(--muted-foreground); }
+/* ── style block 29 ── */
+/* Card — canonical shell + header type. Prototypes use these classes;
+   never re-declare card title/sub sizes locally. */
+.wcard { background: var(--card); border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 20px; }
+    .wcard-title { font-size: var(--fs-xl); font-weight: 500; letter-spacing: -0.02em; line-height: 28px; color: var(--foreground); }
+    .wcard-sub   { font-size: var(--fs-sm); font-weight: 400; letter-spacing: -0.02em; line-height: 20px; color: var(--muted-foreground); }
+    .wcard-head  { display: flex; flex-direction: column; gap: 4px; }
+    .wcard-body  { font-size: var(--fs-sm); color: var(--foreground); line-height: 1.5; }
+    .wcard-footer{ display: flex; justify-content: flex-end; gap: 8px; }

@@ -751,10 +751,12 @@ components:
       - Table: when each record is a rich standalone object (insight, report) rather than a row of comparable fields
       - ListItem: when content needs internal structure (header/content/footer) and visual containment, not just a scannable row
     notes: |
-      shadcn default — not yet reviewed against Figma. Root: rounded-xl, border, bg-card,
-      text-card-foreground, shadow-sm, flex-col gap-6 py-6. Header/Content/Footer use px-6;
-      header is a container-query grid that adds a [1fr_auto] column when CardAction is present.
-      CardTitle: leading-none font-semibold; CardDescription: text-sm text-muted-foreground.
+      Vanilla canonical classes ship in waldo-ds.css: .wcard (bg var(--card), radius 16,
+      padding 28, column gap 20, no border) / .wcard-head / .wcard-title (20px medium -2%)
+      / .wcard-sub (14px regular muted) / .wcard-body / .wcard-footer. Never re-declare
+      card header sizes locally in a prototype — copy from showcase #comp-card.
+      React layer (card.tsx) is shadcn default and not yet aligned to the 20/14 spec
+      (CardTitle: leading-none font-semibold) — aligning it needs Miguel's approval.
 
   - component: Sidebar
     use_when:
@@ -1276,11 +1278,33 @@ components:
       Structure: sentiment label (love/pain) → title → verbatim quote → frequency bar.
       Two sentiment variants: love = var(--primary), pain = var(--destructive).
       Background: var(--card). Border-radius: var(--radius-xl). Same card shell as Comment Card.
+      Surface: on the page background → default; nested inside a container card → add .on-card
+      (background var(--secondary) — the zinc nesting step; --card on --card is invisible).
       Sentiment label: --fs-xs, uppercase, color matches variant.
       Title: --fs-sm, var(--foreground), font-weight 500.
       Quote: --fs-sm, var(--muted-foreground), italic, 2-line clamp.
       Frequency bar: thin (4px), full width, fill color matches sentiment variant.
       Frequency value: tabular nums, --fs-xs.
+
+  - component: Drill Panel
+    use_when:
+      - Dashboard drill-down detail on a metric, chart point, or list row (right slide-in)
+      - Contextual detail that should not navigate away from the dashboard
+    dont_use_when:
+      - Blocking confirmations or forms — use Dialog / AlertDialog
+      - Static side content that is always visible — use Sheet (.wsheet shell)
+      - Ephemeral feedback — use Toast
+    prefer_over:
+      - Dialog: when the user needs to keep the dashboard visible for context while inspecting detail
+      - Sheet: when the panel is transient and interactive (open/close lifecycle), not a fixed layout region
+    notes: |
+      Waldo extension — no shadcn equivalent. Canonical interactive right slide-in from the
+      Brand API dashboard doctrine. Structure: .drill-overlay + .drill (fixed right, 440px,
+      max-width 92vw, bg var(--card)) → .drill-head (eyebrow · title · ✕) → .drill-body.
+      Open = add .open to both panel and overlay (translateX + overlay fade). Close paths,
+      all three mandatory: ✕ click, overlay click, Esc. role="dialog" aria-modal="true".
+      Body composes: .drill-section-label, .drill-p, .drill-kv (key-value row), .drill-quote
+      (bg var(--secondary)), .drill-src-link (var(--primary)).
 
   - component: Comment Card
     use_when:
@@ -1293,8 +1317,10 @@ components:
       - Alert List Row: when the row represents a social mention with platform/author/sentiment
     notes: |
       Structure: platform favicon · author · time → sentiment chip (right-aligned) → text body → footer (comment count + arrow).
-      Background: var(--secondary). Border-radius: var(--radius-lg).
-      Sentiment chip classes: .sentiment-chip.pos / .neu / .neg / .mix — same palette as Theme Pill.
+      Background: var(--card). Border-radius: var(--radius-xl).
+      Sentiment chip classes: .comment-sentiment.pos / .neu / .neg / .mix — same palette as Theme Pill.
+      Surface: on the page background → default; nested inside a container card → add .on-card
+      (background var(--secondary) — the zinc nesting step; --card on --card is invisible).
       Platform favicon: 14×14px img. Author + time in var(--muted-foreground) at --fs-xs.
       Text body: var(--foreground) at --fs-sm, 2-line clamp.
       Footer: comment count + chevron arrow, both muted.
@@ -1451,6 +1477,8 @@ components:
     notes: |
       Horizontal layout: publication favicon (32×32, var(--radius-md)) left + content column right.
       Background: var(--card). Border-radius: var(--radius-xl). Padding: 14px 16px. Gap: 14px.
+      Surface: on the page background → default; nested inside a container card → add .on-card
+      (background var(--secondary) — the zinc nesting step; --card on --card is invisible).
       Hover: color-mix(in srgb, var(--foreground) 5%, var(--card)). Transition: background 0.12s.
       Meta row: source (--fs-xs, 600, foreground) · separator dot · time (--fs-xs, muted) · category tag (right).
       Title: --fs-sm, font-weight 600, 2-line clamp.

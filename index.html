@@ -2242,7 +2242,7 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
       <div class="section-title">Interactive table</div>
       <div class="demo-block">
         <div class="demo-canvas" style="padding:0;display:block">
-          <div class="table-wrap" style="border:none;border-radius:0">
+          <div class="table-wrap">
             <table class="wui-table">
               <thead>
                 <tr>
@@ -3482,7 +3482,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="section-title">Section — inside a table or panel</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="padding:0;width:100%;max-width:560px">
-          <div class="table-wrap" style="border:none;border-radius:0">
+          <div class="table-wrap">
             <table class="wui-table">
               <thead>
                 <tr>
@@ -5035,86 +5035,64 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 <div id="comp-card" class="waldo-page">
   <div class="page-header">
     <div class="page-title">Card</div>
-    <div class="page-desc">Displays a card with header, content, and footer.</div>
+    <div class="page-desc">Canonical card shell — <code>.wcard</code> with <code>.wcard-head</code> / <code>.wcard-title</code> (20 medium) / <code>.wcard-sub</code> (14 regular muted). Never re-declare card header sizes locally.</div>
   </div>
   <div class="section">
     <div class="section-title">Default</div>
     <div class="demo-block">
-      <div class="demo-canvas">
-        <div style="background:var(--card);border-radius:var(--radius-2xl);width:320px;overflow:hidden">
-          <div style="padding:20px 20px 0">
-            <div style="font-size:var(--fs-base);font-weight:600;color:var(--foreground);margin-bottom:4px">Brand Summary</div>
-            <div style="font-size:var(--fs-sm);color:var(--muted-foreground)">Week of June 9, 2026</div>
+      <div class="demo-canvas" style="max-width:400px">
+        <div class="wcard">
+          <div class="wcard-head">
+            <div class="wcard-title">Brand summary</div>
+            <div class="wcard-sub">Week of June 29, 2026</div>
           </div>
-          <div style="padding:16px 20px;font-size:var(--fs-sm);color:var(--foreground);line-height:1.5">Your brand mentions increased 14% this week. Sentiment is trending positive across all monitored channels.</div>
-          <div style="padding:0 20px 20px;display:flex;justify-content:flex-end">
-            <button class="btn btn-default btn-sm">View Report</button>
+          <div class="wcard-body">Nike mentions increased 14% this week. Sentiment is trending positive across all monitored channels.</div>
+          <div class="wcard-footer">
+            <button class="btn btn-default btn-sm">View report</button>
           </div>
         </div>
       </div>
       <div class="demo-code-bar">
-        <span class="demo-code-label">&lt;Card /&gt; · default sm</span>
-        <button class="copy-btn" onclick="copyCode(this, '&lt;CardFooter&gt;&lt;Button size=&quot;sm&quot;&gt;View Report&lt;/Button&gt;&lt;/CardFooter&gt;')">Copy</button>
+        <span class="demo-code-label">.wcard &gt; .wcard-head + .wcard-body + .wcard-footer</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;wcard&quot;&gt;&lt;div class=&quot;wcard-head&quot;&gt;&lt;div class=&quot;wcard-title&quot;&gt;Brand summary&lt;/div&gt;&lt;div class=&quot;wcard-sub&quot;&gt;Week of June 29, 2026&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;wcard-body&quot;&gt;…&lt;/div&gt;&lt;div class=&quot;wcard-footer&quot;&gt;&lt;button class=&quot;btn btn-default btn-sm&quot;&gt;View report&lt;/button&gt;&lt;/div&gt;&lt;/div&gt;')">Copy</button>
       </div>
     </div>
 
-    <div class="section-title">Variante secondary sm</div>
+    <div class="section-title">Header + content</div>
     <div class="demo-block">
-      <div class="demo-canvas">
-        <div style="background:var(--card);border-radius:var(--radius-2xl);width:320px;overflow:hidden">
-          <div style="padding:20px 20px 0">
-            <div style="font-size:var(--fs-base);font-weight:600;color:var(--foreground);margin-bottom:4px">Brand Summary</div>
-            <div style="font-size:var(--fs-sm);color:var(--muted-foreground)">Week of June 9, 2026</div>
+      <div class="demo-canvas" style="max-width:400px">
+        <div class="wcard">
+          <div class="wcard-head">
+            <div class="wcard-title">Share of Voice</div>
+            <div class="wcard-sub">Adidas vs category · last 30 days</div>
           </div>
-          <div style="padding:16px 20px;font-size:var(--fs-sm);color:var(--foreground);line-height:1.5">Your brand mentions increased 14% this week. Sentiment is trending positive across all monitored channels.</div>
-          <div style="padding:0 20px 20px;display:flex;justify-content:flex-end">
-            <button class="btn btn-secondary btn-sm">View Report</button>
-          </div>
+          <div class="wcard-body">Adidas holds 23% of the running-shoe conversation, up 4 points since the marathon campaign launched.</div>
         </div>
       </div>
       <div class="demo-code-bar">
-        <span class="demo-code-label">&lt;Card /&gt; · secondary sm</span>
-        <button class="copy-btn" onclick="copyCode(this, '&lt;CardFooter&gt;&lt;Button variant=&quot;secondary&quot; size=&quot;sm&quot;&gt;View Report&lt;/Button&gt;&lt;/CardFooter&gt;')">Copy</button>
+        <span class="demo-code-label">.wcard &gt; .wcard-head + .wcard-body</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;wcard&quot;&gt;&lt;div class=&quot;wcard-head&quot;&gt;&lt;div class=&quot;wcard-title&quot;&gt;Share of Voice&lt;/div&gt;&lt;div class=&quot;wcard-sub&quot;&gt;Adidas vs category · last 30 days&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;wcard-body&quot;&gt;…&lt;/div&gt;&lt;/div&gt;')">Copy</button>
       </div>
     </div>
 
-    <div class="section-title">Variante outline sm</div>
+    <div class="section-title">Footer with secondary actions</div>
     <div class="demo-block">
-      <div class="demo-canvas">
-        <div style="background:var(--card);border-radius:var(--radius-2xl);width:320px;overflow:hidden">
-          <div style="padding:20px 20px 0">
-            <div style="font-size:var(--fs-base);font-weight:600;color:var(--foreground);margin-bottom:4px">Brand Summary</div>
-            <div style="font-size:var(--fs-sm);color:var(--muted-foreground)">Week of June 9, 2026</div>
+      <div class="demo-canvas" style="max-width:400px">
+        <div class="wcard">
+          <div class="wcard-head">
+            <div class="wcard-title">Active ads</div>
+            <div class="wcard-sub">Meta Ad Library · Tesla</div>
           </div>
-          <div style="padding:16px 20px;font-size:var(--fs-sm);color:var(--foreground);line-height:1.5">Your brand mentions increased 14% this week. Sentiment is trending positive across all monitored channels.</div>
-          <div style="padding:0 20px 20px;display:flex;justify-content:flex-end">
-            <button class="btn btn-outline btn-sm">View Report</button>
+          <div class="wcard-body">12 creatives currently running. 3 launched this week, all video-first.</div>
+          <div class="wcard-footer">
+            <button class="btn btn-ghost btn-sm">Dismiss</button>
+            <button class="btn btn-secondary btn-sm">Add to watchlist</button>
           </div>
         </div>
       </div>
       <div class="demo-code-bar">
-        <span class="demo-code-label">&lt;Card /&gt; · outline sm</span>
-        <button class="copy-btn" onclick="copyCode(this, '&lt;CardFooter&gt;&lt;Button variant=&quot;outline&quot; size=&quot;sm&quot;&gt;View Report&lt;/Button&gt;&lt;/CardFooter&gt;')">Copy</button>
-      </div>
-    </div>
-
-    <div class="section-title">Variante ghost sm</div>
-    <div class="demo-block">
-      <div class="demo-canvas">
-        <div style="background:var(--card);border-radius:var(--radius-2xl);width:320px;overflow:hidden">
-          <div style="padding:20px 20px 0">
-            <div style="font-size:var(--fs-base);font-weight:600;color:var(--foreground);margin-bottom:4px">Brand Summary</div>
-            <div style="font-size:var(--fs-sm);color:var(--muted-foreground)">Week of June 9, 2026</div>
-          </div>
-          <div style="padding:16px 20px;font-size:var(--fs-sm);color:var(--foreground);line-height:1.5">Your brand mentions increased 14% this week. Sentiment is trending positive across all monitored channels.</div>
-          <div style="padding:0 20px 20px;display:flex;justify-content:flex-end">
-            <button class="btn btn-ghost btn-sm">View Report</button>
-          </div>
-        </div>
-      </div>
-      <div class="demo-code-bar">
-        <span class="demo-code-label">&lt;Card /&gt; · ghost sm</span>
-        <button class="copy-btn" onclick="copyCode(this, '&lt;CardFooter&gt;&lt;Button variant=&quot;ghost&quot; size=&quot;sm&quot;&gt;View Report&lt;/Button&gt;&lt;/CardFooter&gt;')">Copy</button>
+        <span class="demo-code-label">.wcard-footer · btn-ghost + btn-secondary</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;wcard-footer&quot;&gt;&lt;button class=&quot;btn btn-ghost btn-sm&quot;&gt;Dismiss&lt;/button&gt;&lt;button class=&quot;btn btn-secondary btn-sm&quot;&gt;Add to watchlist&lt;/button&gt;&lt;/div&gt;')">Copy</button>
       </div>
     </div>
   </div>
@@ -8572,6 +8550,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <button class="sb-item" onclick="brandApiGo('comp-comment-card',this)">Comment Card</button>
     <button class="sb-item" onclick="brandApiGo('comp-copy-link',this)">Copy Link</button>
     <button class="sb-item" onclick="brandApiGo('comp-depth-pill',this)">Depth Pill</button>
+    <button class="sb-item" onclick="brandApiGo('comp-drill-panel',this)">Drill Panel</button>
     <button class="sb-item" onclick="brandApiGo('comp-dual-bar-row',this)">Dual-Bar Row</button>
     <button class="sb-item" onclick="brandApiGo('comp-kpi-stat-card',this)">KPI Stat Card</button>
     <button class="sb-item" onclick="brandApiGo('comp-leaderboard-row',this)">Leaderboard Row</button>
@@ -8747,6 +8726,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   <style>
     .art-card { display: flex; gap: 14px; background: var(--card); border-radius: var(--radius-xl); padding: 14px 16px; text-decoration: none; color: inherit; cursor: pointer; transition: background 0.12s; }
     .art-card:hover { background: color-mix(in srgb, var(--foreground) 5%, var(--card)); }
+    .art-card.on-card { background: var(--secondary); }
+    .art-card.on-card:hover { background: color-mix(in srgb, var(--foreground) 5%, var(--secondary)); }
     .art-favicon { width: 32px; height: 32px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
     .art-favicon img { width: 20px; height: 20px; object-fit: contain; display: block; }
     .art-body { display: flex; flex-direction: column; gap: 5px; min-width: 0; flex: 1; }
@@ -8808,6 +8789,45 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         </div>
       </div>
       <div class="demo-code-bar"><span class="demo-code-label">&lt;a class="art-card"&gt; + .art-tag.neutral|competitor|negative</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Nested on a card — on-card</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div class="card" style="max-width:480px;width:100%">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <a class="art-card on-card">
+              <div class="art-favicon"><img src="https://www.google.com/s2/favicons?domain=bloomberg.com&sz=64" alt="Bloomberg"></div>
+              <div class="art-body">
+                <div class="art-meta">
+                  <span class="art-source">Bloomberg</span>
+                  <span class="art-dot">·</span>
+                  <span class="art-time">2d ago</span>
+                  <span class="art-tag neutral">Industry</span>
+                </div>
+                <div class="art-title">Functional beverage sales outpace legacy soda for the first quarter on record</div>
+                <div class="art-snippet">Category analysts point to Gen Z habits and gut-health messaging as the growth engine.</div>
+              </div>
+            </a>
+            <a class="art-card on-card">
+              <div class="art-favicon"><img src="https://www.google.com/s2/favicons?domain=adweek.com&sz=64" alt="Adweek"></div>
+              <div class="art-body">
+                <div class="art-meta">
+                  <span class="art-source">Adweek</span>
+                  <span class="art-dot">·</span>
+                  <span class="art-time">5d ago</span>
+                  <span class="art-tag competitor">Competitor</span>
+                </div>
+                <div class="art-title">Olipop signs multi-year NCAA partnership in a push for younger shoppers</div>
+                <div class="art-snippet">The deal spans 40 campuses and includes on-site sampling at March Madness venues.</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">&lt;a class="art-card on-card"&gt; — use when nested inside a container card</span></div>
     </div>
   </div>
 </div>
@@ -9145,6 +9165,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   <style>
     .comment-card { background: var(--card); border-radius: var(--radius-xl); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; cursor: pointer; transition: background 0.12s; }
     .comment-card:hover { background: color-mix(in srgb, var(--foreground) 6%, var(--card)); }
+    .comment-card.on-card { background: var(--secondary); }
+    .comment-card.on-card:hover { background: color-mix(in srgb, var(--foreground) 6%, var(--secondary)); }
     .comment-meta { display: flex; align-items: center; gap: 6px; }
     .comment-favicon { width: 14px; height: 14px; border-radius: 2px; flex: none; }
     .comment-author { font-size: var(--fs-sm); color: var(--muted-foreground); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -9209,6 +9231,48 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="demo-code-bar">
         <span class="demo-code-label">&lt;div class="comment-card" /&gt;</span>
         <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;comment-card&quot;&gt;\n  &lt;div class=&quot;comment-meta&quot;&gt;\n    &lt;img class=&quot;comment-favicon&quot; src=&quot;...&quot; alt=&quot;&quot;&gt;\n    &lt;span class=&quot;comment-author&quot;&gt;u/author · r/community&lt;/span&gt;\n    &lt;span class=&quot;comment-time&quot;&gt;2d ago&lt;/span&gt;\n    &lt;span class=&quot;comment-sentiment pos&quot;&gt;POS&lt;/span&gt;\n  &lt;/div&gt;\n  &lt;div class=&quot;comment-body&quot;&gt;Text...&lt;/div&gt;\n  &lt;div class=&quot;comment-foot&quot;&gt;\n    &lt;span class=&quot;comment-count&quot;&gt;142 comments&lt;/span&gt;\n    &lt;span class=&quot;comment-arrow&quot;&gt;→&lt;/span&gt;\n  &lt;/div&gt;\n&lt;/div&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Nested on a card — on-card</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div class="card" style="max-width:460px;width:100%">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div class="comment-card on-card">
+              <div class="comment-meta">
+                <img class="comment-favicon" src="https://www.google.com/s2/favicons?domain=reddit.com&sz=64" alt="Reddit">
+                <span class="comment-author">u/runitback · r/Sneakers</span>
+                <span class="comment-time">3h ago</span>
+                <span class="comment-sentiment pos">POS</span>
+              </div>
+              <div class="comment-body">Nike restocked the Pegasus line and the community is eating it up. Mentions doubled overnight.</div>
+              <div class="comment-foot">
+                <span class="comment-count">64 comments</span>
+                <span class="comment-arrow">→</span>
+              </div>
+            </div>
+            <div class="comment-card on-card">
+              <div class="comment-meta">
+                <img class="comment-favicon" src="https://www.google.com/s2/favicons?domain=twitter.com&sz=64" alt="X">
+                <span class="comment-author">@sodawatch · X (Twitter)</span>
+                <span class="comment-time">1d ago</span>
+                <span class="comment-sentiment mix">MIX</span>
+              </div>
+              <div class="comment-body">Poppi's new flavor drop is splitting the timeline — half love it, half say it tastes like the old formula.</div>
+              <div class="comment-foot">
+                <span class="comment-count">27 comments</span>
+                <span class="comment-arrow">→</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;div class="comment-card on-card" /&gt; — use when nested inside a container card</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;comment-card on-card&quot;&gt;…&lt;/div&gt;')">Copy</button>
       </div>
     </div>
   </div>
@@ -9346,6 +9410,123 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 <!-- Leaderboard Row -->
 </div>
 </div>
+</div>
+<div id="comp-drill-panel" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Drill Panel</div>
+    <div class="page-desc">Right slide-in detail panel for dashboard drill-downs. Overlay + 440px panel, eyebrow, title, close button. Closes via ✕, overlay click, or Esc. Body composes key-value rows, section labels, paragraphs, and quotes.</div>
+  </div>
+
+  <style>
+    .drill-overlay { position: fixed; inset: 0; z-index: 80; background: color-mix(in srgb, var(--background) 62%, transparent); opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+    .drill-overlay.open { opacity: 1; pointer-events: auto; }
+    .drill { position: fixed; top: 0; right: 0; bottom: 0; z-index: 85; width: 440px; max-width: 92vw; background: var(--card); box-shadow: -12px 0 40px color-mix(in srgb, var(--background) 70%, transparent); transform: translateX(102%); transition: transform 0.24s ease; display: flex; flex-direction: column; }
+    .drill.open { transform: translateX(0); }
+    .drill-head { display: flex; align-items: flex-start; gap: 12px; padding: 22px 24px 16px; border-bottom: 1px solid var(--border); }
+    .drill-head-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+    .drill-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-foreground); }
+    .drill-title { font-size: var(--fs-lg); font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; }
+    .drill-close { width: 26px; height: 26px; flex: none; border: none; background: transparent; border-radius: 50%; color: var(--muted-foreground); cursor: pointer; font-size: var(--fs-sm); display: flex; align-items: center; justify-content: center; transition: background 0.1s, color 0.1s; }
+    .drill-close:hover { background: var(--accent); color: var(--foreground); }
+    .drill-body { flex: 1; overflow-y: auto; padding: 18px 24px 32px; display: flex; flex-direction: column; gap: 14px; }
+    .drill-section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-foreground); margin-bottom: -6px; }
+    .drill-p { font-size: var(--fs-sm); color: var(--muted-foreground); line-height: 1.55; }
+    .drill-kv { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--border); font-size: var(--fs-sm); }
+    .drill-kv:last-child { border-bottom: none; }
+    .drill-kv-k { color: var(--muted-foreground); }
+    .drill-kv-v { font-weight: 500; font-variant-numeric: tabular-nums; text-align: right; }
+    .drill-quote { background: var(--secondary); border-radius: var(--radius-lg); padding: 12px 14px; font-size: var(--fs-sm); color: var(--foreground); line-height: 1.55; }
+    .drill-src-link { font-size: var(--fs-xs); color: var(--primary); cursor: pointer; text-decoration: none; }
+    /* Demo scaffolding only — docks the fixed panel inside the preview frame */
+    .drill-demo-frame { position: relative; overflow: hidden; width: 100%; height: 380px; border-radius: var(--radius-xl); background: var(--background); }
+    .drill-demo-frame .drill, .drill-demo-frame .drill-overlay { position: absolute; }
+    /* Demo scaffolding only — lift above the docs-site header (z 100); canonical stays 80/85 */
+    #drill-demo-overlay { z-index: 110; }
+    #drill-demo-panel { z-index: 115; }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Anatomy — docked preview</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="padding:0">
+        <div class="drill-demo-frame">
+          <div class="drill-overlay open"></div>
+          <div class="drill open" role="dialog" aria-modal="true">
+            <div class="drill-head">
+              <div class="drill-head-main">
+                <span class="drill-eyebrow">Input · 0–100</span>
+                <span class="drill-title">Reputation</span>
+              </div>
+              <button class="drill-close" aria-label="Close">✕</button>
+            </div>
+            <div class="drill-body">
+              <div class="drill-p">How the world feels about Nike: sentiment across social and news, scored 0–100.</div>
+              <div class="drill-section-label">Snapshot</div>
+              <div>
+                <div class="drill-kv"><span class="drill-kv-k">Score as of Jun 30</span><span class="drill-kv-v">78</span></div>
+                <div class="drill-kv"><span class="drill-kv-k">7-day average</span><span class="drill-kv-v">76.4</span></div>
+                <div class="drill-kv"><span class="drill-kv-k">30-day positive share</span><span class="drill-kv-v">64.2%</span></div>
+              </div>
+              <div class="drill-section-label">Top quote</div>
+              <div class="drill-quote">"The run club program is the best thing a sneaker brand has done for actual runners in years."</div>
+              <a class="drill-src-link">View source thread →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">.drill + .drill-overlay · head (eyebrow / title / ✕) · body (.drill-kv, .drill-quote, .drill-p)</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;drill-overlay&quot; id=&quot;drill-overlay&quot;&gt;&lt;/div&gt;\n&lt;div class=&quot;drill&quot; id=&quot;drill&quot; role=&quot;dialog&quot; aria-modal=&quot;true&quot;&gt;\n  &lt;div class=&quot;drill-head&quot;&gt;\n    &lt;div class=&quot;drill-head-main&quot;&gt;\n      &lt;span class=&quot;drill-eyebrow&quot;&gt;Input · 0–100&lt;/span&gt;\n      &lt;span class=&quot;drill-title&quot;&gt;Reputation&lt;/span&gt;\n    &lt;/div&gt;\n    &lt;button class=&quot;drill-close&quot; onclick=&quot;closeDrill()&quot; aria-label=&quot;Close&quot;&gt;✕&lt;/button&gt;\n  &lt;/div&gt;\n  &lt;div class=&quot;drill-body&quot;&gt;…&lt;/div&gt;\n&lt;/div&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Interactive — open, then close via ✕, overlay, or Esc</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <button class="btn" onclick="openDrillDemo()">Open drill panel</button>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">open: add .open to panel + overlay · close: ✕ click, overlay click, Esc</span>
+        <button class="copy-btn" onclick="copyCode(this, 'function openDrill(){\n  document.getElementById(&quot;drill-overlay&quot;).classList.add(&quot;open&quot;);\n  document.getElementById(&quot;drill&quot;).classList.add(&quot;open&quot;);\n}\nfunction closeDrill(){\n  document.getElementById(&quot;drill-overlay&quot;).classList.remove(&quot;open&quot;);\n  document.getElementById(&quot;drill&quot;).classList.remove(&quot;open&quot;);\n}\ndocument.getElementById(&quot;drill-overlay&quot;).addEventListener(&quot;click&quot;, closeDrill);\ndocument.addEventListener(&quot;keydown&quot;, function(e){ if(e.key === &quot;Escape&quot;) closeDrill(); });')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="drill-overlay" id="drill-demo-overlay"></div>
+  <div class="drill" id="drill-demo-panel" role="dialog" aria-modal="true">
+    <div class="drill-head">
+      <div class="drill-head-main">
+        <span class="drill-eyebrow">Metric · % share of voice</span>
+        <span class="drill-title">Presence</span>
+      </div>
+      <button class="drill-close" onclick="closeDrillDemo()" aria-label="Close">✕</button>
+    </div>
+    <div class="drill-body">
+      <div class="drill-p">Nike's share of the sneaker conversation, trailing 30 days.</div>
+      <div>
+        <div class="drill-kv"><span class="drill-kv-k">SOV · L30d</span><span class="drill-kv-v">34%</span></div>
+        <div class="drill-kv"><span class="drill-kv-k">Category leader</span><span class="drill-kv-v">Nike · 34%</span></div>
+        <div class="drill-kv"><span class="drill-kv-k">Runner-up</span><span class="drill-kv-v">Adidas · 27%</span></div>
+      </div>
+      <div class="drill-section-label">Reading</div>
+      <div class="drill-p">Share of voice held the top spot for 11 straight weeks; the gap to Adidas narrowed 3 points after their World Cup teaser.</div>
+    </div>
+  </div>
+
+  <script>
+    function openDrillDemo() {
+      document.getElementById('drill-demo-overlay').classList.add('open');
+      document.getElementById('drill-demo-panel').classList.add('open');
+    }
+    function closeDrillDemo() {
+      document.getElementById('drill-demo-overlay').classList.remove('open');
+      document.getElementById('drill-demo-panel').classList.remove('open');
+    }
+    document.getElementById('drill-demo-overlay').addEventListener('click', closeDrillDemo);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDrillDemo(); });
+  </script>
 </div>
 <div id="comp-dual-bar-row" class="waldo-page">
   <div class="page-header">
@@ -9938,6 +10119,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
   <style>
     .quote-card { background: var(--card); border-radius: var(--radius-xl); padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+    .quote-card.on-card { background: var(--secondary); }
     .quote-title { font-size: var(--fs-sm); font-weight: 600; color: var(--foreground); }
     .quote-text { font-size: var(--fs-sm); color: var(--muted-foreground); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5; }
     .quote-foot { display: flex; align-items: center; gap: 10px; }
@@ -10023,6 +10205,37 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         </div>
       </div>
       <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="quote-card love|pain" /&gt;</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Nested on a card — on-card</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div class="card" style="max-width:600px;width:100%">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div class="quote-card on-card love">
+              <div class="quote-title">Run club made me a regular</div>
+              <div class="quote-text">"joined for the free gear, stayed because the community actually shows up"</div>
+              <div class="quote-foot">
+                <span class="quote-freq-label">freq</span>
+                <span class="quote-freq-val">38%</span>
+                <div class="quote-bar-track"><div class="quote-bar-fill" style="width:38%"></div></div>
+              </div>
+            </div>
+            <div class="quote-card on-card pain">
+              <div class="quote-title">App checkout keeps failing</div>
+              <div class="quote-text">"third drop in a row where the cart dies at payment, done trying"</div>
+              <div class="quote-foot">
+                <span class="quote-freq-label">freq</span>
+                <span class="quote-freq-val">24%</span>
+                <div class="quote-bar-track"><div class="quote-bar-fill" style="width:24%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="quote-card on-card love|pain" /&gt; — use when nested inside a container card</span></div>
     </div>
   </div>
 </div>

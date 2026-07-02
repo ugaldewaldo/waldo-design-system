@@ -68,7 +68,7 @@ Charts — so a comp-only scan will miss the charts. This is the flat list of bo
 - Tooltip — `#comp-tooltip`
 - Wizard Dialog — `#comp-wizard-dialog`
 
-## Brand API components (20)
+## Brand API components (21)
 
 Dashboard-specific patterns for Brand API prototypes — not core atoms.
 
@@ -82,6 +82,7 @@ Dashboard-specific patterns for Brand API prototypes — not core atoms.
 - Comment Card — `#comp-comment-card`
 - Copy Link — `#comp-copy-link`
 - Depth Pill — `#comp-depth-pill`
+- Drill Panel — `#comp-drill-panel`
 - Dual-Bar Row — `#comp-dual-bar-row`
 - KPI Stat Card — `#comp-kpi-stat-card`
 - Leaderboard Row — `#comp-leaderboard-row`

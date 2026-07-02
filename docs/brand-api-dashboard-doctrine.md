@@ -238,6 +238,11 @@ Cards are distinguished by **background elevation** (`var(--card)` on `var(--bac
 DS scale. Card header is always vertical: title (medium weight) + subtitle (regular,
 muted), small gap — never a flex row.
 
+**Card shell and header type ship in `waldo-ds.css`** as `.wcard` / `.wcard-head` /
+`.wcard-title` (20 medium) / `.wcard-sub` (14 regular muted) / `.wcard-body` /
+`.wcard-footer` — use these classes and **never re-declare their sizes locally**
+(no local `.card-title { font-size: … }`). Canonical demo: showcase `#comp-card`.
+
 **Card surfaces stay neutral.** A card's background is `var(--card)`; hover on an
 interactive card may lighten it with a neutral mix (`color-mix(in srgb, var(--foreground)
 4–6%, var(--card))`) — but a card surface never takes an accent or status tint
