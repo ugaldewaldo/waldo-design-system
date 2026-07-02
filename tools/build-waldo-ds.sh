@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # Generates waldo-ds.css from its real sources — it is NO LONGER hand-edited.
 #
-#   waldo-ds.css  =  banner  +  globals.css (tokens, the source of truth)  +  vanilla styles
+#   waldo-ds.css  =  banner  +  vanilla component styles  (HSL overlay, NO tokens)
 #
-# Edit tokens in waldo-ui/src/globals.css; edit vanilla component/prototype CSS
-# in tools/waldo-ds.styles.css; then run this. Never edit waldo-ds.css by hand.
+# Token-free component-class layer; consumes the HSL theme (waldo-shadcn-theme.css)
+# via hsl(var(--token)). Consumers link the theme FIRST, then waldo-ds.css.
+# Edit component CSS in tools/waldo-ds.styles.css; then run this. Never hand-edit waldo-ds.css.
 #
 # Usage:  bash tools/build-waldo-ds.sh
 set -eu
@@ -13,7 +14,6 @@ cd "$ROOT"
 
 build() {
   cat tools/waldo-ds.banner.css \
-      waldo-ui/src/globals.css \
       tools/waldo-ds.styles.css
 }
 

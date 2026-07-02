@@ -141,19 +141,15 @@ a **verdict about state or action** (a KPI delta judged "bad", an alert, an
 irreversible action) is `var(--destructive)`. Data = warning · verdict = destructive.
 Apply this consistently — do not re-decide it per component.
 
-### Opacity patterns — always use rgba(var(--*-rgb), alpha)
+### Opacity patterns — always use hsl(var(--token) / alpha)
 
-`waldo-ds.css` defines token variables as hex strings, not HSL. `hsl(var(--primary) / 0.12)`
-is **invalid** and produces no output. Always use the `rgba()` form —
-`rgba(var(--primary-rgb), 0.12)`.
+The theme (`waldo-shadcn-theme.css`) defines tokens as **HSL triplets**, and `waldo-ds.css`
+consumes them with `hsl(var(--token))`. Solid = `hsl(var(--primary))`; with opacity use the
+native slash form — `hsl(var(--primary) / 0.12)`.
 
-**All `-rgb` companions ship in `waldo-ds.css`** (`--primary-rgb`, `--highlight-rgb`,
-`--destructive-rgb`, `--warning-rgb`, `--muted-fg-rgb`, `--accent-rgb`) — use them
-without declaring anything. **Never redeclare a `-rgb` companion in a prototype
-`:root`**: local copies go stale and silently ship a wrong color (a stale
-`--warning-rgb` shipped amber instead of the DS orange — this happened). If a companion
-you need is genuinely missing from `waldo-ds.css`, that's a change request to VALIDATOR,
-not a local declaration.
+**The old `rgba(var(--x-rgb), a)` convention is retired** — there are no `-rgb` companion
+tokens anymore. Never declare `-rgb` vars in a prototype `:root`. If a color token you need
+is missing from the theme, that's a change request to VALIDATOR, not a local declaration.
 
 ### Typography
 - UI text: **Inter** (default, no font-family declaration needed)
@@ -299,7 +295,7 @@ formula, which IS the rule (alpha 0.30 at 10% depth → 1.0 at 60%+, clamped; co
 verbatim, do not re-derive).
 A badge whose **opacity encodes magnitude** (e.g. discount depth) on a fixed
 `var(--highlight)` base: heavier value = more opaque text, fixed low-opacity background
-(`rgba(var(--highlight-rgb), 0.10)`).
+(`hsl(var(--highlight) / 0.10)`).
 - Opacity encoding is intentional — never flatten all pills to one opacity.
 - Use only for magnitude (discount depth or comparable), never for status.
 - Never use `--chart-*` colors here.
@@ -502,4 +498,4 @@ each view before asserting.
   `position: sticky` (the scroll override belongs on `html` only).
 - Do not build a chart/component from scratch when the DS has it — read its markup in
   `index.html` and match it.
-- Do not use `hsl(var(--token) / alpha)` — DS tokens are hex; use `rgba(var(--token-rgb), alpha)`.
+- Use `hsl(var(--token) / alpha)` for opacity — DS tokens are HSL. The old `rgba(var(--token-rgb), alpha)` form is retired.
