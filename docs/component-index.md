@@ -68,6 +68,31 @@ Charts — so a comp-only scan will miss the charts. This is the flat list of bo
 - Tooltip — `#comp-tooltip`
 - Wizard Dialog — `#comp-wizard-dialog`
 
+## Brand API components (20)
+
+Dashboard-specific patterns for Brand API prototypes — not core atoms.
+
+- Ad Copy Card — `#comp-ad-copy-card`
+- Alert List Row — `#comp-alert-list-row`
+- Article Card — `#comp-article-card`
+- Bar Track — `#comp-bar-track`
+- Benchmark Bar — `#comp-benchmark-bar`
+- Brand Column — `#comp-brand-column`
+- Code Block — `#comp-code-block`
+- Comment Card — `#comp-comment-card`
+- Copy Link — `#comp-copy-link`
+- Depth Pill — `#comp-depth-pill`
+- Dual-Bar Row — `#comp-dual-bar-row`
+- KPI Stat Card — `#comp-kpi-stat-card`
+- Leaderboard Row — `#comp-leaderboard-row`
+- Live Badge — `#comp-live-badge`
+- Media Tile — `#comp-media-tile`
+- Quote Card — `#comp-quote-card`
+- Recommendation Card — `#comp-recommendation-card`
+- Score Ring — `#comp-score-ring`
+- Theme Pill — `#comp-theme-pill`
+- Waldo Logo — `#comp-waldo-logo`
+
 ## Charts / Data-viz (16)
 
 - Area Charts — `#chart-page-area`
