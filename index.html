@@ -8805,12 +8805,12 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     .bar-track-label { font-size: var(--fs-xs); color: var(--muted-foreground); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .bar-track-val { font-size: var(--fs-xs); font-weight: 500; color: var(--foreground); font-variant-numeric: tabular-nums; white-space: nowrap; flex: none; }
     .bar-track-rail { height: 6px; border-radius: 999px; background: color-mix(in srgb, var(--foreground) 8%, transparent); overflow: hidden; }
-    .bar-track-fill { height: 100%; border-radius: 999px; background: var(--primary); }
+    .bar-track-fill { height: 100%; border-radius: 999px; background: linear-gradient(to right, color-mix(in srgb, var(--primary) 23%, transparent), rgb(var(--green-400))); }
 
     /* color variants */
-    .bar-track.muted  .bar-track-fill { background: color-mix(in srgb, var(--muted-foreground) 55%, transparent); }
-    .bar-track.warn   .bar-track-fill { background: var(--warning); }
-    .bar-track.bad    .bar-track-fill { background: var(--destructive); }
+    .bar-track.muted  .bar-track-fill { background: linear-gradient(to right, color-mix(in srgb, var(--muted-foreground) 20%, transparent), color-mix(in srgb, var(--muted-foreground) 55%, transparent)); }
+    .bar-track.warn   .bar-track-fill { background: linear-gradient(to right, color-mix(in srgb, var(--warning) 23%, transparent), var(--warning)); }
+    .bar-track.bad    .bar-track-fill { background: linear-gradient(to right, color-mix(in srgb, var(--destructive) 23%, transparent), var(--destructive)); }
 
     /* list wrapper */
     .bar-track-list { background: var(--card); border-radius: var(--radius-xl); padding: 14px 16px; display: flex; flex-direction: column; }
@@ -10371,7 +10371,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     }
     .ds-hbar-inner { flex: 1; display: flex; align-items: center; gap: 12px; }
     .ds-hbar-track { flex: 1; height: 6px; background: var(--muted); border-radius: 12px; overflow: hidden; }
-    .ds-hbar-fill  { height: 100%; border-radius: 15px; }
+    .ds-hbar-fill  { height: 100%; border-radius: 15px; background: linear-gradient(to right, color-mix(in srgb, var(--primary) 23%, transparent), rgb(var(--green-400))); }
     .ds-hbar-val {
       width: 46px; flex: none; text-align: right;
       font-size: var(--fs-xs); font-weight: 400; line-height: 16px; letter-spacing: -0.24px;
@@ -10418,7 +10418,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         c.innerHTML += '<div class="ds-hbar-row stacked">' +
           '<div class="ds-hbar-name">' + d.label + '</div>' +
           '<div class="ds-hbar-inner">' +
-            '<div class="ds-hbar-track"><div class="ds-hbar-fill" style="width:' + pct + '%;background:linear-gradient(to right,color-mix(in srgb,var(--primary) 23%,transparent),rgb(var(--green-400)));"></div></div>' +
+            '<div class="ds-hbar-track"><div class="ds-hbar-fill" style="width:' + pct + '%"></div></div>' +
             '<div class="ds-hbar-val">' + d.val + '%</div>' +
           '</div>' +
         '</div>';
@@ -10455,7 +10455,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         c2.innerHTML += '<div class="ds-hbar-row">' +
           '<div class="ds-hbar-name">' + d.label + '</div>' +
           '<div class="ds-hbar-inner">' +
-            '<div class="ds-hbar-track"><div class="ds-hbar-fill" style="width:' + pct + '%;background:linear-gradient(to right,color-mix(in srgb,var(--primary) 23%,transparent),rgb(var(--green-400)));"></div></div>' +
+            '<div class="ds-hbar-track"><div class="ds-hbar-fill" style="width:' + pct + '%"></div></div>' +
             '<div class="ds-hbar-val">' + d.val + '%</div>' +
           '</div>' +
         '</div>';

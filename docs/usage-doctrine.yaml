@@ -1196,8 +1196,8 @@ components:
     notes: |
       Structure: .bar-track-label (left, fs-xs muted-foreground) + .bar-track-val (right, fs-xs foreground 500) + .bar-track-rail.
       Rail: height 6px, radius 999px, background color-mix(var(--foreground) 8%).
-      Fill width set via inline style (width: N%). Default fill = var(--primary).
-      Variants: .muted → muted fill, .warn → var(--warning), .bad → var(--destructive).
+      Fill width set via inline style (width: N%). Default fill = gradient (--primary 23% → green-400), same recipe as HBar so both bar components read identically side by side.
+      Variants (all gradient ramps): .muted → muted-foreground 20% → 55%, .warn → --warning 23% → solid, .bad → --destructive 23% → solid.
       List wrapper: .bar-track-list (var(--card) bg, radius-xl, padding 14px 16px).
       Use .bar-track-list-title for the list heading (fs-xs, weight 600).
       Bar widths should be relative to the max value in the list (max = 100%).
