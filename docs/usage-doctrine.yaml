@@ -1279,7 +1279,7 @@ components:
       Two sentiment variants: love = var(--primary), pain = var(--destructive).
       Background: var(--card). Border-radius: var(--radius-xl). Same card shell as Comment Card.
       Surface: on the page background → default; nested inside a container card → add .on-card
-      (background var(--secondary) — the zinc nesting step; --card on --card is invisible).
+      (background var(--muted) — one zinc step up; --card on --card is invisible).
       Sentiment label: --fs-xs, uppercase, color matches variant.
       Title: --fs-sm, var(--foreground), font-weight 500.
       Quote: --fs-sm, var(--muted-foreground), italic, 2-line clamp.
@@ -1320,7 +1320,7 @@ components:
       Background: var(--card). Border-radius: var(--radius-xl).
       Sentiment chip classes: .comment-sentiment.pos / .neu / .neg / .mix — same palette as Theme Pill.
       Surface: on the page background → default; nested inside a container card → add .on-card
-      (background var(--secondary) — the zinc nesting step; --card on --card is invisible).
+      (background var(--muted) — one zinc step up; --card on --card is invisible).
       Platform favicon: 14×14px img. Author + time in var(--muted-foreground) at --fs-xs.
       Text body: var(--foreground) at --fs-sm, 2-line clamp.
       Footer: comment count + chevron arrow, both muted.
@@ -1478,7 +1478,7 @@ components:
       Horizontal layout: publication favicon (32×32, var(--radius-md)) left + content column right.
       Background: var(--card). Border-radius: var(--radius-xl). Padding: 14px 16px. Gap: 14px.
       Surface: on the page background → default; nested inside a container card → add .on-card
-      (background var(--secondary) — the zinc nesting step; --card on --card is invisible).
+      (background var(--muted) — one zinc step up; --card on --card is invisible).
       Hover: color-mix(in srgb, var(--foreground) 5%, var(--card)). Transition: background 0.12s.
       Meta row: source (--fs-xs, 600, foreground) · separator dot · time (--fs-xs, muted) · category tag (right).
       Title: --fs-sm, font-weight 600, 2-line clamp.
