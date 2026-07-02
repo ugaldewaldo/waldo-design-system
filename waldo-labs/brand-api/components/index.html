@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brand API Components — Canonical Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  /*
+    CANONICAL SOURCE for the Brand API custom components that do NOT exist in the
+    core DS showcase (index.html) or component-index.md:
+
+      1. KPI Stat Card   (.kpi-grid / .kpi / .k-*)
+      2. Leaderboard Row (.lb / .lb-*)
+      3. Depth Pill      (.depth-pill + depthAlpha() encoding rule)
+
+    Prototypes copy these classes verbatim from here. The doctrine
+    (docs/brand-api-dashboard-doctrine.md) states the rules and points here for the
+    implementation. Everything else (HBar, Proportion Bar, Trend Line, Sparkline,
+    Column Cards…) lives in the DS showcase under #chart-page-* — NOT here.
+
+    If one of these stabilizes, promote it to the core DS with a Linear card and
+    delete it from this file.
+  */
+
+  /* Local rgb helpers the DS does not ship — channels mirror token-catalog.yaml */
+  :root { --destructive-rgb: 222,58,40; --warning-rgb: 201,78,34; }
+
+  /* DS conflict overrides (see doctrine — load-bearing, verbatim) */
+  html, body { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { display: block !important; max-width: none !important; margin: 0 !important;
+         background: var(--background); color: var(--foreground);
+         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; }
+  svg { flex: none; min-height: fit-content; }
+  * { box-sizing: border-box; }
+
+  /* ════════════════════════════════════════════════════════════════════
+     1. KPI STAT CARD — canonical
+     Delta color is SEMANTIC per dashboard (see note in the demo below):
+       .k-delta.good → var(--primary)      .k-delta.bad → var(--destructive)
+     Map up/down to good/bad per dashboard:
+       Brand Health: up=good, down=bad.  Promo Radar: up=bad, down=good.
+     ════════════════════════════════════════════════════════════════════ */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .kpi { background: var(--card); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 8px; }
+  /* No border — elevation only. Radius 16px = DS scale (original doc said 14px, off-scale). */
+  .kpi-top { display: flex; align-items: flex-start; justify-content: space-between; }
+  .k-label { font-size: var(--fs-sm); font-weight: 500; line-height: 20px; letter-spacing: -0.28px; color: var(--muted-foreground); }
+  .k-delta { font-size: 11px; font-weight: 600; padding: 2px 6px; border-radius: 6px; white-space: nowrap; }
+  .k-delta.good { color: var(--primary); background: rgba(var(--primary-rgb), 0.12); }
+  .k-delta.bad  { color: var(--destructive); background: rgba(var(--destructive-rgb), 0.12); }
+  .k-delta.flat { color: var(--muted-foreground); background: var(--secondary); }
+  .k-value { font-size: 30px; font-weight: 600; line-height: 36px; letter-spacing: -0.6px; font-variant-numeric: tabular-nums; }
+  .k-sub { font-size: 12px; font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: var(--muted-foreground); }
+
+  /* ════════════════════════════════════════════════════════════════════
+     2. LEADERBOARD ROW — canonical
+     Rank muted/structural · name dominant · trailing pill right-aligned ·
+     last row no divider. Type tags = DS .badge.badge-secondary.
+     ════════════════════════════════════════════════════════════════════ */
+  .lb { display: flex; flex-direction: column; }
+  .lb-row { display: flex; gap: 14px; align-items: flex-start; padding: 12px 8px; border-radius: 8px; cursor: pointer; transition: background 0.12s; }
+  .lb-row:hover { background: var(--secondary); }
+  .lb-rank { font-size: 18px; font-weight: 600; line-height: 28px; letter-spacing: -0.36px; color: var(--foreground); text-align: center; width: 24px; flex: none; padding: 10px; }
+  .lb-main { flex: 1; min-width: 0; border-bottom: 1px solid var(--border); padding-bottom: 12px; display: flex; flex-direction: column; gap: 3px; }
+  .lb-row:last-child .lb-main { border-bottom: none; }
+  .lb-top { display: flex; gap: 10px; align-items: center; }
+  .lb-brand { font-size: 14px; font-weight: 600; line-height: 20px; letter-spacing: -0.28px; flex: 1; }
+  .lb-meta { font-size: 12px; font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: var(--muted-foreground); display: flex; gap: 8px; }
+  .lb-category { font-size: 11px; letter-spacing: -0.22px; color: var(--muted-foreground); }
+
+  /* ════════════════════════════════════════════════════════════════════
+     3. DEPTH PILL — canonical
+     Opacity ENCODES magnitude on a fixed var(--highlight) base — see
+     depthAlpha() below; that formula IS the encoding rule, not incidental JS.
+     Background fixed at rgba(var(--highlight-rgb), 0.10); only text alpha varies.
+     ════════════════════════════════════════════════════════════════════ */
+  .depth-pill { font-size: 13px; font-weight: 700; padding: 4px 10px; border-radius: 8px; white-space: nowrap; }
+
+  /* ── reference-page chrome (not part of the components) ── */
+  .ref-page { max-width: 1000px; margin: 0 auto; padding: 48px 24px 96px; }
+  .ref-title { font-size: 28px; font-weight: 600; letter-spacing: -0.8px; }
+  .ref-lede { font-size: 14px; color: var(--muted-foreground); line-height: 1.6; margin-top: 8px; max-width: 720px; }
+  .ref-section { margin-top: 44px; }
+  .ref-h { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted-foreground); border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 20px; }
+  .ref-note { font-size: 12.5px; color: var(--muted-foreground); line-height: 1.6; margin-top: 14px; }
+  .ref-note b { color: var(--foreground); font-weight: 600; }
+  .ref-demo { background: var(--card); border-radius: 16px; padding: 24px; }
+  .ref-demo.on-bg { background: transparent; padding: 0; }
+</style>
+</head>
+<body>
+<div class="ref-page">
+
+  <h1 class="ref-title">Brand API components — canonical reference</h1>
+  <p class="ref-lede">The three Brand-API custom components with no home in the core DS showcase. Prototypes copy these classes verbatim. Rules live in <code>docs/brand-api-dashboard-doctrine.md</code>; the implementation lives here. Everything else (HBar, Proportion Bar, Trend Line, Sparkline…) is in the DS showcase under <code>#chart-page-*</code>.</p>
+
+  <!-- ═══ 1. KPI STAT CARD ═══ -->
+  <div class="ref-section">
+    <div class="ref-h">1 · KPI Stat Card</div>
+    <div class="ref-demo on-bg">
+      <div class="kpi-grid">
+        <div class="kpi">
+          <div class="kpi-top"><div class="k-label">Net sentiment</div><span class="k-delta good">▲ +8pp</span></div>
+          <div class="k-value">68%</div>
+          <div class="k-sub">Brand Health: up = good = primary</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-top"><div class="k-label">Active creatives</div><span class="k-delta bad">▼ −4</span></div>
+          <div class="k-value">51</div>
+          <div class="k-sub">Brand Health: down = bad = destructive</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-top"><div class="k-label">Category promo share</div><span class="k-delta bad">▲ +6pp</span></div>
+          <div class="k-value">38%</div>
+          <div class="k-sub">Promo Radar: up = pressure = destructive</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-top"><div class="k-label">Median depth</div><span class="k-delta flat">± 0</span></div>
+          <div class="k-value">25%</div>
+          <div class="k-sub">No movement = flat = muted</div>
+        </div>
+      </div>
+    </div>
+    <p class="ref-note"><b>Delta classes are semantic (<code>.good</code>/<code>.bad</code>/<code>.flat</code>), not directional.</b> The arrow glyph carries direction; the class carries meaning. Map per dashboard: Brand Health up→good/down→bad; Promo Radar up→bad/down→good. Max 4 per row, collapse to 2 on mobile. Delta always top-right — never inline below the value. Time-range toggles use DS <code>comp-segmented</code>.</p>
+  </div>
+
+  <!-- ═══ 2. LEADERBOARD ROW ═══ -->
+  <div class="ref-section">
+    <div class="ref-h">2 · Leaderboard Row</div>
+    <div class="ref-demo">
+      <div class="lb" id="lb-demo">
+        <div class="lb-row">
+          <div class="lb-rank">1</div>
+          <div class="lb-main">
+            <div class="lb-top"><div class="lb-brand">Zara</div></div>
+            <div class="lb-meta"><span class="badge badge-secondary">Sitewide sale</span><span>Up to 50% off</span></div>
+          </div>
+          <span class="depth-pill" data-depth="50">50%</span>
+        </div>
+        <div class="lb-row">
+          <div class="lb-rank">2</div>
+          <div class="lb-main">
+            <div class="lb-top"><div class="lb-brand">H&amp;M</div></div>
+            <div class="lb-meta"><span class="badge badge-secondary">Member promo</span><span>Extra 25% off</span></div>
+          </div>
+          <span class="depth-pill" data-depth="25">25%</span>
+        </div>
+        <div class="lb-row">
+          <div class="lb-rank">3</div>
+          <div class="lb-main">
+            <div class="lb-top"><div class="lb-brand">Uniqlo</div></div>
+            <div class="lb-meta"><span class="badge badge-secondary">Limited offer</span><span>Select styles 10% off</span></div>
+          </div>
+          <span class="depth-pill" data-depth="10">10%</span>
+        </div>
+      </div>
+    </div>
+    <p class="ref-note">Rank is muted and structural — the brand name dominates. Trailing pill right-aligned. Last row has no divider. Type tags are the DS <code>.badge.badge-secondary</code>.</p>
+  </div>
+
+  <!-- ═══ 3. DEPTH PILL ═══ -->
+  <div class="ref-section">
+    <div class="ref-h">3 · Depth Pill + depthAlpha() encoding rule</div>
+    <div class="ref-demo" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+      <span class="depth-pill" data-depth="10">10%</span>
+      <span class="depth-pill" data-depth="20">20%</span>
+      <span class="depth-pill" data-depth="35">35%</span>
+      <span class="depth-pill" data-depth="50">50%</span>
+      <span class="depth-pill" data-depth="70">70%</span>
+    </div>
+    <p class="ref-note"><b>The formula below IS the encoding rule</b> — alpha 0.30 at 10% depth → 1.0 at 60%+, clamped. Background fixed at <code>rgba(var(--highlight-rgb), 0.10)</code>; only the text alpha varies. A 70% pill must look heavier than a 20% pill — never flatten. Magnitude only, never status; never <code>--chart-*</code> here.</p>
+  </div>
+
+</div>
+
+<script>
+/* ── Depth Pill encoding rule — CANONICAL ────────────────────────────────
+   alpha = 0.30 + (depth / 60) × 0.70, clamped to [0.30, 1.0].
+   Copy these two functions verbatim into prototypes that render depth pills. */
+function depthAlpha(d) { return Math.max(0.30, Math.min(1, 0.30 + (d / 60) * 0.70)); }
+function depthPillStyle(d) {
+  return `color:rgba(var(--highlight-rgb),${depthAlpha(d).toFixed(2)});background:rgba(var(--highlight-rgb),0.10);`;
+}
+
+// apply to every pill on this reference page
+document.querySelectorAll('.depth-pill[data-depth]').forEach(el => {
+  el.style.cssText += depthPillStyle(parseInt(el.dataset.depth, 10));
+});
+</script>
+</body>
+</html>

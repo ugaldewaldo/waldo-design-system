@@ -4,6 +4,19 @@ Design rules for Brand API prototypes (Promo Radar, Prospector, Moodtape, Poppi 
 
 **Read this before generating any dashboard. It overrides general intuition but does NOT override `CLAUDE.md` — that file is always the floor.**
 
+> **This doctrine holds principles and rules, never implementation.** It does not
+> restate component CSS, pixel values, hex codes, or JS. Those drift from the real DS
+> and cause bugs (a hardcoded height here once contradicted the thin-line rule and
+> shipped a chunky bar). The authoritative implementation always lives in the source:
+> - **Tokens / hex / RGB channels →** `docs/token-catalog.yaml` + `waldo-ds.css`
+> - **Component & chart CSS/markup →** `index.html` under `#comp-*` / `#chart-page-*`
+> - **Brand-API orphans (KPI Stat Card, Leaderboard Row, Depth Pill) →**
+>   `waldo-labs/brand-api/components/index.html`
+> - **Radii, type scale, spacing →** the DS scale in `waldo-ds.css`
+>
+> When this doctrine and the source disagree, **the source wins** — and the doctrine is
+> the thing to fix.
+
 ---
 
 ## What these prototypes are
@@ -12,72 +25,109 @@ Vanilla HTML single-file dashboards. No framework, no build step. They link to `
 
 ---
 
+## Component discovery & reuse
+
+**Before building ANY visual element, check `docs/component-index.md`** — the generated
+flat list of every consumable in the DS. It has TWO sections — Components and Charts —
+and you must scan both: data-viz (donuts, area/line/bar charts, horizontal bars,
+sparklines, proportion bars, segmented bars) lives in the Charts section, and a
+components-only glance leads to rebuilding viz that already ships.
+
+Resolution order for every element: **core DS component → DS chart → doctrine custom
+component → only then a new component.**
+
+The Brand-API custom components below (KPI card, HBar row, leaderboard row, depth pill,
+trend line / sparkline, proportion bar, theme pill) cover the dashboard-specific pieces
+that the core DS does not. Where a DS or chart equivalent exists, **use it and read its
+markup from `index.html` — do not re-derive it here.**
+
+### When a component genuinely doesn't exist
+
+If — after checking both index sections and this doctrine — an element truly has no
+match, you may build it, but **using the DS itself as the reference, never from
+scratch out of your own head**:
+
+1. Open the closest sibling components in the DS showcase (`index.html` under
+   `#comp-*` / `#chart-page-*`) and study how they are built — class naming, markup
+   structure, token usage, density, type scale, the opacity convention.
+2. Write the new component so it looks like it always belonged to that family.
+   DS tokens only, on the DS radius / type / spacing scale.
+3. **Report it as a DS gap** when you finish the prototype — list every component you
+   had to create. Recurring gaps are candidates for promotion to the core DS or to
+   this doctrine (file a Linear card).
+
+---
+
 ## Token rules
 
 ### Surfaces
 Use DS semantic tokens only — never the prototype legacy vars.
 
-| Use this | Not this |
-|----------|----------|
-| `var(--background)` | `--bg: #171819` |
-| `var(--card)` | `--surface: #202123` |
-| `var(--secondary)` | `--surface-2: #27282b` |
-| `var(--accent)` | `--surface-3: #323539` |
-| `var(--border)` | `--border: rgba(...)` |
+| Use this | Never this (legacy prototype vars) |
+|----------|------------------------------------|
+| `var(--background)` | `--bg` |
+| `var(--card)` | `--surface` |
+| `var(--secondary)` | `--surface-2` |
+| `var(--accent)` | `--surface-3` |
+| `var(--border)` | ad-hoc `--border` |
 | `var(--muted-foreground)` | `--text-2`, `--text-3` |
-| `var(--foreground)` | `--text: #d2d3d3` |
+| `var(--foreground)` | `--text` |
+
+Exact hex/channel values for every token live in `docs/token-catalog.yaml` and
+`waldo-ds.css` — check there, never memorize or hardcode a value.
 
 ### Data visualization — chart palette only
-`--chart-1` through `--chart-12` are the **only** valid colors for bars, donut segments, and line series. Never hardcode hex in data-viz. Never use brand colors as chart colors.
+`--chart-1` through `--chart-12` are the **only** valid colors for bars, donut segments,
+and line series. Never hardcode a hex in data-viz. Never use brand colors as chart
+colors. The palette's values and names live in `token-catalog.yaml` — reference the
+token, not the hex.
 
-| Token | Color | Name |
-|-------|-------|------|
-| `--chart-1` | #2DD4C4 | Cyan Teal |
-| `--chart-2` | #8899AA | Slate |
-| `--chart-3` | #F5A080 | Salmon |
-| `--chart-4` | #F07080 | Rose |
-| `--chart-5` | #9B88E0 | Lavender |
-| `--chart-6` | #5599EE | Periwinkle |
-| `--chart-7` | #F0A82A | Amber |
-| `--chart-8` | #1AB8A8 | Teal |
-| `--chart-9` | #99CC44 | Lime |
-| `--chart-10` | #66BB80 | Sage |
-| `--chart-11` | #BB77CC | Orchid |
-| `--chart-12` | #E06699 | Hot Rose |
+### Data-viz reads light — weight rules
+
+Charts and gauges must read delicate, never heavy:
+- **Thin strokes and thin bars.** Trend/spark lines are hairline; proportion bars,
+  hbar tracks, ring arcs are thin relative to their length/diameter. When a value isn't
+  pinned by the canonical component, err thinner — a thick data bar reads "burdo."
+- Numbers and labels on charts are **regular weight (400)** — never bold. Large display
+  numbers (KPI values, ring scores) may go up to 600, never beyond.
+- Gridlines are subtle — a low-opacity foreground tint, never a distracting line.
+- All numeric values use **tabular numerals** (`font-variant-numeric: tabular-nums`).
+
+Thick + bold data ink is the single most common way a dashboard reads "burdo." When in
+doubt, go lighter.
+
+### Multi-brand color semantics
+
+When a chart shows "you" (the client brand) against competitors and a category
+reference, the encoding is fixed:
+- **"You" / the client brand** → `var(--primary)` — the only saturated series
+- **Competitors** → neutral grays (muted foreground ramp) — never chart-palette hues
+- **Category median / benchmark** → a **dashed** neutral reference line, never solid
+- Positive states / good trends → `var(--primary)`; negative trends / risk →
+  `var(--warning)` (never `--destructive` for a metric — see Proportion Bar rules)
+
+Only switch competitors to `--chart-N` hues when a legend requires distinguishing many
+same-importance series — and then "you" still keeps `var(--primary)`.
 
 ### Accent tokens for status/emphasis
 
 | Semantic | Token | Use |
 |----------|-------|-----|
-| Brand teal | `var(--primary)` / `--accent-brand: #32a9a9` | Focus rings, active states, links |
-| Highlight | `var(--highlight)` / `#f7d371` | Depth pill, decorative emphasis — never urgency |
-| Destructive | `var(--destructive)` / `#de3a28` | Live/active promo badges, alert states |
-
-`--highlight-rgb: 247,211,113` — use for `rgba(var(--highlight-rgb), alpha)` when you need opacity-based encoding.
+| Brand teal | `var(--primary)` | Focus rings, active states, links, positive metrics |
+| Highlight | `var(--highlight)` | Depth pill, decorative emphasis, "mixed" — never urgency |
+| Destructive | `var(--destructive)` | Irreversible actions, live/alert states — never a metric |
+| Warning | `var(--warning)` | Negative sentiment / negative trends / risk |
 
 ### Opacity patterns — always use rgba(var(--*-rgb), alpha)
 
-`waldo-ds.css` defines token variables as hex strings, not HSL. `hsl(var(--primary) / 0.12)` is **invalid** and produces no output. Always use the `rgba()` form:
+`waldo-ds.css` defines token variables as hex strings, not HSL. `hsl(var(--primary) / 0.12)`
+is **invalid** and produces no output. Always use the `rgba()` form —
+`rgba(var(--primary-rgb), 0.12)`.
 
-```css
-/* WRONG — --primary is hex, not hsl() */
-background: hsl(var(--primary) / 0.12);
-
-/* CORRECT */
-background: rgba(var(--primary-rgb), 0.12);
-```
-
-**Pre-defined RGB helpers in `waldo-ds.css`** (use without declaring):
-- `--primary-rgb: 50,169,169`
-- `--highlight-rgb: 247,211,113`
-
-**Must declare in prototype `:root`** (not in DS):
-```css
-:root {
-  --destructive-rgb: 222,58,40;
-  --warning-rgb: 217,119,6;
-}
-```
+- `--primary-rgb` and `--highlight-rgb` ship in `waldo-ds.css` — use without declaring.
+- `--destructive-rgb` and `--warning-rgb` are **not** shipped — declare them in the
+  prototype `:root`, with **channels that match the DS token** (copy the current values
+  from `token-catalog.yaml`; do not invent channels — a wrong channel ships a wrong color).
 
 ### Typography
 - UI text: **Inter** (default, no font-family declaration needed)
@@ -88,455 +138,216 @@ background: rgba(var(--primary-rgb), 0.12);
 
 ## Layout
 
-> **Reconstruction vs. new dashboard:** When rebuilding an existing prototype, preserve the source layout (rings, hero, custom tabs, etc.) — use DS tokens and components for every element but keep the visual structure. The grid-of-cards shell below is the default only for **new dashboards** built from scratch. In both cases, tokens, components, and rules below apply without exception.
+> **Reconstruction vs. new dashboard:** When rebuilding an existing prototype, preserve
+> the source layout (rings, hero, custom tabs, etc.) — use DS tokens and components for
+> every element but keep the visual structure. The grid-of-cards shell below is the
+> default only for **new dashboards** built from scratch. In both cases, tokens,
+> components, and rules apply without exception.
 
 ### Topbar
 
-The topbar always uses the **Waldo SVG logo** — never text, never a placeholder square. It is available in the DS assets. Do not substitute with a colored box or the word "Waldo".
+The topbar always uses the **Waldo SVG logo** — never text, never a placeholder square,
+never the word "Waldo" in a box. The wordmark path:
 
 ```html
-<header class="topbar">
-  <div class="topbar-inner">
-    <div class="topbar-brand">
-      <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" style="color:var(--foreground)" xmlns="http://www.w3.org/2000/svg"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
-      <!-- NO product name, NO subtitle — only the SVG wordmark above -->
-    </div>
-    <nav class="topbar-nav">
-      <a class="nav-link active">Dashboard</a>
-      <a class="nav-link">Alerts</a>
-      <a class="nav-link">API coverage</a>
-    </nav>
-    <span class="topbar-powered">Powered by Waldo API</span>
-  </div>
-</header>
+<svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" style="color:var(--foreground)" xmlns="http://www.w3.org/2000/svg"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
 ```
 
-```css
-.topbar { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
-.topbar-inner { max-width: 1440px; margin: 0 auto; padding: 0 32px; height: 73px; display: flex; align-items: center; gap: 32px; }
-.topbar-brand { display: flex; align-items: center; gap: 12px; }
-.topbar-product { font-size: 16px; font-weight: 600; letter-spacing: -0.32px; }
-.topbar-sub { font-size: 11px; font-weight: 500; letter-spacing: 0.06em; color: var(--muted-foreground); text-transform: uppercase; }
-.topbar-nav { display: flex; gap: 24px; margin-left: auto; }
-.nav-link { font-size: 14px; color: var(--muted-foreground); text-decoration: none; cursor: pointer; }
-.nav-link.active { color: var(--foreground); font-weight: 500; }
-.topbar-powered { font-size: 13px; color: var(--muted-foreground); white-space: nowrap; }
-```
+Layout: sticky, blurred, bottom border in `var(--border)`. Left = logo only (no product
+name, no subtitle). Right = a small nav (Dashboard / Alerts / API coverage) and a muted
+"Powered by Waldo API". Match the density of the DS topbar in `index.html`.
 
 ### Page header (below topbar, above grid)
 
-Each dashboard has a full-width page header with the product name and, when the design calls for it, a one-line descriptor. It sits inside `.wrap`, above the card grid. The right side may include contextual actions (search, alerts, filters) — include only what the specific dashboard design requires, not a fixed set.
+A full-width header inside `.wrap`, above the card grid: product name (large, tight
+tracking) + an optional one-line descriptor (muted). The right side may include
+contextual actions **only when the specific design requires them** — never a fixed set.
+The page title matches the prototype name; the subtitle is a short product descriptor.
 
-```html
-<div class="page-header">
-  <div class="ph-left">
-    <h1 class="ph-title">Dashboard name</h1>
-    <p class="ph-sub">One-line descriptor</p>  <!-- omit if the design doesn't call for it -->
-  </div>
-  <!-- right side: only add actions the specific design requires — do not invent generic ones -->
-</div>
-```
-
-```css
-.page-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 56px 0 40px; border-bottom: none !important; margin-bottom: 0 !important; } /* waldo-ds.css injects border-bottom on .page-header — always kill it */
-.ph-left { display: flex; flex-direction: column; gap: 13px; }
-.ph-title { font-size: 40px; font-weight: 600; line-height: 48px; letter-spacing: -1.6px; color: var(--foreground); }
-.ph-sub { font-size: 16px; font-weight: 400; line-height: 24px; letter-spacing: -0.32px; color: var(--muted-foreground); }
-```
-
-The page title matches the prototype name (e.g. "Promo Radar", "Prospector"). The subtitle is a short product descriptor (e.g. "Discount intelligence", "Brand prospecting").
-
----
+⚠️ `waldo-ds.css` injects a `border-bottom` on `.page-header` — always kill it with
+`border-bottom: none !important`.
 
 ### Page shell
 
-**Required DS conflict overrides** — put these at the top of every prototype's `<style>` block:
+**Required DS conflict overrides** — these are load-bearing fixes for `waldo-ds.css`
+quirks, put them at the top of every prototype's `<style>` block verbatim:
 ```css
 /* waldo-ds.css sets html,body{height:100%;overflow:hidden} — breaks scroll */
 html, body { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
-/* waldo-ds.css sets body{display:flex!important;flex-direction:column!important} — breaks card widths */
+/* waldo-ds.css sets body{display:flex!important} — collapses card widths */
 body { display: block !important; }
 /* waldo-ds.css sets svg{display:block} — collapses ring/icon SVGs inside flex containers */
 svg { flex: none; min-height: fit-content; }
 ```
 
-```css
-/* content wrap — 1184px content area, centered */
-.wrap { max-width: 1184px; margin: 0 auto; padding: 32px 0 80px; }
-
-/* dashboard grid — rows stack vertically, gap 24px */
-.dashboard { display: flex; flex-direction: column; gap: 24px; }
-
-/* each row — equal-width columns, gap 16px, same height */
-.dash-row { display: flex; gap: 16px; align-items: stretch; }
-.dash-col { flex: 1; min-width: 0; }
-```
+Beyond the overrides, known `waldo-ds.css` collisions to guard against (all bit real
+prototypes): a bare `section { display:none }`, `.input { height:40px }`, and a border
+injected via `[class*=card]`. If a generic class name goes wrong, suspect a DS
+collision first.
 
 **Grid rules:**
-- All columns in a row are **equal width** (`flex: 1`). Never use proportional columns (no 1.35fr + 1fr).
-- All cards in the same row are the **same height** — they stretch to match each other (`align-items: stretch`).
-- If a card's content is taller than the row height → **scroll inside the card** (`overflow-y: auto`), never push the row taller. The card must have `height: 100%` and the scrollable inner container must have `flex: 1; min-height: 0; overflow-y: auto`.
-- **Only lists and HBars can scroll** — SVG charts have fixed height and never scroll.
-- Gap between rows: **24px**. Gap between columns: **16px**.
-- The `.wrap` padding is `32px 0 80px` — zero horizontal padding. The 1184px max-width centers the content. Never add horizontal padding to `.wrap`.
+- Centered content column ~1184px wide, zero horizontal padding on the wrap.
+- Rows stack vertically. **All columns in a row are equal width** (`flex: 1`) — never
+  proportional (no 1.35fr + 1fr).
+- All cards in a row are the **same height** (`align-items: stretch`).
+- If a card's content is taller than the row → **scroll inside the card**, never push the
+  row taller. Only lists and HBars scroll; SVG charts have fixed height and never scroll.
+- Gap between rows ~24px, between columns ~16px.
 
 ### Card
-```css
-.card {
-  background: var(--card);
-  border-radius: 16px;
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  border: none !important; /* waldo-ds.css may inject a border via [class*=card] — this override kills it */
-}
-.card-title { font-size: 20px; font-weight: 500; line-height: 28px; letter-spacing: -0.4px; }
-.card-subtitle { font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: -0.28px; color: var(--muted-foreground); margin-top: 4px; }
-```
 
-Card header: title (Inter Medium 20px) + subtitle (Inter Regular 14px muted), stacked with 4px gap. No flex row — always vertical.
+Cards are distinguished by **background elevation** (`var(--card)` on `var(--background)`),
+**never by a border** — kill any injected border. Radius, padding and gaps come from the
+DS scale. Card header is always vertical: title (medium weight) + subtitle (regular,
+muted), small gap — never a flex row.
 
 ---
 
 ## Custom dashboard components
 
-These 5 components are specific to Brand API dashboards. They are not in the core DS. They live in `waldo-labs/<prototype>/` or `waldo-labs/brand-api/components/`. If they stabilize and become generic enough, promote to core DS with a Linear card.
+These are specific to Brand API dashboards and have no core-DS equivalent. The rules
+below define behavior and semantics. The implementation splits by where the canonical
+source lives:
+
+- **KPI Stat Card, Leaderboard Row, Depth Pill** are NOT in the DS showcase or
+  `component-index.md`. Their canonical markup/CSS lives in
+  **`waldo-labs/brand-api/components/index.html`** — copy classes verbatim from there.
+- **HBar, Trend Line, Sparkline, Proportion Bar** ship as DS charts — read them in
+  `index.html` under `#chart-page-*`.
+
+If one of the orphans stabilizes, promote it to the core DS (`index.html`) with a
+Linear card, then delete it from the reference file and point here instead.
 
 ### 1. KPI Stat Card
+Canonical: `waldo-labs/brand-api/components/index.html`.
+A compact summary metric: label, dominant value, a delta badge, and optional context line.
+- Delta badge sits **top-right** — never inline below the value.
+- The value is the dominant element — large, tight tracking, tabular numerals.
+- **Delta classes are semantic (`.good` / `.bad` / `.flat`), not directional** — the arrow
+  glyph carries direction, the class carries meaning. Map per dashboard:
+  - **Brand Health:** up = `.good` (`--primary`); down = `.bad` (`--destructive`).
+  - **Promo Radar:** inverted — more discounting = pressure, so up = `.bad`,
+    down = relief = `.good`.
+- Use `comp-segmented` from the DS for any time-range toggle — never custom buttons.
 
-A 4-up grid of summary metrics. No equivalent in core DS.
-
-```html
-<div class="kpi-grid">
-  <div class="kpi">
-    <div class="kpi-top">
-      <div class="k-label">Metric name</div>
-      <span class="k-delta up">▲ +8pp</span>  <!-- badge top-right -->
-    </div>
-    <div class="k-value">36%</div>
-    <div class="k-sub">context text</div>
-  </div>
-</div>
-```
-
-```css
-.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-.kpi { background: var(--card); border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 8px; }
-/* No border — elevation only */
-.kpi-top { display: flex; align-items: flex-start; justify-content: space-between; }
-.k-label { font-size: var(--fs-sm); font-weight: 500; line-height: 20px; letter-spacing: -0.28px; color: var(--muted-foreground); }
-.k-delta { font-size: 11px; font-weight: 600; padding: 2px 6px; border-radius: 6px; }
-.k-delta.up { color: var(--destructive); background: rgba(var(--destructive-rgb), 0.12); }
-.k-delta.down { color: var(--primary); background: rgba(var(--primary-rgb), 0.12); }
-.k-value { font-size: 30px; font-weight: 600; line-height: 36px; letter-spacing: -0.6px; }
-.k-sub { font-size: 12px; font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: var(--muted-foreground); }
-```
-
-Rules:
-- Max 4 cards per row. Collapse to 2 on mobile.
-- Delta badge sits **top-right** of the card — never inline below the value.
-- Value is always the dominant element — large, bold, tight tracking.
-- **Promo Radar only:** Up = destructive (red) because more discounting = pressure signal. Down = primary (teal) because less discounting = relief signal. **Brand Health uses the opposite:** up trend = good = `var(--primary)`; down trend = bad = `var(--destructive)`. Always match the dashboard's semantic context.
-- Use `comp-segmented` from DS for any time-range toggle (This week / 30 days / 90 days) — never custom buttons.
-
----
-
-### 2. Horizontal Bar Chart Row
-
-Used for category/brand comparisons. Encodes significance via fill opacity, not color hue.
-
-```html
-<div class="hbars">
-  <div class="hbar-row" onclick="...">
-    <div class="hbar-name">Apparel &amp; Fashion</div>
-    <div class="hbar-track">
-      <div class="hbar-fill" style="width:80%;background:rgba(var(--highlight-rgb),0.85);"></div>
-    </div>
-    <div class="hbar-val">48%</div>
-  </div>
-</div>
-```
-
-```css
-.hbars { display: flex; flex-direction: column; }
-.hbar-row { display: flex; flex-direction: column; gap: 4px; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
-.hbar-row:hover { background: var(--secondary); }
-.hbar-name { font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: -0.28px; color: var(--muted-foreground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 180px; }
-.hbar-inner { display: flex; align-items: center; gap: 12px; }
-.hbar-track { flex: 1; height: 6px; background: var(--secondary); border-radius: 12px; overflow: hidden; }
-.hbar-fill { height: 100%; border-radius: 15px; background: linear-gradient(to left, rgba(var(--primary-rgb), 1), rgba(var(--primary-rgb), 0.15)); }
-.hbar-val { font-size: 12px; font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: var(--muted-foreground); text-align: right; width: 46px; }
-```
-
-**Alpha-fill encoding rule:** the fill color is `rgba(var(--primary-rgb), alpha)` where alpha = `0.30 + (value/max * 0.70)`. The highest value gets full opacity, the lowest gets 30%. This encodes magnitude without introducing multiple hues. Use this system consistently across all bars in a chart — never mix with `--chart-*` colors in the same bar set.
-
-**HBars are always teal (`var(--primary)`) — never yellow.** The highlight/yellow color (`--highlight-rgb`) is reserved exclusively for the Depth Pill. Do not use it for bars.
-
-**Default is monochromatic.** Use a single color (teal) for all bars in a chart. Only switch to `--chart-N` multi-color when there is a legend that needs to reference distinct series — e.g. a multi-line trend chart where each line represents a different category. If there is no legend, there is no multi-color.
-
----
+### 2. Horizontal Bar (HBar) row
+Ranked magnitude comparison. **Monochromatic teal by default** — a thin track in
+`var(--secondary)` with a `var(--primary)` fill.
+- **Alpha-fill encoding:** fill opacity encodes magnitude — highest value fully opaque,
+  lowest ~30% (`alpha = 0.30 + value/max × 0.70`). One hue, magnitude by opacity.
+- Never use `--highlight` (yellow) for HBar fills — that's reserved for the Depth Pill.
+- Never mix alpha-teal bars and `--chart-*` bars in the same chart. Multi-color only when
+  a legend distinguishes distinct series.
+- The DS ships a Horizontal Bar chart (`index.html #chart-page-hbar`) — read it there.
 
 ### 3. Leaderboard Row
-
-Ranked list of brands or categories. Combines rank number, name+meta, and a depth pill.
-
-```html
-<div class="lb">
-  <div class="lb-row" onclick="...">
-    <div class="lb-rank">1</div>
-    <div class="lb-main">
-      <div class="lb-brand">Zara</div>
-      <div class="lb-meta">
-        <span class="type-tag">Sitewide sale</span>
-        <span class="lb-offer">Up to 50% off</span>
-      </div>
-    </div>
-    <div class="depth-pill" style="color:rgba(var(--highlight-rgb),0.95);background:rgba(var(--highlight-rgb),0.10);">50%</div>
-  </div>
-</div>
-```
-
-```css
-.lb { display: flex; flex-direction: column; }
-.lb-row { display: flex; gap: 14px; align-items: flex-start; padding: 12px 8px; border-radius: 8px; cursor: pointer; transition: background 0.12s; }
-.lb-row:hover { background: var(--secondary); }
-.lb-rank { font-size: 18px; font-weight: 600; line-height: 28px; letter-spacing: -0.36px; color: var(--foreground); text-align: center; width: 24px; flex: none; padding: 10px; }
-.lb-main { flex: 1; min-width: 0; border-bottom: 1px solid var(--border); padding-bottom: 12px; display: flex; flex-direction: column; gap: 3px; }
-.lb-row:last-child .lb-main { border-bottom: none; }
-.lb-top { display: flex; gap: 10px; align-items: center; }
-.lb-brand { font-size: 14px; font-weight: 600; line-height: 20px; letter-spacing: -0.28px; flex: 1; }
-/* type tag — use .badge.secondary from DS */
-/* depth pill — use .badge.highlight with variable opacity */
-.lb-meta { font-size: 12px; font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: var(--muted-foreground); display: flex; gap: 8px; }
-.lb-category { font-size: 11px; letter-spacing: -0.22px; color: var(--muted-foreground); }
-```
-
-Rules:
-- Rank number is always muted — it's structural, not the focus.
-- Brand name is the dominant element.
-- Depth pill is always right-aligned, uses the alpha-encoding system (see below).
-- Last row has no bottom border.
-
----
+Canonical: `waldo-labs/brand-api/components/index.html`.
+Ranked list: muted rank number (structural, not the focus) + dominant name/meta + a
+right-aligned trailing pill. Last row has no bottom divider. Use the DS `Badge`
+(`.badge.badge-secondary`) for type tags and the Depth Pill for magnitude.
 
 ### 4. Depth Pill
+Canonical: `waldo-labs/brand-api/components/index.html` — including the `depthAlpha()`
+encoding formula, which IS the rule (alpha 0.30 at 10% depth → 1.0 at 60%+, clamped;
+copy it verbatim, do not re-derive).
+A badge whose **opacity encodes magnitude** (e.g. discount depth) on a fixed
+`var(--highlight)` base: heavier value = more opaque text, fixed low-opacity background
+(`rgba(var(--highlight-rgb), 0.10)`).
+- Opacity encoding is intentional — never flatten all pills to one opacity.
+- Use only for magnitude (discount depth or comparable), never for status.
+- Never use `--chart-*` colors here.
 
-A badge that encodes discount magnitude via opacity. Higher depth = more opaque. The system uses `--highlight` as the base color.
-
-```js
-function depthAlpha(d) { return Math.max(0.30, Math.min(1, 0.30 + (d / 60) * 0.70)); }
-function depthPillStyle(d) {
-  return `color:rgba(var(--highlight-rgb),${depthAlpha(d).toFixed(2)});background:rgba(var(--highlight-rgb),0.10);`;
-}
-```
-
-```css
-.depth-pill {
-  font-size: 13px; font-weight: 700;
-  padding: 4px 10px; border-radius: 8px; white-space: nowrap;
-}
-```
-
-Rules:
-- Base color: always `var(--highlight)` / `--highlight-rgb: 247,211,113`
-- Alpha range: 0.30 (10% off) → 1.0 (60%+ off). Clamp at both ends.
-- Background is always `rgba(var(--highlight-rgb), 0.10)` — fixed, not variable.
-- **Opacity encodes depth — this is intentional.** A 70% discount pill must look visually heavier than a 20% pill. Do not flatten all pills to the same opacity.
-- The Figma mockup shows uniform pills — that is a placeholder. The live implementation must use variable opacity.
-- Use only for discount depth or comparable magnitude metrics. Do not repurpose for status.
-- Never use `--chart-*` colors in a depth pill.
-
----
-
-### 5. SVG Trend Line Chart
-
-Multi-series SVG line chart. No external library. Used for time-series overlays (e.g. discount share over 12 weeks).
-
-Structure:
-- Grid lines: `rgba(255,255,255,0.05)` stroke — subtle, never distracting
-- Line stroke: **1px** — thin, not thick
-- Area fill: 8% opacity under the primary series only
-- **Dots: hidden by default** — only appear on hover over a data point. Never render dots as always-visible circles.
-- Secondary series: 1px stroke, no area, no dots
-- Y-axis labels: left-aligned, muted
-- X-axis labels: evenly sampled (not every point), bottom of chart
-- Legend: inline color swatch (14×3px pill) + label, flex row below chart
-
-Color assignment for series:
-- Primary / "all brands" series: `var(--primary)` (brand teal)
-- Additional series: `--chart-4` (rose), `--chart-6` (periwinkle), `--chart-7` (amber) — pick from chart palette in order, skip already-used
-
-```js
-// area path for primary series
-const area = `M${x(0)},${y(0)} L` + data.map((v,i) => `${x(i)},${y(v)}`).join(' L') + ` L${x(n-1)},${y(0)} Z`;
-```
-
-Always render with `width="100%"` and `preserveAspectRatio="xMidYMid meet"` for responsive scaling.
-
-### 5b. Sparkline
-
-The Trend Line chart's tiny sibling. **A sparkline is always embedded** — inside a metric card, a table cell, or a list row — never standalone. It shows shape, not values.
-
-Use a sparkline when:
-- Space is tight (a row, a cell, a corner of a card)
-- You only need the trajectory, not exact numbers or comparison across series
-
-Use the full Trend Line chart instead when you need axes, gridlines, a legend, or multiple overlaid series.
-
-Rules:
-- **Single series.** No axes, no gridlines, no legend, no labels, no dots.
-- Size is small — roughly `88×26`. `viewBox` with `preserveAspectRatio="none"` so it fills its slot.
-- Each sparkline scales to **its own** min/max (independent), since it conveys shape, not absolute value.
-- Stroke `1.5px`. Color encodes direction: `var(--primary)` rising, `var(--warning)` falling. Never `--destructive` for a trend.
+### 5. SVG Trend Line + 5b. Sparkline
+Multi-series (trend) or single-series embedded (sparkline) SVG line charts, no library.
+- **Hairline strokes.** Trend lines thin; sparklines slightly thinner. Never thick.
+- Area fill only under the primary series, very low opacity.
+- **Dots hidden by default** — only on hover. Never always-visible dots.
+- Direction color: rising `var(--primary)`, falling `var(--warning)` — never
+  `--destructive` for a trend.
+- Series: primary `var(--primary)`; additional series pick from `--chart-*` in order.
 - Strokes via `style="stroke:…"` — SVG presentation attributes do not resolve CSS vars.
-
-```js
-function sparkline(data, dir) {
-  var W = 88, H = 26, padX = 2, padY = 4;
-  var min = Math.min(...data), max = Math.max(...data), span = (max - min) || 1;
-  var x = i => padX + (i / (data.length - 1)) * (W - padX * 2);
-  var y = v => padY + (1 - (v - min) / span) * (H - padY * 2);
-  var stroke = dir === 'dn' ? 'var(--warning)' : 'var(--primary)';
-  var d = 'M' + data.map((v, i) => `${x(i)},${y(v)}`).join(' L');
-  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" width="100%">`
-    + `<path d="${d}" fill="none" style="stroke:${stroke}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
-}
-```
+- Sparklines are **always embedded** (card, cell, row), never standalone; each scales to
+  its own min/max. The DS ships both (`#chart-page-trend`, `#chart-page-sparkline`).
 
 ### 5c. Proportion Bar
-
-Per-row 100% stacked bar showing tone composition (positive / neutral / negative / mixed) across platforms or segments.
-
-Color encodes meaning — not chart palette:
-- positive → `var(--primary)`
-- neutral → `var(--muted-foreground)`
-- negative → `var(--warning)`
-- mixed → `var(--highlight)`
-
-**Negative is `--warning`, never `--destructive`.** `--destructive` is reserved for irreversible actions (delete, permanent loss) — a negative sentiment share is a metric, not an action.
-
-Rules:
-- Segments form a 100% composition — they always sum to the full bar.
-- Track `var(--secondary)`, height `16px`, fully rounded (`border-radius: 9999px`), `overflow: hidden` so segments clip to the pill.
-- Segments are flush (no gaps) — it's one whole, not separate bars.
-- Always render a legend — sentiment colors need decoding.
-- Row: fixed-width muted label + bar + trailing positive-share value (tabular-nums, muted).
-
-```html
-<div class="senti-bar">
-  <span class="senti-seg pos" style="width:72%"></span>
-  <span class="senti-seg neu" style="width:21%"></span>
-  <span class="senti-seg neg" style="width:5%"></span>
-  <span class="senti-seg mix" style="width:2%"></span>
-</div>
-```
+Per-row 100% stacked bar showing tone composition across platforms/segments.
+- Color encodes meaning, not chart palette: positive → `var(--primary)`, neutral →
+  `var(--muted-foreground)`, negative → `var(--warning)`, mixed → `var(--highlight)`.
+- **Negative is `--warning`, never `--destructive`** — a sentiment share is a metric, not
+  an action.
+- **The bar is a thin line** (data-viz reads light), a fully-rounded track in
+  `var(--secondary)`, segments flush (no gaps), clipped to the pill.
+- Segments always sum to 100%. Always render a legend. Row = fixed-width muted label +
+  bar + trailing positive-share value (tabular, muted).
+- Canonical: `index.html #chart-page-proportion` — read the thin height and markup there.
 
 ### 5d. Theme Pill
-
-A topic/theme chip colored by sentiment, with a frequency count. Variant of `Tag` with the sentiment palette. Use for theme clouds, topic breakdowns, "what people are talking about" surfaces.
-
-Color encodes sentiment (same mapping as the Sentiment Bar):
-- positive → `var(--primary)`
-- neutral → `var(--muted-foreground)`
-- negative → `var(--warning)`
-- mixed → `var(--highlight)`
-
-**Negative is `--warning`, never `--destructive`.**
-
-Rules:
-- **One fixed text size for every pill.** Never scale the font by volume — volume is shown by the count, not the type size.
-- Tint via `color-mix`: 12% fill + 25% border, text in the full token color.
-- Fully rounded pill. The count (`.theme-pill-freq`) uses tabular-nums at 0.7 opacity, 6px left margin.
-
-```html
-<span class="theme-pill pos">Gut health<span class="theme-pill-freq">2,145</span></span>
-```
+A topic chip colored by sentiment (same mapping as the Proportion Bar) with a frequency
+count. A variant of the DS `Tag`.
+- **One fixed text size for every pill** — volume is shown by the count, never by type size.
+- Sentiment tint via `color-mix` (light fill + border, text in the full token color).
+- Negative is `--warning`, never `--destructive`.
 
 ---
 
 ## Interior page patterns
 
 ### Page header (category / brand detail)
-```
-< Dashboard          [breadcrumb — var(--highlight)]
-Brand Name           [H1 — Inter SemiBold ~36px, left-aligned]
-Category · link      [subtitle — muted, "view category" is a primary link]
-                                          [Discounting now •]  ← badge top-right
-```
-- Breadcrumb `< Dashboard` uses `var(--highlight)` — not muted, not primary
-- Status badge "Discounting now" = destructive color + animated filled dot, floated top-right of header
-- "No active discount" = muted badge, no dot
+- Breadcrumb `< Dashboard` uses `var(--highlight)` — not muted, not primary.
+- H1 brand name left-aligned; subtitle muted with a primary "view category" link.
+- Status badge floated top-right: "Discounting now" = `var(--destructive)` + animated
+  filled dot; "No active discount" = muted badge, no dot.
 
 ### Brand detail — promo cards
-Full-width cards (not two columns). Each active promo gets its own card:
-```
-[Promo value — large bold]   [Live since date — muted right]
-┌─────────────────────┐  ┌─────────────────────┐
-│ "ad copy with       │  │ landing page offer  │
-│  highlighted terms" │  │ highlighted terms"  │
-│ meta · CTA: Shop    │  │ confidence 90%      │
-│ [Detected in ad copy]   [Detected in ad copy]│
-└─────────────────────┘  └─────────────────────┘
-```
-- Discount terms inside quotes are highlighted inline: `color: var(--highlight)`
-- "Detected in ad copy" = secondary badge
-- Evidence cards have darker background (`var(--secondary)`) inside the promo card
+Full-width cards, one per active promo. Discount terms inside quotes are highlighted
+inline with `var(--highlight)`. "Detected in ad copy" = secondary badge. Evidence blocks
+sit on `var(--secondary)` inside the card.
 
-### Timeline / Gantt chart (discount history)
-- Label on left, teal bar showing time period, x-axis month labels below
-- Bars: solid `var(--primary)` — no gradient, no opacity variation
-- Month labels: muted, uppercase, small — NOV · FEB · MAY · JUN
+### Timeline / Gantt (discount history)
+Label left, solid `var(--primary)` bar for the period (no gradient, no opacity variation),
+muted uppercase month labels below.
 
 ### Alerts page — form patterns
-- Form section labels ("What to watch", "Brand", "Trigger when…") use `var(--primary)` — teal, not muted, not uppercase
-- Segment controls: pill-shaped options, active = filled dark background, inactive = plain text
-- CTA button "Create alert" = large pill shape, high contrast — primary action, right-aligned
-
-#### New Alert form — progressive disclosure
-The form has two states. Fields appear progressively — never show everything at once.
-
-**Initial state (always visible):**
-- "What to watch" segment: A brand · A category
-- Brand/category text input (empty)
-- Condition segment: Any discount is live · A new discount starts · Discount deeper than…
-- "Create alert" button — visible, disabled
-
-**Filled state (appears after user completes the above):**
-- "Trigger when…" text input
-- "Deliver to" dropdown (Email / Text)
-- Destination field (Email Address or Phone Number)
-- "Create alert" button — becomes active
-
-Fields animate in as they appear. Never jump — transition smoothly.
+- Form section labels use `var(--primary)` (teal, not muted, not uppercase).
+- Segment controls: pill options, active = filled dark, inactive = plain text.
+- Primary CTA = large high-contrast pill, right-aligned.
+- **Progressive disclosure:** show the initial fields (what to watch, target, condition,
+  disabled CTA) first; reveal delivery fields and enable the CTA only after the first set
+  is complete. Fields animate in — never jump.
 
 ---
 
 ## Interactive patterns
 
-### Search / autocomplete dropdown
-- Input + dropdown as a unit inside `.search-wrap` (position: relative)
-- Dropdown appears below input, `top: calc(100% + 8px)`, `z-index: 40`
-- Group results by type (Categories / Brands) with a group label
-- Status dots: colored circle 8px to indicate live/active state
+- **Drill-down side panel** is the standard "click for detail" surface — a right-slide
+  panel over a dimming overlay, never a centered modal (modals are for forms). Header =
+  eyebrow + title + close; body scrolls independently. Anything clickable as evidence
+  (a mention, chart segment, ranked row, card) opens a drill with full detail + source.
+  Close via ✕, overlay click, and `Esc` — all three. One drill open at a time.
+- **Search / autocomplete:** input + dropdown as one unit; dropdown below the input;
+  results grouped by type; small colored status dots for live/active state.
+- **Segment controls (toggles):** pill options on `var(--secondary)`; active state tinted
+  `var(--primary)`. Prefer the DS `comp-segmented`.
+- **Platform favicon chips:** identify external sources with a small favicon from a
+  favicon service (`https://www.google.com/s2/favicons?domain=<domain>&sz=64`), ~14–16px,
+  small radius; degrade gracefully to a neutral dot on error — never a broken image.
+  Favicons are the one sanctioned remote asset.
+- **Toast:** fixed bottom-center, ~2.6s auto-dismiss, confirmations only — never errors.
+- **Live badge:** low-opacity `var(--destructive)` tint + animated dot; only for genuinely
+  real-time states.
 
-### Segment controls (toggle buttons)
-```css
-.seg { display: flex; gap: 8px; flex-wrap: wrap; }
-.seg button { background: var(--secondary); border: 1px solid var(--border); color: var(--muted-foreground); border-radius: 10px; padding: 10px 14px; font-size: 13px; font-weight: 600; }
-.seg button.on { background: rgba(var(--primary-rgb), 0.12); border-color: var(--primary); color: var(--primary); }
-```
+---
 
-### Toast notification
-Fixed bottom-center. Appears on user action. 2.6s auto-dismiss. Never use for errors — only confirmations.
+## Demo data — deterministic, always
 
-### Live badge
-```html
-<span class="badge-live">
-  <span class="pulse"></span>Discounting now
-</span>
-```
-`background: rgba(var(--destructive-rgb), 0.12)` + animated dot. Use only for genuinely real-time states.
+Prototypes run on synthetic data, and that data must be **identical on every reload**:
+- Generate time-series with a **seeded PRNG** (e.g. mulberry32 with a fixed literal seed)
+  — never `Math.random()`.
+- Anchor "now" to a **fixed literal datetime** and compute every relative timestamp
+  ("3d ago") from it — never `new Date()` / `Date.now()`.
+
+A demo that changes numbers between reloads reads as broken in a sales context and makes
+visual verification impossible.
 
 ---
 
@@ -545,60 +356,68 @@ Fixed bottom-center. Appears on user action. 2.6s auto-dismiss. Never use for er
 ```
 waldo-design-system/
   waldo-labs/
+    brand-api/
+      components/
+        index.html        ← canonical Brand-API orphans (KPI, Leaderboard, Depth Pill)
     <prototype-name>/
       index.html          ← Justin's original
       index-ds.html       ← DS-applied version
   waldo-ds.css            ← shared DS shell, linked by all prototypes
+  index.html              ← DS showcase — authoritative component & chart source
   docs/
-    brand-api-dashboard-doctrine.md  ← this file
+    brand-api-dashboard-doctrine.md  ← this file (principles only)
+    component-index.md               ← generated flat list of all consumables
     token-catalog.yaml               ← VALIDATOR owns — source of truth for all tokens
     usage-doctrine.yaml              ← Intelligence Layer owns — core DS components
 ```
 
-Do not copy CSS between prototype files — always link to `../_waldo/waldo-ds.css` (the `_waldo/` folder is the vendored DS convention in labs, same as `waldo-theme.css`).
+Do not copy CSS between prototype files — always link to `../_waldo/waldo-ds.css`.
 
 ---
 
-## What to do when detect.js flags a violation
+## Validation gate — detect.js before "done"
+
+Running the validator is a **mandatory closing step**, not optional hygiene. A prototype
+is not finished until detect.js reports clean:
 
 ```bash
-node tools/detect.js waldo-labs/<prototype>/index-ds.html
+node tools/detect.js waldo-labs/<prototype>/
 ```
 
-> **detect.js skips `waldo-labs/`** — the validator has `SKIP_PATH_SEGMENTS=['waldo-labs']` hardcoded. Running it against a path inside `waldo-labs/` always reports zero violations, even for broken files. To get real results, copy the file outside that directory first:
-> ```bash
-> cp waldo-labs/<prototype>/index-ds.html /tmp/test-ds.html
-> node tools/detect.js /tmp/test-ds.html
-> ```
+An **explicit** `waldo-labs/` path is always scanned — no flag needed. (A broad scan like
+`detect.js .` skips `waldo-labs/` to keep the commit guard fast; `--include-labs` forces
+it there too.)
 
-Common violations in dashboards:
-- Hardcoded hex in JS-generated inline styles → replace with `var(--token)` or `rgba(var(--token-rgb), alpha)`
-- Using `--bg`, `--surface`, `--text-2` → replace with semantic tokens (see table above)
-- Hex color in a bar fill → replace with `--chart-N` or `rgba(var(--highlight-rgb), alpha)`
+Fix every violation and re-run until clean **before** reporting the work or asking for
+review. Then verify visually (preview tools) — detect.js catches token violations, not
+layout breakage.
 
 ---
 
 ## Do not
 
-- Do not hardcode hex values anywhere in the HTML or JS
-- Do not use `--bg`, `--surface-*`, `--text-*`, `--border-strong` — these are prototype legacy vars, not DS tokens
-- Do not use JetBrains Mono for numeric metric values — Inter only
-- Do not use `--chart-*` colors in depth pills or single-metric bar charts — those use the alpha-highlight system
-- Do not mix alpha-highlight bars and chart-palette bars in the same visualization
-- Do not add italic anywhere
-- Do not use brand colors (`--brand-green`, `--brand-yellow`, etc.) in product dashboards
-- Do not use the word "Waldo" or a colored box in the topbar — always use the SVG logo
-- Do not put the KPI delta inline below the value — it goes as a badge top-right of the card
-- Do not render trend line dots as always-visible — dots only on hover
-- Do not use custom buttons for time-range toggles — use `comp-segmented` from DS
-- Do not use yellow/highlight color (`--highlight-rgb`) for HBar fills — HBars are always teal (`rgba(var(--primary-rgb), alpha)`)
-- Do not add `border` to cards — ever. Cards are distinguished by background elevation (`var(--card)` vs `var(--background)`), not by borders
-- Do not let a separator line appear below the page header — `waldo-ds.css` injects `border-bottom` on `.page-header`; always override with `border-bottom: none !important`
-- Do not hardcode actions in the page header (search pill, alert button, etc.) — include only what the specific dashboard design requires
-- Do not declare `html` or `body` with `height: 100%` or `overflow: hidden` — this breaks page scroll. Use `min-height: 100vh` on body only
-- Do not omit the required DS conflict overrides (`body { display: block !important }` etc.) — `waldo-ds.css` sets `body{display:flex!important}` which collapses card widths to their content size
-- Do not declare `--chart-1` through `--chart-12` in your own `:root` — they are already in `waldo-ds.css`. If you override them you may introduce hex values. Trust the DS file
-- Do not invent a chart component that already exists in the DS — copy the exact HTML/CSS from `index.html`
-- Do not write CSS for a UI element without first reading its definition in `index.html` — copy classes and styles verbatim, never create renamed variants (e.g. `.pulse-label` instead of `.k-label`). Any deviation silently breaks DS compliance (wrong weight, casing, spacing).
-- Do not embed full component CSS snippets in this doctrine as a substitute for reading the source. The CSS blocks in this file are illustrative; the **authoritative** spec lives in `index.html` under `#comp-*` / `#chart-page-*` IDs. When in doubt, read the source file first.
-- Do not use `hsl(var(--token) / alpha)` for opacity — DS tokens are hex, not HSL. Use `rgba(var(--token-rgb), alpha)` instead (see Opacity patterns section above).
+- Do not hardcode hex, rgba, or pixel color values anywhere — tokens only.
+- Do not restate DS values (hex, radii, type scale, component CSS) in a prototype or in
+  this doctrine — reference the source (`index.html`, `waldo-ds.css`, `token-catalog.yaml`).
+- Do not use `--bg`, `--surface-*`, `--text-*`, `--border-strong` — legacy prototype vars.
+- Do not use JetBrains Mono for numeric metric values — Inter only.
+- Do not use `--chart-*` colors in depth pills or single-metric bar charts — alpha system.
+- Do not mix alpha-highlight bars and chart-palette bars in the same visualization.
+- Do not use `--warning`/`--destructive` interchangeably: negative metric/trend = `--warning`;
+  irreversible action / live-alert = `--destructive`.
+- Do not add italic anywhere.
+- Do not use brand colors (`--brand-*`) in product dashboards.
+- Do not use text or a colored box in the topbar — always the Waldo SVG.
+- Do not put the KPI delta inline below the value — badge, top-right.
+- Do not render trend-line dots always-visible — hover only.
+- Do not use custom buttons for time-range toggles — use `comp-segmented`.
+- Do not use `--highlight` for HBar fills — HBars are always teal.
+- Do not add a `border` to cards — elevation only.
+- Do not let a separator line appear below the page header — kill the injected border.
+- Do not hardcode actions in the page header — only what the design requires.
+- Do not declare `html`/`body` with `height:100%` or `overflow:hidden` — breaks scroll.
+- Do not omit the required DS conflict overrides.
+- Do not declare `--chart-1..12` in your own `:root` — they ship in `waldo-ds.css`.
+- Do not build a chart/component from scratch when the DS has it — read its markup in
+  `index.html` and match it.
+- Do not use `hsl(var(--token) / alpha)` — DS tokens are hex; use `rgba(var(--token-rgb), alpha)`.
