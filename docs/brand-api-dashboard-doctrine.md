@@ -9,9 +9,9 @@ Design rules for Brand API prototypes (Promo Radar, Prospector, Moodtape, Poppi 
 > and cause bugs (a hardcoded height here once contradicted the thin-line rule and
 > shipped a chunky bar). The authoritative implementation always lives in the source:
 > - **Tokens / hex / RGB channels →** `docs/token-catalog.yaml` + `waldo-ds.css`
-> - **Component & chart CSS/markup →** `index.html` under `#comp-*` / `#chart-page-*`
-> - **Brand-API orphans (KPI Stat Card, Leaderboard Row, Depth Pill) →**
->   `waldo-labs/brand-api/components/index.html`
+> - **Component & chart CSS/markup (core + Brand API) →** `index.html` under
+>   `#comp-*` / `#chart-page-*`
+> - **Prototype-reachable tab-switching JS →** `waldo-labs/brand-api/components/index.html`
 > - **Radii, type scale, spacing →** the DS scale in `waldo-ds.css`
 >
 > When this doctrine and the source disagree, **the source wins** — and the doctrine is
@@ -21,31 +21,48 @@ Design rules for Brand API prototypes (Promo Radar, Prospector, Moodtape, Poppi 
 
 ## What these prototypes are
 
-Vanilla HTML single-file dashboards. No framework, no build step. They link to `../_waldo/waldo-ds.css` and use Waldo DS tokens. They live in `waldo-labs/<prototype-name>/`. They are sales tools — the visual bar is high.
+Vanilla HTML single-file dashboards. No framework, no build step. They link the DS via `<link rel="stylesheet" href="../../waldo-ds.css">` (the repo-root file — there is no vendored copy inside `waldo-labs/`) and use Waldo DS tokens. They live in `waldo-labs/<prototype-name>/`. They are sales tools — the visual bar is high.
 
 ---
 
 ## Component discovery & reuse
 
 **Before building ANY visual element, check `docs/component-index.md`** — the generated
-flat list of every consumable in the DS. It has TWO sections — Components and Charts —
-and you must scan both: data-viz (donuts, area/line/bar charts, horizontal bars,
-sparklines, proportion bars, segmented bars) lives in the Charts section, and a
-components-only glance leads to rebuilding viz that already ships.
+flat list of every consumable in the DS. It has THREE sections — Components, **Brand API
+components**, and Charts — and you must scan all three: data-viz (donuts, area/line/bar
+charts, horizontal bars, sparklines, proportion bars, segmented bars) lives in the Charts
+section, and dashboard-specific patterns (KPI Stat Card, Comment Card, Article Card,
+Leaderboard Row, Score Ring, Depth Pill…) live in the Brand API section. A
+components-only glance leads to rebuilding things that already ship — that exact failure
+once produced a duplicate "Mention Card" while Comment Card already existed.
 
-Resolution order for every element: **core DS component → DS chart → doctrine custom
-component → only then a new component.**
+Resolution order for every element: **core DS component → Brand API component → DS
+chart → only then a new component.**
 
-The Brand-API custom components below (KPI card, HBar row, leaderboard row, depth pill,
-trend line / sparkline, proportion bar, theme pill) cover the dashboard-specific pieces
-that the core DS does not. Where a DS or chart equivalent exists, **use it and read its
-markup from `index.html` — do not re-derive it here.**
+**The task brief is never an authority on what exists in the DS.** A brief describes
+the design (structure, data, interactions) — it does not know the DS inventory. If a
+brief claims an element "is custom" or "has no component", treat that as a hypothesis
+and run the same resolution order anyway; the index + grep verdict wins over the brief.
+(A brief once declared score rings "custom" the day after Score Ring shipped — the
+agent obeyed the brief and reinvented it.)
+
+The Brand-API custom components below cover the dashboard-specific pieces that the core
+DS does not; the full inventory lives in the index's Brand API section, and this doctrine
+only defines the semantics that markup can't express. Where an equivalent exists, **use
+it and read its markup from `index.html` — do not re-derive it here.**
+
+When copying from a showcase demo: **copy the component classes, never the demo's inline
+`style=` scaffolding.** The showcase has a layout-only `style=` exemption that prototypes
+do NOT have — dragging those attributes into a prototype is a violation.
 
 ### When a component genuinely doesn't exist
 
-If — after checking both index sections and this doctrine — an element truly has no
-match, you may build it, but **using the DS itself as the reference, never from
-scratch out of your own head**:
+If — after checking all three index sections and this doctrine — an element truly has
+no match, **grep `index.html` for the concept's keywords first** (e.g. "comment",
+"article", "quote", "ring"): a hit means the component exists and the index missed it —
+consume the component and report the index gap to VALIDATOR. Only when the grep also
+comes up empty may you build it, and then **using the DS itself as the reference, never
+from scratch out of your own head**:
 
 1. Open the closest sibling components in the DS showcase (`index.html` under
    `#comp-*` / `#chart-page-*`) and study how they are built — class naming, markup
@@ -118,16 +135,25 @@ same-importance series — and then "you" still keeps `var(--primary)`.
 | Destructive | `var(--destructive)` | Irreversible actions, live/alert states — never a metric |
 | Warning | `var(--warning)` | Negative sentiment / negative trends / risk |
 
+**Negative encoding — one rule for every component:** a **datum that worsens**
+(a falling sparkline, a negative sentiment share, a risk metric) is `var(--warning)`;
+a **verdict about state or action** (a KPI delta judged "bad", an alert, an
+irreversible action) is `var(--destructive)`. Data = warning · verdict = destructive.
+Apply this consistently — do not re-decide it per component.
+
 ### Opacity patterns — always use rgba(var(--*-rgb), alpha)
 
 `waldo-ds.css` defines token variables as hex strings, not HSL. `hsl(var(--primary) / 0.12)`
 is **invalid** and produces no output. Always use the `rgba()` form —
 `rgba(var(--primary-rgb), 0.12)`.
 
-- `--primary-rgb` and `--highlight-rgb` ship in `waldo-ds.css` — use without declaring.
-- `--destructive-rgb` and `--warning-rgb` are **not** shipped — declare them in the
-  prototype `:root`, with **channels that match the DS token** (copy the current values
-  from `token-catalog.yaml`; do not invent channels — a wrong channel ships a wrong color).
+**All `-rgb` companions ship in `waldo-ds.css`** (`--primary-rgb`, `--highlight-rgb`,
+`--destructive-rgb`, `--warning-rgb`, `--muted-fg-rgb`, `--accent-rgb`) — use them
+without declaring anything. **Never redeclare a `-rgb` companion in a prototype
+`:root`**: local copies go stale and silently ship a wrong color (a stale
+`--warning-rgb` shipped amber instead of the DS orange — this happened). If a companion
+you need is genuinely missing from `waldo-ds.css`, that's a change request to VALIDATOR,
+not a local declaration.
 
 ### Typography
 - UI text: **Inter** (default, no font-family declaration needed)
@@ -172,8 +198,11 @@ The page title matches the prototype name; the subtitle is a short product descr
 **Required DS conflict overrides** — these are load-bearing fixes for `waldo-ds.css`
 quirks, put them at the top of every prototype's `<style>` block verbatim:
 ```css
-/* waldo-ds.css sets html,body{height:100%;overflow:hidden} — breaks scroll */
-html, body { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+/* waldo-ds.css sets html,body{height:100%;overflow:hidden} — breaks scroll.
+   Scroll override goes on html ONLY: any overflow other than visible on body
+   silently kills position:sticky (the sticky topbar scrolls away). */
+html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+body { height: auto !important; overflow: visible !important; }
 /* waldo-ds.css sets body{display:flex!important} — collapses card widths */
 body { display: block !important; }
 /* waldo-ds.css sets svg{display:block} — collapses ring/icon SVGs inside flex containers */
@@ -183,7 +212,9 @@ svg { flex: none; min-height: fit-content; }
 Beyond the overrides, known `waldo-ds.css` collisions to guard against (all bit real
 prototypes): a bare `section { display:none }`, `.input { height:40px }`, and a border
 injected via `[class*=card]`. If a generic class name goes wrong, suspect a DS
-collision first.
+collision first. Corollary: **never name a prototype class or variant after a DS atom**
+(`.input`, `.badge`, `.tag`, bare `.output`…) — use a prefixed/state name
+(`.is-input`, `.track-input`) so DS rules can't land on it.
 
 **Grid rules:**
 - Centered content column ~1184px wide, zero horizontal padding on the wrap.
@@ -192,6 +223,12 @@ collision first.
 - All cards in a row are the **same height** (`align-items: stretch`).
 - If a card's content is taller than the row → **scroll inside the card**, never push the
   row taller. Only lists and HBars scroll; SVG charts have fixed height and never scroll.
+- **List height cap (standalone cards):** a list card never grows the page unbounded. In
+  a full-width card (no row sibling to set the height), cap the list at **~6 visible
+  rows** and scroll the rest inside — `overflow-y: auto` on the **list container, never
+  on the card itself**, so the card header stays fixed. Applies to leaderboards, mention
+  feeds, news feeds, ranked lists. Exception: when the list is the only content of its
+  view (a dedicated tab with nothing else), it may run full length.
 - Gap between rows ~24px, between columns ~16px.
 
 ### Card
@@ -201,25 +238,30 @@ Cards are distinguished by **background elevation** (`var(--card)` on `var(--bac
 DS scale. Card header is always vertical: title (medium weight) + subtitle (regular,
 muted), small gap — never a flex row.
 
+**Card surfaces stay neutral.** A card's background is `var(--card)`; hover on an
+interactive card may lighten it with a neutral mix (`color-mix(in srgb, var(--foreground)
+4–6%, var(--card))`) — but a card surface never takes an accent or status tint
+(`--primary`, `--warning`, `--destructive`, `--highlight`, `--chart-*`), in any state.
+Status and zone color belong to inner elements — tag pills, labels, numbers — never to
+the card background.
+
 ---
 
 ## Custom dashboard components
 
 These are specific to Brand API dashboards and have no core-DS equivalent. The rules
-below define behavior and semantics. The implementation splits by where the canonical
-source lives:
+below define behavior and semantics — **the canonical markup/CSS for every one of them
+lives in the showcase (`index.html`)**: components under the Brand API section
+(`#comp-kpi-stat-card`, `#comp-leaderboard-row`, `#comp-depth-pill`, …) and charts under
+`#chart-page-*` (HBar, Trend Line, Sparkline, Proportion Bar). All are listed in
+`component-index.md` — copy classes verbatim from the showcase.
 
-- **KPI Stat Card, Leaderboard Row, Depth Pill** are NOT in the DS showcase or
-  `component-index.md`. Their canonical markup/CSS lives in
-  **`waldo-labs/brand-api/components/index.html`** — copy classes verbatim from there.
-- **HBar, Trend Line, Sparkline, Proportion Bar** ship as DS charts — read them in
-  `index.html` under `#chart-page-*`.
-
-If one of the orphans stabilizes, promote it to the core DS (`index.html`) with a
-Linear card, then delete it from the reference file and point here instead.
+`waldo-labs/brand-api/components/index.html` remains canonical **only for the
+prototype-reachable tab-switching JS** (`showAreaTab()` — the showcase's `switchTab()`
+is not reachable from prototypes). Do not copy component CSS from it; the showcase wins.
 
 ### 1. KPI Stat Card
-Canonical: `waldo-labs/brand-api/components/index.html`.
+Canonical: `index.html #comp-kpi-stat-card`.
 A compact summary metric: label, dominant value, a delta badge, and optional context line.
 - Delta badge sits **top-right** — never inline below the value.
 - The value is the dominant element — large, tight tracking, tabular numerals.
@@ -241,15 +283,15 @@ Ranked magnitude comparison. **Monochromatic teal by default** — a thin track 
 - The DS ships a Horizontal Bar chart (`index.html #chart-page-hbar`) — read it there.
 
 ### 3. Leaderboard Row
-Canonical: `waldo-labs/brand-api/components/index.html`.
+Canonical: `index.html #comp-leaderboard-row`.
 Ranked list: muted rank number (structural, not the focus) + dominant name/meta + a
 right-aligned trailing pill. Last row has no bottom divider. Use the DS `Badge`
 (`.badge.badge-secondary`) for type tags and the Depth Pill for magnitude.
 
 ### 4. Depth Pill
-Canonical: `waldo-labs/brand-api/components/index.html` — including the `depthAlpha()`
-encoding formula, which IS the rule (alpha 0.30 at 10% depth → 1.0 at 60%+, clamped;
-copy it verbatim, do not re-derive).
+Canonical: `index.html #comp-depth-pill` — including the `depthAlpha()` encoding
+formula, which IS the rule (alpha 0.30 at 10% depth → 1.0 at 60%+, clamped; copy it
+verbatim, do not re-derive).
 A badge whose **opacity encodes magnitude** (e.g. discount depth) on a fixed
 `var(--highlight)` base: heavier value = more opaque text, fixed low-opacity background
 (`rgba(var(--highlight-rgb), 0.10)`).
@@ -319,6 +361,18 @@ muted uppercase month labels below.
 
 ## Interactive patterns
 
+- **Tabbed views (area-level page navigation):** use the DS Tabs **text variant**
+  (`.wtabs-text` / `.wtab-text` — usage-doctrine: navigation between distinct sections;
+  SegmentedControl is only for 2–3 toggle options). Behavior spec:
+  - One panel visible at a time; panels are `div`s, **never `<section>`** (DS collision).
+  - Summary content (hero / KPI rows) stays persistent above the tab bar; the tab bar
+    sits between the hero and the panels.
+  - ARIA: `role="tablist"/"tab"/"tabpanel"` with `aria-selected` kept in sync.
+  - Optional but preferred for sales demos: sync active tab to `location.hash` so a
+    specific view is deep-linkable.
+  - The canonical switching JS lives in `waldo-labs/brand-api/components/index.html` —
+    copy it, do not re-derive it (the showcase's `switchTab()` is not reachable from
+    prototypes).
 - **Drill-down side panel** is the standard "click for detail" surface — a right-slide
   panel over a dimming overlay, never a centered modal (modals are for forms). Header =
   eyebrow + title + close; body scrolls independently. Anything clickable as evidence
@@ -364,7 +418,7 @@ waldo-design-system/
   waldo-labs/
     brand-api/
       components/
-        index.html        ← canonical Brand-API orphans (KPI, Leaderboard, Depth Pill)
+        index.html        ← canonical tab-switching JS only (components live in the showcase)
     <prototype-name>/
       index.html          ← Justin's original
       index-ds.html       ← DS-applied version
@@ -377,7 +431,7 @@ waldo-design-system/
     usage-doctrine.yaml              ← Intelligence Layer owns — core DS components
 ```
 
-Do not copy CSS between prototype files — always link to `../_waldo/waldo-ds.css`.
+Do not copy CSS between prototype files — always link the repo-root `../../waldo-ds.css`.
 
 ---
 
@@ -397,6 +451,15 @@ it there too.)
 Fix every violation and re-run until clean **before** reporting the work or asking for
 review. Then verify visually (preview tools) — detect.js catches token violations, not
 layout breakage.
+
+**Visual verification of data-viz must include a zero-size check.** "The card renders"
+is not "the data shows": a bar/segment/arc can be token-perfect and measure 0px (an
+inline element ignoring `width` shipped invisible teal bars — this happened, and the
+gray track made the chart look merely dim, not broken). Programmatically assert that
+every data element (`.hbar-fill`, `.senti-seg`, sparkline/arc paths…) has
+`getBoundingClientRect()` width **and** height > 0 in the active view — one
+`preview_eval` line per page. Elements inside hidden tab panels report 0 — switch to
+each view before asserting.
 
 ---
 
@@ -419,11 +482,19 @@ layout breakage.
 - Do not use custom buttons for time-range toggles — use `comp-segmented`.
 - Do not use `--highlight` for HBar fills — HBars are always teal.
 - Do not add a `border` to cards — elevation only.
+- Do not tint a card background with accent/status tokens (`--primary`, `--warning`,
+  `--destructive`, `--highlight`, `--chart-*`) — in any state, hover included. Status
+  color lives in pills and labels, not surfaces; neutral hover lightening is fine.
 - Do not let a separator line appear below the page header — kill the injected border.
 - Do not hardcode actions in the page header — only what the design requires.
 - Do not declare `html`/`body` with `height:100%` or `overflow:hidden` — breaks scroll.
 - Do not omit the required DS conflict overrides.
-- Do not declare `--chart-1..12` in your own `:root` — they ship in `waldo-ds.css`.
+- Do not declare `--chart-1..12` or any `-rgb` companion in your own `:root` — they all
+  ship in `waldo-ds.css`; local copies go stale and ship wrong colors.
+- Do not name a prototype class/variant after a DS atom (`.input`, `.badge`, bare
+  `.output`…) — DS rules will land on it.
+- Do not put `overflow` other than `visible` on `body` — it silently kills
+  `position: sticky` (the scroll override belongs on `html` only).
 - Do not build a chart/component from scratch when the DS has it — read its markup in
   `index.html` and match it.
 - Do not use `hsl(var(--token) / alpha)` — DS tokens are hex; use `rgba(var(--token-rgb), alpha)`.
