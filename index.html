@@ -9811,7 +9811,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
           { rank:4, name:"Ritual",   type:"% off",         offer:"40% off first month", cat:"Health & Supplements", depth:40 },
           { rank:5, name:"Chewy",    type:"% off",         offer:"35% off first Autoship", cat:"Pet Care",     depth:35 },
         ];
-        function depthAlpha(d){ return Math.max(0.30, Math.min(1, 0.30 + (d / 70) * 0.70)); }
+        function depthAlpha(d){ return Math.max(0.30, Math.min(1, 0.30 + (d / 60) * 0.70)); }
         var lb = document.getElementById('lb-demo');
         lb.innerHTML = brands.map(function(b){
           var a = depthAlpha(b.depth).toFixed(2);
