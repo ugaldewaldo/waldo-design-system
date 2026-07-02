@@ -8560,6 +8560,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <button class="sb-item" onclick="brandApiGo('comp-media-tile',this)">Media Tile</button>
     <button class="sb-item" onclick="brandApiGo('comp-quote-card',this)">Quote Card</button>
     <button class="sb-item" onclick="brandApiGo('comp-recommendation-card',this)">Recommendation Card</button>
+    <button class="sb-item" onclick="brandApiGo('comp-score-ring',this)">Score Ring</button>
     <button class="sb-item" onclick="brandApiGo('comp-theme-pill',this)">Theme Pill</button>
     <button class="sb-item" onclick="brandApiGo('comp-waldo-logo',this)">Waldo Logo</button>
     </div>
@@ -9676,7 +9677,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 </div>
 
 
-<!-- Alert List Row -->
+</div>
 </div>
 </div>
 <div id="comp-live-badge" class="waldo-page">
@@ -10072,6 +10073,157 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         </div>
       </div>
       <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="rec-card"&gt; + .rec-tag.comms|product|campaign|creative|retail</span></div>
+    </div>
+  </div>
+</div>
+<div id="comp-score-ring" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Score Ring</div>
+    <div class="page-desc">Circular gauge for a 0–100 score on a card surface. Arc color encodes the zone — good <code>--primary</code>, watch <code>--warning</code>, at risk <code>--destructive</code>. Input variant for grids; hero variant for a single headline metric. Optional suffix and a period-over-period delta row.</div>
+  </div>
+
+  <style>
+    .sring-row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+    .sring { background: var(--card); border-radius: var(--radius-xl); padding: 22px 20px; display: flex; flex-direction: column; align-items: center; }
+    .sring.hero { padding: 28px 24px; box-shadow: 0 0 0 1px color-mix(in srgb, var(--foreground) 6%, transparent), 0 24px 48px -18px color-mix(in srgb, var(--background) 85%, transparent); }
+    .sring.bare { background: transparent; padding: 0; box-shadow: none; }
+    .sring-svg { width: 120px; height: 120px; display: block; flex: none; }
+    .sring.hero .sring-svg { width: 184px; height: 184px; }
+    .sring-track { fill: none; stroke: color-mix(in srgb, var(--foreground) 8%, transparent); stroke-width: 4; }
+    .sring.hero .sring-track { stroke-width: 5; }
+    .sring-arc { fill: none; stroke-width: 4; stroke-linecap: round; }
+    .sring.hero .sring-arc { stroke-width: 5; }
+    .sring.good .sring-arc { stroke: var(--primary); }
+    .sring.watch .sring-arc { stroke: var(--warning); }
+    .sring.risk .sring-arc { stroke: var(--destructive); }
+    .sring-num { font-size: 28px; font-weight: 400; letter-spacing: -0.02em; fill: var(--foreground); }
+    .sring.hero .sring-num { font-size: 44px; }
+    .sring-suffix { font-size: var(--fs-xs); font-weight: 400; letter-spacing: -0.02em; fill: var(--muted-foreground); }
+    .sring-label { font-size: var(--fs-xs); font-weight: 400; letter-spacing: -0.02em; color: var(--muted-foreground); margin-top: 8px; }
+    .sring.hero .sring-label { font-size: var(--fs-sm); color: var(--foreground); margin-top: 12px; }
+    .sring-delta { font-size: var(--fs-xs); color: var(--muted-foreground); margin-top: 6px; font-variant-numeric: tabular-nums; }
+    .sring-delta .up { color: var(--primary); font-weight: 500; }
+    .sring-delta .dn { color: var(--destructive); font-weight: 500; }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Input + hero variants</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div class="sring-row">
+
+          <div class="sring good">
+            <svg class="sring-svg" viewBox="0 0 120 120">
+              <circle class="sring-track" cx="60" cy="60" r="52"/>
+              <circle class="sring-arc" cx="60" cy="60" r="52" stroke-dasharray="271 327" transform="rotate(-90 60 60)"/>
+              <text class="sring-num" x="60" y="60" dominant-baseline="central" text-anchor="middle">83</text>
+            </svg>
+            <div class="sring-label">Reputation</div>
+            <div class="sring-delta">7D AVG <span class="dn">▼ 1.0</span></div>
+          </div>
+
+          <div class="sring good hero">
+            <svg class="sring-svg" viewBox="0 0 120 120">
+              <circle class="sring-track" cx="60" cy="60" r="52"/>
+              <circle class="sring-arc" cx="60" cy="60" r="52" stroke-dasharray="268 327" transform="rotate(-90 60 60)"/>
+              <text class="sring-num" x="60" y="60" dominant-baseline="central" text-anchor="middle">82</text>
+            </svg>
+            <div class="sring-label">Resonance</div>
+            <div class="sring-delta">7D AVG <span class="up">▲ 0.2</span></div>
+          </div>
+
+          <div class="sring risk">
+            <svg class="sring-svg" viewBox="0 0 120 120">
+              <circle class="sring-track" cx="60" cy="60" r="52"/>
+              <circle class="sring-arc" cx="60" cy="60" r="52" stroke-dasharray="105 327" transform="rotate(-90 60 60)"/>
+              <text class="sring-num" x="60" y="54" dominant-baseline="central" text-anchor="middle">32</text>
+              <text class="sring-suffix" x="60" y="78" text-anchor="middle">% SOV</text>
+            </svg>
+            <div class="sring-label">Presence</div>
+            <div class="sring-delta">7D AVG <span class="up">▲ 0.2%</span></div>
+          </div>
+
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="sring good|watch|risk [hero]"&gt; → svg .sring-track + .sring-arc</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Zones</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div class="sring-row">
+
+          <div class="sring good">
+            <svg class="sring-svg" viewBox="0 0 120 120">
+              <circle class="sring-track" cx="60" cy="60" r="52"/>
+              <circle class="sring-arc" cx="60" cy="60" r="52" stroke-dasharray="271 327" transform="rotate(-90 60 60)"/>
+              <text class="sring-num" x="60" y="60" dominant-baseline="central" text-anchor="middle">83</text>
+            </svg>
+            <div class="sring-label">Good</div>
+          </div>
+
+          <div class="sring watch">
+            <svg class="sring-svg" viewBox="0 0 120 120">
+              <circle class="sring-track" cx="60" cy="60" r="52"/>
+              <circle class="sring-arc" cx="60" cy="60" r="52" stroke-dasharray="180 327" transform="rotate(-90 60 60)"/>
+              <text class="sring-num" x="60" y="60" dominant-baseline="central" text-anchor="middle">55</text>
+            </svg>
+            <div class="sring-label">Watch</div>
+          </div>
+
+          <div class="sring risk">
+            <svg class="sring-svg" viewBox="0 0 120 120">
+              <circle class="sring-track" cx="60" cy="60" r="52"/>
+              <circle class="sring-arc" cx="60" cy="60" r="52" stroke-dasharray="105 327" transform="rotate(-90 60 60)"/>
+              <text class="sring-num" x="60" y="60" dominant-baseline="central" text-anchor="middle">32</text>
+            </svg>
+            <div class="sring-label">At risk</div>
+          </div>
+
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">.sring.good → --primary · .sring.watch → --warning · .sring.risk → --destructive</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">No card (bare)</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="gap:32px">
+
+        <div class="sring good bare">
+          <svg class="sring-svg" viewBox="0 0 120 120">
+            <circle class="sring-track" cx="60" cy="60" r="52"/>
+            <circle class="sring-arc" cx="60" cy="60" r="52" stroke-dasharray="271 327" transform="rotate(-90 60 60)"/>
+            <text class="sring-num" x="60" y="60" dominant-baseline="central" text-anchor="middle">83</text>
+          </svg>
+          <div class="sring-label">Reputation</div>
+          <div class="sring-delta">7D AVG <span class="dn">▼ 1.0</span></div>
+        </div>
+
+        <div class="sring watch bare">
+          <svg class="sring-svg" viewBox="0 0 120 120">
+            <circle class="sring-track" cx="60" cy="60" r="52"/>
+            <circle class="sring-arc" cx="60" cy="60" r="52" stroke-dasharray="180 327" transform="rotate(-90 60 60)"/>
+            <text class="sring-num" x="60" y="60" dominant-baseline="central" text-anchor="middle">55</text>
+          </svg>
+          <div class="sring-label">Engagement</div>
+        </div>
+
+        <div class="sring risk bare">
+          <svg class="sring-svg" viewBox="0 0 120 120">
+            <circle class="sring-track" cx="60" cy="60" r="52"/>
+            <circle class="sring-arc" cx="60" cy="60" r="52" stroke-dasharray="105 327" transform="rotate(-90 60 60)"/>
+            <text class="sring-num" x="60" y="54" dominant-baseline="central" text-anchor="middle">32</text>
+            <text class="sring-suffix" x="60" y="78" text-anchor="middle">% SOV</text>
+          </svg>
+          <div class="sring-label">Presence</div>
+        </div>
+
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">&lt;div class="sring good bare"&gt; — no card surface, drops straight onto any layout</span></div>
     </div>
   </div>
 </div>
