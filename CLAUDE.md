@@ -343,7 +343,6 @@ Font: Inter. Weights: Regular, Medium, Semi Bold, Bold (Figma is picky — use n
 | `tools/detect.js` | **DS violation detector** — `node tools/detect.js <file\|dir> [--json]`. No LLM; rules come from the token catalog. Run it on anything you generate |
 | `index.html` | Live DS reference + component library (GitHub Pages) |
 | `waldo-design-system.html` | Legacy DS reference |
-| `NOTES-FOR-STEVE.md` | Notes for the developer |
 
 ---
 

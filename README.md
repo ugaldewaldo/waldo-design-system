@@ -30,7 +30,7 @@ Living reference for the Waldo design system — typography scale, brand colors,
 ### Website (Tailwind)
 Wrap the CSS variables in `@theme { ... }` (Tailwind v4) so utilities auto-generate — e.g. `<h1 class="text-display-md">`.
 
-For Tailwind v3, mirror in `tailwind.config.js`. See `NOTES-FOR-STEVE.md` for the exact snippet.
+For Tailwind v3, mirror in `tailwind.config.js`.
 
 ### Product UI (shadcn)
 Import `waldo-shadcn-theme.css` in your shadcn theme. Semantic tokens (`--primary`, `--background`, etc.) wire to Waldo's anchored colors.
@@ -39,6 +39,3 @@ Import `waldo-shadcn-theme.css` in your shadcn theme. Semantic tokens (`--primar
 - Variables and Text Styles are synced via the Tokens Studio plugin from the JSON files above.
 - Live library: **🧰 WALDO 4 - DESIGN.SYS**
 
-## Internal notes
-
-- `NOTES-FOR-STEVE.md` — open questions on the typography rollout for the dev side.
