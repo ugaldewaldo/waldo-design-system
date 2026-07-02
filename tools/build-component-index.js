@@ -1,41 +1,68 @@
 #!/usr/bin/env node
 /**
- * build-component-index.js — generate docs/component-index.md
+ * build-component-index.js — generate docs/component-index.md + docs/component-index.json
  *
  * THE PROBLEM THIS SOLVES: consumables live in TWO places in index.html —
  * Components (waldoGo('comp-*')) and Charts (id="chart-page-*"). An agent that
  * reads only the comp-* registry concludes "the DS has no data-viz" and rebuilds
  * charts that already exist. This emits ONE flat list of everything consumable
- * (label + anchor + type) so an agent reads it BEFORE deciding something is missing.
+ * (label + anchor + use_when) so an agent reads it BEFORE deciding something is missing.
  *
- * Source of truth = index.html (the live nav + chart sections). GENERATED — never
- * hand-edit docs/component-index.md; re-run this instead.
+ * The .json is the machine-readable "agent context kit" (PRO-2766) the /new-prototype
+ * scaffold vendors; use_when/dont_use_when are joined in from docs/usage-doctrine.yaml.
+ *
+ * Source of truth = index.html (nav + chart sections) + usage-doctrine.yaml (use_when).
+ * GENERATED — never hand-edit the outputs; re-run this instead.
  *
  * Usage:
- *   node tools/build-component-index.js            # write docs/component-index.md
- *   node tools/build-component-index.js --check    # exit 1 if the file is stale (guard/CI)
+ *   node tools/build-component-index.js            # write .md + .json
+ *   node tools/build-component-index.js --check    # exit 1 if either output is stale
  */
 const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const INDEX_HTML = path.join(ROOT, 'index.html');
+const DOCTRINE = path.join(ROOT, 'docs', 'usage-doctrine.yaml');
 const OUT = path.join(ROOT, 'docs', 'component-index.md');
+const JSON_OUT = path.join(ROOT, 'docs', 'component-index.json');
 
-function extract(html) {
-  // Components: <button ... onclick="waldoGo('comp-X',this)">Label</button>
-  // Brand API components register via brandApiGo('comp-X') — same anchor space,
-  // different nav function; the function name is the category.
+const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+// Parse usage-doctrine.yaml (zero-dep) → Map(normName → {use_when[], dont_use_when[]}).
+function parseDoctrine(txt) {
+  const map = new Map();
+  const blocks = txt.split(/\n\s*- component:[ \t]*/).slice(1);
+  for (const b of blocks) {
+    const name = b.split('\n', 1)[0].trim();
+    const grab = (key) => {
+      const m = b.match(new RegExp(`(?:^|\\n)[ \\t]*${key}:[ \\t]*\\n((?:[ \\t]+-[ \\t].*(?:\\n|$))+)`));
+      if (!m) return [];
+      return [...m[1].matchAll(/^[ \t]+-[ \t]+(.+?)[ \t]*$/gm)].map((x) => x[1].trim());
+    };
+    map.set(norm(name), { use_when: grab('use_when'), dont_use_when: grab('dont_use_when') });
+  }
+  return map;
+}
+
+function extract(html, doc) {
+  const attach = (e) => {
+    const key = norm(e.label);
+    let d = doc.get(key);
+    if (!d) {
+      // fallback for label drift: index "Input" ↔ doctrine "Input / Field"
+      for (const [dk, dv] of doc) { if (dk.startsWith(key) || key.startsWith(dk)) { d = dv; break; } }
+    }
+    d = d || { use_when: [], dont_use_when: [] };
+    return { ...e, use_when: d.use_when, dont_use_when: d.dont_use_when };
+  };
   const comps = [...html.matchAll(/(waldoGo|brandApiGo)\('comp-([a-z0-9-]+)',this\)">([^<]+)<\/button>/g)]
-    .map((m) => ({ nav: m[1], id: m[2], label: m[3].trim() }));
-  // dedupe by id, keep first label
+    .map((m) => ({ nav: m[1], id: m[2], selector: `#comp-${m[2]}`, label: m[3].trim() }));
   const seenC = new Set();
-  const deduped = comps.filter((c) => !seenC.has(c.id) && seenC.add(c.id));
+  const deduped = comps.filter((c) => !seenC.has(c.id) && seenC.add(c.id)).map(attach);
   const components = deduped.filter((c) => c.nav === 'waldoGo');
   const brandApiComponents = deduped.filter((c) => c.nav === 'brandApiGo');
 
-  // Charts: each section opens with id="chart-page-X"; its title is the first
-  // <div class="chart-page-title">Title</div> inside that section.
   const charts = [];
   const parts = html.split(/id="chart-page-/).slice(1);
   for (const chunk of parts) {
@@ -43,51 +70,61 @@ function extract(html) {
     if (!idm) continue;
     const id = idm[1];
     const titlem = chunk.match(/class="chart-page-title"[^>]*>([^<]+)</);
-    charts.push({ id, label: titlem ? titlem[1].trim() : id });
+    charts.push(attach({ id, selector: `#chart-page-${id}`, label: titlem ? titlem[1].trim() : id }));
   }
   return { components, brandApiComponents, charts };
 }
 
-function render({ components, brandApiComponents, charts }) {
-  const line = (c, prefix) => `- ${c.label} — \`#${prefix}-${c.id}\``;
+function mdLine(c) {
+  const uw = c.use_when.length ? ` — use when: ${c.use_when.join(' · ')}` : '';
+  return `- **${c.label}** \`${c.selector}\`${uw}`;
+}
+function renderMd({ components, brandApiComponents, charts }) {
   return [
     '<!-- GENERATED by tools/build-component-index.js — DO NOT EDIT. Re-run instead. -->',
     '# Waldo DS — Component Index',
     '',
-    '**Read this BEFORE deciding a component or chart is missing.** Everything below',
-    'already exists in `index.html`. Consumables live in two sections — Components and',
-    'Charts — so a comp-only scan will miss the charts. This is the flat list of both.',
+    '**Read this BEFORE deciding a component or chart is missing.** Everything below already',
+    'exists. Scan all three sections — a comp-only glance misses the charts and Brand API',
+    'patterns. `use_when` is joined in from `usage-doctrine.yaml`. Machine-readable copy: `component-index.json`.',
     '',
-    `## Components (${components.length})`,
-    '',
-    ...components.map((c) => line(c, 'comp')),
-    '',
-    `## Brand API components (${brandApiComponents.length})`,
-    '',
-    'Dashboard-specific patterns for Brand API prototypes — not core atoms.',
-    '',
-    ...brandApiComponents.map((c) => line(c, 'comp')),
-    '',
-    `## Charts / Data-viz (${charts.length})`,
-    '',
-    ...charts.map((c) => line(c, 'chart-page')),
-    '',
+    `## Components (${components.length})`, '',
+    ...components.map(mdLine), '',
+    `## Brand API components (${brandApiComponents.length})`, '',
+    'Dashboard-specific patterns for Brand API prototypes — not core atoms.', '',
+    ...brandApiComponents.map(mdLine), '',
+    `## Charts / Data-viz (${charts.length})`, '',
+    ...charts.map(mdLine), '',
   ].join('\n');
+}
+function renderJson({ components, brandApiComponents, charts }) {
+  const entry = (c, category) => ({ id: c.id, name: c.label, selector: c.selector, category, use_when: c.use_when, dont_use_when: c.dont_use_when });
+  return JSON.stringify({
+    generated_by: 'tools/build-component-index.js',
+    note: 'Agent context kit — reuse a component before inventing. use_when from usage-doctrine.yaml.',
+    components: components.map((c) => entry(c, 'component')),
+    brand_api_components: brandApiComponents.map((c) => entry(c, 'brand-api')),
+    charts: charts.map((c) => entry(c, 'chart')),
+  }, null, 2) + '\n';
 }
 
 const html = fs.readFileSync(INDEX_HTML, 'utf8');
-const out = render(extract(html));
+const doc = parseDoctrine(fs.readFileSync(DOCTRINE, 'utf8'));
+const data = extract(html, doc);
+const md = renderMd(data);
+const json = renderJson(data);
 
-const check = process.argv.includes('--check');
-if (check) {
-  const current = fs.existsSync(OUT) ? fs.readFileSync(OUT, 'utf8') : '';
-  if (current !== out) {
-    console.error('✗ docs/component-index.md is stale. Run: node tools/build-component-index.js');
+if (process.argv.includes('--check')) {
+  const stale = (f, want) => (fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : '') !== want;
+  if (stale(OUT, md) || stale(JSON_OUT, json)) {
+    console.error('✗ component-index.{md,json} is stale. Run: node tools/build-component-index.js');
     process.exit(1);
   }
-  console.log('✓ docs/component-index.md is in sync with index.html.');
+  console.log('✓ component-index.md + .json in sync with index.html + usage-doctrine.yaml.');
 } else {
-  fs.writeFileSync(OUT, out);
-  const { components, brandApiComponents, charts } = extract(html);
-  console.log(`✓ docs/component-index.md regenerated — ${components.length} components + ${brandApiComponents.length} Brand API components + ${charts.length} charts.`);
+  fs.writeFileSync(OUT, md);
+  fs.writeFileSync(JSON_OUT, json);
+  const all = [...data.components, ...data.brandApiComponents, ...data.charts];
+  const withUw = all.filter((c) => c.use_when.length).length;
+  console.log(`✓ regenerated — ${data.components.length} components + ${data.brandApiComponents.length} Brand API + ${data.charts.length} charts · ${withUw}/${all.length} have use_when`);
 }

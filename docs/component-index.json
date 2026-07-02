@@ -1,0 +1,1351 @@
+{
+  "generated_by": "tools/build-component-index.js",
+  "note": "Agent context kit — reuse a component before inventing. use_when from usage-doctrine.yaml.",
+  "components": [
+    {
+      "id": "accordion",
+      "name": "Accordion",
+      "selector": "#comp-accordion",
+      "category": "component",
+      "use_when": [
+        "FAQ-style breakdowns in a report (methodology, data sources, limitations as stacked sections)",
+        "Grouping insight categories where users scan headers and expand one at a time (type=\"single\" collapsible)",
+        "Settings pages with multiple bordered sections sharing identical trigger styling"
+      ],
+      "dont_use_when": [
+        "A single expandable region or custom trigger layout — use Collapsible",
+        "Sections users compare side by side or switch between constantly — use Tabs",
+        "Hiding rarely-used configuration behind one labeled toggle — use AdvancedSection"
+      ]
+    },
+    {
+      "id": "alert",
+      "name": "Alert",
+      "selector": "#comp-alert",
+      "category": "component",
+      "use_when": [
+        "Inline feedback within a page (form errors, plan limits, info)",
+        "Persistent contextual messages that live in the content"
+      ],
+      "dont_use_when": [
+        "Ephemeral feedback after an action — use Toast",
+        "Blocking actions — use AlertDialog"
+      ]
+    },
+    {
+      "id": "alert-dialog",
+      "name": "Alert Dialog",
+      "selector": "#comp-alert-dialog",
+      "category": "component",
+      "use_when": [
+        "Confirming deletion of a space, feed, or saved report where data loss is irreversible",
+        "Confirming a destructive bulk action on signals (e.g. dismiss all, purge feed items)",
+        "Interrupting the user before an action that consumes credits or triggers an external send"
+      ],
+      "dont_use_when": [
+        "Non-blocking editing or configuration of a feed or report — use Dialog",
+        "Lightweight inline confirmation that can be undone — use a toast with undo action instead",
+        "Contextual info or settings anchored to a trigger — use Popover"
+      ]
+    },
+    {
+      "id": "aspect-ratio",
+      "name": "Aspect Ratio",
+      "selector": "#comp-aspect-ratio",
+      "category": "component",
+      "use_when": [
+        "Locking media in signal cards to a consistent ratio (post thumbnails, ad creatives at 16/9 or 1/1)",
+        "Embedded video or chart previews in reports that must keep proportions across responsive grids"
+      ],
+      "dont_use_when": [
+        "Content whose height should follow its text — use Card with natural flow",
+        "Square avatars — use Avatar, which handles sizing and fallback"
+      ]
+    },
+    {
+      "id": "avatar",
+      "name": "Avatar",
+      "selector": "#comp-avatar",
+      "category": "component",
+      "use_when": [
+        "Representing a person (round shape)",
+        "Representing a brand/company/logo (square shape)",
+        "Member lists, author attribution, team displays"
+      ],
+      "dont_use_when": [
+        "Status indicators or labels — use Badge",
+        "Decorative icons that don't represent a person or brand — use Icon"
+      ]
+    },
+    {
+      "id": "badge",
+      "name": "Badge",
+      "selector": "#comp-badge",
+      "category": "component",
+      "use_when": [
+        "Status labels (Active, Paused, Error, Draft)",
+        "Counts and metadata tags",
+        "Category labels on cards"
+      ],
+      "dont_use_when": [
+        "Interactive actions — use Button",
+        "Long text — badges are single-word or short phrase only"
+      ]
+    },
+    {
+      "id": "breadcrumb",
+      "name": "Breadcrumb",
+      "selector": "#comp-breadcrumb",
+      "category": "component",
+      "use_when": [
+        "Showing location depth inside a space hierarchy (Space > Feed > Signal detail)",
+        "Report drill-downs where users navigate back up the path",
+        "Long paths that need truncation — BreadcrumbEllipsis collapses middle ancestors"
+      ],
+      "dont_use_when": [
+        "Top-level section switching — use Sidebar or Tabs; breadcrumbs reflect position, they don't offer peers",
+        "A single back action — use a Button with a chevron instead of a one-segment breadcrumb"
+      ]
+    },
+    {
+      "id": "button",
+      "name": "Button",
+      "selector": "#comp-button",
+      "category": "component",
+      "use_when": [
+        "Primary action in a view (one per screen max for default variant)",
+        "Form submission, dialog confirmation, CTA"
+      ],
+      "dont_use_when": [
+        "Navigation between pages — use a link instead",
+        "Destructive first-touch actions — use destructive variant only for confirmation"
+      ]
+    },
+    {
+      "id": "calendar",
+      "name": "Calendar",
+      "selector": "#comp-calendar",
+      "category": "component",
+      "use_when": [
+        "Picking a custom date range for a signals or mentions feed (range selection inside a Popover)",
+        "Scheduling a report delivery date or a space digest start date",
+        "Filtering insights by a specific day or week in a brand timeline view"
+      ],
+      "dont_use_when": [
+        "Choosing among preset periods like \"Last 7 days / 30 days\" — use SegmentedControl or Select",
+        "Picking a single year or month from a long list — use Select",
+        "Displaying read-only date metadata on a signal card — plain text, no picker needed"
+      ]
+    },
+    {
+      "id": "card",
+      "name": "Card",
+      "selector": "#comp-card",
+      "category": "component",
+      "use_when": [
+        "Grouping a self-contained insight or report summary on a dashboard, with title, description, and an action in the header",
+        "Presenting a signal feed's stat block (mention counts, sentiment deltas) as a bounded surface",
+        "Wrapping a space overview tile (brand logo, latest activity, quick actions) in a grid of spaces"
+      ],
+      "dont_use_when": [
+        "Rendering a long uniform list of signals or mentions — use ListItem inside a plain container",
+        "Showing dense comparative data across feeds — use Table",
+        "Housing secondary or power-user settings — use AdvancedSection"
+      ]
+    },
+    {
+      "id": "carousel",
+      "name": "Carousel",
+      "selector": "#comp-carousel",
+      "category": "component",
+      "use_when": [
+        "Swiping through ad creatives or post media attached to a single signal",
+        "Browsing a horizontal strip of featured insight cards on a space home",
+        "Stepping through report cover previews in a gallery"
+      ],
+      "dont_use_when": [
+        "Listing many signals that all need to be scannable at once — use a grid or Table",
+        "Step-by-step onboarding or setup flows — use WizardDialog",
+        "Two or three items that fit the viewport — lay them out side by side"
+      ]
+    },
+    {
+      "id": "checkbox",
+      "name": "Checkbox",
+      "selector": "#comp-checkbox",
+      "category": "component",
+      "use_when": [
+        "Multi-select from a list",
+        "Boolean toggle that needs a label",
+        "Settings that apply independently"
+      ],
+      "dont_use_when": [
+        "Mutually exclusive options — use RadioGroup",
+        "Immediate action toggle — use Switch"
+      ]
+    },
+    {
+      "id": "collapsible",
+      "name": "Collapsible",
+      "selector": "#comp-collapsible",
+      "category": "component",
+      "use_when": [
+        "Show/hide of a single optional region (expanding a truncated transcript, \"see all 12 sources\")",
+        "Collapsible sub-groups inside the Sidebar (pairs with SidebarMenuSub)",
+        "One-off \"more details\" toggles where multiple regions may be open simultaneously"
+      ],
+      "dont_use_when": [
+        "A stack of related expandable sections with shared styling — use Accordion",
+        "Advanced or destructive settings that warrant a styled, labeled reveal — use AdvancedSection"
+      ]
+    },
+    {
+      "id": "combobox",
+      "name": "Combobox",
+      "selector": "#comp-combobox",
+      "category": "component",
+      "use_when": [
+        "Typeahead brand picker when adding brands to track in a space",
+        "Selecting a feed or report destination from a long list while typing to filter",
+        "Tag/topic input on insights where options are fetched or numerous"
+      ],
+      "dont_use_when": [
+        "Few options (under ~7) with no search need — use Select",
+        "Full-screen navigational search — use Command in a palette",
+        "Free-form text with no constrained options — use Input"
+      ]
+    },
+    {
+      "id": "command",
+      "name": "Command",
+      "selector": "#comp-command",
+      "category": "component",
+      "use_when": [
+        "Global command palette (Cmd+K) to jump between spaces, feeds, and reports",
+        "Searchable action list inside a Popover (e.g. assign signal to feed from many options)",
+        "Filterable multi-group pickers — brands, sources, report templates — with keyboard navigation"
+      ],
+      "dont_use_when": [
+        "Short static option list bound to a form value — use Select",
+        "Plain action menus with no search need — use DropdownMenu",
+        "Single-field autocomplete bound to an input — use Combobox"
+      ]
+    },
+    {
+      "id": "context-menu",
+      "name": "Context Menu",
+      "selector": "#comp-context-menu",
+      "category": "component",
+      "use_when": [
+        "Right-click actions on a signal card in a feed (pin, mute brand, copy link, add to report)",
+        "Right-click on a space or feed in the sidebar tree (rename, duplicate, archive)",
+        "Power-user shortcuts on report blocks or insight rows without adding visible chrome"
+      ],
+      "dont_use_when": [
+        "Actions that need a discoverable visible trigger — use DropdownMenu on a kebab/ellipsis button",
+        "Persistent app-level menus — use Menubar",
+        "Picking a value for a form field — use Select or Combobox"
+      ]
+    },
+    {
+      "id": "data-table",
+      "name": "Data Table",
+      "selector": "#comp-data-table",
+      "category": "component",
+      "use_when": [
+        "Displaying a list of brands, mentions, or campaigns where the user needs to sort, filter, or paginate",
+        "Any tabular data set with more than ~15 rows where filtering by a column is useful",
+        "Tables that need column-visibility toggling (e.g. dashboard config views)"
+      ],
+      "dont_use_when": [
+        "Simple read-only tables with ≤10 fixed rows — use Table directly",
+        "Single-column lists — use ListView / ListItem",
+        "Leaderboard-style ranked rows — use LeaderboardRow"
+      ]
+    },
+    {
+      "id": "date-picker",
+      "name": "Date Picker",
+      "selector": "#comp-date-picker",
+      "category": "component",
+      "use_when": [
+        "Selecting a single date for scheduling (report delivery, digest start date, export date)",
+        "Selecting a date range for filtering signals, mentions, or brand timeline data"
+      ],
+      "dont_use_when": [
+        "Choosing preset periods like \"Last 7 days / 30 days\" — use SegmentedControl or Select",
+        "Showing a read-only date on a card — plain text is enough",
+        "Picking a year or month only — use Select"
+      ]
+    },
+    {
+      "id": "dialog",
+      "name": "Dialog",
+      "selector": "#comp-dialog",
+      "category": "component",
+      "use_when": [
+        "Actions that need focus and shouldn't navigate away",
+        "Forms, confirmations, sharing, configuration"
+      ],
+      "dont_use_when": [
+        "Large panels with navigation — use Sheet/Drawer",
+        "Purely informational content — use Toast or Alert"
+      ]
+    },
+    {
+      "id": "drawer",
+      "name": "Drawer",
+      "selector": "#comp-drawer",
+      "category": "component",
+      "use_when": [
+        "Mobile bottom-sheet for signal quick actions or filter controls with swipe-to-dismiss",
+        "Touch-friendly detail view of a feed item on small viewports",
+        "Progressive disclosure of report options on mobile where a centered Dialog feels cramped"
+      ],
+      "dont_use_when": [
+        "Desktop side panels — use Sheet",
+        "Blocking destructive confirmation — use AlertDialog",
+        "Anchored micro-interactions next to a control — use Popover"
+      ]
+    },
+    {
+      "id": "empty-state",
+      "name": "Empty State",
+      "selector": "#comp-empty-state",
+      "category": "component",
+      "use_when": [
+        "Page, section, or inline area with no data yet",
+        "After filtering returns zero results"
+      ],
+      "dont_use_when": [
+        "Loading states while data fetches — use Skeleton",
+        "Error feedback after a failed action — use Alert or Toast"
+      ]
+    },
+    {
+      "id": "file-input",
+      "name": "File Input",
+      "selector": "#comp-file-input",
+      "category": "component",
+      "use_when": [
+        "File upload with drag-and-drop zone inside dialogs or forms",
+        "Showing uploaded file list with remove action"
+      ],
+      "dont_use_when": [
+        "Simple single-file button upload — use a Button instead",
+        "Showing per-file async status outside a drop zone — use StatusSpinner in a ListItem row"
+      ]
+    },
+    {
+      "id": "filter-chip",
+      "name": "Filter Chip",
+      "selector": "#comp-filter-chip",
+      "category": "component",
+      "use_when": [
+        "Filter bars above signal or mention feeds — an on/off facet like \"Favourites\" (icon + active + onClick)",
+        "Dropdown-style filters in the same row (PopoverTrigger asChild with showChevron)",
+        "Quick toggling of feed scopes (paid ads / owned media / news) where chips sit side by side"
+      ],
+      "dont_use_when": [
+        "Read-only metadata on a card — use Tag or Badge, FilterChip is interactive",
+        "Mutually exclusive view switching — use SegmentedControl",
+        "Long option lists needing search — use Combobox or Select"
+      ]
+    },
+    {
+      "id": "filter-trigger",
+      "name": "Filter Trigger",
+      "selector": "#comp-filter-trigger",
+      "category": "component",
+      "use_when": [
+        "Inline filter selector inside a filter panel or search header (bare label + chevron, opens a dropdown)",
+        "Anywhere a filter has a label + optional current value displayed inline",
+        "Insights panel filter rows (Saved searches, Recent, Any source, etc.)"
+      ],
+      "dont_use_when": [
+        "Navigation — use NavItem instead",
+        "Pill-shaped filter chips — use Tag or Button ghost",
+        "Full-width row items — use NavItem",
+        "Items that expand sub-navigation — use wnav-parent with left chevron"
+      ]
+    },
+    {
+      "id": "form",
+      "name": "Form",
+      "selector": "#comp-form",
+      "category": "component",
+      "use_when": [],
+      "dont_use_when": []
+    },
+    {
+      "id": "hover-card",
+      "name": "Hover Card",
+      "selector": "#comp-hover-card",
+      "category": "component",
+      "use_when": [
+        "Previewing a brand profile (logo, follower counts, recent signals) when hovering a brand mention",
+        "Peeking at a creator or author card from a byline in a signals feed",
+        "Showing a report or space summary on hover over a link, without navigating"
+      ],
+      "dont_use_when": [
+        "Short text label or hint — use Tooltip",
+        "Content the user must click or interact with (buttons, inputs) — use Popover",
+        "Touch-first or mobile flows where hover does not exist — use Popover or Sheet"
+      ]
+    },
+    {
+      "id": "icon",
+      "name": "Icon",
+      "selector": "#comp-icon",
+      "category": "component",
+      "use_when": [
+        "Filter action buttons (paired with btn-secondary or btn-ghost)",
+        "Any UI that triggers a filter panel or filter state"
+      ],
+      "dont_use_when": [
+        "Sorting — use a sort icon instead",
+        "Search — use the Search icon"
+      ]
+    },
+    {
+      "id": "input",
+      "name": "Input",
+      "selector": "#comp-input",
+      "category": "component",
+      "use_when": [
+        "Single-line text entry",
+        "Search, email, URL, name fields"
+      ],
+      "dont_use_when": [
+        "Multi-line content — use Textarea",
+        "Selection from a list — use Select or Combobox"
+      ]
+    },
+    {
+      "id": "input-otp",
+      "name": "Input OTP",
+      "selector": "#comp-input-otp",
+      "category": "component",
+      "use_when": [
+        "Email or 2FA verification codes during sign-in",
+        "Confirming a destructive action with a short emailed code",
+        "Entering a short invite or pairing code when joining a team space"
+      ],
+      "dont_use_when": [
+        "Free-form text like a brand name or search query — use Input",
+        "Passwords or anything longer than ~8 characters — use Input type=\"password\"",
+        "API keys pasted as one blob — use Input; per-character slots fight long pastes"
+      ]
+    },
+    {
+      "id": "kbd",
+      "name": "Kbd",
+      "selector": "#comp-kbd",
+      "category": "component",
+      "use_when": [
+        "Showing the shortcut next to a command in the command palette",
+        "Hinting shortcuts inside Tooltip content on toolbar actions",
+        "Documenting keyboard navigation in empty states or onboarding hints"
+      ],
+      "dont_use_when": [
+        "Status or category labels on signals — use Badge or Tag",
+        "Interactive key remapping UI — Kbd is pointer-events-none, purely presentational"
+      ]
+    },
+    {
+      "id": "label",
+      "name": "Label",
+      "selector": "#comp-label",
+      "category": "component",
+      "use_when": [
+        "Naming form fields in space settings, feed configuration, or report setup dialogs",
+        "Pairing with Checkbox/Switch/RadioGroup rows (e.g. notification toggles per signal type)",
+        "Labeling Select or Input controls in filter and creation forms"
+      ],
+      "dont_use_when": [
+        "Section headings inside a page or card — use heading typography, not a form label",
+        "Inline descriptive helper text under a field — use muted paragraph text"
+      ]
+    },
+    {
+      "id": "list-item",
+      "name": "List Item",
+      "selector": "#comp-list-item",
+      "category": "component",
+      "use_when": [
+        "Rows in a list (people, brands, entities) with avatar + label + actions",
+        "Any interactive row that isn't a table"
+      ],
+      "dont_use_when": [
+        "Tabular data with multiple columns — use Table",
+        "Navigation items — use NavItem"
+      ]
+    },
+    {
+      "id": "loader",
+      "name": "Loader",
+      "selector": "#comp-loader",
+      "category": "component",
+      "use_when": [
+        "DotsLoader for async waits — feed refreshing, signals being fetched, report list loading",
+        "ShimmerText for AI generation in progress (\"Analyzing signals…\", agent thinking states)",
+        "TextCursor appended to streaming AI text as it types out an insight"
+      ],
+      "dont_use_when": [
+        "Content with a known layout still loading — use Skeleton so the page shape stays stable",
+        "A long-running job with measurable completion — use Progress",
+        "Step/status indication on a pipeline item — use StatusSpinner"
+      ]
+    },
+    {
+      "id": "menubar",
+      "name": "Menubar",
+      "selector": "#comp-menubar",
+      "category": "component",
+      "use_when": [
+        "Persistent app-level menu row in a desktop-style editor surface (e.g. report builder: File, Insert, View)",
+        "Grouped command sets with keyboard shortcuts always visible at the top of a workspace canvas"
+      ],
+      "dont_use_when": [
+        "Single button-triggered action list — use DropdownMenu",
+        "Primary app navigation between sections — use Sidebar or Tabs",
+        "Right-click actions on content — use ContextMenu"
+      ]
+    },
+    {
+      "id": "nav-item",
+      "name": "Nav Item",
+      "selector": "#comp-nav-item",
+      "category": "component",
+      "use_when": [
+        "Navigation between views, sections, or settings pages",
+        "Sidebar panels (Signals, Settings, Report Builder, Insights)",
+        "Settings panel items (label + trailing icon)",
+        "Signal/feed sidebar items (count badge + label)",
+        "Report builder items (label + status indicator)",
+        "Any navigable list item that is NOT a row of data"
+      ],
+      "dont_use_when": [
+        "Data rows — use ListItem",
+        "Tabular data — use Table",
+        "Opening a dropdown or filtering data — use FilterTrigger"
+      ]
+    },
+    {
+      "id": "navigation-menu",
+      "name": "Navigation Menu",
+      "selector": "#comp-navigation-menu",
+      "category": "component",
+      "use_when": [
+        "A horizontal top-bar menu where items expand into rich dropdown panels with descriptions per link",
+        "Grouped link panels on marketing or settings surfaces"
+      ],
+      "dont_use_when": [
+        "Primary app navigation in the shell — use Sidebar",
+        "Simple per-item dropdown actions — use DropdownMenu",
+        "Switching content panes in place — use Tabs"
+      ]
+    },
+    {
+      "id": "pagination",
+      "name": "Pagination",
+      "selector": "#comp-pagination",
+      "category": "component",
+      "use_when": [
+        "Paging through bounded, countable result sets (archived reports, signal search results with known totals)",
+        "Tables of mentions where users need to jump to a specific page"
+      ],
+      "dont_use_when": [
+        "Continuous reverse-chronological feeds — use infinite scroll inside ScrollArea",
+        "Tiny sets that fit one screen — render the full list, no paging chrome"
+      ]
+    },
+    {
+      "id": "popover",
+      "name": "Popover",
+      "selector": "#comp-popover",
+      "category": "component",
+      "use_when": [
+        "Date-range picker for filtering signals or report periods, anchored to a filter button",
+        "Inline settings panel for a feed widget (refresh cadence, sources) without leaving the page",
+        "Small anchored forms like \"add tag to insight\" or share-link options"
+      ],
+      "dont_use_when": [
+        "A pure action list — use DropdownMenu",
+        "Read-only hover preview of a brand or person — use HoverCard",
+        "Multi-field editing tasks or long content — use Dialog or Sheet"
+      ]
+    },
+    {
+      "id": "progress",
+      "name": "Progress",
+      "selector": "#comp-progress",
+      "category": "component",
+      "use_when": [
+        "Showing a bulk import or backfill of signals with a known percentage",
+        "Report generation steps where completion is measurable",
+        "Quota usage bars (e.g. monthly credits consumed) in workspace settings"
+      ],
+      "dont_use_when": [
+        "Indeterminate waits with no known duration — use Loader (DotsLoader) or StatusSpinner",
+        "Placeholder while a card's content loads — use Skeleton"
+      ]
+    },
+    {
+      "id": "radio-group",
+      "name": "Radio Group",
+      "selector": "#comp-radio-group",
+      "category": "component",
+      "use_when": [
+        "Mutually exclusive options where user must pick exactly one",
+        "Settings choices (e.g. \"Share only / Comment / Full access\")"
+      ],
+      "dont_use_when": [
+        "Independent toggles — use Switch or Checkbox",
+        "2 options that are view toggles — use SegmentedControl"
+      ]
+    },
+    {
+      "id": "resizable",
+      "name": "Resizable",
+      "selector": "#comp-resizable",
+      "category": "component",
+      "use_when": [
+        "Split workspace views (signal feed list left, signal detail or insight editor right, user-adjustable)",
+        "Report builder layouts where users balance an outline panel against a preview pane"
+      ],
+      "dont_use_when": [
+        "Fixed app chrome navigation — use Sidebar (it has its own collapse behavior, not freeform resize)",
+        "Static two-column layouts users never need to adjust — use plain flex/grid"
+      ]
+    },
+    {
+      "id": "scroll-area",
+      "name": "Scroll Area",
+      "selector": "#comp-scroll-area",
+      "category": "component",
+      "use_when": [
+        "A fixed-height signal feed column that scrolls independently of the page",
+        "Long filter or space lists inside popovers, dialogs, or sidebar panels that must not grow the container",
+        "Horizontal strips of report cards or media thumbnails (ScrollBar orientation=\"horizontal\")"
+      ],
+      "dont_use_when": [
+        "Whole-page scrolling — let the document scroll natively",
+        "Paged, countable results where position matters — use Pagination"
+      ]
+    },
+    {
+      "id": "segmented-control",
+      "name": "Segmented Control",
+      "selector": "#comp-segmented-control",
+      "category": "component",
+      "use_when": [
+        "2–4 mutually exclusive view modes or toggles (Everyone/Only selected, Day/Week/Month)",
+        "Inside dialog body to switch between modes or filter scope",
+        "Primary page-level navigation with many items (variant=\"surface\")"
+      ],
+      "dont_use_when": [
+        "More than 4 options with variant=\"default\" — use Tabs, Select, or variant=\"surface\"",
+        "Options with descriptions — use RadioGroup",
+        "Navigation between distinct sections — use Tabs (wtabs-pill)",
+        "Dialog footer or header — always in the body"
+      ]
+    },
+    {
+      "id": "select",
+      "name": "Select",
+      "selector": "#comp-select",
+      "category": "component",
+      "use_when": [
+        "Choosing one option from a known list (5+ options)",
+        "Filter controls"
+      ],
+      "dont_use_when": [
+        "2-3 options — use SegmentedControl or RadioGroup instead",
+        "Free-text search needed — use Combobox"
+      ]
+    },
+    {
+      "id": "separator",
+      "name": "Separator",
+      "selector": "#comp-separator",
+      "category": "component",
+      "use_when": [
+        "Grouping related items in menus, dropdowns, settings panels",
+        "Visual division between sections"
+      ],
+      "dont_use_when": [
+        "Adding space — use padding/margin instead",
+        "Separating major page sections with their own headers — use layout, not a line"
+      ]
+    },
+    {
+      "id": "sheet",
+      "name": "Sheet",
+      "selector": "#comp-sheet",
+      "category": "component",
+      "use_when": [
+        "Signal detail panel sliding in from the right while keeping the feed visible behind the overlay",
+        "Editing a space's configuration (sources, brands tracked) in a side panel",
+        "Report block inspector or insight annotation panel on desktop"
+      ],
+      "dont_use_when": [
+        "Mobile bottom-edge interactions with swipe-to-dismiss — use Drawer",
+        "Short confirmations or small forms — use Dialog or AlertDialog",
+        "Content that should persist alongside the page without modal overlay — use a Sidebar/Resizable layout instead"
+      ]
+    },
+    {
+      "id": "sidebar",
+      "name": "Sidebar",
+      "selector": "#comp-sidebar",
+      "category": "component",
+      "use_when": [
+        "The app shell's primary navigation with grouped menus and an active-route indicator",
+        "Persistent workspace switcher plus per-space navigation that survives route changes and collapses to icons",
+        "Mobile navigation that should automatically become an off-canvas Sheet drawer"
+      ],
+      "dont_use_when": [
+        "Switching between views inside a single page — use Tabs or SegmentedControl",
+        "A temporary contextual panel (signal detail, filters) — use Sheet or Drawer",
+        "A simple flat list of links inside content — use NavItem directly without the full shell"
+      ]
+    },
+    {
+      "id": "skeleton",
+      "name": "Skeleton",
+      "selector": "#comp-skeleton",
+      "category": "component",
+      "use_when": [
+        "Placeholder rows while a signals feed or mentions list fetches",
+        "Ghosting a report card grid or space sidebar during initial load",
+        "Reserving the shape of an insight summary block before data arrives"
+      ],
+      "dont_use_when": [
+        "The final layout is unknown (e.g. AI composing freeform output) — use Loader",
+        "Showing job completion percentage — use Progress"
+      ]
+    },
+    {
+      "id": "slider",
+      "name": "Slider",
+      "selector": "#comp-slider",
+      "category": "component",
+      "use_when": [
+        "Continuous value selection (volume, opacity, price range)",
+        "Range selection with two thumbs"
+      ],
+      "dont_use_when": [
+        "Precise numeric input — use Input with type=number",
+        "Choosing among a small set of discrete options — use SegmentedControl or RadioGroup"
+      ]
+    },
+    {
+      "id": "sonner",
+      "name": "Sonner",
+      "selector": "#comp-sonner",
+      "category": "component",
+      "use_when": [],
+      "dont_use_when": []
+    },
+    {
+      "id": "status-spinner",
+      "name": "Status Spinner",
+      "selector": "#comp-status-spinner",
+      "category": "component",
+      "use_when": [
+        "File upload row status",
+        "Any async operation that resolves to success/error/warning"
+      ],
+      "dont_use_when": [
+        "Page-level loading — use Skeleton",
+        "Button loading state — use DotsLoader or built-in Button loading prop"
+      ]
+    },
+    {
+      "id": "switch",
+      "name": "Switch",
+      "selector": "#comp-switch",
+      "category": "component",
+      "use_when": [
+        "Immediate on/off toggle (takes effect instantly without Save)",
+        "Feature flags, notification settings, per-item enable/disable"
+      ],
+      "dont_use_when": [
+        "Options that need a Save action — use Checkbox + Button instead",
+        "Multi-select — use Checkbox"
+      ]
+    },
+    {
+      "id": "table",
+      "name": "Table",
+      "selector": "#comp-table",
+      "category": "component",
+      "use_when": [
+        "Structured data with multiple columns and rows",
+        "Sortable, filterable data sets"
+      ],
+      "dont_use_when": [
+        "Simple lists — use ListItem/ListView",
+        "1-2 columns — use a list layout"
+      ]
+    },
+    {
+      "id": "tabs",
+      "name": "Tabs",
+      "selector": "#comp-tabs",
+      "category": "component",
+      "use_when": [
+        "Navigation between distinct sections of a page",
+        "Switching between related views (text variant for page nav, pill for inline filters, pill-primary for main page navigation)"
+      ],
+      "dont_use_when": [
+        "2-3 toggle options — use SegmentedControl",
+        "Deeply nested navigation — use sidebar"
+      ]
+    },
+    {
+      "id": "tag",
+      "name": "Tag",
+      "selector": "#comp-tag",
+      "category": "component",
+      "use_when": [
+        "User-entered removable labels (emails, keywords, filters)",
+        "Multi-value inputs where items can be added and removed"
+      ],
+      "dont_use_when": [
+        "Static labels — use Badge",
+        "Single selection — use Select"
+      ]
+    },
+    {
+      "id": "toast",
+      "name": "Toast",
+      "selector": "#comp-toast",
+      "category": "component",
+      "use_when": [
+        "Ephemeral feedback after user actions (saved, uploaded, error)",
+        "System alerts that appear in the corner and auto-dismiss"
+      ],
+      "dont_use_when": [
+        "Persistent warnings — use Alert",
+        "Blocking confirmations — use AlertDialog"
+      ]
+    },
+    {
+      "id": "toggle",
+      "name": "Toggle",
+      "selector": "#comp-toggle",
+      "category": "component",
+      "use_when": [
+        "Icon-only formatting or view affordances in an editor toolbar (e.g. bold in a report editor)",
+        "A standalone on/off tool state in a toolbar, like snapping or compact density"
+      ],
+      "dont_use_when": [
+        "Filter bars above feeds — use FilterChip, the reviewed Waldo pill for that row",
+        "Settings on/off rows — use Switch with a Label",
+        "Mutually exclusive choices — use ToggleGroup type=\"single\" or SegmentedControl"
+      ]
+    },
+    {
+      "id": "toggle-group",
+      "name": "Toggle Group",
+      "selector": "#comp-toggle-group",
+      "category": "component",
+      "use_when": [
+        "Multi-select formatting clusters in an editor toolbar (bold/italic/underline together)",
+        "Toolbar single-choice icon sets, e.g. chart type (line/bar/area) on an insight visualization"
+      ],
+      "dont_use_when": [
+        "Primary view switching — use SegmentedControl or Tabs for page-level navigation",
+        "Independent filters over a feed — use FilterChip per facet",
+        "More than ~5 options — use Select"
+      ]
+    },
+    {
+      "id": "tooltip",
+      "name": "Tooltip",
+      "selector": "#comp-tooltip",
+      "category": "component",
+      "use_when": [
+        "Explaining icon-only buttons",
+        "Showing keyboard shortcuts",
+        "Non-essential supplementary info"
+      ],
+      "dont_use_when": [
+        "Required information — put it in the UI, not a tooltip",
+        "Long text — use Popover"
+      ]
+    },
+    {
+      "id": "wizard-dialog",
+      "name": "Wizard Dialog",
+      "selector": "#comp-wizard-dialog",
+      "category": "component",
+      "use_when": [
+        "Multi-step onboarding flows",
+        "Setup flows that need contextual images/previews on the right"
+      ],
+      "dont_use_when": [
+        "Single-step forms — use Dialog",
+        "Settings — use Dialog with tabs"
+      ]
+    }
+  ],
+  "brand_api_components": [
+    {
+      "id": "ad-copy-card",
+      "name": "Ad Copy Card",
+      "selector": "#comp-ad-copy-card",
+      "category": "brand-api",
+      "use_when": [
+        "Displaying ad creative copy (headline, body, CTA) in a card",
+        "Competitive ad teardown / creative review surfaces"
+      ],
+      "dont_use_when": [
+        "Generic content — use Card",
+        "A single metric — use KPI Stat Card"
+      ]
+    },
+    {
+      "id": "alert-list-row",
+      "name": "Alert List Row",
+      "selector": "#comp-alert-list-row",
+      "category": "brand-api",
+      "use_when": [
+        "One row in an alerts / signals list (icon, message, timestamp)",
+        "Feed of system or brand alerts"
+      ],
+      "dont_use_when": [
+        "Inline ephemeral notification — use Toast",
+        "Generic list content — use ListItem"
+      ]
+    },
+    {
+      "id": "article-card",
+      "name": "Article Card",
+      "selector": "#comp-article-card",
+      "category": "brand-api",
+      "use_when": [
+        "Displaying a press or news item mentioning a brand (media monitoring feeds)",
+        "Showing earned media coverage with source, headline, and snippet"
+      ],
+      "dont_use_when": [
+        "Social post (Reddit, X, TikTok) — use Comment Card instead",
+        "Internal alert or signal — use Alert List Row"
+      ]
+    },
+    {
+      "id": "bar-track",
+      "name": "Bar Track",
+      "selector": "#comp-bar-track",
+      "category": "brand-api",
+      "use_when": [
+        "Ranked list of brands/entities by a single metric (SoV, reach, engagement)",
+        "Simple percentage breakdown without a reference point"
+      ],
+      "dont_use_when": [
+        "Metric needs a median/benchmark marker — use Benchmark Bar instead",
+        "Only one value with no comparison context — use KPI Stat Card"
+      ]
+    },
+    {
+      "id": "benchmark-bar",
+      "name": "Benchmark Bar",
+      "selector": "#comp-benchmark-bar",
+      "category": "brand-api",
+      "use_when": [
+        "Showing brand performance vs a reference point (category median, benchmark, competitor average)",
+        "Comparing multiple metrics in a stacked layout (sentiment, SoV, engagement, etc.)"
+      ],
+      "dont_use_when": [
+        "Simple percentage with no reference marker — use Quote Card frequency bar instead",
+        "Binary pass/fail metric — use Badge or Alert"
+      ]
+    },
+    {
+      "id": "brand-column",
+      "name": "Brand Column",
+      "selector": "#comp-brand-column",
+      "category": "brand-api",
+      "use_when": [
+        "Competitive overview grid showing brand share with supporting insight text",
+        "Height-encoded comparison of 3-5 brands where taller = higher share/metric"
+      ],
+      "dont_use_when": [
+        "More than 6 brands — too narrow; use a bar chart",
+        "No insight text needed — use Column Cards instead"
+      ]
+    },
+    {
+      "id": "code-block",
+      "name": "Code Block",
+      "selector": "#comp-code-block",
+      "category": "brand-api",
+      "use_when": [
+        "Displaying preformatted code, CLI commands, or prompt text the user may need to copy",
+        "Showing multi-action copy options (e.g. \"Copy prompt\" + \"Copy Curl\") over the same content block"
+      ],
+      "dont_use_when": [
+        "Inline code snippets inside prose — use a bare <code> element instead",
+        "Single-line copyable values (URLs, tokens) — use CopyLink instead"
+      ]
+    },
+    {
+      "id": "comment-card",
+      "name": "Comment Card",
+      "selector": "#comp-comment-card",
+      "category": "brand-api",
+      "use_when": [
+        "Displaying a social mention (Reddit, X, TikTok, Instagram, etc.)",
+        "Feed of brand mentions with platform, author, sentiment, and text"
+      ],
+      "dont_use_when": [
+        "Internal system alerts — use Alert List Row",
+        "Generic list content without platform context — use List Item"
+      ]
+    },
+    {
+      "id": "copy-link",
+      "name": "Copy Link",
+      "selector": "#comp-copy-link",
+      "category": "brand-api",
+      "use_when": [
+        "Displaying a shareable URL the user should copy (invite link, share link, public URL)",
+        "Inside dialog bodies where a link needs to be copied with one click"
+      ],
+      "dont_use_when": [
+        "Editable URL fields — use Input instead",
+        "Multiple links in a list — use ListItem instead"
+      ]
+    },
+    {
+      "id": "depth-pill",
+      "name": "Depth Pill",
+      "selector": "#comp-depth-pill",
+      "category": "brand-api",
+      "use_when": [
+        "Compact inline indicator of a depth/intensity score",
+        "Annotating an item with a small quantified badge"
+      ],
+      "dont_use_when": [
+        "Binary status — use Badge or Live Badge",
+        "Filtering — use FilterChip"
+      ]
+    },
+    {
+      "id": "drill-panel",
+      "name": "Drill Panel",
+      "selector": "#comp-drill-panel",
+      "category": "brand-api",
+      "use_when": [
+        "Dashboard drill-down detail on a metric, chart point, or list row (right slide-in)",
+        "Contextual detail that should not navigate away from the dashboard"
+      ],
+      "dont_use_when": [
+        "Blocking confirmations or forms — use Dialog / AlertDialog",
+        "Static side content that is always visible — use Sheet (.wsheet shell)",
+        "Ephemeral feedback — use Toast"
+      ]
+    },
+    {
+      "id": "dual-bar-row",
+      "name": "Dual-Bar Row",
+      "selector": "#comp-dual-bar-row",
+      "category": "brand-api",
+      "use_when": [
+        "Comparing the same metric between two brands/entities side by side (e.g. Nike 68% vs Adidas 52%)",
+        "Competitive snapshot rows inside a card or list"
+      ],
+      "dont_use_when": [
+        "Single brand metric with no comparison — use Benchmark Bar instead",
+        "More than two entities — use a chart"
+      ]
+    },
+    {
+      "id": "kpi-stat-card",
+      "name": "KPI Stat Card",
+      "selector": "#comp-kpi-stat-card",
+      "category": "brand-api",
+      "use_when": [
+        "Headline metric on a dashboard (big number + label + trend delta)",
+        "Summarizing a single KPI with period-over-period change"
+      ],
+      "dont_use_when": [
+        "Showing more than one metric — use a grid of cards, one KPI each",
+        "Listing ranked items — use Leaderboard Row"
+      ]
+    },
+    {
+      "id": "leaderboard-row",
+      "name": "Leaderboard Row",
+      "selector": "#comp-leaderboard-row",
+      "category": "brand-api",
+      "use_when": [
+        "Any ranked list — rank + entity + a right-hand value, one item per row",
+        "Comparing entities ordered by a metric (magnitude OR trend/momentum)",
+        "Trending items per source (hashtags, topics, subreddits) — use the trend variant + .lb-head",
+        "Multi-source comparison — one .lb column per source, composed side by side"
+      ],
+      "dont_use_when": [
+        "Non-ranked tabular data — use Table",
+        "A single headline metric — use KPI Stat Card",
+        "A simple percentage breakdown with a fill bar — use Bar Track"
+      ]
+    },
+    {
+      "id": "live-badge",
+      "name": "Live Badge",
+      "selector": "#comp-live-badge",
+      "category": "brand-api",
+      "use_when": [
+        "Indicating a real-time / live state on a surface",
+        "Marking streaming or actively-updating data"
+      ],
+      "dont_use_when": [
+        "Static status label — use Badge",
+        "A depth/intensity value — use Depth Pill"
+      ]
+    },
+    {
+      "id": "media-tile",
+      "name": "Media Tile",
+      "selector": "#comp-media-tile",
+      "category": "brand-api",
+      "use_when": [
+        "Displaying a social post thumbnail in a grid (image or video)",
+        "Ad creative previews in a compact grid layout",
+        "Brand owned/earned media feed grids"
+      ],
+      "dont_use_when": [
+        "Full article or blog post with long metadata — use Article Card",
+        "Single featured image — use a plain image with aspect-ratio"
+      ]
+    },
+    {
+      "id": "quote-card",
+      "name": "Quote Card",
+      "selector": "#comp-quote-card",
+      "category": "brand-api",
+      "use_when": [
+        "Displaying a Voice-of-Customer cluster (verbatim quote + frequency)",
+        "Showing what audiences love or pain about a brand"
+      ],
+      "dont_use_when": [
+        "Social mention with platform/author context — use Comment Card",
+        "Generic testimonial without frequency data"
+      ]
+    },
+    {
+      "id": "recommendation-card",
+      "name": "Recommendation Card",
+      "selector": "#comp-recommendation-card",
+      "category": "brand-api",
+      "use_when": [
+        "Surfacing an AI-generated strategic recommendation (comms, product, campaign, etc.)",
+        "Presenting actionable insights with supporting evidence quotes in a feed or panel"
+      ],
+      "dont_use_when": [
+        "Static data metric with no action — use KPI Stat Card or Benchmark Bar",
+        "Simple alert or signal without contextual evidence — use Alert List Row"
+      ]
+    },
+    {
+      "id": "score-ring",
+      "name": "Score Ring",
+      "selector": "#comp-score-ring",
+      "category": "brand-api",
+      "use_when": [
+        "Showing a single 0–100 score (reputation, resonance, presence, health) where the value sits within a good/watch/at-risk range",
+        "Presenting one headline metric prominently (hero variant) or a small grid of scores (input variant)",
+        "The zone (how good/bad the number is) matters as much as the number itself"
+      ],
+      "dont_use_when": [
+        "The metric has no meaningful 0–100 ceiling or range — use KPI Stat Card",
+        "Comparing a value against a reference point (median, benchmark) — use Benchmark Bar",
+        "Showing a proportional breakdown of parts — use Donut Chart or Segmented Bar"
+      ]
+    },
+    {
+      "id": "theme-pill",
+      "name": "Theme Pill",
+      "selector": "#comp-theme-pill",
+      "category": "brand-api",
+      "use_when": [],
+      "dont_use_when": []
+    },
+    {
+      "id": "waldo-logo",
+      "name": "Waldo Logo",
+      "selector": "#comp-waldo-logo",
+      "category": "brand-api",
+      "use_when": [
+        "Displaying the Waldo wordmark in topbars, splash screens, or branded surfaces"
+      ],
+      "dont_use_when": [
+        "Generic icon usage — use a standard icon instead"
+      ]
+    }
+  ],
+  "charts": [
+    {
+      "id": "area",
+      "name": "Area Charts",
+      "selector": "#chart-page-area",
+      "category": "chart",
+      "use_when": [],
+      "dont_use_when": []
+    },
+    {
+      "id": "bar",
+      "name": "Bar Charts",
+      "selector": "#chart-page-bar",
+      "category": "chart",
+      "use_when": [],
+      "dont_use_when": []
+    },
+    {
+      "id": "line",
+      "name": "Line Charts",
+      "selector": "#chart-page-line",
+      "category": "chart",
+      "use_when": [],
+      "dont_use_when": []
+    },
+    {
+      "id": "pie",
+      "name": "Pie Charts",
+      "selector": "#chart-page-pie",
+      "category": "chart",
+      "use_when": [],
+      "dont_use_when": []
+    },
+    {
+      "id": "radar",
+      "name": "Radar Charts",
+      "selector": "#chart-page-radar",
+      "category": "chart",
+      "use_when": [],
+      "dont_use_when": []
+    },
+    {
+      "id": "radial",
+      "name": "Radial Charts",
+      "selector": "#chart-page-radial",
+      "category": "chart",
+      "use_when": [],
+      "dont_use_when": []
+    },
+    {
+      "id": "tooltip",
+      "name": "Chart Tooltip",
+      "selector": "#chart-page-tooltip",
+      "category": "chart",
+      "use_when": [
+        "Plotting signal volume over time for a brand or competitor feed",
+        "Visualizing sentiment or share-of-voice breakdowns inside a report",
+        "Rendering trend lines for audience or category insights in a dashboard card"
+      ],
+      "dont_use_when": [
+        "Showing a single completion percentage — use Progress",
+        "Displaying one headline number with a delta — use a stat card with Badge",
+        "Tabular data the user needs to sort or copy — use Table"
+      ]
+    },
+    {
+      "id": "palette",
+      "name": "Chart Palette",
+      "selector": "#chart-page-palette",
+      "category": "chart",
+      "use_when": [
+        "Plotting signal volume over time for a brand or competitor feed",
+        "Visualizing sentiment or share-of-voice breakdowns inside a report",
+        "Rendering trend lines for audience or category insights in a dashboard card"
+      ],
+      "dont_use_when": [
+        "Showing a single completion percentage — use Progress",
+        "Displaying one headline number with a delta — use a stat card with Badge",
+        "Tabular data the user needs to sort or copy — use Table"
+      ]
+    },
+    {
+      "id": "donut",
+      "name": "Donut Chart",
+      "selector": "#chart-page-donut",
+      "category": "chart",
+      "use_when": [],
+      "dont_use_when": []
+    },
+    {
+      "id": "hbar",
+      "name": "Horizontal Bar",
+      "selector": "#chart-page-hbar",
+      "category": "chart",
+      "use_when": [],
+      "dont_use_when": []
+    },
+    {
+      "id": "proportion",
+      "name": "Proportion Bar",
+      "selector": "#chart-page-proportion",
+      "category": "chart",
+      "use_when": [],
+      "dont_use_when": []
+    },
+    {
+      "id": "trend",
+      "name": "Trend Line",
+      "selector": "#chart-page-trend",
+      "category": "chart",
+      "use_when": [],
+      "dont_use_when": []
+    },
+    {
+      "id": "sparkline",
+      "name": "Sparkline",
+      "selector": "#chart-page-sparkline",
+      "category": "chart",
+      "use_when": [],
+      "dont_use_when": []
+    },
+    {
+      "id": "gantt",
+      "name": "Gantt",
+      "selector": "#chart-page-gantt",
+      "category": "chart",
+      "use_when": [],
+      "dont_use_when": []
+    },
+    {
+      "id": "segbar",
+      "name": "Segmented Bar",
+      "selector": "#chart-page-segbar",
+      "category": "chart",
+      "use_when": [
+        "Showing proportional distribution of topics, themes, or categories across a brand's content",
+        "Comparing message mix between two brands side by side (one bar per brand)",
+        "Sentiment breakdown where each segment's share matters visually"
+      ],
+      "dont_use_when": [
+        "Comparing absolute values between entities — use Benchmark Bar or Dual-Bar Row",
+        "More than 6 segments — bar becomes unreadable; use a Donut Chart instead",
+        "Single metric with no breakdown — use a KPI Stat Card"
+      ]
+    },
+    {
+      "id": "column-card",
+      "name": "Column Cards",
+      "selector": "#chart-page-column-card",
+      "category": "chart",
+      "use_when": [
+        "Week-over-week or period comparison of engagement metrics (posts, interactions, delta %)",
+        "When the magnitude of each period should be visually encoded by card height"
+      ],
+      "dont_use_when": [
+        "More than 8 periods — cards become too narrow; use a Bar Chart instead",
+        "Comparing multiple brands in the same chart — use grouped Bar Chart",
+        "Single metric with no period comparison — use KPI Stat Card"
+      ]
+    }
+  ]
+}
