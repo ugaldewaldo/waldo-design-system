@@ -21,17 +21,6 @@ const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'build', '.next']);
 const SKIP_PATH_SEGMENTS = ['waldo-labs']; // prototype lab files — not DS components
 const SKIP_FILES = new Set(['waldo-ds.css']); // compiled DS stylesheet — source of truth, not linted
 
-// -rgb companion tokens shipped by the DS (opacity convention: solid=var(--x) hex, alpha=rgba(var(--x-rgb),a)).
-// A var(--x-rgb) reference must resolve to one of these or a token defined locally in the same file.
-const DS_CSS_PATH = path.join(__dirname, '..', 'waldo-ds.css');
-function loadDsRgbTokens() {
-  try {
-    const css = fs.readFileSync(DS_CSS_PATH, 'utf8');
-    return new Set([...css.matchAll(/--([a-z0-9-]+-rgb)\s*:/g)].map((m) => m[1]));
-  } catch { return new Set(); }
-}
-const DS_RGB_TOKENS = loadDsRgbTokens();
-
 /* ── Rules from the catalog ────────────────────────────────────── */
 
 function loadRules(catalogText) {
@@ -151,8 +140,6 @@ function scanFile(filePath, rules) {
   const findings = [];
   const text = fs.readFileSync(filePath, 'utf8');
   const lines = text.split('\n');
-  // -rgb companion tokens defined locally in this file (e.g. a prototype's own :root)
-  const localRgb = new Set([...text.matchAll(/--([a-z0-9-]+-rgb)\s*:/g)].map((m) => m[1]));
   const add = (line, severity, rule, message, suggestion) =>
     findings.push({ file: filePath, line, severity, rule, message, suggestion: suggestion || null });
 
@@ -178,15 +165,6 @@ function scanFile(filePath, rules) {
     // an unclosed /* opens a block: scan the part before it, then enter the block
     const open = line.indexOf('/*');
     if (open !== -1) { inBlock = true; line = line.slice(0, open); }
-
-    // 0. undefined -rgb companion: var(--x-rgb) must be DS-shipped or defined locally,
-    //    else rgba(var(--x-rgb),a) is invalid CSS and the opacity silently fails.
-    for (const m of line.matchAll(/var\(\s*--([a-z0-9-]+-rgb)\s*\)/g)) {
-      const tok = m[1];
-      if (!DS_RGB_TOKENS.has(tok) && !localRgb.has(tok)) {
-        add(n, 'error', 'undefined-rgb-token', `var(--${tok}) — --${tok} is not defined (DS or local), so rgba(var(--${tok}),a) is invalid`, `add --${tok} to tools/waldo-ds.styles.css (channels matching its hex), or define it locally`);
-      }
-    }
 
     // 1. hex colors
     for (const m of line.matchAll(/#[0-9a-fA-F]{3,8}\b/g)) {

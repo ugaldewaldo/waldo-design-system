@@ -25,8 +25,9 @@ pieces here work so you can change them safely.
 - **Tune false positives in the detector, not by loosening real rules.** Verify a flag is real before "fixing" a component.
 - After any change here, run `bash tools/ds-audit.sh` and confirm the guard still passes.
 
-## In flight
-An **HSL overlay migration** is on branch `hsl-migration` (PRO-2741): `waldo-ds.css` becomes
-token-free and consumes the HSL theme via `hsl(var(--token)/a)`; the `-rgb` companion
-convention + `undefined-rgb-token` rule retire when it lands. Until then, the hex + `-rgb`
-convention is still live.
+## HSL overlay (landed)
+`waldo-ds.css` is **token-free** and consumes the HSL theme (`waldo-shadcn-theme.css`) via
+`hsl(var(--token)/a)`. The old `-rgb` companion convention + the `undefined-rgb-token` detect
+rule are **retired**. Re-runnable transforms live at `tools/hsl-migrate.js` (styles+theme) and
+`tools/hsl-index.js` (any HTML — SVG-attr-aware). Remaining coordination is in PRO-2741 (Steve's
+labs vendoring + the monorepo sync-upstream entry for `waldo-ds.css`).
