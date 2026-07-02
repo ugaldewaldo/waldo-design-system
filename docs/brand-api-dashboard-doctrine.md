@@ -331,7 +331,13 @@ muted uppercase month labels below.
 - **Platform favicon chips:** identify external sources with a small favicon from a
   favicon service (`https://www.google.com/s2/favicons?domain=<domain>&sz=64`), ~14–16px,
   small radius; degrade gracefully to a neutral dot on error — never a broken image.
-  Favicons are the one sanctioned remote asset.
+- **Remote media (favicons + content thumbnails):** the only sanctioned remote assets
+  are favicons (rule above) and **content thumbnails on media tiles** (owned posts, ad
+  creatives — real images when they exist). Every remote image MUST degrade gracefully:
+  favicons fall back to a neutral dot; thumbnails fall back to a local token-gradient
+  placeholder (`onerror` removes the img, the fallback shows underneath). Never a broken
+  image, never a layout shift. No other remote assets — no CDN scripts, no external
+  fonts, no hero images.
 - **Toast:** fixed bottom-center, ~2.6s auto-dismiss, confirmations only — never errors.
 - **Live badge:** low-opacity `var(--destructive)` tint + animated dot; only for genuinely
   real-time states.

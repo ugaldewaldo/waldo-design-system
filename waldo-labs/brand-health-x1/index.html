@@ -310,8 +310,13 @@ body { background: var(--background); color: var(--foreground); font-family: 'In
 .mtile-post { display: flex; flex-direction: column; gap: 7px; flex: none; width: 140px; cursor: pointer; }
 .mtile { position: relative; aspect-ratio: 4/5; border-radius: var(--radius-2-5xl); overflow: hidden; background: var(--secondary); display: block; width: 100%; }
 .mtile-thumb { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 10px; }
-.mtile-eng { position: absolute; top: 8px; right: 8px; z-index: 2; font-size: var(--fs-xs); font-weight: 600; color: var(--foreground); background: rgba(0, 0, 0, 0.50); border-radius: 9999px; padding: 2px 7px; line-height: 1.4; display: flex; align-items: center; gap: 4px; }
-.mtile-caption { position: relative; z-index: 2; font-size: var(--fs-xs); color: var(--foreground); line-height: 1.4; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
+.mtile-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+/* Scrim keeps the caption readable over a photo. If the photo fails to load
+   the img removes itself and the token-gradient fallback underneath shows —
+   doctrine: degrade gracefully, never a broken image. */
+.mtile-scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.15) 40%, transparent 70%); }
+.mtile-eng { position: absolute; top: 8px; right: 8px; z-index: 2; font-size: var(--fs-xs); font-weight: 600; color: #ffffff; background: rgba(0, 0, 0, 0.50); border-radius: 9999px; padding: 2px 7px; line-height: 1.4; display: flex; align-items: center; gap: 4px; }
+.mtile-caption { position: relative; z-index: 2; font-size: var(--fs-xs); color: #ffffff; line-height: 1.4; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
 .mtile-post-footer { display: flex; align-items: center; gap: 5px; padding: 0 2px; }
 .mtile-post-eng { font-size: var(--fs-xs); color: var(--muted-foreground); display: flex; align-items: center; gap: 4px; }
 .mtile-post-platform { font-size: var(--fs-xs); color: var(--muted-foreground); margin-left: auto; }
@@ -392,6 +397,7 @@ tr.median-row td:first-child { font-style: normal; }
 .drill-stat-label { font-size: var(--fs-xs); color: var(--muted-foreground); }
 .drill-stat-val { font-size: var(--fs-base); font-weight: 500; color: var(--foreground); font-variant-numeric: tabular-nums; }
 .drill-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.drill-media { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: var(--radius-xl); display: block; }
 
 /* ── Toast ────────────────────────────────────────────────────────────── */
 .toast-wrap { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 300; display: none; }
@@ -1105,12 +1111,12 @@ var TRENDING = {
 };
 
 var OWNED_POSTS = [
-  { platform: 'Instagram', caption: 'the BÉIS × Poppi collab is almost here — mini cans, meet your travel case ✈️', eng: '48.2k', sentiment: 'pos', c1: 'var(--chart-5)', c2: 'var(--chart-12)' },
-  { platform: 'TikTok', caption: 'POV: the mini cans fit in literally every bag pocket', eng: '1.2M', sentiment: 'pos', c1: 'var(--chart-1)', c2: 'var(--chart-6)' },
-  { platform: 'Instagram', caption: 'Shirley Temple szn never ended 🍒 one sip and you\'re starstruck', eng: '31.7k', sentiment: 'pos', c1: 'var(--chart-4)', c2: 'var(--chart-3)' },
-  { platform: 'TikTok', caption: 'replying to "is it actually good for your gut" — let\'s talk prebiotics', eng: '640k', sentiment: 'mix', c1: 'var(--chart-8)', c2: 'var(--chart-10)' },
-  { platform: 'Instagram', caption: 'fridge restock ASMR — which flavor wall is yours?', eng: '22.4k', sentiment: 'pos', c1: 'var(--chart-7)', c2: 'var(--chart-9)' },
-  { platform: 'TikTok', caption: 'we brought back the fan-favorite: cherry limeade minis at Walmart now', eng: '890k', sentiment: 'pos', c1: 'var(--chart-11)', c2: 'var(--chart-5)' }
+  { platform: 'Instagram', caption: 'the BÉIS × Poppi collab is almost here — mini cans, meet your travel case ✈️', eng: '48.2k', sentiment: 'pos', img: 'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=300&h=375&fit=crop', c1: 'var(--chart-5)', c2: 'var(--chart-12)' },
+  { platform: 'TikTok', caption: 'POV: the mini cans fit in literally every bag pocket', eng: '1.2M', sentiment: 'pos', img: 'https://images.unsplash.com/photo-1527960471264-932f39eb5846?w=300&h=375&fit=crop', c1: 'var(--chart-1)', c2: 'var(--chart-6)' },
+  { platform: 'Instagram', caption: 'Shirley Temple szn never ended 🍒 one sip and you\'re starstruck', eng: '31.7k', sentiment: 'pos', img: 'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=300&h=375&fit=crop', c1: 'var(--chart-4)', c2: 'var(--chart-3)' },
+  { platform: 'TikTok', caption: 'replying to "is it actually good for your gut" — let\'s talk prebiotics', eng: '640k', sentiment: 'mix', img: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?w=300&h=375&fit=crop', c1: 'var(--chart-8)', c2: 'var(--chart-10)' },
+  { platform: 'Instagram', caption: 'fridge restock ASMR — which flavor wall is yours?', eng: '22.4k', sentiment: 'pos', img: 'https://images.unsplash.com/photo-1536939459926-301728717817?w=300&h=375&fit=crop', c1: 'var(--chart-7)', c2: 'var(--chart-9)' },
+  { platform: 'TikTok', caption: 'we brought back the fan-favorite: cherry limeade minis at Walmart now', eng: '890k', sentiment: 'pos', img: 'https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=300&h=375&fit=crop', c1: 'var(--chart-11)', c2: 'var(--chart-5)' }
 ];
 
 var ADS = [
@@ -1608,6 +1614,8 @@ function renderPresence() {
   document.getElementById('pres-owned').innerHTML = OWNED_POSTS.map(function (o, idx) {
     return '<div class="mtile-post" data-drill="owned" data-idx="' + idx + '">'
       + '<div class="mtile"><div class="mtile-thumb" style="background:linear-gradient(150deg, color-mix(in srgb, ' + o.c1 + ' 55%, var(--card)), color-mix(in srgb, ' + o.c2 + ' 35%, var(--background)));">'
+      + (o.img ? '<img class="mtile-img" src="' + o.img + '" alt="" onerror="this.remove()">' : '')
+      + '<span class="mtile-scrim"></span>'
       + '<span class="mtile-caption">' + esc(o.caption) + '</span></div>'
       + '<span class="mtile-eng num">♥ ' + o.eng + '</span></div>'
       + '<div class="mtile-post-footer"><span class="comment-sentiment ' + o.sentiment + '">' + o.sentiment.toUpperCase() + '</span>'
@@ -1880,6 +1888,7 @@ document.addEventListener('click', function (e) {
   else if (kind === 'owned') {
     var o = OWNED_POSTS[+el.dataset.idx];
     openDrill('Owned post · ' + o.platform, '@drinkpoppi', ''
+      + (o.img ? '<img class="drill-media" src="' + o.img + '" alt="" onerror="this.remove()">' : '')
       + '<div class="drill-sec"><span class="drill-sec-label">Caption</span><div class="drill-text">' + esc(o.caption) + '</div></div>'
       + statGrid([['Engagement', o.eng], ['Sentiment', o.sentiment.toUpperCase()], ['Platform', o.platform], ['Account', '@drinkpoppi']]));
   } else if (kind === 'ad') {
