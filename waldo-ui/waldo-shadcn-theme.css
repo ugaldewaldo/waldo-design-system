@@ -25,6 +25,8 @@
   /* type scale + radius-full (vendored for the vanilla layer) */
   --fs-xs: 12px; --fs-sm: 14px; --fs-base: 16px; --fs-lg: 18px; --fs-xl: 20px; --fs-2xl: 24px; --fs-5xl: 32px;
   --radius-full: 9999px;
+  /* marketing brand accents — showcase/demo use (HSL to match the theme) */
+  --brand-yellow-500: 42 95% 59%; --brand-pink-500: 334 91% 44%; --brand-purple-500: 264 85% 58%;
 
 
   /* ── zinc (Waldo dark neutral) ── */
