@@ -234,7 +234,7 @@ components:
   - component: Tabs
     use_when:
       - Navigation between distinct sections of a page
-      - Switching between related views (text variant for page nav, pill for inline filters)
+      - Switching between related views (text variant for page nav, pill for inline filters, pill-primary for main page navigation)
     dont_use_when:
       - 2-3 toggle options — use SegmentedControl
       - Deeply nested navigation — use sidebar
@@ -242,9 +242,14 @@ components:
       - SegmentedControl: when switching navigates between distinct sections rather than toggling modes on the same data
       - Select: when there are few enough sections to show all options inline
     notes: |
-      Two variants: text = transparent, px-3 py-2, active = text-foreground + font-medium (page-level nav);
-      pill = px-3 py-1 rounded-full, active = bg-secondary + font-medium + shadow-surface (inline filters, view toggles).
-      Inactive: text-muted-foreground, hover to foreground. Built on Radix Tabs; disabled opacity-40.
+      Three variants: text = transparent, px-3 py-2, active = text-foreground + font-medium + 1px primary
+      underline (square edges — rounded-none, border-b; align flush with the container divider) (page-level nav);
+      pill = px-3 py-1 rounded-full, active = bg-secondary + font-medium + shadow-surface (inline filters, view toggles);
+      pill-primary = Waldo extension, no shadcn equivalent. Main page navigation only — at most ONE per page.
+      List: track bg-foreground/3% rounded-full p-1. Trigger: px-4 py-1.5, inactive text-foreground/70 (text/secondary,
+      brighter than the other variants' muted-foreground), active = solid bg-foreground + text-background + font-medium
+      + shadow-surface. Vanilla: .wtabs-pill.primary > .wtab-pill.
+      Inactive on text/pill variants: text-muted-foreground, hover to foreground. Built on Radix Tabs; disabled opacity-40.
       Figma node 83931-3758.
 
 
@@ -1370,6 +1375,28 @@ components:
         NEVER use border-left (banned by DS rules).
       Footer (.rec-foot): border-top color-mix foreground 8%, padding-top 8px, space-between layout.
       Action icons (.rec-action): 28×28px, radius var(--radius-md), var(--muted-foreground) icons.
+
+  - component: Score Ring
+    use_when:
+      - Showing a single 0–100 score (reputation, resonance, presence, health) where the value sits within a good/watch/at-risk range
+      - Presenting one headline metric prominently (hero variant) or a small grid of scores (input variant)
+      - The zone (how good/bad the number is) matters as much as the number itself
+    dont_use_when:
+      - The metric has no meaningful 0–100 ceiling or range — use KPI Stat Card
+      - Comparing a value against a reference point (median, benchmark) — use Benchmark Bar
+      - Showing a proportional breakdown of parts — use Donut Chart or Segmented Bar
+    prefer_over:
+      - KPI Stat Card: when the score's zone (good/watch/at-risk) should be encoded visually by arc color
+      - Radial Chart (chart-page-radial): when you need the full card composition (label + delta row + hero variant), not just the bare gauge
+    notes: |
+      Card shell: .sring — background var(--card), radius var(--radius-xl), flex column centered.
+      Zone variants (arc color): .good → var(--primary), .watch → var(--warning), .risk → var(--destructive). Married to the score's range, never mixed arbitrarily.
+      Size variants: default (input, 120px svg) and .hero (184px svg, elevated shadow, label below in foreground).
+      Keep it light, not heavy: thin strokes (arc + track stroke-width 4 input / 5 hero, round caps), small regular-weight numbers, regular-weight labels. Never bold — bold + thick rings read as crude.
+      Gauge: svg 0 0 120 120, r=52 (circumference ≈ 327). Arc = .sring-arc circle with stroke-dasharray "<value/100·327> 327" and transform rotate(-90 60 60) to start at 12 o'clock. Track = .sring-track.
+      SVG color MUST come from CSS classes (.sring-arc, .sring-num) — never a fill=/stroke= attribute (attributes don't resolve var()). .sring-svg needs display:block + flex:none so the DS svg{display:block} reset doesn't collapse it in flex.
+      Center: .sring-num (28px input / 44px hero, weight 400) + optional .sring-suffix (e.g. "% SOV").
+      Optional .sring-label + .sring-delta row (period-over-period): .up → var(--primary), .dn → var(--destructive).
 
   - component: Segmented Bar
     use_when:

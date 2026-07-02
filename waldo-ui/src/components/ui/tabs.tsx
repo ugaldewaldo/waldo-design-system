@@ -6,14 +6,19 @@ import { cn } from "@/lib/utils";
 // ─────────────────────────────────────────────────────────────────────────────
 // Waldo Tabs — Figma DS node 83931-3758
 //
-// Two variants:
+// Three variants:
 //   text  → transparent background, active = foreground + font-medium
-//           inactive = muted-foreground. No pill, no underline.
+//           + 1px primary underline (square edges, flush with the divider).
+//           inactive = muted-foreground. No pill.
 //           Use for: page-level navigation, section headers.
 //
 //   pill  → active tab has bg-secondary pill (rounded-full)
 //           inactive = transparent + muted-foreground.
 //           Use for: inline filters, view toggles, compact navigation.
+//
+//   pill-primary → Waldo extension (no shadcn equivalent). Solid foreground
+//           active pill on a subtle track; inactive = foreground/70.
+//           Use for: main page navigation — at most one per page.
 //
 // Built on Radix UI Tabs for full keyboard + ARIA support.
 // ─────────────────────────────────────────────────────────────────────────────
@@ -29,6 +34,7 @@ const tabsListVariants = cva(
       variant: {
         text: "gap-0",
         pill: "gap-1",
+        "pill-primary": "gap-0.5 rounded-full bg-foreground/[0.03] p-1",
       },
     },
     defaultVariants: { variant: "text" },
@@ -66,16 +72,23 @@ const tabsTriggerVariants = cva(
     variants: {
       variant: {
         text: [
-          "px-3 py-2 rounded-md",
+          "px-3 py-2 rounded-none border-b border-transparent",
           "text-muted-foreground",
           "hover:text-foreground",
-          "data-[state=active]:text-foreground data-[state=active]:font-medium",
+          "data-[state=active]:text-foreground data-[state=active]:font-medium data-[state=active]:border-primary",
         ],
         pill: [
           "px-3 py-1 rounded-full",
           "text-muted-foreground",
           "hover:text-foreground",
           "data-[state=active]:bg-secondary data-[state=active]:text-foreground data-[state=active]:font-medium",
+          "data-[state=active]:shadow-surface",
+        ],
+        "pill-primary": [
+          "px-4 py-1.5 rounded-full",
+          "text-foreground/70",
+          "hover:text-foreground",
+          "data-[state=active]:bg-foreground data-[state=active]:text-background data-[state=active]:font-medium",
           "data-[state=active]:shadow-surface",
         ],
       },

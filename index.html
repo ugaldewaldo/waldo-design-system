@@ -3564,7 +3564,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   <div id="comp-tabs" class="waldo-page">
     <div class="page-header">
       <div class="page-title">Tabs</div>
-      <div class="page-desc">Two variants: <strong>text</strong> — transparent, active tab is foreground + medium weight. <strong>Pill</strong> — active tab has a pill background. Both use Radix UI for full keyboard + ARIA support.</div>
+      <div class="page-desc">Three variants: <strong>text</strong> — transparent, active tab is foreground + medium weight with a 1px primary underline. <strong>Pill</strong> — active tab has a pill background. <strong>Pill primary</strong> — solid foreground active pill on a subtle track, for main page navigation. All use Radix UI for full keyboard + ARIA support.</div>
     </div>
 
 
@@ -3573,7 +3573,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       <div class="section-title">Text — page navigation, section headers</div>
       <div class="demo-block">
         <div class="demo-canvas col" style="align-items:flex-start;gap:0;padding:0">
-          <div style="padding:16px 24px;border-bottom:1px solid var(--border);width:100%">
+          <div style="padding:16px 24px 0;border-bottom:1px solid var(--border);width:100%">
             <div class="wtabs-text" id="tabs-text-demo">
               <button class="wtab-text active" onclick="switchTab('tabs-text-demo',this,'text-panel')">Overview</button>
               <button class="wtab-text" onclick="switchTab('tabs-text-demo',this,'text-panel')">Signals</button>
@@ -3639,6 +3639,25 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         <div class="demo-code-bar">
           <span class="demo-code-label">&lt;TabsList variant="pill"&gt;&lt;TabsTrigger value="files"&gt;Files&lt;/TabsTrigger&gt;…&lt;/TabsList&gt;</span>
           <button class="copy-btn" onclick="copyCode(this,'&lt;Tabs defaultValue=&quot;files&quot;&gt;\n  &lt;TabsList variant=&quot;pill&quot;&gt;\n    &lt;TabsTrigger value=&quot;files&quot;&gt;Files&lt;/TabsTrigger&gt;\n    &lt;TabsTrigger value=&quot;shared&quot;&gt;Shared&lt;/TabsTrigger&gt;\n  &lt;/TabsList&gt;\n&lt;/Tabs&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pill primary variant -->
+    <div class="section">
+      <div class="section-title">Pill primary — main page navigation, one per page</div>
+      <div class="demo-block">
+        <div class="demo-canvas" style="align-items:flex-start">
+          <div class="wtabs-pill primary" id="tabs-pill-primary">
+            <button class="wtab-pill active" onclick="switchTab('tabs-pill-primary',this)">Resonance</button>
+            <button class="wtab-pill" onclick="switchTab('tabs-pill-primary',this)">Reputation</button>
+            <button class="wtab-pill" onclick="switchTab('tabs-pill-primary',this)">Presence</button>
+            <button class="wtab-pill" onclick="switchTab('tabs-pill-primary',this)">News</button>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;TabsList variant="pill-primary"&gt;&lt;TabsTrigger value="resonance"&gt;Resonance&lt;/TabsTrigger&gt;…&lt;/TabsList&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;Tabs defaultValue=&quot;resonance&quot;&gt;\n  &lt;TabsList variant=&quot;pill-primary&quot;&gt;\n    &lt;TabsTrigger value=&quot;resonance&quot;&gt;Resonance&lt;/TabsTrigger&gt;\n    &lt;TabsTrigger value=&quot;reputation&quot;&gt;Reputation&lt;/TabsTrigger&gt;\n  &lt;/TabsList&gt;\n&lt;/Tabs&gt;')">Copy</button>
         </div>
       </div>
     </div>
