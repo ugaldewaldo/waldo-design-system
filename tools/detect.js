@@ -221,7 +221,7 @@ function scanFile(filePath, rules) {
     }
 
     // 5. italic
-    if (/font-style\s*:\s*italic|class="[^"]*\bitalic\b|<em[\s>]|<i[\s>]/.test(line)) {
+    if (/font-style\s*:\s*italic|class(?:Name)?="[^"]*\bitalic\b|<em[\s>]|<i[\s>]/.test(line)) {
       add(n, 'error', 'italic', 'italic is forbidden everywhere in the DS', 'remove italic styling');
     }
 
