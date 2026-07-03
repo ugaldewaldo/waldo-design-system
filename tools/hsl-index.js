@@ -17,6 +17,15 @@ if (!/<link[^>]*waldo-shadcn-theme\.css/.test(s)) {
   rep.themeLink = s !== b;
 }
 
+// Dark-first: the HSL theme's :root is LIGHT, dark lives under .dark. The old
+// hardcoded-dark waldo-ds.css never needed this; token-free consumers do. Ensure it.
+if (/<link[^>]*waldo-ds\.css/.test(s) && !/<html[^>]*class="[^"]*\bdark\b/.test(s)) {
+  const b2 = s;
+  s = s.replace(/<html\b([^>]*)>/, (m, attrs) =>
+    /class="/.test(attrs) ? m.replace(/class="/, 'class="dark ') : `<html${attrs} class="dark">`);
+  rep.darkAdded = s !== b2;
+}
+
 const RGBA = { '50,169,169':'primary','222,58,40':'destructive','247,211,113':'highlight','42,108,109':'green-700','201,78,34':'warning','23,24,25':'background','210,211,211':'foreground','228,228,231':'foreground','255,255,255':'primary-foreground','9,9,11':'background','129,58,239':'chart-5','144,205,144':'chart-10' };
 const HEX = { '#171819':'background','#f7d371':'highlight','#4dbcbc':'green-400','#41454b':'accent','#32a9a9':'primary','#265152':'green-800','#2d2f33':'secondary','#2a6c6d':'green-700','#27282b':'muted','#202123':'card','#8f9091':'muted-foreground','#d2d3d3':'foreground','#ffffff':'primary-foreground','#63dbdb':'green-400','#242528':'muted','#3f4246':'accent','#e4e4e7':'foreground','#09090b':'background','#1b8c8c':'primary','#ba91f7':'chart-5','#90cd90':'chart-10','#ff8082':'chart-4' };
 const COLOR = new Set(['background','foreground','card','primary','primary-foreground','muted','muted-foreground','secondary','accent','border','popover','destructive','warning','highlight','green-400','green-500','green-700','green-800','zinc-750','zinc-800','zinc-900',...Array.from({length:12},(_,i)=>`chart-${i+1}`)]);
