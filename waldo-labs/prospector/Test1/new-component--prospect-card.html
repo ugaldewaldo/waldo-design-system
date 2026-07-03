@@ -12,7 +12,7 @@
     - Reason blocks sit on hsl(var(--secondary)) (evidence-on-secondary, doctrine interior pattern). "Why now" label: --highlight normally, --destructive when the opening is hot (alert state, verdict — not a metric).
     - Opening-type pill: badge-highlight (emphasis, no urgency) / badge-destructive (hot = act-now alert). Category: badge-secondary. Status: badge-active (accepted) / badge-default (tracking) / badge-secondary (passed).
     - Brand identity = DS Avatar (wav wav-square) + sanctioned favicon with graceful fallback to initial.
-    - Actions: btn-default (accept, the one primary CTA) + btn-outline (track) + btn-ghost (pass / view).
+    - Actions: btn-default (accept, the one primary CTA) + btn-outline for every secondary (track / pass / view). Never btn-ghost (bare) in an action row — doctrine "Card action rows".
     - Reviewed/passed state = whole-card opacity .6 (is-done).
 -->
 <html lang="en" class="dark">
@@ -99,9 +99,9 @@
     <div class="pcard-actions">
       <button class="btn btn-default btn-sm">Accept → Pipeline</button>
       <button class="btn btn-outline btn-sm">Track</button>
-      <button class="btn btn-ghost btn-sm">Pass</button>
+      <button class="btn btn-outline btn-sm">Pass</button>
       <div class="grow"></div>
-      <button class="btn btn-ghost btn-sm">View brief →</button>
+      <button class="btn btn-outline btn-sm">View brief →</button>
     </div>
   </div>
 

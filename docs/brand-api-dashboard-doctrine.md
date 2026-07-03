@@ -403,6 +403,12 @@ muted uppercase month labels below.
   results grouped by type; small colored status dots for live/active state.
 - **Segment controls (toggles):** pill options on `var(--secondary)`; active state tinted
   `var(--primary)`. Prefer the DS `comp-segmented`.
+- **Card action rows (triage buttons on a card):** exactly one primary action per card,
+  `btn btn-default` (filled) — it must always read as THE button of the card. Secondary
+  actions use `btn-outline` (bordered) or `btn-secondary` (subtle fill). **Never
+  `btn-ghost` (bare) inside an action row** — bare loses all button affordance by design
+  and is reserved for tertiary inline actions (a "view all" at the end of a list).
+  Buttons always come from the DS `.btn` variants — never restyled locally.
 - **Platform favicon chips:** identify external sources with a small favicon from a
   favicon service (`https://www.google.com/s2/favicons?domain=<domain>&sz=64`), ~14–16px,
   small radius; degrade gracefully to a neutral dot on error — never a broken image.
@@ -482,6 +488,13 @@ every data element (`.hbar-fill`, `.senti-seg`, sparkline/arc paths…) has
 `preview_eval` line per page. Elements inside hidden tab panels report 0 — switch to
 each view before asserting.
 
+**…and a paint check.** Size is not paint: a declaration whose token fails to resolve
+(e.g. a non-triplet var inside `hsl()`) is dropped silently and the element paints
+transparent at full size — this shipped an unfilled primary button and invisible HBar
+fills while passing every size assertion. For the same data elements — plus the page's
+primary CTA (`.btn-default`) — assert computed `background-color` / `background-image`
+(or `stroke`/`fill` on SVG) is not `transparent`/`none`, one `preview_eval` line per page.
+
 ---
 
 ## Do not
@@ -501,6 +514,8 @@ each view before asserting.
 - Do not put the KPI delta inline below the value — badge, top-right.
 - Do not render trend-line dots always-visible — hover only.
 - Do not use custom buttons for time-range toggles — use `comp-segmented`.
+- Do not use the bare button variant (`btn-ghost`) in a card action row — primary =
+  `btn-default`, secondary = `btn-outline`/`btn-secondary`.
 - Do not use `--highlight` for HBar fills — HBars are always teal.
 - Do not add a `border` to cards — elevation only.
 - Do not tint a card background with accent/status tokens (`--primary`, `--warning`,
