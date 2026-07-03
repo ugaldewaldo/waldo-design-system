@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Poppi — Brand Health</title>
-<link rel="stylesheet" href="../../waldo-ds.css">
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css" />
+  <link rel="stylesheet" href="../../../waldo-ds.css">
 <style>
 /* DS conflict overrides */
 html, body { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
@@ -13,57 +14,57 @@ body { display: block !important; }
 /* Helper RGB for opacity patterns — not redeclaring DS tokens */
 :root { --primary-rgb: 50,169,169; --chart-4-rgb: 240,112,128; --chart-7-rgb: 240,168,42; --chart-5-rgb: 155,136,224; --chart-2-rgb: 136,153,170; --chart-3-rgb: 245,160,128; }
 
-body { background: var(--background); color: var(--foreground); font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; margin: 0; }
+body { background: hsl(var(--background)); color: hsl(var(--foreground)); font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif; margin: 0; }
 
 /* Topbar — doctrine spec */
-.topbar { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); background: var(--background); }
+.topbar { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(8px); border-bottom: 1px solid hsl(var(--border)); background: hsl(var(--background)); }
 .topbar-inner { max-width: 1440px; margin: 0 auto; padding: 0 32px; height: 73px; display: flex; align-items: center; gap: 32px; }
 .topbar-brand { display: flex; align-items: center; }
 .topbar-nav { display: flex; gap: 24px; margin-left: auto; }
-.nav-link { font-size: 14px; color: var(--muted-foreground); text-decoration: none; cursor: pointer; }
-.nav-link.active { color: var(--foreground); font-weight: 500; }
-.topbar-powered { font-size: 13px; color: var(--muted-foreground); white-space: nowrap; }
+.nav-link { font-size: 14px; color: hsl(var(--muted-foreground)); text-decoration: none; cursor: pointer; }
+.nav-link.active { color: hsl(var(--foreground)); font-weight: 500; }
+.topbar-powered { font-size: 13px; color: hsl(var(--muted-foreground)); white-space: nowrap; }
 
 /* Hero */
-.hero { padding: 36px 32px 24px; border-bottom: 1px solid var(--border); }
+.hero { padding: 36px 32px 24px; border-bottom: 1px solid hsl(var(--border)); }
 .hero-inner { max-width: 1120px; margin: 0 auto; }
 .hero-rings { display: grid; grid-template-columns: 1fr 1.7fr 1fr; gap: 12px; align-items: center; margin-bottom: 16px; }
 
 /* Ring cards — avoid DS .input clash */
-.ring-card { background: var(--card); border-radius: 16px; padding: 20px 18px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: opacity 0.2s; border: none !important; }
+.ring-card { background: hsl(var(--card)); border-radius: 16px; padding: 20px 18px; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: opacity 0.2s; border: none !important; }
 .ring-card.ring-side { opacity: 0.82; }
 .ring-card.ring-side:hover { opacity: 1; }
-.ring-card.ring-center { padding: 28px 24px; box-shadow: 0 24px 60px -20px rgba(var(--primary-rgb),0.15); }
-.ring-label { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted-foreground); margin-bottom: 8px; }
-.ring-center .ring-label { color: var(--foreground); font-size: 12px; }
-.ring-track { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 9; }
+.ring-card.ring-center { padding: 28px 24px; box-shadow: 0 24px 60px -20px hsl(var(--primary) / 0.15); }
+.ring-label { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: hsl(var(--muted-foreground)); margin-bottom: 8px; }
+.ring-center .ring-label { color: hsl(var(--foreground)); font-size: 12px; }
+.ring-track { fill: none; stroke: hsl(var(--primary-foreground) / 0.06); stroke-width: 9; }
 .ring-center .ring-track { stroke-width: 11; }
 .ring-arc { fill: none; stroke-width: 9; stroke-linecap: round; transition: stroke-dasharray 0.7s ease-out; }
 .ring-center .ring-arc { stroke-width: 11; }
-.ring-score { font-size: 36px; font-weight: 800; letter-spacing: -0.05em; fill: var(--foreground); }
+.ring-score { font-size: 36px; font-weight: 800; letter-spacing: -0.05em; fill: hsl(var(--foreground)); }
 .ring-center .ring-score { font-size: 64px; }
-.ring-suffix { font-size: 12px; font-weight: 600; fill: var(--muted-foreground); letter-spacing: 0.06em; }
-.ring-deltas { display: flex; gap: 10px; font-size: 11px; color: var(--muted-foreground); margin-top: 6px; }
+.ring-suffix { font-size: 12px; font-weight: 600; fill: hsl(var(--muted-foreground)); letter-spacing: 0.06em; }
+.ring-deltas { display: flex; gap: 10px; font-size: 11px; color: hsl(var(--muted-foreground)); margin-top: 6px; }
 .ring-delta-lbl { font-size: 9px; opacity: 0.6; margin-right: 2px; }
-.ring-delta-val { color: var(--chart-1); }
-.zone-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; margin: 6px 0 6px; background: rgba(var(--primary-rgb),0.12); color: var(--chart-1); }
+.ring-delta-val { color: hsl(var(--chart-1)); }
+.zone-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; margin: 6px 0 6px; background: hsl(var(--primary) / 0.12); color: hsl(var(--chart-1)); }
 
 /* Pulse tiles */
 .hero-extras { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
-.pulse-tile { background: var(--secondary); border-radius: 10px; padding: 12px 14px; cursor: pointer; border: none !important; transition: opacity 0.15s; }
+.pulse-tile { background: hsl(var(--secondary)); border-radius: 10px; padding: 12px 14px; cursor: pointer; border: none !important; transition: opacity 0.15s; }
 .pulse-tile:hover { opacity: 0.85; }
-.pulse-label { font-size: var(--fs-sm); font-weight: 500; line-height: 20px; letter-spacing: -0.28px; color: var(--muted-foreground); margin-bottom: 2px; }
+.pulse-label { font-size: var(--fs-sm); font-weight: 500; line-height: 20px; letter-spacing: -0.28px; color: hsl(var(--muted-foreground)); margin-bottom: 2px; }
 .pulse-value { font-size: 24px; font-weight: 800; letter-spacing: -0.03em; margin: 2px 0; }
-.pulse-delta { font-size: 11px; color: var(--chart-1); }
+.pulse-delta { font-size: 11px; color: hsl(var(--chart-1)); }
 .spark-wrap { margin-top: 8px; height: 44px; }
 .spark-wrap svg { width: 100%; height: 100%; overflow: visible; display: block; }
 
 /* Tab nav */
-.tab-nav-wrap { display: flex; justify-content: center; padding: 18px 0 0; border-bottom: 1px solid var(--border); }
-.tab-nav { display: inline-flex; gap: 2px; padding: 5px; background: var(--secondary); border: 1px solid var(--border); border-radius: 999px; }
-.tab-btn { background: none; border: none; color: var(--muted-foreground); padding: 10px 22px; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 999px; transition: all 0.15s; white-space: nowrap; }
-.tab-btn:hover { color: var(--foreground); }
-.tab-btn.active { background: var(--primary); color: var(--background); }
+.tab-nav-wrap { display: flex; justify-content: center; padding: 18px 0 0; border-bottom: 1px solid hsl(var(--border)); }
+.tab-nav { display: inline-flex; gap: 2px; padding: 5px; background: hsl(var(--secondary)); border: 1px solid hsl(var(--border)); border-radius: 999px; }
+.tab-btn { background: none; border: none; color: hsl(var(--muted-foreground)); padding: 10px 22px; font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer; border-radius: 999px; transition: all 0.15s; white-space: nowrap; }
+.tab-btn:hover { color: hsl(var(--foreground)); }
+.tab-btn.active { background: hsl(var(--primary)); color: hsl(var(--background)); }
 
 /* Content wrap — doctrine spec */
 .wrap { max-width: 1184px; margin: 0 auto; padding: 32px 0 80px; }
@@ -76,147 +77,147 @@ body { background: var(--background); color: var(--foreground); font-family: -ap
 .tab-panel.active > *:last-child { margin-bottom: 0; }
 
 .panel-title { font-size: 24px; font-weight: 800; letter-spacing: -0.04em; margin: 0 0 4px; }
-.panel-sub { font-size: 13px; color: var(--muted-foreground); margin-bottom: 0; }
+.panel-sub { font-size: 13px; color: hsl(var(--muted-foreground)); margin-bottom: 0; }
 
 /* Cards — doctrine spec */
-.card { background: var(--card); border: none !important; border-radius: 16px; padding: 32px; display: flex; flex-direction: column; gap: 24px; width: 100%; box-sizing: border-box; }
+.card { background: hsl(var(--card)); border: none !important; border-radius: 16px; padding: 32px; display: flex; flex-direction: column; gap: 24px; width: 100%; box-sizing: border-box; }
 .card-title { font-size: 20px; font-weight: 500; line-height: 28px; letter-spacing: -0.4px; margin: 0; }
-.card-subtitle { font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: -0.28px; color: var(--muted-foreground); }
-.card-sub { font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: -0.28px; color: var(--muted-foreground); }
+.card-subtitle { font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: -0.28px; color: hsl(var(--muted-foreground)); }
+.card-sub { font-size: 14px; font-weight: 400; line-height: 20px; letter-spacing: -0.28px; color: hsl(var(--muted-foreground)); }
 .card-header { display: flex; align-items: flex-start; justify-content: space-between; }
 
 /* Mention cards */
 .mention-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.mention-card { background: var(--secondary); border-radius: 10px; padding: 12px; border: none !important; }
+.mention-card { background: hsl(var(--secondary)); border-radius: 10px; padding: 12px; border: none !important; }
 .mention-meta { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
 .mention-platform { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
 .mention-body { font-size: 12px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.mention-footer { display: flex; justify-content: space-between; margin-top: 8px; font-size: 10px; color: var(--muted-foreground); }
+.mention-footer { display: flex; justify-content: space-between; margin-top: 8px; font-size: 10px; color: hsl(var(--muted-foreground)); }
 
 /* Sentiment bars */
 .sent-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-.sent-platform { font-size: 12px; color: var(--muted-foreground); width: 72px; flex-shrink: 0; }
-.sent-bar-wrap { flex: 1; height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; }
-.sent-bar { height: 100%; border-radius: 4px; background: var(--chart-1); transform: scaleX(0); transform-origin: left; transition: transform 0.6s ease-out; }
+.sent-platform { font-size: 12px; color: hsl(var(--muted-foreground)); width: 72px; flex-shrink: 0; }
+.sent-bar-wrap { flex: 1; height: 8px; background: hsl(var(--primary-foreground) / 0.06); border-radius: 4px; overflow: hidden; }
+.sent-bar { height: 100%; border-radius: 4px; background: hsl(var(--chart-1)); transform: scaleX(0); transform-origin: left; transition: transform 0.6s ease-out; }
 .sent-pct { font-size: 12px; font-weight: 600; width: 52px; text-align: right; }
 
 /* Complaints */
-.complaint-row { display: flex; align-items: flex-start; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.complaint-row { display: flex; align-items: flex-start; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid hsl(var(--border)); }
 .complaint-row:last-child { border-bottom: none; }
 .complaint-label { font-size: 13px; font-weight: 600; }
-.complaint-quote { font-size: 10px; color: var(--muted-foreground); margin-top: 2px; }
+.complaint-quote { font-size: 10px; color: hsl(var(--muted-foreground)); margin-top: 2px; }
 .complaint-right { text-align: right; flex-shrink: 0; margin-left: 12px; }
-.complaint-pct { font-size: 16px; font-weight: 800; color: var(--chart-4); }
-.complaint-freq { font-size: 9px; color: var(--muted-foreground); }
+.complaint-pct { font-size: 16px; font-weight: 800; color: hsl(var(--chart-4)); }
+.complaint-freq { font-size: 9px; color: hsl(var(--muted-foreground)); }
 
 /* Theme pills */
 .theme-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
-.theme-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,0.06); border: none !important; cursor: pointer; }
-.theme-pill .tpn { color: var(--muted-foreground); font-size: 10px; }
-.theme-pill.pos { background: rgba(var(--primary-rgb),0.1); }
-.theme-pill.neg { background: rgba(var(--chart-4-rgb),0.1); }
+.theme-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: hsl(var(--primary-foreground) / 0.06); border: none !important; cursor: pointer; }
+.theme-pill .tpn { color: hsl(var(--muted-foreground)); font-size: 10px; }
+.theme-pill.pos { background: hsl(var(--primary) / 0.1); }
+.theme-pill.neg { background: hsl(var(--chart-4) / 0.1); }
 
 /* Competitive table */
 .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-.comp-table th { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-foreground); padding: 0 12px 10px; text-align: left; border-bottom: 1px solid var(--border); }
-.comp-table td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.comp-table th { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: hsl(var(--muted-foreground)); padding: 0 12px 10px; text-align: left; border-bottom: 1px solid hsl(var(--border)); }
+.comp-table td { padding: 12px; border-bottom: 1px solid hsl(var(--border)); vertical-align: middle; }
 .comp-table tr:last-child td { border-bottom: none; }
-.comp-table tr.focal { background: rgba(50,169,169,0.05); }
+.comp-table tr.focal { background: hsl(var(--primary) / 0.05); }
 .brand-name { font-weight: 700; font-size: 13px; }
-.brand-cat { font-size: 10px; color: var(--muted-foreground); }
-.comp-delta-pos { font-size: 10px; color: var(--chart-1); }
-.comp-delta-neg { font-size: 10px; color: var(--chart-4); }
-.pbar { height: 4px; border-radius: 2px; background: rgba(255,255,255,0.06); margin-top: 4px; }
+.brand-cat { font-size: 10px; color: hsl(var(--muted-foreground)); }
+.comp-delta-pos { font-size: 10px; color: hsl(var(--chart-1)); }
+.comp-delta-neg { font-size: 10px; color: hsl(var(--chart-4)); }
+.pbar { height: 4px; border-radius: 2px; background: hsl(var(--primary-foreground) / 0.06); margin-top: 4px; }
 .pbar-fill { height: 100%; border-radius: 2px; }
 
 /* Tracker */
-.tracker-row { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+.tracker-row { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid hsl(var(--border)); }
 .tracker-row:last-child { border-bottom: none; }
-.tracker-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--secondary); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; }
+.tracker-icon { width: 36px; height: 36px; border-radius: 8px; background: hsl(var(--secondary)); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; }
 .tracker-body { flex: 1; }
 .tracker-name { font-size: 13px; font-weight: 600; }
-.tracker-meta { font-size: 11px; color: var(--muted-foreground); margin-top: 2px; }
+.tracker-meta { font-size: 11px; color: hsl(var(--muted-foreground)); margin-top: 2px; }
 .tracker-right { text-align: right; }
 .tracker-pulls { font-size: 13px; font-weight: 700; }
-.tracker-cadence { font-size: 10px; color: var(--muted-foreground); }
+.tracker-cadence { font-size: 10px; color: hsl(var(--muted-foreground)); }
 .t-status { display: inline-flex; align-items: center; gap: 4px; font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; margin-bottom: 3px; }
-.t-status.active { background: rgba(var(--primary-rgb),0.12); color: var(--chart-1); }
-.t-status.paused { background: rgba(255,255,255,0.06); color: var(--muted-foreground); }
+.t-status.active { background: hsl(var(--primary) / 0.12); color: hsl(var(--chart-1)); }
+.t-status.paused { background: hsl(var(--primary-foreground) / 0.06); color: hsl(var(--muted-foreground)); }
 
 /* Coach */
 .coach-layout { display: flex; gap: 16px; align-items: flex-start; }
 .coach-main { flex: 1; min-width: 0; }
 .coach-sidebar { flex: 0 0 220px; min-width: 0; }
-.coach-card { background: var(--card); border: none !important; border-radius: 12px; padding: 18px; margin-bottom: 10px; }
-.coach-card.p1 { box-shadow: inset 0 0 0 1px rgba(var(--primary-rgb),0.3); }
-.coach-priority { font-size: 9px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted-foreground); margin-bottom: 8px; }
+.coach-card { background: hsl(var(--card)); border: none !important; border-radius: 12px; padding: 18px; margin-bottom: 10px; }
+.coach-card.p1 { box-shadow: inset 0 0 0 1px hsl(var(--primary) / 0.3); }
+.coach-priority { font-size: 9px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: hsl(var(--muted-foreground)); margin-bottom: 8px; }
 .coach-title { font-size: 15px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 6px; }
-.coach-desc { font-size: 12px; color: var(--muted-foreground); line-height: 1.5; margin-bottom: 10px; }
-.coach-quote { background: var(--secondary); border-left: 2px solid var(--primary); padding: 8px 12px; border-radius: 0 6px 6px 0; font-size: 11px; color: var(--muted-foreground); margin-bottom: 10px; }
+.coach-desc { font-size: 12px; color: hsl(var(--muted-foreground)); line-height: 1.5; margin-bottom: 10px; }
+.coach-quote { background: hsl(var(--secondary)); border-left: 2px solid hsl(var(--primary)); padding: 8px 12px; border-radius: 0 6px 6px 0; font-size: 11px; color: hsl(var(--muted-foreground)); margin-bottom: 10px; }
 .coach-tags { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-.coach-filter-card { background: var(--card); border: none !important; border-radius: 12px; padding: 16px; }
-.cf-title { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted-foreground); margin-bottom: 12px; }
+.coach-filter-card { background: hsl(var(--card)); border: none !important; border-radius: 12px; padding: 16px; }
+.cf-title { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: hsl(var(--muted-foreground)); margin-bottom: 12px; }
 .cf-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: 8px; cursor: pointer; margin-bottom: 2px; }
-.cf-row:hover { background: rgba(255,255,255,0.04); }
-.cf-row.all { background: rgba(255,255,255,0.06); font-weight: 600; }
-.cf-count { font-size: 12px; color: var(--muted-foreground); }
+.cf-row:hover { background: hsl(var(--primary-foreground) / 0.04); }
+.cf-row.all { background: hsl(var(--primary-foreground) / 0.06); font-weight: 600; }
+.cf-count { font-size: 12px; color: hsl(var(--muted-foreground)); }
 
 /* News */
 .news-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.news-card { background: var(--card); border: none !important; border-radius: 12px; padding: 16px; }
+.news-card { background: hsl(var(--card)); border: none !important; border-radius: 12px; padding: 16px; }
 .news-source { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-.news-av { width: 28px; height: 28px; border-radius: 6px; background: var(--secondary); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; flex-shrink: 0; }
-.news-pub { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted-foreground); }
-.news-pub-cat { font-size: 9px; color: var(--muted-foreground); }
-.news-age { font-size: 10px; color: var(--muted-foreground); margin-left: auto; }
+.news-av { width: 28px; height: 28px; border-radius: 6px; background: hsl(var(--secondary)); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; flex-shrink: 0; }
+.news-pub { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: hsl(var(--muted-foreground)); }
+.news-pub-cat { font-size: 9px; color: hsl(var(--muted-foreground)); }
+.news-age { font-size: 10px; color: hsl(var(--muted-foreground)); margin-left: auto; }
 .news-headline { font-size: 13px; font-weight: 700; line-height: 1.4; margin-bottom: 6px; letter-spacing: -0.01em; }
-.news-snippet { font-size: 11px; color: var(--muted-foreground); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.news-snippet { font-size: 11px; color: hsl(var(--muted-foreground)); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .news-tags { margin-top: 10px; display: flex; gap: 4px; }
 
 /* Trending */
 .trend-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
-.trend-card { background: var(--card); border: none !important; border-radius: 12px; padding: 16px; }
-.trend-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.trend-card { background: hsl(var(--card)); border: none !important; border-radius: 12px; padding: 16px; }
+.trend-header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid hsl(var(--border)); }
 .trend-platform-name { font-size: 13px; font-weight: 700; }
-.trend-category { font-size: 10px; color: var(--muted-foreground); margin-left: auto; text-transform: uppercase; letter-spacing: 0.08em; }
-.trend-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.trend-category { font-size: 10px; color: hsl(var(--muted-foreground)); margin-left: auto; text-transform: uppercase; letter-spacing: 0.08em; }
+.trend-row { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid hsl(var(--border)); }
 .trend-row:last-child { border-bottom: none; }
-.trend-rank { font-size: 11px; color: var(--muted-foreground); width: 14px; flex-shrink: 0; }
+.trend-rank { font-size: 11px; color: hsl(var(--muted-foreground)); width: 14px; flex-shrink: 0; }
 .trend-body { flex: 1; }
 .trend-term { font-size: 13px; font-weight: 600; }
-.trend-desc { font-size: 10px; color: var(--muted-foreground); margin-top: 1px; }
-.trend-vol { font-size: 10px; color: var(--muted-foreground); margin-top: 1px; }
+.trend-desc { font-size: 10px; color: hsl(var(--muted-foreground)); margin-top: 1px; }
+.trend-vol { font-size: 10px; color: hsl(var(--muted-foreground)); margin-top: 1px; }
 .trend-delta { font-size: 11px; font-weight: 700; flex-shrink: 0; }
-.trend-delta.up { color: var(--chart-1); }
-.trend-delta.dn { color: var(--chart-4); }
+.trend-delta.up { color: hsl(var(--chart-1)); }
+.trend-delta.dn { color: hsl(var(--chart-4)); }
 
 /* Spike callout */
-.spike-callout { padding: 12px 14px; background: rgba(var(--primary-rgb),0.08); border-left: 2px solid var(--primary); border-radius: 0 8px 8px 0; font-size: 11px; line-height: 1.5; color: var(--muted-foreground); }
+.spike-callout { padding: 12px 14px; background: hsl(var(--primary) / 0.08); border-left: 2px solid hsl(var(--primary)); border-radius: 0 8px 8px 0; font-size: 11px; line-height: 1.5; color: hsl(var(--muted-foreground)); }
 
 /* Chart */
 .chart-area { height: 200px; }
 .chart-area svg { width: 100%; height: 100%; overflow: visible; display: block; }
 
 /* Legend */
-.legend { display: flex; gap: 14px; margin-top: 10px; font-size: 10px; color: var(--muted-foreground); flex-wrap: wrap; }
+.legend { display: flex; gap: 14px; margin-top: 10px; font-size: 10px; color: hsl(var(--muted-foreground)); flex-wrap: wrap; }
 .legend-item { display: flex; align-items: center; gap: 4px; }
 .legend-line { width: 14px; height: 2px; border-radius: 1px; display: inline-block; }
-.legend-dashed { width: 14px; height: 0; border-top: 1.5px dashed rgba(var(--highlight-rgb),0.6); display: inline-block; }
+.legend-dashed { width: 14px; height: 0; border-top: 1.5px dashed hsl(var(--highlight) / 0.6); display: inline-block; }
 
 /* VoC */
 .voc-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 16px; }
-.voc-card { padding: 14px; background: var(--secondary); border-radius: 10px; }
+.voc-card { padding: 14px; background: hsl(var(--secondary)); border-radius: 10px; }
 
 /* Badge overrides for prototype context */
 .badge { display: inline-flex; align-items: center; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; border: none; }
-.badge-teal { background: rgba(var(--primary-rgb),0.15); color: var(--primary); }
-.badge-amber { background: rgba(var(--chart-7-rgb),0.12); color: var(--chart-7); }
-.badge-red { background: rgba(var(--chart-4-rgb),0.12); color: var(--chart-4); }
-.badge-indigo { background: rgba(var(--chart-5-rgb),0.12); color: var(--chart-5); }
-.badge-neutral { background: rgba(255,255,255,0.08); color: var(--muted-foreground); }
+.badge-teal { background: hsl(var(--primary) / 0.15); color: hsl(var(--primary)); }
+.badge-amber { background: hsl(var(--chart-7) / 0.12); color: hsl(var(--chart-7)); }
+.badge-red { background: hsl(var(--chart-4) / 0.12); color: hsl(var(--chart-4)); }
+.badge-indigo { background: hsl(var(--chart-5) / 0.12); color: hsl(var(--chart-5)); }
+.badge-neutral { background: hsl(var(--primary-foreground) / 0.08); color: hsl(var(--muted-foreground)); }
 
 /* Proto footer */
-.proto-footer { text-align: center; font-size: 11px; color: var(--muted-foreground); padding: 32px; border-top: 1px solid var(--border); }
+.proto-footer { text-align: center; font-size: 11px; color: hsl(var(--muted-foreground)); padding: 32px; border-top: 1px solid hsl(var(--border)); }
 </style>
 </head>
 <body>
@@ -225,7 +226,7 @@ body { background: var(--background); color: var(--foreground); font-family: -ap
 <header class="topbar">
   <div class="topbar-inner">
     <div class="topbar-brand">
-      <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" style="color:var(--foreground)" xmlns="http://www.w3.org/2000/svg"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
+      <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" style="color:hsl(var(--foreground))" xmlns="http://www.w3.org/2000/svg"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
     </div>
     <nav class="topbar-nav">
       <a class="nav-link active">Dashboard</a>
@@ -246,7 +247,7 @@ body { background: var(--background); color: var(--foreground); font-family: -ap
         <div class="ring-label">Reputation</div>
         <svg viewBox="0 0 160 160" width="120" height="120" style="display:block;margin-bottom:8px">
           <circle class="ring-track" cx="80" cy="80" r="68"/>
-          <circle class="ring-arc" id="rep-arc" cx="80" cy="80" r="68" style="stroke:var(--primary);" stroke-dasharray="0 427" transform="rotate(-90 80 80)"/>
+          <circle class="ring-arc" id="rep-arc" cx="80" cy="80" r="68" style="stroke:hsl(var(--primary));" stroke-dasharray="0 427" transform="rotate(-90 80 80)"/>
           <text class="ring-score" id="rep-score" x="80" y="80" text-anchor="middle" dominant-baseline="central">--</text>
         </svg>
         <div class="ring-deltas">
@@ -260,7 +261,7 @@ body { background: var(--background); color: var(--foreground); font-family: -ap
         <div class="ring-label">Resonance</div>
         <svg viewBox="0 0 200 200" width="200" height="200" style="display:block;margin-bottom:0">
           <circle class="ring-track" cx="100" cy="100" r="85"/>
-          <circle class="ring-arc" id="res-arc" cx="100" cy="100" r="85" style="stroke:var(--chart-1);" stroke-dasharray="0 534" transform="rotate(-90 100 100)"/>
+          <circle class="ring-arc" id="res-arc" cx="100" cy="100" r="85" style="stroke:hsl(var(--chart-1));" stroke-dasharray="0 534" transform="rotate(-90 100 100)"/>
           <text class="ring-score" id="res-score" x="100" y="94" text-anchor="middle" dominant-baseline="central">--</text>
           <text class="ring-suffix" x="100" y="120" text-anchor="middle">/100</text>
         </svg>
@@ -276,7 +277,7 @@ body { background: var(--background); color: var(--foreground); font-family: -ap
         <div class="ring-label">Presence</div>
         <svg viewBox="0 0 160 160" width="120" height="120" style="display:block;margin-bottom:8px">
           <circle class="ring-track" cx="80" cy="80" r="68"/>
-          <circle class="ring-arc" id="pres-arc" cx="80" cy="80" r="68" style="stroke:var(--chart-9);" stroke-dasharray="0 427" transform="rotate(-90 80 80)"/>
+          <circle class="ring-arc" id="pres-arc" cx="80" cy="80" r="68" style="stroke:hsl(var(--chart-9));" stroke-dasharray="0 427" transform="rotate(-90 80 80)"/>
           <text class="ring-score" id="pres-score" x="80" y="80" text-anchor="middle" dominant-baseline="central">--</text>
         </svg>
         <div class="ring-deltas">
@@ -339,7 +340,7 @@ body { background: var(--background); color: var(--foreground); font-family: -ap
         <div class="mention-grid">
           <div class="mention-card">
             <div class="mention-meta">
-              <span class="mention-platform" style="color:var(--chart-4)">Reddit</span>
+              <span class="mention-platform" style="color:hsl(var(--chart-4))">Reddit</span>
               <span class="badge badge-teal">Positive</span>
             </div>
             <div class="mention-body">Just tried Poppi for the first time after seeing Allison's Scotland TikTok and wow, actually really good. The strawberry lemon is my new daily. Way better than I expected from a "healthy soda."</div>
@@ -347,7 +348,7 @@ body { background: var(--background); color: var(--foreground); font-family: -ap
           </div>
           <div class="mention-card">
             <div class="mention-meta">
-              <span class="mention-platform" style="color:var(--chart-12)">TikTok</span>
+              <span class="mention-platform" style="color:hsl(var(--chart-12))">TikTok</span>
               <span class="badge badge-amber">Mixed</span>
             </div>
             <div class="mention-body">Poppi settlement email just landed in my inbox and I am CONFUSED. Like is this real? Did Poppi actually mislead us about the prebiotics? I still love the taste but now I don't know if I trust the brand.</div>
@@ -355,7 +356,7 @@ body { background: var(--background); color: var(--foreground); font-family: -ap
           </div>
           <div class="mention-card">
             <div class="mention-meta">
-              <span class="mention-platform" style="color:var(--chart-5)">X</span>
+              <span class="mention-platform" style="color:hsl(var(--chart-5))">X</span>
               <span class="badge badge-teal">Positive</span>
             </div>
             <div class="mention-body">Unpopular opinion: Poppi Blue Raspberry > every Olipop flavor. The can design alone makes me feel like I have my life together.</div>
@@ -363,7 +364,7 @@ body { background: var(--background); color: var(--foreground); font-family: -ap
           </div>
           <div class="mention-card">
             <div class="mention-meta">
-              <span class="mention-platform" style="color:var(--chart-11)">Instagram</span>
+              <span class="mention-platform" style="color:hsl(var(--chart-11))">Instagram</span>
               <span class="badge badge-teal">Positive</span>
             </div>
             <div class="mention-body">Poppi x BÉIS collab is everything. The limited travel bundle sold out in 48 hours. The that-girl aesthetic is fully locked in for summer 2026.</div>
@@ -392,9 +393,9 @@ body { background: var(--background); color: var(--foreground); font-family: -ap
           <div style="font-size:12px;font-weight:700;margin-bottom:10px;">Resonance vs. category · 90 days</div>
           <div style="height:100px"><svg id="comp-spark" style="width:100%;height:100%;overflow:visible;display:block"></svg></div>
           <div class="legend" style="margin-top:6px">
-            <div class="legend-item"><span class="legend-line" style="background:var(--chart-1)"></span>Poppi</div>
-            <div class="legend-item"><span class="legend-line" style="background:var(--chart-2)"></span>Olipop</div>
-            <div class="legend-item"><span class="legend-line" style="background:var(--chart-4)"></span>Liquid Death</div>
+            <div class="legend-item"><span class="legend-line" style="background:hsl(var(--chart-1))"></span>Poppi</div>
+            <div class="legend-item"><span class="legend-line" style="background:hsl(var(--chart-2))"></span>Olipop</div>
+            <div class="legend-item"><span class="legend-line" style="background:hsl(var(--chart-4))"></span>Liquid Death</div>
             <div class="legend-item"><span class="legend-dashed"></span>Median</div>
           </div>
         </div>
@@ -407,17 +408,17 @@ body { background: var(--background); color: var(--foreground); font-family: -ap
         <div class="voc-card">
           <div class="badge badge-teal" style="margin-bottom:8px">Taste wins</div>
           <div style="font-size:13px;font-weight:700;margin-bottom:4px">"Genuinely addictive"</div>
-          <div style="font-size:11px;color:var(--muted-foreground);line-height:1.5">Strawberry lemon, blue raspberry, and cherry cola drive repeat purchase intent. Flavor > health claim for conversion.</div>
+          <div style="font-size:11px;color:hsl(var(--muted-foreground));line-height:1.5">Strawberry lemon, blue raspberry, and cherry cola drive repeat purchase intent. Flavor > health claim for conversion.</div>
         </div>
         <div class="voc-card">
           <div class="badge badge-amber" style="margin-bottom:8px">Lawsuit confusion</div>
           <div style="font-size:13px;font-weight:700;margin-bottom:4px">"Did they lie to us?"</div>
-          <div style="font-size:11px;color:var(--muted-foreground);line-height:1.5">Settlement notices triggered a spike in confusion (+190% brand search). Brand trust dip is recoverable with fast, transparent comms.</div>
+          <div style="font-size:11px;color:hsl(var(--muted-foreground));line-height:1.5">Settlement notices triggered a spike in confusion (+190% brand search). Brand trust dip is recoverable with fast, transparent comms.</div>
         </div>
         <div class="voc-card">
           <div class="badge badge-red" style="margin-bottom:8px">Price friction</div>
           <div style="font-size:13px;font-weight:700;margin-bottom:4px">"$3.50 a can is wild"</div>
-          <div style="font-size:11px;color:var(--muted-foreground);line-height:1.5">Price mentions up 34% since Jan. Multi-packs and subscription offers could neutralize this signal before Pepsi Prebiotic captures it.</div>
+          <div style="font-size:11px;color:hsl(var(--muted-foreground));line-height:1.5">Price mentions up 34% since Jan. Multi-packs and subscription offers could neutralize this signal before Pepsi Prebiotic captures it.</div>
         </div>
       </div>
     </div>
@@ -437,7 +438,7 @@ body { background: var(--background); color: var(--foreground); font-family: -ap
         <div class="sent-row"><span class="sent-platform">YouTube</span><div class="sent-bar-wrap"><div class="sent-bar" data-w="82"></div></div><span class="sent-pct">82% pos</span></div>
         <div class="sent-row"><span class="sent-platform">X</span><div class="sent-bar-wrap"><div class="sent-bar" data-w="61"></div></div><span class="sent-pct">61% pos</span></div>
         <div class="sent-row"><span class="sent-platform">Reddit</span><div class="sent-bar-wrap"><div class="sent-bar" data-w="58"></div></div><span class="sent-pct">58% pos</span></div>
-        <div class="spike-callout"><strong style="color:var(--foreground)">Spike detected:</strong> Allison's Scotland TikTok drove 6.4M views Apr 29–May 3. Sentiment spiked from 84% → 92% positive in 72h.</div>
+        <div class="spike-callout"><strong style="color:hsl(var(--foreground))">Spike detected:</strong> Allison's Scotland TikTok drove 6.4M views Apr 29–May 3. Sentiment spiked from 84% → 92% positive in 72h.</div>
       </div></div>
 
       <div class="dash-col"><div class="card">
@@ -490,10 +491,10 @@ body { background: var(--background); color: var(--foreground); font-family: -ap
       <div class="card-sub">Poppi vs. category leaders — all channels combined</div>
       <div class="chart-area"><svg id="presence-chart"></svg></div>
       <div class="legend">
-        <div class="legend-item"><span class="legend-line" style="background:var(--chart-1)"></span>Poppi</div>
-        <div class="legend-item"><span class="legend-line" style="background:var(--chart-2)"></span>Olipop</div>
-        <div class="legend-item"><span class="legend-line" style="background:var(--chart-4)"></span>Liquid Death</div>
-        <div class="legend-item"><span class="legend-line" style="background:var(--chart-5)"></span>Recess</div>
+        <div class="legend-item"><span class="legend-line" style="background:hsl(var(--chart-1))"></span>Poppi</div>
+        <div class="legend-item"><span class="legend-line" style="background:hsl(var(--chart-2))"></span>Olipop</div>
+        <div class="legend-item"><span class="legend-line" style="background:hsl(var(--chart-4))"></span>Liquid Death</div>
+        <div class="legend-item"><span class="legend-line" style="background:hsl(var(--chart-5))"></span>Recess</div>
         <div class="legend-item"><span class="legend-dashed"></span>Category median</div>
       </div>
     </div>
@@ -515,42 +516,42 @@ body { background: var(--background); color: var(--foreground); font-family: -ap
           <tbody>
             <tr class="focal">
               <td><div class="brand-name">Poppi</div><div class="brand-cat">Prebiotic Soda</div></td>
-              <td><strong>92</strong><div class="comp-delta-pos">+2 vs 30d</div><div class="pbar"><div class="pbar-fill" style="width:88%;background:var(--chart-1)"></div></div></td>
-              <td><strong>99</strong><div class="comp-delta-pos">+30 vs 30d</div><div class="pbar"><div class="pbar-fill" style="width:96%;background:var(--chart-1)"></div></div></td>
-              <td><strong>52%</strong><div class="comp-delta-pos">+24pp vs 30d</div><div class="pbar"><div class="pbar-fill" style="width:64%;background:var(--chart-1)"></div></div></td>
-              <td><strong>71%</strong><div class="pbar"><div class="pbar-fill" style="width:71%;background:var(--chart-1)"></div></div></td>
+              <td><strong>92</strong><div class="comp-delta-pos">+2 vs 30d</div><div class="pbar"><div class="pbar-fill" style="width:88%;background:hsl(var(--chart-1))"></div></div></td>
+              <td><strong>99</strong><div class="comp-delta-pos">+30 vs 30d</div><div class="pbar"><div class="pbar-fill" style="width:96%;background:hsl(var(--chart-1))"></div></div></td>
+              <td><strong>52%</strong><div class="comp-delta-pos">+24pp vs 30d</div><div class="pbar"><div class="pbar-fill" style="width:64%;background:hsl(var(--chart-1))"></div></div></td>
+              <td><strong>71%</strong><div class="pbar"><div class="pbar-fill" style="width:71%;background:hsl(var(--chart-1))"></div></div></td>
               <td><strong>22</strong></td>
             </tr>
             <tr>
               <td><div class="brand-name">Olipop</div><div class="brand-cat">Prebiotic Soda</div></td>
-              <td><strong>88</strong><div class="pbar"><div class="pbar-fill" style="width:82%;background:var(--chart-2)"></div></div></td>
-              <td><strong>91</strong><div class="pbar"><div class="pbar-fill" style="width:82%;background:var(--chart-2)"></div></div></td>
-              <td><strong>47%</strong><div class="pbar"><div class="pbar-fill" style="width:58%;background:var(--chart-2)"></div></div></td>
-              <td><strong>68%</strong><div class="pbar"><div class="pbar-fill" style="width:68%;background:var(--chart-2)"></div></div></td>
+              <td><strong>88</strong><div class="pbar"><div class="pbar-fill" style="width:82%;background:hsl(var(--chart-2))"></div></div></td>
+              <td><strong>91</strong><div class="pbar"><div class="pbar-fill" style="width:82%;background:hsl(var(--chart-2))"></div></div></td>
+              <td><strong>47%</strong><div class="pbar"><div class="pbar-fill" style="width:58%;background:hsl(var(--chart-2))"></div></div></td>
+              <td><strong>68%</strong><div class="pbar"><div class="pbar-fill" style="width:68%;background:hsl(var(--chart-2))"></div></div></td>
               <td><strong>18</strong></td>
             </tr>
             <tr>
               <td><div class="brand-name">Liquid Death</div><div class="brand-cat">Sparkling Water</div></td>
-              <td><strong>79</strong><div class="pbar"><div class="pbar-fill" style="width:72%;background:var(--chart-4)"></div></div></td>
-              <td><strong>87</strong><div class="pbar"><div class="pbar-fill" style="width:76%;background:var(--chart-4)"></div></div></td>
-              <td><strong>38%</strong><div class="pbar"><div class="pbar-fill" style="width:46%;background:var(--chart-4)"></div></div></td>
-              <td><strong>72%</strong><div class="pbar"><div class="pbar-fill" style="width:72%;background:var(--chart-4)"></div></div></td>
+              <td><strong>79</strong><div class="pbar"><div class="pbar-fill" style="width:72%;background:hsl(var(--chart-4))"></div></div></td>
+              <td><strong>87</strong><div class="pbar"><div class="pbar-fill" style="width:76%;background:hsl(var(--chart-4))"></div></div></td>
+              <td><strong>38%</strong><div class="pbar"><div class="pbar-fill" style="width:46%;background:hsl(var(--chart-4))"></div></div></td>
+              <td><strong>72%</strong><div class="pbar"><div class="pbar-fill" style="width:72%;background:hsl(var(--chart-4))"></div></div></td>
               <td><strong>41</strong></td>
             </tr>
             <tr>
               <td><div class="brand-name">Recess</div><div class="brand-cat">Sparkling CBD</div></td>
-              <td><strong>71</strong><div class="pbar"><div class="pbar-fill" style="width:62%;background:var(--chart-5)"></div></div></td>
-              <td><strong>74</strong><div class="pbar"><div class="pbar-fill" style="width:62%;background:var(--chart-5)"></div></div></td>
-              <td><strong>22%</strong><div class="pbar"><div class="pbar-fill" style="width:28%;background:var(--chart-5)"></div></div></td>
-              <td><strong>81%</strong><div class="pbar"><div class="pbar-fill" style="width:81%;background:var(--chart-5)"></div></div></td>
+              <td><strong>71</strong><div class="pbar"><div class="pbar-fill" style="width:62%;background:hsl(var(--chart-5))"></div></div></td>
+              <td><strong>74</strong><div class="pbar"><div class="pbar-fill" style="width:62%;background:hsl(var(--chart-5))"></div></div></td>
+              <td><strong>22%</strong><div class="pbar"><div class="pbar-fill" style="width:28%;background:hsl(var(--chart-5))"></div></div></td>
+              <td><strong>81%</strong><div class="pbar"><div class="pbar-fill" style="width:81%;background:hsl(var(--chart-5))"></div></div></td>
               <td><strong>9</strong></td>
             </tr>
             <tr>
               <td><div class="brand-name">Category median</div></td>
-              <td><strong>76</strong><div class="pbar"><div class="pbar-fill" style="width:60%;background:rgba(var(--highlight-rgb),0.4)"></div></div></td>
-              <td><strong>80</strong><div class="pbar"><div class="pbar-fill" style="width:68%;background:rgba(var(--highlight-rgb),0.4)"></div></div></td>
-              <td><strong>31%</strong><div class="pbar"><div class="pbar-fill" style="width:38%;background:rgba(var(--highlight-rgb),0.4)"></div></div></td>
-              <td><strong>64%</strong><div class="pbar"><div class="pbar-fill" style="width:64%;background:rgba(var(--highlight-rgb),0.4)"></div></div></td>
+              <td><strong>76</strong><div class="pbar"><div class="pbar-fill" style="width:60%;background:hsl(var(--highlight) / 0.4)"></div></div></td>
+              <td><strong>80</strong><div class="pbar"><div class="pbar-fill" style="width:68%;background:hsl(var(--highlight) / 0.4)"></div></div></td>
+              <td><strong>31%</strong><div class="pbar"><div class="pbar-fill" style="width:38%;background:hsl(var(--highlight) / 0.4)"></div></div></td>
+              <td><strong>64%</strong><div class="pbar"><div class="pbar-fill" style="width:64%;background:hsl(var(--highlight) / 0.4)"></div></div></td>
               <td><strong>14</strong></td>
             </tr>
           </tbody>
@@ -602,7 +603,7 @@ body { background: var(--background); color: var(--foreground); font-family: -ap
     <div class="panel-sub">Poppi · Prebiotic Soda · US · as of May 18, 2026</div>
     <div class="coach-layout">
       <div class="coach-main">
-        <div style="font-size:12px;color:var(--muted-foreground);margin-bottom:16px;display:flex;justify-content:space-between">
+        <div style="font-size:12px;color:hsl(var(--muted-foreground));margin-bottom:16px;display:flex;justify-content:space-between">
           <span>Next moves · ranked by predicted impact</span><span>refreshes daily</span>
         </div>
         <div class="coach-card p1">
@@ -611,7 +612,7 @@ body { background: var(--background); color: var(--foreground); font-family: -ap
           <div class="coach-title">Get ahead of the lawsuit narrative</div>
           <div class="coach-desc">2.1M settlement notices are landing in inboxes now. Confusion is spreading on TikTok (+190%) and in brand search. A proactive FAQ post will own the narrative before negative press does.</div>
           <div class="coach-quote">"Poppi settlement email just landed in my inbox and I am CONFUSED." — @healthyswaps, 82K reach</div>
-          <div class="coach-tags"><span class="badge badge-neutral">↑ Reputation</span><span style="font-size:11px;color:var(--muted-foreground)">Draft FAQ post</span></div>
+          <div class="coach-tags"><span class="badge badge-neutral">↑ Reputation</span><span style="font-size:11px;color:hsl(var(--muted-foreground))">Draft FAQ post</span></div>
         </div>
         <div class="coach-card">
           <div class="coach-priority">PRIORITY 2</div>
@@ -674,7 +675,7 @@ body { background: var(--background); color: var(--foreground); font-family: -ap
         </div>
         <div class="news-card">
           <div class="news-source">
-            <div class="news-av" style="background:rgba(var(--chart-4-rgb),0.1);color:var(--chart-4)">RT</div>
+            <div class="news-av" style="background:hsl(var(--chart-4) / 0.1);color:hsl(var(--chart-4))">RT</div>
             <div><div class="news-pub">Reuters</div><div class="news-pub-cat">Legal</div></div>
             <div class="news-age">4w ago</div>
           </div>
@@ -694,7 +695,7 @@ body { background: var(--background); color: var(--foreground); font-family: -ap
         </div>
         <div class="news-card">
           <div class="news-source">
-            <div class="news-av" style="background:rgba(var(--primary-rgb),0.1);color:var(--chart-1)">GD</div>
+            <div class="news-av" style="background:hsl(var(--primary) / 0.1);color:hsl(var(--chart-1))">GD</div>
             <div><div class="news-pub">Grocery Dive</div><div class="news-pub-cat">Retail</div></div>
             <div class="news-age">5w ago</div>
           </div>
@@ -896,7 +897,7 @@ function drawPresenceChart() {
     const ln = document.createElementNS('http://www.w3.org/2000/svg','line');
     ln.setAttribute('x1','22'); ln.setAttribute('x2',W);
     ln.setAttribute('y1',y); ln.setAttribute('y2',y);
-    ln.setAttribute('stroke','rgba(255,255,255,0.04)'); ln.setAttribute('stroke-width','1');
+    ln.setAttribute('stroke','hsl(var(--primary-foreground) / 0.04)'); ln.setAttribute('stroke-width','1');
     svg.appendChild(ln);
   });
   const brands = [

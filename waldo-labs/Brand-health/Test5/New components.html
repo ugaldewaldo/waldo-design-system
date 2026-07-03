@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Poppi Health — New Components</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../waldo-ds.css">
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css" />
+  <link rel="stylesheet" href="../../../waldo-ds.css">
 <style>
   /* Helper RGB tokens for opacity tints — mirror DS tokens; no color tokens redeclared */
   :root {
@@ -19,40 +20,40 @@
     --chart-6-rgb: 85,153,238;
   }
   html, body { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
-  body { display: block !important; max-width: none !important; margin: 0 !important; padding: 40px 48px 120px !important; background: var(--background); color: var(--foreground); font-family: 'Inter', sans-serif; }
+  body { display: block !important; max-width: none !important; margin: 0 !important; padding: 40px 48px 120px !important; background: hsl(var(--background)); color: hsl(var(--foreground)); font-family: 'Inter', sans-serif; }
 
   .doc-head { max-width: 1080px; margin: 0 auto 40px; }
   .doc-title { font-size: 32px; font-weight: 600; letter-spacing: -0.04em; }
-  .doc-sub { font-size: var(--fs-sm); color: var(--muted-foreground); margin-top: 8px; line-height: 1.6; max-width: 760px; }
-  .doc-sub code { font-family: 'SF Mono','Menlo',monospace; color: var(--primary); font-size: var(--fs-xs); }
+  .doc-sub { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); margin-top: 8px; line-height: 1.6; max-width: 760px; }
+  .doc-sub code { font-family: 'SF Mono','Menlo',monospace; color: hsl(var(--primary)); font-size: var(--fs-xs); }
 
-  .comp { max-width: 1080px; margin: 0 auto 28px; background: var(--card); border-radius: 16px; padding: 28px 32px; }
+  .comp { max-width: 1080px; margin: 0 auto 28px; background: hsl(var(--card)); border-radius: 16px; padding: 28px 32px; }
   .comp-name { font-size: var(--fs-lg); font-weight: 600; letter-spacing: -0.02em; }
-  .comp-meta { font-size: var(--fs-sm); color: var(--muted-foreground); margin-top: 4px; line-height: 1.5; }
-  .comp-meta b { color: var(--foreground); font-weight: 600; }
-  .comp-demo { margin-top: 20px; padding: 24px; background: var(--background); border-radius: 12px; }
-  .comp-tag-new { display: inline-block; font-size: var(--fs-xs); font-weight: 600; letter-spacing: -0.02em;  padding: 3px 8px; border-radius: 6px; background: rgba(var(--highlight-rgb),0.12); color: var(--highlight); margin-left: 10px; vertical-align: middle; }
-  .micro { font-size: var(--fs-xs); color: var(--muted-foreground);  letter-spacing: -0.02em; font-weight: 600; }
+  .comp-meta { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); margin-top: 4px; line-height: 1.5; }
+  .comp-meta b { color: hsl(var(--foreground)); font-weight: 600; }
+  .comp-demo { margin-top: 20px; padding: 24px; background: hsl(var(--background)); border-radius: 12px; }
+  .comp-tag-new { display: inline-block; font-size: var(--fs-xs); font-weight: 600; letter-spacing: -0.02em;  padding: 3px 8px; border-radius: 6px; background: hsl(var(--highlight) / 0.12); color: hsl(var(--highlight)); margin-left: 10px; vertical-align: middle; }
+  .micro { font-size: var(--fs-xs); color: hsl(var(--muted-foreground));  letter-spacing: -0.02em; font-weight: 600; }
   .tabular { font-variant-numeric: tabular-nums; }
 
   /* ── 1. Score Ring (gauge) ── */
-  .ring-card { background: var(--card); border-radius: 16px; padding: 22px 20px; display: flex; flex-direction: column; align-items: center; min-height: fit-content; }
-  .ring-card.output { background: linear-gradient(180deg, rgba(210,211,211,0.05), transparent), var(--card); box-shadow: 0 0 0 1px rgba(210,211,211,0.05), 0 24px 48px -16px rgba(23,24,25,0.6); padding: 28px 24px; }
+  .ring-card { background: hsl(var(--card)); border-radius: 16px; padding: 22px 20px; display: flex; flex-direction: column; align-items: center; min-height: fit-content; }
+  .ring-card.output { background: linear-gradient(180deg, hsl(var(--foreground) / 0.05), transparent), hsl(var(--card)); box-shadow: 0 0 0 1px hsl(var(--foreground) / 0.05), 0 24px 48px -16px hsl(var(--background) / 0.6); padding: 28px 24px; }
   .ring-svg { width: 130px; height: 130px; margin-bottom: 10px; flex: none; }
   .ring-card.output .ring-svg { width: 200px; height: 200px; }
-  .ring-track { fill: none; stroke: rgba(210,211,211,0.05); stroke-width: 9; }
+  .ring-track { fill: none; stroke: hsl(var(--foreground) / 0.05); stroke-width: 9; }
   .ring-card.output .ring-track { stroke-width: 11; }
   .ring-arc { fill: none; stroke-width: 9; stroke-linecap: round; transition: stroke-dasharray 0.5s ease-out; }
   .ring-card.output .ring-arc { stroke-width: 11; }
-  .ring-score-text { font-weight: 600; font-size: 38px; fill: var(--foreground); letter-spacing: -0.04em; }
+  .ring-score-text { font-weight: 600; font-size: 38px; fill: hsl(var(--foreground)); letter-spacing: -0.04em; }
   .ring-card.output .ring-score-text { font-size: 64px; }
-  .ring-suffix-text { font-weight: 600; font-size: var(--fs-xs); fill: var(--muted-foreground); letter-spacing: -0.02em; }
-  .ring-card .label { font-size: var(--fs-xs); font-weight: 600; letter-spacing: -0.02em;  color: var(--muted-foreground); }
-  .ring-card.output .label { font-size: var(--fs-sm); color: var(--foreground); }
-  .ring-deltas { display: flex; gap: 10px; font-size: var(--fs-xs); color: var(--muted-foreground); margin-top: 8px; }
-  .ring-delta .lbl { color: var(--muted-foreground); font-size: var(--fs-xs); }
-  .ring-delta .val.up { color: var(--primary); }
-  .ring-delta .val.dn { color: var(--destructive); }
+  .ring-suffix-text { font-weight: 600; font-size: var(--fs-xs); fill: hsl(var(--muted-foreground)); letter-spacing: -0.02em; }
+  .ring-card .label { font-size: var(--fs-xs); font-weight: 600; letter-spacing: -0.02em;  color: hsl(var(--muted-foreground)); }
+  .ring-card.output .label { font-size: var(--fs-sm); color: hsl(var(--foreground)); }
+  .ring-deltas { display: flex; gap: 10px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 8px; }
+  .ring-delta .lbl { color: hsl(var(--muted-foreground)); font-size: var(--fs-xs); }
+  .ring-delta .val.up { color: hsl(var(--primary)); }
+  .ring-delta .val.dn { color: hsl(var(--destructive)); }
 
   /* ── 2. Trend Sparkline ── */
   .spark-demo { height: 90px; }
@@ -60,36 +61,36 @@
 
   /* ── 3. Sentiment Stacked Bar ── */
   .stacked-row { display: flex; align-items: center; margin-bottom: 8px; font-size: var(--fs-xs); }
-  .stacked-row .row-label { width: 80px; color: var(--muted-foreground); }
+  .stacked-row .row-label { width: 80px; color: hsl(var(--muted-foreground)); }
   .stacked-row .row-bar { flex: 1; height: 16px; border-radius: 4px; overflow: hidden; display: flex; }
   .stacked-row .seg { height: 100%; }
-  .seg.pos { background: var(--primary); }
-  .seg.neu { background: var(--muted-foreground); }
-  .seg.neg { background: var(--destructive); }
-  .seg.mix { background: var(--warning); }
-  .stacked-row .row-value { margin-left: 10px; font-variant-numeric: tabular-nums; font-weight: 600; min-width: 38px; text-align: right; color: var(--muted-foreground); }
+  .seg.pos { background: hsl(var(--primary)); }
+  .seg.neu { background: hsl(var(--muted-foreground)); }
+  .seg.neg { background: hsl(var(--destructive)); }
+  .seg.mix { background: hsl(var(--warning)); }
+  .stacked-row .row-value { margin-left: 10px; font-variant-numeric: tabular-nums; font-weight: 600; min-width: 38px; text-align: right; color: hsl(var(--muted-foreground)); }
 
   /* ── 4. Theme Pill (sentiment + volume-scaled) ── */
   .theme-pills { display: flex; flex-wrap: wrap; gap: 6px; }
   .theme-pill { padding: 5px 11px; border-radius: 9999px; font-size: var(--fs-xs); font-weight: 500; border: 1px solid transparent; }
-  .theme-pill.pos { background: rgba(var(--primary-rgb),0.12); color: var(--primary); border-color: rgba(var(--primary-rgb),0.25); }
-  .theme-pill.neu { background: rgba(var(--muted-fg-rgb),0.08); color: var(--muted-foreground); border-color: rgba(var(--muted-fg-rgb),0.18); }
-  .theme-pill.neg { background: rgba(var(--destructive-rgb),0.12); color: var(--destructive); border-color: rgba(var(--destructive-rgb),0.25); }
-  .theme-pill.mix { background: rgba(var(--warning-rgb),0.12); color: var(--warning); border-color: rgba(var(--warning-rgb),0.25); }
+  .theme-pill.pos { background: hsl(var(--primary) / 0.12); color: hsl(var(--primary)); border-color: hsl(var(--primary) / 0.25); }
+  .theme-pill.neu { background: hsl(var(--muted-foreground) / 0.08); color: hsl(var(--muted-foreground)); border-color: hsl(var(--muted-foreground) / 0.18); }
+  .theme-pill.neg { background: hsl(var(--destructive) / 0.12); color: hsl(var(--destructive)); border-color: hsl(var(--destructive) / 0.25); }
+  .theme-pill.mix { background: hsl(var(--warning) / 0.12); color: hsl(var(--warning)); border-color: hsl(var(--warning) / 0.25); }
   .theme-pill .freq { opacity: 0.7; margin-left: 6px; font-variant-numeric: tabular-nums; font-size: var(--fs-xs); }
 
   /* ── 5. Mention Card ── */
-  .mention-card { background: var(--secondary); border-radius: 12px; padding: 12px 14px; }
-  .mention-meta { display: flex; align-items: center; gap: 8px; font-size: var(--fs-xs); color: var(--muted-foreground); margin-bottom: 6px; }
-  .platform-favicon { width: 16px; height: 16px; border-radius: 4px; flex-shrink: 0; background: rgba(210,211,211,0.05); object-fit: contain; }
+  .mention-card { background: hsl(var(--secondary)); border-radius: 12px; padding: 12px 14px; }
+  .mention-meta { display: flex; align-items: center; gap: 8px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-bottom: 6px; }
+  .platform-favicon { width: 16px; height: 16px; border-radius: 4px; flex-shrink: 0; background: hsl(var(--foreground) / 0.05); object-fit: contain; }
   .mention-time { font-variant-numeric: tabular-nums; }
   .sentiment-chip { padding: 2px 7px; border-radius: 9999px; font-size: var(--fs-xs); font-weight: 600; letter-spacing: -0.02em; }
-  .sentiment-chip.pos { background: rgba(var(--primary-rgb),0.15); color: var(--primary); }
-  .sentiment-chip.neg { background: rgba(var(--destructive-rgb),0.15); color: var(--destructive); }
-  .sentiment-chip.neu { background: rgba(var(--muted-fg-rgb),0.12); color: var(--muted-foreground); }
-  .sentiment-chip.mix { background: rgba(var(--warning-rgb),0.15); color: var(--warning); }
-  .mention-text { font-size: var(--fs-sm); line-height: 1.5; color: var(--foreground); }
-  .mention-foot { font-size: var(--fs-xs); color: var(--muted-foreground); margin-top: 6px; display: flex; justify-content: space-between; }
+  .sentiment-chip.pos { background: hsl(var(--primary) / 0.15); color: hsl(var(--primary)); }
+  .sentiment-chip.neg { background: hsl(var(--destructive) / 0.15); color: hsl(var(--destructive)); }
+  .sentiment-chip.neu { background: hsl(var(--muted-foreground) / 0.12); color: hsl(var(--muted-foreground)); }
+  .sentiment-chip.mix { background: hsl(var(--warning) / 0.15); color: hsl(var(--warning)); }
+  .mention-text { font-size: var(--fs-sm); line-height: 1.5; color: hsl(var(--foreground)); }
+  .mention-foot { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 6px; display: flex; justify-content: space-between; }
 
   /* ── 6. Multi-line Area Chart ── */
   .area-wrap .chart-svg { width: 100%; height: 180px; }
@@ -99,99 +100,99 @@
   .donut-svg { width: 130px; height: 130px; flex: none; }
   .donut-legend { flex: 1; }
   .donut-legend .lg-row { display: flex; align-items: center; justify-content: space-between; font-size: var(--fs-xs); padding: 3px 0; }
-  .donut-legend .lg-name { display: flex; align-items: center; gap: 8px; color: var(--muted-foreground); }
+  .donut-legend .lg-name { display: flex; align-items: center; gap: 8px; color: hsl(var(--muted-foreground)); }
   .donut-legend .lg-dot { width: 10px; height: 10px; border-radius: 3px; }
   .donut-legend .lg-pct { font-variant-numeric: tabular-nums; font-weight: 600; }
 
   /* ── 8. Complaint Row ── */
-  .complaint-row { display: flex; align-items: center; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .complaint-row { display: flex; align-items: center; gap: 14px; padding: 10px 0; border-bottom: 1px solid hsl(var(--border)); }
   .complaint-row:last-child { border-bottom: none; }
   .complaint-cluster { flex: 1; }
   .complaint-cluster .ttl { font-size: var(--fs-sm); font-weight: 600; }
-  .complaint-cluster .ex { font-size: var(--fs-xs); color: var(--muted-foreground); margin-top: 3px; }
-  .complaint-meta { display: flex; align-items: center; gap: 12px; font-size: var(--fs-xs); color: var(--muted-foreground); font-variant-numeric: tabular-nums; }
-  .freq-bar, .intensity-bar { width: 60px; height: 5px; background: var(--accent); border-radius: 3px; overflow: hidden; }
-  .freq-bar .fill { height: 100%; background: var(--primary); }
-  .intensity-bar .fill { height: 100%; background: var(--destructive); }
+  .complaint-cluster .ex { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 3px; }
+  .complaint-meta { display: flex; align-items: center; gap: 12px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; }
+  .freq-bar, .intensity-bar { width: 60px; height: 5px; background: hsl(var(--accent)); border-radius: 3px; overflow: hidden; }
+  .freq-bar .fill { height: 100%; background: hsl(var(--primary)); }
+  .intensity-bar .fill { height: 100%; background: hsl(var(--destructive)); }
 
   /* ── 9. VoC Cluster ── */
-  .voc-cluster { padding: 11px 14px; background: var(--secondary); border-radius: 12px; margin-bottom: 8px; }
+  .voc-cluster { padding: 11px 14px; background: hsl(var(--secondary)); border-radius: 12px; margin-bottom: 8px; }
   .voc-cluster .vc-title { font-size: var(--fs-sm); font-weight: 600; margin-bottom: 5px; }
-  .voc-cluster .vc-quote { font-size: var(--fs-xs); color: var(--muted-foreground); line-height: 1.5; margin: 4px 0; }
-  .voc-cluster .vc-meta { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: var(--fs-xs); color: var(--muted-foreground); }
-  .voc-cluster .vc-bar { flex: 1; height: 4px; background: var(--accent); border-radius: 4px; overflow: hidden; }
-  .voc-cluster.love .vc-bar .vc-fill { height: 100%; background: var(--primary); }
-  .voc-cluster.pain .vc-bar .vc-fill { height: 100%; background: var(--destructive); }
+  .voc-cluster .vc-quote { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); line-height: 1.5; margin: 4px 0; }
+  .voc-cluster .vc-meta { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .voc-cluster .vc-bar { flex: 1; height: 4px; background: hsl(var(--accent)); border-radius: 4px; overflow: hidden; }
+  .voc-cluster.love .vc-bar .vc-fill { height: 100%; background: hsl(var(--primary)); }
+  .voc-cluster.pain .vc-bar .vc-fill { height: 100%; background: hsl(var(--destructive)); }
 
   /* ── 10. Percentile Bar ── */
-  .perc-row { display: grid; grid-template-columns: 130px 1fr 50px; gap: 14px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); }
+  .perc-row { display: grid; grid-template-columns: 130px 1fr 50px; gap: 14px; align-items: center; padding: 9px 0; border-bottom: 1px solid hsl(var(--border)); }
   .perc-row:last-child { border-bottom: none; }
-  .perc-name { font-size: var(--fs-xs); color: var(--muted-foreground); }
-  .perc-bar { position: relative; height: 16px; background: var(--accent); border-radius: 4px; }
-  .perc-fill { height: 100%; background: var(--primary); border-radius: 4px; }
-  .median-tick { position: absolute; top: -3px; bottom: -3px; width: 0; border-left: 2px dashed var(--highlight); }
-  .leader-tick { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--foreground); }
+  .perc-name { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .perc-bar { position: relative; height: 16px; background: hsl(var(--accent)); border-radius: 4px; }
+  .perc-fill { height: 100%; background: hsl(var(--primary)); border-radius: 4px; }
+  .median-tick { position: absolute; top: -3px; bottom: -3px; width: 0; border-left: 2px dashed hsl(var(--highlight)); }
+  .leader-tick { position: absolute; top: -3px; bottom: -3px; width: 2px; background: hsl(var(--foreground)); }
   .perc-val { font-size: var(--fs-xs); font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
 
   /* ── 11. Owned Post Tile ── */
   .post-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 460px; }
-  .post-tile { aspect-ratio: 4/5; background: var(--secondary); border-radius: 12px; overflow: hidden; position: relative; display: block; }
-  .post-thumb { position: absolute; inset: 0; background-size: cover; background-position: center; background-color: var(--accent); }
+  .post-tile { aspect-ratio: 4/5; background: hsl(var(--secondary)); border-radius: 12px; overflow: hidden; position: relative; display: block; }
+  .post-thumb { position: absolute; inset: 0; background-size: cover; background-position: center; background-color: hsl(var(--accent)); }
   .post-thumb::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.15) 45%, transparent 75%); }
   .post-text { position: absolute; bottom: 10px; left: 10px; right: 10px; font-size: var(--fs-xs); line-height: 1.35; color: #fff; z-index: 1; }
   .post-eng { position: absolute; top: 8px; right: 8px; z-index: 1; font-size: var(--fs-xs); font-weight: 600; color: #fff; background: rgba(0,0,0,0.5); padding: 2px 7px; border-radius: 9999px; }
 
   /* ── 12. Coach Move Card ── */
-  .coach-card { background: var(--card); border-radius: 16px; padding: 22px 24px; }
+  .coach-card { background: hsl(var(--card)); border-radius: 16px; padding: 22px 24px; }
   .coach-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .coach-tag { font-size: var(--fs-xs); font-weight: 600; letter-spacing: -0.02em; padding: 3px 9px; border-radius: 9999px;  background: rgba(var(--chart-3-rgb),0.14); color: var(--chart-3); }
-  .coach-date { font-size: var(--fs-xs); color: var(--muted-foreground); font-variant-numeric: tabular-nums; }
+  .coach-tag { font-size: var(--fs-xs); font-weight: 600; letter-spacing: -0.02em; padding: 3px 9px; border-radius: 9999px;  background: hsl(var(--chart-3) / 0.14); color: hsl(var(--chart-3)); }
+  .coach-date { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; }
   .coach-headline { font-size: var(--fs-lg); font-weight: 600; letter-spacing: -0.01em; margin-bottom: 8px; line-height: 1.3; }
-  .coach-body { font-size: var(--fs-sm); line-height: 1.6; color: var(--muted-foreground); margin-bottom: 12px; }
-  .coach-evidence { background: var(--secondary); border-radius: 12px; padding: 11px 14px; font-size: var(--fs-xs); color: var(--muted-foreground); line-height: 1.55; }
-  .coach-evidence .label { font-size: var(--fs-xs); color: var(--muted-foreground); font-weight: 600; letter-spacing: -0.02em;  display: block; margin-bottom: 4px; }
-  .coach-actions { display: flex; gap: 2px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
-  .coach-action-btn { width: 30px; height: 30px; background: transparent; border: none; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; color: var(--primary); border-radius: 8px; }
+  .coach-body { font-size: var(--fs-sm); line-height: 1.6; color: hsl(var(--muted-foreground)); margin-bottom: 12px; }
+  .coach-evidence { background: hsl(var(--secondary)); border-radius: 12px; padding: 11px 14px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); line-height: 1.55; }
+  .coach-evidence .label { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); font-weight: 600; letter-spacing: -0.02em;  display: block; margin-bottom: 4px; }
+  .coach-actions { display: flex; gap: 2px; margin-top: 14px; padding-top: 12px; border-top: 1px solid hsl(var(--border)); }
+  .coach-action-btn { width: 30px; height: 30px; background: transparent; border: none; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; color: hsl(var(--primary)); border-radius: 8px; }
   .coach-action-btn svg { width: 16px; height: 16px; stroke-width: 1.8; }
 
   /* ── 13. News Card ── */
-  .news-card { display: flex; gap: 14px; background: var(--secondary); border-radius: 12px; padding: 14px 16px; text-decoration: none; color: inherit; max-width: 460px; }
-  .news-favicon { width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0; background: var(--accent); display: flex; align-items: center; justify-content: center; }
-  .news-meta { display: flex; align-items: center; gap: 8px; font-size: var(--fs-xs); color: var(--muted-foreground); margin-bottom: 4px; }
-  .news-source { color: var(--muted-foreground); font-weight: 600;  letter-spacing: -0.02em; font-size: var(--fs-xs); }
-  .news-title { font-size: var(--fs-sm); font-weight: 600; line-height: 1.4; color: var(--foreground); margin-bottom: 4px; }
-  .news-snippet { font-size: var(--fs-xs); line-height: 1.5; color: var(--muted-foreground); }
-  .news-tag { font-size: var(--fs-xs); font-weight: 600; letter-spacing: -0.02em; padding: 1px 7px; border-radius: 9999px;  background: rgba(var(--chart-6-rgb),0.12); color: var(--chart-6); margin-left: auto; }
+  .news-card { display: flex; gap: 14px; background: hsl(var(--secondary)); border-radius: 12px; padding: 14px 16px; text-decoration: none; color: inherit; max-width: 460px; }
+  .news-favicon { width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0; background: hsl(var(--accent)); display: flex; align-items: center; justify-content: center; }
+  .news-meta { display: flex; align-items: center; gap: 8px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-bottom: 4px; }
+  .news-source { color: hsl(var(--muted-foreground)); font-weight: 600;  letter-spacing: -0.02em; font-size: var(--fs-xs); }
+  .news-title { font-size: var(--fs-sm); font-weight: 600; line-height: 1.4; color: hsl(var(--foreground)); margin-bottom: 4px; }
+  .news-snippet { font-size: var(--fs-xs); line-height: 1.5; color: hsl(var(--muted-foreground)); }
+  .news-tag { font-size: var(--fs-xs); font-weight: 600; letter-spacing: -0.02em; padding: 1px 7px; border-radius: 9999px;  background: hsl(var(--chart-6) / 0.12); color: hsl(var(--chart-6)); margin-left: auto; }
 
   /* ── 14. Trend Column ── */
-  .trend-col { background: var(--card); border-radius: 16px; padding: 16px 14px; max-width: 320px; }
+  .trend-col { background: hsl(var(--card)); border-radius: 16px; padding: 16px 14px; max-width: 320px; }
   .trend-col-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
   .tch-title { font-size: var(--fs-sm); font-weight: 600; }
-  .tch-sub { font-size: var(--fs-xs); color: var(--muted-foreground);  letter-spacing: -0.02em; margin-left: auto; }
-  .trend-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .tch-sub { font-size: var(--fs-xs); color: hsl(var(--muted-foreground));  letter-spacing: -0.02em; margin-left: auto; }
+  .trend-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid hsl(var(--border)); }
   .trend-row:last-child { border-bottom: none; }
-  .trend-rank { font-size: var(--fs-xs); font-weight: 600; color: var(--muted-foreground); width: 22px; text-align: right; font-variant-numeric: tabular-nums; }
+  .trend-rank { font-size: var(--fs-xs); font-weight: 600; color: hsl(var(--muted-foreground)); width: 22px; text-align: right; font-variant-numeric: tabular-nums; }
   .trend-main { flex: 1; min-width: 0; }
   .trend-tag { font-size: var(--fs-sm); font-weight: 600; line-height: 1.3; }
-  .trend-context { font-size: var(--fs-xs); color: var(--muted-foreground); margin-top: 2px; line-height: 1.4; }
+  .trend-context { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 2px; line-height: 1.4; }
   .trend-meta { display: flex; flex-direction: column; align-items: flex-end; font-size: var(--fs-xs); gap: 2px; }
-  .trend-vol { color: var(--muted-foreground); font-variant-numeric: tabular-nums; font-weight: 600; }
+  .trend-vol { color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; font-weight: 600; }
   .trend-delta { font-variant-numeric: tabular-nums; font-weight: 600; }
-  .trend-delta.up { color: var(--primary); }
-  .trend-delta.dn { color: var(--destructive); }
+  .trend-delta.up { color: hsl(var(--primary)); }
+  .trend-delta.dn { color: hsl(var(--destructive)); }
 
   /* ── 15. Cadence Bar ── */
   .cadence-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: var(--fs-xs); max-width: 320px; }
-  .cadence-row .pf { width: 70px; color: var(--muted-foreground); }
-  .cadence-row .track { flex: 1; height: 6px; background: var(--accent); border-radius: 9999px; overflow: hidden; }
-  .cadence-row .track .fill { display: block; height: 100%; background: var(--primary); }
-  .cadence-row .val { font-variant-numeric: tabular-nums; font-size: var(--fs-xs); color: var(--muted-foreground); }
+  .cadence-row .pf { width: 70px; color: hsl(var(--muted-foreground)); }
+  .cadence-row .track { flex: 1; height: 6px; background: hsl(var(--accent)); border-radius: 9999px; overflow: hidden; }
+  .cadence-row .track .fill { display: block; height: 100%; background: hsl(var(--primary)); }
+  .cadence-row .val { font-variant-numeric: tabular-nums; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
 
   /* ── 16. Switch-from Row ── */
   .switch-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: var(--fs-xs); }
-  .switch-row .from-brand { color: var(--muted-foreground); min-width: 90px; }
-  .switch-row .reason { color: var(--foreground); flex: 1; }
-  .switch-row .freq { color: var(--muted-foreground); font-variant-numeric: tabular-nums; }
+  .switch-row .from-brand { color: hsl(var(--muted-foreground)); min-width: 90px; }
+  .switch-row .reason { color: hsl(var(--foreground)); flex: 1; }
+  .switch-row .freq { color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; }
 </style>
 </head>
 <body>
@@ -204,20 +205,20 @@
 <!-- 1 -->
 <div class="comp">
   <div class="comp-name">Radial Gauge<span class="comp-tag-new">new</span></div>
-  <div class="comp-meta">Circular gauge for a 0–100 score. Arc color encodes zone via status tokens: <b>good</b> <code>var(--primary)</code>, <b>watch</b> <code>var(--warning)</code>, <b>at risk</b> <code>var(--destructive)</code>. Variants: <b>input</b> (130px side) and <b>output</b> (200px hero, elevated). Fix: <code>.ring-svg{flex:none}</code> + <code>.ring-card{min-height:fit-content}</code> (DS resets <code>svg{display:block}</code> which otherwise collapses it in flex).</div>
+  <div class="comp-meta">Circular gauge for a 0–100 score. Arc color encodes zone via status tokens: <b>good</b> <code>hsl(var(--primary))</code>, <b>watch</b> <code>hsl(var(--warning))</code>, <b>at risk</b> <code>hsl(var(--destructive))</code>. Variants: <b>input</b> (130px side) and <b>output</b> (200px hero, elevated). Fix: <code>.ring-svg{flex:none}</code> + <code>.ring-card{min-height:fit-content}</code> (DS resets <code>svg{display:block}</code> which otherwise collapses it in flex).</div>
   <div class="comp-demo" style="display:flex;gap:16px;align-items:center;justify-content:center;">
     <div class="ring-card">
-      <svg class="ring-svg" viewBox="0 0 200 200"><circle class="ring-track" cx="100" cy="100" r="80"/><circle class="ring-arc" cx="100" cy="100" r="80" stroke-dasharray="417 503" transform="rotate(-90 100 100)" style="stroke:var(--primary)"/><text class="ring-score-text" x="100" y="113" text-anchor="middle">83</text></svg>
+      <svg class="ring-svg" viewBox="0 0 200 200"><circle class="ring-track" cx="100" cy="100" r="80"/><circle class="ring-arc" cx="100" cy="100" r="80" stroke-dasharray="417 503" transform="rotate(-90 100 100)" style="stroke:hsl(var(--primary))"/><text class="ring-score-text" x="100" y="113" text-anchor="middle">83</text></svg>
       <div class="label">Reputation</div>
       <div class="ring-deltas"><span class="ring-delta"><span class="lbl">7D AVG </span><span class="val dn">▼ 1.0</span></span></div>
     </div>
     <div class="ring-card output">
-      <svg class="ring-svg" viewBox="0 0 200 200"><circle class="ring-track" cx="100" cy="100" r="80"/><circle class="ring-arc" cx="100" cy="100" r="80" stroke-dasharray="412 503" transform="rotate(-90 100 100)" style="stroke:var(--primary)"/><text class="ring-score-text" x="100" y="118" text-anchor="middle">82</text></svg>
+      <svg class="ring-svg" viewBox="0 0 200 200"><circle class="ring-track" cx="100" cy="100" r="80"/><circle class="ring-arc" cx="100" cy="100" r="80" stroke-dasharray="412 503" transform="rotate(-90 100 100)" style="stroke:hsl(var(--primary))"/><text class="ring-score-text" x="100" y="118" text-anchor="middle">82</text></svg>
       <div class="label">Resonance</div>
       <div class="ring-deltas"><span class="ring-delta"><span class="lbl">7D AVG </span><span class="val up">▲ 0.2</span></span></div>
     </div>
     <div class="ring-card">
-      <svg class="ring-svg" viewBox="0 0 200 200"><circle class="ring-track" cx="100" cy="100" r="80"/><circle class="ring-arc" cx="100" cy="100" r="80" stroke-dasharray="161 503" transform="rotate(-90 100 100)" style="stroke:var(--destructive)"/><text class="ring-score-text" x="100" y="108" text-anchor="middle">32</text><text class="ring-suffix-text" x="100" y="128" text-anchor="middle">% SOV</text></svg>
+      <svg class="ring-svg" viewBox="0 0 200 200"><circle class="ring-track" cx="100" cy="100" r="80"/><circle class="ring-arc" cx="100" cy="100" r="80" stroke-dasharray="161 503" transform="rotate(-90 100 100)" style="stroke:hsl(var(--destructive))"/><text class="ring-score-text" x="100" y="108" text-anchor="middle">32</text><text class="ring-suffix-text" x="100" y="128" text-anchor="middle">% SOV</text></svg>
       <div class="label">Presence</div>
       <div class="ring-deltas"><span class="ring-delta"><span class="lbl">7D AVG </span><span class="val up">▲ 0.2%</span></span></div>
     </div>
@@ -227,14 +228,14 @@
 <!-- 2 -->
 <div class="comp">
   <div class="comp-name">Sparkline<span class="comp-tag-new">new</span></div>
-  <div class="comp-meta">Compact multi-series line, no axes. Primary series <code>var(--primary)</code> at 2px; competitors from <code>--chart-*</code> at 1.3px; category median dashed <code>var(--highlight)</code>. SVG strokes set via <code>style="stroke:…"</code> (attributes don't resolve CSS vars).</div>
+  <div class="comp-meta">Compact multi-series line, no axes. Primary series <code>hsl(var(--primary))</code> at 2px; competitors from <code>--chart-*</code> at 1.3px; category median dashed <code>hsl(var(--highlight))</code>. SVG strokes set via <code>style="stroke:…"</code> (attributes don't resolve CSS vars).</div>
   <div class="comp-demo">
     <div class="spark-demo">
       <svg viewBox="0 0 400 90" preserveAspectRatio="none">
-        <path d="M4,70 L60,62 L120,66 L180,50 L240,58 L300,40 L396,46" fill="none" style="stroke:var(--chart-2)" stroke-width="1.3" opacity="0.7"/>
-        <path d="M4,60 L60,55 L120,58 L180,52 L240,48 L300,44 L396,40" fill="none" style="stroke:var(--chart-5)" stroke-width="1.3" opacity="0.7"/>
-        <path d="M4,72 L60,70 L120,68 L180,66 L240,64 L300,62 L396,60" fill="none" style="stroke:var(--highlight)" stroke-width="1.3" opacity="0.85" stroke-dasharray="3 3"/>
-        <path d="M4,66 L40,60 L80,64 L100,28 L130,58 L180,46 L220,52 L260,30 L300,48 L340,42 L396,38" fill="none" style="stroke:var(--primary)" stroke-width="2"/>
+        <path d="M4,70 L60,62 L120,66 L180,50 L240,58 L300,40 L396,46" fill="none" style="stroke:hsl(var(--chart-2))" stroke-width="1.3" opacity="0.7"/>
+        <path d="M4,60 L60,55 L120,58 L180,52 L240,48 L300,44 L396,40" fill="none" style="stroke:hsl(var(--chart-5))" stroke-width="1.3" opacity="0.7"/>
+        <path d="M4,72 L60,70 L120,68 L180,66 L240,64 L300,62 L396,60" fill="none" style="stroke:hsl(var(--highlight))" stroke-width="1.3" opacity="0.85" stroke-dasharray="3 3"/>
+        <path d="M4,66 L40,60 L80,64 L100,28 L130,58 L180,46 L220,52 L260,30 L300,48 L340,42 L396,38" fill="none" style="stroke:hsl(var(--primary))" stroke-width="2"/>
       </svg>
     </div>
   </div>
@@ -243,7 +244,7 @@
 <!-- 3 -->
 <div class="comp">
   <div class="comp-name">Stacked Bar<span class="comp-tag-new">new</span></div>
-  <div class="comp-meta">Per-row 100% stacked bar: <b>pos</b> <code>var(--primary)</code> · <b>neu</b> <code>var(--muted-foreground)</code> · <b>neg</b> <code>var(--destructive)</code> · <b>mix</b> <code>var(--warning)</code>.</div>
+  <div class="comp-meta">Per-row 100% stacked bar: <b>pos</b> <code>hsl(var(--primary))</code> · <b>neu</b> <code>hsl(var(--muted-foreground))</code> · <b>neg</b> <code>hsl(var(--destructive))</code> · <b>mix</b> <code>hsl(var(--warning))</code>.</div>
   <div class="comp-demo">
     <div class="stacked-row"><span class="row-label">TikTok</span><span class="row-bar"><span class="seg pos" style="width:72%"></span><span class="seg neu" style="width:21%"></span><span class="seg neg" style="width:5%"></span><span class="seg mix" style="width:2%"></span></span><span class="row-value">72%</span></div>
     <div class="stacked-row"><span class="row-label">X</span><span class="row-bar"><span class="seg pos" style="width:54%"></span><span class="seg neu" style="width:31%"></span><span class="seg neg" style="width:13%"></span><span class="seg mix" style="width:2%"></span></span><span class="row-value">54%</span></div>
@@ -269,7 +270,7 @@
 <!-- 5 -->
 <div class="comp">
   <div class="comp-name">Comment Card<span class="comp-tag-new">new</span></div>
-  <div class="comp-meta">Social mention: platform favicon, author, relative time, sentiment chip, text, comment count. On <code>var(--secondary)</code>.</div>
+  <div class="comp-meta">Social mention: platform favicon, author, relative time, sentiment chip, text, comment count. On <code>hsl(var(--secondary))</code>.</div>
   <div class="comp-demo" style="max-width:460px;">
     <div class="mention-card">
       <div class="mention-meta"><img class="platform-favicon" src="https://www.google.com/s2/favicons?domain=reddit.com&sz=64" alt=""><span>u/Proof-Firefighter-47 · r/Soda</span><span class="mention-time">2d ago</span><span style="margin-left:auto;" class="sentiment-chip pos">POS</span></div>
@@ -282,15 +283,15 @@
 <!-- 6 -->
 <div class="comp">
   <div class="comp-name">Area Chart<span class="comp-tag-new">new</span></div>
-  <div class="comp-meta">Time-series with subtle gridlines (<code>rgba(210,211,211,0.05)</code>), one line per brand. Same color assignment as the sparkline. SVG strokes via <code>style</code>.</div>
+  <div class="comp-meta">Time-series with subtle gridlines (<code>hsl(var(--foreground) / 0.05)</code>), one line per brand. Same color assignment as the sparkline. SVG strokes via <code>style</code>.</div>
   <div class="comp-demo">
     <div class="area-wrap"><svg class="chart-svg" viewBox="0 0 800 180" preserveAspectRatio="none">
       <line x1="8" x2="792" y1="45" y2="45" stroke="rgba(210,211,211,0.05)"/><line x1="8" x2="792" y1="90" y2="90" stroke="rgba(210,211,211,0.05)"/><line x1="8" x2="792" y1="135" y2="135" stroke="rgba(210,211,211,0.05)"/>
-      <path d="M8,150 L200,148 L400,150 L600,149 L792,148" fill="none" style="stroke:var(--chart-6)" stroke-width="1.5" opacity="0.65"/>
-      <path d="M8,120 L200,118 L400,122 L600,116 L792,118" fill="none" style="stroke:var(--chart-5)" stroke-width="1.5" opacity="0.65"/>
-      <path d="M8,60 L200,64 L400,58 L600,55 L792,52" fill="none" style="stroke:var(--chart-2)" stroke-width="1.5" opacity="0.65"/>
-      <path d="M8,100 L200,96 L400,98 L600,92 L792,94" fill="none" style="stroke:var(--highlight)" stroke-width="1.8" opacity="0.9" stroke-dasharray="4 4"/>
-      <path d="M8,90 L200,84 L400,80 L600,72 L792,70" fill="none" style="stroke:var(--primary)" stroke-width="2.5"/>
+      <path d="M8,150 L200,148 L400,150 L600,149 L792,148" fill="none" style="stroke:hsl(var(--chart-6))" stroke-width="1.5" opacity="0.65"/>
+      <path d="M8,120 L200,118 L400,122 L600,116 L792,118" fill="none" style="stroke:hsl(var(--chart-5))" stroke-width="1.5" opacity="0.65"/>
+      <path d="M8,60 L200,64 L400,58 L600,55 L792,52" fill="none" style="stroke:hsl(var(--chart-2))" stroke-width="1.5" opacity="0.65"/>
+      <path d="M8,100 L200,96 L400,98 L600,92 L792,94" fill="none" style="stroke:hsl(var(--highlight))" stroke-width="1.8" opacity="0.9" stroke-dasharray="4 4"/>
+      <path d="M8,90 L200,84 L400,80 L600,72 L792,70" fill="none" style="stroke:hsl(var(--primary))" stroke-width="2.5"/>
     </svg></div>
   </div>
 </div>
@@ -303,16 +304,16 @@
     <div class="donut-wrap">
       <svg class="donut-svg" viewBox="0 0 100 100">
         <circle cx="50" cy="50" r="38" fill="none" stroke="rgba(210,211,211,0.05)" stroke-width="14"/>
-        <path d="M 50 12 A 38 38 0 0 1 86 62" fill="none" style="stroke:var(--chart-1)" stroke-width="14"/>
-        <path d="M 86 62 A 38 38 0 0 1 38 86" fill="none" style="stroke:var(--chart-2)" stroke-width="14"/>
-        <path d="M 38 86 A 38 38 0 0 1 13 41" fill="none" style="stroke:var(--chart-3)" stroke-width="14"/>
-        <path d="M 13 41 A 38 38 0 0 1 50 12" fill="none" style="stroke:var(--chart-4)" stroke-width="14"/>
+        <path d="M 50 12 A 38 38 0 0 1 86 62" fill="none" style="stroke:hsl(var(--chart-1))" stroke-width="14"/>
+        <path d="M 86 62 A 38 38 0 0 1 38 86" fill="none" style="stroke:hsl(var(--chart-2))" stroke-width="14"/>
+        <path d="M 38 86 A 38 38 0 0 1 13 41" fill="none" style="stroke:hsl(var(--chart-3))" stroke-width="14"/>
+        <path d="M 13 41 A 38 38 0 0 1 50 12" fill="none" style="stroke:hsl(var(--chart-4))" stroke-width="14"/>
       </svg>
       <div class="donut-legend">
-        <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:var(--chart-1)"></span>Product / flavors</span><span class="lg-pct">32%</span></div>
-        <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:var(--chart-2)"></span>Partnership / collab</span><span class="lg-pct">21%</span></div>
-        <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:var(--chart-3)"></span>Wellness / health</span><span class="lg-pct">18%</span></div>
-        <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:var(--chart-4)"></span>Retail / promo</span><span class="lg-pct">14%</span></div>
+        <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:hsl(var(--chart-1))"></span>Product / flavors</span><span class="lg-pct">32%</span></div>
+        <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:hsl(var(--chart-2))"></span>Partnership / collab</span><span class="lg-pct">21%</span></div>
+        <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:hsl(var(--chart-3))"></span>Wellness / health</span><span class="lg-pct">18%</span></div>
+        <div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:hsl(var(--chart-4))"></span>Retail / promo</span><span class="lg-pct">14%</span></div>
       </div>
     </div>
   </div>
@@ -321,7 +322,7 @@
 <!-- 8 -->
 <div class="comp">
   <div class="comp-name">Dual-Bar Row<span class="comp-tag-new">new</span></div>
-  <div class="comp-meta">Cluster with two magnitude bars: <b>frequency</b> <code>var(--primary)</code> and <b>intensity</b> <code>var(--destructive)</code>.</div>
+  <div class="comp-meta">Cluster with two magnitude bars: <b>frequency</b> <code>hsl(var(--primary))</code> and <b>intensity</b> <code>hsl(var(--destructive))</code>.</div>
   <div class="comp-demo">
     <div class="complaint-row"><div class="complaint-cluster"><div class="ttl">Class-action lawsuit confusion <span class="micro" style="font-size:var(--fs-xs);margin-left:8px;">reputational</span></div><div class="ex">"is this real or a phishing email"</div></div><div class="complaint-meta"><div><div class="micro" style="font-size:var(--fs-xs);margin-bottom:2px;">FREQ</div><div class="freq-bar"><div class="fill" style="width:18%"></div></div><div class="tabular" style="margin-top:2px;font-size:var(--fs-xs);">18%</div></div><div><div class="micro" style="font-size:var(--fs-xs);margin-bottom:2px;">INTENSITY</div><div class="intensity-bar"><div class="fill" style="width:71%"></div></div><div class="tabular" style="margin-top:2px;font-size:var(--fs-xs);">0.71</div></div></div></div>
     <div class="complaint-row"><div class="complaint-cluster"><div class="ttl">Price creep at retail <span class="micro" style="font-size:var(--fs-xs);margin-left:8px;">transactional</span></div><div class="ex">"$3.50 a can is insane"</div></div><div class="complaint-meta"><div><div class="micro" style="font-size:var(--fs-xs);margin-bottom:2px;">FREQ</div><div class="freq-bar"><div class="fill" style="width:31%"></div></div><div class="tabular" style="margin-top:2px;font-size:var(--fs-xs);">31%</div></div><div><div class="micro" style="font-size:var(--fs-xs);margin-bottom:2px;">INTENSITY</div><div class="intensity-bar"><div class="fill" style="width:62%"></div></div><div class="tabular" style="margin-top:2px;font-size:var(--fs-xs);">0.62</div></div></div></div>
@@ -331,17 +332,17 @@
 <!-- 9 -->
 <div class="comp">
   <div class="comp-name">Quote Card<span class="comp-tag-new">new</span></div>
-  <div class="comp-meta">Voice-of-customer cluster: title, verbatim quote, frequency bar. <b>love</b> = <code>var(--primary)</code>, <b>pain</b> = <code>var(--destructive)</code>.</div>
+  <div class="comp-meta">Voice-of-customer cluster: title, verbatim quote, frequency bar. <b>love</b> = <code>hsl(var(--primary))</code>, <b>pain</b> = <code>hsl(var(--destructive))</code>.</div>
   <div class="comp-demo" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-    <div class="voc-cluster love"><div class="vc-title">Replaced my Diet Coke habit</div><div class="vc-quote">"haven't touched a Diet Coke in 4 months"</div><div class="vc-meta"><span>freq <b class="tabular" style="color:var(--foreground)">42%</b></span><span class="vc-bar"><span class="vc-fill" style="width:42%"></span></span></div></div>
-    <div class="voc-cluster pain"><div class="vc-title">Price creep at retail</div><div class="vc-quote">"$3.50 a can is insane for sugar water"</div><div class="vc-meta"><span>freq <b class="tabular" style="color:var(--foreground)">31%</b></span><span class="vc-bar"><span class="vc-fill" style="width:31%"></span></span></div></div>
+    <div class="voc-cluster love"><div class="vc-title">Replaced my Diet Coke habit</div><div class="vc-quote">"haven't touched a Diet Coke in 4 months"</div><div class="vc-meta"><span>freq <b class="tabular" style="color:hsl(var(--foreground))">42%</b></span><span class="vc-bar"><span class="vc-fill" style="width:42%"></span></span></div></div>
+    <div class="voc-cluster pain"><div class="vc-title">Price creep at retail</div><div class="vc-quote">"$3.50 a can is insane for sugar water"</div><div class="vc-meta"><span>freq <b class="tabular" style="color:hsl(var(--foreground))">31%</b></span><span class="vc-bar"><span class="vc-fill" style="width:31%"></span></span></div></div>
   </div>
 </div>
 
 <!-- 10 -->
 <div class="comp">
   <div class="comp-name">Benchmark Bar<span class="comp-tag-new">new</span></div>
-  <div class="comp-meta">Value fill <code>var(--primary)</code> with a dashed <b>median</b> tick (<code>var(--highlight)</code>) and a solid <b>leader</b> tick (<code>var(--foreground)</code>).</div>
+  <div class="comp-meta">Value fill <code>hsl(var(--primary))</code> with a dashed <b>median</b> tick (<code>hsl(var(--highlight))</code>) and a solid <b>leader</b> tick (<code>hsl(var(--foreground))</code>).</div>
   <div class="comp-demo">
     <div class="perc-row"><span class="perc-name">Net sentiment</span><span class="perc-bar"><span class="perc-fill" style="width:84%"></span><span class="median-tick" style="left:50%"></span><span class="leader-tick" style="left:91%"></span></span><span class="perc-val">P84</span></div>
     <div class="perc-row"><span class="perc-name">Mention volume</span><span class="perc-bar"><span class="perc-fill" style="width:78%"></span><span class="median-tick" style="left:50%"></span><span class="leader-tick" style="left:99%"></span></span><span class="perc-val">P78</span></div>
@@ -383,7 +384,7 @@
 <!-- 13 -->
 <div class="comp">
   <div class="comp-name">Article Card<span class="comp-tag-new">new</span></div>
-  <div class="comp-meta">Press item: source favicon, source, time, category tag, title, snippet. On <code>var(--secondary)</code>.</div>
+  <div class="comp-meta">Press item: source favicon, source, time, category tag, title, snippet. On <code>hsl(var(--secondary))</code>.</div>
   <div class="comp-demo">
     <a class="news-card">
       <div class="news-favicon"><img src="https://www.google.com/s2/favicons?domain=cnbc.com&sz=64" alt="" width="24" height="24"></div>
@@ -399,7 +400,7 @@
 <!-- 14 -->
 <div class="comp">
   <div class="comp-name">Leaderboard<span class="comp-tag-new">new</span></div>
-  <div class="comp-meta">Ranked list per source (TikTok / X / Google): rank, tag, context, volume, delta (<b>up</b> <code>var(--primary)</code> / <b>dn</b> <code>var(--destructive)</code>).</div>
+  <div class="comp-meta">Ranked list per source (TikTok / X / Google): rank, tag, context, volume, delta (<b>up</b> <code>hsl(var(--primary))</code> / <b>dn</b> <code>hsl(var(--destructive))</code>).</div>
   <div class="comp-demo">
     <div class="trend-col">
       <div class="trend-col-head"><span class="tch-title">TikTok hashtags</span><span class="tch-sub">last 7 days</span></div>
@@ -412,7 +413,7 @@
 <!-- 15 -->
 <div class="comp">
   <div class="comp-name">Bar Track<span class="comp-tag-new">new</span></div>
-  <div class="comp-meta">Per-platform posting share, single magnitude bar <code>var(--primary)</code> + posts/day value.</div>
+  <div class="comp-meta">Per-platform posting share, single magnitude bar <code>hsl(var(--primary))</code> + posts/day value.</div>
   <div class="comp-demo">
     <div class="cadence-row"><span class="pf">TikTok</span><span class="track"><span class="fill" style="width:41%"></span></span><span class="val">2.4/d</span></div>
     <div class="cadence-row"><span class="pf">Instagram</span><span class="track"><span class="fill" style="width:34%"></span></span><span class="val">1.8/d</span></div>

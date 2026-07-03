@@ -1,0 +1,1871 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poppi · Brand Health</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css" />
+  <link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   Required DS conflict overrides (doctrine — load-bearing, verbatim)
+   ══════════════════════════════════════════════════════════════════ */
+/* waldo-ds.css sets html,body{height:100%;overflow:hidden} — breaks scroll.
+   Scroll override goes on html ONLY: any overflow other than visible on body
+   silently kills position:sticky (the sticky topbar scrolls away). */
+html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+body { height: auto !important; overflow: visible !important; }
+/* waldo-ds.css sets body{display:flex!important} — collapses card widths */
+body { display: block !important; }
+/* waldo-ds.css sets svg{display:block} — collapses ring/icon SVGs inside flex containers */
+svg { flex: none; min-height: fit-content; }
+
+/* ══ Page shell ══ */
+* { box-sizing: border-box; }
+body {
+  max-width: none !important; margin: 0 !important; padding: 0 !important;
+  background: hsl(var(--background)); color: hsl(var(--foreground));
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
+}
+.bx-wrap { max-width: 1184px; margin: 0 auto; padding: 0 0 64px; }
+
+/* ══ Topbar ══ */
+.bx-topbar {
+  position: sticky; top: 0; z-index: 60;
+  background: color-mix(in srgb, hsl(var(--background)) 78%, transparent);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid hsl(var(--border));
+}
+.bx-topbar-inner { max-width: 1184px; margin: 0 auto; height: 58px; display: flex; align-items: center; gap: 12px; }
+.bx-brand-logo {
+  width: 34px; height: 34px; border-radius: 9999px; flex: none;
+  display: flex; align-items: center; justify-content: center;
+  background: color-mix(in srgb, hsl(var(--primary)) 26%, hsl(var(--card)));
+  box-shadow: 0 0 18px hsl(var(--primary) / 0.35);
+  color: hsl(var(--primary)); font-size: var(--fs-lg); font-weight: 600; line-height: 1;
+}
+.bx-brand-id { display: flex; flex-direction: column; gap: 1px; }
+.bx-brand-name { font-size: var(--fs-base); font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; }
+.bx-brand-eyebrow { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
+.bx-topbar-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+.bx-topbar-date { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+.bx-powered {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 12px; border-radius: 9999px; background: hsl(var(--secondary));
+  font-size: var(--fs-xs); color: hsl(var(--muted-foreground));
+}
+.bx-powered svg { color: hsl(var(--foreground)); }
+
+/* ══ Hero — three asymmetric ring cards (brief geometry: 1fr 1.6fr 1fr) ══ */
+.hero-row { display: grid; grid-template-columns: 1fr 1.6fr 1fr; gap: 16px; align-items: stretch; margin: 24px 0 16px; }
+
+/* Score Ring — canonical classes copied from index.html #comp-score-ring */
+.sring { background: hsl(var(--card)); border-radius: var(--radius-xl); padding: 22px 20px; display: flex; flex-direction: column; align-items: center; border: none; }
+.sring.hero { padding: 28px 24px; box-shadow: 0 0 0 1px color-mix(in srgb, hsl(var(--foreground)) 6%, transparent), 0 24px 48px -18px color-mix(in srgb, hsl(var(--background)) 85%, transparent); }
+.sring-svg { width: 120px; height: 120px; display: block; flex: none; }
+.sring.hero .sring-svg { width: 184px; height: 184px; }
+.sring-track { fill: none; stroke: color-mix(in srgb, hsl(var(--foreground)) 8%, transparent); stroke-width: 4; }
+.sring.hero .sring-track { stroke-width: 5; }
+.sring-arc { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dasharray 0.6s ease; }
+.sring.hero .sring-arc { stroke-width: 5; }
+.sring.good .sring-arc { stroke: hsl(var(--primary)); }
+.sring.watch .sring-arc { stroke: hsl(var(--warning)); }
+.sring.risk .sring-arc { stroke: hsl(var(--destructive)); }
+.sring-num { font-size: 28px; font-weight: 400; letter-spacing: -0.02em; fill: hsl(var(--foreground)); }
+.sring.hero .sring-num { font-size: 44px; }
+.sring-suffix { font-size: var(--fs-xs); font-weight: 400; letter-spacing: -0.02em; fill: hsl(var(--muted-foreground)); }
+.sring-label { font-size: var(--fs-xs); font-weight: 400; letter-spacing: -0.02em; color: hsl(var(--muted-foreground)); margin-top: 8px; }
+.sring.hero .sring-label { font-size: var(--fs-sm); color: hsl(var(--foreground)); margin-top: 12px; }
+.sring-delta { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 6px; font-variant-numeric: tabular-nums; }
+.sring-delta .up { color: hsl(var(--primary)); font-weight: 500; }
+.sring-delta .dn { color: hsl(var(--destructive)); font-weight: 500; }
+
+/* Prototype geometry per brief: input ~130px / score ~38px rendered; hero ~220px / score ~68px */
+.hero-row .sring { justify-content: center; cursor: pointer; transition: background 0.12s; }
+.hero-row .sring:hover { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--card))); }
+.hero-row .sring-svg { width: 130px; height: 130px; }
+.hero-row .sring.hero .sring-svg { width: 220px; height: 220px; }
+.hero-row .sring-num { font-size: 35px; }   /* ≈38px rendered at 130/120 scale */
+.hero-row .sring.hero .sring-num { font-size: 37px; } /* ≈68px rendered at 220/120 scale */
+.sring-kicker { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: hsl(var(--muted-foreground)); margin-bottom: 8px; }
+/* Center (hero) card recolors by zone */
+.hero-row .sring.hero.good  { background: color-mix(in srgb, hsl(var(--primary)) 5%, hsl(var(--card))); }
+.hero-row .sring.hero.watch { background: color-mix(in srgb, hsl(var(--warning)) 6%, hsl(var(--card))); }
+.hero-row .sring.hero.risk  { background: color-mix(in srgb, hsl(var(--destructive)) 6%, hsl(var(--card))); }
+.hero-row .sring.hero.good  .sring-label { color: hsl(var(--primary)); }
+.hero-row .sring.hero.watch .sring-label { color: hsl(var(--warning)); }
+.hero-row .sring.hero.risk  .sring-label { color: hsl(var(--destructive)); }
+.zone-tag { display: inline-flex; align-items: center; gap: 5px; margin-top: 8px; padding: 2px 10px; border-radius: 9999px; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+.zone-tag.good  { background: hsl(var(--primary) / 0.12); color: hsl(var(--primary)); }
+.zone-tag.watch { background: hsl(var(--warning) / 0.12); color: hsl(var(--warning)); }
+.zone-tag.risk  { background: hsl(var(--destructive) / 0.12); color: hsl(var(--destructive)); }
+
+/* ══ Pulse strip (KPI Stat Card canonical + embedded sparkline) ══ */
+.pulse-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px; }
+.kpi { background: hsl(var(--card)); border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 8px; border: none; cursor: pointer; transition: background 0.12s; }
+.kpi:hover { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--card))); }
+.kpi-top { display: flex; align-items: flex-start; justify-content: space-between; }
+.k-label { font-size: var(--fs-sm); font-weight: 500; line-height: 20px; letter-spacing: -0.28px; color: hsl(var(--muted-foreground)); }
+.k-delta { font-size: 11px; font-weight: 600; padding: 2px 6px; border-radius: 6px; white-space: nowrap; }
+.k-delta.good { color: hsl(var(--primary)); background: hsl(var(--primary) / 0.12); }
+.k-delta.bad  { color: hsl(var(--destructive)); background: hsl(var(--destructive) / 0.12); }
+.k-delta.flat { color: hsl(var(--muted-foreground)); background: hsl(var(--secondary)); }
+.k-value { font-size: 30px; font-weight: 600; line-height: 36px; letter-spacing: -0.6px; font-variant-numeric: tabular-nums; }
+.k-sub { font-size: 12px; font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: hsl(var(--muted-foreground)); }
+.kpi-spark-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 14px; }
+
+/* Sparkline — canonical (#chart-page-sparkline) */
+.spk { width: 88px; height: 26px; flex: none; }
+.spk svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.spk-delta { font-size: var(--fs-xs); font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.24px; }
+.spk-delta.up { color: hsl(var(--primary)); }
+.spk-delta.dn { color: hsl(var(--warning)); }
+
+/* ══ Hero legend ══ */
+.hero-legend { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; margin-bottom: 16px; }
+.trend-legend { display: flex; gap: 18px; flex-wrap: wrap; }
+.trend-legend-item { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); line-height: 16px; letter-spacing: -0.24px; color: color-mix(in srgb, hsl(var(--foreground)) 70%, transparent); }
+.trend-swatch { width: 14px; height: 6px; border-radius: 4px; flex: none; }
+.trend-swatch.dashed { background: repeating-linear-gradient(90deg, color-mix(in srgb, hsl(var(--foreground)) 45%, transparent) 0 4px, transparent 4px 7px); border-radius: 0; }
+
+/* ══ Scrubber timeline ══ */
+.scrub-card { background: hsl(var(--card)); border-radius: 16px; padding: 14px 18px; display: flex; flex-direction: column; gap: 12px; border: none; margin-bottom: 20px; }
+.scrub-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.scrub-asof { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; }
+.scrub-asof b { color: hsl(var(--foreground)); font-weight: 500; }
+.scrub-track-wrap { position: relative; padding: 6px 0 18px; }
+.scrub-tick { position: absolute; top: 2px; width: 2px; height: 12px; border-radius: 1px; background: color-mix(in srgb, hsl(var(--foreground)) 30%, transparent); transform: translateX(-50%); pointer-events: none; }
+.scrub-tick-label { position: absolute; top: 18px; transform: translateX(-50%); font-size: 10px; color: hsl(var(--muted-foreground)); white-space: nowrap; pointer-events: none; }
+.scrub-range-labels { display: flex; justify-content: space-between; font-size: 10px; color: hsl(var(--muted-foreground)); }
+
+/* ══ Tab bar ══ */
+.bx-tabs { display: flex; justify-content: flex-start; margin-bottom: 24px; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ══ Layout rows & cards ══ */
+.row { display: flex; gap: 16px; align-items: stretch; margin-bottom: 24px; }
+.row > * { flex: 1; min-width: 0; }
+.bx-card { background: hsl(var(--card)); border-radius: 16px; padding: 18px 20px; border: none; display: flex; flex-direction: column; }
+.bx-card-head { display: flex; flex-direction: column; gap: 3px; margin-bottom: 14px; }
+.bx-card-title { font-size: var(--fs-sm); font-weight: 500; letter-spacing: -0.02em; }
+.bx-card-sub { font-size: var(--fs-xs); font-weight: 400; color: hsl(var(--muted-foreground)); }
+.bx-card-link { font-size: var(--fs-xs); color: hsl(var(--primary)); cursor: pointer; margin-top: 12px; width: fit-content; border: none; background: none; padding: 0; font-family: inherit; text-align: left; }
+.bx-card-link.bx-inline { display: inline; margin: 0; }
+.bx-card-link:hover { opacity: 0.8; }
+.bx-scroll-list { overflow-y: auto; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+.tab-h { display: flex; flex-direction: column; gap: 2px; margin-bottom: 18px; }
+.tab-h-title { font-size: var(--fs-xl); font-weight: 600; letter-spacing: -0.02em; }
+.tab-h-sub { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); }
+
+/* ══ Comment Card — canonical (#comp-comment-card) ══ */
+.comment-card { background: hsl(var(--card)); border-radius: var(--radius-xl); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; cursor: pointer; transition: background 0.12s; border: none; }
+.comment-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 6%, hsl(var(--card))); }
+.comment-card.on-card { background: hsl(var(--secondary)); }
+.comment-card.on-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 6%, hsl(var(--secondary))); }
+.comment-meta { display: flex; align-items: center; gap: 6px; }
+.comment-favicon { width: 14px; height: 14px; border-radius: 2px; flex: none; }
+.comment-author { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.comment-time { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); flex: none; opacity: 0.6; }
+.comment-sentiment { font-size: 10px; font-weight: 600; letter-spacing: 0.04em; padding: 2px 7px; border-radius: 9999px; flex: none; }
+.comment-sentiment.pos { background: color-mix(in srgb, hsl(var(--primary)) 12%, transparent); color: hsl(var(--primary)); }
+.comment-sentiment.neu { background: color-mix(in srgb, hsl(var(--muted-foreground)) 12%, transparent); color: hsl(var(--muted-foreground)); }
+.comment-sentiment.neg { background: color-mix(in srgb, hsl(var(--destructive)) 12%, transparent); color: hsl(var(--destructive)); }
+.comment-sentiment.mix { background: color-mix(in srgb, hsl(var(--warning)) 12%, transparent); color: hsl(var(--warning)); }
+.comment-body { font-size: var(--fs-sm); color: hsl(var(--foreground)); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.comment-foot { display: flex; align-items: center; justify-content: space-between; }
+.comment-count { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); opacity: 0.6; }
+.comment-arrow { display: none; }
+.fav-dot { width: 10px; height: 10px; border-radius: 9999px; background: color-mix(in srgb, hsl(var(--foreground)) 25%, transparent); flex: none; display: inline-block; }
+
+/* ══ Theme Pill — canonical (#comp-theme-pill) ══ */
+.theme-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.theme-pill { display: inline-flex; align-items: center; padding: 5px 11px; border-radius: 9999px; font-size: var(--fs-xs); font-weight: 500; letter-spacing: -0.02em; border: 1px solid transparent; cursor: pointer; }
+.theme-pill.pos { background: color-mix(in srgb,hsl(var(--primary)) 12%,transparent); color: hsl(var(--primary)); border-color: color-mix(in srgb,hsl(var(--primary)) 25%,transparent); }
+.theme-pill.neu { background: color-mix(in srgb,hsl(var(--muted-foreground)) 10%,transparent); color: hsl(var(--muted-foreground)); border-color: color-mix(in srgb,hsl(var(--muted-foreground)) 22%,transparent); }
+.theme-pill.neg { background: color-mix(in srgb,hsl(var(--warning)) 12%,transparent); color: hsl(var(--warning)); border-color: color-mix(in srgb,hsl(var(--warning)) 25%,transparent); }
+.theme-pill.mix { background: color-mix(in srgb,hsl(var(--highlight)) 12%,transparent); color: hsl(var(--highlight)); border-color: color-mix(in srgb,hsl(var(--highlight)) 25%,transparent); }
+.theme-pill-freq { opacity: 0.7; margin-left: 6px; font-variant-numeric: tabular-nums; }
+
+/* ══ Recommendation Card — canonical (#comp-recommendation-card) ══ */
+.rec-card { background: hsl(var(--card)); border-radius: var(--radius-xl); padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; cursor: pointer; transition: background 0.12s; border: none; }
+.rec-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 5%, hsl(var(--card))); }
+.rec-header { display: flex; align-items: center; gap: 8px; }
+.rec-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 9999px; flex: none; text-transform: uppercase; }
+.rec-tag.campaign { background: color-mix(in srgb, hsl(var(--chart-3)) 14%, transparent); color: hsl(var(--chart-3)); }
+.rec-tag.product  { background: color-mix(in srgb, hsl(var(--primary)) 14%, transparent); color: hsl(var(--primary)); }
+.rec-tag.creative { background: color-mix(in srgb, hsl(var(--warning)) 14%, transparent); color: hsl(var(--warning)); }
+.rec-tag.comms    { background: color-mix(in srgb, hsl(var(--destructive)) 14%, transparent); color: hsl(var(--destructive)); }
+.rec-tag.retail   { background: color-mix(in srgb, hsl(var(--muted-foreground)) 14%, transparent); color: hsl(var(--muted-foreground)); }
+.rec-headline { font-size: var(--fs-sm); font-weight: 600; color: hsl(var(--foreground)); line-height: 1.35; }
+.rec-body { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); line-height: 1.55; }
+.rec-evidence { background: color-mix(in srgb, hsl(var(--foreground)) 5%, transparent); border-radius: var(--radius-md); padding: 10px 12px; display: flex; flex-direction: column; gap: 3px; }
+.rec-evidence-label { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: hsl(var(--muted-foreground)); opacity: 0.6; }
+.rec-evidence-text { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); line-height: 1.5; }
+.rec-foot { display: flex; align-items: center; gap: 2px; padding-top: 6px; border-top: 1px solid color-mix(in srgb, hsl(var(--foreground)) 8%, transparent); margin-top: 2px; }
+.rec-foot-tag { margin-left: auto; }
+.rec-action { width: 28px; height: 28px; background: transparent; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: var(--radius-md); color: hsl(var(--muted-foreground)); transition: background 0.12s, color 0.12s; padding: 0; }
+.rec-action:hover { background: color-mix(in srgb, hsl(var(--primary)) 10%, transparent); color: hsl(var(--primary)); }
+.rec-action.down:hover { background: color-mix(in srgb, hsl(var(--destructive)) 10%, transparent); color: hsl(var(--destructive)); }
+.rec-action.on { color: hsl(var(--primary)); background: color-mix(in srgb, hsl(var(--primary)) 10%, transparent); }
+.rec-action.down.on { color: hsl(var(--destructive)); background: color-mix(in srgb, hsl(var(--destructive)) 10%, transparent); }
+.rec-action svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+/* prototype extensions for Coach: rank, impact chip, evidence source list, status banner */
+.rec-rank { font-size: var(--fs-lg); font-weight: 600; color: hsl(var(--muted-foreground)); flex: none; width: 22px; }
+.rec-impact { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 9999px; background: hsl(var(--primary) / 0.12); color: hsl(var(--primary)); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.rec-sources { font-size: 10px; color: hsl(var(--muted-foreground)); opacity: 0.7; }
+.rec-status { font-size: var(--fs-xs); padding: 6px 10px; border-radius: var(--radius-md); background: hsl(var(--primary) / 0.08); color: hsl(var(--primary)); }
+.rec-status.down { background: hsl(var(--destructive) / 0.08); color: hsl(var(--destructive)); }
+
+/* ══ Article Card — canonical (#comp-article-card) ══ */
+.art-card { display: flex; gap: 14px; background: hsl(var(--card)); border-radius: var(--radius-xl); padding: 14px 16px; text-decoration: none; color: inherit; cursor: pointer; transition: background 0.12s; border: none; }
+.art-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 5%, hsl(var(--card))); }
+.art-favicon { width: 32px; height: 32px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.art-favicon img { width: 20px; height: 20px; object-fit: contain; display: block; }
+.art-body { display: flex; flex-direction: column; gap: 5px; min-width: 0; flex: 1; }
+.art-meta { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); flex-wrap: wrap; }
+.art-source { font-weight: 600; color: hsl(var(--foreground)); }
+.art-dot { opacity: 0.4; }
+.art-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.02em; padding: 1px 7px; border-radius: 9999px; margin-left: auto; flex-shrink: 0; }
+.art-tag.neutral { background: color-mix(in srgb, hsl(var(--primary)) 14%, transparent); color: hsl(var(--primary)); }
+.art-tag.competitor { background: color-mix(in srgb, hsl(var(--warning)) 14%, transparent); color: hsl(var(--warning)); }
+.art-tag.negative { background: color-mix(in srgb, hsl(var(--destructive)) 14%, transparent); color: hsl(var(--destructive)); }
+.art-title { font-size: var(--fs-sm); font-weight: 600; color: hsl(var(--foreground)); line-height: 1.4; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.art-snippet { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); line-height: 1.5; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.art-ext { font-size: var(--fs-xs); color: hsl(var(--primary)); }
+
+/* ══ Quote Card — canonical (#comp-quote-card) ══ */
+.quote-card { background: hsl(var(--card)); border-radius: var(--radius-xl); padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; border: none; }
+.quote-card.on-card { background: hsl(var(--secondary)); }
+.quote-title { font-size: var(--fs-sm); font-weight: 600; color: hsl(var(--foreground)); }
+.quote-text { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.5; }
+.quote-foot { display: flex; align-items: center; gap: 10px; }
+.quote-freq-label { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); white-space: nowrap; }
+.quote-freq-val { font-size: var(--fs-xs); font-weight: 600; color: hsl(var(--foreground)); font-variant-numeric: tabular-nums; }
+.quote-bar-track { flex: 1; height: 4px; border-radius: 9999px; background: color-mix(in srgb, hsl(var(--foreground)) 8%, transparent); overflow: hidden; }
+.quote-bar-fill { height: 100%; border-radius: 9999px; }
+.quote-card.love .quote-bar-fill { background: hsl(var(--primary)); }
+.quote-card.pain .quote-bar-fill { background: hsl(var(--destructive)); }
+.voc-col-label { font-size: var(--fs-xs); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px; }
+.voc-col-label.love { color: hsl(var(--primary)); }
+.voc-col-label.pain { color: hsl(var(--destructive)); }
+.voc-stack { display: flex; flex-direction: column; gap: 8px; }
+
+/* ══ Bar Track — canonical (#comp-bar-track) ══ */
+.bar-track { display: flex; flex-direction: column; gap: 5px; padding: 7px 6px; cursor: default; border-radius: var(--radius-md); transition: background 0.1s; }
+.bar-track:hover { background: color-mix(in srgb, hsl(var(--foreground)) 4%, transparent); }
+.bar-track-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.bar-track-label { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bar-track-val { font-size: var(--fs-xs); font-weight: 500; color: hsl(var(--foreground)); font-variant-numeric: tabular-nums; white-space: nowrap; flex: none; }
+.bar-track-rail { height: 6px; border-radius: 9999px; background: color-mix(in srgb, hsl(var(--foreground)) 8%, transparent); overflow: hidden; }
+.bar-track-fill { height: 100%; border-radius: 9999px; background: hsl(var(--primary)); }
+.bar-track.muted .bar-track-fill { background: color-mix(in srgb, hsl(var(--muted-foreground)) 55%, transparent); }
+.bar-track.warn  .bar-track-fill { background: hsl(var(--warning)); }
+.bar-track.bad   .bar-track-fill { background: hsl(var(--destructive)); }
+
+/* ══ Benchmark Bar — canonical (#comp-benchmark-bar) + leader marker ══ */
+.bench-bar { display: flex; flex-direction: column; gap: 6px; }
+.bench-bar-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.bench-bar-label { font-size: var(--fs-xs); font-weight: 400; color: hsl(var(--foreground)); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bench-bar-right { display: flex; align-items: baseline; gap: 5px; flex: none; }
+.bench-bar-val { font-size: var(--fs-xs); font-weight: 400; color: hsl(var(--foreground)); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bench-bar-ref { font-size: var(--fs-xs); font-weight: 400; color: hsl(var(--muted-foreground)); white-space: nowrap; }
+.bench-bar-track { position: relative; height: 6px; border-radius: 9999px; background: color-mix(in srgb, hsl(var(--foreground)) 8%, transparent); overflow: visible; }
+.bench-bar-fill { height: 100%; border-radius: 9999px; transition: width 0.3s ease; }
+.bench-bar-marker { position: absolute; top: -3px; bottom: -3px; width: 2px; border-radius: 1px; background: color-mix(in srgb, hsl(var(--foreground)) 30%, transparent); transform: translateX(-50%); }
+.bench-bar-marker.leader { background: color-mix(in srgb, hsl(var(--highlight)) 70%, transparent); }
+.bench-bar.good .bench-bar-fill { background: hsl(var(--primary)); }
+.bench-bar.bad  .bench-bar-fill { background: hsl(var(--destructive)); }
+.bench-bar.warn .bench-bar-fill { background: hsl(var(--warning)); }
+.bench-bar.neutral .bench-bar-fill { background: color-mix(in srgb, hsl(var(--muted-foreground)) 50%, transparent); }
+.bench-stack-gap { display: flex; flex-direction: column; gap: 14px; }
+.bench-legend { display: flex; gap: 16px; margin-top: 12px; }
+.bench-legend-item { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+.bench-legend-mark { width: 2px; height: 10px; border-radius: 1px; flex: none; }
+.bench-legend-mark.median { background: color-mix(in srgb, hsl(var(--foreground)) 30%, transparent); }
+.bench-legend-mark.leader { background: color-mix(in srgb, hsl(var(--highlight)) 70%, transparent); }
+
+/* ══ Proportion Bar — canonical (#chart-page-proportion) ══ */
+.senti-row { display: flex; align-items: center; gap: 14px; padding: 7px 0; }
+.senti-label { width: 72px; flex: none; font-size: var(--fs-sm); font-weight: 400; letter-spacing: -0.28px; color: hsl(var(--muted-foreground)); display: flex; align-items: center; gap: 6px; }
+.senti-bar { flex: 1; height: 10px; border-radius: 9999px; overflow: hidden; display: flex; background: hsl(var(--secondary)); }
+.senti-seg { height: 100%; }
+.senti-seg.pos { background: hsl(var(--primary)); }
+.senti-seg.neu { background: hsl(var(--muted-foreground)); }
+.senti-seg.neg { background: hsl(var(--warning)); }
+.senti-seg.mix { background: hsl(var(--highlight)); }
+.senti-val { width: 40px; flex: none; text-align: right; font-size: var(--fs-sm); font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.28px; color: hsl(var(--muted-foreground)); }
+.senti-vol { width: 44px; flex: none; text-align: right; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); opacity: 0.7; font-variant-numeric: tabular-nums; }
+.senti-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 14px; padding-top: 14px; border-top: 1px solid hsl(var(--border)); }
+.senti-legend-item { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); letter-spacing: -0.24px; color: color-mix(in srgb,hsl(var(--foreground)) 70%,transparent); }
+.senti-swatch { width: 14px; height: 8px; border-radius: 4px; flex: none; }
+.senti-swatch.pos { background: hsl(var(--primary)); }
+.senti-swatch.neu { background: hsl(var(--muted-foreground)); }
+.senti-swatch.neg { background: hsl(var(--warning)); }
+.senti-swatch.mix { background: hsl(var(--highlight)); }
+
+/* ══ Donut — canonical legend classes (#chart-page-donut) ══ */
+.donut-chart-row { display: flex; gap: 24px; align-items: center; }
+.donut-legend-grid { display: flex; flex-direction: column; gap: 8px; }
+.donut-legend-row { display: flex; align-items: center; gap: 8px; font-size: var(--fs-xs); min-width: 140px; cursor: pointer; }
+.donut-swatch { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.donut-legend-label { flex: 1; color: hsl(var(--muted-foreground)); }
+.donut-legend-val { font-weight: 500; font-size: var(--fs-xs); color: hsl(var(--foreground)); }
+
+/* ══ HBar — canonical (#chart-page-hbar) ══ */
+.ds-hbars { display: flex; flex-direction: column; }
+.ds-hbar-row { display: flex; flex-direction: row; align-items: center; height: 32px; padding: 6px 12px; gap: 12px; border-radius: 8px; cursor: pointer; transition: background .12s; }
+.ds-hbar-row:hover { background: hsl(var(--muted)); }
+.ds-hbar-name { width: 140px; flex: none; font-size: var(--fs-sm); font-weight: 400; line-height: 20px; letter-spacing: -0.28px; color: hsl(var(--muted-foreground)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ds-hbar-inner { flex: 1; display: flex; align-items: center; gap: 12px; }
+.ds-hbar-track { flex: 1; height: 6px; background: hsl(var(--muted)); border-radius: 12px; overflow: hidden; }
+.ds-hbar-fill  { height: 100%; border-radius: 9999px; }
+.ds-hbar-val { width: 46px; flex: none; text-align: right; font-size: var(--fs-xs); font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: hsl(var(--muted-foreground)); }
+.ds-hbar-row.stacked { flex-direction: column; align-items: stretch; height: auto; padding: 8px 12px; gap: 4px; }
+.ds-hbar-row.stacked .ds-hbar-name { width: auto; }
+
+/* ══ Segmented Bar — canonical (#chart-page-segbar) ══ */
+.segbar-wrap { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+.segbar-track { display: flex; width: 100%; height: 48px; border-radius: var(--radius-xl); overflow: hidden; }
+.segbar-seg { height: 100%; transition: opacity 0.15s; }
+.segbar-seg:hover { opacity: 0.82; }
+.segbar-legend { display: flex; flex-wrap: wrap; gap: 4px 24px; padding: 0 2px; }
+.segbar-legend-item { display: flex; align-items: center; gap: 5px; }
+.segbar-legend-pct { font-size: var(--fs-xs); font-weight: 700; }
+.segbar-legend-label { font-size: var(--fs-xs); }
+
+/* ══ Trend / area chart wrap — canonical (#chart-page-trend) ══ */
+.trend-wrap { position: relative; width: 100%; }
+.trend-wrap svg { display: block; width: 100%; }
+.trend-wrap:hover .trend-dot { opacity: 1 !important; }
+
+/* ══ Leaderboard Row (trend variant) — canonical (#comp-leaderboard-row) ══ */
+.lb { display: flex; flex-direction: column; }
+.lb-row { display: flex; gap: 14px; align-items: flex-start; padding: 12px 16px 0 8px; margin-bottom: 12px; cursor: pointer; transition: background 0.12s; border-radius: 8px; }
+.lb-row:last-child { margin-bottom: 0; }
+.lb-row:hover { background: hsl(var(--secondary)); }
+.lb-row:hover .lb-main { border-bottom-color: transparent; }
+.lb-rank { width: 24px; flex: none; font-size: var(--fs-lg); font-weight: 600; line-height: 28px; letter-spacing: -0.36px; color: hsl(var(--foreground)); text-align: center; }
+.lb-main { flex: 1; min-width: 0; border-bottom: 1px solid hsl(var(--border)); padding-bottom: 12px; display: flex; flex-direction: column; gap: 3px; }
+.lb-row:last-child .lb-main { border-bottom: none; }
+.lb-name-row { display: flex; gap: 10px; align-items: center; width: 100%; }
+.lb-brand { flex: 1; min-width: 0; font-size: var(--fs-sm); font-weight: 600; line-height: 20px; letter-spacing: -0.28px; color: hsl(var(--foreground)); display: flex; align-items: center; gap: 8px; }
+.lb-meta { display: flex; gap: 8px; align-items: center; overflow: hidden; }
+.lb-category { font-size: var(--fs-sm); font-weight: 400; line-height: 16px; letter-spacing: -0.22px; color: hsl(var(--muted-foreground)); opacity: 0.6; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.lb-head { display: flex; align-items: center; gap: 10px; padding: 0 8px 12px; }
+.lb-head-title { font-size: var(--fs-sm); font-weight: 600; color: hsl(var(--foreground)); }
+.lb-head-sub { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-left: auto; font-variant-numeric: tabular-nums; }
+.lb-vol { font-size: var(--fs-xs); font-weight: 500; line-height: 16px; letter-spacing: -0.24px; color: hsl(var(--muted-foreground)); white-space: nowrap; flex: none; font-variant-numeric: tabular-nums; }
+.lb-delta { font-size: var(--fs-xs); font-weight: 600; white-space: nowrap; flex: none; font-variant-numeric: tabular-nums; }
+.lb-delta.up { color: hsl(var(--primary)); }
+.lb-delta.dn { color: hsl(var(--warning)); }
+.lb-delta.new { color: hsl(var(--highlight)); }
+.lb-fav { width: 14px; height: 14px; border-radius: 2px; flex: none; }
+
+/* ══ Media Tile — canonical (#comp-media-tile), scrim colors tokenized ══ */
+.mtile-row { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; width: 100%; }
+.mtile-row::-webkit-scrollbar { display: none; }
+.mtile-post { display: flex; flex-direction: column; gap: 7px; flex: none; width: 124px; cursor: pointer; }
+.mtile { position: relative; aspect-ratio: 4/5; border-radius: 20px; overflow: hidden; background: hsl(var(--secondary)); display: block; cursor: pointer; }
+.mtile-thumb { position: absolute; inset: 0; background-size: cover; background-position: center; }
+.mtile-thumb.ph-1 { background: linear-gradient(135deg, color-mix(in srgb, hsl(var(--chart-1)) 34%, hsl(var(--secondary))), hsl(var(--secondary))); }
+.mtile-thumb.ph-2 { background: linear-gradient(135deg, color-mix(in srgb, hsl(var(--chart-3)) 34%, hsl(var(--secondary))), hsl(var(--secondary))); }
+.mtile-thumb.ph-3 { background: linear-gradient(135deg, color-mix(in srgb, hsl(var(--chart-5)) 34%, hsl(var(--secondary))), hsl(var(--secondary))); }
+.mtile-thumb.ph-4 { background: linear-gradient(135deg, color-mix(in srgb, hsl(var(--chart-7)) 34%, hsl(var(--secondary))), hsl(var(--secondary))); }
+.mtile-thumb.ph-5 { background: linear-gradient(135deg, color-mix(in srgb, hsl(var(--chart-9)) 34%, hsl(var(--secondary))), hsl(var(--secondary))); }
+.mtile-thumb.ph-6 { background: linear-gradient(135deg, color-mix(in srgb, hsl(var(--chart-11)) 34%, hsl(var(--secondary))), hsl(var(--secondary))); }
+.mtile-thumb::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, color-mix(in srgb, hsl(var(--background)) 78%, transparent) 0%, color-mix(in srgb, hsl(var(--background)) 15%, transparent) 40%, transparent 70%); }
+.mtile-eng { position: absolute; top: 8px; right: 8px; z-index: 2; font-size: var(--fs-xs); font-weight: 600; color: hsl(var(--foreground)); background: color-mix(in srgb, hsl(var(--background)) 55%, transparent); border-radius: 9999px; padding: 2px 7px; line-height: 1.4; display: flex; align-items: center; gap: 4px; }
+.mtile-caption { position: absolute; bottom: 8px; left: 10px; right: 10px; z-index: 2; font-size: var(--fs-xs); color: hsl(var(--foreground)); line-height: 1.4; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.mtile-post-footer { display: flex; align-items: center; gap: 5px; padding: 0 2px; }
+.mtile-post-eng { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); display: flex; align-items: center; gap: 4px; }
+.mtile-post-platform { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+
+/* ══ Compare table — DS wui-table + "you" row tint ══ */
+.cmp-table-wrap { overflow-x: auto; }
+table.wui-table tbody tr.row-you td { background: hsl(var(--primary) / 0.05); }
+.cmp-you-badge { margin-left: 8px; }
+.cmp-median td { color: hsl(var(--muted-foreground)); font-style: normal; }
+.cmp-brand-cell { font-weight: 600; color: hsl(var(--foreground)); white-space: nowrap; }
+
+/* ══ Tracker ══ */
+.trk-layout { display: flex; gap: 16px; align-items: flex-start; }
+.trk-main { flex: 2.2; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.trk-aside { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px; position: sticky; top: 76px; }
+.trk-item { background: hsl(var(--card)); border-radius: var(--radius-xl); padding: 14px 16px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: background 0.12s; border: none; }
+.trk-item:hover { background: color-mix(in srgb, hsl(var(--foreground)) 5%, hsl(var(--card))); }
+.trk-item.is-archived { opacity: 0.55; }
+.trk-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.trk-name { font-size: var(--fs-sm); font-weight: 600; display: flex; align-items: center; gap: 8px; }
+.trk-meta { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+.trk-actions { display: flex; gap: 2px; flex: none; }
+.trk-icon-btn { width: 26px; height: 26px; border: none; background: transparent; border-radius: var(--radius-md); color: hsl(var(--muted-foreground)); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; transition: background 0.12s, color 0.12s; }
+.trk-icon-btn:hover { background: hsl(var(--secondary)); color: hsl(var(--foreground)); }
+.trk-icon-btn.danger:hover { background: color-mix(in srgb, hsl(var(--destructive)) 10%, transparent); color: hsl(var(--destructive)); }
+.trk-icon-btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.trk-empty { background: hsl(var(--card)); border-radius: 16px; padding: 48px 24px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; border: none; }
+.trk-empty-title { font-size: var(--fs-sm); font-weight: 500; }
+.trk-empty-sub { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); margin-bottom: 10px; }
+.trk-count-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid hsl(var(--border)); font-size: var(--fs-sm); }
+.trk-count-row:last-child { border-bottom: none; }
+.trk-count-label { color: hsl(var(--muted-foreground)); }
+.trk-count-val { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* Tracker modal — DS wdialog + radio grid */
+.bx-modal-overlay { position: fixed; inset: 0; z-index: 90; background: color-mix(in srgb, hsl(var(--background)) 70%, transparent); display: none; align-items: center; justify-content: center; padding: 24px; }
+.bx-modal-overlay.open { display: flex; }
+.kind-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.kind-opt { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: var(--radius-xl); background: hsl(var(--secondary)); cursor: pointer; border: 1px solid transparent; transition: border-color 0.12s, background 0.12s; }
+.kind-opt:hover { background: color-mix(in srgb, hsl(var(--foreground)) 5%, hsl(var(--secondary))); }
+.kind-opt.selected { border-color: color-mix(in srgb, hsl(var(--primary)) 45%, transparent); background: color-mix(in srgb, hsl(var(--primary)) 7%, hsl(var(--secondary))); }
+.kind-opt-title { font-size: var(--fs-sm); font-weight: 500; }
+.kind-opt-sub { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 1px; }
+.bx-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.bx-field .inp { width: 100%; }
+.bx-field-label { font-size: var(--fs-sm); font-weight: 400; letter-spacing: -0.02em; color: hsl(var(--primary)); }
+
+/* ══ Coach layout ══ */
+.coach-layout { display: flex; gap: 16px; align-items: flex-start; }
+.coach-main { flex: 2.2; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+.coach-aside { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px; position: sticky; top: 76px; }
+
+/* ══ Drill-down side panel (doctrine interactive pattern) ══ */
+.drill-overlay { position: fixed; inset: 0; z-index: 80; background: color-mix(in srgb, hsl(var(--background)) 62%, transparent); opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+.drill-overlay.open { opacity: 1; pointer-events: auto; }
+.drill { position: fixed; top: 0; right: 0; bottom: 0; z-index: 85; width: 440px; max-width: 92vw; background: hsl(var(--card)); box-shadow: -12px 0 40px color-mix(in srgb, hsl(var(--background)) 70%, transparent); transform: translateX(102%); transition: transform 0.24s ease; display: flex; flex-direction: column; }
+.drill.open { transform: translateX(0); }
+.drill-head { display: flex; align-items: flex-start; gap: 12px; padding: 22px 24px 16px; border-bottom: 1px solid hsl(var(--border)); }
+.drill-head-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.drill-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
+.drill-title { font-size: var(--fs-lg); font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; }
+.drill-close { width: 26px; height: 26px; flex: none; border: none; background: transparent; border-radius: 50%; color: hsl(var(--muted-foreground)); cursor: pointer; font-size: var(--fs-sm); display: flex; align-items: center; justify-content: center; transition: background 0.1s, color 0.1s; }
+.drill-close:hover { background: hsl(var(--accent)); color: hsl(var(--foreground)); }
+.drill-body { flex: 1; overflow-y: auto; padding: 18px 24px 32px; display: flex; flex-direction: column; gap: 14px; }
+.drill-section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: hsl(var(--muted-foreground)); margin-bottom: -6px; }
+.drill-p { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); line-height: 1.55; }
+.drill-kv { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1px solid hsl(var(--border)); font-size: var(--fs-sm); }
+.drill-kv:last-child { border-bottom: none; }
+.drill-kv-k { color: hsl(var(--muted-foreground)); }
+.drill-kv-v { font-weight: 500; font-variant-numeric: tabular-nums; text-align: right; }
+.drill-quote { background: hsl(var(--secondary)); border-radius: var(--radius-lg); padding: 12px 14px; font-size: var(--fs-sm); color: hsl(var(--foreground)); line-height: 1.55; }
+.drill-src-link { font-size: var(--fs-xs); color: hsl(var(--primary)); cursor: pointer; text-decoration: none; }
+.drill-ad { background: hsl(var(--secondary)); border-radius: var(--radius-lg); padding: 12px 14px; display: flex; flex-direction: column; gap: 5px; cursor: pointer; transition: background 0.12s; }
+.drill-ad:hover { background: color-mix(in srgb, hsl(var(--foreground)) 5%, hsl(var(--secondary))); }
+.drill-ad-quote { font-size: var(--fs-sm); font-weight: 500; line-height: 1.45; }
+.drill-ad-meta { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+
+/* ══ Toast — DS wtoast, fixed bottom-center per doctrine ══ */
+.bx-toast-vp { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 100; display: flex; flex-direction: column; gap: 8px; align-items: center; }
+
+/* ══ Footer ══ */
+.bx-footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid hsl(var(--border)); font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); text-align: center; }
+
+/* ══ Two-up / three-up helpers where the brief pins column count ══ */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+@media (max-width: 900px) {
+  .hero-row { grid-template-columns: 1fr; }
+  .pulse-grid, .grid-3, .grid-2, .kind-grid { grid-template-columns: 1fr; }
+  .row, .trk-layout, .coach-layout { flex-direction: column; }
+  .bx-wrap { padding-left: 16px; padding-right: 16px; }
+  .bx-topbar-inner { padding: 0 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ Topbar ══ -->
+<div class="bx-topbar">
+  <div class="bx-topbar-inner">
+    <div class="bx-brand-logo">p</div>
+    <div class="bx-brand-id">
+      <span class="bx-brand-name">Poppi</span>
+      <span class="bx-brand-eyebrow">Prebiotic Soda</span>
+    </div>
+    <div class="bx-topbar-right">
+      <span class="bx-topbar-date" id="topbar-date"></span>
+      <span class="bx-powered">Powered by
+        <svg width="48" height="12" viewBox="0 0 69.75 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Waldo"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="bx-wrap">
+
+  <!-- ══ Hero — Reputation + Presence → Resonance ══ -->
+  <div class="hero-row">
+    <div class="sring good" id="ring-reputation" data-drill="ring:reputation" role="button" tabindex="0">
+      <div class="sring-kicker">Input</div>
+      <svg class="sring-svg" viewBox="0 0 120 120">
+        <circle class="sring-track" cx="60" cy="60" r="52"/>
+        <circle class="sring-arc" id="arc-reputation" cx="60" cy="60" r="52" stroke-dasharray="0 327" transform="rotate(-90 60 60)"/>
+        <text class="sring-num" id="num-reputation" x="60" y="60" dominant-baseline="central" text-anchor="middle">–</text>
+      </svg>
+      <div class="sring-label">Reputation</div>
+      <div class="sring-delta" id="delta-reputation">7D AVG —</div>
+    </div>
+    <div class="sring hero good" id="ring-resonance" data-drill="ring:resonance" role="button" tabindex="0">
+      <div class="sring-kicker">Outcome · (Reputation + Presence) / 2</div>
+      <svg class="sring-svg" viewBox="0 0 120 120">
+        <circle class="sring-track" cx="60" cy="60" r="52"/>
+        <circle class="sring-arc" id="arc-resonance" cx="60" cy="60" r="52" stroke-dasharray="0 327" transform="rotate(-90 60 60)"/>
+        <text class="sring-num" id="num-resonance" x="60" y="60" dominant-baseline="central" text-anchor="middle">–</text>
+      </svg>
+      <div class="sring-label">Resonance</div>
+      <div class="sring-delta" id="delta-resonance">7D AVG —</div>
+      <span class="zone-tag good" id="zone-tag">Good</span>
+    </div>
+    <div class="sring good" id="ring-presence" data-drill="ring:presence" role="button" tabindex="0">
+      <div class="sring-kicker">Input</div>
+      <svg class="sring-svg" viewBox="0 0 120 120">
+        <circle class="sring-track" cx="60" cy="60" r="52"/>
+        <circle class="sring-arc" id="arc-presence" cx="60" cy="60" r="52" stroke-dasharray="0 327" transform="rotate(-90 60 60)"/>
+        <text class="sring-num" id="num-presence" x="60" y="54" dominant-baseline="central" text-anchor="middle">–</text>
+        <text class="sring-suffix" x="60" y="78" text-anchor="middle">% SOV</text>
+      </svg>
+      <div class="sring-label">Presence</div>
+      <div class="sring-delta" id="delta-presence">7D AVG —</div>
+    </div>
+  </div>
+
+  <!-- ══ Tab nav ══ -->
+  <div class="bx-tabs">
+    <div class="wtabs-pill" role="tablist" id="main-tabs">
+      <button class="wtab-pill active" role="tab" aria-selected="true" data-tab="resonance" onclick="showTab('resonance')">Resonance</button>
+      <button class="wtab-pill" role="tab" aria-selected="false" data-tab="reputation" onclick="showTab('reputation')">Reputation</button>
+      <button class="wtab-pill" role="tab" aria-selected="false" data-tab="presence" onclick="showTab('presence')">Presence</button>
+      <button class="wtab-pill" role="tab" aria-selected="false" data-tab="tracker" onclick="showTab('tracker')">Tracker</button>
+      <button class="wtab-pill" role="tab" aria-selected="false" data-tab="coach" onclick="showTab('coach')">Coach</button>
+      <button class="wtab-pill" role="tab" aria-selected="false" data-tab="news" onclick="showTab('news')">News</button>
+      <button class="wtab-pill" role="tab" aria-selected="false" data-tab="trending" onclick="showTab('trending')">Trending</button>
+    </div>
+  </div>
+
+  <!-- ══ Hero extras — visible only on the Resonance tab ══ -->
+  <div id="hero-extras">
+    <div class="pulse-grid" id="pulse-grid"></div>
+    <div class="hero-legend">
+      <span class="trend-legend-item"><span class="trend-swatch" id="lg-poppi"></span>Poppi</span>
+      <span class="trend-legend-item"><span class="trend-swatch" id="lg-olipop"></span>Olipop</span>
+      <span class="trend-legend-item"><span class="trend-swatch" id="lg-ld"></span>Liquid Death</span>
+      <span class="trend-legend-item"><span class="trend-swatch" id="lg-recess"></span>Recess</span>
+      <span class="trend-legend-item"><span class="trend-swatch dashed"></span>Category median</span>
+    </div>
+  </div>
+
+  <!-- ══ Scrubber timeline ══ -->
+  <div class="scrub-card">
+    <div class="scrub-top">
+      <div class="wseg" id="grain-seg" role="group" aria-label="Aggregation grain">
+        <button class="wseg-opt active" data-grain="day" onclick="setGrain('day',this)">Day</button>
+        <button class="wseg-opt inactive" data-grain="week" onclick="setGrain('week',this)">Week</button>
+        <button class="wseg-opt inactive" data-grain="month" onclick="setGrain('month',this)">Month</button>
+      </div>
+      <span class="scrub-asof">As of <b id="asof-label">—</b></span>
+    </div>
+    <div class="scrub-track-wrap" id="scrub-wrap">
+      <div class="wslider" id="scrub-slider">
+        <div class="wslider-track"><div class="wslider-range" id="scrub-range"></div></div>
+        <div class="wslider-thumb" id="scrub-thumb"></div>
+      </div>
+      <div id="scrub-ticks"></div>
+    </div>
+    <div class="scrub-range-labels"><span id="scrub-start">—</span><span id="scrub-end">—</span></div>
+  </div>
+
+  <!-- ══ 1 · Resonance (default synthesis view) ══ -->
+  <div class="tab-panel active" id="tab-resonance" role="tabpanel">
+    <div class="row">
+      <div class="bx-card">
+        <div class="bx-card-head">
+          <span class="bx-card-title">Recent mentions</span>
+          <span class="bx-card-sub" id="res-mentions-sub">3 of 8,940 · trailing 30 days</span>
+        </div>
+        <div id="res-mentions" style="display:flex;flex-direction:column;gap:8px;"></div>
+        <button class="btn-link bx-card-link" data-tab-link="reputation">See all mentions in Reputation →</button>
+      </div>
+      <div class="bx-card">
+        <div class="bx-card-head">
+          <span class="bx-card-title">Audience themes</span>
+          <span class="bx-card-sub">What the conversation is about · colored by sentiment</span>
+        </div>
+        <div class="theme-pills" id="res-themes"></div>
+      </div>
+    </div>
+    <div class="bx-card-head" style="margin-bottom:12px;">
+      <span class="bx-card-title">Next moves</span>
+      <span class="bx-card-sub">Top 3 by predicted impact · <button class="btn-link bx-card-link bx-inline" data-tab-link="coach">see all in Coach →</button></span>
+    </div>
+    <div class="grid-3" id="res-coach"></div>
+  </div>
+
+  <!-- ══ 2 · Reputation ══ -->
+  <div class="tab-panel" id="tab-reputation" role="tabpanel">
+    <div class="tab-h">
+      <span class="tab-h-title">How the world feels about Poppi</span>
+      <span class="tab-h-sub">Trailing 30 days · 8,940 mentions across social + news</span>
+    </div>
+    <div class="row">
+      <div class="bx-card">
+        <div class="bx-card-head">
+          <span class="bx-card-title">Sentiment by platform</span>
+          <span class="bx-card-sub">Share of conversation by tone, last 30 days</span>
+        </div>
+        <div id="rep-senti"></div>
+        <div class="senti-legend">
+          <span class="senti-legend-item"><span class="senti-swatch pos"></span>Positive</span>
+          <span class="senti-legend-item"><span class="senti-swatch neu"></span>Neutral</span>
+          <span class="senti-legend-item"><span class="senti-swatch neg"></span>Negative</span>
+          <span class="senti-legend-item"><span class="senti-swatch mix"></span>Mixed</span>
+        </div>
+      </div>
+      <div class="bx-card">
+        <div class="bx-card-head">
+          <span class="bx-card-title">Top themes</span>
+          <span class="bx-card-sub">Discussion volume by theme</span>
+        </div>
+        <div class="donut-chart-row">
+          <div id="rep-donut" style="width:200px;height:200px;flex:none;position:relative;"></div>
+          <div class="donut-legend-grid" id="rep-donut-legend"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bx-card">
+        <div class="bx-card-head">
+          <span class="bx-card-title">Recent high-reach mentions</span>
+          <span class="bx-card-sub">Ranked by reach · click a mention for detail</span>
+        </div>
+        <div class="bx-scroll-list" id="rep-mentions" style="max-height:430px;"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bx-card">
+        <div class="bx-card-head">
+          <span class="bx-card-title">Owned content · engagement rate</span>
+          <span class="bx-card-sub">@drinkpoppi Instagram + TikTok · last 30 days</span>
+        </div>
+        <div class="trend-wrap" id="rep-eng-chart"></div>
+        <div class="mtile-row" id="rep-owned" style="margin-top:14px;"></div>
+      </div>
+      <div class="kpi" data-drill="pulse:minican" role="button" tabindex="0">
+        <div class="kpi-top"><div class="k-label">Post-launch pulse · Mini-cans</div><span class="k-delta good">▲ 72h</span></div>
+        <div class="k-value">12.1k</div>
+        <div class="k-sub">mentions in first 72h · 68% positive</div>
+        <div class="k-sub" style="margin-top:auto;">Walmart national launch · strongest product moment of the quarter</div>
+      </div>
+      <div class="bx-card">
+        <div class="bx-card-head">
+          <span class="bx-card-title">Sentiment percentile</span>
+          <span class="bx-card-sub">vs prebiotic-soda category</span>
+        </div>
+        <div class="bench-stack-gap" id="rep-pct-mini"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bx-card">
+        <div class="bx-card-head">
+          <span class="bx-card-title">Complaint clusters</span>
+          <span class="bx-card-sub">Frequency × intensity → risk · negative themes only</span>
+        </div>
+        <div id="rep-complaints"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bx-card">
+        <div class="bx-card-head">
+          <span class="bx-card-title">Audience voice</span>
+          <span class="bx-card-sub">Voice-of-customer clusters · loves and pains with verbatims</span>
+        </div>
+        <div class="grid-2">
+          <div>
+            <div class="voc-col-label love">Loves</div>
+            <div class="voc-stack" id="rep-loves"></div>
+          </div>
+          <div>
+            <div class="voc-col-label pain">Pains</div>
+            <div class="voc-stack" id="rep-pains"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bx-card">
+        <div class="bx-card-head">
+          <span class="bx-card-title">Reputation percentile</span>
+          <span class="bx-card-sub">Poppi vs prebiotic-soda category · median and leader marked</span>
+        </div>
+        <div class="bench-stack-gap" id="rep-pct"></div>
+        <div class="bench-legend">
+          <span class="bench-legend-item"><span class="bench-legend-mark median"></span>Category median</span>
+          <span class="bench-legend-item"><span class="bench-legend-mark leader"></span>Category leader</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 3 · Presence ══ -->
+  <div class="tab-panel" id="tab-presence" role="tabpanel">
+    <div class="tab-h">
+      <span class="tab-h-title">Your share of the prebiotic-soda conversation</span>
+      <span class="tab-h-sub">Share of voice, channels, cadence and competitive position · trailing 30 days</span>
+    </div>
+    <div class="row">
+      <div class="kpi" style="cursor:default;">
+        <div class="kpi-top"><div class="k-label">Share of voice</div><span class="k-delta good" id="sov-delta">▲ —</span></div>
+        <div class="k-value" id="sov-value">32%</div>
+        <div class="k-sub">of the category conversation · 2nd behind Olipop (41%)</div>
+      </div>
+      <div class="bx-card">
+        <div class="bx-card-head">
+          <span class="bx-card-title">Conversation by channel</span>
+          <span class="bx-card-sub">Where Poppi mentions happen</span>
+        </div>
+        <div class="donut-chart-row">
+          <div id="pre-donut" style="width:170px;height:170px;flex:none;position:relative;"></div>
+          <div class="donut-legend-grid" id="pre-donut-legend"></div>
+        </div>
+      </div>
+      <div class="bx-card">
+        <div class="bx-card-head">
+          <span class="bx-card-title">Posting cadence</span>
+          <span class="bx-card-sub">Owned posts by platform · last 30 days</span>
+        </div>
+        <div class="ds-hbars" id="pre-cadence"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bx-card">
+        <div class="bx-card-head">
+          <span class="bx-card-title">Theme mix</span>
+          <span class="bx-card-sub">What Poppi's share of conversation is made of</span>
+        </div>
+        <div class="segbar-wrap" id="pre-thememix"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bx-card">
+        <div class="bx-card-head">
+          <span class="bx-card-title">Competitive set</span>
+          <span class="bx-card-sub">Trailing 30 days · category = prebiotic soda</span>
+        </div>
+        <div class="cmp-table-wrap" id="pre-compare"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bx-card">
+        <div class="bx-card-head">
+          <span class="bx-card-title">Over-indexed themes</span>
+          <span class="bx-card-sub">Poppi share of theme vs category share</span>
+        </div>
+        <div id="pre-over"></div>
+      </div>
+      <div class="bx-card">
+        <div class="bx-card-head">
+          <span class="bx-card-title">Under-indexed themes</span>
+          <span class="bx-card-sub">Where the category talks and Poppi doesn't</span>
+        </div>
+        <div id="pre-under"></div>
+      </div>
+      <div class="bx-card">
+        <div class="bx-card-head">
+          <span class="bx-card-title">Switch-from sources</span>
+          <span class="bx-card-sub">What new Poppi drinkers say they replaced</span>
+        </div>
+        <div class="ds-hbars" id="pre-switch"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="bx-card">
+        <div class="bx-card-head">
+          <span class="bx-card-title">Share of voice over time</span>
+          <span class="bx-card-sub">Poppi vs competitors vs category median · 90 days</span>
+        </div>
+        <div class="trend-wrap" id="pre-area"></div>
+        <div class="trend-legend" id="pre-area-legend" style="margin-top:12px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 4 · Tracker ══ -->
+  <div class="tab-panel" id="tab-tracker" role="tabpanel">
+    <div class="tab-h">
+      <span class="tab-h-title">What you're watching</span>
+      <span class="tab-h-sub">Your saved watches on searches, brands, competitors and themes</span>
+    </div>
+    <div class="trk-layout">
+      <div class="trk-main" id="trk-list"></div>
+      <div class="trk-aside">
+        <div class="bx-card">
+          <div class="bx-card-head">
+            <span class="bx-card-title">Trackers</span>
+            <span class="bx-card-sub">By status</span>
+          </div>
+          <div id="trk-counters"></div>
+          <button class="btn btn-default btn-sm" style="margin-top:14px;width:100%;" onclick="openTrackerModal()">+ Tracker</button>
+        </div>
+        <div class="bx-card">
+          <div class="bx-card-head">
+            <span class="bx-card-title">How checks work</span>
+          </div>
+          <div class="drill-p">Each tracker is checked on its frequency against the Brand × Culture API. Status changes and spikes land here first.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 5 · Coach ══ -->
+  <div class="tab-panel" id="tab-coach" role="tabpanel">
+    <div class="tab-h">
+      <span class="tab-h-title">Next moves · ranked by predicted impact</span>
+      <span class="tab-h-sub">Each suggestion shows which ring it moves and by how much</span>
+    </div>
+    <div class="coach-layout">
+      <div class="coach-main" id="coach-list"></div>
+      <div class="coach-aside">
+        <div class="bx-card">
+          <div class="bx-card-head">
+            <span class="bx-card-title">Your feedback</span>
+            <span class="bx-card-sub">Saved and rated suggestions</span>
+          </div>
+          <div id="coach-counters"></div>
+        </div>
+        <div class="bx-card">
+          <div class="bx-card-head">
+            <span class="bx-card-title">How impact is estimated</span>
+          </div>
+          <div class="drill-p">Predicted deltas are modeled from historical response to comparable moves across the category, weighted by Poppi's current theme mix and channel strength.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 6 · News ══ -->
+  <div class="tab-panel" id="tab-news" role="tabpanel">
+    <div class="tab-h">
+      <span class="tab-h-title">Press coverage</span>
+      <span class="tab-h-sub">Earned media mentioning Poppi and the prebiotic-soda category</span>
+    </div>
+    <div id="news-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+  </div>
+
+  <!-- ══ 7 · Trending ══ -->
+  <div class="tab-panel" id="tab-trending" role="tabpanel">
+    <div class="tab-h">
+      <span class="tab-h-title">Trending</span>
+      <span class="tab-h-sub">Where the conversation is heading · TikTok, X and Google search</span>
+    </div>
+    <div class="grid-3">
+      <div class="bx-card"><div class="lb" id="trend-tiktok"></div></div>
+      <div class="bx-card"><div class="lb" id="trend-x"></div></div>
+      <div class="bx-card"><div class="lb" id="trend-google"></div></div>
+    </div>
+  </div>
+
+  <div class="bx-footer">Prototype · partial real data via Waldo API (Meta ads, Reddit, TikTok, Instagram @drinkpoppi) · built on the Brand × Culture API.</div>
+</div>
+
+<!-- ══ Drill-down side panel ══ -->
+<div class="drill-overlay" id="drill-overlay"></div>
+<div class="drill" id="drill" role="dialog" aria-modal="true">
+  <div class="drill-head">
+    <div class="drill-head-main">
+      <span class="drill-eyebrow" id="drill-eyebrow"></span>
+      <span class="drill-title" id="drill-title"></span>
+    </div>
+    <button class="drill-close" onclick="closeDrill()" aria-label="Close">✕</button>
+  </div>
+  <div class="drill-body" id="drill-body"></div>
+</div>
+
+<!-- ══ Tracker modal ══ -->
+<div class="bx-modal-overlay" id="trk-modal">
+  <div class="wdialog wdialog-sm" role="dialog" aria-modal="true">
+    <div class="wdialog-header">
+      <span class="wdialog-title" id="trk-modal-title">New tracker</span>
+      <button class="wdialog-close" onclick="closeTrackerModal()" aria-label="Close">✕</button>
+    </div>
+    <div class="wdialog-body">
+      <div class="bx-field">
+        <span class="bx-field-label">What do you want to watch?</span>
+        <div class="kind-grid" id="trk-kind-grid"></div>
+      </div>
+      <div class="bx-field">
+        <span class="bx-field-label">Name or query</span>
+        <input class="inp" id="trk-input" type="text" placeholder="e.g. poppi lawsuit settlement">
+      </div>
+      <div class="bx-field" style="margin-bottom:0;">
+        <span class="bx-field-label">Check frequency</span>
+        <div class="wseg full" id="trk-freq-seg">
+          <button class="wseg-opt inactive" data-freq="hourly" onclick="setTrkFreq('hourly',this)">Hourly</button>
+          <button class="wseg-opt active" data-freq="daily" onclick="setTrkFreq('daily',this)">Daily</button>
+          <button class="wseg-opt inactive" data-freq="weekly" onclick="setTrkFreq('weekly',this)">Weekly</button>
+        </div>
+      </div>
+    </div>
+    <div class="wdialog-footer">
+      <button class="btn btn-ghost" onclick="closeTrackerModal()">Cancel</button>
+      <button class="btn btn-default" id="trk-save-btn" onclick="saveTracker()">Create tracker</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ Toast viewport ══ -->
+<div class="bx-toast-vp" id="toast-vp"></div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+   Deterministic data model — seeded PRNG, fixed "now" (doctrine)
+   ════════════════════════════════════════════════════════════════ */
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+var DAYS=90, DAY_MS=86400000;
+var NOW=new Date(2026,4,18,14,0,0); /* May 18, 2026, 2:00 PM — fixed anchor */
+function dayDate(i){return new Date(NOW.getTime()-(DAYS-1-i)*DAY_MS);}
+function fmtD(d){return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});}
+function fmtDY(d){return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
+function rel(ts){var ms=NOW.getTime()-ts;var h=Math.round(ms/3600000);if(h<24)return h+'h ago';var d=Math.round(h/24);if(d<7)return d+'d ago';return Math.round(d/7)+'w ago';}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+/* Event days (indices into the 90-day window ending May 18) */
+var EV_OLIPOP=61;  /* Apr 20 — Olipop flavor drop */
+var EV_PEPSI=82;   /* May 11 — Pepsi Prebiotic national launch */
+var EV_MINICAN=86; /* May 15 — mini-can Walmart launch */
+var EVENTS=[{i:EV_OLIPOP,label:'Olipop flavor drop'},{i:EV_PEPSI,label:'Pepsi Prebiotic launch'},{i:EV_MINICAN,label:'Mini-can launch'}];
+function bump(i,c,w){var d=i-c;return Math.exp(-(d*d)/(2*w*w));}
+
+var SERIES=(function(){
+  var r=mulberry32(20260518);
+  var S={poppi:{},olipop:{},ld:{},recess:{}};
+  ['rep','sov','men','pos','ads','eng'].forEach(function(k){for(var b in S)S[b][k]=[];});
+  for(var i=0;i<DAYS;i++){
+    var t=i/(DAYS-1);
+    /* Poppi — gentle upward trend + event spikes */
+    S.poppi.rep.push(77.5+3.5*t+(r()-0.5)*1.4+1.6*bump(i,EV_MINICAN,2)-1.1*bump(i,EV_PEPSI,2.5));
+    S.poppi.sov.push(0.285+0.04*t+(r()-0.5)*0.018+0.045*bump(i,EV_MINICAN,2)+0.028*bump(i,EV_PEPSI,2)-0.02*bump(i,EV_OLIPOP,2));
+    S.poppi.men.push((240+90*t+(r()-0.5)*36)*(1+2.3*bump(i,EV_PEPSI,1.6)+1.9*bump(i,EV_MINICAN,1.4)));
+    S.poppi.pos.push(67+3*t+(r()-0.5)*1.8-2.4*bump(i,EV_PEPSI,2)+2.1*bump(i,EV_MINICAN,2));
+    S.poppi.ads.push(41+8*t+(r()-0.5)*3);
+    S.poppi.eng.push(3.4+1.0*t+(r()-0.5)*0.35+0.7*bump(i,EV_MINICAN,2.2));
+    /* Olipop — bigger, slight drift down in SOV, flavor-drop spike */
+    S.olipop.rep.push(76.5+(r()-0.5)*1.4+0.9*bump(i,EV_OLIPOP,2));
+    S.olipop.sov.push(0.425-0.015*t+(r()-0.5)*0.016+0.04*bump(i,EV_OLIPOP,1.8));
+    S.olipop.men.push((360+20*t+(r()-0.5)*40)*(1+1.6*bump(i,EV_OLIPOP,1.6)+0.8*bump(i,EV_PEPSI,1.6)));
+    S.olipop.pos.push(62+(r()-0.5)*1.8+1.2*bump(i,EV_OLIPOP,2));
+    S.olipop.ads.push(50+3*t+(r()-0.5)*3);
+    S.olipop.eng.push(3.5+(r()-0.5)*0.3);
+    /* Liquid Death — smaller, highest sentiment */
+    S.ld.rep.push(81.5+(r()-0.5)*1.2);
+    S.ld.sov.push(0.185+(r()-0.5)*0.012);
+    S.ld.men.push(185+(r()-0.5)*26);
+    S.ld.pos.push(71.5+(r()-0.5)*1.6);
+    S.ld.ads.push(37+(r()-0.5)*3);
+    S.ld.eng.push(5.3+(r()-0.5)*0.3);
+    /* Recess — smallest */
+    S.recess.rep.push(74.5+(r()-0.5)*1.4);
+    S.recess.sov.push(0.09+(r()-0.5)*0.008);
+    S.recess.men.push(76+(r()-0.5)*14);
+    S.recess.pos.push(64+(r()-0.5)*1.8);
+    S.recess.ads.push(17.5+(r()-0.5)*2);
+    S.recess.eng.push(3.0+(r()-0.5)*0.25);
+  }
+  /* Calibrate trailing-30d values at "now" to the brief's fixed numbers */
+  function sum30(a){var s=0;for(var i=DAYS-30;i<DAYS;i++)s+=a[i];return s;}
+  function avg30(a){return sum30(a)/30;}
+  function scaleTo(a,target,cur){var f=target/cur;for(var i=0;i<a.length;i++)a[i]*=f;}
+  function shiftTo(a,target,cur){var d=target-cur;for(var i=0;i<a.length;i++)a[i]+=d;}
+  scaleTo(S.poppi.men,8940,sum30(S.poppi.men));   shiftTo(S.poppi.pos,69.4,avg30(S.poppi.pos));
+  scaleTo(S.poppi.sov,0.32,avg30(S.poppi.sov));   scaleTo(S.poppi.ads,47,avg30(S.poppi.ads));
+  scaleTo(S.poppi.eng,4.2,avg30(S.poppi.eng));
+  scaleTo(S.olipop.men,11400,sum30(S.olipop.men)); shiftTo(S.olipop.pos,62,avg30(S.olipop.pos));
+  scaleTo(S.olipop.sov,0.41,avg30(S.olipop.sov));  scaleTo(S.olipop.ads,52,avg30(S.olipop.ads));
+  scaleTo(S.ld.men,5800,sum30(S.ld.men));          shiftTo(S.ld.pos,71.5,avg30(S.ld.pos));
+  scaleTo(S.ld.sov,0.18,avg30(S.ld.sov));          scaleTo(S.ld.ads,38,avg30(S.ld.ads));
+  scaleTo(S.recess.men,2400,sum30(S.recess.men));  shiftTo(S.recess.pos,64,avg30(S.recess.pos));
+  scaleTo(S.recess.sov,0.09,avg30(S.recess.sov));  scaleTo(S.recess.ads,18,avg30(S.recess.ads));
+  /* clamp reputation to the brief's ~76–84 band */
+  for(var b in S){S[b].rep=S[b].rep.map(function(v){return Math.max(76,Math.min(84,v));});}
+  /* derived: presence-as-score, resonance, category median */
+  for(var b2 in S){
+    S[b2].pscore=S[b2].sov.map(function(v){return Math.min(100,v*250);});
+    S[b2].res=S[b2].rep.map(function(v,i){return (v+S[b2].pscore[i])/2;});
+  }
+  S.median={};
+  ['rep','sov','men','pos','ads','res','pscore'].forEach(function(k){
+    S.median[k]=[];
+    for(var i=0;i<DAYS;i++){
+      var vals=[S.poppi[k][i],S.olipop[k][i],S.ld[k][i],S.recess[k][i]].sort(function(a,b){return a-b;});
+      S.median[k].push((vals[1]+vals[2])/2);
+    }
+  });
+  return S;
+})();
+
+/* Aggregation by grain — returns array of {label, v} buckets (avg) */
+function aggregate(arr,grain,mode){
+  var out=[];
+  if(grain==='day'){for(var i=0;i<arr.length;i++)out.push({label:fmtD(dayDate(i)),v:arr[i]});return out;}
+  var size=grain==='week'?7:30;
+  for(var end=arr.length;end>0;end-=size){
+    var start=Math.max(0,end-size),s=0;
+    for(var j=start;j<end;j++)s+=arr[j];
+    out.unshift({label:fmtD(dayDate(start)),v:mode==='sum'?s:s/(end-start)});
+  }
+  return out;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Fixed content — the actual Poppi story (brief §2)
+   ════════════════════════════════════════════════════════════════ */
+var THEMES=[
+  {name:'Gut health / prebiotic',senti:'pos',vol:2145},
+  {name:'Soda alternative',senti:'pos',vol:1410},
+  {name:'Mini-can flavors',senti:'pos',vol:980},
+  {name:'BÉIS × Poppi collab',senti:'pos',vol:720},
+  {name:'Lawsuit / settlement',senti:'neg',vol:610},
+  {name:'Pepsi Prebiotic entrant',senti:'mix',vol:540},
+  {name:'Walmart pricing',senti:'mix',vol:430},
+  {name:'Category saturation',senti:'mix',vol:350},
+  {name:'Stevia aftertaste',senti:'neg',vol:280}
+];
+var PLATFORM_SENTI=[
+  {label:'TikTok',domain:'tiktok.com',pos:72,neu:19,neg:5,mix:4,vol:'3.1k'},
+  {label:'Instagram',domain:'instagram.com',pos:68,neu:21,neg:7,mix:4,vol:'2.2k'},
+  {label:'News',domain:'reuters.com',pos:78,neu:16,neg:4,mix:2,vol:'620'},
+  {label:'YouTube',domain:'youtube.com',pos:71,neu:19,neg:6,mix:4,vol:'500'},
+  {label:'Reddit',domain:'reddit.com',pos:61,neu:19,neg:14,mix:6,vol:'980'},
+  {label:'X',domain:'x.com',pos:54,neu:22,neg:18,mix:6,vol:'1.48k'}
+];
+var COMPLAINTS=[
+  {label:'Price creep at retail',f:0.31,intensity:0.62},
+  {label:'Too sweet for daily',f:0.24,intensity:0.41},
+  {label:'Stevia aftertaste',f:0.19,intensity:0.44},
+  {label:'Class-action lawsuit confusion',f:0.18,intensity:0.71},
+  {label:'Pepsi-knockoff perception',f:0.14,intensity:0.52},
+  {label:'Category-saturation fatigue',f:0.11,intensity:0.38}
+];
+var LOVES=[
+  {t:'Replaced my Diet Coke habit',f:0.42,q:'Two weeks off Diet Coke and I honestly don\'t miss it. Cherry limeade scratches the itch.'},
+  {t:'Doesn\'t make me feel bloated',f:0.34,q:'First soda that doesn\'t wreck my stomach by mid-afternoon.'},
+  {t:'Mini cans are perfect',f:0.26,q:'The mini cans are the exact right size for lunch. Zero waste.'},
+  {t:'Aesthetic for the fridge',f:0.18,q:'My fridge shelf looks like a poppi ad and I\'m not mad about it.'}
+];
+var PAINS=[
+  {t:'Price creep',f:0.31,q:'It was $1.98 last year, now it\'s $2.68 at my store. That adds up fast.'},
+  {t:'Too sweet for daily',f:0.24,q:'Love the flavors, but two a day is too much sweetness for me.'},
+  {t:'Lawsuit confusion',f:0.18,q:'Got the settlement email and still don\'t know if my cans count.'},
+  {t:'Pepsi just copied them',f:0.14,q:'Pepsi Prebiotic is the same shelf pitch, down to the pastel can.'}
+];
+var SWITCH_FROM=[
+  {label:'Diet Coke',v:0.34,ctx:'gut issues + aspartame anxiety + flavor variety'},
+  {label:'Kombucha',v:0.18,ctx:'price and taste; soda format feels easier'},
+  {label:'LaCroix',v:0.14,ctx:'wants flavor, not just bubbles'},
+  {label:'Olipop',v:0.11,ctx:'flavor preference, lighter taste'},
+  {label:'Energy drinks',v:0.08,ctx:'cutting caffeine, keeping the ritual'}
+];
+var COMPARE=[
+  {name:'Poppi',you:true,mentions:'8,940',sent:'69.4%',posts:124,eng:'4.2%',ads:47,sov:'32%'},
+  {name:'Olipop',mentions:'11.4k',sent:'62%',posts:142,eng:'3.6%',ads:52,sov:'41%'},
+  {name:'Liquid Death',mentions:'5.8k',sent:'71.5%',posts:98,eng:'5.4%',ads:38,sov:'18%'},
+  {name:'Recess',mentions:'2.4k',sent:'64%',posts:56,eng:'3.0%',ads:18,sov:'9%'},
+  {name:'Category median',median:true,mentions:'7.4k',sent:'66.7%',posts:111,eng:'3.9%',ads:43,sov:'25%'}
+];
+var MENTIONS=[
+  {platform:'TikTok',domain:'tiktok.com',user:'@asellsworth',text:'Scotland, we\'re HERE. Taking poppi across the pond and the reaction in this supermarket is everything.',senti:'pos',reach:'6.4M views',comments:8412,theme:'Soda alternative',url:'https://www.tiktok.com/@asellsworth',ts:NOW.getTime()-3*DAY_MS},
+  {platform:'TikTok',domain:'tiktok.com',user:'@michael.dicostanzo',text:'Ranking every poppi flavor so you don\'t have to. The mini cans changed the game, wild how good cherry limeade is.',senti:'pos',reach:'5.0M views',comments:6120,theme:'Mini-can flavors',url:'https://www.tiktok.com/@michael.dicostanzo',ts:NOW.getTime()-2*DAY_MS},
+  {platform:'TikTok',domain:'tiktok.com',user:'@jamescharles',text:'Opening the BÉIS × Poppi advent-style drop box. The soda bag is REAL and it\'s gorgeous.',senti:'pos',reach:'2.8M views',comments:3904,theme:'BÉIS × Poppi collab',url:'https://www.tiktok.com/@jamescharles',ts:NOW.getTime()-4*DAY_MS},
+  {platform:'Reddit',domain:'reddit.com',user:'u/guthealthgal · r/Soda',text:'Two weeks off Diet Coke thanks to poppi. Gut feels better and I don\'t miss the aspartame at all.',senti:'pos',reach:'41k reach',comments:212,theme:'Soda alternative',url:'https://www.reddit.com/r/Soda',ts:NOW.getTime()-1*DAY_MS},
+  {platform:'Reddit',domain:'reddit.com',user:'u/settlementwatch · r/classactions',text:'Poppi settlement notices are going out. Read the claim window carefully, half this thread is confused about eligibility.',senti:'neg',reach:'82k reach',comments:634,theme:'Lawsuit / settlement',url:'https://www.reddit.com/r/classactions',ts:NOW.getTime()-5*DAY_MS},
+  {platform:'Reddit',domain:'reddit.com',user:'u/sodaswapper · r/Soda',text:'Pepsi Prebiotic side-by-side with poppi: closer than I expected, but the aftertaste gives it away. Original still wins.',senti:'mix',reach:'36k reach',comments:318,theme:'Pepsi Prebiotic entrant',url:'https://www.reddit.com/r/Soda',ts:NOW.getTime()-6*DAY_MS},
+  {platform:'Reddit',domain:'reddit.com',user:'u/fizzfan99 · r/Soda',text:'Walmart has poppi at $2.68 a can now. Love the stuff but the price creep is getting hard to justify daily.',senti:'mix',reach:'22k reach',comments:187,theme:'Walmart pricing',url:'https://www.reddit.com/r/Soda',ts:NOW.getTime()-2*DAY_MS},
+  {platform:'Reddit',domain:'reddit.com',user:'u/plainpalate · r/Soda',text:'Am I the only one who can\'t get past the stevia aftertaste? Root beer flavor hides it best.',senti:'neg',reach:'18k reach',comments:96,theme:'Stevia aftertaste',url:'https://www.reddit.com/r/Soda',ts:NOW.getTime()-7*DAY_MS}
+];
+var NEWS=[
+  {source:'AdAge',domain:'adage.com',tag:'brand',headline:'Poppi and BÉIS turn a soda-bag collab into a sellout waitlist',snippet:'The limited May 20 drop generated a waitlist within hours; organic mentions outpaced paid reach four to one.',url:'https://adage.com',ts:NOW.getTime()-2*DAY_MS},
+  {source:'Beverage Industry',domain:'bevindustry.com',tag:'product',headline:'Poppi\'s mini-cans land at Walmart nationwide',snippet:'The 7.5-oz format targets lunchboxes and lighter daily drinkers, with placement in 3,800 stores.',url:'https://bevindustry.com',ts:NOW.getTime()-3*DAY_MS},
+  {source:'CNBC',domain:'cnbc.com',tag:'category',headline:'Pepsi launches Prebiotic Cola nationally, taking on Poppi and Olipop',snippet:'Wall Street reads the entry as validation of functional soda, and as new pressure on the category\'s incumbents.',url:'https://cnbc.com',ts:NOW.getTime()-7*DAY_MS},
+  {source:'WWD',domain:'wwd.com',tag:'brand',headline:'How Poppi became fashion\'s favorite soda',snippet:'From front-row product placement to the BÉIS collab, the brand is converting style equity into shelf velocity.',url:'https://wwd.com',ts:NOW.getTime()-5*DAY_MS},
+  {source:'Reuters',domain:'reuters.com',tag:'legal',headline:'Poppi settlement notices go out; claims window closes June 30',snippet:'Class members began receiving email notices this week under the proposed settlement of the gut-health marketing suit.',url:'https://reuters.com',ts:NOW.getTime()-6*DAY_MS},
+  {source:'Modern Retail',domain:'modernretail.co',tag:'product',headline:'Inside Poppi\'s Circle K buy-one-get-one push',snippet:'The convenience-channel promo pairs a category-reframe creative with an aggressive trial price.',url:'https://modernretail.co',ts:NOW.getTime()-9*DAY_MS},
+  {source:'Marketing Brew',domain:'marketingbrew.com',tag:'brand',headline:'Allison Ellsworth\'s founder-led feed is Poppi\'s cheapest media',snippet:'A single founder post from Scotland out-delivered the brand\'s paid flight last week, at 6.4M organic views.',url:'https://marketingbrew.com',ts:NOW.getTime()-12*DAY_MS},
+  {source:'Food Dive',domain:'fooddive.com',tag:'category',headline:'Functional soda shelf tightens as entrants multiply',snippet:'Retailers are consolidating prebiotic sets even as volume grows, and category saturation chatter is rising.',url:'https://fooddive.com',ts:NOW.getTime()-15*DAY_MS}
+];
+var TAG_CLASS={brand:'neutral',product:'neutral',category:'competitor',legal:'negative'};
+var TRENDING={
+  tiktok:{title:'TikTok hashtags',domain:'tiktok.com',items:[
+    {term:'#drinkpoppi',vol:'2.1M',delta:'+18%',dir:'up',ctx:'Mini-can unboxings dominate'},
+    {term:'#guttok',vol:'4.4M',delta:'+34%',dir:'up',ctx:'Prebiotic vs probiotic explainers'},
+    {term:'#sodaswap',vol:'780k',delta:'+62%',dir:'up',ctx:'Diet-soda switch stories'},
+    {term:'#beispoppi',vol:'220k',delta:'NEW',dir:'new',ctx:'Collab drop unboxings'},
+    {term:'#shirleytemple',vol:'1.6M',delta:'+22%',dir:'up',ctx:'Flavor nostalgia wave'},
+    {term:'#prebioticsoda',vol:'910k',delta:'+11%',dir:'up',ctx:'Category education content'},
+    {term:'#5gsugar',vol:'340k',delta:'+8%',dir:'up',ctx:'Low-sugar claims comparisons'}
+  ]},
+  x:{title:'X trends',domain:'x.com',items:[
+    {term:'Pepsi Prebiotic',vol:'48k',delta:'+212%',dir:'up',ctx:'Launch reactions, mostly skeptical'},
+    {term:'Poppi',vol:'22k',delta:'+47%',dir:'up',ctx:'Founder Scotland post ripples'},
+    {term:'BÉIS x Poppi',vol:'6.8k',delta:'NEW',dir:'new',ctx:'Sellout screenshots'},
+    {term:'Allison Ellsworth',vol:'4.2k',delta:'+31%',dir:'up',ctx:'Founder-led media coverage'},
+    {term:'class action soda',vol:'3.1k',delta:'+18%',dir:'up',ctx:'Settlement notice confusion'},
+    {term:'gut health',vol:'19k',delta:'+9%',dir:'up',ctx:'Evergreen wellness discourse'},
+    {term:'Olipop',vol:'15k',delta:'−6%',dir:'dn',ctx:'Quiet week after flavor drop'}
+  ]},
+  google:{title:'Google search terms',domain:'google.com',items:[
+    {term:'poppi mini cans where to buy',vol:'Breakout',delta:'+1,400%',dir:'new',ctx:'Walmart launch demand'},
+    {term:'is poppi healthy',vol:'110k/mo',delta:'+38%',dir:'up',ctx:'Category education query'},
+    {term:'poppi vs olipop',vol:'90k/mo',delta:'+24%',dir:'up',ctx:'Head-to-head comparisons'},
+    {term:'pepsi prebiotic review',vol:'74k/mo',delta:'+550%',dir:'up',ctx:'Entrant trial curiosity'},
+    {term:'beis poppi launch',vol:'22k/mo',delta:'Breakout',dir:'new',ctx:'Collab drop timing'},
+    {term:'poppi lawsuit settlement',vol:'45k/mo',delta:'+71%',dir:'up',ctx:'Claim eligibility searches'},
+    {term:'shirley temple poppi',vol:'34k/mo',delta:'+180%',dir:'up',ctx:'Flavor launch searches'}
+  ]}
+};
+var OWNED=[
+  {cap:'BÉIS × Poppi: the soda bag is real',platform:'Instagram',eng:'42.1k',senti:'pos',ph:1},
+  {cap:'Scotland, we\'re here',platform:'TikTok',eng:'64.0k',senti:'pos',ph:2},
+  {cap:'Mini cans hit Walmart today',platform:'TikTok',eng:'38.7k',senti:'pos',ph:3},
+  {cap:'Shirley temple girlies, this one\'s for you',platform:'TikTok',eng:'29.4k',senti:'pos',ph:4},
+  {cap:'Fridge restock ASMR',platform:'Instagram',eng:'18.2k',senti:'pos',ph:5},
+  {cap:'Your settlement questions, answered',platform:'Instagram',eng:'9.8k',senti:'mix',ph:6}
+];
+var ADS=[
+  {q:'soda\'s back, but better',angle:'Category reframe',sub:'Circle K B1G1 push',days:21},
+  {q:'A new bombshell has entered the villa',angle:'Culture tie-in',sub:'Love Island × Target',days:9},
+  {q:'One Sip and You\'re Starstruck',angle:'Flavor hero',sub:'Shirley Temple',days:14},
+  {q:'Refresco, pero mejor',angle:'Bilingual reach',sub:'Spanish-language variant',days:12},
+  {q:'Get 2 Poppi for $4.50',angle:'Price anchor',sub:'Retail bundle offer',days:6},
+  {q:'Soda made with ingredients you can love',angle:'Ingredient trust',sub:'Evergreen brand',days:34}
+];
+var COACH=[
+  {id:'c1',rank:1,tag:'comms',tagLabel:'Comms',ring:'Reputation',delta:'+7',
+   headline:'Get ahead of the lawsuit narrative this week — before it ossifies',
+   body:'Settlement confusion is the highest-intensity complaint cluster (0.71) and lawsuit talk is climbing on X and in brand search. A plain-language FAQ from the founder, pinned across channels, owns the story before the press cycle does.',
+   evidence:'"Got the settlement email and still don\'t know if my cans count." — r/classactions, 82k reach',
+   sources:['brand_mentions_summary','brand_timeseries','category_news']},
+  {id:'c2',rank:2,tag:'campaign',tagLabel:'Campaign',ring:'Presence',delta:'+5',
+   headline:'Frame Pepsi Prebiotic as the proof point — you invented this',
+   body:'Pepsi\'s national launch (+212% on X) validates the category you created. An "original prebiotic soda" flight converts their media spend into your brand search.',
+   evidence:'"pepsi prebiotic review" search up +550% while "poppi vs olipop" grows +24%.',
+   sources:['category_trends','brand_compare','search_google_trends']},
+  {id:'c3',rank:3,tag:'product',tagLabel:'Product',ring:'Resonance',delta:'+4',
+   headline:'Double-down on mini-cans through summer — flavor is your moat',
+   body:'The mini-can launch drove 12.1k mentions in 72 hours at 68% positive, the strongest product moment of the quarter. Extend it with summer-flavor mini packs.',
+   evidence:'Mini-can unboxings dominate #drinkpoppi (2.1M, +18%).',
+   sources:['brand_mentions_list','brand_timeseries','audience_posts']},
+  {id:'c4',rank:4,tag:'creative',tagLabel:'Creative',ring:'Presence',delta:'+3',
+   headline:'Run a "switch from Diet Coke" test on Meta this week',
+   body:'34% of switchers come from Diet Coke, citing gut issues and aspartame anxiety. Creative that names the switch directly is the cheapest presence gain available.',
+   evidence:'"Two weeks off Diet Coke and I don\'t miss it." — top love cluster, freq 0.42.',
+   sources:['audience_insights','brand_paid_media_summary','brand_creative_hooks']}
+];
+
+/* ════════════════════════════════════════════════════════════════
+   Shared render helpers
+   ════════════════════════════════════════════════════════════════ */
+function fav(domain,cls){return '<img class="'+cls+'" src="https://www.google.com/s2/favicons?domain='+domain+'&sz=64" alt="" onerror="favFail(this)">';}
+function favFail(img){var s=document.createElement('span');s.className='fav-dot';img.replaceWith(s);}
+var GRAYS=['color-mix(in srgb, hsl(var(--foreground)) 42%, transparent)','color-mix(in srgb, hsl(var(--foreground)) 30%, transparent)','color-mix(in srgb, hsl(var(--foreground)) 20%, transparent)'];
+
+function sparkSVG(vals,dir,w,h){
+  w=w||88;h=h||26;
+  var min=Math.min.apply(null,vals),max=Math.max.apply(null,vals),span=(max-min)||1;
+  var padX=2,padY=4,cW=w-padX*2,cH=h-padY*2;
+  function xp(i){return padX+(vals.length<=1?0:(i/(vals.length-1))*cW);}
+  function yp(v){return padY+(1-(v-min)/span)*cH;}
+  var stroke=dir==='dn'?'hsl(var(--warning))':'hsl(var(--primary))';
+  var d='M'+vals.map(function(v,i){return xp(i).toFixed(1)+','+yp(v).toFixed(1);}).join(' L');
+  return '<svg viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" width="100%"><path d="'+d+'" fill="none" style="stroke:'+stroke+'" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>';
+}
+
+function donutSVG(container,legendEl,data,size,centerTop,centerSub){
+  var cx=size/2,cy=size/2,r=size/2-6,ri=r-15,TAU=Math.PI*2,gap=0.018;
+  var total=data.reduce(function(a,d){return a+d.value;},0);
+  function arc(a0,a1){
+    var x1=cx+r*Math.cos(a0),y1=cy+r*Math.sin(a0),x2=cx+r*Math.cos(a1),y2=cy+r*Math.sin(a1);
+    var x3=cx+ri*Math.cos(a1),y3=cy+ri*Math.sin(a1),x4=cx+ri*Math.cos(a0),y4=cy+ri*Math.sin(a0);
+    var lg=(a1-a0)>Math.PI?1:0;
+    return 'M'+x1+','+y1+' A'+r+','+r+' 0 '+lg+',1 '+x2+','+y2+' L'+x3+','+y3+' A'+ri+','+ri+' 0 '+lg+',0 '+x4+','+y4+' Z';
+  }
+  var svg='<svg viewBox="0 0 '+size+' '+size+'" xmlns="http://www.w3.org/2000/svg" width="'+size+'" height="'+size+'">';
+  var a=-Math.PI/2;
+  data.forEach(function(d,idx){
+    var sweep=(d.value/total)*TAU-gap;
+    svg+='<path d="'+arc(a,a+Math.max(0.02,sweep))+'" style="fill:'+d.color+'" data-di="'+idx+'"/>';
+    a+=sweep+gap;
+  });
+  svg+='<text x="'+cx+'" y="'+(cy+2)+'" text-anchor="middle" font-size="24" font-weight="600" style="fill:hsl(var(--foreground))">'+centerTop+'</text>';
+  svg+='<text x="'+cx+'" y="'+(cy+20)+'" text-anchor="middle" font-size="11" style="fill:hsl(var(--muted-foreground))">'+centerSub+'</text>';
+  svg+='</svg>';
+  document.getElementById(container).innerHTML=svg;
+  if(legendEl)document.getElementById(legendEl).innerHTML=data.map(function(d){
+    return '<div class="donut-legend-row"'+(d.drill?' data-drill="'+d.drill+'" role="button" tabindex="0"':'')+'><div class="donut-swatch" style="background:'+d.color+'"></div><span class="donut-legend-label">'+esc(d.label)+'</span><span class="donut-legend-val">'+d.valText+'</span></div>';
+  }).join('');
+}
+
+/* Multi-series trend/area chart — canonical Trend Line pattern */
+function trendSVG(el,series,opts){
+  var W=opts.w||1120,H=opts.h||240,padL=44,padR=14,padT=10,padB=26;
+  var minV=opts.min,maxV=opts.max,cW=W-padL-padR,cH=H-padT-padB;
+  var n=series[0].data.length;
+  function xp(i){return padL+(i/(n-1))*cW;}
+  function yp(v){return padT+(1-(v-minV)/(maxV-minV))*cH;}
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg" width="100%" preserveAspectRatio="xMidYMid meet">';
+  (opts.grid||[]).forEach(function(v){
+    var yy=yp(v);
+    svg+='<line x1="'+padL+'" y1="'+yy+'" x2="'+(W-padR)+'" y2="'+yy+'" style="stroke:hsl(var(--muted-foreground) / 0.18)" stroke-width="1"/>';
+    svg+='<text x="'+(padL-8)+'" y="'+(yy+4)+'" font-size="11" style="fill:hsl(var(--muted-foreground))" text-anchor="end">'+v+(opts.unit||'')+'</text>';
+  });
+  (opts.xlabels||[]).forEach(function(d){
+    svg+='<text x="'+xp(d.i)+'" y="'+(H-6)+'" font-size="11" style="fill:hsl(var(--muted-foreground))" text-anchor="middle">'+d.label+'</text>';
+  });
+  series.forEach(function(s){
+    var pts=s.data.map(function(v,i){return xp(i).toFixed(1)+','+yp(v).toFixed(1);});
+    var lineD='M'+pts.join(' L');
+    if(s.area){
+      var areaD='M'+xp(0).toFixed(1)+','+yp(s.data[0]).toFixed(1)+' L'+pts.join(' L')+' L'+xp(n-1).toFixed(1)+','+(padT+cH)+' L'+xp(0).toFixed(1)+','+(padT+cH)+' Z';
+      svg+='<path d="'+areaD+'" style="fill:'+s.color+'" fill-opacity="0.08"/>';
+    }
+    svg+='<path d="'+lineD+'" fill="none" style="stroke:'+s.color+'" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"'+(s.dashed?' stroke-dasharray="4 4"':'')+'/>';
+    if(!s.dashed)s.data.forEach(function(v,i){
+      svg+='<circle cx="'+xp(i).toFixed(1)+'" cy="'+yp(v).toFixed(1)+'" r="2.5" style="fill:'+s.color+'" class="trend-dot" opacity="0"/>';
+    });
+  });
+  svg+='</svg>';
+  document.getElementById(el).innerHTML=svg;
+}
+
+function barTrackRow(cls,label,valText,widthPct){
+  return '<div class="bar-track '+cls+'"><div class="bar-track-top"><span class="bar-track-label">'+esc(label)+'</span><span class="bar-track-val">'+valText+'</span></div><div class="bar-track-rail"><div class="bar-track-fill" style="width:'+widthPct+'%"></div></div></div>';
+}
+function hbarRow(label,valText,pct,alpha){
+  return '<div class="ds-hbar-row"><div class="ds-hbar-name" title="'+esc(label)+'">'+esc(label)+'</div><div class="ds-hbar-inner"><div class="ds-hbar-track"><div class="ds-hbar-fill" style="width:'+pct+'%;background:hsl(var(--primary) / ' + alpha.toFixed(2) + ')"></div></div><div class="ds-hbar-val">'+valText+'</div></div></div>';
+}
+function commentCardHTML(m,idx,extraCls){
+  return '<div class="comment-card '+(extraCls||'')+'" data-drill="mention:'+idx+'" role="button" tabindex="0">'
+    +'<div class="comment-meta">'+fav(m.domain,'comment-favicon')
+    +'<span class="comment-author">'+esc(m.user)+' · '+esc(m.platform)+'</span>'
+    +'<span class="comment-time">'+rel(m.ts)+'</span>'
+    +'<span class="comment-sentiment '+m.senti+'">'+m.senti.toUpperCase()+'</span></div>'
+    +'<div class="comment-body">'+esc(m.text)+'</div>'
+    +'<div class="comment-foot"><span class="comment-count">'+m.comments.toLocaleString('en-US')+' comments · '+esc(m.reach)+'</span><span class="comment-arrow">→</span></div></div>';
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Hero — rings, pulse, scrubber (recompute live on scrub)
+   ════════════════════════════════════════════════════════════════ */
+var asOf=DAYS-1, grain='day';
+function zone(v){return v>=80?'good':(v>=65?'watch':'risk');}
+function zoneLabel(z){return z==='good'?'Good':(z==='watch'?'Watch':'At risk');}
+function avgWin(a,end,len){var s=0,c=0;for(var i=Math.max(0,end-len+1);i<=end;i++){s+=a[i];c++;}return c?s/c:0;}
+function sumWin(a,end,len){var s=0;for(var i=Math.max(0,end-len+1);i<=end;i++)s+=a[i];return s;}
+
+function setRing(key,val,numText,deltaVal,deltaSuffix){
+  var ring=document.getElementById('ring-'+key);
+  var z=zone(val);
+  ring.classList.remove('good','watch','risk');ring.classList.add(z);
+  document.getElementById('arc-'+key).setAttribute('stroke-dasharray',(val/100*327).toFixed(1)+' 327');
+  document.getElementById('num-'+key).textContent=numText;
+  var up=deltaVal>=0;
+  document.getElementById('delta-'+key).innerHTML='7D AVG <span class="'+(up?'up':'dn')+'">'+(up?'▲ +':'▼ −')+Math.abs(deltaVal).toFixed(1)+(deltaSuffix||'')+'</span>';
+  if(key==='resonance'){
+    var tag=document.getElementById('zone-tag');
+    tag.className='zone-tag '+z;tag.textContent=zoneLabel(z);
+  }
+}
+
+function updateHero(){
+  var P=SERIES.poppi;
+  /* Presence uses trailing-30d SOV (same basis as the 8,940 mentions);
+     displayed Resonance is recomputed from the displayed inputs so the
+     formula visibly holds: Resonance = (Reputation + Presence) / 2 */
+  var rep=P.rep[asOf], sov=avgWin(P.sov,asOf,30);
+  var ps=Math.min(100,sov*250), res=(rep+ps)/2;
+  function d7(a){return avgWin(a,asOf,7)-avgWin(a,asOf-7,7);}
+  setRing('reputation',rep,Math.round(rep),d7(P.rep));
+  setRing('resonance',res,Math.round(res),d7(P.res));
+  setRing('presence',ps,Math.round(sov*100),d7(P.sov)*100,'%');
+  /* pulse tiles */
+  var men=sumWin(P.men,asOf,30), menPrev=sumWin(P.men,asOf-30,30);
+  var pos=avgWin(P.pos,asOf,30), posPrev=avgWin(P.pos,asOf-30,30);
+  var ads=avgWin(P.ads,asOf,30), adsPrev=avgWin(P.ads,asOf-30,30);
+  var start=Math.max(0,asOf-29);
+  function sparkVals(a){var raw=a.slice(start,asOf+1);return aggregate(raw,grain==='month'?'week':grain,'avg').map(function(b){return b.v;});}
+  var tiles=[
+    {label:'Mentions L30d',value:Math.round(men).toLocaleString('en-US'),d:men-menPrev,dText:(men>=menPrev?'▲ +':'▼ −')+Math.abs(Math.round(men-menPrev)).toLocaleString('en-US'),sub:'vs prior 30 days',spark:sparkVals(P.men),click:'data-tab-link="reputation"'},
+    {label:'Sentiment L30d',value:pos.toFixed(1)+'%',d:pos-posPrev,dText:(pos>=posPrev?'▲ +':'▼ −')+Math.abs(pos-posPrev).toFixed(1)+'pp',sub:'positive share · vs prior 30 days',spark:sparkVals(P.pos),click:'data-tab-link="reputation"'},
+    {label:'Active creatives L30d',value:Math.round(ads),d:ads-adsPrev,dText:(ads>=adsPrev?'▲ +':'▼ −')+Math.abs(Math.round(ads-adsPrev)),sub:'Meta ads live · vs prior 30 days',spark:sparkVals(P.ads),click:'data-drill="ads:0"'}
+  ];
+  document.getElementById('pulse-grid').innerHTML=tiles.map(function(t){
+    var cls=t.d>=0.05?'good':(t.d<=-0.05?'bad':'flat');
+    return '<div class="kpi" '+t.click+' role="button" tabindex="0">'
+      +'<div class="kpi-top"><div class="k-label">'+t.label+'</div><span class="k-delta '+cls+'">'+t.dText+'</span></div>'
+      +'<div class="kpi-spark-row"><div class="k-value">'+t.value+'</div><div class="spk">'+sparkSVG(t.spark,t.d>=0?'up':'dn')+'</div></div>'
+      +'<div class="k-sub">'+t.sub+'</div></div>';
+  }).join('');
+  document.getElementById('asof-label').textContent=fmtDY(dayDate(asOf))+(asOf===DAYS-1?' · 2:00 PM':'');
+  /* SOV headline on Presence tab stays in sync */
+  var sd=document.getElementById('sov-delta');
+  if(sd){var dv=(avgWin(P.sov,asOf,7)-avgWin(P.sov,asOf-7,7))*100;sd.className='k-delta '+(dv>=0?'good':'bad');sd.textContent=(dv>=0?'▲ +':'▼ −')+Math.abs(dv).toFixed(1)+'pp';
+    document.getElementById('sov-value').textContent=Math.round(sov*100)+'%';}
+  window.__hero={rep:rep,ps:ps,res:res,sov:sov};
+}
+
+/* legend swatch colors */
+document.getElementById('lg-poppi').style.background='hsl(var(--primary))';
+document.getElementById('lg-olipop').style.background=GRAYS[0];
+document.getElementById('lg-ld').style.background=GRAYS[1];
+document.getElementById('lg-recess').style.background=GRAYS[2];
+
+/* Scrubber */
+function renderScrubber(){
+  var wrap=document.getElementById('scrub-ticks');
+  wrap.innerHTML=EVENTS.map(function(e){
+    var left=(e.i/(DAYS-1)*100).toFixed(2)+'%';
+    return '<div class="scrub-tick" style="left:'+left+'" title="'+esc(e.label)+'"></div>'
+      +'<div class="scrub-tick-label" style="left:'+left+'">'+esc(e.label)+'</div>';
+  }).join('');
+  document.getElementById('scrub-start').textContent=fmtDY(dayDate(0));
+  document.getElementById('scrub-end').textContent=fmtDY(dayDate(DAYS-1))+' · 2:00 PM';
+  positionScrub();
+}
+function positionScrub(){
+  var pct=(asOf/(DAYS-1)*100);
+  document.getElementById('scrub-range').style.width=pct+'%';
+  document.getElementById('scrub-thumb').style.left=pct+'%';
+}
+function setAsOf(i){
+  asOf=Math.max(7,Math.min(DAYS-1,Math.round(i)));
+  positionScrub();updateHero();
+}
+(function(){
+  var slider=document.getElementById('scrub-slider');
+  function fromEvent(ev){
+    var rect=slider.getBoundingClientRect();
+    var x=(ev.touches?ev.touches[0].clientX:ev.clientX);
+    setAsOf(((x-rect.left)/rect.width)*(DAYS-1));
+  }
+  slider.addEventListener('mousedown',function(e){
+    e.preventDefault();fromEvent(e);
+    function mv(ev){fromEvent(ev);}
+    function up(){document.removeEventListener('mousemove',mv);document.removeEventListener('mouseup',up);}
+    document.addEventListener('mousemove',mv);document.addEventListener('mouseup',up);
+  });
+})();
+function setGrain(g,btn){
+  grain=g;
+  document.querySelectorAll('#grain-seg .wseg-opt').forEach(function(b){
+    var on=b===btn;b.classList.toggle('active',on);b.classList.toggle('inactive',!on);
+  });
+  updateHero();
+  rendered.presence=false;rendered.reputation=false;
+  if(activeTab==='presence')renderPresence();
+  if(activeTab==='reputation')renderReputation();
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Tabs — hash routing (canonical showAreaTab pattern, pill variant)
+   ════════════════════════════════════════════════════════════════ */
+var TABS=['resonance','reputation','presence','tracker','coach','news','trending'];
+var activeTab='resonance';
+var rendered={};
+function showTab(name){
+  if(TABS.indexOf(name)===-1)name='resonance';
+  activeTab=name;
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.toggle('active',p.id==='tab-'+name);});
+  document.querySelectorAll('#main-tabs .wtab-pill').forEach(function(b){
+    var on=b.getAttribute('data-tab')===name;
+    b.classList.toggle('active',on);b.setAttribute('aria-selected',on?'true':'false');
+  });
+  document.getElementById('hero-extras').style.display=(name==='resonance')?'':'none';
+  if(location.hash!=='#'+name){history.replaceState(null,'','#'+name);}
+  renderTab(name);
+}
+window.addEventListener('hashchange',function(){showTab(location.hash.replace('#',''));});
+function renderTab(name){
+  if(name==='resonance'&&!rendered.resonance)renderResonance();
+  if(name==='reputation'&&!rendered.reputation)renderReputation();
+  if(name==='presence'&&!rendered.presence)renderPresence();
+  if(name==='tracker')renderTracker();
+  if(name==='coach')renderCoach();
+  if(name==='news'&&!rendered.news)renderNews();
+  if(name==='trending'&&!rendered.trending)renderTrending();
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Tab 1 — Resonance
+   ════════════════════════════════════════════════════════════════ */
+function renderResonance(){
+  rendered.resonance=true;
+  document.getElementById('res-mentions').innerHTML=MENTIONS.slice(0,3).map(function(m){return commentCardHTML(m,MENTIONS.indexOf(m),'on-card');}).join('');
+  document.getElementById('res-themes').innerHTML=THEMES.map(function(t,i){
+    return '<span class="theme-pill '+t.senti+'" data-drill="theme:'+i+'" role="button" tabindex="0">'+esc(t.name)+'<span class="theme-pill-freq">'+t.vol.toLocaleString('en-US')+'</span></span>';
+  }).join('');
+  renderResCoach();
+}
+function renderResCoach(){
+  var el=document.getElementById('res-coach');
+  if(!el)return;
+  el.innerHTML=COACH.slice(0,3).map(function(c){return recCardHTML(c,true);}).join('');
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Tab 2 — Reputation
+   ════════════════════════════════════════════════════════════════ */
+function renderReputation(){
+  rendered.reputation=true;
+  /* sentiment by platform — Proportion Bar */
+  document.getElementById('rep-senti').innerHTML=PLATFORM_SENTI.map(function(p){
+    return '<div class="senti-row"><span class="senti-label">'+fav(p.domain,'comment-favicon')+esc(p.label)+'</span>'
+      +'<span class="senti-bar"><span class="senti-seg pos" style="width:'+p.pos+'%"></span><span class="senti-seg neu" style="width:'+p.neu+'%"></span><span class="senti-seg neg" style="width:'+p.neg+'%"></span><span class="senti-seg mix" style="width:'+p.mix+'%"></span></span>'
+      +'<span class="senti-val">'+p.pos+'%</span><span class="senti-vol">'+p.vol+'</span></div>';
+  }).join('');
+  /* themes donut */
+  var CHART=['hsl(var(--chart-1))','hsl(var(--chart-2))','hsl(var(--chart-3))','hsl(var(--chart-4))','hsl(var(--chart-5))','hsl(var(--chart-6))','hsl(var(--chart-7))','hsl(var(--chart-8))','hsl(var(--chart-9))'];
+  donutSVG('rep-donut','rep-donut-legend',THEMES.map(function(t,i){
+    return {label:t.name,value:t.vol,color:CHART[i],valText:t.vol.toLocaleString('en-US'),drill:'theme:'+i};
+  }),200,'9','themes');
+  /* mentions list */
+  var byReach=MENTIONS.map(function(m,i){return {m:m,i:i};});
+  document.getElementById('rep-mentions').innerHTML=byReach.map(function(o){return commentCardHTML(o.m,o.i);}).join('');
+  /* owned engagement chart + owned posts */
+  var start=DAYS-30;
+  var eng=SERIES.poppi.eng.slice(start);
+  var engAgg=aggregate(eng,grain==='month'?'week':grain,'avg').map(function(b){return b.v;});
+  trendSVG('rep-eng-chart',[{data:engAgg,color:'hsl(var(--primary))',area:true}],{w:560,h:150,min:2.5,max:5.5,grid:[3,4,5],unit:'%',xlabels:[{i:0,label:fmtD(dayDate(start))},{i:engAgg.length-1,label:fmtD(dayDate(DAYS-1))}]});
+  document.getElementById('rep-owned').innerHTML=OWNED.map(function(p,i){
+    return '<div class="mtile-post" data-drill="post:'+i+'" role="button" tabindex="0"><div class="mtile"><div class="mtile-thumb ph-'+p.ph+'"></div><div class="mtile-eng">♡ '+p.eng+'</div><div class="mtile-caption">'+esc(p.cap)+'</div></div>'
+      +'<div class="mtile-post-footer"><span class="mtile-post-eng">♡ '+p.eng+'</span><span class="mtile-post-platform">'+p.platform+'</span><span class="comment-sentiment '+p.senti+'" style="margin-left:auto;">'+p.senti.toUpperCase()+'</span></div></div>';
+  }).join('');
+  /* sentiment percentile mini */
+  document.getElementById('rep-pct-mini').innerHTML=
+    '<div class="bench-bar good"><div class="bench-bar-top"><span class="bench-bar-label">Positive sentiment</span><div class="bench-bar-right"><span class="bench-bar-val">69.4%</span><span class="bench-bar-ref">median 66.7%</span></div></div>'
+    +'<div class="bench-bar-track"><div class="bench-bar-fill" style="width:69.4%"></div><div class="bench-bar-marker" style="left:66.7%"></div><div class="bench-bar-marker leader" style="left:71.5%" title="Leader: Liquid Death 71.5%"></div></div></div>'
+    +'<div class="drill-p" style="margin-top:4px;">Above the category median; Liquid Death leads at 71.5%.</div>';
+  /* complaint clusters */
+  var sorted=COMPLAINTS.slice().sort(function(a,b){return b.f*b.intensity-a.f*a.intensity;});
+  var maxRisk=Math.max.apply(null,sorted.map(function(c){return c.f*c.intensity;}));
+  document.getElementById('rep-complaints').innerHTML=sorted.map(function(c){
+    var risk=c.f*c.intensity;
+    return barTrackRow('warn',c.label,'risk '+risk.toFixed(2)+' · freq '+c.f.toFixed(2)+' × int '+c.intensity.toFixed(2),Math.round(risk/maxRisk*100));
+  }).join('');
+  /* audience voice */
+  document.getElementById('rep-loves').innerHTML=LOVES.map(function(v){
+    return '<div class="quote-card love on-card"><div class="quote-title">'+esc(v.t)+'</div><div class="quote-text">"'+esc(v.q)+'"</div>'
+      +'<div class="quote-foot"><span class="quote-freq-label">freq</span><span class="quote-freq-val">'+Math.round(v.f*100)+'%</span><div class="quote-bar-track"><div class="quote-bar-fill" style="width:'+Math.round(v.f*100)+'%"></div></div></div></div>';
+  }).join('');
+  document.getElementById('rep-pains').innerHTML=PAINS.map(function(v){
+    return '<div class="quote-card pain on-card"><div class="quote-title">'+esc(v.t)+'</div><div class="quote-text">"'+esc(v.q)+'"</div>'
+      +'<div class="quote-foot"><span class="quote-freq-label">freq</span><span class="quote-freq-val">'+Math.round(v.f*100)+'%</span><div class="quote-bar-track"><div class="quote-bar-fill" style="width:'+Math.round(v.f*100)+'%"></div></div></div></div>';
+  }).join('');
+  /* reputation percentile bars */
+  var pct=[
+    {label:'Net sentiment',val:72,med:50,lead:88},
+    {label:'Mention volume',val:68,med:50,lead:84},
+    {label:'Engagement rate',val:74,med:50,lead:90},
+    {label:'Audience fit',val:81,med:50,lead:86}
+  ];
+  document.getElementById('rep-pct').innerHTML=pct.map(function(p){
+    return '<div class="bench-bar good"><div class="bench-bar-top"><span class="bench-bar-label">'+p.label+'</span><div class="bench-bar-right"><span class="bench-bar-val">'+p.val+'th pct</span><span class="bench-bar-ref">median '+p.med+'th</span></div></div>'
+      +'<div class="bench-bar-track"><div class="bench-bar-fill" style="width:'+p.val+'%"></div><div class="bench-bar-marker" style="left:'+p.med+'%"></div><div class="bench-bar-marker leader" style="left:'+p.lead+'%"></div></div></div>';
+  }).join('');
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Tab 3 — Presence
+   ════════════════════════════════════════════════════════════════ */
+function renderPresence(){
+  rendered.presence=true;
+  /* channel donut */
+  var CH=[{label:'TikTok',v:35},{label:'Instagram',v:25},{label:'X',v:17},{label:'Reddit',v:11},{label:'News',v:7},{label:'YouTube',v:5}];
+  var CHART=['hsl(var(--chart-1))','hsl(var(--chart-2))','hsl(var(--chart-3))','hsl(var(--chart-4))','hsl(var(--chart-5))','hsl(var(--chart-6))'];
+  donutSVG('pre-donut','pre-donut-legend',CH.map(function(c,i){return {label:c.label,value:c.v,color:CHART[i],valText:c.v+'%'};}),170,'8.9k','mentions');
+  /* posting cadence — HBar, alpha encodes magnitude */
+  var cad=[{label:'TikTok',v:52},{label:'Instagram',v:41},{label:'X',v:18},{label:'YouTube',v:13}];
+  var maxC=52;
+  document.getElementById('pre-cadence').innerHTML=cad.map(function(c){
+    return hbarRow(c.label,c.v+' posts',Math.round(c.v/maxC*100),0.30+(c.v/maxC)*0.70);
+  }).join('');
+  /* theme mix — Segmented Bar */
+  var MIX=[{l:'Gut health / prebiotic',v:31,c:'hsl(var(--chart-1))'},{l:'Soda alternative',v:21,c:'hsl(var(--chart-2))'},{l:'Mini-can flavors',v:19,c:'hsl(var(--chart-5))'},{l:'BÉIS × Poppi collab',v:15,c:'hsl(var(--chart-4))'},{l:'Other themes',v:14,c:'hsl(var(--chart-6))'}];
+  document.getElementById('pre-thememix').innerHTML=
+    '<div class="segbar-track">'+MIX.map(function(m){return '<div class="segbar-seg" style="width:'+m.v+'%;background:'+m.c+'"></div>';}).join('')+'</div>'
+    +'<div class="segbar-legend">'+MIX.map(function(m){return '<div class="segbar-legend-item" style="color:'+m.c+'"><span class="segbar-legend-pct">'+m.v+'%</span><span class="segbar-legend-label">'+esc(m.l)+'</span></div>';}).join('')+'</div>';
+  /* compare table — DS wui-table */
+  document.getElementById('pre-compare').innerHTML=
+    '<div class="table-wrap"><table class="wui-table"><thead><tr><th>Brand</th><th>Mentions</th><th>Sentiment</th><th>Posts</th><th>Eng rate</th><th>Active ads</th><th>SOV</th></tr></thead><tbody>'
+    +COMPARE.map(function(b){
+      return '<tr class="'+(b.you?'row-you':'')+(b.median?'cmp-median':'')+'"><td class="cmp-brand-cell">'+esc(b.name)+(b.you?'<span class="badge badge-active badge-sm cmp-you-badge">You</span>':'')+'</td>'
+        +'<td>'+b.mentions+'</td><td>'+b.sent+'</td><td>'+b.posts+'</td><td>'+b.eng+'</td><td>'+b.ads+'</td><td>'+b.sov+'</td></tr>';
+    }).join('')+'</tbody></table></div>';
+  /* over / under indexed */
+  var OVER=[{l:'Mini-can flavors',x:'2.4×',w:100},{l:'BÉIS × Poppi collab',x:'2.1×',w:88},{l:'Gut health / prebiotic',x:'1.6×',w:67},{l:'Soda alternative',x:'1.3×',w:54}];
+  var UNDER=[{l:'Pepsi Prebiotic entrant',x:'0.8×',w:80},{l:'Walmart pricing',x:'0.7×',w:70},{l:'Category saturation',x:'0.5×',w:50}];
+  document.getElementById('pre-over').innerHTML=OVER.map(function(o){return barTrackRow('',o.l,o.x,o.w);}).join('');
+  document.getElementById('pre-under').innerHTML=UNDER.map(function(o){return barTrackRow('muted',o.l,o.x,o.w);}).join('');
+  /* switch-from — HBar alpha */
+  var maxS=SWITCH_FROM[0].v;
+  document.getElementById('pre-switch').innerHTML=SWITCH_FROM.map(function(s){
+    return '<div title="'+esc(s.ctx)+'">'+hbarRow(s.label,Math.round(s.v*100)+'%',Math.round(s.v/maxS*100),0.30+(s.v/maxS)*0.70)+'</div>';
+  }).join('');
+  /* presence area chart over time */
+  var g=grain, mode='avg';
+  function series(key){return aggregate(SERIES[key].sov,g,mode).map(function(b){return b.v*100;});}
+  var pop=series('poppi'),oli=series('olipop'),ld=series('ld'),rec=series('recess'),med=series('median');
+  var n=pop.length;
+  var xl=[{i:0,label:fmtD(dayDate(0))},{i:Math.round((EV_OLIPOP/(DAYS-1))*(n-1)),label:'Apr 20'},{i:Math.round((EV_PEPSI/(DAYS-1))*(n-1)),label:'May 11'},{i:n-1,label:fmtD(dayDate(DAYS-1))}];
+  trendSVG('pre-area',[
+    {data:oli,color:GRAYS[0]},
+    {data:ld,color:GRAYS[1]},
+    {data:rec,color:GRAYS[2]},
+    {data:med,color:'color-mix(in srgb, hsl(var(--foreground)) 45%, transparent)',dashed:true},
+    {data:pop,color:'hsl(var(--primary))',area:true}
+  ],{w:1120,h:240,min:0,max:50,grid:[10,20,30,40],unit:'%',xlabels:xl});
+  document.getElementById('pre-area-legend').innerHTML=
+    '<div class="trend-legend-item"><div class="trend-swatch" style="background:hsl(var(--primary))"></div>Poppi</div>'
+    +'<div class="trend-legend-item"><div class="trend-swatch" style="background:'+GRAYS[0]+'"></div>Olipop</div>'
+    +'<div class="trend-legend-item"><div class="trend-swatch" style="background:'+GRAYS[1]+'"></div>Liquid Death</div>'
+    +'<div class="trend-legend-item"><div class="trend-swatch" style="background:'+GRAYS[2]+'"></div>Recess</div>'
+    +'<div class="trend-legend-item"><div class="trend-swatch dashed"></div>Category median</div>';
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Tab 4 — Tracker (localStorage CRUD + modal)
+   ════════════════════════════════════════════════════════════════ */
+var TRK_KEY='bhx2-trackers';
+var TRK_KINDS=[
+  {id:'search',title:'Search / keyword',sub:'Any query across platforms'},
+  {id:'brand',title:'Brand',sub:'Your brand\'s own signals'},
+  {id:'competitor',title:'Competitor',sub:'A rival brand\'s moves'},
+  {id:'theme',title:'Theme',sub:'A conversation theme'}
+];
+var trkEditing=null, trkKind='search', trkFreq='daily';
+function loadTrackers(){try{return JSON.parse(localStorage.getItem(TRK_KEY))||[];}catch(e){return [];}}
+function saveTrackers(list){localStorage.setItem(TRK_KEY,JSON.stringify(list));}
+function trkSpark(name){
+  var h=0;for(var i=0;i<name.length;i++)h=(h*31+name.charCodeAt(i))|0;
+  var r=mulberry32(h||1),vals=[],v=50;
+  for(var j=0;j<14;j++){v+=(r()-0.45)*8;vals.push(v);}
+  return {vals:vals,dir:vals[13]>=vals[0]?'up':'dn'};
+}
+function renderTracker(){
+  var list=loadTrackers();
+  var el=document.getElementById('trk-list');
+  if(!list.length){
+    el.innerHTML='<div class="trk-empty"><span class="trk-empty-title">Nothing tracked yet</span><span class="trk-empty-sub">Watch a search, a brand, a competitor or a theme, and changes will land here.</span><button class="btn btn-default btn-sm" onclick="openTrackerModal()">+ Tracker</button></div>';
+  }else{
+    el.innerHTML=list.map(function(t){
+      var sp=trkSpark(t.name);
+      var badge=t.status==='active'?'<span class="badge badge-active badge-sm">Active</span>':(t.status==='paused'?'<span class="badge badge-secondary badge-sm">Paused</span>':'<span class="badge badge-ghost badge-sm">Archived</span>');
+      return '<div class="trk-item'+(t.status==='archived'?' is-archived':'')+'" data-drill="tracker:'+t.id+'" role="button" tabindex="0">'
+        +'<div class="trk-info"><span class="trk-name">'+esc(t.name)+' '+badge+'</span>'
+        +'<span class="trk-meta">'+esc(kindTitle(t.kind))+' · checks '+t.freq+' · created '+fmtD(new Date(t.created))+'</span></div>'
+        +'<div class="spk">'+sparkSVG(sp.vals,sp.dir)+'</div>'
+        +'<div class="trk-actions">'
+        +'<button class="trk-icon-btn" title="Edit" onclick="event.stopPropagation();openTrackerModal(\''+t.id+'\')"><svg viewBox="0 0 16 16"><path d="M11.3 2.1l2.6 2.6L5.4 13.2l-3.2.6.6-3.2z"/></svg></button>'
+        +'<button class="trk-icon-btn" title="'+(t.status==='paused'?'Resume':'Pause')+'" onclick="event.stopPropagation();toggleTracker(\''+t.id+'\')"><svg viewBox="0 0 16 16">'+(t.status==='paused'?'<path d="M4 2.5l9 5.5-9 5.5z"/>':'<path d="M5 3v10M11 3v10"/>')+'</svg></button>'
+        +'<button class="trk-icon-btn" title="Archive" onclick="event.stopPropagation();archiveTracker(\''+t.id+'\')"><svg viewBox="0 0 16 16"><path d="M2 5h12M3 5v8h10V5M6.5 8h3"/></svg></button>'
+        +'<button class="trk-icon-btn danger" title="Delete" onclick="event.stopPropagation();deleteTracker(\''+t.id+'\')"><svg viewBox="0 0 16 16"><path d="M2 4h12M5 4V2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5V4M6 7v5M10 7v5M3 4l.8 8.5a.5.5 0 0 0 .5.5h7.4a.5.5 0 0 0 .5-.5L13 4"/></svg></button>'
+        +'</div></div>';
+    }).join('');
+  }
+  var counts={active:0,paused:0,archived:0};
+  list.forEach(function(t){counts[t.status]=(counts[t.status]||0)+1;});
+  document.getElementById('trk-counters').innerHTML=
+    '<div class="trk-count-row"><span class="trk-count-label">Active</span><span class="trk-count-val">'+counts.active+'</span></div>'
+    +'<div class="trk-count-row"><span class="trk-count-label">Paused</span><span class="trk-count-val">'+counts.paused+'</span></div>'
+    +'<div class="trk-count-row"><span class="trk-count-label">Archived</span><span class="trk-count-val">'+counts.archived+'</span></div>';
+}
+function kindTitle(id){var k=TRK_KINDS.filter(function(x){return x.id===id;})[0];return k?k.title:id;}
+function renderKindGrid(){
+  document.getElementById('trk-kind-grid').innerHTML=TRK_KINDS.map(function(k){
+    var sel=k.id===trkKind;
+    return '<label class="kind-opt'+(sel?' selected':'')+'" onclick="setTrkKind(\''+k.id+'\')">'
+      +'<span class="wradio-field"><input type="radio" name="trk-kind" value="'+k.id+'"'+(sel?' checked':'')+'><span class="wradio green"><span class="wradio-dot"></span></span></span>'
+      +'<span><span class="kind-opt-title">'+k.title+'</span><br><span class="kind-opt-sub">'+k.sub+'</span></span></label>';
+  }).join('');
+}
+function setTrkKind(id){trkKind=id;renderKindGrid();}
+function setTrkFreq(f,btn){
+  trkFreq=f;
+  document.querySelectorAll('#trk-freq-seg .wseg-opt').forEach(function(b){
+    var on=b===btn;b.classList.toggle('active',on);b.classList.toggle('inactive',!on);
+  });
+}
+function openTrackerModal(id){
+  trkEditing=id||null;trkKind='search';trkFreq='daily';
+  var input=document.getElementById('trk-input');input.value='';
+  if(id){
+    var t=loadTrackers().filter(function(x){return x.id===id;})[0];
+    if(t){trkKind=t.kind;trkFreq=t.freq;input.value=t.name;}
+  }
+  document.getElementById('trk-modal-title').textContent=trkEditing?'Edit tracker':'New tracker';
+  document.getElementById('trk-save-btn').textContent=trkEditing?'Save changes':'Create tracker';
+  document.querySelectorAll('#trk-freq-seg .wseg-opt').forEach(function(b){
+    var on=b.getAttribute('data-freq')===trkFreq;b.classList.toggle('active',on);b.classList.toggle('inactive',!on);
+  });
+  renderKindGrid();
+  document.getElementById('trk-modal').classList.add('open');
+  input.focus();
+}
+function closeTrackerModal(){document.getElementById('trk-modal').classList.remove('open');trkEditing=null;}
+function saveTracker(){
+  var name=document.getElementById('trk-input').value.trim();
+  if(!name){document.getElementById('trk-input').focus();return;}
+  var list=loadTrackers();
+  if(trkEditing){
+    list=list.map(function(t){return t.id===trkEditing?Object.assign({},t,{name:name,kind:trkKind,freq:trkFreq}):t;});
+    showToast('Tracker updated');
+  }else{
+    list.push({id:'t'+Date.now(),name:name,kind:trkKind,freq:trkFreq,status:'active',created:NOW.getTime()});
+    showToast('Tracker created');
+  }
+  saveTrackers(list);closeTrackerModal();renderTracker();
+}
+function toggleTracker(id){
+  var list=loadTrackers().map(function(t){return t.id===id?Object.assign({},t,{status:t.status==='paused'?'active':'paused'}):t;});
+  saveTrackers(list);renderTracker();
+}
+function archiveTracker(id){
+  var list=loadTrackers().map(function(t){return t.id===id?Object.assign({},t,{status:'archived'}):t;});
+  saveTrackers(list);renderTracker();showToast('Tracker archived');
+}
+function deleteTracker(id){
+  var list=loadTrackers();
+  var removed=list.filter(function(t){return t.id===id;})[0];
+  saveTrackers(list.filter(function(t){return t.id!==id;}));
+  renderTracker();
+  showToast('Tracker deleted',function(){var l=loadTrackers();l.push(removed);saveTrackers(l);renderTracker();});
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Tab 5 — Coach (feedback state + toast/undo, localStorage)
+   ════════════════════════════════════════════════════════════════ */
+var COACH_KEY='bhx2-coach';
+function loadCoach(){try{return JSON.parse(localStorage.getItem(COACH_KEY))||{};}catch(e){return {};}}
+function saveCoach(s){localStorage.setItem(COACH_KEY,JSON.stringify(s));}
+function coachState(id){return loadCoach()[id]||{saved:false,vote:null};}
+function recCardHTML(c,compact){
+  var st=coachState(c.id);
+  var banner='';
+  if(st.saved||st.vote){
+    var parts=[];
+    if(st.saved)parts.push('Saved to plan');
+    if(st.vote==='up')parts.push('Marked helpful');
+    if(st.vote==='down')parts.push('Marked not helpful');
+    banner='<div class="rec-status'+(st.vote==='down'?' down':'')+'">'+parts.join(' · ')+'</div>';
+  }
+  return '<div class="rec-card" data-drill="coach:'+c.id+'" role="button" tabindex="0">'
+    +'<div class="rec-header"><span class="rec-rank">#'+c.rank+'</span><span class="rec-impact">▲ '+c.delta+' '+c.ring+'</span></div>'
+    +'<div class="rec-headline">'+esc(c.headline)+'</div>'
+    +(compact?'':'<div class="rec-body">'+esc(c.body)+'</div>')
+    +'<div class="rec-evidence"><span class="rec-evidence-label">Evidence</span><span class="rec-evidence-text">'+esc(c.evidence)+'</span></div>'
+    +(compact?'':'<div class="rec-sources">API sources: '+c.sources.join(' · ')+'</div>')
+    +banner
+    +'<div class="rec-foot">'
+    +'<button class="rec-action'+(st.saved?' on':'')+'" aria-label="Save" onclick="event.stopPropagation();coachAct(\''+c.id+'\',\'save\')"><svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg></button>'
+    +'<button class="rec-action'+(st.vote==='up'?' on':'')+'" aria-label="Helpful" onclick="event.stopPropagation();coachAct(\''+c.id+'\',\'up\')"><svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>'
+    +'<button class="rec-action down'+(st.vote==='down'?' on':'')+'" aria-label="Not helpful" onclick="event.stopPropagation();coachAct(\''+c.id+'\',\'down\')"><svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg></button>'
+    +'<span class="rec-tag '+c.tag+' rec-foot-tag">'+c.tagLabel+'</span>'
+    +'</div></div>';
+}
+function coachAct(id,action){
+  var store=loadCoach();
+  var prev=JSON.stringify(store);
+  var st=store[id]||{saved:false,vote:null};
+  var msg='';
+  if(action==='save'){st.saved=!st.saved;msg=st.saved?'Saved to plan':'Removed from plan';}
+  if(action==='up'){st.vote=st.vote==='up'?null:'up';msg=st.vote?'Marked helpful':'Feedback cleared';}
+  if(action==='down'){st.vote=st.vote==='down'?null:'down';msg=st.vote?'Marked not helpful':'Feedback cleared';}
+  store[id]=st;saveCoach(store);
+  renderCoach();renderResCoach();
+  showToast(msg,function(){localStorage.setItem(COACH_KEY,prev);renderCoach();renderResCoach();});
+}
+function renderCoach(){
+  var el=document.getElementById('coach-list');
+  if(el)el.innerHTML=COACH.map(function(c){return recCardHTML(c,false);}).join('');
+  var store=loadCoach(),saved=0,up=0,down=0;
+  COACH.forEach(function(c){var s=store[c.id];if(!s)return;if(s.saved)saved++;if(s.vote==='up')up++;if(s.vote==='down')down++;});
+  var cc=document.getElementById('coach-counters');
+  if(cc)cc.innerHTML=
+    '<div class="trk-count-row"><span class="trk-count-label">Saved</span><span class="trk-count-val">'+saved+'</span></div>'
+    +'<div class="trk-count-row"><span class="trk-count-label">Helpful</span><span class="trk-count-val">'+up+'</span></div>'
+    +'<div class="trk-count-row"><span class="trk-count-label">Not helpful</span><span class="trk-count-val">'+down+'</span></div>';
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Tab 6 — News · Tab 7 — Trending
+   ════════════════════════════════════════════════════════════════ */
+function renderNews(){
+  rendered.news=true;
+  document.getElementById('news-list').innerHTML=NEWS.map(function(a){
+    return '<a class="art-card" href="'+a.url+'" target="_blank" rel="noopener">'
+      +'<div class="art-favicon">'+fav(a.domain,'')+'</div>'
+      +'<div class="art-body"><div class="art-meta"><span class="art-source">'+esc(a.source)+'</span><span class="art-dot">·</span><span class="art-time">'+rel(a.ts)+'</span><span class="art-ext">↗</span><span class="art-tag '+TAG_CLASS[a.tag]+'">'+a.tag+'</span></div>'
+      +'<div class="art-title">'+esc(a.headline)+'</div>'
+      +'<div class="art-snippet">'+esc(a.snippet)+'</div></div></a>';
+  }).join('');
+}
+function renderTrending(){
+  rendered.trending=true;
+  [['trend-tiktok',TRENDING.tiktok],['trend-x',TRENDING.x],['trend-google',TRENDING.google]].forEach(function(pair){
+    var el=document.getElementById(pair[0]),col=pair[1];
+    el.innerHTML='<div class="lb-head"><span class="lb-head-title">'+col.title+'</span><span class="lb-head-sub">last 7 days</span></div>'
+      +col.items.map(function(it,i){
+        var deltaCls=it.dir==='up'?'up':(it.dir==='dn'?'dn':'new');
+        var arrow=it.dir==='up'?'▲ ':(it.dir==='dn'?'▼ ':'');
+        return '<div class="lb-row"><div class="lb-rank">'+(i+1)+'</div><div class="lb-main">'
+          +'<div class="lb-name-row"><span class="lb-brand">'+fav(col.domain,'lb-fav')+esc(it.term)+'</span><span class="lb-delta '+deltaCls+'">'+arrow+esc(it.delta)+'</span></div>'
+          +'<div class="lb-meta"><span class="lb-vol">'+esc(it.vol)+'</span><span class="lb-category">· '+esc(it.ctx)+'</span></div>'
+          +'</div></div>';
+      }).join('');
+  });
+}
+
+/* ════════════════════════════════════════════════════════════════
+   Drill-down side panel — one open at a time, ✕ / overlay / Esc
+   ════════════════════════════════════════════════════════════════ */
+function kv(k,v){return '<div class="drill-kv"><span class="drill-kv-k">'+k+'</span><span class="drill-kv-v">'+v+'</span></div>';}
+function openDrill(type,id){
+  var P=SERIES.poppi,d={eyebrow:'',title:'',html:''};
+  if(type==='ring'){
+    var rep=P.rep[asOf],sov=avgWin(P.sov,asOf,30),ps=Math.min(100,sov*250),res=(rep+ps)/2;
+    if(id==='reputation'){
+      d.eyebrow='Input · 0–100';d.title='Reputation';
+      d.html='<div class="drill-p">How the world feels about Poppi: sentiment across social and news, scored 0–100.</div>'
+        +kv('Score as of '+fmtD(dayDate(asOf)),Math.round(rep))+kv('7-day average',avgWin(P.rep,asOf,7).toFixed(1))
+        +kv('30-day positive share',avgWin(P.pos,asOf,30).toFixed(1)+'%')+kv('Zone',zoneLabel(zone(rep)))
+        +'<div class="drill-p">Feeds the outcome: Resonance = (Reputation + Presence) / 2.</div>';
+    }else if(id==='presence'){
+      d.eyebrow='Input · % share of voice';d.title='Presence';
+      d.html='<div class="drill-p">Poppi\'s share of the prebiotic-soda conversation, trailing 30 days. The ring converts SOV to a 0–100 score: min(100, SOV × 250).</div>'
+        +kv('SOV · L30d as of '+fmtD(dayDate(asOf)),Math.round(sov*100)+'%')+kv('Ring score',Math.round(ps))
+        +kv('Category leader','Olipop · 41%')+kv('Zone',zoneLabel(zone(ps)))
+        +'<div class="drill-p">Feeds the outcome: Resonance = (Reputation + Presence) / 2.</div>';
+    }else{
+      d.eyebrow='Outcome · (Reputation + Presence) / 2';d.title='Resonance';
+      d.html='<div class="drill-p">The headline number: two inputs, one outcome.</div>'
+        +kv('Reputation input',Math.round(rep))+kv('Presence input',Math.round(ps))
+        +kv('Resonance',Math.round(res))+kv('Zone',zoneLabel(zone(res)))
+        +'<div class="drill-p">Good ≥ 80 · Watch ≥ 65 · At risk &lt; 65. Scrub the timeline to see how events moved it.</div>';
+    }
+  }
+  if(type==='mention'){
+    var m=MENTIONS[id];
+    d.eyebrow=m.platform+' mention';d.title=m.user;
+    d.html='<div class="drill-quote">'+esc(m.text)+'</div>'
+      +kv('Sentiment','<span class="comment-sentiment '+m.senti+'">'+m.senti.toUpperCase()+'</span>')
+      +kv('Reach',esc(m.reach))+kv('Comments',m.comments.toLocaleString('en-US'))
+      +kv('Theme',esc(m.theme))+kv('Posted',rel(m.ts))
+      +'<a class="drill-src-link" href="'+m.url+'" target="_blank" rel="noopener">Open source ↗</a>';
+  }
+  if(type==='theme'){
+    var t=THEMES[id];
+    var related=MENTIONS.map(function(m,i){return {m:m,i:i};}).filter(function(o){return o.m.theme===t.name;});
+    d.eyebrow='Audience theme';d.title=t.name;
+    d.html=kv('Volume · L30d',t.vol.toLocaleString('en-US')+' mentions')
+      +kv('Sentiment','<span class="comment-sentiment '+t.senti+'">'+t.senti.toUpperCase()+'</span>')
+      +(related.length?'<div class="drill-section-label">Related mentions</div>'+related.map(function(o){return commentCardHTML(o.m,o.i,'on-card');}).join(''):'<div class="drill-p">No captured mentions in this sample for this theme.</div>');
+  }
+  if(type==='post'){
+    var p=OWNED[id];
+    d.eyebrow='Owned post · @drinkpoppi';d.title=p.cap;
+    d.html=kv('Platform',p.platform)+kv('Engagement','♡ '+p.eng)
+      +kv('Sentiment in replies','<span class="comment-sentiment '+p.senti+'">'+p.senti.toUpperCase()+'</span>')
+      +'<div class="drill-p">Pulled from the owned-media feed via the Brand × Culture API.</div>';
+  }
+  if(type==='ads'){
+    d.eyebrow='Paid media · Meta';d.title='Active creatives';
+    d.html='<div class="drill-p">'+Math.round(avgWin(P.ads,asOf,30))+' creatives live over the trailing 30 days. Six current angles:</div>'
+      +ADS.map(function(a,i){return '<div class="drill-ad" data-drill="ad:'+i+'" role="button" tabindex="0"><span class="drill-ad-quote">"'+esc(a.q)+'"</span><span class="drill-ad-meta">'+esc(a.angle)+' · '+esc(a.sub)+' · '+a.days+'d active</span></div>';}).join('');
+  }
+  if(type==='ad'){
+    var a=ADS[id];
+    d.eyebrow='Ad creative · Meta';d.title='"'+a.q+'"';
+    d.html=kv('Angle',esc(a.angle))+kv('Subtext',esc(a.sub))+kv('Days active',a.days)
+      +'<div class="drill-p">Detected in ad copy via the Meta ad library feed of the Brand × Culture API.</div>';
+  }
+  if(type==='pulse'){
+    d.eyebrow='Post-launch pulse';d.title='Mini-cans · first 72 hours';
+    d.html=kv('Mentions','12.1k')+kv('Positive share','68%')+kv('Launch',fmtD(dayDate(EV_MINICAN))+' · Walmart national')
+      +'<div class="drill-p">The strongest product moment of the quarter. Unboxings dominate #drinkpoppi and "where to buy" search is breaking out (+1,400%).</div>';
+  }
+  if(type==='coach'){
+    var c=COACH.filter(function(x){return x.id===id;})[0];
+    d.eyebrow='Coach · ranked #'+c.rank;d.title=c.headline;
+    d.html='<span class="rec-impact">▲ '+c.delta+' '+c.ring+'</span>'
+      +'<div class="drill-p">'+esc(c.body)+'</div>'
+      +'<div class="drill-section-label">Evidence</div><div class="drill-quote">'+esc(c.evidence)+'</div>'
+      +'<div class="drill-section-label">API sources</div><div class="drill-p">'+c.sources.join(' · ')+'</div>'
+      +kv('Category','<span class="rec-tag '+c.tag+'">'+c.tagLabel+'</span>');
+  }
+  if(type==='tracker'){
+    var t2=loadTrackers().filter(function(x){return x.id===id;})[0];
+    if(!t2)return;
+    var sp=trkSpark(t2.name);
+    d.eyebrow='Tracker · '+kindTitle(t2.kind);d.title=t2.name;
+    d.html='<div class="spk" style="width:100%;height:48px;">'+sparkSVG(sp.vals,sp.dir,320,48)+'</div>'
+      +kv('Status',t2.status)+kv('Check frequency',t2.freq)+kv('Created',fmtDY(new Date(t2.created)))
+      +'<div class="drill-p">Signal volume for this watch over the last 14 checks.</div>';
+  }
+  document.getElementById('drill-eyebrow').textContent=d.eyebrow;
+  document.getElementById('drill-title').textContent=d.title;
+  document.getElementById('drill-body').innerHTML=d.html;
+  document.getElementById('drill-overlay').classList.add('open');
+  document.getElementById('drill').classList.add('open');
+}
+function closeDrill(){
+  document.getElementById('drill-overlay').classList.remove('open');
+  document.getElementById('drill').classList.remove('open');
+}
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){closeDrill();closeTrackerModal();}
+});
+
+/* ════════════════════════════════════════════════════════════════
+   Toast — bottom-center, auto-dismiss ~2.6s, optional Undo
+   ════════════════════════════════════════════════════════════════ */
+function showToast(msg,undoFn){
+  var vp=document.getElementById('toast-vp');
+  var el=document.createElement('div');
+  el.className='wtoast';
+  el.innerHTML='<div class="wtoast-body"><span class="wtoast-title">'+esc(msg)+'</span></div>'+(undoFn?'<span class="wtoast-action">Undo</span>':'');
+  if(undoFn)el.querySelector('.wtoast-action').addEventListener('click',function(){undoFn();el.remove();});
+  vp.appendChild(el);
+  setTimeout(function(){el.remove();},2600);
+}
+
+
+/* Delegated activation for data-drill / data-tab-link (cards, pills, rows) */
+document.addEventListener('click',function(e){
+  var el=e.target.closest?e.target.closest('[data-drill],[data-tab-link]'):null;
+  if(!el)return;
+  var tab=el.getAttribute('data-tab-link');
+  if(tab){showTab(tab);return;}
+  var v=el.getAttribute('data-drill').split(':');
+  var id=v[1];if(/^\d+$/.test(id))id=parseInt(id,10);
+  openDrill(v[0],id);
+});
+document.addEventListener('keydown',function(e){
+  if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.getAttribute&&(e.target.getAttribute('data-drill')||e.target.getAttribute('data-tab-link'))){
+    e.preventDefault();e.target.click();
+  }
+});
+document.getElementById('drill-overlay').addEventListener('click',closeDrill);
+document.getElementById('trk-modal').addEventListener('click',function(e){if(e.target===this)closeTrackerModal();});
+
+/* ════════════════════════════════════════════════════════════════
+   Init
+   ════════════════════════════════════════════════════════════════ */
+document.getElementById('topbar-date').textContent=NOW.toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric',year:'numeric'});
+renderScrubber();
+updateHero();
+showTab((location.hash||'#resonance').replace('#',''));
+</script>
+</body>
+</html>

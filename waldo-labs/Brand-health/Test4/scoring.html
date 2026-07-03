@@ -353,7 +353,7 @@
   </div>
   <div class="topbar-links">
     <a href="index.html">← Dashboard</a>
-    <a href="../bxcapi/index.html">/bxcapi spec</a>
+    <a href="../../bxcapi/index.html">/bxcapi spec</a>
   </div>
 </header>
 
@@ -363,7 +363,7 @@
   <div class="eyebrow">Brand health · scoring reference</div>
   <h1>How <span class="r">Reputation</span>, <span class="p">Presence</span>, and <span class="s">Resonance</span> are computed.</h1>
   <p class="lede">
-    Every contributor below maps a raw signal to a 0–100 component, weighted into a single score. This page documents the exact equations, the <a href="../bxcapi/index.html">/bxcapi</a> endpoints and properties they require, and whether each one exists today.
+    Every contributor below maps a raw signal to a 0–100 component, weighted into a single score. This page documents the exact equations, the <a href="../../bxcapi/index.html">/bxcapi</a> endpoints and properties they require, and whether each one exists today.
   </p>
   <p class="lede" style="margin-top: 12px;">
     <b style="color: var(--text);">Status legend.</b> <span class="mono" style="color: var(--green);">✓ Available</span> = exists in /bxcapi today · <span class="mono" style="color: var(--amber);">⚠ Partial</span> = endpoint exists but a needed property doesn't · <span class="mono" style="color: var(--red);">✗ Gap</span> = MVP requirement, not in /bxcapi yet · <span class="mono" style="color: var(--text-2);">◷ V2</span> = deferred past MVP (no reliable source yet, or signal won't be accurate). In <b>Reputation</b> and <b>Presence</b>, V2 contributors drop from the formula and their weight redistributes proportionally to the remaining contributors. <b>Resonance</b> at v1 is derived directly from Reputation and Presence — see that section.
@@ -417,7 +417,7 @@ sign = +1 (pos), 0 (neu), −1 (neg), −0.5 (mix)</div>
         <div class="contrib-col">
           <h4>Endpoint(s)</h4>
           <div class="endpoint-list">
-            <a class="endpoint-link" href="../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/mentions</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/mentions</a>
           </div>
         </div>
         <div class="contrib-col">
@@ -446,7 +446,7 @@ active = 1 if cluster had ≥1 mention in last 14d</div>
         <div class="contrib-col">
           <h4>Endpoint(s)</h4>
           <div class="endpoint-list">
-            <a class="endpoint-link" href="../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/customer-complaints</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/customer-complaints</a>
           </div>
         </div>
         <div class="contrib-col">
@@ -472,7 +472,7 @@ active = 1 if cluster had ≥1 mention in last 14d</div>
         <div class="contrib-col">
           <h4>Endpoint(s)</h4>
           <div class="endpoint-list">
-            <a class="endpoint-link" href="../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/mentions</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/mentions</a>
           </div>
         </div>
         <div class="contrib-col">
@@ -502,7 +502,7 @@ active = 1 if cluster had ≥1 mention in last 14d</div>
         <div class="contrib-col">
           <h4>Endpoint(s)</h4>
           <div class="endpoint-list">
-            <a class="endpoint-link" href="../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/mentions</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/mentions</a>
           </div>
         </div>
         <div class="contrib-col">
@@ -529,8 +529,8 @@ active = 1 if cluster had ≥1 mention in last 14d</div>
         <div class="contrib-col">
           <h4>Endpoint(s)</h4>
           <div class="endpoint-list">
-            <a class="endpoint-link" href="../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/customer-complaints</a>
-            <a class="endpoint-link" href="../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/posts</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/customer-complaints</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/posts</a>
           </div>
         </div>
         <div class="contrib-col">
@@ -558,7 +558,7 @@ active = 1 if cluster had ≥1 mention in last 14d</div>
         <div class="contrib-col">
           <h4>Endpoint(s)</h4>
           <div class="endpoint-list">
-            <a class="endpoint-link" href="../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/analysis</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/analysis</a>
           </div>
         </div>
         <div class="contrib-col">
@@ -609,9 +609,9 @@ raw = volume(brand) / Σ_c volume(c)   over competitive set ∪ {brand}</div>
         <div class="contrib-col">
           <h4>Endpoint(s)</h4>
           <div class="endpoint-list">
-            <a class="endpoint-link" href="../bxcapi/index.html#market-conditions"><span class="method">GET</span>/brands/compare</a>
-            <a class="endpoint-link" href="../bxcapi/index.html#market-conditions"><span class="method">GET</span>/brands/{id}/competitive-set</a>
-            <a class="endpoint-link" href="../bxcapi/index.html#analysis"><span class="method">GET</span>/reports/share-of-voice</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#market-conditions"><span class="method">GET</span>/brands/compare</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#market-conditions"><span class="method">GET</span>/brands/{id}/competitive-set</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#analysis"><span class="method">GET</span>/reports/share-of-voice</a>
           </div>
         </div>
         <div class="contrib-col">
@@ -640,8 +640,8 @@ raw = min(p/t, 1) · min(t/p, 1)^0.5
         <div class="contrib-col">
           <h4>Endpoint(s)</h4>
           <div class="endpoint-list">
-            <a class="endpoint-link" href="../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/summary</a>
-            <a class="endpoint-link" href="../bxcapi/index.html#cat-landscape"><span class="method">GET</span>/category/{id}/channel-mix</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/summary</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#cat-landscape"><span class="method">GET</span>/category/{id}/channel-mix</a>
           </div>
         </div>
         <div class="contrib-col">
@@ -669,8 +669,8 @@ fatigue_threshold defaults to 30d</div>
         <div class="contrib-col">
           <h4>Endpoint(s)</h4>
           <div class="endpoint-list">
-            <a class="endpoint-link" href="../bxcapi/index.html#paid-media"><span class="method">GET</span>/brands/{id}/creative-fatigue</a>
-            <a class="endpoint-link" href="../bxcapi/index.html#paid-media"><span class="method">GET</span>/brands/{id}/ads/active</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#paid-media"><span class="method">GET</span>/brands/{id}/creative-fatigue</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#paid-media"><span class="method">GET</span>/brands/{id}/ads/active</a>
           </div>
         </div>
         <div class="contrib-col">
@@ -698,8 +698,8 @@ fatigue_threshold defaults to 30d</div>
         <div class="contrib-col">
           <h4>Endpoint(s)</h4>
           <div class="endpoint-list">
-            <a class="endpoint-link" href="../bxcapi/index.html#brand-discovery"><span class="method">GET</span>/brands/{id}/platforms</a>
-            <a class="endpoint-link" href="../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/posts</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#brand-discovery"><span class="method">GET</span>/brands/{id}/platforms</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/posts</a>
           </div>
         </div>
         <div class="contrib-col">
@@ -727,8 +727,8 @@ under_indexed_themes from analysis/whitespace with momentum > 1.0</div>
         <div class="contrib-col">
           <h4>Endpoint(s)</h4>
           <div class="endpoint-list">
-            <a class="endpoint-link" href="../bxcapi/index.html#analysis"><span class="method">GET</span>/analysis/whitespace</a>
-            <a class="endpoint-link" href="../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/posts</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#analysis"><span class="method">GET</span>/analysis/whitespace</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/posts</a>
           </div>
         </div>
         <div class="contrib-col">
@@ -756,8 +756,8 @@ under_indexed_themes from analysis/whitespace with momentum > 1.0</div>
         <div class="contrib-col">
           <h4>Endpoint(s)</h4>
           <div class="endpoint-list">
-            <a class="endpoint-link" href="../bxcapi/index.html#brand-trends"><span class="method">GET</span>/brands/{id}/{dataset}/timeseries</a>
-            <a class="endpoint-link" href="../bxcapi/index.html#market-conditions"><span class="method">GET</span>/brands/compare</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#brand-trends"><span class="method">GET</span>/brands/{id}/{dataset}/timeseries</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#market-conditions"><span class="method">GET</span>/brands/compare</a>
           </div>
         </div>
         <div class="contrib-col">
@@ -886,8 +886,8 @@ Resonance = clamp(
         <div class="contrib-col">
           <h4>Endpoint(s)</h4>
           <div class="endpoint-list">
-            <a class="endpoint-link" href="../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/mentions/summary</a>
-            <a class="endpoint-link" href="../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/summary</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/mentions/summary</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/summary</a>
           </div>
         </div>
         <div class="contrib-col">
@@ -912,8 +912,8 @@ Resonance = clamp(
         <div class="contrib-col">
           <h4>Endpoint(s)</h4>
           <div class="endpoint-list">
-            <a class="endpoint-link" href="../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/summary</a>
-            <a class="endpoint-link" href="../bxcapi/index.html#brand-trends"><span class="method">GET</span>/brands/{id}/{dataset}/benchmark</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/summary</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#brand-trends"><span class="method">GET</span>/brands/{id}/{dataset}/benchmark</a>
           </div>
         </div>
         <div class="contrib-col">
@@ -940,8 +940,8 @@ Resonance = clamp(
         <div class="contrib-col">
           <h4>Endpoint(s)</h4>
           <div class="endpoint-list">
-            <a class="endpoint-link" href="../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/love-letters</a>
-            <a class="endpoint-link" href="../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/customer-complaints</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/love-letters</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/customer-complaints</a>
           </div>
         </div>
         <div class="contrib-col">
@@ -997,8 +997,8 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
         <div class="contrib-col">
           <h4>Endpoint(s)</h4>
           <div class="endpoint-list">
-            <a class="endpoint-link" href="../bxcapi/index.html#aud-conversations"><span class="method">GET</span>/audiences/{id}/voice-of-customer</a>
-            <a class="endpoint-link" href="../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/posts</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#aud-conversations"><span class="method">GET</span>/audiences/{id}/voice-of-customer</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/posts</a>
           </div>
         </div>
         <div class="contrib-col">
@@ -1026,7 +1026,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
         <div class="contrib-col">
           <h4>Endpoint(s)</h4>
           <div class="endpoint-list">
-            <a class="endpoint-link" href="../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/posts</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/posts</a>
           </div>
         </div>
         <div class="contrib-col">
@@ -1055,7 +1055,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
           <h4>Endpoint(s)</h4>
           <div class="endpoint-list">
             <a class="endpoint-link missing"><span class="method">GAP</span>/brands/{id}/people</a>
-            <a class="endpoint-link" href="../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/posts</a>
+            <a class="endpoint-link" href="../../bxcapi/index.html#owned-media"><span class="method">GET</span>/brands/{id}/owned-media/posts</a>
           </div>
         </div>
         <div class="contrib-col">
@@ -1198,7 +1198,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
 
         <tr>
           <td><code>themes[]</code> (canonical) on owned posts</td>
-          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/posts</code></a></td>
+          <td><a href="../../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/posts</code></a></td>
           <td class="num">1</td>
           <td>ClusterEngagement</td>
           <td>Stable canonical theme vocabulary that overlaps with complaint clusters. (V2 contributors AudienceFitHitRate and CrossChannelReinforcement read the same vocab when they come online.)</td>
@@ -1206,7 +1206,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
         </tr>
         <tr>
           <td><code>brand_replies[]</code> on each mention</td>
-          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions</code></a></td>
           <td class="num">1</td>
           <td>ResponseRate24h</td>
           <td>Array of <code>{ replied_at, reply_url, channel }</code> per mention. Single highest-priority Reputation lever.</td>
@@ -1214,7 +1214,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
         </tr>
         <tr>
           <td><code>voice_similarity</code> per owned post</td>
-          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/analysis</code></a></td>
+          <td><a href="../../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/analysis</code></a></td>
           <td class="num">1</td>
           <td>VoiceConsistency</td>
           <td>Per-post cosine similarity to a brand-voice fingerprint, plus the fingerprint itself on the brand profile.</td>
@@ -1234,7 +1234,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
 
         <tr>
           <td><code>posted_at</code> on each mention</td>
-          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions</code></a></td>
           <td class="num">3</td>
           <td>NetSentiment, NewsTone, ResponseRate24h</td>
           <td>Timestamp used for age-decay weighting.</td>
@@ -1242,7 +1242,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
         </tr>
         <tr>
           <td><code>sentiment</code> on each mention</td>
-          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions</code></a></td>
           <td class="num">2</td>
           <td>NetSentiment, NewsTone</td>
           <td>Per-mention sentiment classification (pos / neu / neg / mix).</td>
@@ -1250,7 +1250,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
         </tr>
         <tr>
           <td><code>source_type</code> on each mention</td>
-          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions</code></a></td>
           <td class="num">1</td>
           <td>NewsTone</td>
           <td>Filter to <code>source_type = "news"</code> to isolate press mentions from social.</td>
@@ -1258,7 +1258,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
         </tr>
         <tr>
           <td><code>cluster</code> &amp; <code>frequency</code> on complaint / love clusters</td>
-          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/customer-complaints</code></a> · <a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/love-letters</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-mentions"><code>/brands/{id}/customer-complaints</code></a> · <a href="../../bxcapi/index.html#brand-mentions"><code>/brands/{id}/love-letters</code></a></td>
           <td class="num">2</td>
           <td>ComplaintPressure, ClusterEngagement</td>
           <td>Cluster label + current-window frequency.</td>
@@ -1266,7 +1266,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
         </tr>
         <tr>
           <td><code>intensity</code> &amp; <code>last_mention_at</code> on complaint clusters</td>
-          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/customer-complaints</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-mentions"><code>/brands/{id}/customer-complaints</code></a></td>
           <td class="num">1</td>
           <td>ComplaintPressure</td>
           <td>Intensity 0–1 for severity weighting; <code>last_mention_at</code> for active-cluster gating.</td>
@@ -1274,7 +1274,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
         </tr>
         <tr>
           <td><code>posted_at</code> &amp; <code>channel</code> on owned posts</td>
-          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/posts</code></a></td>
+          <td><a href="../../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/posts</code></a></td>
           <td class="num">2</td>
           <td>CadenceFit, ChannelBreadth</td>
           <td>Per-post timestamp and platform attribution.</td>
@@ -1282,7 +1282,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
         </tr>
         <tr>
           <td><code>posts_count</code> / <code>posts_per_day</code> aggregations</td>
-          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/summary</code></a></td>
+          <td><a href="../../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/summary</code></a></td>
           <td class="num">1</td>
           <td>CadenceFit</td>
           <td>Pre-aggregated post volume and daily rate per channel.</td>
@@ -1290,7 +1290,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
         </tr>
         <tr>
           <td>Per-competitor volume (<code>mentions_count</code>, <code>owned_posts_count</code>)</td>
-          <td><a href="../bxcapi/index.html#market-conditions"><code>/brands/compare</code></a> · <a href="../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/timeseries</code></a></td>
+          <td><a href="../../bxcapi/index.html#market-conditions"><code>/brands/compare</code></a> · <a href="../../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/timeseries</code></a></td>
           <td class="num">2</td>
           <td>SOV, CategoryHeadwind</td>
           <td>Volume metrics per brand in the competitive set; 7d delta drives headwind.</td>
@@ -1298,7 +1298,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
         </tr>
         <tr>
           <td><code>competitor_brand_ids[]</code></td>
-          <td><a href="../bxcapi/index.html#market-conditions"><code>/brands/{id}/competitive-set</code></a></td>
+          <td><a href="../../bxcapi/index.html#market-conditions"><code>/brands/{id}/competitive-set</code></a></td>
           <td class="num">1</td>
           <td>SOV, CategoryHeadwind</td>
           <td>Stable competitive-set membership.</td>
@@ -1306,7 +1306,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
         </tr>
         <tr>
           <td>Tracked platform list per brand</td>
-          <td><a href="../bxcapi/index.html#brand-discovery"><code>/brands/{id}/platforms</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-discovery"><code>/brands/{id}/platforms</code></a></td>
           <td class="num">1</td>
           <td>ChannelBreadth</td>
           <td>Which channels count toward breadth.</td>
@@ -1314,7 +1314,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
         </tr>
         <tr>
           <td>Category-median cadence per channel</td>
-          <td><a href="../bxcapi/index.html#cat-landscape"><code>/category/{id}/channel-mix</code></a></td>
+          <td><a href="../../bxcapi/index.html#cat-landscape"><code>/category/{id}/channel-mix</code></a></td>
           <td class="num">1</td>
           <td>CadenceFit</td>
           <td>The <code>t</code> target in the cadence formula.</td>
@@ -1326,7 +1326,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
 
         <tr>
           <td><code>reach</code> on each mention</td>
-          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions</code></a></td>
           <td class="num">0 <span class="would">(would be 3)</span></td>
           <td>NetSentiment, NewsTone, ResponseRate24h</td>
           <td>Reach-weighting for sentiment and response rules. Removed from MVP — no reliable source for accurate reach yet.</td>
@@ -1334,7 +1334,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
         </tr>
         <tr>
           <td><code>engagement</code> / <code>engagement_rate</code> on owned posts</td>
-          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/posts</code></a> · <a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/summary</code></a></td>
+          <td><a href="../../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/posts</code></a> · <a href="../../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/summary</code></a></td>
           <td class="num">0 <span class="would">(would be 2)</span></td>
           <td>EngagementVsMedian, FounderVoiceCarry (original)</td>
           <td>Posts are scanned once on first ingestion, so likes / comments / shares are frozen at that snapshot. Pull from API and score until we can re-scan over time.</td>
@@ -1342,7 +1342,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
         </tr>
         <tr>
           <td><code>days_active</code> &amp; <code>fatigue_flag</code> on ads</td>
-          <td><a href="../bxcapi/index.html#paid-media"><code>/brands/{id}/ads/active</code></a> · <a href="../bxcapi/index.html#paid-media"><code>/brands/{id}/creative-fatigue</code></a></td>
+          <td><a href="../../bxcapi/index.html#paid-media"><code>/brands/{id}/ads/active</code></a> · <a href="../../bxcapi/index.html#paid-media"><code>/brands/{id}/creative-fatigue</code></a></td>
           <td class="num">0 <span class="would">(would be 1)</span></td>
           <td>CreativeFreshness</td>
           <td>Ad distribution and fatigue can't be measured accurately at MVP. Reintroduce once ad-library signals are validated.</td>
@@ -1350,7 +1350,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
         </tr>
         <tr>
           <td>Whitespace themes + <code>momentum</code></td>
-          <td><a href="../bxcapi/index.html#analysis"><code>/analysis/whitespace</code></a></td>
+          <td><a href="../../bxcapi/index.html#analysis"><code>/analysis/whitespace</code></a></td>
           <td class="num">0 <span class="would">(would be 1)</span></td>
           <td>WhitespaceHitRate</td>
           <td>Endpoint exists but the response example is missing in /bxcapi — and owned posts need canonical themes to compute the intersection. Both required before this is usable.</td>
@@ -1366,7 +1366,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
         </tr>
         <tr>
           <td><code>previous_frequency</code> on clusters (or <code>?compare=prev_window</code>)</td>
-          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/customer-complaints</code></a> · <a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/love-letters</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-mentions"><code>/brands/{id}/customer-complaints</code></a> · <a href="../../bxcapi/index.html#brand-mentions"><code>/brands/{id}/love-letters</code></a></td>
           <td class="num">0 <span class="would">(would be 2)</span></td>
           <td>LovePainVelocity, AudienceFitHitRate</td>
           <td>Prior-window cluster frequency for period-over-period delta. Only used by V2 Resonance contributors — not in the v1 score.</td>
@@ -1374,7 +1374,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
         </tr>
         <tr>
           <td><code>handle</code> / <code>account_id</code> attribution on each post</td>
-          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/posts</code></a></td>
+          <td><a href="../../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/posts</code></a></td>
           <td class="num">0 <span class="would">(would be 1)</span></td>
           <td>FounderVoiceCarry</td>
           <td>Which configured account published each post — needed to partition founder/exec posts from brand. Only used by V2 Resonance.</td>
@@ -1436,25 +1436,25 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
         </tr>
         <tr>
           <td>Mentions L30d sparkline tile</td>
-          <td><a href="../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/timeseries?dataset=mentions</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/timeseries?dataset=mentions</code></a></td>
           <td>Daily mention-volume series feeding the pulse-strip sparkline.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
         <tr>
           <td>Sentiment L30d sparkline tile</td>
-          <td><a href="../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/timeseries?dataset=sentiment</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/timeseries?dataset=sentiment</code></a></td>
           <td>Daily net-sentiment series feeding the pulse-strip sparkline.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
         <tr>
           <td>Active creatives L30d sparkline tile</td>
-          <td><a href="../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/timeseries?dataset=paid-media</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/timeseries?dataset=paid-media</code></a></td>
           <td>Daily active-ad count series for the pulse-strip sparkline.</td>
           <td><span class="status-pill partial">⚠ Partial</span></td>
         </tr>
         <tr>
           <td>90-day scrubber timeseries (base)</td>
-          <td><a href="../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/timeseries</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/timeseries</code></a></td>
           <td>Daily series across mentions, sentiment, SOV — the scrubber lets the dashboard replay history.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
@@ -1476,13 +1476,13 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
 
         <tr>
           <td>Recent mentions snapshot (3 of N)</td>
-          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions?limit=3</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions?limit=3</code></a></td>
           <td>Top mentions with platform, author, sentiment, text. Sort by recency or reach.</td>
           <td><span class="status-pill partial">⚠ Partial</span></td>
         </tr>
         <tr>
           <td>Audience themes pills</td>
-          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions/analysis</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions/analysis</code></a></td>
           <td>Top discussion themes by volume, colored by sentiment.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
@@ -1498,61 +1498,61 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
 
         <tr>
           <td>Sentiment by platform stacked bars</td>
-          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions/summary</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions/summary</code></a></td>
           <td>pos / neu / neg / mix percentages per platform with volume.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
         <tr>
           <td>Spike Detected callout</td>
-          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions/analysis</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions/analysis</code></a></td>
           <td>Auto-detected mention-volume spike with the causal one-liner.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
         <tr>
           <td>Top discussion themes pills</td>
-          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions/analysis</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions/analysis</code></a></td>
           <td>Frequency × sentiment per theme.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
         <tr>
           <td>Recent high-reach mentions list</td>
-          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions</code></a></td>
           <td>Mention feed sorted by reach. Reach itself is V2 in the score; widget can fall back to recency-sorted for v1.</td>
           <td><span class="status-pill partial">⚠ Partial</span></td>
         </tr>
         <tr>
           <td>Engagement rate on owned content</td>
-          <td><a href="../bxcapi/index.html#enrich-posts"><code>/posts/{id}</code></a> (per-post live fetch)</td>
+          <td><a href="../../bxcapi/index.html#enrich-posts"><code>/posts/{id}</code></a> (per-post live fetch)</td>
           <td>Aggregate engagement was removed from the API (frozen-snapshot accuracy issue). For an aggregate card we'd need a live-engagement re-scan layer or accept stale data.</td>
           <td><span class="status-pill gap">✗ Gap</span></td>
         </tr>
         <tr>
           <td>Post-launch pulse card (mini-cans · 72h)</td>
-          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/post-launch-pulse</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-mentions"><code>/brands/{id}/post-launch-pulse</code></a></td>
           <td>72-hour mention reaction + sentiment for a named launch.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
         <tr>
           <td>Sentiment percentile vs category</td>
-          <td><a href="../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/benchmark?dataset=mentions</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/benchmark?dataset=mentions</code></a></td>
           <td>"P84 · top quartile" — percentile of net sentiment within the competitive set.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
         <tr>
           <td>Reputation risk — complaint clusters</td>
-          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/customer-complaints</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-mentions"><code>/brands/{id}/customer-complaints</code></a></td>
           <td>Cluster list with frequency, intensity, type, examples.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
         <tr>
           <td>Audience voice — loves &amp; pains (VoC)</td>
-          <td><a href="../bxcapi/index.html#aud-conversations"><code>/audiences/{id}/voice-of-customer</code></a></td>
+          <td><a href="../../bxcapi/index.html#aud-conversations"><code>/audiences/{id}/voice-of-customer</code></a></td>
           <td>Top love and pain clusters with verbatim quotes. Brand-scoped variant is <a href="api-gaps.md">api-gaps.md §7</a>.</td>
           <td><span class="status-pill partial">⚠ Partial</span></td>
         </tr>
         <tr>
           <td>Reputation percentile multi-metric bars</td>
-          <td><a href="../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/benchmark</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/benchmark</code></a></td>
           <td>Per-metric percentile vs category (sentiment, volume, engagement, audience fit) with median + leader markers.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
@@ -1562,85 +1562,85 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
 
         <tr>
           <td>Presence % over 90 days area chart</td>
-          <td><a href="../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/timeseries?dataset=mentions</code></a> per competitor</td>
+          <td><a href="../../bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/timeseries?dataset=mentions</code></a> per competitor</td>
           <td>One line per brand showing share of the category set over time.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
         <tr>
           <td>Top owned posts grid (@drinkpoppi)</td>
-          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/posts</code></a></td>
+          <td><a href="../../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/posts</code></a></td>
           <td>Recent owned posts with thumbnails. Sorting by engagement requires live <code>/posts/{id}</code> fetches.</td>
           <td><span class="status-pill partial">⚠ Partial</span></td>
         </tr>
         <tr>
           <td>Theme mix · owned content donut</td>
-          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/summary</code></a></td>
+          <td><a href="../../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/summary</code></a></td>
           <td>Share of owned posts by canonical theme (top_themes block).</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
         <tr>
           <td>Voice consistency single-number card</td>
-          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/analysis</code></a></td>
+          <td><a href="../../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/analysis</code></a></td>
           <td>Reads <code>voice_consistency_score</code> directly. Same field powers the Reputation contributor.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
         <tr>
           <td>"Where Poppi punches above weight" channel donut</td>
-          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/summary</code></a> · <a href="../bxcapi/index.html#cat-landscape"><code>/category/{id}/channel-mix</code></a></td>
+          <td><a href="../../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/summary</code></a> · <a href="../../bxcapi/index.html#cat-landscape"><code>/category/{id}/channel-mix</code></a></td>
           <td>Brand share per channel vs. category-average share.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
         <tr>
           <td>Spend signal daily chart</td>
-          <td><a href="../bxcapi/index.html#market-conditions"><code>/brands/{id}/spend-signal</code></a></td>
+          <td><a href="../../bxcapi/index.html#market-conditions"><code>/brands/{id}/spend-signal</code></a></td>
           <td>Directional ad-spend index over time per brand + category median.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
         <tr>
           <td>Active creatives count + flagged-for-fatigue</td>
-          <td><a href="../bxcapi/index.html#paid-media"><code>/brands/{id}/ads/active</code></a> · <a href="../bxcapi/index.html#paid-media"><code>/brands/{id}/creative-fatigue</code></a></td>
+          <td><a href="../../bxcapi/index.html#paid-media"><code>/brands/{id}/ads/active</code></a> · <a href="../../bxcapi/index.html#paid-media"><code>/brands/{id}/creative-fatigue</code></a></td>
           <td>Count of currently-active ads, 7-day average, new today, fatigue flags. (CreativeFreshness in the score is V2, but the display card works on the existing endpoints.)</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
         <tr>
           <td>Promo watch card</td>
-          <td><a href="../bxcapi/index.html#market-conditions"><code>/brands/{id}/promo-watch</code></a></td>
+          <td><a href="../../bxcapi/index.html#market-conditions"><code>/brands/{id}/promo-watch</code></a></td>
           <td>% of competitive set running promos, with month-over-month delta.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
         <tr>
           <td>Posting cadence per platform</td>
-          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/summary</code></a></td>
+          <td><a href="../../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/summary</code></a></td>
           <td>Posts/day per channel and share of total posts. Reads <code>by_platform.avg_posts_per_day</code>.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
         <tr>
           <td>Currently-active Poppi ads grid</td>
-          <td><a href="../bxcapi/index.html#paid-media"><code>/brands/{id}/ads/active</code></a></td>
+          <td><a href="../../bxcapi/index.html#paid-media"><code>/brands/{id}/ads/active</code></a></td>
           <td>Real ads from Meta Ad Library with hook + angle + platform + days active.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
         <tr>
           <td>Side-by-side last 30d comparison table</td>
-          <td><a href="../bxcapi/index.html#market-conditions"><code>/brands/compare</code></a></td>
+          <td><a href="../../bxcapi/index.html#market-conditions"><code>/brands/compare</code></a></td>
           <td>Per-brand rows of mentions, sentiment, posts, engagement, ads, SOV.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
         <tr>
           <td>"Where Poppi over-indexes" themes</td>
-          <td><a href="../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/analysis</code></a> + <a href="../bxcapi/index.html#analysis"><code>/analysis/whitespace</code></a></td>
+          <td><a href="../../bxcapi/index.html#owned-media"><code>/brands/{id}/owned-media/analysis</code></a> + <a href="../../bxcapi/index.html#analysis"><code>/analysis/whitespace</code></a></td>
           <td>Themes the brand owns disproportionately vs the category. Inverse of whitespace.</td>
           <td><span class="status-pill partial">⚠ Partial</span></td>
         </tr>
         <tr>
           <td>"Where Poppi under-indexes" themes</td>
-          <td><a href="../bxcapi/index.html#analysis"><code>/analysis/whitespace</code></a></td>
+          <td><a href="../../bxcapi/index.html#analysis"><code>/analysis/whitespace</code></a></td>
           <td>Themes with high momentum but low brand coverage.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
         <tr>
           <td>Switch-from clusters</td>
-          <td><a href="../bxcapi/index.html#aud-conversations"><code>/audiences/{id}/voice-of-customer</code></a></td>
+          <td><a href="../../bxcapi/index.html#aud-conversations"><code>/audiences/{id}/voice-of-customer</code></a></td>
           <td>Why people moved off competitors (Diet Coke, Kombucha, etc.) with frequencies. Currently embedded in VoC; could become a dedicated <code>/brands/{id}/switch-from</code>.</td>
           <td><span class="status-pill partial">⚠ Partial</span></td>
         </tr>
@@ -1650,7 +1650,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
 
         <tr>
           <td>User-tracked URLs + search-term feeds</td>
-          <td><a href="../bxcapi/index.html#search"><code>/search</code></a> · <a href="../bxcapi/index.html#discover-posts"><code>/discover/posts</code></a></td>
+          <td><a href="../../bxcapi/index.html#search"><code>/search</code></a> · <a href="../../bxcapi/index.html#discover-posts"><code>/discover/posts</code></a></td>
           <td>Each tracker hits search or discovery to pull fresh matches. Tracker list itself is client-side state.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
@@ -1670,7 +1670,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
 
         <tr>
           <td>Recent news list (title, source, snippet, link)</td>
-          <td><a href="../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions?source_type=news</code></a></td>
+          <td><a href="../../bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions?source_type=news</code></a></td>
           <td>Brand-relevant news items filtered from the mentions stream. Endpoint exists; news-shaped fields (title vs. text, domain authority) may need verification.</td>
           <td><span class="status-pill partial">⚠ Partial</span></td>
         </tr>
@@ -1680,7 +1680,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
 
         <tr>
           <td>Trending hashtags / X trends / Google search terms</td>
-          <td><a href="../bxcapi/index.html#cat-trends"><code>/categories/{id}/trends</code></a> · <a href="../bxcapi/index.html#discover-trends"><code>/discover/trends</code></a></td>
+          <td><a href="../../bxcapi/index.html#cat-trends"><code>/categories/{id}/trends</code></a> · <a href="../../bxcapi/index.html#discover-trends"><code>/discover/trends</code></a></td>
           <td>Where the category is heating up — TikTok hashtags, X trends, Google search terms.</td>
           <td><span class="status-pill ok">✓ Available</span></td>
         </tr>
@@ -1691,7 +1691,7 @@ growing love cluster = love cluster with Δ14d(freq) > 0</div>
 
   <div class="foot">
     Reference doc · methodology version <code class="mono">2026.05.01</code><br>
-    See <a href="api-gaps.md">api-gaps.md</a> for related endpoint proposals · <a href="../bxcapi/index.html">/bxcapi spec</a> · <a href="index.html">back to dashboard</a>
+    See <a href="api-gaps.md">api-gaps.md</a> for related endpoint proposals · <a href="../../bxcapi/index.html">/bxcapi spec</a> · <a href="index.html">back to dashboard</a>
   </div>
 </section>
 
