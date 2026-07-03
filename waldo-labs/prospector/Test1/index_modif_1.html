@@ -651,9 +651,9 @@ function prospectCard(p){
     <div class="pcard-actions" role="presentation" data-stop>
       <button class="btn btn-default btn-sm" onclick="accept('${p.id}')">${I.check} Accept → Pipeline</button>
       <button class="btn btn-outline btn-sm" onclick="track('${p.id}')">${I.eye} Track</button>
-      <button class="btn btn-ghost btn-sm" onclick="reject('${p.id}')">${I.x} Pass</button>
+      <button class="btn btn-outline btn-sm" onclick="reject('${p.id}')">${I.x} Pass</button>
       <div class="grow"></div>
-      <button class="btn btn-ghost btn-sm" onclick="go('/prospect/${p.id}')">View brief ${I.arrow}</button>
+      <button class="btn btn-outline btn-sm" onclick="go('/prospect/${p.id}')">View brief ${I.arrow}</button>
     </div>`}
   </div>`;
 }
@@ -707,7 +707,7 @@ function renderDetail(id){
     actionBtns = `
       <button class="btn btn-default" onclick="accept('${p.id}')">${I.check} Accept → Pipeline</button>
       <button class="btn btn-outline" onclick="track('${p.id}')">${I.eye} ${tracked?'Tracking ✓ · monitor':'Track this brand'}</button>
-      ${p.status!=='rejected' ? `<button class="btn btn-ghost" onclick="reject('${p.id}')">${I.x} Pass</button>` : `<div class="note" style="text-align:center;margin-top:6px">Passed on this prospect.</div>`}`;
+      ${p.status!=='rejected' ? `<button class="btn btn-outline" onclick="reject('${p.id}')">${I.x} Pass</button>` : `<div class="note" style="text-align:center;margin-top:6px">Passed on this prospect.</div>`}`;
   }
 
   $('#content').innerHTML = `
@@ -819,9 +819,9 @@ function renderPassed(){
       <div class="pcard-actions">
         <button class="btn btn-default btn-sm" onclick="accept('${p.id}')">${I.check} Accept → Pipeline</button>
         <button class="btn btn-outline btn-sm" onclick="track('${p.id}')">${I.eye} Track</button>
-        <button class="btn btn-ghost btn-sm" onclick="restore('${p.id}')">${I.swap} Move back to review</button>
+        <button class="btn btn-outline btn-sm" onclick="restore('${p.id}')">${I.swap} Move back to review</button>
         <div class="grow"></div>
-        <button class="btn btn-ghost btn-sm" onclick="go('/prospect/${p.id}')">View brief ${I.arrow}</button>
+        <button class="btn btn-outline btn-sm" onclick="go('/prospect/${p.id}')">View brief ${I.arrow}</button>
       </div>
     </div>`;
   }).join('')}</div>` : emptyState('Nothing passed yet', 'Prospects you pass on from <a href="#/">This Week</a> are archived here — you can always reconsider them later.');
