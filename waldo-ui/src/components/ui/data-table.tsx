@@ -5,6 +5,7 @@ import {
   type ColumnDef,
   type ColumnFiltersState,
   type SortingState,
+  type Table as TanstackTable,
   type VisibilityState,
   flexRender,
   getCoreRowModel,
@@ -95,30 +96,7 @@ function DataTable<TData, TValue>({
               className="max-w-sm"
             />
           )}
-          {showColumnToggle && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="ml-auto">
-                  Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {table
-                  .getAllColumns()
-                  .filter((col) => col.getCanHide())
-                  .map((col) => (
-                    <DropdownMenuCheckboxItem
-                      key={col.id}
-                      className="capitalize"
-                      checked={col.getIsVisible()}
-                      onCheckedChange={(value) => col.toggleVisibility(!!value)}
-                    >
-                      {col.id}
-                    </DropdownMenuCheckboxItem>
-                  ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
+          {showColumnToggle && <DataTableViewOptions table={table} />}
         </div>
       )}
 
@@ -195,6 +173,39 @@ function DataTable<TData, TValue>({
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// DataTableViewOptions — column visibility toggle
+// Pattern: shadcn/ui data-table view-options. The DropdownMenu is the component
+// root so the portal-based primitive is never buried in layout markup.
+// ─────────────────────────────────────────────────────────────────────────────
+
+function DataTableViewOptions<TData>({ table }: { table: TanstackTable<TData> }) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" className="ml-auto">
+          Columns <ChevronDownIcon className="ml-2 h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {table
+          .getAllColumns()
+          .filter((col) => col.getCanHide())
+          .map((col) => (
+            <DropdownMenuCheckboxItem
+              key={col.id}
+              className="capitalize"
+              checked={col.getIsVisible()}
+              onCheckedChange={(value) => col.toggleVisibility(!!value)}
+            >
+              {col.id}
+            </DropdownMenuCheckboxItem>
+          ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // sortableHeader helper — wraps a label in a sort-toggle button
 // Usage: header: sortableHeader("Brand")
 // ─────────────────────────────────────────────────────────────────────────────
@@ -215,5 +226,5 @@ function sortableHeader(label: string) {
   }
 }
 
-export { DataTable, sortableHeader }
+export { DataTable, DataTableViewOptions, sortableHeader }
 export type { ColumnDef, DataTableProps }

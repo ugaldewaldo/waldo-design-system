@@ -946,6 +946,9 @@ components:
       Built on @tanstack/react-table v8. Exposes ColumnDef from tanstack so consumer column definitions
       are type-safe. sortableHeader() helper wraps a column header in a sort-toggle button.
       Toolbar is optional: set filterColumn and/or showColumnToggle as needed. Page size defaults to 10.
+      Column-visibility toggle lives in DataTableViewOptions (exported, shadcn naming) — the DropdownMenu
+      is that component's root, per the rule that portal-based primitives sit at the component root,
+      never buried in layout markup.
 
   - component: Carousel
     use_when:
