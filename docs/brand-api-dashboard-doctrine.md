@@ -19,9 +19,59 @@ Design rules for Brand API prototypes (Promo Radar, Prospector, Moodtape, Poppi 
 
 ---
 
+## Aesthetic thesis — the north
+
+A Waldo dashboard is a quiet instrument for an operator who lives inside it. It earns
+trust by receding: the interface is the frame, the data is the subject. Every rule below
+derives from this — when a rule doesn't cover your case, resolve it toward this.
+
+1. **Restraint is the default.** The most common way a dashboard fails is by trying too
+   hard — thick ink, bold everything, decoration standing in for hierarchy. We call that
+   "burdo." Quiet is not empty; quiet is confident. When in doubt, go lighter, thinner,
+   fewer.
+2. **Dark, dense, tool-first.** These are instruments for professionals, not marketing
+   pages. High information density on zinc surfaces, Inter throughout, no ornament. We
+   share Linear's DNA on purpose: the product should feel fast, sharp, and built for
+   someone who returns to it daily.
+3. **Structure through elevation and space — never lines.** Hierarchy comes from surface
+   steps (background → card → muted → secondary), spacing, and type weight. A border is
+   an admission that the layout didn't separate on its own. The shell is borderless.
+4. **Data reads light.** The chart is the point, so the chart whispers — hairline strokes,
+   regular-weight numbers, tabular figures, subtle gridlines. Saturated color is a scarce
+   resource, spent only on what matters most (you, the client brand). Everything else is
+   neutral.
+5. **One system, reused — never reinvented.** Consistency beats cleverness. Nothing is
+   built that the DS already ships; nothing is styled off-token. A prototype that looks
+   like it always belonged to the family beats a clever one-off.
+6. **Craft is the product.** These are sales tools — the visual bar is the pitch.
+   Determinism is part of the craft: seeded data, verified paint, identical on every
+   reload. A demo that flickers or drifts reads as broken, no matter how good the idea.
+
+---
+
 ## What these prototypes are
 
 Vanilla HTML single-file dashboards. No framework, no build step. They link the DS via `<link rel="stylesheet" href="../../waldo-ds.css">` (the repo-root file — there is no vendored copy inside `waldo-labs/`) and use Waldo DS tokens. They live in `waldo-labs/<prototype-name>/`. They are sales tools — the visual bar is high.
+
+---
+
+## Calibration — gold standard & slop
+
+Each row is the thesis made testable. Study the shipped prototypes in `waldo-labs/`
+(Poppi Health, Promo Radar, Prospector) as gold-standard references — real work beats
+mockups. If your output matches the Slop column, stop and fix it before going further.
+
+| Dimension | Gold | Slop ("burdo") |
+|-----------|------|----------------|
+| Density & restraint | High-density zinc, one saturated accent, quiet confidence | Padded boxes, every metric in its own bordered card, decoration doing hierarchy's job |
+| Data-viz weight | Hairline strokes, regular-weight tabular numbers, subtle gridlines | Thick bold bars, chunky rings, always-on dots |
+| Chart color | Teal only on "you"; competitors neutral gray; benchmark dashed | Rainbow `--chart-*` on same-importance series; brand colors as data |
+| Negative encoding | Falling metric or trend = `--warning` | `--destructive` used for a metric — destructive is an action verdict, not data |
+| Structure | Zones separate by elevation + space; borderless shell | `border-bottom` on topbar, `border-right` on sidebar, `<hr>` between sections |
+| App header | One line: wordmark + name inline, muted text nav | Stacked brand lockup with tagline; search, pills or buttons in the header |
+| Card surfaces | Neutral card; status color lives in pills and labels | Card background tinted `--primary` / `--warning` / `--highlight` |
+| Reuse | Looks like it always belonged to the DS family | Clever off-token one-off that reinvents a shipped component |
+| Determinism | Seeded data, identical every reload, verified paint | `Math.random()` / `new Date()`, flickering demo, invisible zero-size bars |
 
 ---
 
@@ -542,49 +592,48 @@ primary CTA (`.btn-default`) — assert computed `background-color` / `backgroun
 
 ## Do not
 
-- Do not hardcode hex, rgba, or pixel color values anywhere — tokens only.
-- Do not restate DS values (hex, radii, type scale, component CSS) in a prototype or in
-  this doctrine — reference the source (`index.html`, `waldo-ds.css`, `token-catalog.yaml`).
-- Do not use `--bg`, `--surface-*`, `--text-*`, `--border-strong` — legacy prototype vars.
-- Do not use JetBrains Mono for numeric metric values — Inter only.
-- Do not use `--chart-*` colors in depth pills or single-metric bar charts — alpha system.
-- Do not mix alpha-highlight bars and chart-palette bars in the same visualization.
-- Do not use `--warning`/`--destructive` interchangeably: negative metric/trend = `--warning`;
-  irreversible action / live-alert = `--destructive`.
-- Do not add italic anywhere.
-- Do not use brand colors (`--brand-*`) in product dashboards.
-- Do not render the Waldo mark as text or a colored box — the mark is always the SVG
-  wordmark (the product name next to it is plain text, and may stand alone).
-- Do not stack anything under the header identity — no subtitle, tagline, or descriptor
-  below the logo/name; the header lockup is one line.
-- Do not put search, status/integration pills, badges, buttons, or "Powered by" in the
-  app header — the header is identity + text navigation only. Search goes on the second
-  line (right-aligned), except when the header has no navigation.
-- Do not put the KPI delta inline below the value — badge, top-right.
-- Do not render trend-line dots always-visible — hover only.
-- Do not use custom buttons for time-range toggles — use `comp-segmented`.
-- Do not use the bare button variant (`btn-ghost`) in a card action row — primary =
-  `btn-default`, secondary = `btn-outline`/`btn-secondary`.
-- Do not use `--highlight` for HBar fills — HBars are always teal.
-- Do not add a `border` to cards — elevation only.
-- Do not tint a card background with accent/status tokens (`--primary`, `--warning`,
-  `--destructive`, `--highlight`, `--chart-*`) — in any state, hover included. Status
-  color lives in pills and labels, not surfaces; neutral hover lightening is fine.
-- Do not let a separator line appear below the page header — kill the injected border.
-- Do not put a `border-bottom` on the topbar or a `border-right` on the sidebar — the
-  shell is borderless; zones separate by surface + spacing (see Borderless shell).
-- Do not split the sidebar identity chip and the nav into two separate boxes — one
-  integrated `var(--popover)` panel, chip as transparent header.
-- Do not divide page sections with an `<hr>`/divider line — use spacing + a muted label.
-- Do not hardcode actions in the page header — only what the design requires.
-- Do not declare `html`/`body` with `height:100%` or `overflow:hidden` — breaks scroll.
-- Do not omit the required DS conflict overrides.
-- Do not declare `--chart-1..12` or any `-rgb` companion in your own `:root` — they all
-  ship in `waldo-ds.css`; local copies go stale and ship wrong colors.
-- Do not name a prototype class/variant after a DS atom (`.input`, `.badge`, bare
-  `.output`…) — DS rules will land on it.
-- Do not put `overflow` other than `visible` on `body` — it silently kills
-  `position: sticky` (the scroll override belongs on `html` only).
-- Do not build a chart/component from scratch when the DS has it — read its markup in
-  `index.html` and match it.
-- Use `hsl(var(--token) / alpha)` for opacity — DS tokens are HSL. The old `rgba(var(--token-rgb), alpha)` form is retired.
+### Hard — blocking violations
+
+_A prototype that breaks one of these is wrong. detect.js / review must reject it._
+
+- [hard] Do not hardcode hex, rgba, or pixel color values anywhere — tokens only.
+- [hard] Do not use `--bg`, `--surface-*`, `--text-*`, `--border-strong` — legacy prototype vars.
+- [hard] Do not use the old `rgba(var(--token-rgb), alpha)` opacity form — it's retired; DS tokens are HSL, so write `hsl(var(--token) / alpha)`.
+- [hard] Do not declare `--chart-1..12` or any `-rgb` companion in your own `:root` — they all ship in `waldo-ds.css`; local copies go stale and ship wrong colors.
+- [hard] Do not restate DS values (hex, radii, type scale, component CSS) in a prototype or in this doctrine — reference the source (`index.html`, `waldo-ds.css`, `token-catalog.yaml`).
+- [hard] Do not use brand colors (`--brand-*`) in product dashboards.
+- [hard] Do not add italic anywhere.
+- [hard] Do not name a prototype class/variant after a DS atom (`.input`, `.badge`, bare `.output`…) — DS rules will land on it.
+- [hard] Do not declare `html`/`body` with `height:100%` or `overflow:hidden` — breaks scroll.
+- [hard] Do not put `overflow` other than `visible` on `body` — it silently kills `position: sticky` (the scroll override belongs on `html` only).
+- [hard] Do not omit the required DS conflict overrides.
+- [hard] Do not stack anything under the header identity — no subtitle, tagline, or descriptor below the logo/name; the header lockup is one line.
+
+### Should — strong defaults
+
+_Follow unless the specific design has a documented reason not to._
+
+- [should] Do not put search, status/integration pills, badges, buttons, or "Powered by" in the app header — the header is identity + text navigation only. Search goes on the second line (right-aligned), except when the header has no navigation.
+- [should] Do not render the Waldo mark as text or a colored box — the mark is always the SVG wordmark (the product name next to it is plain text, and may stand alone).
+- [should] Do not hardcode actions in the page header — only what the design requires.
+- [should] Do not put a `border-bottom` on the topbar or a `border-right` on the sidebar — the shell is borderless; zones separate by surface + spacing (see Borderless shell).
+- [should] Do not let a separator line appear below the page header — kill the injected border.
+- [should] Do not divide page sections with an `<hr>`/divider line — use spacing + a muted label.
+- [should] Do not split the sidebar identity chip and the nav into two separate boxes — one integrated `var(--popover)` panel, chip as transparent header.
+- [should] Do not add a `border` to cards — elevation only.
+- [should] Do not tint a card background with accent/status tokens (`--primary`, `--warning`, `--destructive`, `--highlight`, `--chart-*`) — in any state, hover included. Status color lives in pills and labels, not surfaces; neutral hover lightening is fine.
+- [should] Do not put the KPI delta inline below the value — badge, top-right.
+- [should] Do not use `--highlight` for HBar fills — HBars are always teal.
+- [should] Do not use `--chart-*` colors in depth pills or single-metric bar charts — alpha system.
+- [should] Do not mix alpha-highlight bars and chart-palette bars in the same visualization.
+- [should] Do not use `--warning`/`--destructive` interchangeably: negative metric/trend = `--warning`; irreversible action / live-alert = `--destructive`.
+- [should] Do not use custom buttons for time-range toggles — use `comp-segmented`.
+- [should] Do not use the bare button variant (`btn-ghost`) in a card action row — primary = `btn-default`, secondary = `btn-outline`/`btn-secondary`.
+- [should] Do not build a chart/component from scratch when the DS has it — read its markup in `index.html` and match it.
+- [should] Do not use JetBrains Mono for numeric metric values — Inter only.
+
+### Preference — taste & polish
+
+_Guidance that raises quality; deviations are judgment calls, not violations._
+
+- [pref] Do not render trend-line dots always-visible — hover only.

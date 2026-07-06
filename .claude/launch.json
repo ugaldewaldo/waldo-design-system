@@ -7,6 +7,12 @@
       "runtimeArgs": ["serve", "/Users/miguelugalde/Desktop/waldo-design-system"],
       "port": 4501,
       "autoPort": true
+    },
+    {
+      "name": "doctrine-panel",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["waldo-labs/doctrine-panel/server.js"],
+      "port": 4174
     }
   ]
 }
