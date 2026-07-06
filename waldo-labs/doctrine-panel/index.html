@@ -26,21 +26,12 @@
                  display: none; }
     .is-dirty .dirty-dot { display: inline-block; }
 
-    .btn-act { font: inherit; font-size: 13px; font-weight: 500; border: none; cursor: pointer;
-               padding: 7px 14px; border-radius: var(--radius); color: hsl(var(--foreground));
-               background: hsl(var(--secondary)); transition: background .12s; }
-    .btn-act:hover { background: color-mix(in srgb, hsl(var(--foreground)) 8%, hsl(var(--secondary))); }
-    .btn-primary { background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); }
-    .btn-primary:hover { background: color-mix(in srgb, black 8%, hsl(var(--primary))); }
-    .btn-primary:disabled { opacity: .45; cursor: default; }
+    .btn:disabled { opacity: .45; cursor: default; }
 
     /* toolbar */
     .toolbar { display: flex; align-items: center; justify-content: flex-end; gap: 12px;
                padding: 8px 28px 20px; }
-    .search { font: inherit; font-size: 13px; width: 240px; padding: 7px 12px; border-radius: var(--radius);
-              background: hsl(var(--secondary)); border: none; color: hsl(var(--foreground)); }
-    .search::placeholder { color: hsl(var(--muted-foreground)); }
-    .search:focus { outline: 2px solid hsl(var(--primary) / 0.5); outline-offset: 1px; }
+    .search-wrap { width: 260px; }
 
     /* board */
     .board { display: flex; gap: 16px; padding: 0 28px 48px; align-items: stretch; }
@@ -52,9 +43,10 @@
     .col[data-sev="should"] .sev-dot { background: hsl(var(--warning)); }
     .col[data-sev="pref"]   .sev-dot { background: hsl(var(--muted-foreground)); }
     .col-title { font-size: 14px; font-weight: 500; letter-spacing: -0.01em; }
-    .col-n { margin-left: auto; font-size: 12px; color: hsl(var(--muted-foreground));
-             font-variant-numeric: tabular-nums; }
-    .col-note { font-size: 12px; line-height: 1.45; color: hsl(var(--muted-foreground)); margin: 0 0 14px; }
+    .col-n { margin-left: auto; font-variant-numeric: tabular-nums; }
+    .col-note { font-size: 12px; line-height: 1.45; color: hsl(var(--muted-foreground)); margin: 0 0 7px; }
+    .col-axis { font-size: 10.5px; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 12px;
+                color: hsl(var(--muted-foreground) / 0.65); }
     .col-body { display: flex; flex-direction: column; gap: 8px; flex: 1; min-height: 60px; }
     .col-body.drop-hint { outline: 1.5px dashed hsl(var(--primary) / 0.5); outline-offset: 4px; border-radius: var(--radius); }
 
@@ -69,17 +61,14 @@
     .card code { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11.5px;
                  background: hsl(var(--secondary)); padding: 1px 5px; border-radius: 4px; }
     .card.hidden { display: none; }
-    .card .del { flex: none; background: none; border: none; color: hsl(var(--muted-foreground));
-                 cursor: pointer; font-size: 15px; line-height: 1.4; padding: 0 2px; opacity: 0;
-                 transition: opacity .12s, color .12s; }
-    .card:hover .del { opacity: .55; }
+    .card .edit, .card .del { flex: none; background: none; border: none; cursor: pointer;
+                 color: hsl(var(--muted-foreground)); font-size: 14px; line-height: 1.4; padding: 0 2px;
+                 opacity: 0; transition: opacity .12s, color .12s; }
+    .card:hover .edit, .card:hover .del { opacity: .55; }
+    .card .edit:hover { color: hsl(var(--primary)); opacity: 1; }
     .card .del:hover { color: hsl(var(--destructive)); opacity: 1; }
 
-    .col-add { margin-top: 8px; width: 100%; font: inherit; font-size: 12px; cursor: pointer;
-               color: hsl(var(--muted-foreground)); background: none; padding: 8px;
-               border: 1px dashed hsl(var(--border)); border-radius: calc(var(--radius) - 2px);
-               transition: color .12s, border-color .12s; }
-    .col-add:hover { color: hsl(var(--foreground)); border-color: hsl(var(--muted-foreground)); }
+    .col-add { margin-top: 10px; align-self: flex-start; }
     .add-input { font: inherit; font-size: 13px; line-height: 1.5; width: 100%; box-sizing: border-box;
                  resize: vertical; background: hsl(var(--secondary)); color: hsl(var(--foreground));
                  border: 1px solid hsl(var(--primary) / 0.6); border-radius: calc(var(--radius) - 2px);
@@ -94,7 +83,7 @@
 
     /* tabs + calibration gallery */
     [hidden] { display: none !important; }
-    .tabsbar { padding: 4px 28px 0; }
+    .tabsbar { display: flex; align-items: center; justify-content: space-between; padding: 4px 28px 0; }
     .cal-intro { color: hsl(var(--muted-foreground)); font-size: 13px; line-height: 1.55;
                  max-width: 920px; padding: 14px 28px 4px; margin: 0; }
     .cal-wrap { display: flex; flex-direction: column; gap: 12px; padding: 10px 28px 48px; }
@@ -110,6 +99,20 @@
     .cal-slop .lab { color: hsl(var(--destructive)); }
     .cal-cell code { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11.5px;
                      background: hsl(var(--secondary)); padding: 1px 5px; border-radius: 4px; }
+    .cal-bar { display: flex; align-items: center; gap: 10px; padding: 4px 28px 0; }
+    .cal-bar .dirty-dot { display: none; width: 7px; height: 7px; border-radius: 9999px; background: hsl(var(--warning)); }
+    .cal-bar.is-dirty .dirty-dot { display: inline-block; }
+    .cal-row { position: relative; }
+    .cal-dim, .cal-cell .body { cursor: text; border-radius: 4px; }
+    .cal-dim:hover, .cal-cell .body:hover { background: hsl(var(--foreground) / 0.05); }
+    .cal-del { position: absolute; top: 12px; right: 12px; background: none; border: none; cursor: pointer;
+               color: hsl(var(--muted-foreground)); font-size: 15px; line-height: 1; opacity: 0; transition: opacity .12s, color .12s; }
+    .cal-row:hover .cal-del { opacity: .55; }
+    .cal-del:hover { color: hsl(var(--destructive)); opacity: 1; }
+    .cal-edit { font: inherit; font-size: 13px; line-height: 1.5; width: 100%; box-sizing: border-box; resize: vertical;
+                background: hsl(var(--secondary)); color: hsl(var(--foreground)); border: 1px solid hsl(var(--primary) / 0.6);
+                border-radius: calc(var(--radius) - 2px); padding: 8px 10px; }
+    .cal-edit:focus { outline: none; border-color: hsl(var(--primary)); }
   </style>
 </head>
 <body>
@@ -121,8 +124,8 @@
     <div class="actions">
       <span class="dirty-dot" title="Unsaved changes"></span>
       <span class="count" id="count">—</span>
-      <button class="btn-act" id="reload">Reload</button>
-      <button class="btn-act btn-primary" id="save" disabled>Save to document</button>
+      <button class="btn btn-outline btn-sm" id="reload">Reload</button>
+      <button class="btn btn-default btn-sm" id="save" disabled>Save to document</button>
     </div>
   </header>
 
@@ -131,11 +134,12 @@
       <button class="wtab-text active" data-view="severity">Severity</button>
       <button class="wtab-text" data-view="calibration">Calibration</button>
     </div>
+    <button class="btn btn-outline btn-sm" id="cal-add" hidden>+ Add dimension</button>
   </div>
 
   <div id="view-severity">
     <div class="toolbar">
-      <input class="search" id="search" type="search" placeholder="Filter rules…" autocomplete="off">
+      <div class="search-wrap"><input class="input input--ghost" id="search" type="search" placeholder="Filter rules…" autocomplete="off"></div>
     </div>
     <div class="board" id="board"></div>
   </div>
@@ -163,11 +167,13 @@
               .replace(/`([^`]+)`/g, '<code>$1</code>');
     }
 
-    function setDirty(v) {
-      dirty = v;
-      document.body.classList.toggle('is-dirty', v);
-      saveBtn.disabled = !v;
+    let activeView = 'severity';
+    function refreshTopbar() {
+      const d = activeView === 'severity' ? dirty : calDirty;
+      document.body.classList.toggle('is-dirty', d);
+      saveBtn.disabled = !d;
     }
+    function setDirty(v) { dirty = v; refreshTopbar(); }
 
     function render() {
       board.innerHTML = '';
@@ -179,14 +185,15 @@
         col.innerHTML =
           `<div class="col-head"><span class="sev-dot"></span>` +
           `<span class="col-title">${esc(TIERS[sev].heading)}</span>` +
-          `<span class="col-n">${state[sev].length}</span></div>` +
+          `<span class="badge badge-secondary badge-sm col-n">${state[sev].length}</span></div>` +
           `<p class="col-note">${esc(TIERS[sev].note)}</p>` +
+          `<div class="col-axis">↑ most often violated · ↓ rarer</div>` +
           `<div class="col-body"></div>`;
         const body = col.querySelector('.col-body');
         for (const r of state[sev]) body.appendChild(cardEl(r));
         wireColumn(col, body);
         const add = document.createElement('button');
-        add.className = 'col-add'; add.textContent = '+ Add rule';
+        add.className = 'col-add btn btn-outline btn-sm'; add.textContent = '+ Add rule';
         add.addEventListener('click', () => startAdd(col, sev));
         col.appendChild(add);
         board.appendChild(col);
@@ -200,11 +207,14 @@
       el.className = 'card'; el.draggable = true; el.dataset.id = r.id;
       el.innerHTML = `<span class="grip">⠿</span>` +
                      `<span class="txt" title="Double-click to edit">${esc(r.text)}</span>` +
+                     `<button class="edit" title="Edit rule" aria-label="Edit rule">✎</button>` +
                      `<button class="del" title="Delete rule" aria-label="Delete rule">×</button>`;
       el.addEventListener('dragstart', () => { el.classList.add('dragging'); });
       el.addEventListener('dragend', () => { el.classList.remove('dragging'); rebuildFromDOM(); });
+      el.querySelector('.edit').addEventListener('click', e => { e.stopPropagation(); startEdit(r, el); });
       el.querySelector('.del').addEventListener('click', e => {
         e.stopPropagation();
+        if (!confirm('Delete this rule?\n\n' + r.text)) return;
         SEVS.forEach(s => state[s] = state[s].filter(x => x !== r));
         delete byId[r.id];
         render(); setDirty(true);
@@ -333,37 +343,100 @@
       } else toast('Save failed: ' + (data.error || 'unknown'));
     }
 
-    // --- tabs + calibration gallery ---
+    // --- tabs + calibration gallery (editable) ---
     let calLoaded = false;
-    async function loadCalibration() {
-      const d = await (await fetch('/api/calibration')).json();
-      $('#cal-intro').textContent = d.intro || '';
+    let calIntro = '';
+    let calRows = [];                 // [{dimension, gold, slop}] — raw text
+    let calDirty = false;
+
+    function setCalDirty(v) { calDirty = v; refreshTopbar(); }
+
+    function editField(el, obj, key) {
+      if (el.querySelector('.cal-edit')) return;
+      const ta = document.createElement('textarea');
+      ta.className = 'cal-edit'; ta.value = obj[key];
+      ta.rows = Math.max(2, Math.ceil((obj[key].length || 1) / 42));
+      el.innerHTML = ''; el.appendChild(ta);
+      ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
+      let done = false;
+      const commit = () => {
+        if (done) return; done = true;
+        const t = ta.value.trim();
+        if (t !== obj[key]) { obj[key] = t; setCalDirty(true); }
+        renderCalibration();
+      };
+      ta.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commit(); }
+        else if (e.key === 'Escape') { done = true; renderCalibration(); }
+      });
+      ta.addEventListener('blur', commit);
+    }
+
+    function renderCalibration() {
       const wrap = $('#cal-wrap'); wrap.innerHTML = '';
-      (d.rows || []).forEach(row => {
+      calRows.forEach(row => {
         const el = document.createElement('div');
         el.className = 'cal-row';
         el.innerHTML =
-          `<div class="cal-dim">${esc(row.dimension)}</div>` +
+          `<div class="cal-dim" data-k="dimension">${esc(row.dimension)}</div>` +
           `<div class="cal-pair">` +
-            `<div class="cal-cell cal-gold"><div class="lab">✓ Gold</div>${esc(row.gold)}</div>` +
-            `<div class="cal-cell cal-slop"><div class="lab">✗ Slop</div>${esc(row.slop)}</div>` +
-          `</div>`;
+            `<div class="cal-cell cal-gold"><div class="lab">✓ Gold</div><div class="body" data-k="gold">${esc(row.gold)}</div></div>` +
+            `<div class="cal-cell cal-slop"><div class="lab">✗ Slop</div><div class="body" data-k="slop">${esc(row.slop)}</div></div>` +
+          `</div>` +
+          `<button class="cal-del" title="Delete dimension">×</button>`;
+        el.querySelector('[data-k="dimension"]').addEventListener('click', e => editField(e.currentTarget, row, 'dimension'));
+        el.querySelectorAll('.cal-cell .body').forEach(b => b.addEventListener('click', e => editField(e.currentTarget, row, e.currentTarget.dataset.k)));
+        el.querySelector('.cal-del').addEventListener('click', () => {
+          if (!confirm('Delete dimension "' + row.dimension + '"?')) return;
+          calRows = calRows.filter(r => r !== row); renderCalibration(); setCalDirty(true);
+        });
         wrap.appendChild(el);
       });
+    }
+
+    async function loadCalibration() {
+      const d = await (await fetch('/api/calibration')).json();
+      calIntro = d.intro || '';
+      calRows = (d.rows || []).map(r => ({ ...r }));
+      $('#cal-intro').textContent = calIntro;
+      renderCalibration(); setCalDirty(false);
       calLoaded = true;
+    }
+
+    async function saveCalibration() {
+      const res = await fetch('/api/save-calibration', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ intro: calIntro, rows: calRows })
+      });
+      const d = await res.json();
+      if (d.ok) { setCalDirty(false); toast(`Saved · ${calRows.length} dimensions`); }
+      else toast('Save failed: ' + (d.error || 'unknown'));
     }
     document.querySelectorAll('#tabs .wtab-text').forEach(b => b.addEventListener('click', () => {
       document.querySelectorAll('#tabs .wtab-text').forEach(x => x.classList.toggle('active', x === b));
       const v = b.dataset.view;
+      activeView = v;
       $('#view-severity').hidden = v !== 'severity';
       $('#view-calibration').hidden = v !== 'calibration';
+      $('#cal-add').hidden = v !== 'calibration';
       if (v === 'calibration' && !calLoaded) loadCalibration();
+      refreshTopbar();
     }));
+    $('#cal-add').addEventListener('click', () => {
+      calRows.unshift({ dimension: 'New dimension', gold: '', slop: '' });
+      renderCalibration(); setCalDirty(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const first = document.querySelector('#cal-wrap .cal-row:first-child [data-k="dimension"]');
+      if (first) first.click();
+    });
 
     $('#search').addEventListener('input', applyFilter);
-    $('#reload').addEventListener('click', () => { if (!dirty || confirm('Discard unsaved changes and reload from disk?')) load(); });
-    saveBtn.addEventListener('click', save);
-    window.addEventListener('beforeunload', e => { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+    $('#reload').addEventListener('click', () => {
+      if ((dirty || calDirty) && !confirm('Discard unsaved changes and reload from disk?')) return;
+      load(); if (calLoaded) loadCalibration();
+    });
+    saveBtn.addEventListener('click', () => activeView === 'severity' ? save() : saveCalibration());
+    window.addEventListener('beforeunload', e => { if (dirty || calDirty) { e.preventDefault(); e.returnValue = ''; } });
 
     load();
   </script>

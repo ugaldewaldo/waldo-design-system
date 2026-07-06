@@ -62,6 +62,26 @@ function parseCalibration(text) {
   return { intro: intro.join(' '), rows };
 }
 
+function saveCalibration(intro, rows) {
+  const text = fs.readFileSync(DOCTRINE, 'utf8');
+  const lines = text.split('\n');
+  const sec = findSectionBy(lines, /^##\s+Calibration\b/);
+  if (!sec) throw new Error('Calibration section not found');
+  fs.writeFileSync(DOCTRINE + '.bak', text);
+  const clean = s => String(s || '').replace(/\|/g, '/').replace(/\s+/g, ' ').trim();
+  const out = [lines[sec.start], ''];
+  if (intro && intro.trim()) out.push(intro.trim(), '');
+  out.push('| Dimension | Gold | Slop ("burdo") |', '|-----------|------|----------------|');
+  for (const r of rows) out.push(`| ${clean(r.dimension)} | ${clean(r.gold)} | ${clean(r.slop)} |`);
+  out.push('', '---', '');
+  const before = lines.slice(0, sec.start).join('\n').replace(/\n+$/, '');
+  const after = lines.slice(sec.end).join('\n');
+  let result = before + '\n\n' + out.join('\n');
+  if (after.trim()) result += '\n' + after;
+  if (!result.endsWith('\n')) result += '\n';
+  fs.writeFileSync(DOCTRINE, result);
+}
+
 function parseRules(text) {
   const lines = text.split('\n');
   const sec = findSection(lines);
@@ -129,7 +149,7 @@ function sendJSON(res, code, obj) {
   res.end(JSON.stringify(obj));
 }
 
-if (require.main !== module) { module.exports = { parseRules, buildSection, findSection, parseCalibration }; return; }
+if (require.main !== module) { module.exports = { parseRules, buildSection, findSection, parseCalibration, saveCalibration }; return; }
 
 http.createServer((req, res) => {
   const u = new URL(req.url, 'http://localhost');
@@ -143,6 +163,15 @@ http.createServer((req, res) => {
   if (req.method === 'GET' && u.pathname === '/api/calibration') {
     try { sendJSON(res, 200, parseCalibration(fs.readFileSync(DOCTRINE, 'utf8'))); }
     catch (e) { sendJSON(res, 500, { error: String(e) }); }
+    return;
+  }
+  if (req.method === 'POST' && u.pathname === '/api/save-calibration') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try { const { intro, rows } = JSON.parse(body); saveCalibration(intro, rows); sendJSON(res, 200, { ok: true, count: rows.length }); }
+      catch (e) { sendJSON(res, 500, { error: String(e) }); }
+    });
     return;
   }
   if (req.method === 'POST' && u.pathname === '/api/save') {

@@ -57,9 +57,7 @@ Vanilla HTML single-file dashboards. No framework, no build step. They link the 
 
 ## Calibration — gold standard & slop
 
-Each row is the thesis made testable. Study the shipped prototypes in `waldo-labs/`
-(Poppi Health, Promo Radar, Prospector) as gold-standard references — real work beats
-mockups. If your output matches the Slop column, stop and fix it before going further.
+Each row is the thesis made testable. Study the shipped prototypes in `waldo-labs/` (Poppi Health, Promo Radar, Prospector) as gold-standard references — real work beats mockups. If your output matches the Slop column, stop and fix it before going further.
 
 | Dimension | Gold | Slop ("burdo") |
 |-----------|------|----------------|
