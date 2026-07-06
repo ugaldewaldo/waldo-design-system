@@ -1,6 +1,8 @@
-/* Waldo Design System — tokens + components */
+/* Waldo Design System — vanilla component styles */
 
 /* ══════════════════════════════════════════
-   globals.css — Tailwind theme + semantic tokens
+   GENERATED — do not hand-edit. Run tools/build-waldo-ds.sh
+   Token-free overlay: consumes the HSL theme (waldo-shadcn-theme.css)
+   via hsl(var(--token)). Link the theme FIRST, then this file.
    ══════════════════════════════════════════ */
 

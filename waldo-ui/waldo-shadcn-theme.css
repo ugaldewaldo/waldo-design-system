@@ -30,58 +30,58 @@
 
 
   /* ── zinc (Waldo dark neutral) ── */
-  --zinc-50:   #f8f8f9;   /* DERIVED */
-  --zinc-100:  #f0f0f2;   /* DERIVED */
-  --zinc-200:  #d2d3d3;   /* ANCHOR — text50High */
-  --zinc-300:  #b4b5b6;   /* DERIVED */
-  --zinc-400:  #8f9091;   /* ANCHOR — text100Regular */
-  --zinc-500:  #636465;   /* ANCHOR — text200Low */
-  --zinc-600:  #41454b;   /* ANCHOR — fill500Highest */
-  --zinc-700:  #323539;   /* ANCHOR — fill600Menu */
-  --zinc-750:  #2d2f33;   /* ANCHOR — fill700Regular (custom step) */
-  --zinc-800:  #27282b;   /* ANCHOR — fill800Low */
-  --zinc-850:  #242528;   /* ANCHOR — bg850High (custom step) */
-  --zinc-900:  #202123;   /* ANCHOR — bg900Regular */
-  --zinc-950:  #171819;   /* ANCHOR — bg950Low */
+  --zinc-50:   240 8% 97%;   /* DERIVED · #f8f8f9 */
+  --zinc-100:  240 7% 95%;   /* DERIVED · #f0f0f2 */
+  --zinc-200:  180 1% 83%;   /* ANCHOR — text50High · #d2d3d3 */
+  --zinc-300:  210 1% 71%;   /* DERIVED · #b4b5b6 */
+  --zinc-400:  210 1% 56%;   /* ANCHOR — text100Regular · #8f9091 */
+  --zinc-500:  210 1% 39%;   /* ANCHOR — text200Low · #636465 */
+  --zinc-600:  216 7% 27%;   /* ANCHOR — fill500Highest · #41454b */
+  --zinc-700:  214 7% 21%;   /* ANCHOR — fill600Menu · #323539 */
+  --zinc-750:  220 6% 19%;   /* ANCHOR — fill700Regular (custom step) · #2d2f33 */
+  --zinc-800:  225 5% 16%;   /* ANCHOR — fill800Low · #27282b */
+  --zinc-850:  225 5% 15%;   /* ANCHOR — bg850High (custom step) · #242528 */
+  --zinc-900:  220 4% 13%;   /* ANCHOR — bg900Regular · #202123 */
+  --zinc-950:  210 4% 9%;   /* ANCHOR — bg950Low · #171819 */
 
   /* ── green (brand primary — formerly teal) ── */
-  --green-50:   #edfafa;   /* DERIVED */
-  --green-100:  #d5f3f3;   /* DERIVED */
-  --green-200:  #a8e6e6;   /* DERIVED */
-  --green-300:  #6dcece;   /* DERIVED */
-  --green-400:  #4dbcbc;   /* DERIVED */
-  --green-500:  #32a9a9;   /* ANCHOR — primary brand */
-  --green-600:  #2c797a;   /* ANCHOR */
-  --green-700:  #2a6c6d;   /* ANCHOR */
-  --green-800:  #265152;   /* ANCHOR */
-  --green-900:  #223133;   /* ANCHOR */
-  --green-950:  #111e1f;   /* DERIVED */
+  --green-50:   180 57% 95%;   /* DERIVED · #edfafa */
+  --green-100:  180 56% 89%;   /* DERIVED · #d5f3f3 */
+  --green-200:  180 55% 78%;   /* DERIVED · #a8e6e6 */
+  --green-300:  180 50% 62%;   /* DERIVED · #6dcece */
+  --green-400:  180 45% 52%;   /* DERIVED · #4dbcbc */
+  --green-500:  180 54% 43%;   /* ANCHOR — primary brand · #32a9a9 */
+  --green-600:  181 47% 33%;   /* ANCHOR · #2c797a */
+  --green-700:  181 44% 30%;   /* ANCHOR · #2a6c6d */
+  --green-800:  181 37% 24%;   /* ANCHOR · #265152 */
+  --green-900:  187 20% 17%;   /* ANCHOR · #223133 */
+  --green-950:  184 29% 9%;   /* DERIVED · #111e1f */
 
   /* ── yellow (formerly amber) ── */
-  --yellow-50:   #fffbeb;  /* DERIVED */
-  --yellow-100:  #fef3c7;  /* DERIVED */
-  --yellow-200:  #fde68a;  /* DERIVED */
-  --yellow-300:  #f7d371;  /* ANCHOR */
-  --yellow-400:  #f0c040;  /* DERIVED */
-  --yellow-500:  #e5b020;  /* DERIVED */
-  --yellow-600:  #d6ac32;  /* ANCHOR */
-  --yellow-700:  #b48a00;  /* ANCHOR */
-  --yellow-800:  #946f00;  /* ANCHOR */
-  --yellow-900:  #713d00;  /* DERIVED */
-  --yellow-950:  #3d2100;  /* DERIVED */
+  --yellow-50:   48 100% 96%;  /* DERIVED · #fffbeb */
+  --yellow-100:  48 96% 89%;  /* DERIVED · #fef3c7 */
+  --yellow-200:  48 97% 77%;  /* DERIVED · #fde68a */
+  --yellow-300:  44 89% 71%;  /* ANCHOR · #f7d371 */
+  --yellow-400:  44 85% 60%;  /* DERIVED · #f0c040 */
+  --yellow-500:  44 79% 51%;  /* DERIVED · #e5b020 */
+  --yellow-600:  45 67% 52%;  /* ANCHOR · #d6ac32 */
+  --yellow-700:  46 100% 35%;  /* ANCHOR · #b48a00 */
+  --yellow-800:  45 100% 29%;  /* ANCHOR · #946f00 */
+  --yellow-900:  32 100% 22%;  /* DERIVED · #713d00 */
+  --yellow-950:  32 100% 12%;  /* DERIVED · #3d2100 */
 
   /* ── orange ── */
-  --orange-50:   #fff8f5; /* DERIVED */
-  --orange-100:  #ffeed5; /* DERIVED */
-  --orange-200:  #ffd4b0; /* DERIVED */
-  --orange-300:  #cd917b; /* ANCHOR — muted warm */
-  --orange-400:  #a95d41; /* ANCHOR — terracotta */
-  --orange-500:  #e76638; /* ANCHOR — bright orange */
-  --orange-600:  #c94e22; /* DERIVED */
-  --orange-700:  #a83a18; /* DERIVED */
-  --orange-800:  #86280f; /* DERIVED */
-  --orange-900:  #5e1a08; /* DERIVED */
-  --orange-950:  #380e03; /* DERIVED */
+  --orange-50:   18 100% 98%; /* DERIVED · #fff8f5 */
+  --orange-100:  36 100% 92%; /* DERIVED · #ffeed5 */
+  --orange-200:  27 100% 85%; /* DERIVED · #ffd4b0 */
+  --orange-300:  16 45% 64%; /* ANCHOR — muted warm · #cd917b */
+  --orange-400:  16 44% 46%; /* ANCHOR — terracotta · #a95d41 */
+  --orange-500:  16 78% 56%; /* ANCHOR — bright orange · #e76638 */
+  --orange-600:  16 71% 46%; /* DERIVED · #c94e22 */
+  --orange-700:  14 75% 38%; /* DERIVED · #a83a18 */
+  --orange-800:  13 80% 29%; /* DERIVED · #86280f */
+  --orange-900:  13 84% 20%; /* DERIVED · #5e1a08 */
+  --orange-950:  12 90% 12%; /* DERIVED · #380e03 */
 
 
   /* red / blue removed from DS. Destructive now references orange.
