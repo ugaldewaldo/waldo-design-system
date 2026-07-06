@@ -27,8 +27,12 @@ Vanilla HTML single-file dashboards. No framework, no build step. They link the 
 
 ## Component discovery & reuse
 
-**Before building ANY visual element, check `docs/component-index.md`** — the generated
-flat list of every consumable in the DS. It has THREE sections — Components, **Brand API
+**Before building ANY visual element, check the component index** — the generated,
+authoritative flat list of every consumable in the DS. It ships in two forms, same
+content: `docs/component-index.md` (read this) and `docs/component-index.json` (the
+machine-readable form an agent or the `/new-prototype` scaffold consumes — each entry
+carries `id`, `name`, `selector`, `category`, and `use_when`/`dont_use_when`). It has
+THREE sections — Components, **Brand API
 components**, and Charts — and you must scan all three: data-viz (donuts, area/line/bar
 charts, horizontal bars, sparklines, proportion bars, segmented bars) lives in the Charts
 section, and dashboard-specific patterns (KPI Stat Card, Comment Card, Article Card,
@@ -491,7 +495,8 @@ waldo-design-system/
   index.html              ← DS showcase — authoritative component & chart source
   docs/
     brand-api-dashboard-doctrine.md  ← this file (principles only)
-    component-index.md               ← generated flat list of all consumables
+    component-index.md               ← generated flat list of all consumables (human)
+    component-index.json             ← same list, machine-readable — agents + scaffold consume this
     token-catalog.yaml               ← VALIDATOR owns — source of truth for all tokens
     usage-doctrine.yaml              ← Intelligence Layer owns — core DS components
 ```
