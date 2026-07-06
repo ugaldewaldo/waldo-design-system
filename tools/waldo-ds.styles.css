@@ -1290,7 +1290,6 @@ table.wui-table tbody tr.row-selected td { background: hsl(var(--primary) / 0.04
       .wnav-items-wrap { padding:0 16px; }
       .wnav-section { padding:8px 24px 12px;font-size:var(--fs-xs);font-weight:500;letter-spacing:-.02em;text-transform:uppercase;color:color-mix(in srgb,hsl(var(--foreground)) 30%,transparent);user-select:none; }
       .wnav-action.visible { opacity:1; }
-      .wnav-badge--ghost { background:transparent;color:hsl(var(--muted-foreground)); }
       .wnav-sep { height:1px;background:color-mix(in srgb,hsl(var(--foreground)) 6%,transparent);margin:4px 0; }
       .wnav-item {
         display:flex;align-items:center;gap:6px;
@@ -1309,7 +1308,6 @@ table.wui-table tbody tr.row-selected td { background: hsl(var(--primary) / 0.04
       .wnav-count { font-size:var(--fs-xs);font-weight:600;color:hsl(var(--primary));min-width:18px;text-align:center;flex-shrink:0; }
       .wnav-icon  { flex-shrink:0;color:hsl(var(--muted-foreground));display:flex; }
       .wnav-action { flex-shrink:0;opacity:0;transition:opacity .1s;display:flex; }
-      .wnav-badge { background:color-mix(in srgb,hsl(var(--primary)) 15%,transparent);color:hsl(var(--primary));border-radius:999px;padding:0 6px;font-size:var(--fs-xs);font-weight:600;flex-shrink:0; }
       .wnav-section-row { display:flex;align-items:center;justify-content:space-between;padding:8px 24px 12px; }
       .wnav-section-row .wnav-section { padding:0; }
       .wnav-section-add { display:flex;align-items:center;color:color-mix(in srgb,hsl(var(--foreground)) 30%,transparent);cursor:pointer; }
@@ -1387,3 +1385,23 @@ table.wui-table tbody tr.row-selected td { background: hsl(var(--primary) / 0.04
     .wcard-head  { display: flex; flex-direction: column; gap: 4px; }
     .wcard-body  { font-size: var(--fs-sm); color: hsl(var(--foreground)); line-height: 1.5; }
     .wcard-footer{ display: flex; justify-content: flex-end; gap: 8px; }
+
+/* ── style block 30 ── */
+/* App Header — the chrome of every Brand API prototype. One line, exactly two
+   groups: A identity (Waldo wordmark + product name, inline, one baseline) +
+   B text navigation (right). Sticky + blurred, NO border-bottom (borderless
+   shell). Search never shares this line with nav — it lives on .app-toolbar
+   (second line, right-aligned, may double as a filter toolbar on its left). */
+.app-header { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(8px); background: color-mix(in srgb, hsl(var(--background)) 85%, transparent); }
+.app-header-inner { max-width: 1184px; margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+.app-ident { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.app-ident svg { flex: none; }
+.app-ident .product { font-size: var(--fs-lg); font-weight: 500; letter-spacing: -0.02em; color: hsl(var(--foreground)); white-space: nowrap; }
+.app-nav { display: flex; align-items: center; gap: 24px; }
+.app-nav a { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); text-decoration: none; }
+.app-nav a:hover { color: hsl(var(--foreground)); }
+.app-nav a.active { color: hsl(var(--foreground)); font-weight: 500; }
+.app-toolbar { max-width: 1184px; margin: 0 auto; padding: 10px 24px 0; display: flex; align-items: center; justify-content: flex-end; gap: 16px; }
+.app-toolbar .toolbar-left { margin-right: auto; display: flex; align-items: center; gap: 12px; }
+.app-search { width: 360px; max-width: 100%; }
+.app-search .input { height: 36px; }

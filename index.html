@@ -4752,18 +4752,18 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
       </div>
     </div>
 
-    <!-- Report builder with checkboxes -->
+    <!-- Report builder with status indicators -->
     <div class="section">
-      <div class="section-title">Report builder · label + badge count right</div>
+      <div class="section-title">Report builder · status dot + checkmark indicators</div>
       <div class="demo-block">
         <div class="demo-canvas" style="align-items:flex-start">
           <div class="wnav-panel">
             <div class="wnav-section">Report Builder</div>
             <div class="wnav-items-wrap">
-            <div class="wnav-item active"><span class="wnav-label">Week Summary</span><span class="wnav-badge">4</span></div>
-            <div class="wnav-item"><span class="wnav-label">Brand mentions</span><span class="wnav-badge">8</span></div>
-            <div class="wnav-item"><span class="wnav-label">Audience canvas</span><span class="wnav-badge">3</span></div>
-            <div class="wnav-item"><span class="wnav-label">Market trends</span><span class="wnav-badge wnav-badge--ghost">0</span></div>
+            <div class="wnav-item active"><span class="wnav-label">Week Summary</span></div>
+            <div class="wnav-item"><span class="wnav-label">Brand mentions</span></div>
+            <div class="wnav-item"><span class="wnav-label">Audience canvas</span></div>
+            <div class="wnav-item"><span class="wnav-label">Market trends</span></div>
             <div class="wnav-sep"></div>
             <div class="wnav-section">Client Sync</div>
             <div class="wnav-item"><span class="wnav-icon"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.5"/></svg></span><span class="wnav-label">Sentiment analysis</span></div>
@@ -4773,7 +4773,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
           </div>
         </div>
         <div class="demo-code-bar">
-          <span class="demo-code-label">&lt;NavItem label="Week Summary" active /&gt; · supports badge, status dot, checkmark indicators</span>
+          <span class="demo-code-label">&lt;NavItem label="Week Summary" active /&gt; · supports status dot + checkmark indicators</span>
           <button class="copy-btn" onclick="copyCode(this,'// NavGroup with status indicators:\n&lt;NavGroup label=&quot;Report Builder&quot;&gt;\n  &lt;NavItem label=&quot;Week Summary&quot; active /&gt;\n  &lt;NavItem label=&quot;Sentiment analysis&quot; icon={&lt;CheckCircle /&gt;} /&gt;\n&lt;/NavGroup&gt;')">Copy</button>
         </div>
       </div>
