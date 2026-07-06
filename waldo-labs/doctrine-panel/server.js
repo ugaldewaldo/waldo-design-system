@@ -118,6 +118,39 @@ function saveThesis(intro, principles) {
   fs.writeFileSync(DOCTRINE, result);
 }
 
+function parseGallery(text) {
+  const lines = text.split('\n');
+  const sec = findSectionBy(lines, /^##\s+Reference gallery\b/);
+  if (!sec) return { intro: '', items: [] };
+  const intro = []; const items = [];
+  for (let i = sec.start + 1; i < sec.end; i++) {
+    const t = lines[i].trim();
+    const m = t.match(/^-\s+\[(.+?)\]\((.+?)\)(?:\s*—\s*(.*))?$/);
+    if (m) items.push({ title: m[1], url: m[2], caption: (m[3] || '').trim() });
+    else if (t && !t.startsWith('#') && t !== '---') intro.push(t);
+  }
+  return { intro: intro.join(' '), items };
+}
+
+function saveGallery(intro, items) {
+  const text = fs.readFileSync(DOCTRINE, 'utf8');
+  const lines = text.split('\n');
+  const sec = findSectionBy(lines, /^##\s+Reference gallery\b/);
+  if (!sec) throw new Error('Reference gallery section not found');
+  fs.writeFileSync(DOCTRINE + '.bak', text);
+  const clean = s => String(s || '').replace(/\s+/g, ' ').trim();
+  const out = [lines[sec.start], ''];
+  const it = clean(intro); if (it) out.push(it, '');
+  items.forEach(x => out.push(`- [${clean(x.title)}](${clean(x.url)})${x.caption ? ' — ' + clean(x.caption) : ''}`));
+  out.push('', '---', '');
+  const before = lines.slice(0, sec.start).join('\n').replace(/\n+$/, '');
+  const after = lines.slice(sec.end).join('\n');
+  let result = before + '\n\n' + out.join('\n');
+  if (after.trim()) result += '\n' + after;
+  if (!result.endsWith('\n')) result += '\n';
+  fs.writeFileSync(DOCTRINE, result);
+}
+
 function parseRules(text) {
   const lines = text.split('\n');
   const sec = findSection(lines);
@@ -185,7 +218,7 @@ function sendJSON(res, code, obj) {
   res.end(JSON.stringify(obj));
 }
 
-if (require.main !== module) { module.exports = { parseRules, buildSection, findSection, parseCalibration, saveCalibration, parseThesis, saveThesis }; return; }
+if (require.main !== module) { module.exports = { parseRules, buildSection, findSection, parseCalibration, saveCalibration, parseThesis, saveThesis, parseGallery, saveGallery }; return; }
 
 http.createServer((req, res) => {
   const u = new URL(req.url, 'http://localhost');
@@ -206,6 +239,20 @@ http.createServer((req, res) => {
     req.on('data', c => body += c);
     req.on('end', () => {
       try { const { intro, principles } = JSON.parse(body); saveThesis(intro, principles); sendJSON(res, 200, { ok: true, count: principles.length }); }
+      catch (e) { sendJSON(res, 500, { error: String(e) }); }
+    });
+    return;
+  }
+  if (req.method === 'GET' && u.pathname === '/api/gallery') {
+    try { sendJSON(res, 200, parseGallery(fs.readFileSync(DOCTRINE, 'utf8'))); }
+    catch (e) { sendJSON(res, 500, { error: String(e) }); }
+    return;
+  }
+  if (req.method === 'POST' && u.pathname === '/api/save-gallery') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try { const { intro, items } = JSON.parse(body); saveGallery(intro, items); sendJSON(res, 200, { ok: true, count: items.length }); }
       catch (e) { sendJSON(res, 500, { error: String(e) }); }
     });
     return;

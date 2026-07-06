@@ -56,6 +56,15 @@ Each row is the thesis made testable. Study the shipped prototypes in `waldo-lab
 
 ---
 
+## Reference gallery
+
+Gold-standard references to study before building — real shipped work is the bar.
+
+- [Promo Radar](waldo-labs/promo-radar/index.html) — Brand API dashboard, canonical shell + charts
+- [Prospector](waldo-labs/prospector/index.html) — prospect-intel dashboard, dense list + drill patterns
+
+---
+
 ## Component discovery & reuse
 
 **Before building ANY visual element, check the component index** — the generated,

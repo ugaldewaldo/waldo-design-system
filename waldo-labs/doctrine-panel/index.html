@@ -68,11 +68,6 @@
     .card .edit:hover { color: hsl(var(--primary)); opacity: 1; }
     .card .del:hover { color: hsl(var(--destructive)); opacity: 1; }
 
-    .add-input { font: inherit; font-size: 13px; line-height: 1.5; width: 100%; box-sizing: border-box;
-                 resize: vertical; background: hsl(var(--secondary)); color: hsl(var(--foreground));
-                 border: 1px solid hsl(var(--primary) / 0.6); border-radius: calc(var(--radius) - 2px);
-                 padding: 10px 12px; }
-    .add-input:focus { outline: none; border-color: hsl(var(--primary)); }
 
     .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
              background: hsl(var(--popover)); color: hsl(var(--foreground)); padding: 10px 18px;
@@ -83,11 +78,21 @@
     /* tabs + calibration gallery */
     [hidden] { display: none !important; }
     .tabsbar { display: flex; align-items: center; justify-content: space-between; padding: 4px 28px 0; }
-    .cal-intro { color: hsl(var(--muted-foreground)); font-size: 13px; line-height: 1.55;
-                 max-width: 920px; padding: 14px 28px 4px; margin: 0; }
+    .view-intro { color: hsl(var(--muted-foreground)); font-size: 13px; line-height: 1.55;
+                  max-width: 920px; padding: 14px 28px 4px; margin: 0; }
+    .view-intro .i-edit { opacity: 0; }
+    .view-intro:hover .i-edit { opacity: .55; }
+    .item-acts { position: absolute; top: 12px; right: 12px; display: flex; gap: 4px; opacity: 0; transition: opacity .12s; }
+    .thesis-item:hover .item-acts, .cal-row:hover .item-acts, .gal-item:hover .item-acts { opacity: 1; }
+    .i-edit, .i-del { background: none; border: none; cursor: pointer; color: hsl(var(--muted-foreground));
+                      font-size: 14px; line-height: 1; padding: 2px; transition: color .12s, opacity .12s; }
+    .i-edit:hover { color: hsl(var(--primary)); }
+    .i-del:hover { color: hsl(var(--destructive)); }
+    .edit-foot { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
     .cal-wrap { display: flex; flex-direction: column; gap: 12px; padding: 10px 28px 48px; }
-    .cal-row { background: hsl(var(--card)); border-radius: var(--radius); padding: 16px; }
-    .cal-dim { font-size: 14px; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 12px; }
+    .cal-row { background: hsl(var(--card)); border-radius: var(--radius); padding: 16px;
+               display: flex; flex-direction: column; gap: 12px; }
+    .cal-dim { font-size: 14px; font-weight: 500; letter-spacing: -0.01em; }
     .cal-pair { display: flex; gap: 12px; }
     @media (max-width: 720px) { .cal-pair { flex-direction: column; } }
     .cal-cell { flex: 1; background: hsl(var(--muted)); border-radius: calc(var(--radius) - 2px);
@@ -100,25 +105,21 @@
                      background: hsl(var(--secondary)); padding: 1px 5px; border-radius: 4px; }
     .thesis-wrap { display: flex; flex-direction: column; gap: 12px; padding: 10px 28px 48px; }
     .thesis-item { background: hsl(var(--card)); border-radius: var(--radius); padding: 16px; position: relative; }
-    .thesis-item .t { font-size: 14px; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 6px; cursor: text; border-radius: 4px; }
-    .thesis-item .b { font-size: 13px; line-height: 1.6; color: hsl(var(--muted-foreground)); cursor: text; border-radius: 4px; }
-    .thesis-item .t:hover, .thesis-item .b:hover { background: hsl(var(--foreground) / 0.05); }
-    .thesis-item:hover .cal-del { opacity: .55; }
-    .cal-intro { cursor: text; }
-    .cal-bar { display: flex; align-items: center; gap: 10px; padding: 4px 28px 0; }
-    .cal-bar .dirty-dot { display: none; width: 7px; height: 7px; border-radius: 9999px; background: hsl(var(--warning)); }
-    .cal-bar.is-dirty .dirty-dot { display: inline-block; }
+    .thesis-item .t { font-size: 14px; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 6px; }
+    .thesis-item .b { font-size: 13px; line-height: 1.6; color: hsl(var(--muted-foreground)); }
+    .gal-wrap { display: flex; flex-direction: column; gap: 12px; padding: 10px 28px 48px; }
+    .gal-item { background: hsl(var(--card)); border-radius: var(--radius); padding: 16px; position: relative;
+                display: flex; gap: 16px; align-items: flex-start; }
+    .gal-meta { flex: 1; min-width: 0; }
+    .gal-title { font-size: 14px; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 4px; }
+    .gal-cap { font-size: 13px; line-height: 1.5; color: hsl(var(--muted-foreground)); margin-bottom: 8px; }
+    .gal-url { font-size: 11.5px; color: hsl(var(--primary)); font-family: 'JetBrains Mono', ui-monospace, monospace;
+               word-break: break-all; }
+    .gal-fields { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+    .gal-preview { flex: none; width: 200px; }
+    .gal-preview:empty { width: 0; }
+    .gal-preview img { width: 100%; border-radius: calc(var(--radius) - 2px); display: block; }
     .cal-row { position: relative; }
-    .cal-dim, .cal-cell .body { cursor: text; border-radius: 4px; }
-    .cal-dim:hover, .cal-cell .body:hover { background: hsl(var(--foreground) / 0.05); }
-    .cal-del { position: absolute; top: 12px; right: 12px; background: none; border: none; cursor: pointer;
-               color: hsl(var(--muted-foreground)); font-size: 15px; line-height: 1; opacity: 0; transition: opacity .12s, color .12s; }
-    .cal-row:hover .cal-del { opacity: .55; }
-    .cal-del:hover { color: hsl(var(--destructive)); opacity: 1; }
-    .cal-edit { font: inherit; font-size: 13px; line-height: 1.5; width: 100%; box-sizing: border-box; resize: vertical;
-                background: hsl(var(--secondary)); color: hsl(var(--foreground)); border: 1px solid hsl(var(--primary) / 0.6);
-                border-radius: calc(var(--radius) - 2px); padding: 8px 10px; }
-    .cal-edit:focus { outline: none; border-color: hsl(var(--primary)); }
   </style>
 </head>
 <body>
@@ -140,14 +141,16 @@
       <button class="wtab-text active" data-view="principles">Principles</button>
       <button class="wtab-text" data-view="severity">Rules</button>
       <button class="wtab-text" data-view="calibration">Calibration</button>
+      <button class="wtab-text" data-view="gallery">Gallery</button>
     </div>
     <button class="btn btn-outline btn-sm" id="thesis-add">+ Add principle</button>
     <button class="btn btn-outline btn-sm" id="sev-add" hidden>+ Add rule</button>
     <button class="btn btn-outline btn-sm" id="cal-add" hidden>+ Add dimension</button>
+    <button class="btn btn-outline btn-sm" id="gal-add" hidden>+ Add reference</button>
   </div>
 
   <div id="view-principles">
-    <p class="cal-intro" id="thesis-intro"></p>
+    <p class="view-intro" id="thesis-intro"></p>
     <div class="thesis-wrap" id="thesis-wrap"></div>
   </div>
 
@@ -159,8 +162,13 @@
   </div>
 
   <div id="view-calibration" hidden>
-    <p class="cal-intro" id="cal-intro"></p>
+    <p class="view-intro" id="cal-intro"></p>
     <div class="cal-wrap" id="cal-wrap"></div>
+  </div>
+
+  <div id="view-gallery" hidden>
+    <p class="view-intro" id="gal-intro"></p>
+    <div class="gal-wrap" id="gal-wrap"></div>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -183,7 +191,7 @@
 
     let activeView = 'principles';
     function refreshTopbar() {
-      const d = activeView === 'severity' ? dirty : activeView === 'calibration' ? calDirty : activeView === 'principles' ? thesisDirty : false;
+      const d = activeView === 'severity' ? dirty : activeView === 'calibration' ? calDirty : activeView === 'principles' ? thesisDirty : activeView === 'gallery' ? galDirty : false;
       document.body.classList.toggle('is-dirty', d);
       saveBtn.disabled = !d;
     }
@@ -237,11 +245,11 @@
     }
 
     function startEdit(r, el) {
-      if (el.querySelector('.add-input')) return;
+      if (el.querySelector('.input')) return;
       el.draggable = false;
       el.innerHTML = '';
       const ta = document.createElement('textarea');
-      ta.className = 'add-input'; ta.value = r.text;
+      ta.className = 'input'; ta.value = r.text;
       ta.rows = Math.max(2, Math.ceil(r.text.length / 46));
       el.appendChild(ta);
       ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
@@ -330,43 +338,65 @@
       } else toast('Save failed: ' + (data.error || 'unknown'));
     }
 
+    // --- shared read-first editing: card shows clean text, ✎ swaps it to DS fields ---
+    function editItem(el, specs, onDone) {
+      el.innerHTML = '';
+      const wrap = document.createElement('div'); wrap.className = 'gal-fields';
+      const inputs = {};
+      specs.forEach(s => {
+        const f = document.createElement('div'); f.className = 'field';
+        const lb = document.createElement('label'); lb.className = 'field-label'; lb.textContent = s.label;
+        const inp = document.createElement(s.textarea ? 'textarea' : 'input');
+        inp.className = 'input'; inp.value = s.value || '';
+        if (s.textarea) inp.rows = 3;
+        if (s.placeholder) inp.placeholder = s.placeholder;
+        f.appendChild(lb); f.appendChild(inp); wrap.appendChild(f); inputs[s.key] = inp;
+      });
+      const foot = document.createElement('div'); foot.className = 'edit-foot';
+      const cancel = document.createElement('button'); cancel.className = 'btn btn-secondary btn-sm'; cancel.textContent = 'Cancel';
+      const ok = document.createElement('button'); ok.className = 'btn btn-default btn-sm'; ok.textContent = 'Done';
+      foot.appendChild(cancel); foot.appendChild(ok);
+      el.appendChild(wrap); el.appendChild(foot);
+      inputs[specs[0].key].focus();
+      const commit = () => onDone(Object.fromEntries(specs.map(s => [s.key, inputs[s.key].value.trim()])));
+      ok.addEventListener('click', commit);
+      cancel.addEventListener('click', () => onDone(null));
+      wrap.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && e.target.tagName === 'INPUT') { e.preventDefault(); commit(); }
+        else if (e.key === 'Escape') onDone(null);
+      });
+    }
+
+    function renderIntro(sel, meta, setD, rerender) {
+      const el = $(sel); el.innerHTML = '';
+      const span = document.createElement('span'); span.textContent = meta.intro + ' '; el.appendChild(span);
+      const b = document.createElement('button'); b.className = 'i-edit'; b.title = 'Edit intro'; b.textContent = '✎';
+      b.addEventListener('click', () => editItem(el,
+        [{ label: 'Intro', key: 'intro', value: meta.intro, textarea: true }],
+        vals => { if (vals) { meta.intro = vals.intro; setD(true); } rerender(); }));
+      el.appendChild(b);
+    }
+
     // --- principles (thesis, editable) ---
     let thesisLoaded = false, thesisMeta = { intro: '' }, thesisPrinciples = [], thesisDirty = false;
     function setThesisDirty(v) { thesisDirty = v; refreshTopbar(); }
 
-    function editThesisField(el, obj, key) {
-      if (el.querySelector('.cal-edit')) return;
-      const ta = document.createElement('textarea');
-      ta.className = 'cal-edit'; ta.value = obj[key];
-      ta.rows = Math.max(2, Math.ceil((obj[key].length || 1) / 80));
-      el.innerHTML = ''; el.appendChild(ta);
-      ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
-      let done = false;
-      const commit = () => {
-        if (done) return; done = true;
-        const t = ta.value.trim();
-        if (t !== obj[key]) { obj[key] = t; setThesisDirty(true); }
-        renderThesis();
-      };
-      ta.addEventListener('keydown', e => {
-        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commit(); }
-        else if (e.key === 'Escape') { done = true; renderThesis(); }
-      });
-      ta.addEventListener('blur', commit);
-    }
-
     function renderThesis() {
-      $('#thesis-intro').textContent = thesisMeta.intro;
+      renderIntro('#thesis-intro', thesisMeta, setThesisDirty, renderThesis);
       const w = $('#thesis-wrap'); w.innerHTML = '';
       thesisPrinciples.forEach((p, i) => {
         const el = document.createElement('div'); el.className = 'thesis-item';
         el.innerHTML =
-          `<div class="t" data-k="title">${i + 1}. ${esc(p.title)}</div>` +
-          `<div class="b" data-k="body">${esc(p.body)}</div>` +
-          `<button class="cal-del" title="Delete principle">×</button>`;
-        el.querySelector('[data-k="title"]').addEventListener('click', e => editThesisField(e.currentTarget, p, 'title'));
-        el.querySelector('[data-k="body"]').addEventListener('click', e => editThesisField(e.currentTarget, p, 'body'));
-        el.querySelector('.cal-del').addEventListener('click', () => {
+          `<div class="t">${i + 1}. ${esc(p.title)}</div>` +
+          `<div class="b">${esc(p.body)}</div>` +
+          `<div class="item-acts"><button class="i-edit" title="Edit">✎</button><button class="i-del" title="Delete">×</button></div>`;
+        const openEdit = () => editItem(el, [
+          { label: 'Title', key: 'title', value: p.title },
+          { label: 'Description', key: 'body', value: p.body, textarea: true },
+        ], vals => { if (vals) { p.title = vals.title; p.body = vals.body; setThesisDirty(true); } renderThesis(); });
+        el.querySelector('.i-edit').addEventListener('click', openEdit);
+        el.addEventListener('dblclick', openEdit);
+        el.querySelector('.i-del').addEventListener('click', () => {
           if (!confirm('Delete principle "' + p.title + '"?')) return;
           thesisPrinciples = thesisPrinciples.filter(x => x !== p); renderThesis(); setThesisDirty(true);
         });
@@ -391,50 +421,92 @@
       else toast('Save failed: ' + (d.error || 'unknown'));
     }
 
+    // --- reference gallery (editable) ---
+    let galLoaded = false, galMeta = { intro: '' }, galItems = [], galDirty = false;
+    function setGalDirty(v) { galDirty = v; refreshTopbar(); }
+    function isImg(u) { return /\.(png|jpe?g|webp|gif|svg|avif)(\?|#|$)/i.test(u || ''); }
+
+    function previewInner(url) {
+      if (!url) return '';
+      return isImg(url)
+        ? `<a href="${url}" target="_blank"><img src="${url}" alt="" onerror="this.style.display='none'"></a>`
+        : `<a class="btn btn-outline btn-sm" href="${url}" target="_blank">Open ↗</a>`;
+    }
+
+    function renderGallery() {
+      renderIntro('#gal-intro', galMeta, setGalDirty, renderGallery);
+      const w = $('#gal-wrap'); w.innerHTML = '';
+      galItems.forEach(it => {
+        const el = document.createElement('div'); el.className = 'gal-item';
+        el.innerHTML =
+          `<div class="gal-meta">` +
+            `<div class="gal-title">${esc(it.title)}</div>` +
+            `<div class="gal-cap">${esc(it.caption)}</div>` +
+            `<div class="gal-url">${esc(it.url)}</div>` +
+          `</div>` +
+          `<div class="gal-preview">${previewInner(it.url)}</div>` +
+          `<div class="item-acts"><button class="i-edit" title="Edit">✎</button><button class="i-del" title="Delete">×</button></div>`;
+        const openEdit = () => editItem(el, [
+          { label: 'Title', key: 'title', value: it.title },
+          { label: 'URL', key: 'url', value: it.url, placeholder: 'image, .html page, or Figma link' },
+          { label: 'Caption', key: 'caption', value: it.caption, placeholder: "why it's the standard" },
+        ], vals => { if (vals) { Object.assign(it, vals); setGalDirty(true); } renderGallery(); });
+        el.querySelector('.i-edit').addEventListener('click', openEdit);
+        el.addEventListener('dblclick', openEdit);
+        el.querySelector('.i-del').addEventListener('click', () => {
+          if (!confirm('Delete reference "' + (it.title || 'untitled') + '"?')) return;
+          galItems = galItems.filter(x => x !== it); renderGallery(); setGalDirty(true);
+        });
+        w.appendChild(el);
+      });
+    }
+
+    async function loadGallery() {
+      const d = await (await fetch('/api/gallery')).json();
+      galMeta = { intro: d.intro || '' };
+      galItems = (d.items || []).map(x => ({ ...x }));
+      renderGallery(); setGalDirty(false); galLoaded = true;
+    }
+
+    async function saveGalleryDoc() {
+      const res = await fetch('/api/save-gallery', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ intro: galMeta.intro, items: galItems })
+      });
+      const d = await res.json();
+      if (d.ok) { setGalDirty(false); toast(`Saved · ${galItems.length} references`); }
+      else toast('Save failed: ' + (d.error || 'unknown'));
+    }
+
     // --- tabs + calibration gallery (editable) ---
     let calLoaded = false;
-    let calIntro = '';
+    let calMeta = { intro: '' };
     let calRows = [];                 // [{dimension, gold, slop}] — raw text
     let calDirty = false;
 
     function setCalDirty(v) { calDirty = v; refreshTopbar(); }
 
-    function editField(el, obj, key) {
-      if (el.querySelector('.cal-edit')) return;
-      const ta = document.createElement('textarea');
-      ta.className = 'cal-edit'; ta.value = obj[key];
-      ta.rows = Math.max(2, Math.ceil((obj[key].length || 1) / 42));
-      el.innerHTML = ''; el.appendChild(ta);
-      ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
-      let done = false;
-      const commit = () => {
-        if (done) return; done = true;
-        const t = ta.value.trim();
-        if (t !== obj[key]) { obj[key] = t; setCalDirty(true); }
-        renderCalibration();
-      };
-      ta.addEventListener('keydown', e => {
-        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commit(); }
-        else if (e.key === 'Escape') { done = true; renderCalibration(); }
-      });
-      ta.addEventListener('blur', commit);
-    }
-
     function renderCalibration() {
+      renderIntro('#cal-intro', calMeta, setCalDirty, renderCalibration);
       const wrap = $('#cal-wrap'); wrap.innerHTML = '';
       calRows.forEach(row => {
         const el = document.createElement('div');
         el.className = 'cal-row';
         el.innerHTML =
-          `<div class="cal-dim" data-k="dimension">${esc(row.dimension)}</div>` +
+          `<div class="cal-dim">${esc(row.dimension)}</div>` +
           `<div class="cal-pair">` +
-            `<div class="cal-cell cal-gold"><div class="lab">✓ Gold</div><div class="body" data-k="gold">${esc(row.gold)}</div></div>` +
-            `<div class="cal-cell cal-slop"><div class="lab">✗ Slop</div><div class="body" data-k="slop">${esc(row.slop)}</div></div>` +
+            `<div class="cal-cell cal-gold"><div class="lab">✓ Gold</div>${esc(row.gold)}</div>` +
+            `<div class="cal-cell cal-slop"><div class="lab">✗ Slop</div>${esc(row.slop)}</div>` +
           `</div>` +
-          `<button class="cal-del" title="Delete dimension">×</button>`;
-        el.querySelector('[data-k="dimension"]').addEventListener('click', e => editField(e.currentTarget, row, 'dimension'));
-        el.querySelectorAll('.cal-cell .body').forEach(b => b.addEventListener('click', e => editField(e.currentTarget, row, e.currentTarget.dataset.k)));
-        el.querySelector('.cal-del').addEventListener('click', () => {
+          `<div class="item-acts"><button class="i-edit" title="Edit">✎</button><button class="i-del" title="Delete">×</button></div>`;
+        const openEdit = () => editItem(el, [
+          { label: 'Dimension', key: 'dimension', value: row.dimension },
+          { label: 'Gold', key: 'gold', value: row.gold, textarea: true },
+          { label: 'Slop ("burdo")', key: 'slop', value: row.slop, textarea: true },
+        ], vals => { if (vals) { Object.assign(row, vals); setCalDirty(true); } renderCalibration(); });
+        el.querySelector('.i-edit').addEventListener('click', openEdit);
+        el.addEventListener('dblclick', openEdit);
+        el.querySelector('.i-del').addEventListener('click', () => {
           if (!confirm('Delete dimension "' + row.dimension + '"?')) return;
           calRows = calRows.filter(r => r !== row); renderCalibration(); setCalDirty(true);
         });
@@ -444,9 +516,8 @@
 
     async function loadCalibration() {
       const d = await (await fetch('/api/calibration')).json();
-      calIntro = d.intro || '';
+      calMeta.intro = d.intro || '';
       calRows = (d.rows || []).map(r => ({ ...r }));
-      $('#cal-intro').textContent = calIntro;
       renderCalibration(); setCalDirty(false);
       calLoaded = true;
     }
@@ -454,7 +525,7 @@
     async function saveCalibration() {
       const res = await fetch('/api/save-calibration', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ intro: calIntro, rows: calRows })
+        body: JSON.stringify({ intro: calMeta.intro, rows: calRows })
       });
       const d = await res.json();
       if (d.ok) { setCalDirty(false); toast(`Saved · ${calRows.length} dimensions`); }
@@ -467,28 +538,30 @@
       $('#view-principles').hidden = v !== 'principles';
       $('#view-severity').hidden = v !== 'severity';
       $('#view-calibration').hidden = v !== 'calibration';
+      $('#view-gallery').hidden = v !== 'gallery';
       $('#cal-add').hidden = v !== 'calibration';
       $('#thesis-add').hidden = v !== 'principles';
       $('#sev-add').hidden = v !== 'severity';
+      $('#gal-add').hidden = v !== 'gallery';
       if (v === 'calibration' && !calLoaded) loadCalibration();
       if (v === 'principles' && !thesisLoaded) loadThesis();
+      if (v === 'gallery' && !galLoaded) loadGallery();
       refreshTopbar();
     }));
     $('#cal-add').addEventListener('click', () => {
-      calRows.unshift({ dimension: 'New dimension', gold: '', slop: '' });
+      calRows.unshift({ dimension: '', gold: '', slop: '' });
       renderCalibration(); setCalDirty(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      const first = document.querySelector('#cal-wrap .cal-row:first-child [data-k="dimension"]');
+      const first = document.querySelector('#cal-wrap .cal-row:first-child .i-edit');
       if (first) first.click();
     });
     $('#thesis-add').addEventListener('click', () => {
-      thesisPrinciples.unshift({ title: 'New principle', body: '' });
+      thesisPrinciples.unshift({ title: '', body: '' });
       renderThesis(); setThesisDirty(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      const first = document.querySelector('#thesis-wrap .thesis-item:first-child [data-k="title"]');
+      const first = document.querySelector('#thesis-wrap .thesis-item:first-child .i-edit');
       if (first) first.click();
     });
-    $('#thesis-intro').addEventListener('click', e => editThesisField(e.currentTarget, thesisMeta, 'intro'));
     $('#sev-add').addEventListener('click', () => {
       const r = { id: 'n' + (idSeq++), text: 'New rule', severity: 'hard' };
       byId[r.id] = r; state.hard.unshift(r);
@@ -497,18 +570,26 @@
       const card = document.querySelector('.col[data-sev="hard"] .card');
       if (card) startEdit(r, card);
     });
+    $('#gal-add').addEventListener('click', () => {
+      galItems.unshift({ title: '', url: '', caption: '' });
+      renderGallery(); setGalDirty(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const first = document.querySelector('#gal-wrap .gal-item:first-child .i-edit');
+      if (first) first.click();
+    });
 
     $('#search').addEventListener('input', applyFilter);
     $('#reload').addEventListener('click', () => {
-      if ((dirty || calDirty || thesisDirty) && !confirm('Discard unsaved changes and reload from disk?')) return;
-      load(); if (calLoaded) loadCalibration(); if (thesisLoaded) loadThesis();
+      if ((dirty || calDirty || thesisDirty || galDirty) && !confirm('Discard unsaved changes and reload from disk?')) return;
+      load(); if (calLoaded) loadCalibration(); if (thesisLoaded) loadThesis(); if (galLoaded) loadGallery();
     });
     saveBtn.addEventListener('click', () => {
       if (activeView === 'severity') save();
       else if (activeView === 'calibration') saveCalibration();
       else if (activeView === 'principles') saveThesis();
+      else if (activeView === 'gallery') saveGalleryDoc();
     });
-    window.addEventListener('beforeunload', e => { if (dirty || calDirty || thesisDirty) { e.preventDefault(); e.returnValue = ''; } });
+    window.addEventListener('beforeunload', e => { if (dirty || calDirty || thesisDirty || galDirty) { e.preventDefault(); e.returnValue = ''; } });
 
     load();
     loadThesis();
