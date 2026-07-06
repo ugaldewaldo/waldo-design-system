@@ -68,7 +68,6 @@
     .card .edit:hover { color: hsl(var(--primary)); opacity: 1; }
     .card .del:hover { color: hsl(var(--destructive)); opacity: 1; }
 
-    .col-add { margin-top: 10px; align-self: flex-start; }
     .add-input { font: inherit; font-size: 13px; line-height: 1.5; width: 100%; box-sizing: border-box;
                  resize: vertical; background: hsl(var(--secondary)); color: hsl(var(--foreground));
                  border: 1px solid hsl(var(--primary) / 0.6); border-radius: calc(var(--radius) - 2px);
@@ -99,6 +98,13 @@
     .cal-slop .lab { color: hsl(var(--destructive)); }
     .cal-cell code { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11.5px;
                      background: hsl(var(--secondary)); padding: 1px 5px; border-radius: 4px; }
+    .thesis-wrap { display: flex; flex-direction: column; gap: 12px; padding: 10px 28px 48px; }
+    .thesis-item { background: hsl(var(--card)); border-radius: var(--radius); padding: 16px; position: relative; }
+    .thesis-item .t { font-size: 14px; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 6px; cursor: text; border-radius: 4px; }
+    .thesis-item .b { font-size: 13px; line-height: 1.6; color: hsl(var(--muted-foreground)); cursor: text; border-radius: 4px; }
+    .thesis-item .t:hover, .thesis-item .b:hover { background: hsl(var(--foreground) / 0.05); }
+    .thesis-item:hover .cal-del { opacity: .55; }
+    .cal-intro { cursor: text; }
     .cal-bar { display: flex; align-items: center; gap: 10px; padding: 4px 28px 0; }
     .cal-bar .dirty-dot { display: none; width: 7px; height: 7px; border-radius: 9999px; background: hsl(var(--warning)); }
     .cal-bar.is-dirty .dirty-dot { display: inline-block; }
@@ -131,13 +137,21 @@
 
   <div class="tabsbar">
     <div class="wtabs-text" id="tabs">
-      <button class="wtab-text active" data-view="severity">Severity</button>
+      <button class="wtab-text active" data-view="principles">Principles</button>
+      <button class="wtab-text" data-view="severity">Rules</button>
       <button class="wtab-text" data-view="calibration">Calibration</button>
     </div>
+    <button class="btn btn-outline btn-sm" id="thesis-add">+ Add principle</button>
+    <button class="btn btn-outline btn-sm" id="sev-add" hidden>+ Add rule</button>
     <button class="btn btn-outline btn-sm" id="cal-add" hidden>+ Add dimension</button>
   </div>
 
-  <div id="view-severity">
+  <div id="view-principles">
+    <p class="cal-intro" id="thesis-intro"></p>
+    <div class="thesis-wrap" id="thesis-wrap"></div>
+  </div>
+
+  <div id="view-severity" hidden>
     <div class="toolbar">
       <div class="search-wrap"><input class="input input--ghost" id="search" type="search" placeholder="Filter rules…" autocomplete="off"></div>
     </div>
@@ -167,9 +181,9 @@
               .replace(/`([^`]+)`/g, '<code>$1</code>');
     }
 
-    let activeView = 'severity';
+    let activeView = 'principles';
     function refreshTopbar() {
-      const d = activeView === 'severity' ? dirty : calDirty;
+      const d = activeView === 'severity' ? dirty : activeView === 'calibration' ? calDirty : activeView === 'principles' ? thesisDirty : false;
       document.body.classList.toggle('is-dirty', d);
       saveBtn.disabled = !d;
     }
@@ -192,10 +206,6 @@
         const body = col.querySelector('.col-body');
         for (const r of state[sev]) body.appendChild(cardEl(r));
         wireColumn(col, body);
-        const add = document.createElement('button');
-        add.className = 'col-add btn btn-outline btn-sm'; add.textContent = '+ Add rule';
-        add.addEventListener('click', () => startAdd(col, sev));
-        col.appendChild(add);
         board.appendChild(col);
       }
       countEl.textContent = total + ' rules';
@@ -245,29 +255,6 @@
       ta.addEventListener('keydown', e => {
         if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commit(); }
         else if (e.key === 'Escape') { done = true; render(); }
-      });
-      ta.addEventListener('blur', commit);
-    }
-
-    function startAdd(col, sev) {
-      if (col.querySelector('.add-input')) return;
-      const ta = document.createElement('textarea');
-      ta.className = 'add-input'; ta.rows = 2;
-      ta.placeholder = 'New rule… (Enter to add · Esc to cancel · `code` renders inline)';
-      col.querySelector('.col-body').appendChild(ta);
-      ta.focus();
-      let done = false;
-      const commit = () => {
-        if (done) return; done = true;
-        const text = ta.value.trim(); ta.remove();
-        if (!text) return;
-        const r = { id: 'n' + (idSeq++), text, severity: sev };
-        byId[r.id] = r; state[sev].push(r);
-        render(); setDirty(true);
-      };
-      ta.addEventListener('keydown', e => {
-        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commit(); }
-        else if (e.key === 'Escape') { done = true; ta.remove(); }
       });
       ta.addEventListener('blur', commit);
     }
@@ -343,6 +330,67 @@
       } else toast('Save failed: ' + (data.error || 'unknown'));
     }
 
+    // --- principles (thesis, editable) ---
+    let thesisLoaded = false, thesisMeta = { intro: '' }, thesisPrinciples = [], thesisDirty = false;
+    function setThesisDirty(v) { thesisDirty = v; refreshTopbar(); }
+
+    function editThesisField(el, obj, key) {
+      if (el.querySelector('.cal-edit')) return;
+      const ta = document.createElement('textarea');
+      ta.className = 'cal-edit'; ta.value = obj[key];
+      ta.rows = Math.max(2, Math.ceil((obj[key].length || 1) / 80));
+      el.innerHTML = ''; el.appendChild(ta);
+      ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
+      let done = false;
+      const commit = () => {
+        if (done) return; done = true;
+        const t = ta.value.trim();
+        if (t !== obj[key]) { obj[key] = t; setThesisDirty(true); }
+        renderThesis();
+      };
+      ta.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); commit(); }
+        else if (e.key === 'Escape') { done = true; renderThesis(); }
+      });
+      ta.addEventListener('blur', commit);
+    }
+
+    function renderThesis() {
+      $('#thesis-intro').textContent = thesisMeta.intro;
+      const w = $('#thesis-wrap'); w.innerHTML = '';
+      thesisPrinciples.forEach((p, i) => {
+        const el = document.createElement('div'); el.className = 'thesis-item';
+        el.innerHTML =
+          `<div class="t" data-k="title">${i + 1}. ${esc(p.title)}</div>` +
+          `<div class="b" data-k="body">${esc(p.body)}</div>` +
+          `<button class="cal-del" title="Delete principle">×</button>`;
+        el.querySelector('[data-k="title"]').addEventListener('click', e => editThesisField(e.currentTarget, p, 'title'));
+        el.querySelector('[data-k="body"]').addEventListener('click', e => editThesisField(e.currentTarget, p, 'body'));
+        el.querySelector('.cal-del').addEventListener('click', () => {
+          if (!confirm('Delete principle "' + p.title + '"?')) return;
+          thesisPrinciples = thesisPrinciples.filter(x => x !== p); renderThesis(); setThesisDirty(true);
+        });
+        w.appendChild(el);
+      });
+    }
+
+    async function loadThesis() {
+      const d = await (await fetch('/api/thesis')).json();
+      thesisMeta = { intro: d.intro || '' };
+      thesisPrinciples = (d.principles || []).map(p => ({ ...p }));
+      renderThesis(); setThesisDirty(false); thesisLoaded = true;
+    }
+
+    async function saveThesis() {
+      const res = await fetch('/api/save-thesis', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ intro: thesisMeta.intro, principles: thesisPrinciples })
+      });
+      const d = await res.json();
+      if (d.ok) { setThesisDirty(false); toast(`Saved · ${thesisPrinciples.length} principles`); }
+      else toast('Save failed: ' + (d.error || 'unknown'));
+    }
+
     // --- tabs + calibration gallery (editable) ---
     let calLoaded = false;
     let calIntro = '';
@@ -416,10 +464,14 @@
       document.querySelectorAll('#tabs .wtab-text').forEach(x => x.classList.toggle('active', x === b));
       const v = b.dataset.view;
       activeView = v;
+      $('#view-principles').hidden = v !== 'principles';
       $('#view-severity').hidden = v !== 'severity';
       $('#view-calibration').hidden = v !== 'calibration';
       $('#cal-add').hidden = v !== 'calibration';
+      $('#thesis-add').hidden = v !== 'principles';
+      $('#sev-add').hidden = v !== 'severity';
       if (v === 'calibration' && !calLoaded) loadCalibration();
+      if (v === 'principles' && !thesisLoaded) loadThesis();
       refreshTopbar();
     }));
     $('#cal-add').addEventListener('click', () => {
@@ -429,16 +481,37 @@
       const first = document.querySelector('#cal-wrap .cal-row:first-child [data-k="dimension"]');
       if (first) first.click();
     });
+    $('#thesis-add').addEventListener('click', () => {
+      thesisPrinciples.unshift({ title: 'New principle', body: '' });
+      renderThesis(); setThesisDirty(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const first = document.querySelector('#thesis-wrap .thesis-item:first-child [data-k="title"]');
+      if (first) first.click();
+    });
+    $('#thesis-intro').addEventListener('click', e => editThesisField(e.currentTarget, thesisMeta, 'intro'));
+    $('#sev-add').addEventListener('click', () => {
+      const r = { id: 'n' + (idSeq++), text: 'New rule', severity: 'hard' };
+      byId[r.id] = r; state.hard.unshift(r);
+      render(); setDirty(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const card = document.querySelector('.col[data-sev="hard"] .card');
+      if (card) startEdit(r, card);
+    });
 
     $('#search').addEventListener('input', applyFilter);
     $('#reload').addEventListener('click', () => {
-      if ((dirty || calDirty) && !confirm('Discard unsaved changes and reload from disk?')) return;
-      load(); if (calLoaded) loadCalibration();
+      if ((dirty || calDirty || thesisDirty) && !confirm('Discard unsaved changes and reload from disk?')) return;
+      load(); if (calLoaded) loadCalibration(); if (thesisLoaded) loadThesis();
     });
-    saveBtn.addEventListener('click', () => activeView === 'severity' ? save() : saveCalibration());
-    window.addEventListener('beforeunload', e => { if (dirty || calDirty) { e.preventDefault(); e.returnValue = ''; } });
+    saveBtn.addEventListener('click', () => {
+      if (activeView === 'severity') save();
+      else if (activeView === 'calibration') saveCalibration();
+      else if (activeView === 'principles') saveThesis();
+    });
+    window.addEventListener('beforeunload', e => { if (dirty || calDirty || thesisDirty) { e.preventDefault(); e.returnValue = ''; } });
 
     load();
+    loadThesis();
   </script>
 </body>
 </html>

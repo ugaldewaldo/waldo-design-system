@@ -21,31 +21,14 @@ Design rules for Brand API prototypes (Promo Radar, Prospector, Moodtape, Poppi 
 
 ## Aesthetic thesis — the north
 
-A Waldo dashboard is a quiet instrument for an operator who lives inside it. It earns
-trust by receding: the interface is the frame, the data is the subject. Every rule below
-derives from this — when a rule doesn't cover your case, resolve it toward this.
+A Waldo dashboard is a quiet instrument for an operator who lives inside it. It earns trust by receding: the interface is the frame, the data is the subject. Every rule below derives from this — when a rule doesn't cover your case, resolve it toward this.
 
-1. **Restraint is the default.** The most common way a dashboard fails is by trying too
-   hard — thick ink, bold everything, decoration standing in for hierarchy. We call that
-   "burdo." Quiet is not empty; quiet is confident. When in doubt, go lighter, thinner,
-   fewer.
-2. **Dark, dense, tool-first.** These are instruments for professionals, not marketing
-   pages. High information density on zinc surfaces, Inter throughout, no ornament. We
-   share Linear's DNA on purpose: the product should feel fast, sharp, and built for
-   someone who returns to it daily.
-3. **Structure through elevation and space — never lines.** Hierarchy comes from surface
-   steps (background → card → muted → secondary), spacing, and type weight. A border is
-   an admission that the layout didn't separate on its own. The shell is borderless.
-4. **Data reads light.** The chart is the point, so the chart whispers — hairline strokes,
-   regular-weight numbers, tabular figures, subtle gridlines. Saturated color is a scarce
-   resource, spent only on what matters most (you, the client brand). Everything else is
-   neutral.
-5. **One system, reused — never reinvented.** Consistency beats cleverness. Nothing is
-   built that the DS already ships; nothing is styled off-token. A prototype that looks
-   like it always belonged to the family beats a clever one-off.
-6. **Craft is the product.** These are sales tools — the visual bar is the pitch.
-   Determinism is part of the craft: seeded data, verified paint, identical on every
-   reload. A demo that flickers or drifts reads as broken, no matter how good the idea.
+1. **Restraint is the default.** The most common way a dashboard fails is by trying too hard — thick ink, bold everything, decoration standing in for hierarchy. We call that "burdo." Quiet is not empty; quiet is confident. When in doubt, go lighter, thinner, fewer.
+2. **Dark, dense, tool-first.** These are instruments for professionals, not marketing pages. High information density on zinc surfaces, Inter throughout, no ornament. We share Linear's DNA on purpose: the product should feel fast, sharp, and built for someone who returns to it daily.
+3. **Structure through elevation and space — never lines.** Hierarchy comes from surface steps (background → card → muted → secondary), spacing, and type weight. A border is an admission that the layout didn't separate on its own. The shell is borderless.
+4. **Data reads light.** The chart is the point, so the chart whispers — hairline strokes, regular-weight numbers, tabular figures, subtle gridlines. Saturated color is a scarce resource, spent only on what matters most (you, the client brand). Everything else is neutral.
+5. **One system, reused — never reinvented.** Consistency beats cleverness. Nothing is built that the DS already ships; nothing is styled off-token. A prototype that looks like it always belonged to the family beats a clever one-off.
+6. **Craft is the product.** These are sales tools — the visual bar is the pitch. Determinism is part of the craft: seeded data, verified paint, identical on every reload. A demo that flickers or drifts reads as broken, no matter how good the idea.
 
 ---
 

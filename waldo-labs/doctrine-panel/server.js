@@ -82,6 +82,42 @@ function saveCalibration(intro, rows) {
   fs.writeFileSync(DOCTRINE, result);
 }
 
+function parseThesis(text) {
+  const lines = text.split('\n');
+  const sec = findSectionBy(lines, /^##\s+Aesthetic thesis\b/);
+  if (!sec) return { intro: '', principles: [] };
+  const intro = []; const principles = []; let cur = null; let inList = false;
+  for (let i = sec.start + 1; i < sec.end; i++) {
+    const ln = lines[i]; const t = ln.trim();
+    const m = t.match(/^\d+\.\s+\*\*(.+?)\*\*\s*(.*)$/);
+    if (m) { if (cur) principles.push(cur); cur = { title: m[1].replace(/\.$/, ''), body: m[2] }; inList = true; }
+    else if (cur && /^\s+\S/.test(ln)) { cur.body += ' ' + t; }
+    else if (!inList && t && !t.startsWith('#') && t !== '---') { intro.push(t); }
+  }
+  if (cur) principles.push(cur);
+  return { intro: intro.join(' '), principles };
+}
+
+function saveThesis(intro, principles) {
+  const text = fs.readFileSync(DOCTRINE, 'utf8');
+  const lines = text.split('\n');
+  const sec = findSectionBy(lines, /^##\s+Aesthetic thesis\b/);
+  if (!sec) throw new Error('Aesthetic thesis section not found');
+  fs.writeFileSync(DOCTRINE + '.bak', text);
+  const clean = s => String(s || '').replace(/\s+/g, ' ').trim();
+  const out = [lines[sec.start], ''];
+  const it = clean(intro);
+  if (it) out.push(it, '');
+  principles.forEach((p, i) => out.push(`${i + 1}. **${clean(p.title).replace(/\.$/, '')}.** ${clean(p.body)}`));
+  out.push('', '---', '');
+  const before = lines.slice(0, sec.start).join('\n').replace(/\n+$/, '');
+  const after = lines.slice(sec.end).join('\n');
+  let result = before + '\n\n' + out.join('\n');
+  if (after.trim()) result += '\n' + after;
+  if (!result.endsWith('\n')) result += '\n';
+  fs.writeFileSync(DOCTRINE, result);
+}
+
 function parseRules(text) {
   const lines = text.split('\n');
   const sec = findSection(lines);
@@ -149,7 +185,7 @@ function sendJSON(res, code, obj) {
   res.end(JSON.stringify(obj));
 }
 
-if (require.main !== module) { module.exports = { parseRules, buildSection, findSection, parseCalibration, saveCalibration }; return; }
+if (require.main !== module) { module.exports = { parseRules, buildSection, findSection, parseCalibration, saveCalibration, parseThesis, saveThesis }; return; }
 
 http.createServer((req, res) => {
   const u = new URL(req.url, 'http://localhost');
@@ -158,6 +194,20 @@ http.createServer((req, res) => {
   if (req.method === 'GET' && u.pathname === '/api/rules') {
     try { sendJSON(res, 200, { rules: parseRules(fs.readFileSync(DOCTRINE, 'utf8')), tiers: TIER_META }); }
     catch (e) { sendJSON(res, 500, { error: String(e) }); }
+    return;
+  }
+  if (req.method === 'GET' && u.pathname === '/api/thesis') {
+    try { sendJSON(res, 200, parseThesis(fs.readFileSync(DOCTRINE, 'utf8'))); }
+    catch (e) { sendJSON(res, 500, { error: String(e) }); }
+    return;
+  }
+  if (req.method === 'POST' && u.pathname === '/api/save-thesis') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      try { const { intro, principles } = JSON.parse(body); saveThesis(intro, principles); sendJSON(res, 200, { ok: true, count: principles.length }); }
+      catch (e) { sendJSON(res, 500, { error: String(e) }); }
+    });
     return;
   }
   if (req.method === 'GET' && u.pathname === '/api/calibration') {
