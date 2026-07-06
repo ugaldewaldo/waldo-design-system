@@ -39,7 +39,7 @@
 
 <!-- Components panel -->
 <div id="tb-panel-components" class="tb-panel">
-<div id="wb-sidebar" class="wnav-panel plain" style="margin:8px 8px 8px 40px;height:calc(100vh - 16px);padding:8px 0;">
+<div id="wb-sidebar" class="wnav-panel" style="margin:8px 8px 8px 40px;height:calc(100vh - 16px);border-radius:var(--radius-3xl);padding:8px 0;">
   <div class="wnav-search">
     <div class="input-with-icon">
       <div class="input-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
@@ -8599,6 +8599,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <button class="sb-item" onclick="brandApiGo('comp-brand-column',this)">Brand Column</button>
     <button class="sb-item" onclick="brandApiGo('comp-code-block',this)">Code Block</button>
     <button class="sb-item" onclick="brandApiGo('comp-comment-card',this)">Comment Card</button>
+    <button class="sb-item" onclick="brandApiGo('comp-community-banner',this)">Community Banner</button>
     <button class="sb-item" onclick="brandApiGo('comp-copy-link',this)">Copy Link</button>
     <button class="sb-item" onclick="brandApiGo('comp-depth-pill',this)">Depth Pill</button>
     <button class="sb-item" onclick="brandApiGo('comp-drill-panel',this)">Drill Panel</button>
@@ -8607,10 +8608,14 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <button class="sb-item" onclick="brandApiGo('comp-leaderboard-row',this)">Leaderboard Row</button>
     <button class="sb-item" onclick="brandApiGo('comp-live-badge',this)">Live Badge</button>
     <button class="sb-item" onclick="brandApiGo('comp-media-tile',this)">Media Tile</button>
+    <button class="sb-item" onclick="brandApiGo('comp-opportunity-card',this)">Opportunity Card</button>
     <button class="sb-item" onclick="brandApiGo('comp-quote-card',this)">Quote Card</button>
     <button class="sb-item" onclick="brandApiGo('comp-recommendation-card',this)">Recommendation Card</button>
     <button class="sb-item" onclick="brandApiGo('comp-score-ring',this)">Score Ring</button>
     <button class="sb-item" onclick="brandApiGo('comp-theme-pill',this)">Theme Pill</button>
+    <button class="sb-item" onclick="brandApiGo('comp-threaded-comment',this)">Threaded Comment</button>
+    <button class="sb-item" onclick="brandApiGo('comp-tracker-item',this)">Tracker Item</button>
+    <button class="sb-item" onclick="brandApiGo('comp-vote-column',this)">Vote Column</button>
     <button class="sb-item" onclick="brandApiGo('comp-waldo-logo',this)">Waldo Logo</button>
     </div>
   </div>
@@ -10791,6 +10796,355 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
 <!-- Live Badge -->
 </div>
+</div>
+
+<div id="comp-community-banner" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Community Banner</div>
+    <div class="page-desc">Header card for a community / space / audience page: neutral cover strip, overlapping ringed avatar, name, meta row (badge + muted count), and a right-aligned action. Card surface stays neutral — no accent tints per doctrine.</div>
+  </div>
+
+  <style>
+    .cbanner { border-radius: 16px; overflow: hidden; background: hsl(var(--card)); max-width: 560px; width: 100%; }
+    .cbanner-cover { height: 88px; background: hsl(var(--secondary)); background-image: radial-gradient(hsl(var(--foreground) / 0.06) 1px, transparent 1px); background-size: 14px 14px; }
+    .cbanner-row { display: flex; align-items: flex-end; gap: 14px; padding: 0 18px 14px; margin-top: -26px; position: relative; }
+    .cbanner-avatar { background: hsl(var(--primary)); color: hsl(var(--background)); box-shadow: 0 0 0 3px hsl(var(--card)); border-color: transparent; }
+    .cbanner-meta { flex: 1; padding-bottom: 2px; min-width: 0; }
+    .cbanner-meta h3 { font-size: var(--fs-2xl); font-weight: 600; letter-spacing: -0.02em; margin: 0; line-height: 1.2; }
+    .cbanner-sub { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+    .cbanner-members { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+    .cbanner-members b { color: hsl(var(--foreground)); font-weight: 600; font-variant-numeric: tabular-nums; }
+    .cbanner-join { margin-left: auto; flex: none; }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div class="cbanner">
+          <div class="cbanner-cover"></div>
+          <div class="cbanner-row">
+            <div class="avatar av-2xl cbanner-avatar">G</div>
+            <div class="cbanner-meta">
+              <h3>r/glossier</h3>
+              <div class="cbanner-sub">
+                <span class="badge badge-active">◆ simulated community</span>
+                <span class="cbanner-members">grounded in <b>76k</b> real r/glossier accounts</span>
+                <button class="btn btn-secondary btn-sm cbanner-join">Joined</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;div class="cbanner" /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;cbanner&quot;&gt;\n  &lt;div class=&quot;cbanner-cover&quot;&gt;&lt;/div&gt;\n  &lt;div class=&quot;cbanner-row&quot;&gt;\n    &lt;div class=&quot;avatar av-2xl cbanner-avatar&quot;&gt;G&lt;/div&gt;\n    &lt;div class=&quot;cbanner-meta&quot;&gt;\n      &lt;h3&gt;r/glossier&lt;/h3&gt;\n      &lt;div class=&quot;cbanner-sub&quot;&gt;...&lt;/div&gt;\n    &lt;/div&gt;\n  &lt;/div&gt;\n&lt;/div&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="comp-opportunity-card" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Opportunity Card</div>
+    <div class="page-desc">A review-queue item pairing a source conversation with an AI-drafted response awaiting human review. Meta row (favicon + source + recency + match badge), title, muted excerpt, a translucent draft block, and an action row. Match badge = <code>badge-active</code> at 0.85+. Card surface stays neutral in every state.</div>
+  </div>
+
+  <style>
+    .opp-card { background: hsl(var(--card)); border-radius: 16px; padding: 20px 24px; max-width: 640px; width: 100%; transition: background .14s; }
+    .opp-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--card))); }
+    .opp-card.is-skipped { opacity: .45; }
+    .opp-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .opp-favicon { width: 14px; height: 14px; border-radius: 2px; flex: none; }
+    .opp-source { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); }
+    .opp-time { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); opacity: .6; }
+    .opp-match { margin-left: auto; flex: none; }
+    .opp-title { font-size: var(--fs-base); font-weight: 500; letter-spacing: -0.02em; line-height: 1.45; margin-top: 12px; }
+    .opp-excerpt { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); line-height: 1.55; margin-top: 5px; }
+    .opp-draft { background: color-mix(in srgb, hsl(var(--foreground)) 5%, transparent); border-radius: var(--radius-lg); padding: 14px 16px; margin-top: 14px; }
+    .opp-draft-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: hsl(var(--primary)); display: flex; align-items: center; gap: 6px; margin-bottom: 7px; }
+    .opp-draft-label svg { width: 12px; height: 12px; }
+    .opp-draft-ref { color: hsl(var(--muted-foreground)); text-transform: none; letter-spacing: -0.01em; font-weight: 400; }
+    .opp-draft p { font-size: var(--fs-sm); line-height: 1.6; color: hsl(var(--foreground)); margin: 0; }
+    .opp-actions { display: flex; align-items: center; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid hsl(var(--border)); }
+    .opp-teach { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-left: auto; }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Default</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div class="opp-card">
+          <div class="opp-meta">
+            <img class="opp-favicon" src="https://www.google.com/s2/favicons?domain=reddit.com&amp;sz=64" alt="Reddit">
+            <span class="opp-source">r/startups · Reddit</span>
+            <span class="opp-time">24 replies · 2h ago</span>
+            <span class="opp-match badge badge-active badge-sm">92% match</span>
+          </div>
+          <div class="opp-title">Does posting on LinkedIn every day actually move the needle, or is it just vanity?</div>
+          <div class="opp-excerpt">"Everyone says consistency wins, but I've been posting daily for 4 months and pipeline hasn't moved. What am I missing?"</div>
+          <div class="opp-draft">
+            <div class="opp-draft-label">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+              Draft ready <span class="opp-draft-ref">· grounded in "Daily cadence is the wrong thing to optimize"</span>
+            </div>
+            <p>Daily cadence is the wrong thing to optimize. Reach you can't defend is vanity; a take your peers actually argue with in the comments is distribution. I'd post a quarter as often and say something I'm willing to be wrong about.</p>
+          </div>
+          <div class="opp-actions">
+            <button class="btn btn-default btn-sm">Edit &amp; post</button>
+            <button class="btn btn-secondary btn-sm">Skip</button>
+            <span class="opp-teach">Your edits teach the style guide. Nothing posts without you.</span>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;div class="opp-card" /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;opp-card&quot;&gt;\n  &lt;div class=&quot;opp-meta&quot;&gt;...&lt;/div&gt;\n  &lt;div class=&quot;opp-title&quot;&gt;...&lt;/div&gt;\n  &lt;div class=&quot;opp-excerpt&quot;&gt;...&lt;/div&gt;\n  &lt;div class=&quot;opp-draft&quot;&gt;...&lt;/div&gt;\n  &lt;div class=&quot;opp-actions&quot;&gt;...&lt;/div&gt;\n&lt;/div&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Skipped — is-skipped</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div class="opp-card is-skipped">
+          <div class="opp-meta">
+            <img class="opp-favicon" src="https://www.google.com/s2/favicons?domain=tiktok.com&amp;sz=64" alt="TikTok">
+            <span class="opp-source">@fitcheck.daily · TikTok</span>
+            <span class="opp-time">8 replies · 6h ago</span>
+            <span class="opp-match badge badge-secondary badge-sm">61% match</span>
+          </div>
+          <div class="opp-title">Which prebiotic soda actually tastes good and isn't just hype?</div>
+          <div class="opp-excerpt">"Tried Poppi and Olipop back to back — genuinely can't tell which one people prefer anymore."</div>
+          <div class="opp-actions">
+            <button class="btn btn-secondary btn-sm">Restore</button>
+            <span class="opp-teach">Skipped items drop to 45% opacity and move to the bottom of the queue.</span>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;div class="opp-card is-skipped" /&gt; — dismissed from the queue</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;opp-card is-skipped&quot;&gt;...&lt;/div&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="comp-threaded-comment" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Threaded Comment</div>
+    <div class="page-desc">Nested discussion thread with a collapsible rail: avatar + collapse line, username, flair pill, receipt badge, tabular karma, time, and 16px-indented children. Cast identity uses <code>--chart-1..12</code> as a categorical tint (avatar + flair share it). Distinct from Comment Card, which is a flat mention feed card.</div>
+  </div>
+
+  <style>
+    .thread { margin-top: 4px; font-size: var(--fs-sm); line-height: 1.5; max-width: 560px; width: 100%; }
+    .thread-row { display: flex; gap: 9px; }
+    .thread-rail { flex: none; width: 32px; display: flex; flex-direction: column; align-items: center; padding-top: 3px; }
+    .thread-line { border: none; padding: 0; width: 2px; flex: 1; background: hsl(var(--border)); margin: 6px 0 0; border-radius: 2px; cursor: pointer; transition: background 0.12s; }
+    .thread-line:hover { background: hsl(var(--primary)); }
+    .thread-main { flex: 1; min-width: 0; padding-bottom: 8px; }
+    .thread-head { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+    .thread-user { font-weight: 600; color: hsl(var(--foreground)); cursor: pointer; border-bottom: 1px dotted hsl(var(--muted-foreground)); transition: color 0.12s, border-color 0.12s; }
+    .thread-user:hover { color: hsl(var(--primary)); border-bottom-color: hsl(var(--primary)); }
+    .thread-flair { font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 7px; border-radius: var(--radius-full); }
+    .thread-karma { font-variant-numeric: tabular-nums; }
+    .thread-dot { color: hsl(var(--muted-foreground)); opacity: 0.6; }
+    .thread-text { margin: 5px 0 2px; color: hsl(var(--foreground) / 0.9); font-size: var(--fs-sm); line-height: 1.55; }
+    .thread-foot { display: flex; align-items: center; gap: 14px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 5px; }
+    .thread-act { cursor: pointer; transition: color 0.12s; }
+    .thread-act:hover { color: hsl(var(--foreground)); }
+    .thread-children { margin-left: 16px; }
+    .thread.collapsed > .thread-row > .thread-main > .thread-text,
+    .thread.collapsed > .thread-row > .thread-main > .thread-foot,
+    .thread.collapsed > .thread-row > .thread-main > .thread-children { display: none; }
+    .thread.collapsed > .thread-row > .thread-rail > .thread-line { display: none; }
+    .thread-stub { display: none; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+    .thread.collapsed > .thread-row > .thread-main > .thread-stub { display: block; margin-top: 4px; }
+    .thread-cast-1 { background: hsl(var(--chart-1) / 0.15); color: hsl(var(--chart-1)); border-color: transparent; }
+    .thread-cast-8 { background: hsl(var(--chart-8) / 0.15); color: hsl(var(--chart-8)); border-color: transparent; }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Nested thread — click the rail to collapse</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div class="thread">
+          <div class="thread-row">
+            <div class="thread-rail"><div class="avatar av-md thread-cast-1">g</div><button class="thread-line" onclick="this.closest('.thread').classList.toggle('collapsed')" aria-label="Collapse thread"></button></div>
+            <div class="thread-main">
+              <div class="thread-head"><span class="thread-user">u/softlaunch16</span><span class="thread-flair thread-cast-1">Since 2016</span><span class="badge badge-active badge-sm">◆ real account</span><span class="thread-dot">·</span><span class="thread-karma">734 pts</span><span class="thread-dot">·</span><span>4h</span></div>
+              <div class="thread-text">the whole appeal was that it felt simple and personal — plastering the logo on branded merch misses the point entirely. hard pass.</div>
+              <div class="thread-stub">[+] thread collapsed</div>
+              <div class="thread-foot"><span class="thread-act">↩ reply</span><span class="thread-act">⚑</span><span class="thread-act">···</span></div>
+              <div class="thread-children">
+                <div class="thread">
+                  <div class="thread-row">
+                    <div class="thread-rail"><div class="avatar av-md thread-cast-8">j</div><button class="thread-line" onclick="this.closest('.thread').classList.toggle('collapsed')" aria-label="Collapse thread"></button></div>
+                    <div class="thread-main">
+                      <div class="thread-head"><span class="thread-user">u/glossierfan</span><span class="thread-flair thread-cast-8">Save the Balm</span><span class="thread-dot">·</span><span class="thread-karma">281 pts</span><span class="thread-dot">·</span><span>3h</span></div>
+                      <div class="thread-text">exactly?? i want the actual products restocked, not another branded tote bag.</div>
+                      <div class="thread-stub">[+] thread collapsed</div>
+                      <div class="thread-foot"><span class="thread-act">↩ reply</span><span class="thread-act">⚑</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;div class="thread" /&gt; — nest &lt;div class="thread"&gt; inside .thread-children</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;thread&quot;&gt;\n  &lt;div class=&quot;thread-row&quot;&gt;\n    &lt;div class=&quot;thread-rail&quot;&gt;...&lt;/div&gt;\n    &lt;div class=&quot;thread-main&quot;&gt;...&lt;/div&gt;\n  &lt;/div&gt;\n&lt;/div&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="comp-tracker-item" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Tracker Item</div>
+    <div class="page-desc">A saved watch / tracker row: query + kind/status badges, meta line, an embedded Sparkline, and icon actions (pause / archive / delete — delete hover is destructive). Status encodes via row opacity (<code>.paused</code> 0.7 · <code>.archived</code> 0.45). Counter tiles summarize by status.</div>
+  </div>
+
+  <style>
+    .tracker-list { display: flex; flex-direction: column; gap: 10px; max-width: 560px; width: 100%; }
+    .tracker-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: var(--radius-xl); background: hsl(var(--card)); cursor: pointer; transition: background 0.12s; }
+    .tracker-item:hover { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--card))); }
+    .tracker-item.paused { opacity: 0.7; }
+    .tracker-item.archived { opacity: 0.45; }
+    .tracker-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+    .tracker-name { font-size: var(--fs-sm); font-weight: 600; color: hsl(var(--foreground)); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .tracker-meta { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+    .tracker-actions { display: flex; gap: 2px; flex: none; }
+    .tracker-btn { width: 28px; height: 28px; background: transparent; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: var(--radius-md); color: hsl(var(--muted-foreground)); transition: background 0.12s, color 0.12s; padding: 0; }
+    .tracker-btn:hover { background: hsl(var(--foreground) / 0.08); color: hsl(var(--foreground)); }
+    .tracker-btn.del:hover { background: hsl(var(--destructive) / 0.10); color: hsl(var(--destructive)); }
+    .tracker-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .tracker-counters { display: flex; gap: 12px; max-width: 560px; width: 100%; margin-top: 14px; }
+    .tracker-counter { flex: 1; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: var(--radius-xl); background: hsl(var(--card)); }
+    .tracker-counter-label { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); }
+    .tracker-counter-val { font-size: var(--fs-xl); font-weight: 600; color: hsl(var(--foreground)); font-variant-numeric: tabular-nums; }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Tracker list + status counters</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="flex-direction:column;align-items:flex-start;gap:0">
+        <div class="tracker-list">
+          <div class="tracker-item" role="button" tabindex="0">
+            <div class="tracker-main">
+              <div class="tracker-name">poppi <span class="badge badge-secondary badge-sm">Search</span> <span class="badge badge-active badge-sm">active</span></div>
+              <div class="tracker-meta">checks daily · created May 12, 2026</div>
+            </div>
+            <div class="spk" data-spark="12,14,15,18,22,27,31,36" data-dir="up"></div>
+            <div class="tracker-actions">
+              <button class="tracker-btn" title="Pause" type="button"><svg viewBox="0 0 16 16"><path d="M5 3v10M11 3v10"/></svg></button>
+              <button class="tracker-btn" title="Archive" type="button"><svg viewBox="0 0 16 16"><path d="M2 4h12v3H2zM3 7v6h10V7M6.5 10h3"/></svg></button>
+              <button class="tracker-btn del" title="Delete" type="button"><svg viewBox="0 0 16 16"><path d="M2 4h12M5 4V2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5V4M6 7v5M10 7v5M3 4l.8 8.5a.5.5 0 0 0 .5.5h7.4a.5.5 0 0 0 .5-.5L13 4"/></svg></button>
+            </div>
+          </div>
+          <div class="tracker-item paused" role="button" tabindex="0">
+            <div class="tracker-main">
+              <div class="tracker-name">pepsi prebiotic <span class="badge badge-secondary badge-sm">Competitor</span> <span class="badge badge-highlight badge-sm">paused</span></div>
+              <div class="tracker-meta">checks weekly · created May 9, 2026</div>
+            </div>
+            <div class="spk" data-spark="40,41,39,40,38,37,36,35" data-dir="dn"></div>
+            <div class="tracker-actions">
+              <button class="tracker-btn" title="Resume" type="button"><svg viewBox="0 0 16 16"><path d="M5 3l8 5-8 5z"/></svg></button>
+              <button class="tracker-btn" title="Archive" type="button"><svg viewBox="0 0 16 16"><path d="M2 4h12v3H2zM3 7v6h10V7M6.5 10h3"/></svg></button>
+              <button class="tracker-btn del" title="Delete" type="button"><svg viewBox="0 0 16 16"><path d="M2 4h12M5 4V2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5V4M6 7v5M10 7v5M3 4l.8 8.5a.5.5 0 0 0 .5.5h7.4a.5.5 0 0 0 .5-.5L13 4"/></svg></button>
+            </div>
+          </div>
+          <div class="tracker-item archived" role="button" tabindex="0">
+            <div class="tracker-main">
+              <div class="tracker-name">olipop launch <span class="badge badge-secondary badge-sm">Competitor</span> <span class="badge badge-secondary badge-sm">archived</span></div>
+              <div class="tracker-meta">archived Apr 28, 2026</div>
+            </div>
+            <div class="spk" data-spark="20,21,20,22,21,22,23,22" data-dir="up"></div>
+            <div class="tracker-actions">
+              <button class="tracker-btn" title="Restore" type="button"><svg viewBox="0 0 16 16"><path d="M3 8a5 5 0 1 1 1.5 3.6M3 8V4.5M3 8h3.5"/></svg></button>
+              <button class="tracker-btn del" title="Delete" type="button"><svg viewBox="0 0 16 16"><path d="M2 4h12M5 4V2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5V4M6 7v5M10 7v5M3 4l.8 8.5a.5.5 0 0 0 .5.5h7.4a.5.5 0 0 0 .5-.5L13 4"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="tracker-counters">
+          <div class="tracker-counter"><span class="tracker-counter-label">Active</span><span class="tracker-counter-val">3</span></div>
+          <div class="tracker-counter"><span class="tracker-counter-label">Paused</span><span class="tracker-counter-val">1</span></div>
+          <div class="tracker-counter"><span class="tracker-counter-label">Archived</span><span class="tracker-counter-val">2</span></div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;div class="tracker-item" /&gt; — embeds .spk (Sparkline)</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;tracker-item&quot;&gt;\n  &lt;div class=&quot;tracker-main&quot;&gt;...&lt;/div&gt;\n  &lt;div class=&quot;spk&quot; data-spark=&quot;12,14,15,18&quot; data-dir=&quot;up&quot;&gt;&lt;/div&gt;\n  &lt;div class=&quot;tracker-actions&quot;&gt;...&lt;/div&gt;\n&lt;/div&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    function sparkline(el){
+      var data = el.getAttribute('data-spark').split(',').map(Number);
+      var dir = el.getAttribute('data-dir');
+      var W = 88, H = 26, padX = 2, padY = 4;
+      var minV = Math.min.apply(null, data), maxV = Math.max.apply(null, data);
+      var span = (maxV - minV) || 1;
+      var cW = W - padX*2, cH = H - padY*2;
+      function xp(i){ return padX + (data.length<=1 ? 0 : (i/(data.length-1))*cW); }
+      function yp(v){ return padY + (1 - (v-minV)/span)*cH; }
+      var stroke = dir === 'dn' ? 'hsl(var(--warning))' : 'hsl(var(--primary))';
+      var d = 'M' + data.map(function(v,i){ return xp(i)+','+yp(v); }).join(' L');
+      el.innerHTML = '<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" width="100%">'
+        + '<path d="'+d+'" fill="none" style="stroke:'+stroke+'" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>'
+        + '</svg>';
+    }
+    document.querySelectorAll('#comp-tracker-item .spk').forEach(sparkline);
+  })();
+  </script>
+</div>
+
+<div id="comp-vote-column" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Vote Column</div>
+    <div class="page-desc">Upvote / downvote affordance — vertical column (post) and inline mini row (comment). Upvote active/hover uses a <code>--primary</code> tint; downvote is neutral foreground — it is an action, not a negative metric, so never <code>--warning</code> or <code>--destructive</code>. Score is tabular-nums 600.</div>
+  </div>
+
+  <style>
+    .vote-col { width: 44px; background: hsl(var(--muted)); display: flex; flex-direction: column; align-items: center; padding: 12px 0; gap: 3px; border-radius: var(--radius-xl); }
+    .vote-arrow { width: 26px; height: 26px; border: none; background: transparent; cursor: pointer; border-radius: var(--radius); display: grid; place-items: center; color: hsl(var(--muted-foreground)); transition: background 0.12s, color 0.12s; }
+    .vote-arrow:hover { background: hsl(var(--primary) / 0.12); color: hsl(var(--primary)); }
+    .vote-arrow.dn:hover { background: hsl(var(--foreground) / 0.08); color: hsl(var(--foreground)); }
+    .vote-arrow.on-up { color: hsl(var(--primary)); }
+    .vote-arrow.on-dn { color: hsl(var(--foreground)); }
+    .vote-score { font-size: var(--fs-xs); font-weight: 600; font-variant-numeric: tabular-nums; }
+    .vote-row { display: flex; align-items: center; gap: 4px; }
+    .vote-mini { width: 18px; height: 18px; border: none; background: transparent; cursor: pointer; color: hsl(var(--muted-foreground)); display: grid; place-items: center; border-radius: var(--radius); transition: background 0.12s, color 0.12s; }
+    .vote-mini:hover { color: hsl(var(--primary)); background: hsl(var(--primary) / 0.12); }
+    .vote-mini.dn:hover { color: hsl(var(--foreground)); background: hsl(var(--foreground) / 0.08); }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Vertical column (post) · inline mini row (comment)</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="gap:48px;align-items:flex-start">
+        <div class="vote-col">
+          <button class="vote-arrow on-up" aria-label="Upvote"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 14 6-7 6 7"/></svg></button>
+          <span class="vote-score">1.2k</span>
+          <button class="vote-arrow dn" aria-label="Downvote"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 10 6 7 6-7"/></svg></button>
+        </div>
+        <div class="vote-row">
+          <button class="vote-mini" aria-label="Upvote"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m6 14 6-7 6 7"/></svg></button>
+          <span class="vote-score">734</span>
+          <button class="vote-mini dn" aria-label="Downvote"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m6 10 6 7 6-7"/></svg></button>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;div class="vote-col" /&gt; · &lt;div class="vote-row" /&gt;</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;div class=&quot;vote-col&quot;&gt;\n  &lt;button class=&quot;vote-arrow on-up&quot;&gt;...&lt;/button&gt;\n  &lt;span class=&quot;vote-score&quot;&gt;1.2k&lt;/span&gt;\n  &lt;button class=&quot;vote-arrow dn&quot;&gt;...&lt;/button&gt;\n&lt;/div&gt;')">Copy</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="chart-page-hbar" class="waldo-page">

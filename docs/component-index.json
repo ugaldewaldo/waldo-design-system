@@ -922,6 +922,21 @@
       ]
     },
     {
+      "id": "app-header",
+      "name": "App Header",
+      "selector": "#comp-app-header",
+      "category": "brand-api",
+      "use_when": [
+        "The chrome of every Brand API prototype page — with or without a sidebar",
+        "A sticky top bar carrying product identity + primary navigation"
+      ],
+      "dont_use_when": [
+        "You need a page title / descriptor block below the chrome — use Page Header",
+        "Utility state (integration status, credits, sync) — that lives in the sidebar panel or Settings, never the header",
+        "A workspace navigation panel — the sidebar is additional to the header, not this component"
+      ]
+    },
+    {
       "id": "article-card",
       "name": "Article Card",
       "selector": "#comp-article-card",
@@ -1003,6 +1018,20 @@
       "dont_use_when": [
         "Internal system alerts — use Alert List Row",
         "Generic list content without platform context — use List Item"
+      ]
+    },
+    {
+      "id": "community-banner",
+      "name": "Community Banner",
+      "selector": "#comp-community-banner",
+      "category": "brand-api",
+      "use_when": [
+        "Header card for a community, space, or audience page (name, cover, member count, join action)",
+        "Introducing a simulated community grounded in a real audience"
+      ],
+      "dont_use_when": [
+        "Individual user or brand profile header — this is for a community/space, not a person",
+        "A generic page title bar without membership/identity — use App Header"
       ]
     },
     {
@@ -1123,6 +1152,20 @@
       ]
     },
     {
+      "id": "opportunity-card",
+      "name": "Opportunity Card",
+      "selector": "#comp-opportunity-card",
+      "category": "brand-api",
+      "use_when": [
+        "A review-queue item pairing a source conversation (thread/post) with an AI-drafted response awaiting human review",
+        "Any queue where each row carries context + a proposed action the user approves, edits, or skips"
+      ],
+      "dont_use_when": [
+        "A plain social mention with no proposed action — use Comment Card",
+        "A recommendation without a source conversation — use Recommendation Card"
+      ]
+    },
+    {
       "id": "quote-card",
       "name": "Quote Card",
       "selector": "#comp-quote-card",
@@ -1173,6 +1216,48 @@
       "category": "brand-api",
       "use_when": [],
       "dont_use_when": []
+    },
+    {
+      "id": "threaded-comment",
+      "name": "Threaded Comment",
+      "selector": "#comp-threaded-comment",
+      "category": "brand-api",
+      "use_when": [
+        "Nested discussion threads (comment + replies) with a collapsible rail — community/forum conversation surfaces",
+        "Showing reply hierarchy where a subtree can be collapsed"
+      ],
+      "dont_use_when": [
+        "A flat feed of social mentions — use Comment Card",
+        "A single non-nested quote — use Quote Card"
+      ]
+    },
+    {
+      "id": "tracker-item",
+      "name": "Tracker Item",
+      "selector": "#comp-tracker-item",
+      "category": "brand-api",
+      "use_when": [
+        "A saved watch/tracker row — query + kind/status badges + meta line + embedded sparkline + icon actions",
+        "A list of monitored searches/competitors with pause/archive/delete controls"
+      ],
+      "dont_use_when": [
+        "A metric tile without a saved-query identity — use KPI Stat Card",
+        "A generic list row without status/actions — use List Item"
+      ]
+    },
+    {
+      "id": "vote-column",
+      "name": "Vote Column",
+      "selector": "#comp-vote-column",
+      "category": "brand-api",
+      "use_when": [
+        "Upvote/downvote affordance on a post or feed item (vertical column variant)",
+        "Inline vote row on a comment (mini variant)"
+      ],
+      "dont_use_when": [
+        "Showing a sentiment or trend metric — voting is an action, not a measurement",
+        "A single like/reaction toggle — use a Button or icon toggle"
+      ]
     },
     {
       "id": "waldo-logo",

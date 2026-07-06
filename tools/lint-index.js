@@ -30,7 +30,13 @@ const EXEMPT = new Set([
   'dual-bar-row',          // vanilla-only dual comparison row, no React wrapper needed
   'recommendation-card',   // vanilla-only recommendation card, no React wrapper needed
   'article-card',          // vanilla-only press/news card, no React wrapper needed
+  'app-header',            // vanilla-only prototype chrome, consumed by waldo-labs, no React wrapper needed
   'brand-column',          // vanilla-only competitive brand column, no React wrapper needed
+  'community-banner',      // vanilla-only community/audience header, consumed by waldo-labs, no React wrapper needed
+  'opportunity-card',      // vanilla-only review-queue card, consumed by waldo-labs, no React wrapper needed
+  'threaded-comment',      // vanilla-only nested discussion thread, consumed by waldo-labs, no React wrapper needed
+  'tracker-item',          // vanilla-only saved-watch row, consumed by waldo-labs, no React wrapper needed
+  'vote-column',           // vanilla-only upvote/downvote affordance, consumed by waldo-labs, no React wrapper needed
   'chart',                 // internal data-viz section, not a standalone component
   'advanced-section',  // internal DS section grouping, not a standalone component
 ]);

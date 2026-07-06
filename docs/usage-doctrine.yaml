@@ -1525,6 +1525,111 @@ components:
       failed image degrades to the base layout (doctrine: never a broken image). Composes with .on-card
       (thumb placeholder becomes var(--secondary)).
 
+  - component: Community Banner
+    use_when:
+      - Header card for a community, space, or audience page (name, cover, member count, join action)
+      - Introducing a simulated community grounded in a real audience
+    dont_use_when:
+      - Individual user or brand profile header — this is for a community/space, not a person
+      - A generic page title bar without membership/identity — use App Header
+    prefer_over:
+      - App Header: when the surface represents a community/audience with a cover strip, avatar, and join action, not app chrome
+    notes: |
+      Structure: neutral cover strip (.cbanner-cover) → row with overlapping ringed avatar + meta + right-aligned action.
+      Cover is a neutral surface — var(--secondary) with a low-opacity foreground dot pattern. Card surfaces
+      NEVER take accent tints (doctrine): the cover stays neutral, no primary wash.
+      Avatar (.avatar av-2xl) overlaps the cover by margin-top -26px, ringed with box-shadow 0 0 0 3px var(--card).
+      Meta: name in --fs-2xl/600; sub-row = a DS badge (badge-active for a status marker) + muted member count
+      (count number bolded, tabular-nums) + a right-aligned DS .btn (btn-secondary btn-sm, margin-left auto).
+      Background: var(--card). Border-radius: 16px, overflow hidden.
+      Classes: .cbanner, .cbanner-cover, .cbanner-row, .cbanner-avatar, .cbanner-meta, .cbanner-sub, .cbanner-members, .cbanner-join.
+
+  - component: Opportunity Card
+    use_when:
+      - A review-queue item pairing a source conversation (thread/post) with an AI-drafted response awaiting human review
+      - Any queue where each row carries context + a proposed action the user approves, edits, or skips
+    dont_use_when:
+      - A plain social mention with no proposed action — use Comment Card
+      - A recommendation without a source conversation — use Recommendation Card
+    prefer_over:
+      - Comment Card: when the item pairs the source with a draft/proposed action, not just a mention
+      - Recommendation Card: when the surface is a review queue anchored to a specific external conversation
+    notes: |
+      Composite in the wcard / comment-card family. Structure: meta row (favicon 14×14 + source + recency +
+      right-aligned match badge) → title (--fs-base/500) → muted excerpt → draft block → action row.
+      Draft block (.opp-draft): translucent evidence surface — color-mix(var(--foreground) 5%, transparent),
+      matching Recommendation Card evidence — stays distinct from the card even on hover (card hover is
+      color-mix(var(--foreground) 4%, var(--card))). Draft label in --primary uppercase; grounding ref muted.
+      Match badge: badge-active (primary) at 0.85+ match, badge-secondary below.
+      Skipped state: add .is-skipped → whole-card opacity .45. Card surface stays neutral in all states.
+      Action row: one primary .btn (btn-default) + secondary; teaching note muted, margin-left auto.
+      Classes: .opp-card(.is-skipped), .opp-meta, .opp-favicon, .opp-source, .opp-time, .opp-match, .opp-title,
+      .opp-excerpt, .opp-draft, .opp-draft-label, .opp-draft-ref, .opp-actions, .opp-teach.
+
+  - component: Threaded Comment
+    use_when:
+      - Nested discussion threads (comment + replies) with a collapsible rail — community/forum conversation surfaces
+      - Showing reply hierarchy where a subtree can be collapsed
+    dont_use_when:
+      - A flat feed of social mentions — use Comment Card
+      - A single non-nested quote — use Quote Card
+    prefer_over:
+      - Comment Card: when the conversation is threaded/nested with collapse, not a flat mention feed
+    notes: |
+      Structure per node: .thread > .thread-row > (.thread-rail | .thread-main). Rail = avatar (.avatar av-md)
+      + a 2px collapse line (.thread-line, hover → var(--primary)). Head = username (dotted underline, hover
+      → primary) + flair pill + optional receipt badge (badge-active) + karma (tabular-nums) + time.
+      Children nest as .thread inside .thread-children (indent margin-left 16px).
+      Collapse: the rail line toggles .collapsed on the closest .thread, which hides text/foot/children and
+      reveals a "[+] thread collapsed" stub.
+      Cast identity: use --chart-1..12 as a categorical encoding — avatar background AND flair pill share the
+      same tint (.thread-cast-N: chart-N at 0.15 bg / solid text). This is categorical identity, not sentiment.
+      Classes: .thread(.collapsed), .thread-row, .thread-rail, .thread-line, .thread-main, .thread-head,
+      .thread-user, .thread-flair, .thread-karma, .thread-dot, .thread-text, .thread-foot, .thread-act,
+      .thread-children, .thread-stub, .thread-cast-N.
+
+  - component: Tracker Item
+    use_when:
+      - A saved watch/tracker row — query + kind/status badges + meta line + embedded sparkline + icon actions
+      - A list of monitored searches/competitors with pause/archive/delete controls
+    dont_use_when:
+      - A metric tile without a saved-query identity — use KPI Stat Card
+      - A generic list row without status/actions — use List Item
+    prefer_over:
+      - List Item: when the row represents a saved monitor with status encoding, an inline trend, and lifecycle actions
+    notes: |
+      Row (.tracker-item): query name + kind badge (badge-secondary) + status badge (badge-active active /
+      badge-highlight paused / badge-secondary archived) → meta line → embedded DS Sparkline (.spk, see
+      Sparkline chart) → icon actions.
+      Status encodes via ROW OPACITY, not color: .paused → 0.7, .archived → 0.45.
+      Actions (.tracker-btn): pause/resume/archive/restore are neutral; delete (.del) hover is the ONLY
+      destructive use — hover tints var(--destructive) at 0.10 bg. Destructive is an action verdict here,
+      allowed on a genuine delete control.
+      Sparkline is the canonical DS Sparkline (data-spark="n,n,n" + data-dir="up|dn"; up=primary, dn=warning) —
+      never a bespoke reimplementation.
+      Counter tiles (.tracker-counter) summarize by status: label + value (--fs-xl/600, tabular-nums).
+      Classes: .tracker-list, .tracker-item(.paused/.archived), .tracker-main, .tracker-name, .tracker-meta,
+      .tracker-actions, .tracker-btn(.del), .tracker-counters, .tracker-counter, .tracker-counter-label, .tracker-counter-val.
+
+  - component: Vote Column
+    use_when:
+      - Upvote/downvote affordance on a post or feed item (vertical column variant)
+      - Inline vote row on a comment (mini variant)
+    dont_use_when:
+      - Showing a sentiment or trend metric — voting is an action, not a measurement
+      - A single like/reaction toggle — use a Button or icon toggle
+    prefer_over:
+      - Badge: when the element is an interactive vote control, not a static count display
+    notes: |
+      Two variants: vertical column (.vote-col, on a post — muted pill background, 44px wide) and inline mini
+      row (.vote-row + .vote-mini, on a comment).
+      Encoding: upvote active/hover uses a --primary tint (.on-up = primary text; hover = primary 0.12 bg).
+      Downvote is NEUTRAL foreground (.on-dn = foreground text; hover = foreground 0.08 bg) — it is an action,
+      not a negative metric, so NEVER --warning or --destructive.
+      Score is --fs-xs, weight 600, tabular-nums, between the two arrows.
+      SVG arrows use stroke=currentColor so they track the button color token.
+      Classes: .vote-col, .vote-arrow(.dn/.on-up/.on-dn), .vote-score, .vote-row, .vote-mini(.dn).
+
 component_choice_logic:
 
   dialog_vs_drawer:

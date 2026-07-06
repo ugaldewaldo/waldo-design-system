@@ -68,18 +68,20 @@ patterns. `use_when` is joined in from `usage-doctrine.yaml`. Machine-readable c
 - **Tooltip** `#comp-tooltip` — use when: Explaining icon-only buttons · Showing keyboard shortcuts · Non-essential supplementary info
 - **Wizard Dialog** `#comp-wizard-dialog` — use when: Multi-step onboarding flows · Setup flows that need contextual images/previews on the right
 
-## Brand API components (21)
+## Brand API components (27)
 
 Dashboard-specific patterns for Brand API prototypes — not core atoms.
 
 - **Ad Copy Card** `#comp-ad-copy-card` — use when: Displaying ad creative copy (headline, body, CTA) in a card · Competitive ad teardown / creative review surfaces
 - **Alert List Row** `#comp-alert-list-row` — use when: One row in an alerts / signals list (icon, message, timestamp) · Feed of system or brand alerts
+- **App Header** `#comp-app-header` — use when: The chrome of every Brand API prototype page — with or without a sidebar · A sticky top bar carrying product identity + primary navigation
 - **Article Card** `#comp-article-card` — use when: Displaying a press or news item mentioning a brand (media monitoring feeds) · Showing earned media coverage with source, headline, and snippet
 - **Bar Track** `#comp-bar-track` — use when: Ranked list of brands/entities by a single metric (SoV, reach, engagement) · Simple percentage breakdown without a reference point
 - **Benchmark Bar** `#comp-benchmark-bar` — use when: Showing brand performance vs a reference point (category median, benchmark, competitor average) · Comparing multiple metrics in a stacked layout (sentiment, SoV, engagement, etc.)
 - **Brand Column** `#comp-brand-column` — use when: Competitive overview grid showing brand share with supporting insight text · Height-encoded comparison of 3-5 brands where taller = higher share/metric
 - **Code Block** `#comp-code-block` — use when: Displaying preformatted code, CLI commands, or prompt text the user may need to copy · Showing multi-action copy options (e.g. "Copy prompt" + "Copy Curl") over the same content block
 - **Comment Card** `#comp-comment-card` — use when: Displaying a social mention (Reddit, X, TikTok, Instagram, etc.) · Feed of brand mentions with platform, author, sentiment, and text
+- **Community Banner** `#comp-community-banner` — use when: Header card for a community, space, or audience page (name, cover, member count, join action) · Introducing a simulated community grounded in a real audience
 - **Copy Link** `#comp-copy-link` — use when: Displaying a shareable URL the user should copy (invite link, share link, public URL) · Inside dialog bodies where a link needs to be copied with one click
 - **Depth Pill** `#comp-depth-pill` — use when: Compact inline indicator of a depth/intensity score · Annotating an item with a small quantified badge
 - **Drill Panel** `#comp-drill-panel` — use when: Dashboard drill-down detail on a metric, chart point, or list row (right slide-in) · Contextual detail that should not navigate away from the dashboard
@@ -88,10 +90,14 @@ Dashboard-specific patterns for Brand API prototypes — not core atoms.
 - **Leaderboard Row** `#comp-leaderboard-row` — use when: Any ranked list — rank + entity + a right-hand value, one item per row · Comparing entities ordered by a metric (magnitude OR trend/momentum) · Trending items per source (hashtags, topics, subreddits) — use the trend variant + .lb-head · Multi-source comparison — one .lb column per source, composed side by side
 - **Live Badge** `#comp-live-badge` — use when: Indicating a real-time / live state on a surface · Marking streaming or actively-updating data
 - **Media Tile** `#comp-media-tile` — use when: Displaying a social post thumbnail in a grid (image or video) · Ad creative previews in a compact grid layout · Brand owned/earned media feed grids
+- **Opportunity Card** `#comp-opportunity-card` — use when: A review-queue item pairing a source conversation (thread/post) with an AI-drafted response awaiting human review · Any queue where each row carries context + a proposed action the user approves, edits, or skips
 - **Quote Card** `#comp-quote-card` — use when: Displaying a Voice-of-Customer cluster (verbatim quote + frequency) · Showing what audiences love or pain about a brand
 - **Recommendation Card** `#comp-recommendation-card` — use when: Surfacing an AI-generated strategic recommendation (comms, product, campaign, etc.) · Presenting actionable insights with supporting evidence quotes in a feed or panel
 - **Score Ring** `#comp-score-ring` — use when: Showing a single 0–100 score (reputation, resonance, presence, health) where the value sits within a good/watch/at-risk range · Presenting one headline metric prominently (hero variant) or a small grid of scores (input variant) · The zone (how good/bad the number is) matters as much as the number itself
 - **Theme Pill** `#comp-theme-pill`
+- **Threaded Comment** `#comp-threaded-comment` — use when: Nested discussion threads (comment + replies) with a collapsible rail — community/forum conversation surfaces · Showing reply hierarchy where a subtree can be collapsed
+- **Tracker Item** `#comp-tracker-item` — use when: A saved watch/tracker row — query + kind/status badges + meta line + embedded sparkline + icon actions · A list of monitored searches/competitors with pause/archive/delete controls
+- **Vote Column** `#comp-vote-column` — use when: Upvote/downvote affordance on a post or feed item (vertical column variant) · Inline vote row on a comment (mini variant)
 - **Waldo Logo** `#comp-waldo-logo` — use when: Displaying the Waldo wordmark in topbars, splash screens, or branded surfaces
 
 ## Charts / Data-viz (16)

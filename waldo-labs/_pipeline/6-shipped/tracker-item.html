@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<!--
+component: Tracker Item + Counters
+source: waldo-labs/Brand-health/Test3 (index_agent.html) via _pipeline/2-done/missing-components--brand-health-x.html
+date: 2026-07-03
+use_when: a saved watch/tracker row — query + kind/status badges + meta line + embedded sparkline + icon actions (pause/archive/delete); counter tiles summarize by status
+status: NEW component proposal — composes DS .badge + DS Sparkline (#chart-page-sparkline); status encodes via row opacity (.paused 0.7 / .archived 0.45)
+-->
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tracker Item — Pipeline Review</title>
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  /* Required DS conflict overrides */
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  body { display: block !important; }
+  svg { flex: none; min-height: fit-content; }
+  body { max-width: none !important; margin: 0 !important; padding: 48px; background: hsl(var(--background)); color: hsl(var(--foreground)); font-family: 'Inter', sans-serif; }
+
+  .rev-head { max-width: 640px; margin: 0 auto 36px; }
+  .rev-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: hsl(var(--primary)); }
+  .rev-title { font-size: 26px; font-weight: 600; letter-spacing: -0.03em; margin-top: 6px; }
+  .rev-meta { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); margin-top: 8px; line-height: 1.6; }
+  .rev-meta code { color: hsl(var(--primary)); font-size: var(--fs-xs); }
+
+  /* ── Tracker Item ── */
+  .tracker-list { display: flex; flex-direction: column; gap: 10px; max-width: 640px; margin: 0 auto; }
+  .tracker-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: var(--radius-xl); background: hsl(var(--card)); cursor: pointer; transition: background 0.12s; }
+  .tracker-item:hover { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--card))); }
+  .tracker-item.paused { opacity: 0.7; }
+  .tracker-item.archived { opacity: 0.45; }
+  .tracker-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .tracker-name { font-size: var(--fs-sm); font-weight: 600; color: hsl(var(--foreground)); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .tracker-meta { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .tracker-actions { display: flex; gap: 2px; flex: none; }
+  .tracker-btn { width: 28px; height: 28px; background: transparent; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: var(--radius-md); color: hsl(var(--muted-foreground)); transition: background 0.12s, color 0.12s; padding: 0; }
+  .tracker-btn:hover { background: hsl(var(--foreground) / 0.08); color: hsl(var(--foreground)); }
+  .tracker-btn.del:hover { background: hsl(var(--destructive) / 0.10); color: hsl(var(--destructive)); }
+  .tracker-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .spk svg { display: block; width: 88px; height: 26px; }
+  .tracker-counters { display: flex; gap: 12px; max-width: 640px; margin: 14px auto 0; }
+  .tracker-counter { flex: 1; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: var(--radius-xl); background: hsl(var(--card)); }
+  .tracker-counter-label { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); }
+  .tracker-counter-val { font-size: var(--fs-xl); font-weight: 600; color: hsl(var(--foreground)); font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+
+<div class="rev-head">
+  <div class="rev-eyebrow">Pipeline · To review</div>
+  <div class="rev-title">Tracker Item + Counters</div>
+  <div class="rev-meta">A saved watch row: query + kind/status badges (DS <code>.badge</code>), meta line,
+  embedded DS sparkline, icon actions (pause / archive / delete — delete hover is destructive, an action verdict).
+  Status encodes via row opacity (<code>.paused</code> 0.7 · <code>.archived</code> 0.45).
+  Counter tiles summarize by status. Source: Brand Health X rebuild.</div>
+</div>
+
+<div class="tracker-list">
+  <div class="tracker-item" role="button" tabindex="0">
+    <div class="tracker-main">
+      <div class="tracker-name">poppi <span class="badge badge-secondary badge-sm">Search</span> <span class="badge badge-active badge-sm">active</span></div>
+      <div class="tracker-meta">checks daily · created May 12, 2026</div>
+    </div>
+    <div class="spk" data-spark="up"></div>
+    <div class="tracker-actions">
+      <button class="tracker-btn" title="Pause" type="button"><svg viewBox="0 0 16 16"><path d="M5 3v10M11 3v10"/></svg></button>
+      <button class="tracker-btn" title="Archive" type="button"><svg viewBox="0 0 16 16"><path d="M2 4h12v3H2zM3 7v6h10V7M6.5 10h3"/></svg></button>
+      <button class="tracker-btn del" title="Delete" type="button"><svg viewBox="0 0 16 16"><path d="M2 4h12M5 4V2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5V4M6 7v5M10 7v5M3 4l.8 8.5a.5.5 0 0 0 .5.5h7.4a.5.5 0 0 0 .5-.5L13 4"/></svg></button>
+    </div>
+  </div>
+  <div class="tracker-item paused" role="button" tabindex="0">
+    <div class="tracker-main">
+      <div class="tracker-name">pepsi prebiotic <span class="badge badge-secondary badge-sm">Competitor</span> <span class="badge badge-highlight badge-sm">paused</span></div>
+      <div class="tracker-meta">checks weekly · created May 9, 2026</div>
+    </div>
+    <div class="spk" data-spark="dn"></div>
+    <div class="tracker-actions">
+      <button class="tracker-btn" title="Resume" type="button"><svg viewBox="0 0 16 16"><path d="M5 3l8 5-8 5z"/></svg></button>
+      <button class="tracker-btn" title="Archive" type="button"><svg viewBox="0 0 16 16"><path d="M2 4h12v3H2zM3 7v6h10V7M6.5 10h3"/></svg></button>
+      <button class="tracker-btn del" title="Delete" type="button"><svg viewBox="0 0 16 16"><path d="M2 4h12M5 4V2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5V4M6 7v5M10 7v5M3 4l.8 8.5a.5.5 0 0 0 .5.5h7.4a.5.5 0 0 0 .5-.5L13 4"/></svg></button>
+    </div>
+  </div>
+  <div class="tracker-item archived" role="button" tabindex="0">
+    <div class="tracker-main">
+      <div class="tracker-name">olipop launch <span class="badge badge-secondary badge-sm">Competitor</span> <span class="badge badge-secondary badge-sm">archived</span></div>
+      <div class="tracker-meta">archived Apr 28, 2026</div>
+    </div>
+    <div class="spk" data-spark="flat"></div>
+    <div class="tracker-actions">
+      <button class="tracker-btn" title="Restore" type="button"><svg viewBox="0 0 16 16"><path d="M3 8a5 5 0 1 1 1.5 3.6M3 8V4.5M3 8h3.5"/></svg></button>
+      <button class="tracker-btn del" title="Delete" type="button"><svg viewBox="0 0 16 16"><path d="M2 4h12M5 4V2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5V4M6 7v5M10 7v5M3 4l.8 8.5a.5.5 0 0 0 .5.5h7.4a.5.5 0 0 0 .5-.5L13 4"/></svg></button>
+    </div>
+  </div>
+</div>
+
+<div class="tracker-counters">
+  <div class="tracker-counter"><span class="tracker-counter-label">Active</span><span class="tracker-counter-val">3</span></div>
+  <div class="tracker-counter"><span class="tracker-counter-label">Paused</span><span class="tracker-counter-val">1</span></div>
+  <div class="tracker-counter"><span class="tracker-counter-label">Archived</span><span class="tracker-counter-val">2</span></div>
+</div>
+
+<script>
+/* Embedded sparklines — deterministic data; rising = --primary, falling = --warning (doctrine), flat = muted. */
+(function () {
+  var data = {
+    up:   [4, 5, 4.5, 6, 5.5, 7, 6.5, 8, 9, 8.5, 10, 11],
+    dn:   [9, 8.5, 9, 7.5, 8, 6.5, 7, 6, 5.5, 6, 5, 4.5],
+    flat: [6, 6.2, 5.9, 6.1, 6, 6.1, 5.9, 6, 6.1, 6, 6.05, 6]
+  };
+  var stroke = {
+    up: 'hsl(var(--primary))',
+    dn: 'hsl(var(--warning))',
+    flat: 'hsl(var(--muted-foreground))'
+  };
+  document.querySelectorAll('.spk[data-spark]').forEach(function (el) {
+    var dir = el.dataset.spark, d = data[dir];
+    var W = 88, H = 26, padX = 2, padY = 4;
+    var min = Math.min.apply(null, d), max = Math.max.apply(null, d), span = (max - min) || 1;
+    var pts = d.map(function (v, i) {
+      var x = padX + (i / (d.length - 1)) * (W - padX * 2);
+      var y = padY + (1 - (v - min) / span) * (H - padY * 2);
+      return x.toFixed(1) + ',' + y.toFixed(1);
+    }).join(' L');
+    el.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none">'
+      + '<path d="M' + pts + '" fill="none" style="stroke:' + stroke[dir] + '" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>';
+  });
+})();
+</script>
+</body>
+</html>
