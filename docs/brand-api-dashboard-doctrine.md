@@ -166,19 +166,44 @@ is missing from the theme, that's a change request to VALIDATOR, not a local dec
 > default only for **new dashboards** built from scratch. In both cases, tokens,
 > components, and rules apply without exception.
 
-### Topbar
+### App Header
 
-The topbar always uses the **Waldo SVG logo** — never text, never a placeholder square,
-never the word "Waldo" in a box. The wordmark path:
+Every prototype has an app header — **with or without a sidebar**. A sidebar is
+workspace navigation, additional to the header, never a replacement for it.
+Canonical frames: Figma BRAND-API `281-423` (header), `281-445` (search row),
+`281-31` (full page).
+
+The header is **one line with exactly two groups — nothing else**:
+
+- **A — identity (left):** the product name, normally preceded by the **Waldo wordmark
+  SVG**. The logo is optional; the name normally isn't. Logo and name sit **inline on
+  one baseline** — never stacked. **No subtitle, tagline, or descriptor under or beside
+  the logo** — a stacked brand lockup in the chrome is a hard violation (the single most
+  common agent mistake).
+- **B — navigation (right):** plain text links, muted, active = `var(--foreground)`.
+  Text links only — no buttons, no pills.
+
+**Prohibited inside the header:** search inputs, status/integration pills, badges,
+buttons, "Powered by" lines, or any third group. Utility state (integration status,
+credits, sync state) lives in the sidebar panel, Settings, or contextual surfaces —
+never in the header.
+
+**Search** never shares the header line with navigation. It goes on a **second line
+below the header, right-aligned**; that line may double as a toolbar — filters, range
+switchers, and other context controls may sit on its left side. **Exception:** when the
+header has no navigation (B is empty), search may take the right slot of the header
+line itself.
+
+When the Waldo mark appears it is always the **SVG wordmark** — never text, never a
+placeholder square, never the word "Waldo" in a box. The wordmark path:
 
 ```html
 <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" style="color:var(--foreground)" xmlns="http://www.w3.org/2000/svg"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
 ```
 
-Layout: sticky, blurred, **no bottom border** (see Borderless shell below — the blur +
-translucent background marks the sticky layer). Left = logo only (no product name, no
-subtitle). Right = a small nav (Dashboard / Alerts / API coverage) and a muted
-"Powered by Waldo API". Match the density of the DS topbar in `index.html`.
+Chrome: sticky, blurred, **no bottom border** (see Borderless shell below — the blur +
+translucent background marks the sticky layer). Match the density of the canonical
+frame, not the DS showcase topbar.
 
 ### Borderless shell — no structural lines
 
@@ -265,6 +290,19 @@ interactive card may lighten it with a neutral mix (`color-mix(in srgb, var(--fo
 (`--primary`, `--warning`, `--destructive`, `--highlight`, `--chart-*`), in any state.
 Status and zone color belong to inner elements — tag pills, labels, numbers — never to
 the card background.
+
+**Nested blocks on a card — the `on-card` rule.** Any block with its own surface nested
+inside a card (evidence/reason blocks, nested article/comment/quote cards, board
+mini-cards) uses `hsl(var(--muted))` — never `--secondary` as the first nesting step.
+Hover on an interactive nested block = `color-mix(in srgb, hsl(var(--foreground)) 5%,
+hsl(var(--muted)))`. A third nesting level (a detail inside the nested block, e.g. a
+thumbnail) steps to `--secondary`. Surface ladder: `--background` → `--card` →
+`--muted` → `--secondary`. Canonical: the `.on-card` variants of Article Card,
+Comment Card, and Quote Card in the showcase.
+If the **parent card itself is hoverable**, nested blocks lighten in lockstep — the same
+mix % over `--muted` that the parent applies over `--card`
+(`.parent:hover .nested { background: color-mix(in srgb, hsl(var(--foreground)) 4%,
+hsl(var(--muted))) }`) — otherwise the parent hover flattens the nested surfaces into it.
 
 ---
 
@@ -364,7 +402,7 @@ count. A variant of the DS `Tag`.
 ### Brand detail — promo cards
 Full-width cards, one per active promo. Discount terms inside quotes are highlighted
 inline with `var(--highlight)`. "Detected in ad copy" = secondary badge. Evidence blocks
-sit on `var(--secondary)` inside the card.
+sit on `hsl(var(--muted))` inside the card (the `on-card` rule above).
 
 ### Timeline / Gantt (discount history)
 Label left, solid `var(--primary)` bar for the period (no gradient, no opacity variation),
@@ -510,7 +548,13 @@ primary CTA (`.btn-default`) — assert computed `background-color` / `backgroun
   irreversible action / live-alert = `--destructive`.
 - Do not add italic anywhere.
 - Do not use brand colors (`--brand-*`) in product dashboards.
-- Do not use text or a colored box in the topbar — always the Waldo SVG.
+- Do not render the Waldo mark as text or a colored box — the mark is always the SVG
+  wordmark (the product name next to it is plain text, and may stand alone).
+- Do not stack anything under the header identity — no subtitle, tagline, or descriptor
+  below the logo/name; the header lockup is one line.
+- Do not put search, status/integration pills, badges, buttons, or "Powered by" in the
+  app header — the header is identity + text navigation only. Search goes on the second
+  line (right-aligned), except when the header has no navigation.
 - Do not put the KPI delta inline below the value — badge, top-right.
 - Do not render trend-line dots always-visible — hover only.
 - Do not use custom buttons for time-range toggles — use `comp-segmented`.

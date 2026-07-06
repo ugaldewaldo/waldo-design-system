@@ -9,7 +9,7 @@
   notes:
     - Built to the wcard family: hsl(var(--card)) elevation, radius 16, no border; hover = neutral color-mix lighten (doctrine).
     - Match score is a plain display number (weight 500, tabular) — hsl(var(--primary)) at >=90, foreground otherwise. Not a Score Ring: the card corner needs a compact number, not a gauge.
-    - Reason blocks sit on hsl(var(--secondary)) (evidence-on-secondary, doctrine interior pattern). "Why now" label: --highlight normally, --destructive when the opening is hot (alert state, verdict — not a metric).
+    - Reason blocks sit on hsl(var(--muted)) (doctrine "on-card" rule: nested block on a card = --muted, never --secondary). "Why now" label: --highlight normally, --destructive when the opening is hot (alert state, verdict — not a metric).
     - Opening-type pill: badge-highlight (emphasis, no urgency) / badge-destructive (hot = act-now alert). Category: badge-secondary. Status: badge-active (accepted) / badge-default (tracking) / badge-secondary (passed).
     - Brand identity = DS Avatar (wav wav-square) + sanctioned favicon with graceful fallback to initial.
     - Actions: btn-default (accept, the one primary CTA) + btn-outline for every secondary (track / pass / view). Never btn-ghost (bare) in an action row — doctrine "Card action rows".
@@ -37,6 +37,7 @@
     cursor: pointer; transition: background .14s;
   }
   .pcard:hover { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--card))); }
+  .pcard:hover .reason { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--muted))); }
   .pcard.is-done { opacity: .6; }
   .pcard-top { display: flex; align-items: flex-start; gap: 14px; }
   .pcard-id { min-width: 0; }
@@ -50,7 +51,7 @@
   .match-label { font-size: 10px; color: hsl(var(--muted-foreground)); font-weight: 500; text-transform: uppercase; letter-spacing: .06em; }
 
   .reason-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
-  .reason { background: hsl(var(--secondary)); border-radius: var(--radius-lg); padding: 12px 14px; }
+  .reason { background: hsl(var(--muted)); border-radius: var(--radius-lg); padding: 12px 14px; }
   .reason-lbl { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: hsl(var(--muted-foreground)); display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
   .reason-lbl svg { width: 13px; height: 13px; }
   .reason-lbl.opening { color: hsl(var(--highlight)); }

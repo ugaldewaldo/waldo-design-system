@@ -8,7 +8,7 @@
     - Compact per-item cards with an inline stage switcher and small status flags
   notes:
     - No core-DS or Brand API kanban exists (checked component-index.md all three sections + grep of index.html for "kanban"/"board").
-    - Elevation ladder, no borders (doctrine): column = hsl(var(--card)) on background, mini card = hsl(var(--secondary)) on column; hover = neutral color-mix lighten.
+    - Elevation ladder, no borders (doctrine "on-card" rule): column = hsl(var(--card)) on background, mini card = hsl(var(--muted)) on column; hover = color-mix(foreground 5%, muted).
     - Column dots are neutral (muted-foreground / 0.5) — NOT chart palette; only the terminal "Won" stage is hsl(var(--primary)) (positive state).
     - Stage switcher reuses the DS select (.select-wrap) at a compact 28px height.
     - Status flags (CRM synced, playbook ready) = badge badge-secondary badge-sm with a 12px icon.
@@ -37,8 +37,8 @@
   .pcol-dot { width: 7px; height: 7px; border-radius: 50%; background: hsl(var(--muted-foreground) / .5); flex: none; }
   .pcol-dot.won { background: hsl(var(--primary)); }
   .pcol-cnt { margin-left: auto; font-variant-numeric: tabular-nums; }
-  .mini-card { background: hsl(var(--secondary)); border-radius: var(--radius-lg); padding: 11px 12px; margin-bottom: 9px; cursor: pointer; transition: background .12s; }
-  .mini-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 5%, hsl(var(--secondary))); }
+  .mini-card { background: hsl(var(--muted)); border-radius: var(--radius-lg); padding: 11px 12px; margin-bottom: 9px; cursor: pointer; transition: background .12s; }
+  .mini-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 5%, hsl(var(--muted))); }
   .mini-card:last-child { margin-bottom: 0; }
   .mc-top { display: flex; align-items: center; gap: 9px; }
   .mc-name { font-weight: 500; font-size: var(--fs-sm); }

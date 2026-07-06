@@ -34,56 +34,60 @@
   button { font-family: inherit; }
   .tabular { font-variant-numeric: tabular-nums; }
 
-  /* ── App shell — layout only, tokens only ── */
-  .app { display: grid; grid-template-columns: 252px 1fr; min-height: 100vh; }
+  /* ── App Header (doctrine) — one line: A identity + B text navigation, nothing else ── */
+  .app-header {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(8px);
+    background: color-mix(in srgb, hsl(var(--background)) 85%, transparent);
+  }
+  .app-header-inner { height: 64px; padding: 0 28px; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+  .app-ident { display: flex; align-items: center; gap: 14px; min-width: 0; }
+  .app-ident .product { font-size: var(--fs-lg); font-weight: 500; letter-spacing: -0.02em; white-space: nowrap; }
+  .app-nav { display: flex; align-items: center; gap: 24px; }
+  .app-nav a { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); }
+  .app-nav a:hover { color: hsl(var(--foreground)); opacity: 1; }
+  .app-nav a.active { color: hsl(var(--foreground)); font-weight: 500; }
+
+  /* ── App shell — layout only, tokens only (borderless: zones separate by surface) ── */
+  .app { display: grid; grid-template-columns: 252px 1fr; min-height: calc(100vh - 64px); }
 
   .sidebar {
-    border-right: 1px solid hsl(var(--border));
     display: flex; flex-direction: column;
-    position: sticky; top: 0; height: 100vh;
+    position: sticky; top: 64px; height: calc(100vh - 64px);
   }
-  .side-brand { display: flex; flex-direction: column; gap: 6px; padding: 20px 20px 14px; color: hsl(var(--foreground)); }
-  .side-product { font-size: var(--fs-xs); letter-spacing: .06em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
 
+  /* Agency chip = header of the integrated nav panel (borderless shell) */
   .agency-chip {
-    margin: 4px 12px 10px; padding: 10px 12px; border: none; text-align: left; width: calc(100% - 24px);
-    border-radius: var(--radius-lg); background: hsl(var(--secondary)); cursor: pointer;
+    margin: 4px 8px 6px; padding: 8px 10px; border: none; text-align: left; width: calc(100% - 16px);
+    border-radius: var(--radius-lg); background: transparent; cursor: pointer;
     display: flex; align-items: center; gap: 10px; transition: background .12s; color: hsl(var(--foreground));
   }
-  .agency-chip:hover { background: color-mix(in srgb, hsl(var(--foreground)) 6%, hsl(var(--secondary))); }
+  .agency-chip:hover { background: hsl(var(--muted)); }
   .agency-chip .a-name { font-weight: 500; font-size: var(--fs-sm); line-height: 1.25; }
   .agency-chip .a-sub { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
 
   /* wnav-panel ships at a fixed 288px (floating-panel context) — fit it to the sidebar */
-  .side-nav.wnav-panel { width: auto; margin: 0 12px; padding: 8px 0; }
+  .side-nav.wnav-panel { width: auto; margin: 14px 12px 0; padding: 8px 0; }
   .side-nav .wnav-item { text-decoration: none; }
   .side-nav .wnav-item, .side-nav .wnav-item:hover { color: color-mix(in srgb, hsl(var(--foreground)) 70%, transparent); }
   .side-nav .wnav-item.active { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
   .side-nav .wnav-item .wnav-icon svg { width: 15px; height: 15px; }
   .watch-dot { margin-left: auto; width: 6px; height: 6px; border-radius: 50%; background: hsl(var(--highlight)); flex: none; }
 
-  .side-foot { margin-top: auto; padding: 14px 16px; border-top: 1px solid hsl(var(--border)); }
+  .side-foot { margin-top: auto; padding: 14px 16px 18px; }
   .side-foot .lbl { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); display: flex; justify-content: space-between; font-variant-numeric: tabular-nums; }
   /* DS Progress pattern (showcase #comp-progress) */
   .credit-track { height: 6px; background: hsl(var(--muted)); border-radius: var(--radius-full); overflow: hidden; margin: 8px 0 6px; }
   .credit-fill { height: 100%; background: hsl(var(--primary)); border-radius: var(--radius-full); }
 
-  /* ── Main / topbar ── */
+  /* ── Main + toolbar line — search lives HERE, never in the header (doctrine) ── */
   .main { display: flex; flex-direction: column; min-width: 0; }
-  .topbar {
-    height: 60px; position: sticky; top: 0; z-index: 40;
-    backdrop-filter: blur(8px);
-    background: color-mix(in srgb, hsl(var(--background)) 85%, transparent);
-    border-bottom: 1px solid hsl(var(--border));
-    display: flex; align-items: center; gap: 16px; padding: 0 28px;
+  .app-toolbar {
+    max-width: 1184px; width: 100%; margin: 0 auto; padding: 18px 28px 0;
+    display: flex; align-items: center; justify-content: flex-end; gap: 16px;
   }
-  .topbar-brand { display: none; align-items: center; gap: 10px; color: hsl(var(--foreground)); }
-  .searchbox { flex: 1; max-width: 420px; }
+  .searchbox { width: 360px; max-width: 100%; }
   .searchbox .input { height: 36px; }
-  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
-  .integ-badge { cursor: default; }
-  .integ-badge .badge-dot { background: currentColor; }
-  .topbar-powered { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); white-space: nowrap; }
 
   .content { padding: 28px 28px 80px; max-width: 1184px; width: 100%; margin: 0 auto; }
 
@@ -101,6 +105,8 @@
     cursor: pointer; transition: background .14s;
   }
   .pcard:hover { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--card))); }
+  /* on-card rule: nested blocks lighten in lockstep with the parent hover so they never flatten into it */
+  .pcard:hover .reason { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--muted))); }
   .pcard.is-done { opacity: .6; }
   .pcard-top { display: flex; align-items: flex-start; gap: 14px; }
   .pcard-id { min-width: 0; }
@@ -114,7 +120,7 @@
   .match-label { font-size: 10px; color: hsl(var(--muted-foreground)); font-weight: 500; text-transform: uppercase; letter-spacing: .06em; }
 
   .reason-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
-  .reason { background: hsl(var(--secondary)); border-radius: var(--radius-lg); padding: 12px 14px; }
+  .reason { background: hsl(var(--muted)); border-radius: var(--radius-lg); padding: 12px 14px; }
   .reason-lbl { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: hsl(var(--muted-foreground)); display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
   .reason-lbl svg { width: 13px; height: 13px; }
   .reason-lbl.opening { color: hsl(var(--highlight)); }
@@ -186,8 +192,8 @@
   .pcol-dot { width: 7px; height: 7px; border-radius: 50%; background: hsl(var(--muted-foreground) / .5); flex: none; }
   .pcol-dot.won { background: hsl(var(--primary)); }
   .pcol-cnt { margin-left: auto; font-variant-numeric: tabular-nums; }
-  .mini-card { background: hsl(var(--secondary)); border-radius: var(--radius-lg); padding: 11px 12px; margin-bottom: 9px; cursor: pointer; transition: background .12s; }
-  .mini-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 5%, hsl(var(--secondary))); }
+  .mini-card { background: hsl(var(--muted)); border-radius: var(--radius-lg); padding: 11px 12px; margin-bottom: 9px; cursor: pointer; transition: background .12s; }
+  .mini-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 5%, hsl(var(--muted))); }
   .mini-card:last-child { margin-bottom: 0; }
   .mc-top { display: flex; align-items: center; gap: 9px; }
   .mc-name { font-weight: 500; font-size: var(--fs-sm); }
@@ -254,8 +260,7 @@
   .integ-icon { color: hsl(var(--muted-foreground)); }
   .integ-icon svg { width: 18px; height: 18px; }
 
-  .divider { height: 1px; background: hsl(var(--border)); margin: 22px 0; }
-  .api-foot { margin-top: 30px; padding-top: 18px; border-top: 1px solid hsl(var(--border)); font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .api-foot { margin-top: 44px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
   .api-foot a { color: color-mix(in srgb, hsl(var(--foreground)) 68%, transparent); border-bottom: 1px dashed hsl(var(--border)); }
 
   /* ── Toast — DS wtoast, fixed bottom-center (doctrine) ── */
@@ -268,16 +273,16 @@
   @media (max-width: 940px) {
     .app { grid-template-columns: 1fr; }
     .sidebar { display: none; }
-    .mobile-nav { display: flex; gap: 4px; overflow-x: auto; padding: 8px 14px; border-bottom: 1px solid hsl(var(--border)); position: sticky; top: 60px; z-index: 39; background: hsl(var(--background)); }
+    .mobile-nav { display: flex; gap: 4px; overflow-x: auto; padding: 8px 14px; position: sticky; top: 64px; z-index: 39; background: hsl(var(--background)); }
     .mobile-nav .wnav-item { white-space: nowrap; text-decoration: none; }
     .mobile-nav .wnav-item.active { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
-    .topbar-brand { display: flex; }
-    .topbar-right { display: none; }
+    .app-header-inner { padding: 0 16px; }
+    .app-nav { gap: 14px; }
     .detail-grid { grid-template-columns: 1fr; }
     .reason-row { grid-template-columns: 1fr; }
     .pboard { grid-template-columns: 1fr; }
     .wl-grid { grid-template-columns: 1fr; }
-    .topbar { padding: 0 16px; }
+    .app-toolbar { padding: 14px 16px 0; }
     .content { padding: 20px 16px 80px; }
     .pcol { min-height: auto; }
   }
@@ -285,23 +290,33 @@
 </head>
 <body>
 
-<div class="app">
-  <!-- ════ SIDEBAR ════ -->
-  <aside class="sidebar">
-    <div class="side-brand">
+<!-- ════ APP HEADER (doctrine) — A identity + B text navigation, one line ════ -->
+<header class="app-header">
+  <div class="app-header-inner">
+    <div class="app-ident">
       <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Waldo"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
-      <div class="side-product">Prospector · New business engine</div>
+      <span class="product">Prospector</span>
     </div>
+    <nav class="app-nav">
+      <a href="#/" data-route="dashboard">Dashboard</a>
+      <a href="#/watchlist" data-route="alerts">Alerts</a>
+      <a href="../endpoints.html">API coverage</a>
+      <a href="/bxcapi/index.html">bxcAPI</a>
+    </nav>
+  </div>
+</header>
 
-    <button class="agency-chip" onclick="go('/settings')">
-      <div class="wav wav-square wav-32" id="agency-av">H</div>
-      <div style="min-width:0">
-        <div class="a-name" id="agency-name">Highline Studio</div>
-        <div class="a-sub" id="agency-sub">highlinestudio.com</div>
-      </div>
-    </button>
-
+<div class="app">
+  <!-- ════ SIDEBAR — one integrated nav panel (borderless shell) ════ -->
+  <aside class="sidebar">
     <div class="side-nav wnav-panel">
+      <button class="agency-chip" onclick="go('/settings')">
+        <div class="wav wav-square wav-32" id="agency-av">H</div>
+        <div style="min-width:0">
+          <div class="a-name" id="agency-name">Highline Studio</div>
+          <div class="a-sub" id="agency-sub">highlinestudio.com</div>
+        </div>
+      </button>
       <div class="wnav-section">Workspace</div>
       <div class="wnav-items-wrap" id="nav"></div>
     </div>
@@ -315,17 +330,14 @@
 
   <!-- ════ MAIN ════ -->
   <div class="main">
-    <div class="topbar">
-      <a class="topbar-brand" href="#/">
-        <svg width="56" height="14" viewBox="0 0 69.75 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Waldo"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
-      </a>
+    <!-- second line — search row (doctrine: search never in the header when nav exists) -->
+    <div class="app-toolbar">
       <div class="searchbox input-with-icon">
         <div class="input-icon">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
         </div>
         <input class="input" type="text" id="search" placeholder="Search prospects, brands, categories…" autocomplete="off">
       </div>
-      <div class="topbar-right" id="integ-status"></div>
     </div>
     <div class="mobile-nav" id="mobile-nav"></div>
     <div class="content" id="content"></div>
@@ -562,11 +574,10 @@ function renderNav(){
   const html = items.map(n=>`<a class="wnav-item ${isActive(n)?'active':''}" href="#${n.path}"><span class="wnav-icon">${n.icon}</span><span class="wnav-label">${n.label}</span>${badge(n.path)}</a>`).join('');
   $('#nav').innerHTML = html;
   $('#mobile-nav').innerHTML = items.map(n=>`<a class="wnav-item ${isActive(n)?'active':''}" href="#${n.path}"><span class="wnav-icon">${n.icon}</span><span class="wnav-label">${n.label}</span>${badge(n.path)}</a>`).join('');
-  // integrations status badges
-  $('#integ-status').innerHTML =
-    `<span class="badge badge-lg integ-badge ${state.integrations.linkedin?'badge-active':'badge-secondary'}" title="LinkedIn"><span class="badge-dot"></span>${state.integrations.linkedin?'LinkedIn':'Connect LinkedIn'}</span>`+
-    `<span class="badge badge-lg integ-badge ${state.integrations.hubspot?'badge-active':'badge-secondary'}" title="HubSpot"><span class="badge-dot"></span>${state.integrations.hubspot?'HubSpot synced':'HubSpot off'}</span>`+
-    `<span class="topbar-powered">Powered by Waldo API</span>`;
+  // header nav (B) active state — Alerts owns /watchlist, Dashboard owns the rest
+  document.querySelectorAll('.app-nav a[data-route]').forEach(a=>{
+    a.classList.toggle('active', a.dataset.route==='alerts' ? route==='/watchlist' : route!=='/watchlist');
+  });
   $('#agency-name').textContent = AGENCY.name;
   $('#agency-sub').textContent = AGENCY.domain;
   $('#agency-av').textContent = AGENCY.name[0];
@@ -590,7 +601,7 @@ function renderThisWeek(){
   }
   let reviewed = '';
   if(actioned.length){
-    reviewed = `<div class="divider"></div><div class="sec-label" style="margin-bottom:12px">Reviewed (${actioned.length})</div><div class="pstack">${actioned.map(prospectCard).join('')}</div>`;
+    reviewed = `<div class="sec-label" style="margin:32px 0 12px">Reviewed (${actioned.length})</div><div class="pstack">${actioned.map(prospectCard).join('')}</div>`;
   }
 
   $('#content').innerHTML = `
