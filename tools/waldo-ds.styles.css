@@ -1407,3 +1407,53 @@ table.wui-table tbody tr.row-selected td { background: hsl(var(--primary) / 0.04
 .app-toolbar .toolbar-left { margin-right: auto; display: flex; align-items: center; gap: 12px; }
 .app-search { width: 360px; max-width: 100%; }
 .app-search .input { height: 36px; }
+
+/* ── style block 31 ── */
+/* Brand API — KPI card. The four-up metric grid at the top of a dashboard.
+   .kpi is the shell; .k-label/.k-value/.k-sub the three text rows; .k-up/.k-down
+   the inline trend accents (up = destructive/negative, down = primary/positive). */
+.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.kpi { background: hsl(var(--card)); border-radius: var(--radius-2xl); padding: 24px; display: flex; flex-direction: column; gap: 8px; }
+.k-label { font-size: var(--fs-sm); font-weight: 500; line-height: 20px; letter-spacing: -0.28px; color: hsl(var(--muted-foreground)); }
+.k-value { font-size: var(--fs-4xl); font-weight: 600; line-height: 36px; letter-spacing: -0.6px; }
+.k-sub { font-size: var(--fs-xs); font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: hsl(var(--muted-foreground)); }
+.k-sub .k-up { color: hsl(var(--destructive)); font-weight: 600; }
+.k-sub .k-down { color: hsl(var(--primary)); font-weight: 600; }
+
+/* ── style block 32 ── */
+/* Brand API — Comment card. A single social mention/comment in a feed. Shell +
+   meta row (favicon, author, time, sentiment pill) + clamped body + footer.
+   .on-card variant sits on an elevated surface. Sentiment: pos/neu/neg/mix. */
+.comment-card { background: hsl(var(--card)); border-radius: var(--radius-xl); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; cursor: pointer; transition: background 0.12s; }
+.comment-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 6%, hsl(var(--card))); }
+.comment-card.on-card { background: hsl(var(--muted)); }
+.comment-card.on-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 6%, hsl(var(--muted))); }
+.comment-meta { display: flex; align-items: center; gap: 6px; }
+.comment-favicon { width: 14px; height: 14px; border-radius: 2px; flex: none; }
+.comment-author { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.comment-time { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); flex: none; opacity: 0.6; }
+.comment-sentiment { font-size: 10px; font-weight: 600; letter-spacing: 0.04em; padding: 2px 7px; border-radius: 999px; flex: none; }
+.comment-sentiment.pos { background: color-mix(in srgb, hsl(var(--primary)) 12%, transparent); color: hsl(var(--primary)); }
+.comment-sentiment.neu { background: color-mix(in srgb, hsl(var(--muted-foreground)) 12%, transparent); color: hsl(var(--muted-foreground)); }
+.comment-sentiment.neg { background: color-mix(in srgb, hsl(var(--destructive)) 12%, transparent); color: hsl(var(--destructive)); }
+.comment-sentiment.mix { background: color-mix(in srgb, hsl(var(--warning)) 12%, transparent); color: hsl(var(--warning)); }
+.comment-body { font-size: var(--fs-sm); color: hsl(var(--foreground)); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.comment-foot { display: flex; align-items: center; justify-content: space-between; }
+.comment-count { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); opacity: 0.6; }
+.comment-arrow { display: none; }
+
+/* ── style block 33 ── */
+/* Brand API — Depth pill. Discount-depth chip; the color alpha encodes intensity
+   (set per-instance via inline style on --yellow-300, e.g. 30% → 60%+ off). */
+.depth-pill { font-size: var(--fs-sm); font-weight: 700; padding: 4px 10px; border-radius: 8px; white-space: nowrap; }
+
+/* ── style block 34 ── */
+/* Brand API — Trend chart legend + wrapper. The SVG line chart itself is
+   .chart-card-trend (block above); these wrap it and render its series legend.
+   .trend-dot markers reveal on hover of the wrapper. */
+.trend-wrap { position: relative; width: 100%; }
+.trend-wrap svg { display: block; width: 100%; }
+.trend-wrap:hover .trend-dot { opacity: 1 !important; }
+.trend-legend { display: flex; gap: 18px; padding-left: 47px; }
+.trend-legend-item { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); line-height: 16px; letter-spacing: -0.24px; color: color-mix(in srgb,hsl(var(--foreground)) 70%,transparent); }
+.trend-swatch { width: 14px; height: 6px; border-radius: 4px; flex: none; }
