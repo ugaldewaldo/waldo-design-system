@@ -2,7 +2,8 @@
   "detector": {
     "ignoreRules": [],
     "ignoreFiles": [
-      "waldo-labs/promo-radar/index-ds-test4-20260618.html"
+      "waldo-labs/promo-radar/index-ds-test4-20260618.html",
+      "/Users/miguelugalde/Desktop/waldo-design-system/index.html"
     ],
     "ignoreValues": [
       {

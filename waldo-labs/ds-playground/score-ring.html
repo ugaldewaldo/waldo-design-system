@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<!--
+  Score Ring trio — recreation test.
+  Built ONLY from DS components: Radial (Text) chart gauge + Card surface + status tokens.
+  No new colors, no hardcoded hex. Arc colors via CSS classes (attributes don't resolve var()).
+  RUN:  cd waldo-design-system && python3 -m http.server 8099
+        open http://127.0.0.1:8099/waldo-labs/ds-playground/score-ring.html
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Score Ring — recreation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../waldo-ds.css">
+<style>
+  body {
+    margin: 0; padding: 56px 40px;
+    background: var(--background); color: var(--foreground);
+    font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased;
+  }
+
+  /* row of gauges */
+  .ring-row { display: flex; gap: 20px; align-items: center; justify-content: center; flex-wrap: wrap; }
+
+  /* Card surface (DS Card) wrapping a Radial-Text gauge */
+  .ring-card {
+    background: var(--card); border-radius: 16px; padding: 22px 20px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .ring-card.hero {
+    padding: 28px 24px;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--foreground) 5%, transparent),
+                0 24px 48px -16px rgba(0,0,0,0.6);
+  }
+
+  /* Radial (Text) gauge */
+  .ring-svg { width: 130px; height: 130px; display: block; flex: none; }
+  .ring-card.hero .ring-svg { width: 200px; height: 200px; }
+  .ring-track { fill: none; stroke: color-mix(in srgb, var(--foreground) 8%, transparent); stroke-width: 9; }
+  .ring-card.hero .ring-track { stroke-width: 11; }
+  .ring-arc { fill: none; stroke-width: 9; stroke-linecap: round; }
+  .ring-card.hero .ring-arc { stroke-width: 11; }
+  .ring-arc.good { stroke: var(--primary); }
+  .ring-arc.risk { stroke: var(--destructive); }
+  .ring-num { font-weight: 600; font-size: 38px; letter-spacing: -0.04em; fill: var(--foreground); }
+  .ring-card.hero .ring-num { font-size: 64px; }
+  .ring-suffix { font-weight: 600; font-size: var(--fs-xs); letter-spacing: -0.02em; fill: var(--muted-foreground); }
+
+  /* label + delta */
+  .ring-label { font-size: var(--fs-xs); font-weight: 600; letter-spacing: -0.02em; color: var(--muted-foreground); margin-top: 8px; }
+  .ring-card.hero .ring-label { font-size: var(--fs-sm); color: var(--foreground); margin-top: 12px; }
+  .ring-delta { font-size: var(--fs-xs); color: var(--muted-foreground); margin-top: 6px; font-variant-numeric: tabular-nums; }
+  .ring-delta .up { color: var(--primary); font-weight: 600; }
+  .ring-delta .dn { color: var(--destructive); font-weight: 600; }
+</style>
+</head>
+<body>
+  <div class="ring-row">
+
+    <!-- Reputation — good zone, 83, down delta -->
+    <div class="ring-card">
+      <svg class="ring-svg" viewBox="0 0 120 120">
+        <circle class="ring-track" cx="60" cy="60" r="52"/>
+        <circle class="ring-arc good" cx="60" cy="60" r="52" stroke-dasharray="271 327" transform="rotate(-90 60 60)"/>
+        <text class="ring-num" x="60" y="60" dominant-baseline="central" text-anchor="middle">83</text>
+      </svg>
+      <div class="ring-label">Reputation</div>
+      <div class="ring-delta">7D AVG <span class="dn">▼ 1.0</span></div>
+    </div>
+
+    <!-- Resonance — hero, good zone, 82, up delta -->
+    <div class="ring-card hero">
+      <svg class="ring-svg" viewBox="0 0 120 120">
+        <circle class="ring-track" cx="60" cy="60" r="52"/>
+        <circle class="ring-arc good" cx="60" cy="60" r="52" stroke-dasharray="268 327" transform="rotate(-90 60 60)"/>
+        <text class="ring-num" x="60" y="60" dominant-baseline="central" text-anchor="middle">82</text>
+      </svg>
+      <div class="ring-label">Resonance</div>
+      <div class="ring-delta">7D AVG <span class="up">▲ 0.2</span></div>
+    </div>
+
+    <!-- Presence — at-risk zone, 32 % SOV, up delta -->
+    <div class="ring-card">
+      <svg class="ring-svg" viewBox="0 0 120 120">
+        <circle class="ring-track" cx="60" cy="60" r="52"/>
+        <circle class="ring-arc risk" cx="60" cy="60" r="52" stroke-dasharray="105 327" transform="rotate(-90 60 60)"/>
+        <text class="ring-num" x="60" y="54" dominant-baseline="central" text-anchor="middle">32</text>
+        <text class="ring-suffix" x="60" y="76" text-anchor="middle">% SOV</text>
+      </svg>
+      <div class="ring-label">Presence</div>
+      <div class="ring-delta">7D AVG <span class="up">▲ 0.2%</span></div>
+    </div>
+
+  </div>
+</body>
+</html>

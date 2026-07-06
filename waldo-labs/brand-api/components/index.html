@@ -26,11 +26,12 @@
     delete it from this file.
   */
 
-  /* Local rgb helpers the DS does not ship — channels mirror token-catalog.yaml */
-  :root { --destructive-rgb: 222,58,40; --warning-rgb: 201,78,34; }
+  /* No local -rgb declarations: all six companions ship in waldo-ds.css. */
 
-  /* DS conflict overrides (see doctrine — load-bearing, verbatim) */
-  html, body { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  /* DS conflict overrides (see doctrine — load-bearing, verbatim).
+     Scroll override on html ONLY — overflow on body kills position:sticky. */
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
   body { display: block !important; max-width: none !important; margin: 0 !important;
          background: var(--background); color: var(--foreground);
          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; }
@@ -79,6 +80,14 @@
      Background fixed at rgba(var(--highlight-rgb), 0.10); only text alpha varies.
      ════════════════════════════════════════════════════════════════════ */
   .depth-pill { font-size: 13px; font-weight: 700; padding: 4px 10px; border-radius: 8px; white-space: nowrap; }
+
+  /* ════════════════════════════════════════════════════════════════════
+     4. TABBED VIEWS — canonical panel CSS
+     Tab bar itself is DS .wtabs-text/.wtab-text (ships in waldo-ds.css).
+     Panels are divs, never <section> (waldo-ds.css hides bare section).
+     ════════════════════════════════════════════════════════════════════ */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
 
   /* ── reference-page chrome (not part of the components) ── */
   .ref-page { max-width: 1000px; margin: 0 auto; padding: 48px 24px 96px; }
@@ -175,6 +184,20 @@
     <p class="ref-note"><b>The formula below IS the encoding rule</b> — alpha 0.30 at 10% depth → 1.0 at 60%+, clamped. Background fixed at <code>rgba(var(--highlight-rgb), 0.10)</code>; only the text alpha varies. A 70% pill must look heavier than a 20% pill — never flatten. Magnitude only, never status; never <code>--chart-*</code> here.</p>
   </div>
 
+  <!-- ═══ 4. TABBED VIEWS — canonical switching JS ═══ -->
+  <div class="ref-section">
+    <div class="ref-h">4 · Tabbed views — canonical switching JS</div>
+    <div class="ref-demo">
+      <div class="wtabs-text" role="tablist">
+        <button class="wtab-text active" role="tab" aria-selected="true" onclick="showAreaTab('demo-one',this)">Overview</button>
+        <button class="wtab-text" role="tab" aria-selected="false" onclick="showAreaTab('demo-two',this)">Detail</button>
+      </div>
+      <div class="tab-panel active" id="tab-demo-one" role="tabpanel"><p class="ref-note">Panel one — visible by default.</p></div>
+      <div class="tab-panel" id="tab-demo-two" role="tabpanel"><p class="ref-note">Panel two — shown when its tab is selected.</p></div>
+    </div>
+    <p class="ref-note">Tab bar = DS Tabs <b>text variant</b> (<code>.wtabs-text</code>/<code>.wtab-text</code>, ships in <code>waldo-ds.css</code>). Panels are <code>div.tab-panel</code> — <b>never <code>&lt;section&gt;</code></b> (DS collision hides it). Copy <code>showAreaTab()</code> below verbatim; the showcase's <code>switchTab()</code> is not reachable from prototypes. ARIA roles + <code>aria-selected</code> stay in sync. For sales demos, prefer also syncing the active tab to <code>location.hash</code> so views are deep-linkable.</p>
+  </div>
+
 </div>
 
 <script>
@@ -190,6 +213,20 @@ function depthPillStyle(d) {
 document.querySelectorAll('.depth-pill[data-depth]').forEach(el => {
   el.style.cssText += depthPillStyle(parseInt(el.dataset.depth, 10));
 });
+
+/* ── Tabbed views switching — CANONICAL ──────────────────────────────────
+   Copy verbatim into prototypes. Panels use id="tab-<name>"; buttons call
+   showAreaTab('<name>', this). Keeps .active and aria-selected in sync. */
+function showAreaTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(function (p) {
+    p.classList.toggle('active', p.id === 'tab-' + name);
+  });
+  btn.closest('[role="tablist"]').querySelectorAll('.wtab-text').forEach(function (b) {
+    var on = b === btn;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+}
 </script>
 </body>
 </html>

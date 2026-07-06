@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "waldo-ds",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "/Users/miguelugalde/Desktop/waldo-design-system"],
+      "port": 4501,
+      "autoPort": true
+    }
+  ]
+}

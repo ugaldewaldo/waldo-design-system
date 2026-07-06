@@ -6,6 +6,8 @@ This session works exclusively inside `waldo-labs/`. Its job is building vanilla
 
 - **In scope**: HTML prototypes in `waldo-labs/`, doctrine in `docs/brand-api-dashboard-doctrine.md`
 - **Out of scope**: `index.html`, `waldo-ds.css`, `tools/`, `waldo-ui/` — do not touch these
+  (single exception: a `/component-pipeline` run follows the skill's own rules, which may
+  edit `index.html`, `tools/lint-index.js` EXEMPT, and `tools/waldo-ds.styles.css`)
 
 ## Before creating any file
 
@@ -14,6 +16,19 @@ This session works exclusively inside `waldo-labs/`. Its job is building vanilla
    (machine-readable: selector/category/use_when) or `docs/component-index.md`; both are
    generated from `index.html` and cover core + Brand API components + charts
 3. Only create after confirming neither exists
+
+## Missing components → pipeline (automatic, no approval needed)
+
+When a prototype needs a component that does NOT exist in `docs/component-index.json`:
+
+1. Implement it locally in the prototype — don't block the prototype.
+2. **Automatically** save a spec to `waldo-labs/_pipeline/1-todo/new-component--<name>.html`:
+   a self-contained HTML rendering the component as built (verbatim markup + CSS, DS linked),
+   with a metadata comment on top (component, source, date, use_when, notes). This step never
+   requires approval — it's how gaps get captured.
+3. Continue. Processing happens when Miguel says "pipeline" (skill `/component-pipeline`;
+   states documented in `_pipeline/README.md`). Miguel moving a file into `4-to-integrate/`
+   or `5-to-figma/` IS his approval for that stage.
 
 ## Before executing any task
 

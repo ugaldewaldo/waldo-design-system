@@ -1,0 +1,86 @@
+<!--
+  component: Search Autocomplete (vanilla)
+  source: waldo-labs/moodtape/Test1/index.html (DS rebuild of waldo-labs/moodtape)
+  date: 2026-07-03
+  use_when:
+    - A prototype needs an inline search that filters entities as you type and navigates on selection
+    - Results mix types (tickers/brands vs sectors/categories) that need a type label per row
+  notes:
+    - Implements the doctrine "Search / autocomplete" interactive pattern (input + dropdown as one unit, results grouped by type) — the pattern has no canonical vanilla markup in the showcase; core Combobox/Command are React-only
+    - Input is the DS .input + .input-with-icon; dropdown sits on hsl(var(--popover)), radius var(--radius-xl), rows hover hsl(var(--secondary))
+    - Trailing metric colored by the data rule (positive --primary / negative --warning / neutral --muted-foreground), tabular-nums
+    - Enter selects the first result; clicking outside the shell closes the dropdown
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<title>New component — Search Autocomplete</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; display: block !important;
+         max-width: none !important; margin: 0 !important; padding: 40px;
+         background: hsl(var(--background)); color: hsl(var(--foreground)); }
+  svg { flex: none; min-height: fit-content; }
+
+  .search-shell { position: relative; max-width: 560px; }
+  .search-results { position: absolute; left: 0; right: 0; top: 100%; margin-top: 8px;
+                    background: hsl(var(--popover)); border-radius: var(--radius-xl);
+                    overflow: hidden; z-index: 40; display: none;
+                    box-shadow: 0 8px 24px hsl(var(--background) / 0.5); }
+  .search-results.open { display: block; }
+  .sr-row { display: flex; align-items: center; gap: 12px; padding: 11px 16px; cursor: pointer;
+            border-bottom: 1px solid hsl(var(--border)); }
+  .sr-row:last-child { border-bottom: none; }
+  .sr-row:hover { background: hsl(var(--secondary)); }
+  .sr-sym { min-width: 64px; font-weight: 600; font-size: var(--fs-sm);
+            font-variant-numeric: tabular-nums; color: hsl(var(--foreground)); }
+  .sr-sym.sr-kind { color: hsl(var(--muted-foreground)); font-size: var(--fs-xs);
+                    font-weight: 500; letter-spacing: 0.06em; }
+  .sr-name { color: hsl(var(--muted-foreground)); flex: 1; font-size: var(--fs-sm); }
+  .sr-meta { font-size: var(--fs-xs); font-weight: 500; font-variant-numeric: tabular-nums; }
+  .sr-empty { color: hsl(var(--muted-foreground)); cursor: default; font-size: var(--fs-sm);
+              padding: 11px 16px; }
+  .pos { color: hsl(var(--primary)); }
+  .neg { color: hsl(var(--warning)); }
+  .neu { color: hsl(var(--muted-foreground)); }
+</style>
+</head>
+<body>
+<div class="search-shell">
+  <div class="input-with-icon" style="width:100%">
+    <div class="input-icon">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </div>
+    <input class="input" id="search-input" type="text" placeholder="Search a ticker or sector…" autocomplete="off" spellcheck="false" style="width:100%">
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+<script>
+  const ITEMS = [
+    { kind:'ticker', sym:'AAPL', name:'Apple Inc.',           v:'+0.46', c:'pos' },
+    { kind:'ticker', sym:'NKE',  name:'Nike, Inc.',           v:'-0.11', c:'neg' },
+    { kind:'ticker', sym:'TSLA', name:'Tesla, Inc.',          v:'+0.02', c:'neu' },
+    { kind:'sector', sym:'SECTOR', name:'Apparel & Fashion',  v:'+0.10', c:'neu' },
+    { kind:'sector', sym:'SECTOR', name:'Technology',         v:'+0.44', c:'pos' },
+  ];
+  const box = document.getElementById('search-results');
+  const input = document.getElementById('search-input');
+  function run(q){
+    q = q.trim().toLowerCase();
+    if(!q){ box.classList.remove('open'); box.innerHTML=''; return; }
+    const hits = ITEMS.filter(i => i.sym.toLowerCase().includes(q) || i.name.toLowerCase().includes(q));
+    box.innerHTML = hits.length ? hits.map(i =>
+      `<div class="sr-row"><span class="sr-sym${i.kind==='sector'?' sr-kind':''}">${i.sym}</span><span class="sr-name">${i.name}</span><span class="sr-meta ${i.c}">${i.v}</span></div>`
+    ).join('') : `<div class="sr-row sr-empty">No match for “${q}”</div>`;
+    box.classList.add('open');
+  }
+  input.addEventListener('input', e => run(e.target.value));
+  input.addEventListener('keydown', e => { if(e.key==='Enter'){ const f=box.querySelector('.sr-row'); if(f) f.click(); } });
+  document.addEventListener('click', e => { if(!e.target.closest('.search-shell')) box.classList.remove('open'); });
+</script>
+</body>
+</html>
