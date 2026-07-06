@@ -1,0 +1,326 @@
+<!--
+PIPELINE PROCESSED 2026-07-03:
+1. Scrubber Timeline  -> built: 3-to-review/scrubber-timeline.html
+2. Drill-down Panel   -> SKIPPED, duplicate: already ships as Brand API "Drill Panel" (#comp-drill-panel)
+3. Tracker Item + Counters -> built: 3-to-review/tracker-item.html
+4. Score Ring Hero Trio -> built as VARIANT: 3-to-review/score-ring-hero-trio.html (doctrine adjustments noted inside)
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Missing DS Components — Brand Health X</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../waldo-ds.css">
+<style>
+  html, body { height: auto !important; overflow: visible !important; }
+  body { display: block !important; max-width: none !important; margin: 0 !important; padding: 40px 48px 120px !important; background: var(--background); color: var(--foreground); font-family: 'Inter', sans-serif; }
+
+  .doc-head { max-width: 1080px; margin: 0 auto 48px; }
+  .doc-title { font-size: 32px; font-weight: 600; letter-spacing: -0.04em; }
+  .doc-sub { font-size: var(--fs-sm); color: var(--muted-foreground); margin-top: 8px; line-height: 1.6; max-width: 760px; }
+  .doc-sub code { color: var(--primary); font-size: var(--fs-xs); }
+
+  .comp { max-width: 1080px; margin: 0 auto 28px; background: var(--card); border-radius: 16px; padding: 28px 32px; }
+  .comp-name { font-size: var(--fs-lg); font-weight: 600; letter-spacing: -0.02em; }
+  .comp-meta { font-size: var(--fs-sm); color: var(--muted-foreground); margin-top: 4px; line-height: 1.5; }
+  .comp-meta code { color: var(--primary); font-size: var(--fs-xs); }
+  .comp-demo { margin-top: 20px; padding: 24px; background: var(--background); border-radius: 12px; }
+  .comp-tag { display: inline-block; font-size: var(--fs-xs); font-weight: 600; padding: 3px 8px; border-radius: 6px; background: color-mix(in srgb, var(--highlight) 12%, transparent); color: var(--highlight); margin-left: 10px; vertical-align: middle; }
+  .comp-tag.variant { background: color-mix(in srgb, var(--primary) 12%, transparent); color: var(--primary); }
+
+  /* ══ 1. Scrubber Timeline — extracted verbatim from index_agent.html ══ */
+  .scrubber { display: flex; align-items: center; gap: 20px; padding: 16px 20px; background: var(--card); border-radius: 16px; }
+  .scrub-slider { flex: 1; position: relative; }
+  .scrub-slider .wslider { height: 24px; }
+  .scrub-tick { position: absolute; top: 50%; width: 6px; height: 6px; border-radius: 50%; background: var(--highlight); transform: translate(-50%, -50%); pointer-events: none; z-index: 1; opacity: 0.9; }
+  .scrub-asof { font-size: var(--fs-sm); color: var(--foreground); min-width: 128px; text-align: right; }
+  .scrub-asof span { display: block; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); }
+
+  /* ══ 2. Drill-down Panel — extracted verbatim from index_agent.html ══ */
+  .drill-overlay { position: fixed; inset: 0; background: color-mix(in srgb, var(--background) 65%, transparent); backdrop-filter: blur(2px); opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 90; }
+  .drill-overlay.open { opacity: 1; pointer-events: all; }
+  .drill-panel { position: fixed; top: 0; right: 0; bottom: 0; width: 440px; max-width: 92vw; background: var(--card); border-left: 1px solid var(--border-md); z-index: 91; transform: translateX(100%); transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1); display: flex; flex-direction: column; }
+  .drill-panel.open { transform: translateX(0); }
+  .drill-head { padding: 24px 28px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 12px; }
+  .drill-head-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .drill-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--primary); }
+  .drill-title { font-size: var(--fs-lg); font-weight: 600; letter-spacing: -0.02em; color: var(--foreground); line-height: 1.3; }
+  .drill-close { display: flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; border: none; background: transparent; color: var(--muted-foreground); cursor: pointer; transition: background 0.1s, color 0.1s; flex: none; }
+  .drill-close:hover { background: var(--accent); color: var(--foreground); }
+  .drill-body { padding: 20px 28px 32px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 16px; }
+  .drill-stat-row { display: flex; gap: 12px; }
+  .drill-stat { flex: 1; background: var(--background); border-radius: var(--radius-xl); padding: 12px 14px; display: flex; flex-direction: column; gap: 3px; }
+  .drill-stat-label { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted-foreground); }
+  .drill-stat-val { font-size: var(--fs-lg); font-weight: 600; color: var(--foreground); }
+  .drill-text { font-size: var(--fs-sm); color: var(--muted-foreground); line-height: 1.6; }
+  .drill-quote { background: var(--background); border-radius: var(--radius-xl); padding: 14px 16px; font-size: var(--fs-sm); color: var(--foreground); line-height: 1.55; }
+  .drill-sec-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-foreground); opacity: 0.7; margin-bottom: -8px; }
+  .drill-link { font-size: var(--fs-sm); color: var(--primary); text-decoration: none; }
+  .drill-link:hover { opacity: 0.8; }
+
+  /* ══ 3. Tracker Item + Counters — extracted verbatim from index_agent.html ══ */
+  .tracker-list { display: flex; flex-direction: column; gap: 10px; max-width: 640px; }
+  .tracker-item { display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: var(--radius-xl); background: var(--card); cursor: pointer; transition: background 0.12s; }
+  .tracker-item:hover { background: color-mix(in srgb, var(--foreground) 4%, var(--card)); }
+  .tracker-item.paused { opacity: 0.7; }
+  .tracker-item.archived { opacity: 0.45; }
+  .tracker-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .tracker-name { font-size: var(--fs-sm); font-weight: 600; color: var(--foreground); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .tracker-meta { font-size: var(--fs-xs); color: var(--muted-foreground); }
+  .tracker-actions { display: flex; gap: 2px; flex: none; }
+  .tracker-btn { width: 28px; height: 28px; background: transparent; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; border-radius: var(--radius-md); color: var(--muted-foreground); transition: background 0.12s, color 0.12s; padding: 0; }
+  .tracker-btn:hover { background: color-mix(in srgb, var(--foreground) 8%, transparent); color: var(--foreground); }
+  .tracker-btn.del:hover { background: color-mix(in srgb, var(--destructive) 10%, transparent); color: var(--destructive); }
+  .tracker-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .spk svg { display: block; width: 88px; height: 26px; }
+  .tracker-counters { display: flex; gap: 12px; max-width: 640px; margin-top: 14px; }
+  .tracker-counter { flex: 1; display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-radius: var(--radius-xl); background: var(--card); }
+  .tracker-counter-label { font-size: var(--fs-sm); color: var(--muted-foreground); }
+  .tracker-counter-val { font-size: var(--fs-xl); font-weight: 600; color: var(--foreground); }
+
+  /* ══ 4. Score Ring — Hero Trio variant — extracted verbatim from index_agent.html ══ */
+  .hero-rings { display: grid; grid-template-columns: 1fr 1.6fr 1fr; gap: 16px; align-items: stretch; }
+  .ring-card { background: var(--card); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; cursor: pointer; transition: background 0.25s; }
+  .ring-card:hover { background: color-mix(in srgb, var(--foreground) 4%, var(--card)); }
+  .ring-card.hero-ring { padding: 32px; }
+  .ring-card.zone-good.hero-ring { background: color-mix(in srgb, var(--primary) 5%, var(--card)); }
+  .ring-card.zone-watch.hero-ring { background: color-mix(in srgb, var(--warning) 6%, var(--card)); }
+  .ring-card.zone-risk.hero-ring { background: color-mix(in srgb, var(--destructive) 6%, var(--card)); }
+  .ring-svg { display: block; }
+  .ring-track { fill: none; stroke: color-mix(in srgb, var(--foreground) 8%, transparent); }
+  .ring-arc { fill: none; stroke-linecap: round; transition: stroke-dasharray 0.7s cubic-bezier(0.22, 1, 0.36, 1), stroke 0.3s; }
+  .zone-good .ring-arc { stroke: var(--primary); }
+  .zone-watch .ring-arc { stroke: var(--warning); }
+  .zone-risk .ring-arc { stroke: var(--destructive); }
+  .ring-num { font-weight: 400; letter-spacing: -0.02em; fill: var(--foreground); }
+  .ring-suffix { font-size: var(--fs-xs); font-weight: 400; fill: var(--muted-foreground); }
+  .ring-label { font-size: var(--fs-sm); font-weight: 400; letter-spacing: -0.02em; color: var(--muted-foreground); display: flex; align-items: center; gap: 8px; }
+  .hero-ring .ring-label { font-size: var(--fs-base); color: var(--foreground); }
+  .zone-watch.hero-ring .ring-label { color: var(--warning); }
+  .zone-risk.hero-ring .ring-label { color: var(--destructive); }
+  .ring-role { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); opacity: 0.7; }
+  .ring-delta { font-size: var(--fs-xs); color: var(--muted-foreground); font-variant-numeric: tabular-nums; }
+  .ring-delta .up { color: var(--primary); font-weight: 500; }
+  .ring-delta .dn { color: var(--warning); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<div class="doc-head">
+  <div class="doc-title">Missing DS Components</div>
+  <div class="doc-sub">The components the Brand Health X rebuild had to create because no match exists in
+  <code>component-index.md</code> (all three sections checked) — extracted verbatim from
+  <code>index_agent.html</code>, tokens only. 3 missing + 1 variant of an existing component.
+  Candidates for promotion to the Brand API section of the DS showcase.</div>
+</div>
+
+<!-- ═══ 1. Scrubber Timeline ═══ -->
+<div class="comp">
+  <div class="comp-name">Scrubber Timeline <span class="comp-tag">missing</span></div>
+  <div class="comp-meta">Time-travel control for dashboards: grain toggle (DS <code>.wseg</code>) + range slider
+  (DS <code>.wslider</code>) + event ticks (<code>var(--highlight)</code> dots) + "as of" readout.
+  Scrubbing recomputes every score on the page. Only the ticks and readout are new — the rest composes DS parts.</div>
+  <div class="comp-demo">
+    <div class="scrubber">
+      <div class="wseg">
+        <button class="wseg-opt active" type="button">Day</button>
+        <button class="wseg-opt inactive" type="button">Week</button>
+        <button class="wseg-opt inactive" type="button">Month</button>
+      </div>
+      <div class="scrub-slider">
+        <div class="wslider" id="demo-slider">
+          <div class="wslider-track"><div class="wslider-range" id="demo-range"></div></div>
+          <div id="demo-ticks"></div>
+          <div class="wslider-thumb" id="demo-thumb"></div>
+        </div>
+      </div>
+      <div class="scrub-asof"><span>As of</span><strong id="demo-asof">May 18, 2026</strong></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 2. Drill-down Panel ═══ -->
+<div class="comp">
+  <div class="comp-name">Drill-down Panel <span class="comp-tag">missing</span></div>
+  <div class="comp-meta">Right-slide detail surface (vanilla <code>Sheet</code>): overlay + panel with eyebrow /
+  title / close, scrollable body with stat row, quote and source link. Closes via ✕, overlay and <code>Esc</code>.
+  Pattern now specified in the doctrine ("Drill-down side panel").</div>
+  <div class="comp-demo">
+    <button class="btn btn-secondary btn-sm" type="button" onclick="openDemoDrill()">Open drill panel</button>
+  </div>
+</div>
+
+<!-- ═══ 3. Tracker Item + Counters ═══ -->
+<div class="comp">
+  <div class="comp-name">Tracker Item + Counters <span class="comp-tag">missing</span></div>
+  <div class="comp-meta">A saved watch row: query + kind/status badges (DS <code>.badge</code>), meta line,
+  embedded sparkline, icon actions (pause / archive / delete). Status encodes via opacity
+  (<code>.paused</code> 0.7 · <code>.archived</code> 0.45). Counter tiles summarize by status.</div>
+  <div class="comp-demo">
+    <div class="tracker-list">
+      <div class="tracker-item" role="button" tabindex="0">
+        <div class="tracker-main">
+          <div class="tracker-name">poppi <span class="badge badge-secondary badge-sm">Search</span> <span class="badge badge-active badge-sm">active</span></div>
+          <div class="tracker-meta">checks daily · created May 12, 2026</div>
+        </div>
+        <div class="spk" data-spark="up"></div>
+        <div class="tracker-actions">
+          <button class="tracker-btn" title="Pause" type="button"><svg viewBox="0 0 16 16"><path d="M5 3v10M11 3v10"/></svg></button>
+          <button class="tracker-btn" title="Archive" type="button"><svg viewBox="0 0 16 16"><path d="M2 4h12v3H2zM3 7v6h10V7M6.5 10h3"/></svg></button>
+          <button class="tracker-btn del" title="Delete" type="button"><svg viewBox="0 0 16 16"><path d="M2 4h12M5 4V2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5V4M6 7v5M10 7v5M3 4l.8 8.5a.5.5 0 0 0 .5.5h7.4a.5.5 0 0 0 .5-.5L13 4"/></svg></button>
+        </div>
+      </div>
+      <div class="tracker-item paused" role="button" tabindex="0">
+        <div class="tracker-main">
+          <div class="tracker-name">pepsi prebiotic <span class="badge badge-secondary badge-sm">Competitor</span> <span class="badge badge-highlight badge-sm">paused</span></div>
+          <div class="tracker-meta">checks weekly · created May 9, 2026</div>
+        </div>
+        <div class="spk" data-spark="dn"></div>
+        <div class="tracker-actions">
+          <button class="tracker-btn" title="Resume" type="button"><svg viewBox="0 0 16 16"><path d="M5 3l8 5-8 5z"/></svg></button>
+          <button class="tracker-btn" title="Archive" type="button"><svg viewBox="0 0 16 16"><path d="M2 4h12v3H2zM3 7v6h10V7M6.5 10h3"/></svg></button>
+          <button class="tracker-btn del" title="Delete" type="button"><svg viewBox="0 0 16 16"><path d="M2 4h12M5 4V2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5V4M6 7v5M10 7v5M3 4l.8 8.5a.5.5 0 0 0 .5.5h7.4a.5.5 0 0 0 .5-.5L13 4"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="tracker-counters">
+      <div class="tracker-counter"><span class="tracker-counter-label">Active</span><span class="tracker-counter-val">3</span></div>
+      <div class="tracker-counter"><span class="tracker-counter-label">Paused</span><span class="tracker-counter-val">1</span></div>
+      <div class="tracker-counter"><span class="tracker-counter-label">Archived</span><span class="tracker-counter-val">2</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ 4. Score Ring — Hero Trio variant ═══ -->
+<div class="comp">
+  <div class="comp-name">Score Ring — Hero Trio <span class="comp-tag variant">variant</span></div>
+  <div class="comp-meta">Variant of the existing <code>#comp-score-ring</code>: an asymmetric
+  <code>1fr / 1.6fr / 1fr</code> trio encoding "two inputs → one outcome". The outcome card and its label
+  recolor by zone (<code>.zone-good</code> / <code>.zone-watch</code> / <code>.zone-risk</code> →
+  primary / warning / destructive) with a matching badge. Each ring carries a role eyebrow and a 7-day delta.</div>
+  <div class="comp-demo">
+    <div class="hero-rings">
+      <div class="ring-card zone-good" role="button" tabindex="0">
+        <span class="ring-role">Input</span>
+        <svg class="ring-svg" width="130" height="130" viewBox="0 0 200 200">
+          <circle class="ring-track" cx="100" cy="100" r="80" stroke-width="9"/>
+          <circle class="ring-arc" data-score="83" cx="100" cy="100" r="80" stroke-width="9" stroke-dasharray="0 502.7" transform="rotate(-90 100 100)"/>
+          <text class="ring-num" x="100" y="112" text-anchor="middle" font-size="38">83</text>
+        </svg>
+        <span class="ring-label">Reputation</span>
+        <span class="ring-delta">7D AVG <span class="up">▲ 1.4</span></span>
+      </div>
+      <div class="ring-card hero-ring zone-watch" role="button" tabindex="0">
+        <span class="ring-role">Outcome</span>
+        <svg class="ring-svg" width="220" height="220" viewBox="0 0 200 200">
+          <circle class="ring-track" cx="100" cy="100" r="80" stroke-width="11"/>
+          <circle class="ring-arc" data-score="63" cx="100" cy="100" r="80" stroke-width="11" stroke-dasharray="0 502.7" transform="rotate(-90 100 100)"/>
+          <text class="ring-num" x="100" y="122" text-anchor="middle" font-size="64">63</text>
+        </svg>
+        <span class="ring-label">Resonance <span class="badge badge-highlight badge-sm">Watch</span></span>
+        <span class="ring-delta">7D AVG <span class="dn">▼ 1.6</span></span>
+      </div>
+      <div class="ring-card zone-good" role="button" tabindex="0">
+        <span class="ring-role">Input</span>
+        <svg class="ring-svg" width="130" height="130" viewBox="0 0 200 200">
+          <circle class="ring-track" cx="100" cy="100" r="80" stroke-width="9"/>
+          <circle class="ring-arc" data-score="32" cx="100" cy="100" r="80" stroke-width="9" stroke-dasharray="0 502.7" transform="rotate(-90 100 100)"/>
+          <text class="ring-num" x="100" y="105" text-anchor="middle" font-size="38">32</text>
+          <text class="ring-suffix" x="100" y="128" text-anchor="middle">% SOV</text>
+        </svg>
+        <span class="ring-label">Presence</span>
+        <span class="ring-delta">7D AVG <span class="dn">▼ 1.9%</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Drill demo instance -->
+<div class="drill-overlay" id="demo-drill-overlay" aria-hidden="true"></div>
+<aside class="drill-panel" id="demo-drill" role="dialog" aria-modal="true">
+  <div class="drill-head">
+    <div class="drill-head-main">
+      <span class="drill-eyebrow">Mention · Reddit</span>
+      <span class="drill-title">u/exdietcokedrinker · r/Soda</span>
+    </div>
+    <button class="drill-close" onclick="closeDemoDrill()" aria-label="Close">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M1 1l10 10M11 1L1 11"/></svg>
+    </button>
+  </div>
+  <div class="drill-body">
+    <div class="drill-stat-row">
+      <div class="drill-stat"><span class="drill-stat-label">Reach</span><span class="drill-stat-val">268k</span></div>
+      <div class="drill-stat"><span class="drill-stat-label">Comments</span><span class="drill-stat-val">218</span></div>
+      <div class="drill-stat"><span class="drill-stat-label">Sentiment</span><span class="drill-stat-val">POS</span></div>
+    </div>
+    <span class="drill-sec-label">Post</span>
+    <div class="drill-quote">"Switched from Diet Coke to Poppi a month ago. Gut genuinely feels better, wallet does not."</div>
+    <span class="drill-sec-label">Theme</span>
+    <div class="drill-text">Soda alternative — the highest-frequency switch-from cluster (Diet Coke, 0.34).</div>
+    <a class="drill-link" href="#">Open source post →</a>
+  </div>
+</aside>
+
+<script>
+/* Demo wiring only — positions and arcs; all colors come from CSS classes. */
+
+/* Scrubber: thumb at 78%, range fill, event ticks */
+(function () {
+  var pos = 78, ticks = [12, 34, 61, 78];
+  document.getElementById('demo-range').style.width = pos + '%';
+  document.getElementById('demo-thumb').style.left = pos + '%';
+  var wrap = document.getElementById('demo-ticks');
+  ticks.forEach(function (p) {
+    var t = document.createElement('span');
+    t.className = 'scrub-tick';
+    t.style.left = p + '%';
+    wrap.appendChild(t);
+  });
+})();
+
+/* Rings: animate arcs to data-score */
+(function () {
+  var CIRC = 2 * Math.PI * 80;
+  requestAnimationFrame(function () {
+    document.querySelectorAll('.ring-arc[data-score]').forEach(function (arc) {
+      var pct = Math.max(0, Math.min(1, Number(arc.dataset.score) / 100));
+      arc.setAttribute('stroke-dasharray', (pct * CIRC).toFixed(1) + ' ' + CIRC.toFixed(1));
+    });
+  });
+})();
+
+/* Tracker sparklines — direction classes resolve color via CSS vars in style attr-free SVG */
+(function () {
+  var data = { up: [4, 5, 4.5, 6, 5.5, 7, 6.5, 8, 9, 8.5, 10, 11], dn: [9, 8.5, 9, 7.5, 8, 6.5, 7, 6, 5.5, 6, 5, 4.5] };
+  document.querySelectorAll('.spk[data-spark]').forEach(function (el) {
+    var dir = el.dataset.spark, d = data[dir];
+    var W = 88, H = 26, padX = 2, padY = 4;
+    var min = Math.min.apply(null, d), max = Math.max.apply(null, d), span = (max - min) || 1;
+    var pts = d.map(function (v, i) {
+      var x = padX + (i / (d.length - 1)) * (W - padX * 2);
+      var y = padY + (1 - (v - min) / span) * (H - padY * 2);
+      return x.toFixed(1) + ',' + y.toFixed(1);
+    }).join(' L');
+    var stroke = dir === 'dn' ? 'var(--warning)' : 'var(--primary)';
+    el.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none">'
+      + '<path d="M' + pts + '" fill="none" style="stroke:' + stroke + '" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg>';
+  });
+})();
+
+/* Drill open/close */
+function openDemoDrill() {
+  document.getElementById('demo-drill').classList.add('open');
+  document.getElementById('demo-drill-overlay').classList.add('open');
+}
+function closeDemoDrill() {
+  document.getElementById('demo-drill').classList.remove('open');
+  document.getElementById('demo-drill-overlay').classList.remove('open');
+}
+document.getElementById('demo-drill-overlay').addEventListener('click', closeDemoDrill);
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDemoDrill(); });
+</script>
+</body>
+</html>

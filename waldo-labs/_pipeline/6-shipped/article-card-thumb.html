@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<!--
+  Article Card — "with-thumb" variant PREVIEW (pending approval).
+  Base .art-card CSS copied VERBATIM from index.html #comp-article-card.
+  New additive styles are marked below. Not canonical yet — do not consume.
+  RUN:  cd waldo-design-system && python3 -m http.server 8099
+        open http://127.0.0.1:8099/waldo-labs/_pipeline/4-to-integrate/article-card-thumb.html
+-->
+<html lang="en" class="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Article Card — with-thumb preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  body { margin: 0; padding: 56px 40px; background: hsl(var(--background)); color: hsl(var(--foreground)); font-family: 'Inter', sans-serif; }
+  .pg-title { font-size: var(--fs-lg); font-weight: 600; margin-bottom: 4px; }
+  .pg-desc { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); margin-bottom: 32px; }
+  .pg-section { font-size: var(--fs-xs); font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: hsl(var(--muted-foreground)); margin: 32px 0 12px; }
+  .pg-col { max-width: 480px; display: flex; flex-direction: column; gap: 6px; }
+
+  /* ===== BASE — copied verbatim from index.html #comp-article-card ===== */
+  /* NOTE: canonical uses var(--radius-xl), but --radius-* live inside the Tailwind v4
+     @theme block, which vanilla browsers ignore — so it resolves to 0 (square cards).
+     Preview composes the same 12px from the real --radius token. Theme fix = VALIDATOR. */
+  .art-card { display: flex; gap: 14px; background: hsl(var(--card)); border-radius: calc(var(--radius) + 6px); padding: 14px 16px; text-decoration: none; color: inherit; cursor: pointer; transition: background 0.12s; }
+  .art-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 5%, hsl(var(--card))); }
+  .art-card.on-card { background: hsl(var(--muted)); }
+  .art-card.on-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 5%, hsl(var(--muted))); }
+  .art-favicon { width: 32px; height: 32px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .art-favicon img { width: 20px; height: 20px; object-fit: contain; display: block; }
+  .art-body { display: flex; flex-direction: column; gap: 5px; min-width: 0; flex: 1; }
+  .art-meta { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); flex-wrap: wrap; }
+  .art-source { font-weight: 600; color: hsl(var(--foreground)); }
+  .art-dot { opacity: 0.4; }
+  .art-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.02em; padding: 1px 7px; border-radius: 999px; margin-left: auto; flex-shrink: 0; }
+  .art-tag.neutral { background: color-mix(in srgb, hsl(var(--primary)) 14%, transparent); color: hsl(var(--primary)); }
+  .art-tag.competitor { background: color-mix(in srgb, hsl(var(--warning)) 14%, transparent); color: hsl(var(--warning)); }
+  .art-tag.negative { background: color-mix(in srgb, hsl(var(--destructive)) 14%, transparent); color: hsl(var(--destructive)); }
+  .art-title { font-size: var(--fs-sm); font-weight: 600; color: hsl(var(--foreground)); line-height: 1.4; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .art-snippet { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); line-height: 1.5; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+
+  /* ===== NEW — with-thumb variant (additive, pending approval) ===== */
+  /* Full-bleed thumb: stretches card height and meets the top/right/bottom edges,
+     inheriting the card's rounded corners on the right side. */
+  .art-card.with-thumb { padding-left: 20px; }
+  .art-thumb { width: 96px; flex-shrink: 0; align-self: stretch; margin: -14px -16px -14px 0; border-radius: 0 calc(var(--radius) + 6px) calc(var(--radius) + 6px) 0; overflow: hidden; background: hsl(var(--muted)); }
+  .art-card.on-card .art-thumb { background: hsl(var(--secondary)); }
+  .art-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.7; transition: opacity 0.12s; }
+  .art-card:hover .art-thumb img { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="pg-title">Article Card — with-thumb variant</div>
+<div class="pg-desc">Preview for approval. Article image as a full-bleed thumbnail meeting the card's top, right, and bottom edges; favicon + meta unchanged. If the image fails to load, the thumb removes itself and the card degrades to the base variant.</div>
+
+<div class="pg-section">Feed (stacked) — with thumb</div>
+<div class="pg-col">
+  <a class="art-card with-thumb">
+    <div class="art-favicon"><img src="https://www.google.com/s2/favicons?domain=cnbc.com&sz=64" alt="CNBC"></div>
+    <div class="art-body">
+      <div class="art-meta">
+        <span class="art-source">CNBC</span>
+                <span class="art-tag neutral">Industry</span>
+        <span class="art-time">4d ago</span>
+      </div>
+      <div class="art-title">Pepsi launches national Prebiotic line — Poppi and Olipop face their first big-soda challenger</div>
+      <div class="art-snippet">Wall Street sees this as validation for the functional-soda category, but pressure on incumbents is mounting.</div>
+    </div>
+    <div class="art-thumb"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=320&q=80&auto=format&fit=crop" alt="" onerror="this.parentElement.remove()"></div>
+  </a>
+  <a class="art-card with-thumb">
+    <div class="art-favicon"><img src="https://www.google.com/s2/favicons?domain=forbes.com&sz=64" alt="Forbes"></div>
+    <div class="art-body">
+      <div class="art-meta">
+        <span class="art-source">Forbes</span>
+                <span class="art-tag competitor">Competitor</span>
+        <span class="art-time">6d ago</span>
+      </div>
+      <div class="art-title">Olipop raises $50M Series C as prebiotic soda wars heat up</div>
+      <div class="art-snippet">The funding will go toward retail expansion and a new marketing push targeting Gen Z health-conscious consumers.</div>
+    </div>
+    <div class="art-thumb"><img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=320&q=80&auto=format&fit=crop" alt="" onerror="this.parentElement.remove()"></div>
+  </a>
+  <a class="art-card with-thumb">
+    <div class="art-favicon"><img src="https://www.google.com/s2/favicons?domain=adweek.com&sz=64" alt="Adweek"></div>
+    <div class="art-body">
+      <div class="art-meta">
+        <span class="art-source">Adweek</span>
+                <span class="art-tag neutral">Brand</span>
+        <span class="art-time">1w ago</span>
+      </div>
+      <div class="art-title">How Poppi's BÉIS collab turned a product drop into a cultural moment</div>
+      <div class="art-snippet">The limited-edition collaboration generated 140K organic mentions in 48 hours, outpacing paid reach by 4×.</div>
+    </div>
+    <div class="art-thumb"><img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=320&q=80&auto=format&fit=crop" alt="" onerror="this.parentElement.remove()"></div>
+  </a>
+</div>
+
+<div class="pg-section">Nested on a card — on-card + with-thumb</div>
+<div class="wcard" style="max-width:480px">
+  <div class="wcard-head">
+    <span class="wcard-title">News</span>
+    <span class="wcard-sub">Earned media mentioning the brand</span>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <a class="art-card on-card with-thumb">
+      <div class="art-favicon"><img src="https://www.google.com/s2/favicons?domain=bloomberg.com&sz=64" alt="Bloomberg"></div>
+      <div class="art-body">
+        <div class="art-meta">
+          <span class="art-source">Bloomberg</span>
+                    <span class="art-tag neutral">Industry</span>
+          <span class="art-time">2d ago</span>
+        </div>
+        <div class="art-title">Functional beverage sales outpace legacy soda for the first quarter on record</div>
+        <div class="art-snippet">Category analysts point to Gen Z habits and gut-health messaging as the growth engine.</div>
+      </div>
+      <div class="art-thumb"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=320&q=80&auto=format&fit=crop" alt="" onerror="this.parentElement.remove()"></div>
+    </a>
+    <a class="art-card on-card with-thumb">
+      <div class="art-favicon"><img src="https://www.google.com/s2/favicons?domain=adweek.com&sz=64" alt="Adweek"></div>
+      <div class="art-body">
+        <div class="art-meta">
+          <span class="art-source">Adweek</span>
+                    <span class="art-tag competitor">Competitor</span>
+          <span class="art-time">5d ago</span>
+        </div>
+        <div class="art-title">Olipop signs multi-year NCAA partnership in a push for younger shoppers</div>
+        <div class="art-snippet">The deal spans 40 campuses and includes on-site sampling at March Madness venues.</div>
+      </div>
+      <div class="art-thumb"><img src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=320&q=80&auto=format&fit=crop" alt="" onerror="this.parentElement.remove()"></div>
+    </a>
+  </div>
+</div>
+
+<div class="pg-section">Graceful degrade — image fails to load</div>
+<div class="pg-col">
+  <a class="art-card with-thumb">
+    <div class="art-favicon"><img src="https://www.google.com/s2/favicons?domain=cnbc.com&sz=64" alt="CNBC"></div>
+    <div class="art-body">
+      <div class="art-meta">
+        <span class="art-source">CNBC</span>
+                <span class="art-tag negative">Risk</span>
+        <span class="art-time">4d ago</span>
+      </div>
+      <div class="art-title">Broken image URL — this card falls back to the base layout with no empty gap</div>
+      <div class="art-snippet">The onerror handler removes the thumb container entirely, so the body reflows to full width.</div>
+    </div>
+    <div class="art-thumb"><img src="https://invalid.example/broken.jpg" alt="" onerror="this.parentElement.remove()"></div>
+  </a>
+</div>
+
+</body>
+</html>

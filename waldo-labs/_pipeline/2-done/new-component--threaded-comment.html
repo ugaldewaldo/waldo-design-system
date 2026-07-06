@@ -1,0 +1,81 @@
+<!--
+component: Threaded Comment
+source: waldo-labs/sedditw/glossier.html (seddit reconstruction)
+date: 2026-07-03
+use_when:
+  - Nested discussion threads (comment + replies) with a collapsible rail
+  - Community/forum-style conversation surfaces (distinct from Comment Card, which is a flat mention feed card)
+notes: Rail = avatar + 2px collapse line (hover --primary). Head = username (dotted underline,
+  hover --primary) + flair pill + receipt badge + karma (tabular) + time. Children indent 16px.
+  Collapse toggles a "[+] thread collapsed" stub. Cast identity colors use --chart-1..12 as
+  categorical encoding (avatar + flair share the tint). Comment Card exists in the DS but covers
+  a different pattern (flat social mention) — this is the threaded variant gap.
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<title>Pipeline spec · Threaded Comment</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; display: block !important; font-family: 'Inter', sans-serif; background: hsl(var(--background)); color: hsl(var(--foreground)); padding: 40px; max-width: 640px; }
+  svg { flex: none; min-height: fit-content; }
+
+  .sed-comment { margin-top: 4px; font-size: var(--fs-sm); line-height: 1.5; }
+  .sed-crow { display: flex; gap: 9px; }
+  .sed-rail { flex: none; width: 32px; display: flex; flex-direction: column; align-items: center; padding-top: 3px; }
+  .sed-thread-line { border: none; padding: 0; width: 2px; flex: 1; background: hsl(var(--border)); margin: 6px 0 0; border-radius: 2px; cursor: pointer; transition: background 0.12s; }
+  .sed-thread-line:hover { background: hsl(var(--primary)); }
+  .sed-cmain { flex: 1; min-width: 0; padding-bottom: 8px; }
+  .sed-chead { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .sed-username { font-weight: 600; color: hsl(var(--foreground)); cursor: pointer; border-bottom: 1px dotted hsl(var(--muted-foreground)); transition: color 0.12s, border-color 0.12s; }
+  .sed-username:hover { color: hsl(var(--primary)); border-bottom-color: hsl(var(--primary)); }
+  .sed-uflair { font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 7px; border-radius: var(--radius-full); }
+  .sed-karma { font-variant-numeric: tabular-nums; }
+  .sed-dot { color: hsl(var(--muted-foreground)); opacity: 0.6; }
+  .sed-ctext { margin: 5px 0 2px; color: hsl(var(--foreground) / 0.9); font-size: var(--fs-sm); line-height: 1.55; }
+  .sed-cfoot { display: flex; align-items: center; gap: 14px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 5px; }
+  .sed-act { cursor: pointer; transition: color 0.12s; }
+  .sed-act:hover { color: hsl(var(--foreground)); }
+  .sed-children { margin-left: 16px; }
+  .sed-comment.collapsed > .sed-crow > .sed-cmain > .sed-ctext,
+  .sed-comment.collapsed > .sed-crow > .sed-cmain > .sed-cfoot,
+  .sed-comment.collapsed > .sed-crow > .sed-cmain > .sed-children { display: none; }
+  .sed-comment.collapsed > .sed-crow > .sed-rail > .sed-thread-line { display: none; }
+  .sed-cstub { display: none; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .sed-comment.collapsed > .sed-crow > .sed-cmain > .sed-cstub { display: block; margin-top: 4px; }
+
+  .sed-cast-1 { background: hsl(var(--chart-1) / 0.15); color: hsl(var(--chart-1)); border-color: transparent; }
+  .sed-cast-8 { background: hsl(var(--chart-8) / 0.15); color: hsl(var(--chart-8)); border-color: transparent; }
+</style>
+</head>
+<body>
+<div class="sed-comment">
+  <div class="sed-crow">
+    <div class="sed-rail"><div class="avatar av-md sed-cast-1">g</div><button class="sed-thread-line" onclick="this.closest('.sed-comment').classList.toggle('collapsed')" aria-label="Collapse thread"></button></div>
+    <div class="sed-cmain">
+      <div class="sed-chead"><span class="sed-username">u/softlaunch16</span><span class="sed-uflair sed-cast-1">Since 2016</span><span class="badge badge-active badge-sm">◆ real account</span><span class="sed-dot">·</span><span class="sed-karma">734 pts</span><span class="sed-dot">·</span><span>4h</span></div>
+      <div class="sed-ctext">lol what. the whole point was the makeup felt simple and personal, not slapping the logo on dog poop bags. hard pass.</div>
+      <div class="sed-cstub">[+] thread collapsed</div>
+      <div class="sed-cfoot"><span class="sed-act">↩ reply</span><span class="sed-act">⚑</span><span class="sed-act">···</span></div>
+      <div class="sed-children">
+        <div class="sed-comment">
+          <div class="sed-crow">
+            <div class="sed-rail"><div class="avatar av-md sed-cast-8">j</div><button class="sed-thread-line" onclick="this.closest('.sed-comment').classList.toggle('collapsed')" aria-label="Collapse thread"></button></div>
+            <div class="sed-cmain">
+              <div class="sed-chead"><span class="sed-username">u/wowderwatch</span><span class="sed-uflair sed-cast-8">Save Wowder</span><span class="sed-dot">·</span><span class="sed-karma">281 pts</span><span class="sed-dot">·</span><span>3h</span></div>
+              <div class="sed-ctext">girl what?? i want the actual products not a dog leash...</div>
+              <div class="sed-cstub">[+] thread collapsed</div>
+              <div class="sed-cfoot"><span class="sed-act">↩ reply</span><span class="sed-act">⚑</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

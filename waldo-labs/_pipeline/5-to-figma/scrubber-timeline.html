@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!--
+component: Scrubber Timeline
+source: waldo-labs/Brand-health/Test3 (index_agent.html) via _pipeline/2-done/missing-components--brand-health-x.html
+date: 2026-07-03
+use_when: time-travel control for dashboards — grain toggle + range slider + event ticks + "as of" readout; scrubbing recomputes every score on the page
+status: NEW component proposal — composes DS .wseg + .wslider; only the ticks and readout are new
+-->
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scrubber Timeline — Pipeline Review</title>
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  /* Required DS conflict overrides */
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  body { display: block !important; }
+  svg { flex: none; min-height: fit-content; }
+  body { max-width: none !important; margin: 0 !important; padding: 48px; background: hsl(var(--background)); color: hsl(var(--foreground)); font-family: 'Inter', sans-serif; }
+
+  .rev-head { max-width: 760px; margin: 0 auto 36px; }
+  .rev-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: hsl(var(--primary)); }
+  .rev-title { font-size: 26px; font-weight: 600; letter-spacing: -0.03em; margin-top: 6px; }
+  .rev-meta { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); margin-top: 8px; line-height: 1.6; }
+  .rev-meta code { color: hsl(var(--primary)); font-size: var(--fs-xs); }
+
+  /* ── Scrubber Timeline ── */
+  .scrubber { display: flex; align-items: center; gap: 20px; padding: 16px 20px; background: hsl(var(--card)); border-radius: 16px; max-width: 760px; margin: 0 auto; }
+  .scrub-slider { flex: 1; position: relative; }
+  .scrub-slider .wslider { height: 24px; }
+  .scrub-tick { position: absolute; top: 50%; width: 6px; height: 6px; border-radius: 50%; background: hsl(var(--highlight)); transform: translate(-50%, -50%); pointer-events: none; z-index: 1; opacity: 0.9; }
+  .scrub-asof { font-size: var(--fs-sm); color: hsl(var(--foreground)); min-width: 128px; text-align: right; font-variant-numeric: tabular-nums; }
+  .scrub-asof span { display: block; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
+</style>
+</head>
+<body>
+
+<div class="rev-head">
+  <div class="rev-eyebrow">Pipeline · To review</div>
+  <div class="rev-title">Scrubber Timeline</div>
+  <div class="rev-meta">Time-travel control: grain toggle (DS <code>.wseg</code>) + range slider (DS <code>.wslider</code>)
+  + event ticks (<code>--highlight</code> dots) + "as of" readout. Only <code>.scrub-tick</code> and
+  <code>.scrub-asof</code> are new — the rest composes existing DS parts.
+  Source: Brand Health X rebuild.</div>
+</div>
+
+<div class="scrubber">
+  <div class="wseg">
+    <button class="wseg-opt active" type="button">Day</button>
+    <button class="wseg-opt inactive" type="button">Week</button>
+    <button class="wseg-opt inactive" type="button">Month</button>
+  </div>
+  <div class="scrub-slider">
+    <div class="wslider" id="scrub-slider">
+      <div class="wslider-track"><div class="wslider-range" id="scrub-range"></div></div>
+      <div id="scrub-ticks"></div>
+      <div class="wslider-thumb" id="scrub-thumb"></div>
+    </div>
+  </div>
+  <div class="scrub-asof"><span>As of</span><strong id="scrub-asof">May 18, 2026</strong></div>
+</div>
+
+<script>
+/* Demo wiring — positions only, deterministic; all colors come from CSS classes. */
+(function () {
+  var pos = 78, ticks = [12, 34, 61, 78];
+  document.getElementById('scrub-range').style.width = pos + '%';
+  document.getElementById('scrub-thumb').style.left = pos + '%';
+  var wrap = document.getElementById('scrub-ticks');
+  ticks.forEach(function (p) {
+    var t = document.createElement('span');
+    t.className = 'scrub-tick';
+    t.style.left = p + '%';
+    wrap.appendChild(t);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!--
+  component: Opportunity Card
+  source: waldo-labs/pov-amp/Test1/index.html (DS recreation of povamp.com)
+  date: 2026-07-03
+  use_when:
+    - A feed item pairing a source conversation (thread/post) with an AI-drafted response awaiting human review
+    - Any "review queue" surface where each row carries context (source, recency, match score) + a proposed action
+  notes:
+    - Composite built to the wcard / comment-card family: meta row (favicon chip + source + recency + match badge), title, muted excerpt, draft block, action row
+    - Match score = .badge.badge-active (primary) when the POV directly answers it (0.85+), .badge-secondary below
+    - Draft block sits on hsl(var(--secondary)) (doctrine: evidence surfaces); its eyebrow label is var(--primary) with a muted POV reference
+    - Favicon uses the sanctioned Google s2 service with graceful fallback to a neutral dot (never a broken image)
+    - Skipped state = whole-card opacity .45; card surface stays neutral in all states (no accent tints)
+    - No DS equivalent found in docs/component-index.md (Components / Brand API / Charts); closest siblings are Comment Card (no draft/action row) and Recommendation Card (no source thread)
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<title>New component — Opportunity Card</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; display: block !important;
+         max-width: none !important; margin: 0 !important; padding: 40px;
+         background: hsl(var(--background)); color: hsl(var(--foreground));
+         font-family: 'Inter', -apple-system, sans-serif; font-size: var(--fs-sm); line-height: 1.5; }
+  svg { flex: none; min-height: fit-content; }
+
+  .opp-card { background: hsl(var(--card)); border-radius: 16px; padding: 20px 24px; max-width: 720px; transition: background .14s; }
+  .opp-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--card))); }
+  .opp-card.is-skipped { opacity: .45; }
+  .opp-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .opp-favicon { width: 14px; height: 14px; border-radius: 2px; flex: none; }
+  .opp-source { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); }
+  .opp-time { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); opacity: .6; }
+  .opp-match { margin-left: auto; flex: none; }
+  .opp-title { font-size: var(--fs-base); font-weight: 500; letter-spacing: -0.02em; line-height: 1.45; margin-top: 12px; }
+  .opp-excerpt { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); line-height: 1.55; margin-top: 5px; }
+  .opp-draft { background: hsl(var(--secondary)); border-radius: var(--radius-lg); padding: 14px 16px; margin-top: 14px; }
+  .opp-draft-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: hsl(var(--primary)); display: flex; align-items: center; gap: 6px; margin-bottom: 7px; }
+  .opp-draft-label svg { width: 12px; height: 12px; }
+  .opp-draft-label .pov-ref { color: hsl(var(--muted-foreground)); text-transform: none; letter-spacing: -0.01em; font-weight: 400; }
+  .opp-draft p { font-size: var(--fs-sm); line-height: 1.6; color: hsl(var(--foreground)); }
+  .opp-actions { display: flex; align-items: center; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid hsl(var(--border)); }
+  .opp-teach { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-left: auto; }
+</style>
+</head>
+<body>
+
+<div class="opp-card">
+  <div class="opp-meta">
+    <img class="opp-favicon" src="https://www.google.com/s2/favicons?domain=reddit.com&amp;sz=64" alt="">
+    <span class="opp-source">r/startups · Reddit</span>
+    <span class="opp-time">24 replies · 2h ago</span>
+    <span class="opp-match badge badge-active badge-sm">92% match</span>
+  </div>
+  <div class="opp-title">Does posting on LinkedIn every day actually move the needle, or is it just vanity?</div>
+  <div class="opp-excerpt">"Everyone says consistency wins, but I've been posting daily for 4 months and pipeline hasn't moved. What am I missing?"</div>
+  <div class="opp-draft">
+    <div class="opp-draft-label">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+      Draft ready <span class="pov-ref">· grounded in "Daily cadence is the wrong thing to optimize"</span>
+    </div>
+    <p>Daily cadence is the wrong thing to optimize. Reach you can't defend is vanity; a take your peers actually argue with in the comments is distribution. I'd post a quarter as often and say something I'm willing to be wrong about.</p>
+  </div>
+  <div class="opp-actions">
+    <button class="btn btn-default btn-sm">Edit &amp; post</button>
+    <button class="btn btn-secondary btn-sm">Skip</button>
+    <span class="opp-teach">Your edits teach the style guide. Nothing posts without you.</span>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!--
+component: Community Banner
+source: waldo-labs/sedditw/glossier.html (seddit reconstruction)
+date: 2026-07-03
+use_when:
+  - Header card for a community / space / audience page (cover strip + overlapping avatar + name + meta + action)
+  - Any entity detail page needing a Reddit-style identity header
+notes: Cover strip is a neutral surface (--secondary + low-opacity foreground dot pattern) —
+  card surfaces never take accent tints per doctrine. Avatar overlaps the cover with a
+  card-colored ring (box-shadow). Right action = DS .btn. Meta row = DS badge + muted count.
+  No DS equivalent found in component-index (core, Brand API, charts) or index.html grep.
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<title>Pipeline spec · Community Banner</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; display: block !important; font-family: 'Inter', sans-serif; background: hsl(var(--background)); color: hsl(var(--foreground)); padding: 40px; max-width: 720px; }
+  svg { flex: none; min-height: fit-content; }
+
+  .sed-banner { border-radius: 16px; overflow: hidden; background: hsl(var(--card)); }
+  .sed-banner-top { height: 88px; background: hsl(var(--secondary)); background-image: radial-gradient(hsl(var(--foreground) / 0.06) 1px, transparent 1px); background-size: 14px 14px; }
+  .sed-banner-row { display: flex; align-items: flex-end; gap: 14px; padding: 0 18px 14px; margin-top: -26px; position: relative; }
+  .sed-banner-ava { box-shadow: 0 0 0 3px hsl(var(--card)); border-color: transparent; }
+  .sed-banner-meta { flex: 1; padding-bottom: 2px; min-width: 0; }
+  .sed-banner-meta h1 { font-size: var(--fs-2xl); font-weight: 600; letter-spacing: -0.02em; margin: 0; line-height: 1.2; }
+  .sed-subline { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+  .sed-members { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .sed-members b { color: hsl(var(--foreground)); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .sed-join { align-self: center; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+<div class="sed-banner">
+  <div class="sed-banner-top"></div>
+  <div class="sed-banner-row">
+    <div class="avatar av-2xl av-brand sed-banner-ava">G</div>
+    <div class="sed-banner-meta">
+      <h1>r/glossier</h1>
+      <div class="sed-subline">
+        <span class="badge badge-active">◆ simulated community</span>
+        <span class="sed-members">grounded in <b>76k</b> real r/glossier accounts</span>
+      </div>
+    </div>
+    <button class="btn btn-secondary btn-sm sed-join">Joined</button>
+  </div>
+</div>
+</body>
+</html>

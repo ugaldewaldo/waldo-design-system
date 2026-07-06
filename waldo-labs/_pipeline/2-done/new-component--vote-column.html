@@ -1,0 +1,56 @@
+<!--
+component: Vote Column
+source: waldo-labs/sedditw/glossier.html (seddit reconstruction)
+date: 2026-07-03
+use_when:
+  - Upvote/downvote affordance on a post or feed item (vertical column variant)
+  - Inline vote row on a comment (mini variant)
+notes: Upvote active/hover = --primary tint; downvote = neutral foreground (an action,
+  not a negative metric — never --warning/--destructive). Score is tabular-nums 600.
+  No DS equivalent found in component-index (core, Brand API, charts) or index.html grep.
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<title>Pipeline spec · Vote Column</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; display: block !important; font-family: 'Inter', sans-serif; background: hsl(var(--background)); color: hsl(var(--foreground)); padding: 40px; }
+  svg { flex: none; min-height: fit-content; }
+  .demo-row { display: flex; gap: 40px; align-items: flex-start; }
+
+  /* Vote Column — vertical (post) */
+  .sed-votes { width: 44px; background: hsl(var(--muted)); display: flex; flex-direction: column; align-items: center; padding: 12px 0; gap: 3px; border-radius: var(--radius-xl); }
+  .sed-arrow { width: 26px; height: 26px; border: none; background: transparent; cursor: pointer; border-radius: var(--radius); display: grid; place-items: center; color: hsl(var(--muted-foreground)); transition: background 0.12s, color 0.12s; }
+  .sed-arrow:hover { background: hsl(var(--primary) / 0.12); color: hsl(var(--primary)); }
+  .sed-arrow.dn:hover { background: hsl(var(--foreground) / 0.08); color: hsl(var(--foreground)); }
+  .sed-arrow.on-up { color: hsl(var(--primary)); }
+  .sed-arrow.on-dn { color: hsl(var(--foreground)); }
+  .sed-score { font-size: var(--fs-xs); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  /* Vote Row — inline mini (comment) */
+  .sed-vrow { display: flex; align-items: center; gap: 4px; }
+  .sed-miniarrow { width: 18px; height: 18px; border: none; background: transparent; cursor: pointer; color: hsl(var(--muted-foreground)); display: grid; place-items: center; border-radius: var(--radius); transition: background 0.12s, color 0.12s; }
+  .sed-miniarrow:hover { color: hsl(var(--primary)); background: hsl(var(--primary) / 0.12); }
+  .sed-miniarrow.dn:hover { color: hsl(var(--foreground)); background: hsl(var(--foreground) / 0.08); }
+</style>
+</head>
+<body>
+<div class="demo-row">
+  <div class="sed-votes">
+    <button class="sed-arrow" aria-label="Upvote"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 14 6-7 6 7"/></svg></button>
+    <span class="sed-score">1.2k</span>
+    <button class="sed-arrow dn" aria-label="Downvote"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 10 6 7 6-7"/></svg></button>
+  </div>
+  <div class="sed-vrow">
+    <button class="sed-miniarrow" aria-label="Upvote"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m6 14 6-7 6 7"/></svg></button>
+    <span class="sed-score">734</span>
+    <button class="sed-miniarrow dn" aria-label="Downvote"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m6 10 6 7 6-7"/></svg></button>
+  </div>
+</div>
+</body>
+</html>
