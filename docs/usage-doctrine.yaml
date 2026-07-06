@@ -776,11 +776,14 @@ components:
       - NavigationMenu: for app-level persistent navigation; NavigationMenu is for horizontal header menus with dropdown panels
       - Sheet: when navigation is permanent chrome, not a transient overlay (Sidebar falls back to Sheet on mobile automatically)
     notes: |
-      Widths: SIDEBAR_WIDTH 16rem, mobile 18rem, icon-collapsed 3rem. Cmd/Ctrl+B toggles; state
-      persisted in "sidebar_state" cookie. Variants: sidebar | floating | inset; collapsible:
-      offcanvas | icon | none. Uses bg-sidebar / text-sidebar-foreground / bg-sidebar-accent tokens.
-      MenuButton sizes: default h-8 text-sm, sm h-7 text-xs, lg h-12. Mobile renders inside Sheet
-      automatically via useIsMobile.
+      Two layers compose the app-shell sidebar: sidebar.tsx provides the shell BEHAVIOR
+      (collapse, mobile Sheet, Cmd/Ctrl+B, cookie state); the nav kit provides the LOOK —
+      the visible navigation is NavPanel variant="plain" (flush, boxless) + NavGroup + NavItem,
+      not the shadcn MenuButton visuals. An app-shell sidebar sits flush to the shell (plain),
+      never in a floating box (floating is for panels over another surface).
+      sidebar.tsx shell: widths SIDEBAR_WIDTH 16rem / mobile 18rem / icon-collapsed 3rem;
+      Cmd/Ctrl+B toggles; state in "sidebar_state" cookie; collapsible offcanvas | icon | none;
+      mobile renders inside Sheet via useIsMobile.
 
   - component: Breadcrumb
     use_when:

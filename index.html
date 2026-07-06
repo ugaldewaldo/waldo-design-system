@@ -5997,13 +5997,13 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 <div id="comp-sidebar" class="waldo-page">
   <div class="page-header">
     <div class="page-title">Sidebar</div>
-    <div class="page-desc">A composable, themeable sidebar component with collapsible support.</div>
+    <div class="page-desc">The app-shell navigation, composed from the nav kit — NavPanel (variant="plain", flush to the shell) + NavGroup + NavItem. Not a separate primitive; the Waldo sidebar IS the nav kit rendered boxless.</div>
   </div>
   <div class="section">
     <div class="section-title">App shell — grouped navigation with active route</div>
     <div class="demo-block">
       <div class="demo-canvas" style="align-items:flex-start">
-        <div class="wnav-panel">
+        <div class="wnav-panel plain">
           <div class="wnav-items-wrap">
             <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg></span><span class="wnav-label">Waldo Marketing</span><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="7 15 12 20 17 15"/><polyline points="7 9 12 4 17 9"/></svg></span></div>
           </div>
@@ -6028,8 +6028,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         </div>
       </div>
       <div class="demo-code-bar">
-        <span class="demo-code-label">&lt;Sidebar&gt; · SidebarGroup · SidebarMenuButton isActive</span>
-        <button class="copy-btn" onclick="copyCode(this, '&lt;Sidebar&gt;\n  &lt;SidebarContent&gt;\n    &lt;SidebarGroup&gt;\n      &lt;SidebarGroupLabel&gt;Platform&lt;/SidebarGroupLabel&gt;\n      &lt;SidebarMenu&gt;\n        &lt;SidebarMenuItem&gt;\n          &lt;SidebarMenuButton isActive&gt;&lt;LayoutGrid /&gt;Dashboard&lt;/SidebarMenuButton&gt;\n        &lt;/SidebarMenuItem&gt;\n      &lt;/SidebarMenu&gt;\n    &lt;/SidebarGroup&gt;\n  &lt;/SidebarContent&gt;\n&lt;/Sidebar&gt;')">Copy</button>
+        <span class="demo-code-label">&lt;NavPanel variant="plain"&gt; · NavGroup · NavItem active — the app-shell sidebar is the nav kit, flush to the shell</span>
+        <button class="copy-btn" onclick="copyCode(this, '&lt;NavPanel variant=&quot;plain&quot;&gt;\n  &lt;NavGroup label=&quot;Platform&quot;&gt;\n    &lt;NavItem label=&quot;Dashboard&quot; active icon={&lt;LayoutGrid /&gt;} /&gt;\n    &lt;NavItem label=&quot;Brands&quot; icon={&lt;BoxIcon /&gt;} /&gt;\n    &lt;NavItem label=&quot;Audiences&quot; icon={&lt;UsersIcon /&gt;} /&gt;\n  &lt;/NavGroup&gt;\n  &lt;NavGroup label=&quot;Intelligence&quot;&gt;\n    &lt;NavItem label=&quot;Signals&quot; icon={&lt;ActivityIcon /&gt;} count={12} /&gt;\n  &lt;/NavGroup&gt;\n  &lt;NavSeparator /&gt;\n  &lt;NavItem label=&quot;Settings&quot; icon={&lt;SettingsIcon /&gt;} /&gt;\n&lt;/NavPanel&gt;')">Copy</button>
       </div>
     </div>
   </div>
