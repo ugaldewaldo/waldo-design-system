@@ -1287,6 +1287,8 @@ table.wui-table tbody tr.row-selected td { background: hsl(var(--primary) / 0.04
         background:hsl(var(--popover));border-radius:24px;padding:8px 0;
         width:288px;display:flex;flex-direction:column;
       }
+      /* plain — boxless: flush to the app shell, no surface, no radius */
+      .wnav-panel.plain { background:transparent;border-radius:0; }
       .wnav-items-wrap { padding:0 16px; }
       .wnav-section { padding:8px 24px 12px;font-size:var(--fs-xs);font-weight:500;letter-spacing:-.02em;text-transform:uppercase;color:color-mix(in srgb,hsl(var(--foreground)) 30%,transparent);user-select:none; }
       .wnav-action.visible { opacity:1; }

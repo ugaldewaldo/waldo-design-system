@@ -3,7 +3,11 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Waldo NavItem — Figma DS node 83995-111644
+// Waldo Nav — navigation kit (Figma DS node 83995-111644)
+//
+// The full Waldo navigation vocabulary lives here: NavItem, NavSection,
+// NavSeparator, NavGroup, NavPanel. (sidebar.tsx is the generic shadcn shell —
+// collapse/rail/mobile-sheet infrastructure; this is the Waldo look.)
 //
 // Used in: settings panels, sidebar navigation, filter panels, report builder.
 // Height 36px · icon 14px right · active = bg-muted + font-medium
@@ -179,14 +183,25 @@ interface NavPanelProps {
   children: React.ReactNode;
   className?: string;
   width?: string;
+  /**
+   * Container surface.
+   *   floating → boxed panel over another surface (bg-popover + rounded-3xl) — default
+   *   plain    → flush to the app shell, no box, sits directly on --background
+   */
+  variant?: "floating" | "plain";
 }
 
-export function NavPanel({ children, className, width = "w-[288px]" }: NavPanelProps) {
+export function NavPanel({
+  children,
+  className,
+  width = "w-[288px]",
+  variant = "floating",
+}: NavPanelProps) {
   return (
     <nav
       className={cn(
-        "flex flex-col h-full overflow-y-auto",
-        "bg-popover py-2 rounded-3xl",
+        "flex flex-col h-full overflow-y-auto py-2",
+        variant === "floating" ? "bg-popover rounded-3xl" : "bg-transparent",
         width,
         className
       )}

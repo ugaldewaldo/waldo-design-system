@@ -4619,6 +4619,55 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     </div>
 
 
+    <!-- NavPanel variants — floating vs plain -->
+    <div class="section">
+      <div class="section-title">Container variant — <code>floating</code> (boxed) vs <code>plain</code> (flush to app shell)</div>
+      <div class="demo-block">
+        <div class="demo-canvas" style="align-items:flex-start;gap:32px">
+
+          <!-- plain / boxless — sits directly on the app background -->
+          <div class="wnav-panel plain">
+            <div class="wnav-section">Listen</div>
+            <div class="wnav-items-wrap">
+              <div class="wnav-item active"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg></span><span class="wnav-label">Opportunities</span><span class="wnav-count">18</span></div>
+              <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></span><span class="wnav-label">Conversations</span></div>
+              <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span><span class="wnav-label">Trends &amp; signals</span></div>
+              <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.5 2v6l6 6-6 6v-6M9.5 22v-6l-6-6 6-6v6"/></svg></span><span class="wnav-label">Competitors</span></div>
+            </div>
+            <div class="wnav-section">Voice</div>
+            <div class="wnav-items-wrap">
+              <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg></span><span class="wnav-label">POV Library</span><span class="wnav-count">4</span></div>
+              <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4z"/></svg></span><span class="wnav-label">Style guide</span></div>
+              <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span><span class="wnav-label">Messages &amp; narrative</span></div>
+            </div>
+            <div class="wnav-section">Publish</div>
+            <div class="wnav-items-wrap">
+              <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16v16H4z"/><polyline points="4 7 12 13 20 7"/></svg></span><span class="wnav-label">Review queue</span><span class="wnav-count">6</span></div>
+              <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></span><span class="wnav-label">Scheduled</span></div>
+              <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span><span class="wnav-label">Published</span></div>
+            </div>
+          </div>
+
+          <!-- floating / boxed — the default panel over another surface -->
+          <div class="wnav-panel">
+            <div class="wnav-section">Listen</div>
+            <div class="wnav-items-wrap">
+              <div class="wnav-item active"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg></span><span class="wnav-label">Opportunities</span><span class="wnav-count">18</span></div>
+              <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></span><span class="wnav-label">Conversations</span></div>
+              <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span><span class="wnav-label">Trends &amp; signals</span></div>
+              <div class="wnav-item"><span class="wnav-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14.5 2v6l6 6-6 6v-6M9.5 22v-6l-6-6 6-6v6"/></svg></span><span class="wnav-label">Competitors</span></div>
+            </div>
+          </div>
+
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;NavPanel variant="plain"&gt; · boxless, flush to the app shell</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;NavPanel variant=&quot;plain&quot;&gt;\n  &lt;NavGroup label=&quot;Listen&quot;&gt;\n    &lt;NavItem label=&quot;Opportunities&quot; active icon={&lt;TargetIcon /&gt;} count={18} /&gt;\n    &lt;NavItem label=&quot;Conversations&quot; icon={&lt;MessageIcon /&gt;} /&gt;\n  &lt;/NavGroup&gt;\n&lt;/NavPanel&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+
     <!-- Pill items — Workflows pattern -->
     <div class="section">
       <div class="section-title">Pill items — label + hover ellipsis action · Workflows pattern</div>
@@ -8543,6 +8592,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="sb-items-wrap">
     <button class="sb-item active" onclick="brandApiGo('comp-ad-copy-card',this)">Ad Copy Card</button>
     <button class="sb-item" onclick="brandApiGo('comp-alert-list-row',this)">Alert List Row</button>
+    <button class="sb-item" onclick="brandApiGo('comp-app-header',this)">App Header</button>
     <button class="sb-item" onclick="brandApiGo('comp-article-card',this)">Article Card</button>
     <button class="sb-item" onclick="brandApiGo('comp-bar-track',this)">Bar Track</button>
     <button class="sb-item" onclick="brandApiGo('comp-benchmark-bar',this)">Benchmark Bar</button>
@@ -8718,6 +8768,108 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 <!-- Quote Card -->
 </div>
 </div>
+<div id="comp-app-header" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">App Header</div>
+    <div class="page-desc">The chrome of every Brand API prototype. One line, exactly two groups — A identity (Waldo wordmark + product name, inline on one baseline) and B text navigation (right). Sticky and blurred, no bottom border. Search never shares this line — it goes on a second line (App Toolbar), which may double as a filter bar.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Header — identity + navigation</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="display:block;padding:0;">
+        <header class="app-header">
+          <div class="app-header-inner">
+            <div class="app-ident">
+              <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Waldo"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
+              <span class="product">Prospector</span>
+            </div>
+            <nav class="app-nav">
+              <a class="active" href="#">Dashboard</a>
+              <a href="#">Alerts</a>
+              <a href="#">API coverage</a>
+              <a href="#">Watchlist</a>
+            </nav>
+          </div>
+        </header>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Second line — search row / toolbar</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="display:block;padding:0;">
+        <header class="app-header">
+          <div class="app-header-inner">
+            <div class="app-ident">
+              <span class="product">Prospector</span>
+            </div>
+            <nav class="app-nav">
+              <a class="active" href="#">Dashboard</a>
+              <a href="#">Alerts</a>
+              <a href="#">API coverage</a>
+            </nav>
+          </div>
+        </header>
+        <div class="app-toolbar">
+          <div class="toolbar-left">
+            <div class="wseg">
+              <button class="wseg-opt active" type="button">This week</button>
+              <button class="wseg-opt inactive" type="button">May 18</button>
+              <button class="wseg-opt inactive" type="button">May 11</button>
+            </div>
+          </div>
+          <div class="app-search input-with-icon">
+            <div class="input-icon">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            </div>
+            <input class="input" type="text" placeholder="Search prospects, brands, categories…">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Exception — no navigation, search takes the right slot</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="display:block;padding:0;">
+        <header class="app-header">
+          <div class="app-header-inner">
+            <div class="app-ident">
+              <span class="product">Promo Radar</span>
+            </div>
+            <div class="app-search input-with-icon">
+              <div class="input-icon">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              </div>
+              <input class="input" type="text" placeholder="Search brands…">
+            </div>
+          </div>
+        </header>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Rules</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="font-size:var(--fs-sm);line-height:20px;color:hsl(var(--muted-foreground));display:flex;flex-direction:column;gap:6px;">
+        <div>Exactly two groups: <code>.app-ident</code> (Waldo wordmark + product name, one baseline) + <code>.app-nav</code> (text links, right).</div>
+        <div>Prohibited in the header: search inputs, status/integration pills, badges, buttons, "Powered by" lines, or any third group.</div>
+        <div>No stacked lockup — never a subtitle or descriptor under the product name.</div>
+        <div>Sticky + blurred, no <code>border-bottom</code> — the sticky layer reads via blur alone (borderless shell).</div>
+        <div>Search lives on <code>.app-toolbar</code> (second line, right-aligned); its left may hold filters or a range switcher. Only when nav is empty may search take the header's right slot.</div>
+      </div>
+    </div>
+
+    <div class="demo-code-bar">
+      <span class="demo-code-label">&lt;header class="app-header"&gt;</span>
+      <button class="copy-btn" onclick="copyCode(this, '&lt;header class=&quot;app-header&quot;&gt;\n  &lt;div class=&quot;app-header-inner&quot;&gt;\n    &lt;div class=&quot;app-ident&quot;&gt;&lt;svg class=&quot;waldo-wordmark&quot;&gt;…&lt;/svg&gt;&lt;span class=&quot;product&quot;&gt;Prospector&lt;/span&gt;&lt;/div&gt;\n    &lt;nav class=&quot;app-nav&quot;&gt;&lt;a class=&quot;active&quot;&gt;Dashboard&lt;/a&gt;&lt;a&gt;Alerts&lt;/a&gt;&lt;/nav&gt;\n  &lt;/div&gt;\n&lt;/header&gt;\n\n&lt;div class=&quot;app-toolbar&quot;&gt;\n  &lt;div class=&quot;toolbar-left&quot;&gt;…&lt;/div&gt;\n  &lt;div class=&quot;app-search input-with-icon&quot;&gt;…&lt;/div&gt;\n&lt;/div&gt;')">Copy</button>
+    </div>
+  </div>
+</div>
 <div id="comp-article-card" class="waldo-page">
   <div class="page-header">
     <div class="page-title">Article Card</div>
@@ -8734,13 +8886,19 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     .art-body { display: flex; flex-direction: column; gap: 5px; min-width: 0; flex: 1; }
     .art-meta { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); flex-wrap: wrap; }
     .art-source { font-weight: 600; color: hsl(var(--foreground)); }
-    .art-dot { opacity: 0.4; }
+    .art-time { flex-shrink: 0; }
     .art-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.02em; padding: 1px 7px; border-radius: 999px; margin-left: auto; flex-shrink: 0; }
     .art-tag.neutral { background: color-mix(in srgb, hsl(var(--primary)) 14%, transparent); color: hsl(var(--primary)); }
     .art-tag.competitor { background: color-mix(in srgb, hsl(var(--warning)) 14%, transparent); color: hsl(var(--warning)); }
     .art-tag.negative { background: color-mix(in srgb, hsl(var(--destructive)) 14%, transparent); color: hsl(var(--destructive)); }
     .art-title { font-size: var(--fs-sm); font-weight: 600; color: hsl(var(--foreground)); line-height: 1.4; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
     .art-snippet { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); line-height: 1.5; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    /* with-thumb variant — full-bleed article thumbnail meeting the card's top/right/bottom edges */
+    .art-card.with-thumb { padding-left: 20px; }
+    .art-thumb { width: 96px; flex-shrink: 0; align-self: stretch; margin: -14px -16px -14px 0; border-radius: 0 var(--radius-xl) var(--radius-xl) 0; overflow: hidden; background: hsl(var(--muted)); }
+    .art-card.on-card .art-thumb { background: hsl(var(--secondary)); }
+    .art-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.7; transition: opacity 0.12s; }
+    .art-card:hover .art-thumb img { opacity: 1; }
   </style>
 
   <div class="section">
@@ -8753,9 +8911,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <div class="art-body">
               <div class="art-meta">
                 <span class="art-source">CNBC</span>
-                <span class="art-dot">·</span>
-                <span class="art-time">4d ago</span>
                 <span class="art-tag neutral">Industry</span>
+                <span class="art-time">4d ago</span>
               </div>
               <div class="art-title">Pepsi launches national Prebiotic line — Poppi and Olipop face their first big-soda challenger</div>
               <div class="art-snippet">Wall Street sees this as validation for the functional-soda category, but pressure on incumbents is mounting.</div>
@@ -8766,9 +8923,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <div class="art-body">
               <div class="art-meta">
                 <span class="art-source">Forbes</span>
-                <span class="art-dot">·</span>
-                <span class="art-time">6d ago</span>
                 <span class="art-tag competitor">Competitor</span>
+                <span class="art-time">6d ago</span>
               </div>
               <div class="art-title">Olipop raises $50M Series C as prebiotic soda wars heat up</div>
               <div class="art-snippet">The funding will go toward retail expansion and a new marketing push targeting Gen Z health-conscious consumers.</div>
@@ -8779,9 +8935,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
             <div class="art-body">
               <div class="art-meta">
                 <span class="art-source">Adweek</span>
-                <span class="art-dot">·</span>
-                <span class="art-time">1w ago</span>
                 <span class="art-tag neutral">Brand</span>
+                <span class="art-time">1w ago</span>
               </div>
               <div class="art-title">How Poppi's BÉIS collab turned a product drop into a cultural moment</div>
               <div class="art-snippet">The limited-edition collaboration generated 140K organic mentions in 48 hours, outpacing paid reach by 4×.</div>
@@ -8808,9 +8963,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <div class="art-body">
                 <div class="art-meta">
                   <span class="art-source">Bloomberg</span>
-                  <span class="art-dot">·</span>
-                  <span class="art-time">2d ago</span>
-                  <span class="art-tag neutral">Industry</span>
+                <span class="art-tag neutral">Industry</span>
+                <span class="art-time">2d ago</span>
                 </div>
                 <div class="art-title">Functional beverage sales outpace legacy soda for the first quarter on record</div>
                 <div class="art-snippet">Category analysts point to Gen Z habits and gut-health messaging as the growth engine.</div>
@@ -8821,9 +8975,8 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
               <div class="art-body">
                 <div class="art-meta">
                   <span class="art-source">Adweek</span>
-                  <span class="art-dot">·</span>
-                  <span class="art-time">5d ago</span>
-                  <span class="art-tag competitor">Competitor</span>
+                <span class="art-tag competitor">Competitor</span>
+                <span class="art-time">5d ago</span>
                 </div>
                 <div class="art-title">Olipop signs multi-year NCAA partnership in a push for younger shoppers</div>
                 <div class="art-snippet">The deal spans 40 campuses and includes on-site sampling at March Madness venues.</div>
@@ -8833,6 +8986,56 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         </div>
       </div>
       <div class="demo-code-bar"><span class="demo-code-label">&lt;a class="art-card on-card"&gt; — use when nested inside a container card</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">With thumbnail — with-thumb</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div style="max-width:480px;width:100%;display:flex;flex-direction:column;gap:6px;">
+          <a class="art-card with-thumb">
+            <div class="art-favicon"><img src="https://www.google.com/s2/favicons?domain=cnbc.com&sz=64" alt="CNBC"></div>
+            <div class="art-body">
+              <div class="art-meta">
+                <span class="art-source">CNBC</span>
+                <span class="art-tag neutral">Industry</span>
+                <span class="art-time">4d ago</span>
+              </div>
+              <div class="art-title">Pepsi launches national Prebiotic line — Poppi and Olipop face their first big-soda challenger</div>
+              <div class="art-snippet">Wall Street sees this as validation for the functional-soda category, but pressure on incumbents is mounting.</div>
+            </div>
+            <div class="art-thumb"><img src="https://picsum.photos/seed/soda1/160/120" alt="" onerror="this.parentElement.remove()"></div>
+          </a>
+          <a class="art-card with-thumb">
+            <div class="art-favicon"><img src="https://www.google.com/s2/favicons?domain=forbes.com&sz=64" alt="Forbes"></div>
+            <div class="art-body">
+              <div class="art-meta">
+                <span class="art-source">Forbes</span>
+                <span class="art-tag competitor">Competitor</span>
+                <span class="art-time">6d ago</span>
+              </div>
+              <div class="art-title">Olipop raises $50M Series C as prebiotic soda wars heat up</div>
+              <div class="art-snippet">The funding will go toward retail expansion and a new marketing push targeting Gen Z health-conscious consumers.</div>
+            </div>
+            <div class="art-thumb"><img src="https://picsum.photos/seed/soda2/160/120" alt="" onerror="this.parentElement.remove()"></div>
+          </a>
+          <a class="art-card with-thumb">
+            <div class="art-favicon"><img src="https://www.google.com/s2/favicons?domain=cnbc.com&sz=64" alt="CNBC"></div>
+            <div class="art-body">
+              <div class="art-meta">
+                <span class="art-source">CNBC</span>
+                <span class="art-tag negative">Risk</span>
+                <span class="art-time">1w ago</span>
+              </div>
+              <div class="art-title">Broken image URL — this card degrades to the base layout with no empty gap</div>
+              <div class="art-snippet">The onerror handler removes the thumb container entirely, so the body reflows to full width.</div>
+            </div>
+            <div class="art-thumb"><img src="https://invalid.example/broken.jpg" alt="" onerror="this.parentElement.remove()"></div>
+          </a>
+        </div>
+      </div>
+      <div class="demo-code-bar"><span class="demo-code-label">&lt;a class="art-card with-thumb"&gt; + .art-thumb — full-bleed thumb; onerror removes it (graceful degrade). Composes with .on-card</span></div>
     </div>
   </div>
 </div>

@@ -474,7 +474,7 @@ components:
       Click opens a wdd dropdown positioned below the trigger.
       Figma node 84014-277810 (PANEL / INSIGHTS).
 
-  - component: NavItem
+  - component: NavItem / Nav
     use_when:
       - Navigation between views, sections, or settings pages
       - Sidebar panels (Signals, Settings, Report Builder, Insights)
@@ -494,6 +494,11 @@ components:
       Items with nested children use wnav-parent + left chevron.
       Section headers use NavSection / wnav-section (ALL CAPS, 11px, padding-top 24px).
       Use NavPanel (wnav-items-wrap, padding 0 16px) as the scrollable container.
+      NavPanel has two container variants: floating (default — bg-popover + rounded-3xl,
+      for a panel over another surface) and plain (transparent, no radius — flush to the
+      app shell, sits directly on --background). Items/sections/counts are identical in
+      both; only the container surface changes.
+      Figma node 83995:111644.
 
   - component: CopyLink
     use_when:
@@ -1342,6 +1347,26 @@ components:
       Brand API prototype component — not yet reviewed against Figma.
       min-h-10.
 
+  - component: App Header
+    use_when:
+      - The chrome of every Brand API prototype page — with or without a sidebar
+      - A sticky top bar carrying product identity + primary navigation
+    dont_use_when:
+      - You need a page title / descriptor block below the chrome — use Page Header
+      - Utility state (integration status, credits, sync) — that lives in the sidebar panel or Settings, never the header
+      - A workspace navigation panel — the sidebar is additional to the header, not this component
+    prefer_over:
+      - Waldo Logo: when you need the full page chrome, not just the wordmark
+    notes: |
+      One line, exactly two groups: A identity (.app-ident = Waldo wordmark + product
+      name, inline on one baseline, never stacked) + B navigation (.app-nav = plain text
+      links, muted, active = --foreground). Prohibited inside the header: search inputs,
+      status/integration pills, badges, buttons, "Powered by" lines, any third group.
+      Sticky + blurred, NO border-bottom (borderless shell). Search lives on .app-toolbar
+      (second line, right-aligned; its left may hold filters / a range switcher). Only
+      when nav is empty may search take the header's right slot.
+      Canonical CSS in waldo-ds.css; vanilla-only, consumed by waldo-labs prototypes.
+
   - component: Waldo Logo
     use_when:
       - Displaying the Waldo wordmark in topbars, splash screens, or branded surfaces
@@ -1483,12 +1508,19 @@ components:
       Surface: on the page background → default; nested inside a container card → add .on-card
       (background var(--muted) — one zinc step up; --card on --card is invisible).
       Hover: color-mix(in srgb, var(--foreground) 5%, var(--card)). Transition: background 0.12s.
-      Meta row: source (--fs-xs, 600, foreground) · separator dot · time (--fs-xs, muted) · category tag (right).
+      Meta row: source (--fs-xs, 600, foreground) left; category tag + time (--fs-xs, muted) pushed right
+      via the tag's margin-left auto — the date always sits at the far-right edge of the card, never
+      next to the source. No separator dot.
       Title: --fs-sm, font-weight 600, 2-line clamp.
       Snippet: --fs-xs, muted-foreground, 2-line clamp.
       Category tag: color-mix tint using --primary (neutral/default) or --warning (competitor/negative).
       Element is <a> — renders as clickable link, cursor pointer.
       Classes: .art-card, .art-favicon, .art-body, .art-meta, .art-source, .art-time, .art-tag, .art-title, .art-snippet.
+      Variant .with-thumb: add .art-thumb as the LAST child — a 96px full-bleed thumbnail meeting the
+      card's top/right/bottom edges (negative margins), rounded on the right side only. Image at
+      opacity 0.7, full opacity on card hover. MUST carry onerror="this.parentElement.remove()" so a
+      failed image degrades to the base layout (doctrine: never a broken image). Composes with .on-card
+      (thumb placeholder becomes var(--secondary)).
 
 component_choice_logic:
 
