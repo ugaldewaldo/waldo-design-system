@@ -49,7 +49,6 @@ components:
       Always pill shape (rounded-full). Label uses text-primary.
       Hover/focus border: border-waldo-green-800. No ring.
 
-
   - component: Select / Dropdown
     use_when:
       - Choosing one option from a known list (5+ options)
@@ -71,7 +70,6 @@ components:
       The trigger opens .wdd directly via position:absolute. .dropdown-root/.dropdown-menu is an
       alternative shell pattern for non-.wdd content only.
 
-
   - component: Checkbox
     use_when:
       - Multi-select from a list
@@ -84,7 +82,6 @@ components:
       - Switch: when the choice is saved with a form submit rather than applied instantly
       - RadioGroup: when selections are independent, not mutually exclusive
     notes: Circular shape (not square). green variant for brand, mono for neutral.
-
 
   - component: Switch
     use_when:
@@ -99,7 +96,6 @@ components:
       32x18px pill; ON track bg-primary, OFF track bg-muted (zinc-800).
       Thumb: white 14px circle (h-3.5), translates 13px when checked; 150ms transitions.
       Disabled opacity-40. Built on Radix Switch. Figma node 11406:98105.
-
 
   - component: Badge
     use_when:
@@ -133,7 +129,6 @@ components:
       - Icon: when representing a specific person or brand rather than a generic concept
     notes: round = people, square = brands. Sizes 16/24/32/40px.
 
-
   - component: Tag / TagInput
     use_when:
       - User-entered removable labels (emails, keywords, filters)
@@ -150,7 +145,6 @@ components:
       TagInput: min-h-10 rounded-full container (rounded-2xl when tags present), border foreground/12,
       focus-within border-waldo-green-800; Enter/comma/blur adds, Backspace removes last, dedupes, optional maxTags.
       Figma node 67645:81618 (CHIP/800).
-
 
   - component: FileInput
     use_when:
@@ -170,7 +164,6 @@ components:
       Hover state: bg-secondary. Drag-over: bg-secondary + teal border.
       Error state per file uses text-warning inline.
       Zone text is text-primary (teal). Optional label uses foreground/50.
-
 
   - component: SegmentedControl
     use_when:
@@ -214,7 +207,6 @@ components:
       Text 12px font-medium tracking-[-0.01em] text-foreground; animate-fade-in, sideOffset 4.
       Requires TooltipProvider wrapper (Radix).
 
-
   - component: Table
     use_when:
       - Structured data with multiple columns and rows
@@ -229,7 +221,6 @@ components:
       Linear pattern: slightly lighter than card surface, no shadow. Use maxHeight prop to
       constrain the scroll container (default 400px).
       Waldo extension: shadcn Table has no stickyHeader.
-
 
   - component: Tabs
     use_when:
@@ -251,7 +242,6 @@ components:
       + shadow-surface. Vanilla: .wtabs-pill.primary > .wtab-pill.
       Inactive on text/pill variants: text-muted-foreground, hover to foreground. Built on Radix Tabs; disabled opacity-40.
       Figma node 83931-3758.
-
 
   - component: Alert
     use_when:
@@ -286,7 +276,6 @@ components:
       Exports: toast (function) + Toaster (component). No useToast hook.
       Use: toast("message") / toast.success() / toast.error() / toast.warning()
 
-
   - component: Separator
     use_when:
       - Grouping related items in menus, dropdowns, settings panels
@@ -301,7 +290,6 @@ components:
       orientation horizontal (h-px w-full, default) or vertical (h-full w-px); decorative by default.
       Built on Radix Separator.
 
-
   - component: ListItem / ListView
     use_when:
       - Rows in a list (people, brands, entities) with avatar + label + actions
@@ -313,7 +301,6 @@ components:
       - Table: when rows are entity-centric (avatar + label + hover actions) with 1-2 columns
       - NavItem: when the row displays entity data rather than navigating
     notes: 40px height. Actions appear on hover. Avatar round=people, square=brands.
-
 
   - component: EmptyState
     use_when:
@@ -328,7 +315,6 @@ components:
       page (80px padding) for full-view empty.
       section (48px) inside tables/panels.
       inline (24px) inside dropdowns/search.
-
 
   - component: RadioGroup
     use_when:
@@ -346,7 +332,6 @@ components:
       colorScheme: brand = primary green (default), mono = foreground/70; disabled opacity-40.
       Root flex-col gap-2; RadioGroupField composes item + label + optional description.
 
-
   - component: Slider
     use_when:
       - Continuous value selection (volume, opacity, price range)
@@ -360,7 +345,6 @@ components:
       Track: h-1 (4px) rounded-full bg-muted; filled range bg-primary.
       Thumb: h-2.5 (10px) rounded-full bg-primary, shadow-surface, focus ring-ring/30, grab cursors.
       Single value or range (two thumbs via two-value array); disabled opacity-40.
-
 
   - component: Dialog / Modal
     use_when:
@@ -419,7 +403,6 @@ components:
         14. Brand Audit — md, form fields + FileInput slim + AdvancedSection + split footer
         15. Report builder — lg, SegmentedControl + date Fields
 
-
   - component: WizardDialog
     use_when:
       - Multi-step onboarding flows
@@ -437,7 +420,6 @@ components:
       Progress dots: active 16x6 primary pill, completed 6px primary/50, upcoming 6px foreground/20.
       Figma node 83966-356773.
 
-
   - component: StatusSpinner
     use_when:
       - File upload row status
@@ -449,7 +431,6 @@ components:
       - Skeleton: when showing per-item async status that resolves to success/error/warning, not page-level loading
       - Loader: when the operation has a terminal state to morph into, not an indefinite wait
     notes: Canvas 16px. Morphs to success/error/warning with animation.
-
 
   - component: FilterTrigger
     use_when:
@@ -532,7 +513,6 @@ components:
       Copied state swaps icon to check and colors text primary for 2s.
       Body is font-mono, text-sm, text-foreground/70, whitespace-pre-wrap.
       Waldo extension — no shadcn equivalent.
-
 
   - component: AdvancedSection
     use_when:
@@ -784,6 +764,10 @@ components:
       sidebar.tsx shell: widths SIDEBAR_WIDTH 16rem / mobile 18rem / icon-collapsed 3rem;
       Cmd/Ctrl+B toggles; state in "sidebar_state" cookie; collapsible offcanvas | icon | none;
       mobile renders inside Sheet via useIsMobile.
+      STICKY HEAD: in a scrolling nav panel, the panel head (workspace chip, search) stays
+      sticky at the panel top — position: sticky, top: 0, background var(--popover) — while
+      the item list scrolls under it. Sidebar scrollbars are always hidden
+      (scrollbar-width: none); only main content areas show the global 5px thumb.
 
   - component: Breadcrumb
     use_when:

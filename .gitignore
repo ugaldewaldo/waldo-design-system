@@ -20,5 +20,5 @@ npm-debug.log
 .env
 .env.local
 
-# Doctrine panel runtime backup
-docs/brand-api-dashboard-doctrine.md.bak
+# Doctrines app runtime backups
+docs/*.bak

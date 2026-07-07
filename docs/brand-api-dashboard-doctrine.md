@@ -1,4 +1,4 @@
-# Brand API Dashboard Doctrine
+# Brand API Prototypes Doctrine
 
 Design rules for Brand API prototypes (Promo Radar, Prospector, Moodtape, Poppi Health, and any future dashboard built on the Waldo Brand Intelligence API).
 

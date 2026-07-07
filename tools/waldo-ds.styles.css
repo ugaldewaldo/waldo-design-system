@@ -193,8 +193,9 @@
     .tb-empty { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
     .tb-empty h3 { font-size: var(--fs-sm); font-weight: 500; letter-spacing: -0.02em; color: hsl(var(--foreground)); }
     .tb-empty p  { font-size: var(--fs-sm); letter-spacing: -0.02em; color: hsl(var(--muted-foreground)); }
-    #wb-sidebar{width:288px;min-width:288px;height:100vh;position:sticky;top:0;display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;border-right:1px solid hsl(var(--border));}
+    #wb-sidebar{width:288px;min-width:288px;height:100vh;position:sticky;top:0;display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;}
     #wb-sidebar::-webkit-scrollbar{width:0;}#wb-sidebar { scrollbar-width: none; }
+    #wb-sidebar .wnav-search { position: sticky; top: -8px; z-index: 5; background: hsl(var(--popover)); padding-top: 16px; }
     #wb-main{flex:1;overflow-y:auto;padding:48px 52px 100px 52px;}
     #wb-main::-webkit-scrollbar{width:5px;}#wb-main::-webkit-scrollbar-thumb{background:hsl(var(--secondary));border-radius:99px;}
     .sb-logo{padding:14px 14px 12px;border-bottom:1px solid hsl(var(--border));display:flex;align-items:center;gap:8px;}
@@ -1398,7 +1399,7 @@ table.wui-table tbody tr.row-selected td { background: hsl(var(--primary) / 0.04
 .app-header-inner { max-width: 1184px; margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
 .app-ident { display: flex; align-items: center; gap: 14px; min-width: 0; }
 .app-ident svg { flex: none; }
-.app-ident .product { font-size: var(--fs-lg); font-weight: 500; letter-spacing: -0.02em; color: hsl(var(--foreground)); white-space: nowrap; }
+.app-ident .product { font-size: var(--fs-xl); font-weight: 500; letter-spacing: -0.02em; color: hsl(var(--foreground)); white-space: nowrap; }
 .app-nav { display: flex; align-items: center; gap: 24px; }
 .app-nav a { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); text-decoration: none; }
 .app-nav a:hover { color: hsl(var(--foreground)); }
