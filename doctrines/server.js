@@ -392,7 +392,7 @@ if (require.main !== module) { module.exports = { parseRules, buildSection, find
 
 http.createServer((req, res) => {
   const u = new URL(req.url, 'http://localhost');
-  if (req.method === 'GET' && u.pathname === '/') return serveFile(res, path.join(PANEL_DIR, 'index.html'));
+  if (req.method === 'GET' && u.pathname === '/') { res.writeHead(302, { Location: '/doctrines/' }); res.end(); return; }
 
   const doc = () => surfacePath(u.searchParams.get('doc'));
 
@@ -475,8 +475,9 @@ http.createServer((req, res) => {
   }
   if (req.method === 'GET') {                              // static, repo-root scoped
     const rel = decodeURIComponent(u.pathname.replace(/^\/+/, ''));
-    const filePath = path.resolve(REPO_ROOT, rel);
+    let filePath = path.resolve(REPO_ROOT, rel);
     if (filePath !== REPO_ROOT && !filePath.startsWith(REPO_ROOT + path.sep)) { res.writeHead(403); res.end('Forbidden'); return; }
+    try { if (fs.statSync(filePath).isDirectory()) filePath = path.join(filePath, 'index.html'); } catch (e) {}
     return serveFile(res, filePath);
   }
   res.writeHead(404); res.end('Not found');

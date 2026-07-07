@@ -10,14 +10,6 @@
       ],
       "port": 4501,
       "autoPort": true
-    },
-    {
-      "name": "doctrines",
-      "runtimeExecutable": "node",
-      "runtimeArgs": [
-        "/Users/miguelugalde/Desktop/waldo-design-system/doctrines/server.js"
-      ],
-      "port": 4174
     }
   ]
 }
