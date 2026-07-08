@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seddit — simulation cockpit</title>
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  /* waldo-ds.css sets html,body{height:100%;overflow:hidden} — breaks scroll.
+     Scroll override goes on html ONLY: any overflow other than visible on body
+     silently kills position:sticky (the sticky topbar scrolls away). */
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  /* waldo-ds.css sets body{display:flex!important} — collapses card widths */
+  body { display: block !important; }
+  /* waldo-ds.css sets svg{display:block} — collapses ring/icon SVGs inside flex containers */
+  svg { flex: none; min-height: fit-content; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    max-width: none !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: hsl(var(--background)); color: hsl(var(--foreground));
+    font-size: var(--fs-sm); line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: hsl(var(--primary)); text-decoration: none; }
+  a:hover { opacity: .85; }
+  a.btn, a.btn:hover { opacity: 1; }
+  button { font-family: inherit; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  /* ── App shell — canonical .app-header on top (identity + search in the
+       no-nav exception slot); sidebar is workspace nav, additional to it.
+       Grid shares the header's 1184px column so the chrome aligns. ── */
+  .app { display: grid; grid-template-columns: 256px 1fr; gap: 28px; max-width: 1184px; margin: 0 auto; padding: 0 24px; min-height: calc(100vh - 64px); }
+
+  /* ── Sidebar — one integrated popover panel: chip header + nav (doctrine) ── */
+  .sidebar { display: flex; flex-direction: column; position: sticky; top: 64px; height: calc(100vh - 64px); padding: 14px 0; }
+
+  /* boxless sidebar — items sit directly on the background, no panel surface */
+  .side-panel { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .client-chip { border-radius: var(--radius-lg); }
+
+  /* Client chip — panel header: transparent, hover lightens to muted (doctrine) */
+  .client-chip { padding: 12px 14px; border: none; text-align: left; width: 100%;
+    background: transparent; cursor: pointer;
+    display: flex; align-items: center; gap: 10px; transition: background .12s; color: hsl(var(--foreground)); }
+  .client-chip:hover { background: hsl(var(--muted)); }
+  .client-chip .c-name { font-weight: 500; font-size: var(--fs-sm); line-height: 1.25; }
+  .client-chip .c-sub { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .client-chip .c-chev { margin-left: auto; color: hsl(var(--muted-foreground)); display: flex; }
+  .client-chip .c-chev svg { width: 15px; height: 15px; }
+
+  /* Nav — DS wnav; fit the floating panel to the sidebar */
+  .side-nav { flex: 1; overflow-y: auto; }
+  .side-nav.wnav-panel { width: auto; margin: 0; padding: 2px 0 8px; background: transparent; border-radius: 0; }
+  .side-nav .wnav-item { text-decoration: none; cursor: pointer; }
+  .side-nav .wnav-item, .side-nav .wnav-item:hover { color: color-mix(in srgb, hsl(var(--foreground)) 70%, transparent); }
+  .side-nav .wnav-item.active { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
+  .side-nav .wnav-item .wnav-icon svg { width: 15px; height: 15px; }
+  .side-nav .wnav-items-wrap { padding: 0 8px; }
+  .side-nav .wnav-section { padding: 12px 16px 6px; }
+
+  .side-foot { padding: 14px 16px; }
+  .side-foot .lbl { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); display: flex; justify-content: space-between; font-variant-numeric: tabular-nums; }
+  .credit-track { height: 6px; background: hsl(var(--muted)); border-radius: var(--radius-full); overflow: hidden; margin: 8px 0 6px; }
+  .credit-fill { height: 100%; background: hsl(var(--primary)); border-radius: var(--radius-full); }
+
+  /* ── Main column ── */
+  .main { display: flex; flex-direction: column; min-width: 0; }
+  .content { padding: 28px 0; width: 100%; }
+
+  /* ── Page header (doctrine — injected border killed) ── */
+  .page-head { margin-bottom: 22px; border-bottom: none !important; display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.8px; line-height: 34px; }
+  .page-head .sub { color: hsl(var(--muted-foreground)); margin-top: 5px; font-size: var(--fs-sm); }
+  .page-head .spacer { flex: 1; }
+
+  /* ── Views ── */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ── KPI Stat Card — canonical (showcase #comp-kpi-stat-card) ── */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  .kpi { background: hsl(var(--card)); border-radius: var(--radius-2xl); padding: 22px; display: flex; flex-direction: column; gap: 8px; position: relative; }
+  .k-label { font-size: var(--fs-sm); font-weight: 500; line-height: 20px; letter-spacing: -0.28px; color: hsl(var(--muted-foreground)); }
+  .kpi:has(.k-delta) .k-label { padding-right: 48px; }
+  .k-value { font-size: var(--fs-3xl); font-weight: 600; line-height: 34px; letter-spacing: -0.6px; font-variant-numeric: tabular-nums; }
+  .k-sub { font-size: var(--fs-xs); font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: hsl(var(--muted-foreground)); }
+  .k-delta { position: absolute; top: 16px; right: 16px; border: none; }
+  .k-delta.good { background: hsl(var(--primary) / 0.12); color: hsl(var(--primary)); }
+
+  /* ── Feed toolbar — row rhythm: ~24px above and below ── */
+  .feed-toolbar { display: flex; align-items: center; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+  .kpi-grid + .feed-toolbar { margin-top: 0; }
+  .feed-note { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-left: auto; }
+
+  /* ── Simulation Card — Opportunity Card (showcase #comp-opportunity-card) ── */
+  .opp-stack { display: flex; flex-direction: column; gap: 14px; }
+  .opp-card { background: hsl(var(--card)); border-radius: 16px; padding: 20px 24px; transition: background .14s; }
+  .opp-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--card))); }
+  .opp-card.is-skipped { opacity: .45; }
+  .opp-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .opp-source { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); }
+  .opp-time { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); opacity: .6; }
+  .opp-match { margin-left: auto; flex: none; }
+  .opp-title { font-size: var(--fs-base); font-weight: 500; letter-spacing: -0.02em; line-height: 1.45; margin-top: 12px; }
+  .opp-excerpt { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); line-height: 1.55; margin-top: 5px; }
+  /* nested on-card block = muted; lockstep hover with the parent card (doctrine) */
+  .opp-draft { background: hsl(var(--muted)); border-radius: var(--radius-lg); padding: 14px 16px; margin-top: 14px; transition: background .14s; }
+  .opp-card:hover .opp-draft { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--muted))); }
+  .opp-draft-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: hsl(var(--primary)); display: flex; align-items: center; gap: 6px; margin-bottom: 7px; flex-wrap: wrap; }
+  .opp-draft-label svg { width: 12px; height: 12px; }
+  .opp-draft-ref { color: hsl(var(--muted-foreground)); text-transform: none; letter-spacing: -0.01em; font-weight: 400; }
+  .opp-draft p { font-size: var(--fs-sm); line-height: 1.6; color: hsl(var(--foreground)); }
+  .opp-actions { display: flex; align-items: center; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid hsl(var(--border)); flex-wrap: wrap; }
+  .opp-teach { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-left: auto; }
+
+  /* Room read — Proportion Bar (showcase #chart-page-proportion) inside the card */
+  .senti-row { display: flex; align-items: center; gap: 14px; padding: 7px 0; margin-top: 8px; }
+  .senti-label { width: 72px; flex: none; font-size: var(--fs-sm); font-weight: 400; letter-spacing: -0.28px; color: hsl(var(--muted-foreground)); }
+  .senti-bar { flex: 1; height: 10px; border-radius: var(--radius-full); overflow: hidden; display: flex; background: hsl(var(--secondary)); }
+  .senti-seg { height: 100%; }
+  .senti-seg.pos { background: hsl(var(--primary)); }
+  .senti-seg.neu { background: hsl(var(--muted-foreground)); }
+  .senti-seg.neg { background: hsl(var(--warning)); }
+  .senti-seg.mix { background: hsl(var(--highlight)); }
+  .senti-val { width: 40px; flex: none; text-align: right; font-size: var(--fs-sm); font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.28px; color: hsl(var(--muted-foreground)); }
+  .senti-legend { display: flex; gap: 16px; flex-wrap: wrap; margin: 0 2px 12px; }
+  .senti-legend-item { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); letter-spacing: -0.24px; color: color-mix(in srgb, hsl(var(--foreground)) 70%, transparent); }
+  .senti-swatch { width: 14px; height: 8px; border-radius: 4px; flex: none; }
+  .senti-swatch.pos { background: hsl(var(--primary)); }
+  .senti-swatch.neu { background: hsl(var(--muted-foreground)); }
+  .senti-swatch.neg { background: hsl(var(--warning)); }
+  .senti-swatch.mix { background: hsl(var(--highlight)); }
+
+  /* Flair pill — Threaded Comment family (showcase #comp-threaded-comment) */
+  .thread-flair { font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 7px; border-radius: var(--radius-full); }
+
+  /* Cast identity — categorical chart tints (avatar + flair share the tint) */
+  .cast-1  { background: hsl(var(--chart-1) / 0.15);  color: hsl(var(--chart-1));  border-color: transparent; }
+  .cast-2  { background: hsl(var(--chart-2) / 0.15);  color: hsl(var(--chart-2));  border-color: transparent; }
+  .cast-3  { background: hsl(var(--chart-3) / 0.15);  color: hsl(var(--chart-3));  border-color: transparent; }
+  .cast-4  { background: hsl(var(--chart-4) / 0.15);  color: hsl(var(--chart-4));  border-color: transparent; }
+  .cast-5  { background: hsl(var(--chart-5) / 0.15);  color: hsl(var(--chart-5));  border-color: transparent; }
+  .cast-6  { background: hsl(var(--chart-6) / 0.15);  color: hsl(var(--chart-6));  border-color: transparent; }
+  .cast-7  { background: hsl(var(--chart-7) / 0.15);  color: hsl(var(--chart-7));  border-color: transparent; }
+  .cast-8  { background: hsl(var(--chart-8) / 0.15);  color: hsl(var(--chart-8));  border-color: transparent; }
+  .cast-9  { background: hsl(var(--chart-9) / 0.15);  color: hsl(var(--chart-9));  border-color: transparent; }
+  .cast-10 { background: hsl(var(--chart-10) / 0.15); color: hsl(var(--chart-10)); border-color: transparent; }
+  .cast-11 { background: hsl(var(--chart-11) / 0.15); color: hsl(var(--chart-11)); border-color: transparent; }
+  .cast-12 { background: hsl(var(--chart-12) / 0.15); color: hsl(var(--chart-12)); border-color: transparent; }
+
+  /* ── Cast view — Comment Card family (showcase #comp-comment-card) ── */
+  .cast-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .comment-card { background: hsl(var(--card)); border-radius: var(--radius-xl); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; transition: background 0.12s; }
+  .comment-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 6%, hsl(var(--card))); }
+  .comment-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .comment-author { font-size: var(--fs-sm); font-weight: 600; color: hsl(var(--foreground)); }
+  .comment-body { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); line-height: 1.55; }
+  .comment-foot { display: flex; align-items: center; gap: 8px; }
+  .comment-count { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); opacity: 0.6; margin-left: auto; }
+
+  /* ── Rooms view — Room Card (DS gap captured: PROTOTYPES/seddit/new-component--room-card.html) ── */
+  .room-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .sed-room { display: block; background: hsl(var(--card)); border-radius: 16px; overflow: hidden; transition: background 0.14s; cursor: pointer; color: hsl(var(--foreground)); }
+  .sed-room:hover { opacity: 1; }
+  .sed-room:hover { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--card))); }
+  .sed-room-cover { height: 74px; background: hsl(var(--secondary)); background-image: radial-gradient(hsl(var(--foreground) / 0.06) 1px, transparent 1px); background-size: 13px 13px; position: relative; }
+  .sed-room-ava { position: absolute; left: 18px; bottom: -22px; background: hsl(var(--primary)); color: hsl(var(--background)); box-shadow: 0 0 0 3px hsl(var(--card)); border-color: transparent; }
+  .sed-room-body { padding: 32px 18px 16px; }
+  .sed-room-body h2 { font-size: var(--fs-xl); font-weight: 600; letter-spacing: -0.02em; margin: 0 0 7px; }
+  .sed-room-stim { font-size: var(--fs-sm); color: hsl(var(--foreground) / 0.85); line-height: 1.5; margin: 0 0 13px; }
+  .sed-room-stim .badge { margin-right: 6px; }
+  .sed-room-meta { display: flex; gap: 10px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); padding-top: 11px; }
+
+  /* ── Runs ── */
+  .log-cost { color: hsl(var(--muted-foreground)); }
+  .agent-badge { font-variant-numeric: tabular-nums; }
+  .row { display: flex; gap: 16px; align-items: stretch; margin-top: 16px; }
+  .row > * { flex: 1; min-width: 0; }
+
+  /* ── Toast — DS wtoast, fixed bottom-center (doctrine) ── */
+  .toast-vp { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(20px); opacity: 0; pointer-events: none; transition: all .25s; z-index: 90; }
+  .toast-vp.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast-vp .wtoast-icon { color: hsl(var(--primary)); }
+
+  .api-foot { margin-top: 30px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+
+  /* Re-simulate shimmer */
+  .shimmer { opacity: 0.35; filter: blur(1px); transition: 0.3s; }
+
+  .mobile-nav { display: none; }
+
+  @media (max-width: 940px) {
+    .app { grid-template-columns: 1fr; gap: 0; padding: 0 16px; }
+    .sidebar { display: none; }
+    .mobile-nav { display: flex; gap: 4px; overflow-x: auto; padding: 8px 14px; position: sticky; top: 64px; z-index: 39; background: hsl(var(--background)); }
+    .mobile-nav .wnav-item { white-space: nowrap; cursor: pointer; }
+    .mobile-nav .wnav-item.active { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
+    .kpi-grid { grid-template-columns: 1fr 1fr; }
+    .cast-grid, .room-grid, .row { grid-template-columns: 1fr; flex-direction: column; }
+    .content { padding: 20px 0 80px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════ APP HEADER — canonical chrome: identity + search (no-nav exception) ════ -->
+<header class="app-header">
+  <div class="app-header-inner">
+    <div class="app-ident">
+      <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Waldo"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
+      <span class="product">Seddit</span>
+    </div>
+    <div class="app-search input-with-icon">
+      <div class="input-icon">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </div>
+      <input class="input" type="text" placeholder="Search simulations, voices, stimuli…" autocomplete="off">
+    </div>
+  </div>
+</header>
+
+<div class="app">
+  <!-- ════ SIDEBAR — workspace nav, additional to the header ════ -->
+  <aside class="sidebar">
+    <div class="side-panel">
+      <button class="client-chip" onclick="toast('Switch brand room — demo (one cockpit, many brands)')">
+        <div class="wav wav-square wav-32">G</div>
+        <div style="min-width:0">
+          <div class="c-name">Glossier</div>
+          <div class="c-sub">glossier.com · brand</div>
+        </div>
+        <span class="c-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+
+      <div class="side-nav wnav-panel">
+        <div class="wnav-items-wrap" id="nav"></div>
+      </div>
+
+      <div class="side-foot">
+        <div class="lbl"><span>Waldo API credits</span><span>448 / 1,000</span></div>
+        <div class="credit-track"><div class="credit-fill" style="width:45%"></div></div>
+        <div class="lbl"><span>Resets Aug 1</span><a href="#runs" style="font-weight:500">Usage</a></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ════ MAIN ════ -->
+  <div class="main">
+    <div class="mobile-nav" id="mobile-nav"></div>
+    <div class="content">
+
+      <!-- ── VIEW: Simulations ── -->
+      <div class="view active" id="view-sims">
+        <div class="page-head">
+          <div>
+            <h1>Simulations</h1>
+            <div class="sub">Brand moves tested against the reconstructed r/glossier audience — 12 grounded voices.</div>
+          </div>
+          <div class="spacer"></div>
+          <button class="btn btn-default btn-sm" onclick="toast('Stimulus composer opens — demo')">New stimulus</button>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi">
+            <span class="badge badge-sm k-delta good">▲ 2</span>
+            <div class="k-label">Stimuli simulated</div>
+            <div class="k-value">5</div>
+            <div class="k-sub">1 real move · 4 hypothetical</div>
+          </div>
+          <div class="kpi">
+            <div class="k-label">Voices in cast</div>
+            <div class="k-value">12</div>
+            <div class="k-sub">100% grounded in real accounts</div>
+          </div>
+          <div class="kpi">
+            <div class="k-label">Avg negative share</div>
+            <div class="k-value">58%</div>
+            <div class="k-sub">the room protects the core line</div>
+          </div>
+          <div class="kpi">
+            <div class="k-label">Grounding pool</div>
+            <div class="k-value">76k</div>
+            <div class="k-sub">real r/glossier accounts sampled</div>
+          </div>
+        </div>
+
+        <div class="feed-toolbar">
+          <div class="wseg" role="group" aria-label="Filter by stimulus type">
+            <button class="wseg-opt active" onclick="segFilter(this, 'all')">All</button>
+            <button class="wseg-opt inactive" onclick="segFilter(this, 'real')">Real moves</button>
+            <button class="wseg-opt inactive" onclick="segFilter(this, 'hypo')">Hypotheticals</button>
+          </div>
+          <span class="feed-note">Blind-generated — the cast never sees the real replies · updated 12 min ago</span>
+        </div>
+
+        <div class="senti-legend" aria-label="Room read legend">
+          <span class="senti-legend-item"><span class="senti-swatch pos"></span>Positive</span>
+          <span class="senti-legend-item"><span class="senti-swatch neu"></span>Neutral</span>
+          <span class="senti-legend-item"><span class="senti-swatch neg"></span>Negative</span>
+          <span class="senti-legend-item"><span class="senti-swatch mix"></span>Mixed</span>
+        </div>
+
+        <div class="opp-stack">
+
+          <div class="opp-card" data-kind="real">
+            <div class="opp-meta">
+              <span class="avatar av-xs cast-6">G</span>
+              <span class="opp-source">r/glossier · 12 voices</span>
+              <span class="opp-time">14 comments · simulated 2h ago</span>
+              <span class="opp-match badge badge-warning badge-sm">71% negative</span>
+            </div>
+            <div class="opp-title">REAL · Glossier launches a pet line — a collar, a leash, and dog poop bags printed with the logo.</div>
+            <div class="opp-excerpt">The room reads it as logo-stretching: loyalists want the core products restocked and supported, not brand merch for dogs.</div>
+            <div class="senti-row">
+              <span class="senti-label">Room read</span>
+              <span class="senti-bar"><span class="senti-seg pos" style="width:8%"></span><span class="senti-seg neu" style="width:18%"></span><span class="senti-seg neg" style="width:71%"></span><span class="senti-seg mix" style="width:3%"></span></span>
+              <span class="senti-val">8%</span>
+            </div>
+            <div class="opp-draft">
+              <div class="opp-draft-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Top reaction <span class="opp-draft-ref">· u/softlaunch16 <span class="thread-flair cast-1">Since 2016</span> · 734 pts</span>
+              </div>
+              <p>"lol what. the whole point was the makeup felt simple and personal, not slapping the logo on dog poop bags. this is the kind of thing brands do when they've run out of actual ideas. hard pass."</p>
+            </div>
+            <div class="opp-actions">
+              <a class="btn btn-default btn-sm" href="../../PROTOTYPES/seddit/glossier.html">Open thread</a>
+              <button class="btn btn-secondary btn-sm" onclick="resim(this)">Re-simulate</button>
+              <span class="opp-teach">Every voice above is a real account. The takes are theirs, the thread is conjured.</span>
+            </div>
+          </div>
+
+          <div class="opp-card" data-kind="hypo">
+            <div class="opp-meta">
+              <span class="avatar av-xs cast-6">G</span>
+              <span class="opp-source">r/glossier · 12 voices</span>
+              <span class="opp-time">11 comments · simulated 5h ago</span>
+              <span class="opp-match badge badge-warning badge-sm">78% negative</span>
+            </div>
+            <div class="opp-title">HYPOTHETICAL · Balm Dotcom moves from $14 to $18 with new "clean formula" packaging.</div>
+            <div class="opp-excerpt">Price is the sorest nerve in the room — priced-out loyalists dominate, and "clean formula" reads as cover for the increase.</div>
+            <div class="senti-row">
+              <span class="senti-label">Room read</span>
+              <span class="senti-bar"><span class="senti-seg pos" style="width:4%"></span><span class="senti-seg neu" style="width:13%"></span><span class="senti-seg neg" style="width:78%"></span><span class="senti-seg mix" style="width:5%"></span></span>
+              <span class="senti-val">4%</span>
+            </div>
+            <div class="opp-draft">
+              <div class="opp-draft-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Top reaction <span class="opp-draft-ref">· u/balmbudget <span class="thread-flair cast-3">Priced Out</span> · 812 pts</span>
+              </div>
+              <p>"$18 for balm dotcom?? I used to order three at a time in 2017. At this point I'm window shopping a brand I used to love — reformulate the prices, not the packaging."</p>
+            </div>
+            <div class="opp-actions">
+              <button class="btn btn-default btn-sm" onclick="toast('Thread view — demo (hypothetical rooms render on request)')">Open thread</button>
+              <button class="btn btn-secondary btn-sm" onclick="resim(this)">Re-simulate</button>
+              <span class="opp-teach">Every voice above is a real account. The takes are theirs, the thread is conjured.</span>
+            </div>
+          </div>
+
+          <div class="opp-card" data-kind="hypo">
+            <div class="opp-meta">
+              <span class="avatar av-xs cast-6">G</span>
+              <span class="opp-source">r/glossier · 12 voices</span>
+              <span class="opp-time">16 comments · simulated 9h ago</span>
+              <span class="opp-match badge badge-active badge-sm">64% positive</span>
+            </div>
+            <div class="opp-title">HYPOTHETICAL · Glossier Play returns as a one-week limited drop — Glitter Gelée and Vinylic Lip only.</div>
+            <div class="opp-excerpt">The nostalgia bloc carries the room — strongest positive read of the week, with a minority warning it splits focus from restocks.</div>
+            <div class="senti-row">
+              <span class="senti-label">Room read</span>
+              <span class="senti-bar"><span class="senti-seg pos" style="width:64%"></span><span class="senti-seg neu" style="width:17%"></span><span class="senti-seg neg" style="width:11%"></span><span class="senti-seg mix" style="width:8%"></span></span>
+              <span class="senti-val">64%</span>
+            </div>
+            <div class="opp-draft">
+              <div class="opp-draft-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Top reaction <span class="opp-draft-ref">· u/vscoghost <span class="thread-flair cast-2">Nostalgic</span> · 691 pts</span>
+              </div>
+              <p>"ok NOW we're talking. glitter gelée on my eyelids in 2018 was a personality trait. if this is real i'm buying two of everything before they panic-discontinue it again."</p>
+            </div>
+            <div class="opp-actions">
+              <button class="btn btn-default btn-sm" onclick="toast('Thread view — demo (hypothetical rooms render on request)')">Open thread</button>
+              <button class="btn btn-secondary btn-sm" onclick="resim(this)">Re-simulate</button>
+              <span class="opp-teach">Every voice above is a real account. The takes are theirs, the thread is conjured.</span>
+            </div>
+          </div>
+
+          <div class="opp-card" data-kind="hypo">
+            <div class="opp-meta">
+              <span class="avatar av-xs cast-6">G</span>
+              <span class="opp-source">r/glossier · 12 voices</span>
+              <span class="opp-time">12 comments · simulated 1d ago</span>
+              <span class="opp-match badge badge-highlight badge-sm">Mixed read</span>
+            </div>
+            <div class="opp-title">HYPOTHETICAL · An AI shade-matching quiz replaces the shade finder in the app.</div>
+            <div class="opp-excerpt">Product-first voices judge it on whether it actually works; the skeptics don't want a quiz standing in for a wider shade range.</div>
+            <div class="senti-row">
+              <span class="senti-label">Room read</span>
+              <span class="senti-bar"><span class="senti-seg pos" style="width:41%"></span><span class="senti-seg neu" style="width:27%"></span><span class="senti-seg neg" style="width:19%"></span><span class="senti-seg mix" style="width:13%"></span></span>
+              <span class="senti-val">41%</span>
+            </div>
+            <div class="opp-draft">
+              <div class="opp-draft-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Top reaction <span class="opp-draft-ref">· u/skintintstan <span class="thread-flair cast-5">Skin Tint Evangelist</span> · 486 pts</span>
+              </div>
+              <p>"if the quiz actually matches my undertone better than the guessing game we have now, fine — but I need shades that exist, not a smarter way to find out mine doesn't."</p>
+            </div>
+            <div class="opp-actions">
+              <button class="btn btn-default btn-sm" onclick="toast('Thread view — demo (hypothetical rooms render on request)')">Open thread</button>
+              <button class="btn btn-secondary btn-sm" onclick="resim(this)">Re-simulate</button>
+              <span class="opp-teach">Every voice above is a real account. The takes are theirs, the thread is conjured.</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── VIEW: Rooms ── -->
+      <div class="view" id="view-rooms">
+        <div class="page-head">
+          <div>
+            <h1>Rooms</h1>
+            <div class="sub">Simulated communities — each cast reconstructed from a real audience.</div>
+          </div>
+          <div class="spacer"></div>
+          <button class="btn btn-default btn-sm" onclick="toast('Point Seddit at a community — demo')">New room</button>
+        </div>
+        <div class="room-grid">
+          <a class="sed-room" href="../../PROTOTYPES/seddit/glossier.html">
+            <div class="sed-room-cover"><div class="avatar av-xl sed-room-ava">G</div></div>
+            <div class="sed-room-body">
+              <h2>r/glossier</h2>
+              <p class="sed-room-stim"><span class="badge badge-highlight badge-sm">REAL</span>Glossier launches a pet line — collar, leash, and dog poop bags with the logo.</p>
+              <div class="sed-room-meta"><span>12 voices</span><span>·</span><span>grounded in r/glossier</span><span>·</span><span>5 stimuli tested</span></div>
+            </div>
+          </a>
+          <a class="sed-room" href="../../PROTOTYPES/seddit/chipotle.html">
+            <div class="sed-room-cover"><div class="avatar av-xl sed-room-ava">C</div></div>
+            <div class="sed-room-body">
+              <h2>r/Chipotle</h2>
+              <p class="sed-room-stim"><span class="badge badge-highlight badge-sm">REAL</span>Prices rise 1–2%, and the CEO's advice on skimpy portions: "just ask" for more.</p>
+              <div class="sed-room-meta"><span>12 voices</span><span>·</span><span>grounded in r/Chipotle</span><span>·</span><span>2 stimuli tested</span></div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- ── VIEW: Cast ── -->
+      <div class="view" id="view-cast">
+        <div class="page-head">
+          <div>
+            <h1>Cast</h1>
+            <div class="sub">The 12 voices of r/glossier — sampled from neutral threads, distilled into distinct registers.</div>
+          </div>
+        </div>
+        <div class="cast-grid" id="cast-grid"></div>
+      </div>
+
+      <!-- ── VIEW: Runs ── -->
+      <div class="view" id="view-runs">
+        <div class="page-head">
+          <div>
+            <h1>Runs</h1>
+            <div class="sub">Read-only agent run history · platform admins only.</div>
+          </div>
+        </div>
+        <div class="wcard" style="padding:0;gap:0">
+          <div class="table-wrap">
+            <table class="wui-table">
+              <thead><tr><th style="padding-left:24px">Run</th><th>Agent</th><th>User</th><th>Duration</th><th>Tokens</th><th>Cost</th><th>When</th></tr></thead>
+              <tbody>
+                <tr><td style="padding-left:24px" class="tabular">run_3c18</td><td><span class="badge badge-secondary badge-sm agent-badge">simulate-thread</span></td><td>justin@waldo.fyi</td><td class="tabular">38.2s</td><td class="tabular">52,340</td><td class="tabular log-cost">$0.804</td><td class="log-cost">2h ago</td></tr>
+                <tr><td style="padding-left:24px" class="tabular">run_3c15</td><td><span class="badge badge-secondary badge-sm agent-badge">distill-read</span></td><td>justin@waldo.fyi</td><td class="tabular">6.4s</td><td class="tabular">9,112</td><td class="tabular log-cost">$0.131</td><td class="log-cost">2h ago</td></tr>
+                <tr><td style="padding-left:24px" class="tabular">run_3c0e</td><td><span class="badge badge-secondary badge-sm agent-badge">simulate-thread</span></td><td>jenny@waldo.fyi</td><td class="tabular">41.7s</td><td class="tabular">55,908</td><td class="tabular log-cost">$0.862</td><td class="log-cost">5h ago</td></tr>
+                <tr><td style="padding-left:24px" class="tabular">run_3c07</td><td><span class="badge badge-secondary badge-sm agent-badge">ground-voice</span></td><td>justin@waldo.fyi</td><td class="tabular">12.9s</td><td class="tabular">18,266</td><td class="tabular log-cost">$0.271</td><td class="log-cost">9h ago</td></tr>
+                <tr><td style="padding-left:24px" class="tabular">run_3bfa</td><td><span class="badge badge-secondary badge-sm agent-badge">assemble-cast</span></td><td>jenny@waldo.fyi</td><td class="tabular">64.3s</td><td class="tabular">88,410</td><td class="tabular log-cost">$1.322</td><td class="log-cost">1d ago</td></tr>
+                <tr><td style="padding-left:24px" class="tabular">run_3bf2</td><td><span class="badge badge-secondary badge-sm agent-badge">simulate-thread</span></td><td>justin@waldo.fyi</td><td class="tabular">36.5s</td><td class="tabular">49,772</td><td class="tabular log-cost">$0.766</td><td class="log-cost">1d ago</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row">
+          <div class="wcard">
+            <div class="wcard-head"><span class="wcard-title">Step trace — run_3c18</span><span class="wcard-sub">simulate-thread · one isolated agent per voice, blind to the real replies</span></div>
+            <div class="wcode-block">
+              <div class="wcode-block-header">
+                <button class="wcode-block-action" onclick="toast('Trace copied — demo')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                  Copy trace
+                </button>
+              </div>
+              <pre class="wcode-block-body">step 1 · load-cast           12 voices · r/glossier · cached · 0.2s
+step 2 · neutralize-stimulus  "pet line launch" → neutral statement · 0.8s
+step 3 · react (x12, blind)   each agent sees: persona prior posts + neutral stimulus
+                              never the real replies · 12 isolated runs · 31.4s
+step 4 · assemble-thread      score-ordered, nesting from reply affinity · 3.1s
+step 5 · distill-read         pos 8 / neu 18 / neg 71 / mix 3 · cost $0.804</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── VIEW: shared placeholder (not-yet-built sections) ── -->
+      <div class="view" id="view-soon">
+        <div class="page-head">
+          <div>
+            <h1 id="soon-title">Section</h1>
+            <div class="sub">Part of the Seddit cockpit.</div>
+          </div>
+        </div>
+        <div class="wcard" style="background:transparent;padding:0">
+          <div class="wempty wempty-page">
+            <div class="wempty-icon" id="soon-icon"></div>
+            <div class="wempty-title" id="soon-empty-title">Available when connected to Glossier's Waldo workspace</div>
+            <div class="wempty-desc">This view will draw live audience data from the Waldo Brand Intelligence API.</div>
+            <div class="wempty-action"><button class="btn btn-default" style="height:32px;font-size:var(--fs-sm)" onclick="toast('Connect workspace — demo')">Connect workspace</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="api-foot">Prototype · Seddit simulation cockpit on the Waldo Design System · synthetic data, fixed to Jul 8, 2026</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-vp" id="toast-vp">
+  <div class="wtoast">
+    <div class="wtoast-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <div class="wtoast-body"><span class="wtoast-title" id="toast-msg"></span></div>
+  </div>
+</div>
+
+<script>
+/* ════ ICONS ════ */
+var IC = {
+  flask:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31L4.6 18.6A2 2 0 0 0 6.3 22h11.4a2 2 0 0 0 1.7-3.4L14 9.31V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>',
+  bolt:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+  door:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/></svg>',
+  users:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  anchor: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"/><line x1="12" y1="22" x2="12" y2="8"/><path d="M5 12H2a10 10 0 0 0 20 0h-3"/></svg>',
+  globe:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+  gauge:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>',
+  logs:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>'
+};
+
+/* ════ NAV MODEL ════
+   view: id of a real .view · null: routes to the shared placeholder */
+var NAV = [
+  { section: 'Simulate' },
+  { id: 'sims',   label: 'Simulations',       icon: 'flask',  count: 5, view: 'sims' },
+  { id: 'queue',  label: 'Stimuli queue',     icon: 'bolt',   count: 3, view: null },
+  { id: 'rooms',  label: 'Rooms',             icon: 'door',   count: 2, view: 'rooms' },
+  { section: 'Audience' },
+  { id: 'cast',   label: 'Cast',              icon: 'users',  count: 12, view: 'cast' },
+  { id: 'ground', label: 'Grounding sources', icon: 'anchor', view: null },
+  { id: 'comms',  label: 'Communities',       icon: 'globe',  view: null },
+  { section: 'Measure' },
+  { id: 'reads',  label: 'Room reads',        icon: 'gauge',  view: null },
+  { id: 'runs',   label: 'Runs',              icon: 'logs',   view: 'runs' }
+];
+
+/* ════ CAST — grounded in real r/glossier accounts (deterministic literals) ════ */
+var CAST = [
+  { u: 'softlaunch16',  ava: 'g', tint: 1,  flair: 'Since 2016',           bio: "Hooked since 2016 when the makeup felt simple, relatable and beginner-friendly against all the full-glam. Still a fave, but honestly not as diehard as an adult." },
+  { u: 'vscoghost',     ava: 't', tint: 2,  flair: 'Nostalgic',            bio: "Nostalgic for peak 2017–2018 Glossier — the art-hoe era when Boy Brow and Balm Dotcom were everywhere. Loves the memory more than the current brand." },
+  { u: 'balmbudget',    ava: 'N', tint: 3,  flair: 'Priced Out',           bio: "Used to order everything in 2017. Now has bills and the prices went up, so rarely orders. Priced-out, not bitter — just wants it affordable again." },
+  { u: 'lashloyalist',  ava: 'r', tint: 4,  flair: 'Mascara Loyalist',     bio: "Glossier's mascara is the only one that never clumps and she can't go back. Loves the makeup; judges everything by whether it's actually good." },
+  { u: 'skintintstan',  ava: 'p', tint: 5,  flair: 'Skin Tint Evangelist', bio: "Hates the look and feel of foundation; the skin tint is the first thing that ever gave her that clean, makeup-less glow. Here for the products that work." },
+  { u: 'feralpinkera',  ava: 'v', tint: 6,  flair: 'Feral Nostalgic',      bio: "Was 17 mixing the jelly cleanser with sugar 'like an ANIMAL.' Deep history, zero reverence." },
+  { u: 'freshlyhooked', ava: 'N', tint: 7,  flair: 'New Convert',          bio: "Brand-new convert — discovered Glossier this month from the sub, now hunting the products at Marshalls. All-in, easily delighted." },
+  { u: 'wowderwatch',   ava: 'j', tint: 8,  flair: 'Save Wowder',          bio: "Wowder superfan who lives in fear they'll discontinue it. Wants the products supported, not the lineup sprawled." },
+  { u: 'y2k18skin',     ava: 'b', tint: 9,  flair: 'Skincare, RIP',        bio: "2017–2018 skincare devotee — Milky Jelly and Super Bounce 'fixed my problematic skin.' Wistful and specific: it doesn't work the same since the reformulation." },
+  { u: 'paintcollector',ava: 'm', tint: 10, flair: 'Cloud Paint Collector',bio: "Cloud Paint and Ultralip collector, owns many shades of both. Wants more of what's good, not new categories." },
+  { u: 'mintbalm4ever', ava: 'j', tint: 11, flair: 'Balm Devotee',         bio: "OG Balm Dotcom (mint) and skin tint devotee — 'makes it look like you woke up with really good skin.' Keeps coming back after trying everything." },
+  { u: 'afterbaumeonly',ava: 'J', tint: 12, flair: 'Just The Balm',        bio: "Afterbaume loyalist — a little goes a long way through cold midwest winters. Low-key, product-first." }
+];
+
+/* ════ RENDER NAV ════ */
+(function () {
+  var html = '';
+  NAV.forEach(function (n) {
+    if (n.section) { html += '<div class="wnav-section">' + n.section + '</div>'; return; }
+    var count = n.count != null ? '<span class="wnav-count">' + n.count + '</span>' : '';
+    html += '<a class="wnav-item" data-id="' + n.id + '" onclick="go(\'' + n.id + '\')">'
+          + '<span class="wnav-icon">' + IC[n.icon] + '</span>'
+          + '<span class="wnav-label">' + n.label + '</span>' + count + '</a>';
+  });
+  document.getElementById('nav').innerHTML = html;
+
+  // Mobile: top-level real views only
+  var mob = '';
+  NAV.filter(function (n) { return n.view; }).forEach(function (n) {
+    mob += '<a class="wnav-item" data-id="' + n.id + '" onclick="go(\'' + n.id + '\')"><span class="wnav-label">' + n.label + '</span></a>';
+  });
+  document.getElementById('mobile-nav').innerHTML = mob;
+})();
+
+/* ════ RENDER CAST ════ */
+document.getElementById('cast-grid').innerHTML = CAST.map(function (c) {
+  return '<div class="comment-card">'
+    + '<div class="comment-meta">'
+    +   '<span class="avatar av-md cast-' + c.tint + '">' + c.ava + '</span>'
+    +   '<span class="comment-author">u/' + c.u + '</span>'
+    +   '<span class="thread-flair cast-' + c.tint + '">' + c.flair + '</span>'
+    + '</div>'
+    + '<div class="comment-body">' + c.bio + '</div>'
+    + '<div class="comment-foot">'
+    +   '<span class="badge badge-active badge-sm">◆ real account</span>'
+    +   '<span class="comment-count">grounded in r/glossier</span>'
+    + '</div>'
+    + '</div>';
+}).join('');
+
+/* ════ ROUTER ════ */
+function go(id) {
+  var item = NAV.find(function (n) { return n.id === id; });
+  if (!item) return;
+
+  document.querySelectorAll('.view').forEach(function (v) { v.classList.remove('active'); });
+  if (item.view) {
+    document.getElementById('view-' + item.view).classList.add('active');
+  } else {
+    document.getElementById('soon-title').textContent = item.label;
+    document.getElementById('soon-icon').innerHTML = IC[item.icon];
+    document.getElementById('soon-empty-title').textContent = item.label + " — available when connected to Glossier's Waldo workspace";
+    document.getElementById('view-soon').classList.add('active');
+  }
+  document.querySelectorAll('.wnav-item').forEach(function (a) {
+    a.classList.toggle('active', a.dataset.id === id);
+  });
+  if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
+  window.scrollTo(0, 0);
+}
+
+/* Deep-link on load */
+(function () {
+  var id = location.hash.replace('#', '');
+  go(NAV.find(function (n) { return n.id === id; }) ? id : 'sims');
+})();
+
+/* ════ INTERACTIONS ════ */
+function segFilter(btn, kind) {
+  btn.parentElement.querySelectorAll('.wseg-opt').forEach(function (b) {
+    b.classList.toggle('active', b === btn);
+    b.classList.toggle('inactive', b !== btn);
+  });
+  document.querySelectorAll('#view-sims .opp-card').forEach(function (card) {
+    card.style.display = (kind === 'all' || card.dataset.kind === kind) ? '' : 'none';
+  });
+}
+function resim(btn) {
+  var card = btn.closest('.opp-card');
+  card.classList.add('shimmer');
+  setTimeout(function () {
+    card.classList.remove('shimmer');
+    toast('Re-simulated — same cast, same grounding, fresh takes');
+  }, 850);
+}
+var toastTimer = null;
+function toast(msg) {
+  document.getElementById('toast-msg').textContent = msg;
+  var vp = document.getElementById('toast-vp');
+  vp.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { vp.classList.remove('show'); }, 2600);
+}
+</script>
+</body>
+</html>

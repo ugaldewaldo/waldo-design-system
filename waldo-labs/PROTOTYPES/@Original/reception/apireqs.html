@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reception — API requirements</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #09090B;
+    --surface: #111114;
+    --surface-2: #16161B;
+    --surface-3: #1C1C22;
+    --border: rgba(255,255,255,0.07);
+    --border-strong: rgba(255,255,255,0.12);
+    --text: #FAFAFA;
+    --text-2: #B4B4BC;
+    --text-3: #6B6B74;
+    --bt: #F5C453;        /* Breakthrough */
+    --sent: #7EE8C4;      /* Sentiment */
+    --pt: #A78BFA;        /* Pull-through */
+    --reception: #32A9A9;
+    --amber: #FBBF24;
+    --red: #FB7185;
+    --green: #4ADE80;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.55; font-size: 14px;
+    -webkit-font-smoothing: antialiased; padding-bottom: 80px; overflow-x: hidden;
+  }
+  a { color: var(--sent); text-decoration: none; }
+  a:hover { opacity: 0.85; }
+  code, .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 32px; border-bottom: 1px solid var(--border);
+    background: rgba(9,9,11,0.85); backdrop-filter: blur(8px);
+    position: sticky; top: 0; z-index: 50;
+  }
+  .brand-mark { display: flex; align-items: center; gap: 12px; }
+  .brand-mark .logo { width: 32px; height: 32px; border-radius: 9px; background: #000; border: 1px solid var(--border-strong);
+    display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--reception); box-shadow: 0 0 24px rgba(50,169,169,0.4); }
+  .brand-mark .name { font-weight: 800; font-size: 18px; letter-spacing: -0.01em; }
+  .brand-mark .cat { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 1px; }
+  .topbar-links { display: flex; gap: 18px; font-size: 12px; }
+  .topbar-links a { color: var(--text-2); }
+  .topbar-links a:hover { color: var(--text); opacity: 1; }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+  .hero { padding: 56px 0 32px; border-bottom: 1px solid var(--border); }
+  .eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-3); margin-bottom: 14px; }
+  h1 { font-size: 38px; letter-spacing: -0.02em; font-weight: 800; line-height: 1.15; margin-bottom: 18px; }
+  h1 span.b { color: var(--bt); } h1 span.s { color: var(--sent); } h1 span.p { color: var(--pt); }
+  .lede { font-size: 16px; color: var(--text-2); max-width: 800px; line-height: 1.6; }
+  .lede a { color: var(--text); border-bottom: 1px dashed var(--border-strong); }
+
+  .section { padding: 48px 0; border-bottom: 1px solid var(--border); }
+  .section-head { margin-bottom: 24px; }
+  .section-head .tag {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; padding: 4px 10px; border-radius: 999px; margin-bottom: 12px;
+  }
+  .tag.bt   { color: var(--bt);   background: rgba(245,196,83,0.12);  border: 1px solid rgba(245,196,83,0.28); }
+  .tag.sent { color: var(--sent); background: rgba(126,232,196,0.10); border: 1px solid rgba(126,232,196,0.28); }
+  .tag.pt   { color: var(--pt);   background: rgba(167,139,250,0.10); border: 1px solid rgba(167,139,250,0.28); }
+  .tag.plain { color: var(--text-2); background: var(--surface-3); border: 1px solid var(--border-strong); }
+  .section-head h2 { font-size: 26px; letter-spacing: -0.015em; font-weight: 800; line-height: 1.2; }
+  .section-head h2 .ttl-b { color: var(--bt); } .section-head h2 .ttl-s { color: var(--sent); } .section-head h2 .ttl-p { color: var(--pt); }
+  .section-head .def { color: var(--text-2); margin-top: 8px; font-size: 15px; max-width: 800px; }
+
+  .notation { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; margin-top: 24px; }
+  .notation h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); margin-bottom: 12px; }
+  .notation ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 32px; font-size: 13px; color: var(--text-2); }
+  .notation li { padding-left: 14px; position: relative; }
+  .notation li::before { content: "•"; color: var(--text-3); position: absolute; left: 0; }
+  .notation code { background: var(--surface-3); padding: 1px 6px; border-radius: 4px; font-size: 12px; color: var(--text); }
+
+  .eq {
+    background: var(--surface); border: 1px solid var(--border-strong); border-radius: 12px;
+    padding: 18px 22px; margin: 18px 0 24px; font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; color: var(--text); line-height: 1.7; white-space: pre-wrap; word-break: break-word; overflow-x: auto;
+  }
+  .eq.bt { border-left: 3px solid var(--bt); } .eq.sent { border-left: 3px solid var(--sent); } .eq.pt { border-left: 3px solid var(--pt); }
+  .eq .w { color: var(--amber); }
+
+  .contrib-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
+  .contrib { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; transition: border-color 0.15s; }
+  .contrib:hover { border-color: var(--border-strong); }
+  .contrib-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+  .contrib-name { font-size: 15px; font-weight: 700; letter-spacing: -0.005em; }
+  .contrib-weight { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-2); background: var(--surface-3); padding: 2px 8px; border-radius: 4px; }
+  .type-pill { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; }
+  .type-pill.controllable { color: var(--green); background: rgba(74,222,128,0.10); }
+  .type-pill.environmental { color: var(--amber); background: rgba(251,191,36,0.10); }
+  .type-pill.mixed { color: var(--text-2); background: var(--surface-3); }
+  .status-pill { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.02em; margin-left: auto; white-space: nowrap; }
+  .status-pill.ok { color: var(--green); background: rgba(74,222,128,0.10); border: 1px solid rgba(74,222,128,0.30); }
+  .status-pill.partial { color: var(--amber); background: rgba(251,191,36,0.10); border: 1px solid rgba(251,191,36,0.30); }
+  .status-pill.gap { color: var(--red); background: rgba(251,113,133,0.10); border: 1px solid rgba(251,113,133,0.30); }
+  .status-pill.v2 { color: var(--text-2); background: var(--surface-3); border: 1px solid var(--border-strong); }
+
+  .contrib.v2 { opacity: 0.78; }
+  .contrib-raw { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-2); background: var(--surface-2); padding: 10px 12px; border-radius: 8px; margin: 10px 0 14px; white-space: pre-wrap; line-height: 1.6; }
+  .contrib-body { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 18px; margin-top: 10px; }
+  .contrib-col h4 { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-3); margin-bottom: 8px; }
+  .endpoint-list { display: flex; flex-direction: column; gap: 6px; }
+  .endpoint-link {
+    display: inline-flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    background: var(--surface-3); padding: 4px 10px; border-radius: 6px; color: var(--text); border: 1px solid var(--border);
+    transition: border-color 0.15s, background 0.15s; width: fit-content; max-width: 100%;
+  }
+  .endpoint-link:hover { background: var(--surface-2); border-color: var(--border-strong); opacity: 1; }
+  .endpoint-link .method { font-size: 9px; font-weight: 800; color: var(--reception); letter-spacing: 0.08em; }
+  .endpoint-link.missing { color: var(--text-3); border-style: dashed; }
+  .endpoint-link.missing .method { color: var(--red); }
+  .prop-list { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--text-2); }
+  .prop-list code { background: var(--surface-3); padding: 1px 6px; border-radius: 4px; font-size: 12px; color: var(--text); }
+  .status-note { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border); font-size: 12px; color: var(--text-3); line-height: 1.55; }
+  .status-note b { color: var(--text-2); font-weight: 600; }
+
+  .v2-divider { display: flex; align-items: center; gap: 14px; margin: 36px 0 18px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-3); }
+  .v2-divider::before, .v2-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* Tables */
+  .prop-table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; overflow-x: auto; }
+  .prop-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .prop-table thead th { text-align: left; padding: 12px 16px; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); background: var(--surface-2); border-bottom: 1px solid var(--border-strong); white-space: nowrap; }
+  .prop-table thead th.num { text-align: right; }
+  .prop-table td { padding: 14px 16px; vertical-align: top; border-bottom: 1px solid var(--border); color: var(--text-2); line-height: 1.55; }
+  .prop-table td.num { text-align: right; font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text); }
+  .prop-table td:first-child { color: var(--text); font-weight: 600; min-width: 230px; }
+  .prop-table td code, .prop-table th code { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: var(--surface-3); padding: 1px 6px; border-radius: 4px; color: var(--text); }
+  .prop-table td a { color: var(--text); border-bottom: 1px dashed var(--border-strong); }
+  .prop-table td a:hover { color: var(--sent); opacity: 1; }
+  .prop-table .would { color: var(--text-3); font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-left: 4px; }
+  .prop-table tr.grp td { padding: 14px 16px 8px; background: var(--surface-2); font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); border-bottom: 1px solid var(--border-strong); }
+  .prop-table tr:last-child td { border-bottom: none; }
+
+  /* Proposed additions */
+  .proposal { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px 24px; margin-bottom: 16px; }
+  .proposal h3 { font-size: 17px; font-weight: 800; letter-spacing: -0.01em; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .proposal h3 code { font-family: 'JetBrains Mono', monospace; font-size: 14px; background: var(--surface-3); padding: 3px 9px; border-radius: 6px; color: var(--text); font-weight: 600; }
+  .proposal .rank { font-size: 10px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-3); }
+  .proposal p { font-size: 13.5px; color: var(--text-2); line-height: 1.6; margin: 8px 0; }
+  .proposal pre { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.6; color: var(--text-2); margin: 10px 0; }
+  .proposal pre .k { color: var(--sent); } .proposal pre .s { color: var(--bt); } .proposal pre .n { color: var(--pt); }
+  .proposal .httpsig { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--text); background: var(--surface-2); border-left: 3px solid var(--reception); border-radius: 0 8px 8px 0; padding: 8px 14px; margin: 8px 0; }
+
+  .foot { padding: 40px 0 0; text-align: center; font-size: 12px; color: var(--text-3); line-height: 1.8; }
+  .foot a { color: var(--text-2); border-bottom: 1px dashed var(--border-strong); }
+
+  @media (max-width: 720px) {
+    .wrap { padding: 0 20px; }
+    h1 { font-size: 28px; }
+    .contrib-body { grid-template-columns: 1fr; }
+    .notation ul { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand-mark">
+    <div class="logo">R</div>
+    <div>
+      <div class="name">Reception</div>
+      <div class="cat">API requirements · v2026.05.28</div>
+    </div>
+  </div>
+  <div class="topbar-links">
+    <a href="/reception/">← Dashboard</a>
+    <a href="/bxcapi/index.html">/bxcapi spec</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+<section class="hero">
+  <div class="eyebrow">Ad social-listening · scoring &amp; endpoint reference</div>
+  <h1>How <span class="b">Breakthrough</span>, <span class="s">Sentiment</span>, and <span class="p">Pull-through</span> are computed.</h1>
+  <p class="lede">
+    Reception measures the qualitative effectiveness of an ad campaign from the social conversation it generates —
+    especially on TV/CTV, where there's no click to count. Every contributor below maps a raw signal to a 0–100
+    component, weighted into a pillar; the three pillars roll into one <b>Reception Score</b>. This page documents
+    the equations, the <a href="/bxcapi/index.html">/bxcapi</a> endpoints and properties they require, whether each
+    exists today, and the additions the API needs.
+  </p>
+  <p class="lede" style="margin-top: 12px;">
+    <b style="color: var(--text);">Status legend.</b>
+    <span class="mono" style="color: var(--green);">✓ Available</span> = exists in /bxcapi today ·
+    <span class="mono" style="color: var(--amber);">⚠ Partial</span> = endpoint exists but a needed property/scope doesn't ·
+    <span class="mono" style="color: var(--red);">✗ Gap</span> = MVP requirement, not in /bxcapi yet ·
+    <span class="mono" style="color: var(--text-2);">◷ V2</span> = deferred past MVP (no reliable source yet).
+    The anchor already exists: <code style="font-size:12px">GET /ads/{ad_id}/audience-reaction</code> returns sentiment +
+    verbatim themes from comments under a creative. The gaps are about <b>user-owned campaigns</b>,
+    <b>TV/CTV-airing→social linkage</b>, <b>campaign-level rollups</b>, <b>comment drill-in</b>, and <b>benchmarking</b>.
+  </p>
+
+  <div class="notation">
+    <h3>Notation used in the equations</h3>
+    <ul>
+      <li><code>conv(c)</code> — comments + posts reacting to campaign <code>c</code> in the flight window</li>
+      <li><code>Norm(x) = clamp(50 + 16.67·Z(x), 0, 100)</code> — percentile-style 0–100 mapping</li>
+      <li><code>Z(x)</code> — standardized vs the category competitive set over the window</li>
+      <li><code>decay_τ(d) = exp(−d / τ)</code> — age decay in days from airing</li>
+      <li><code>on_topic</code> — comments matched to the campaign's <code>context</code> spec</li>
+      <li><code>Σ w_i = 1</code> — weights sum to 1 per pillar</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ════════════ BREAKTHROUGH ════════════ -->
+<section class="section" id="breakthrough">
+  <div class="section-head">
+    <span class="tag bt">Breakthrough · attention</span>
+    <h2><span class="ttl-b">Breakthrough</span> — did the ad cut through, or did it air to silence?</h2>
+    <p class="def">The hardest thing to measure on TV/CTV is whether anyone noticed. Breakthrough reads the volume and
+      share of conversation a campaign generates relative to its own baseline and the category — not impressions you bought.</p>
+  </div>
+
+  <div class="eq bt">Breakthrough = clamp(
+  <span class="w">0.35</span>·Norm(ConversationLift)   + <span class="w">0.30</span>·Norm(ShareOfConversation)
++ <span class="w">0.20</span>·Norm(ConversationPerImpression) + <span class="w">0.15</span>·Norm(SpikeMagnitude),
+  0, 100
+)</div>
+
+  <div class="contrib-grid">
+
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">ConversationLift</span>
+        <span class="contrib-weight">w = 0.35</span>
+        <span class="type-pill mixed">mixed</span>
+        <span class="status-pill partial">⚠ Partial</span>
+      </div>
+      <div class="contrib-raw">raw = conv(campaign, window) / baseline_conv(brand, trailing_90d)</div>
+      <div class="contrib-body">
+        <div class="contrib-col"><h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link missing"><span class="method">GAP</span>/campaigns/{id}/reception</a>
+            <a class="endpoint-link" href="/bxcapi/index.html#paid-media"><span class="method">GET</span>/ads/{ad_id}/audience-reaction</a>
+            <a class="endpoint-link" href="/bxcapi/index.html#discover-posts"><span class="method">GET</span>/discover/posts</a>
+          </div>
+        </div>
+        <div class="contrib-col"><h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>comment_count</code> + daily volume series for the campaign</div>
+            <div>A brand baseline conversation rate</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Partial:</b> <code>audience-reaction</code> gives a per-ad <code>comment_count</code> at a point in time, and <code>discover/posts</code> finds posts by keyword — but there's no campaign-scoped rollup with a daily series. Needs <code>/campaigns/{id}/reception</code> (proposal §1, §3).</div>
+    </div>
+
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">ShareOfConversation</span>
+        <span class="contrib-weight">w = 0.30</span>
+        <span class="type-pill mixed">mixed</span>
+        <span class="status-pill partial">⚠ Partial</span>
+      </div>
+      <div class="contrib-raw">raw = conv(campaign) / Σ_c conv(category competitive set)   over window</div>
+      <div class="contrib-body">
+        <div class="contrib-col"><h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="/bxcapi/index.html#brand-trends"><span class="method">GET</span>/brands/{id}/{dataset}/timeseries</a>
+            <a class="endpoint-link missing"><span class="method">GAP</span>/category/{id}/reception-benchmark</a>
+          </div>
+        </div>
+        <div class="contrib-col"><h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>dataset=mentions</code> volume per brand in the set</div>
+            <div>Category total conversation for the window denominator</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Partial:</b> brand-level mention timeseries exists, but tying it to a specific <i>campaign's</i> conversation and a category denominator needs the reception-benchmark endpoint (proposal §7).</div>
+    </div>
+
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">ConversationPerImpression</span>
+        <span class="contrib-weight">w = 0.20</span>
+        <span class="type-pill environmental">TV / CTV</span>
+        <span class="status-pill gap">✗ Gap</span>
+      </div>
+      <div class="contrib-raw">raw = conv(campaign) / tv_impressions(campaign, window)
+      (the CTV/TV efficiency proxy — replaces CTR when there is no click)</div>
+      <div class="contrib-body">
+        <div class="contrib-col"><h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link missing"><span class="method">GAP</span>POST /campaigns (airings[])</a>
+            <a class="endpoint-link missing"><span class="method">GAP</span>/campaigns/{id}/reception</a>
+          </div>
+        </div>
+        <div class="contrib-col"><h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>airings[]</code> with <code>impressions</code> (TV-measurement partner, e.g. iSpot)</div>
+            <div>Window-scoped conversation count</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>The headline TV gap.</b> There's no way today to attach a TV/CTV airing (no URL) and divide conversation by impressions. Falls back to <code>n/a</code> for link campaigns. See proposals §2 and §8.</div>
+    </div>
+
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">SpikeMagnitude</span>
+        <span class="contrib-weight">w = 0.15</span>
+        <span class="type-pill environmental">environmental</span>
+        <span class="status-pill partial">⚠ Partial</span>
+      </div>
+      <div class="contrib-raw">raw = peak_day_conv / median_day_conv   anchored to airing/drop days</div>
+      <div class="contrib-body">
+        <div class="contrib-col"><h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="/bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/mentions/analysis</a>
+            <a class="endpoint-link missing"><span class="method">GAP</span>/campaigns/{id}/reception</a>
+          </div>
+        </div>
+        <div class="contrib-col"><h4>Required properties</h4>
+          <div class="prop-list">
+            <div>Spike detection on the campaign's daily series</div>
+            <div>Airing/drop days to anchor the spike window</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Partial:</b> brand-level spike detection exists in <code>mentions/analysis</code>; campaign-scoped + airing-anchored spikes need the campaign rollup.</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════ SENTIMENT ════════════ -->
+<section class="section" id="sentiment">
+  <div class="section-head">
+    <span class="tag sent">Sentiment · reception quality</span>
+    <h2><span class="ttl-s">Sentiment</span> — how did people feel, and <i>why</i>?</h2>
+    <p class="def">Net positive/negative is the trunk, but the texture — funny, annoying, confusing, brand-love —
+      is what tells a creative team whether the ad worked. The anchor endpoint already returns this; the gap is a
+      <i>standard</i> reaction taxonomy so campaigns are comparable.</p>
+  </div>
+
+  <div class="eq sent">Sentiment = clamp(
+  <span class="w">0.40</span>·Norm(NetSentiment)   + <span class="w">0.25</span>·Norm(EmotionTexture)
++ <span class="w">0.20</span>·Norm(LoveVsBacklash) + <span class="w">0.15</span>·Norm⁻(ControversyIndex),
+  0, 100
+)</div>
+
+  <div class="contrib-grid">
+
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">NetSentiment</span>
+        <span class="contrib-weight">w = 0.40</span>
+        <span class="type-pill environmental">environmental</span>
+        <span class="status-pill ok">✓ Available</span>
+      </div>
+      <div class="contrib-raw">raw = sentiment.positive − sentiment.negative   over campaign reactions</div>
+      <div class="contrib-body">
+        <div class="contrib-col"><h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="/bxcapi/index.html#paid-media"><span class="method">GET</span>/ads/{ad_id}/audience-reaction</a>
+            <a class="endpoint-link" href="/bxcapi/index.html#brand-mentions"><span class="method">GET</span>/brands/{id}/mentions</a>
+          </div>
+        </div>
+        <div class="contrib-col"><h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>sentiment: { positive, neutral, negative }</code> on the reaction object</div>
+            <div><code>sentiment</code> per mention for organic posts</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Available:</b> <code>audience-reaction</code> returns exactly this distribution per ad. The only gap is unioning many ads into one campaign figure (proposal §3).</div>
+    </div>
+
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">EmotionTexture</span>
+        <span class="contrib-weight">w = 0.25</span>
+        <span class="type-pill environmental">environmental</span>
+        <span class="status-pill partial">⚠ Partial</span>
+      </div>
+      <div class="contrib-raw">raw = balance of reactions across the taxonomy
+      {funny, brand_love, mission, annoyed, confused, purchase_intent}</div>
+      <div class="contrib-body">
+        <div class="contrib-col"><h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="/bxcapi/index.html#paid-media"><span class="method">GET</span>/ads/{ad_id}/audience-reaction</a>
+          </div>
+        </div>
+        <div class="contrib-col"><h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>themes[]</code> with <code>{ theme, frequency, verbatim }</code></div>
+            <div>A canonical <code>reaction_taxonomy</code> mapping (proposal §5)</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Partial:</b> <code>themes[]</code> exist but are free-form per ad (<code>hook_resonates</code>, <code>price_complaint</code>…). Cross-campaign comparison needs a standard emotion/reaction taxonomy.</div>
+    </div>
+
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">LoveVsBacklash</span>
+        <span class="contrib-weight">w = 0.20</span>
+        <span class="type-pill environmental">environmental</span>
+        <span class="status-pill partial">⚠ Partial</span>
+      </div>
+      <div class="contrib-raw">raw = share(brand_love) / (share(brand_love) + share(hostile))</div>
+      <div class="contrib-body">
+        <div class="contrib-col"><h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="/bxcapi/index.html#paid-media"><span class="method">GET</span>/ads/{ad_id}/audience-reaction</a>
+          </div>
+        </div>
+        <div class="contrib-col"><h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>brand_love</code> &amp; <code>hostile</code> as taxonomy buckets</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Partial:</b> derivable once the reaction taxonomy (proposal §5) lands; today it's inferred from free-form themes.</div>
+    </div>
+
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">ControversyIndex</span>
+        <span class="contrib-weight">w = 0.15</span>
+        <span class="type-pill environmental">environmental · inverse</span>
+        <span class="status-pill ok">✓ Available</span>
+      </div>
+      <div class="contrib-raw">raw = bimodality of sentiment = 1 − |pos − neg| · (1 − neu)
+      (high when love and hate coexist — polarizing creative)</div>
+      <div class="contrib-body">
+        <div class="contrib-col"><h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="/bxcapi/index.html#paid-media"><span class="method">GET</span>/ads/{ad_id}/audience-reaction</a>
+          </div>
+        </div>
+        <div class="contrib-col"><h4>Required properties</h4>
+          <div class="prop-list">
+            <div>Sentiment distribution (computed client-side)</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Available:</b> fully derived from the sentiment distribution. Per-platform breakdown (to localize where the controversy lives) would benefit from <code>?group_by=platform</code>.</div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════ PULL-THROUGH ════════════ -->
+<section class="section" id="pullthrough">
+  <div class="section-head">
+    <span class="tag pt">Pull-through · message landing</span>
+    <h2><span class="ttl-p">Pull-through</span> — did the brand and message survive the joke?</h2>
+    <p class="def">A viral ad that people can't attribute to your brand is wasted reach. Pull-through measures whether
+      commenters name the brand, repeat the intended message, and signal intent — the closest social proxy to
+      "the creative did its job" when there's no conversion to track.</p>
+  </div>
+
+  <div class="eq pt">Pull-through = clamp(
+  <span class="w">0.40</span>·Norm(BrandAttributionRate) + <span class="w">0.35</span>·Norm(MessageEcho)
++ <span class="w">0.25</span>·Norm(PurchaseIntentSignal),
+  0, 100
+)</div>
+
+  <div class="contrib-grid">
+
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">BrandAttributionRate</span>
+        <span class="contrib-weight">w = 0.40</span>
+        <span class="type-pill mixed">mixed</span>
+        <span class="status-pill gap">✗ Gap</span>
+      </div>
+      <div class="contrib-raw">raw = count(comments naming the brand) / count(on_topic comments)
+      (vs naming only the celebrity, song, or meme)</div>
+      <div class="contrib-body">
+        <div class="contrib-col"><h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link missing"><span class="method">GAP</span>/campaigns/{id}/reception</a>
+            <a class="endpoint-link" href="/bxcapi/index.html#paid-media"><span class="method">GET</span>/ads/{ad_id}/audience-reaction</a>
+          </div>
+        </div>
+        <div class="contrib-col"><h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>attribution_rate</code> on the reaction object</div>
+            <div>or comment-level brand-mention tags (proposal §4)</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Gap:</b> the single most important pull-through signal — and the one celebrity stunts fail. Not exposed today. See proposals §4, §6.</div>
+    </div>
+
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">MessageEcho</span>
+        <span class="contrib-weight">w = 0.35</span>
+        <span class="type-pill mixed">mixed</span>
+        <span class="status-pill partial">⚠ Partial</span>
+      </div>
+      <div class="contrib-raw">raw = count(on_topic comments echoing the intended message/hook)
+      / count(on_topic comments)   — message from the campaign context spec</div>
+      <div class="contrib-body">
+        <div class="contrib-col"><h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link missing"><span class="method">GAP</span>/campaigns/{id}/reception</a>
+            <a class="endpoint-link" href="/bxcapi/index.html#paid-media"><span class="method">GET</span>/ads/{ad_id}/audience-reaction</a>
+          </div>
+        </div>
+        <div class="contrib-col"><h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>message_echo</code> on the reaction object</div>
+            <div>The campaign's <code>context</code>/message terms to match against</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Partial:</b> partly derivable by matching <code>themes[]</code> against the user's context, but a server-side <code>message_echo</code> scored against the declared message is cleaner (proposal §6).</div>
+    </div>
+
+    <div class="contrib">
+      <div class="contrib-head">
+        <span class="contrib-name">PurchaseIntentSignal</span>
+        <span class="contrib-weight">w = 0.25</span>
+        <span class="type-pill environmental">environmental</span>
+        <span class="status-pill partial">⚠ Partial</span>
+      </div>
+      <div class="contrib-raw">raw = share(comments with intent language: "where to buy", "switched", "bought")</div>
+      <div class="contrib-body">
+        <div class="contrib-col"><h4>Endpoint(s)</h4>
+          <div class="endpoint-list">
+            <a class="endpoint-link" href="/bxcapi/index.html#paid-media"><span class="method">GET</span>/ads/{ad_id}/audience-reaction</a>
+          </div>
+        </div>
+        <div class="contrib-col"><h4>Required properties</h4>
+          <div class="prop-list">
+            <div><code>purchase_intent</code> bucket in the reaction taxonomy</div>
+          </div>
+        </div>
+      </div>
+      <div class="status-note"><b>Partial:</b> a <code>purchase_intent</code> theme appears in some reactions today; standardizing it in the taxonomy (proposal §5) makes it reliable.</div>
+    </div>
+
+  </div>
+
+  <div class="v2-divider">V2 — deferred signals</div>
+  <p class="def" style="margin-bottom: 18px;">Two enhancements are deferred until reliable sources exist; they don't move the v1 score.</p>
+  <div class="contrib-grid">
+    <div class="contrib v2">
+      <div class="contrib-head">
+        <span class="contrib-name">ReachWeightedReception</span>
+        <span class="contrib-weight">re-weights all pillars</span>
+        <span class="type-pill environmental">environmental</span>
+        <span class="status-pill v2">◷ V2</span>
+      </div>
+      <div class="contrib-raw">weight each comment by estimated reach of its author/post</div>
+      <div class="status-note"><b>Deferred:</b> same reach gap the Poppi prototype flagged — no reliable per-comment reach source yet, so viral and obscure reactions count equally at v1.</div>
+    </div>
+    <div class="contrib v2">
+      <div class="contrib-head">
+        <span class="contrib-name">SentimentDecayHalfLife</span>
+        <span class="contrib-weight">diagnostic</span>
+        <span class="type-pill environmental">environmental</span>
+        <span class="status-pill v2">◷ V2</span>
+      </div>
+      <div class="contrib-raw">how fast conversation decays after each airing (staying power)</div>
+      <div class="status-note"><b>Deferred:</b> needs the campaign daily series (proposal §3) stable first; then half-life becomes a clean staying-power diagnostic.</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════ PROPERTIES SUMMARY ════════════ -->
+<section class="section" id="properties">
+  <div class="section-head">
+    <span class="tag plain">Properties summary</span>
+    <h2>Every property the scoring system reads</h2>
+    <p class="def">One row per property across all three pillars. Ordered by status: MVP gaps first (these block the
+      score), then properties available today, then V2.</p>
+  </div>
+
+  <div class="prop-table-wrap">
+    <table class="prop-table">
+      <thead><tr><th>Property</th><th>Endpoint</th><th class="num">Uses</th><th>Used by</th><th>Description</th><th>Status</th></tr></thead>
+      <tbody>
+
+        <tr class="grp"><td colspan="6">MVP gaps — blocks the score until built</td></tr>
+        <tr>
+          <td>User-owned campaign object</td>
+          <td><code>POST /campaigns</code> · <code>GET /campaigns/{id}</code> <span class="would">(new)</span></td>
+          <td class="num">—</td>
+          <td>(everything)</td>
+          <td>Define your <i>own</i> campaign by ad IDs <b>or</b> a TV/CTV airing spec. The API is brand/competitor-scoped today. Proposal §1.</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td><code>airings[]</code> + <code>match</code> spec (no URL)</td>
+          <td><code>POST /campaigns</code> <span class="would">(new)</span></td>
+          <td class="num">2</td>
+          <td>ConversationPerImpression, ConversationLift</td>
+          <td>Window + network/DMA/dayparts + match terms, returning attributable conversation. The headline TV/CTV gap. Proposal §2.</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td>Campaign-level reception rollup + daily series</td>
+          <td><code>/campaigns/{id}/reception</code> <span class="would">(new)</span></td>
+          <td class="num">5</td>
+          <td>ConversationLift, SpikeMagnitude, NetSentiment, BrandAttributionRate, MessageEcho</td>
+          <td>Rolls <code>audience-reaction</code> across many ads + organic + matched TV chatter, with a sentiment time series. Proposal §3.</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td><code>attribution_rate</code></td>
+          <td><a href="/bxcapi/index.html#paid-media"><code>/ads/{id}/audience-reaction</code></a> + campaign rollup</td>
+          <td class="num">1</td>
+          <td>BrandAttributionRate</td>
+          <td>Share of comments naming the brand vs only the celebrity/song. Highest-leverage pull-through field. Proposal §6.</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+
+        <tr class="grp"><td colspan="6">Available in /bxcapi today</td></tr>
+        <tr>
+          <td><code>sentiment: {pos, neu, neg}</code></td>
+          <td><a href="/bxcapi/index.html#paid-media"><code>/ads/{id}/audience-reaction</code></a></td>
+          <td class="num">3</td>
+          <td>NetSentiment, ControversyIndex, LoveVsBacklash</td>
+          <td>Sentiment distribution from comments &amp; replies under an ad — the anchor for the whole app.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td><code>themes[] {theme, frequency, verbatim}</code></td>
+          <td><a href="/bxcapi/index.html#paid-media"><code>/ads/{id}/audience-reaction</code></a></td>
+          <td class="num">3</td>
+          <td>EmotionTexture, MessageEcho, theme pills</td>
+          <td>Verbatim themes per ad. Free-form today (canonical taxonomy is the V2/gap — proposal §5).</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td><code>comment_count</code></td>
+          <td><a href="/bxcapi/index.html#paid-media"><code>/ads/{id}/audience-reaction</code></a></td>
+          <td class="num">1</td>
+          <td>ConversationLift</td>
+          <td>Reactions counted per ad creative. Needs campaign-level union + daily series for the chart.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Classified ad object (<code>hook</code>, <code>angle</code>, <code>days_running</code>)</td>
+          <td><a href="/bxcapi/index.html#paid-media"><code>/brands/{id}/ads/active</code></a></td>
+          <td class="num">1</td>
+          <td>Link-mode campaign creative</td>
+          <td>Creative metadata for link-defined campaigns (hook/angle/format/CTA/landing page).</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Paid campaign objects (copy, dates, platform)</td>
+          <td><a href="/bxcapi/index.html#paid-media"><code>/brands/{id}/paid-media/campaigns</code></a></td>
+          <td class="num">1</td>
+          <td>Link-mode campaign import</td>
+          <td>Existing campaign inventory with flight dates &amp; platform — seeds a link campaign.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Keyword post discovery</td>
+          <td><a href="/bxcapi/index.html#discover-posts"><code>/discover/posts</code></a> · <a href="/bxcapi/index.html#search"><code>/search</code></a></td>
+          <td class="num">2</td>
+          <td>ConversationLift, verbatim wall</td>
+          <td>Finds organic posts referencing the ad/slogan — the basis for TV/CTV matching before a formal airing endpoint.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Per-post comments &amp; engagement</td>
+          <td><a href="/bxcapi/index.html#enrich-posts"><code>/posts/{post_id}</code></a></td>
+          <td class="num">1</td>
+          <td>Verbatim wall drill-in</td>
+          <td>Live fetch of comments/engagement for a specific post in the conversation.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Brand mention volume timeseries</td>
+          <td><a href="/bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/timeseries</code></a></td>
+          <td class="num">1</td>
+          <td>ShareOfConversation</td>
+          <td>Daily mention volume per brand — the category denominator for share of conversation.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Mention spike detection</td>
+          <td><a href="/bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions/analysis</code></a></td>
+          <td class="num">1</td>
+          <td>SpikeMagnitude</td>
+          <td>Auto-detected volume spikes with causal one-liners; needs campaign scoping + airing anchoring.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+
+        <tr class="grp"><td colspan="6">Deferred to V2 — not in the MVP score</td></tr>
+        <tr>
+          <td>Canonical <code>reaction_taxonomy</code></td>
+          <td><code>/ads/{id}/audience-reaction?taxonomy=v1</code> <span class="would">(new)</span></td>
+          <td class="num">0 <span class="would">(would be 3)</span></td>
+          <td>EmotionTexture, LoveVsBacklash, PurchaseIntentSignal</td>
+          <td>Standard buckets (funny, brand_love, annoyed, confused, purchase_intent…) so reactions compare across campaigns. Proposal §5.</td>
+          <td><span class="status-pill v2">◷ V2</span></td>
+        </tr>
+        <tr>
+          <td><code>message_echo</code> vs declared message</td>
+          <td><code>/campaigns/{id}/reception</code> <span class="would">(new)</span></td>
+          <td class="num">0 <span class="would">(would be 1)</span></td>
+          <td>MessageEcho</td>
+          <td>Server-scored echo of the campaign's declared message; partly client-derivable today. Proposal §6.</td>
+          <td><span class="status-pill v2">◷ V2</span></td>
+        </tr>
+        <tr>
+          <td>Per-comment <code>reach</code></td>
+          <td><a href="/bxcapi/index.html#paid-media"><code>/ads/{id}/audience-reaction</code></a></td>
+          <td class="num">0 <span class="would">(would be 4)</span></td>
+          <td>ReachWeightedReception</td>
+          <td>Reach-weight reactions so a 2M-view dunk outweighs a 12-like reply. No reliable source yet.</td>
+          <td><span class="status-pill v2">◷ V2</span></td>
+        </tr>
+        <tr>
+          <td>TV <code>impressions</code> per airing</td>
+          <td><code>POST /campaigns (airings[])</code> <span class="would">(new)</span></td>
+          <td class="num">0 <span class="would">(would be 1)</span></td>
+          <td>ConversationPerImpression</td>
+          <td>TV-measurement-partner impressions (iSpot, etc.) to compute conversation-per-impression. Proposal §8.</td>
+          <td><span class="status-pill v2">◷ V2</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<!-- ════════════ DASHBOARD ENDPOINTS ════════════ -->
+<section class="section" id="dashboard-endpoints">
+  <div class="section-head">
+    <span class="tag plain">Dashboard endpoints</span>
+    <h2>Every widget on /reception</h2>
+    <p class="def">Beyond the three pillar rings, the dashboard renders these widgets across four tabs. This maps each to
+      the /bxcapi endpoint(s) that would feed it — most are presentational reads on top of the campaign rollup.</p>
+  </div>
+
+  <div class="prop-table-wrap">
+    <table class="prop-table">
+      <thead><tr><th>Widget</th><th>Endpoint(s)</th><th>What it shows</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr class="grp"><td colspan="4">Hero — always visible</td></tr>
+        <tr>
+          <td>Reception Score + 3 pillar rings</td>
+          <td><code>/campaigns/{id}/reception</code> <span class="would">(new)</span></td>
+          <td>Composite + Breakthrough / Sentiment / Pull-through with deltas vs prior campaign.</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td>Pulse tiles (volume · net sentiment · share of conv.)</td>
+          <td><code>/campaigns/{id}/reception</code> + <a href="/bxcapi/index.html#brand-trends"><code>timeseries</code></a></td>
+          <td>Headline numbers + sparklines for the flight window.</td>
+          <td><span class="status-pill partial">⚠ Partial</span></td>
+        </tr>
+        <tr>
+          <td>"What we're listening for" context box</td>
+          <td><code>GET /campaigns/{id}</code> <span class="would">(new)</span></td>
+          <td>The user-supplied context/match spec + where it ran.</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+
+        <tr class="grp"><td colspan="4">Overview tab</td></tr>
+        <tr>
+          <td>Conversation-over-time area + airing markers</td>
+          <td><code>/campaigns/{id}/reception</code> (daily series) + <code>airings[]</code></td>
+          <td>Daily volume vs category baseline, with airing/drop annotations — the TV decay story.</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td>Platform mix donut</td>
+          <td><a href="/bxcapi/index.html#paid-media"><code>/ads/{id}/audience-reaction</code></a> · <a href="/bxcapi/index.html#discover-posts"><code>/discover/posts</code></a></td>
+          <td>Where the conversation lives (TikTok / X / Reddit / YT / IG), grouped by platform.</td>
+          <td><span class="status-pill partial">⚠ Partial</span></td>
+        </tr>
+
+        <tr class="grp"><td colspan="4">Sentiment tab</td></tr>
+        <tr>
+          <td>Sentiment donut + net</td>
+          <td><a href="/bxcapi/index.html#paid-media"><code>/ads/{id}/audience-reaction</code></a></td>
+          <td>pos / neu / neg distribution with net in the center.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Emotional texture bars</td>
+          <td><code>audience-reaction?taxonomy=v1</code> <span class="would">(new)</span></td>
+          <td>Reaction taxonomy distribution (funny / brand-love / annoyed / confused / intent).</td>
+          <td><span class="status-pill partial">⚠ Partial</span></td>
+        </tr>
+        <tr>
+          <td>Sentiment by platform stacked bars</td>
+          <td><a href="/bxcapi/index.html#paid-media"><code>audience-reaction?group_by=platform</code></a></td>
+          <td>pos/neu/neg per platform. Grouping param is the only addition.</td>
+          <td><span class="status-pill partial">⚠ Partial</span></td>
+        </tr>
+        <tr>
+          <td>Controversy callout</td>
+          <td>(client-derived from sentiment)</td>
+          <td>Polarization index + a listening note.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+
+        <tr class="grp"><td colspan="4">Conversation tab</td></tr>
+        <tr>
+          <td>Verbatim wall (comment cards)</td>
+          <td><code>/campaigns/{id}/comments</code> <span class="would">(new)</span> · <a href="/bxcapi/index.html#enrich-posts"><code>/posts/{id}</code></a></td>
+          <td>Paginated comments w/ author, platform, timestamp, engagement, sentiment, theme. Proposal §4.</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td>Top reaction themes pills</td>
+          <td><a href="/bxcapi/index.html#paid-media"><code>/ads/{id}/audience-reaction</code></a></td>
+          <td>Themes sized by frequency, colored by sentiment.</td>
+          <td><span class="status-pill ok">✓ Available</span></td>
+        </tr>
+
+        <tr class="grp"><td colspan="4">Compare tab</td></tr>
+        <tr>
+          <td>Percentile-vs-category bars</td>
+          <td><code>/category/{id}/reception-benchmark</code> <span class="would">(new)</span></td>
+          <td>Percentile on breakthrough, sentiment, brand-love, pull-through, intent. Proposal §7.</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td>Vs-your-previous-campaigns table</td>
+          <td><code>GET /campaigns?brand_id=…</code> <span class="would">(new)</span></td>
+          <td>Per-campaign rows of breakthrough, net sentiment, brand-love, attribution, pull-through.</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td>Pull-through stats + "what people think it's about"</td>
+          <td><code>/campaigns/{id}/reception</code> (<code>attribution_rate</code>, <code>message_echo</code>)</td>
+          <td>Attribution, message echo, purchase intent + the perceived-subject breakdown.</td>
+          <td><span class="status-pill gap">✗ Gap</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<!-- ════════════ PROPOSED ADDITIONS ════════════ -->
+<section class="section" id="proposals" style="border-bottom: none;">
+  <div class="section-head">
+    <span class="tag plain">Proposed bxcAPI additions</span>
+    <h2>What the API needs to ship Reception</h2>
+    <p class="def">Eight additions, in rough order of leverage. The first two — user-owned campaigns and TV/CTV
+      airing→social linkage — are what make this product possible at all; the rest make it efficient.</p>
+  </div>
+
+  <div class="proposal">
+    <h3><span class="rank">§1 · highest leverage</span><br>User-owned campaigns — <code>POST /campaigns</code>, <code>GET /campaigns/{id}</code></h3>
+    <p>Today the API is brand/competitor-scoped (<code>/brands/{id}/…</code>). Reception needs a first-class object the
+      <i>user</i> creates and owns — defined either by ad IDs (link mode) or a TV/CTV airing spec (no URL).</p>
+    <div class="httpsig">POST /campaigns</div>
+<pre>{
+  <span class="k">"name"</span>: <span class="s">"Death to Plastic — Q2 CTV flight"</span>,
+  <span class="k">"brand_id"</span>: <span class="s">"brand_liquiddeath_001"</span>,
+  <span class="k">"type"</span>: <span class="s">"tv"</span>,                      <span class="n">// "link" | "tv"</span>
+  <span class="k">"ad_ids"</span>: [],                       <span class="n">// link mode</span>
+  <span class="k">"airings"</span>: [ /* see §2 */ ],         <span class="n">// tv mode</span>
+  <span class="k">"context"</span>: <span class="s">"Is the sustainability angle landing without reading preachy?"</span>,
+  <span class="k">"match"</span>: { <span class="k">"terms"</span>: [<span class="s">"death to plastic"</span>, <span class="s">"murder your thirst"</span>], <span class="k">"hashtags"</span>: [<span class="s">"#deathtoplastic"</span>] }
+}</pre>
+    <p>Returns a <code>campaign_id</code> and an index-build status. <code>GET /campaigns?brand_id=…</code> lists a brand's
+      campaigns (powers the campaign switcher and the vs-previous-campaigns table).</p>
+  </div>
+
+  <div class="proposal">
+    <h3><span class="rank">§2 · the TV/CTV unlock</span><br>Airing→social linkage — <code>airings[]</code> + <code>match</code> on a campaign</h3>
+    <p>The whole reason TV/CTV is hard: there's no permalink. Let a campaign be defined by <i>where and when</i> it aired
+      plus a match spec, and have the API attribute social conversation to that window.</p>
+<pre>{
+  <span class="k">"airings"</span>: [
+    { <span class="k">"start"</span>: <span class="s">"2026-05-01"</span>, <span class="k">"end"</span>: <span class="s">"2026-05-28"</span>,
+      <span class="k">"networks"</span>: [<span class="s">"hulu"</span>, <span class="s">"roku"</span>, <span class="s">"comedy_central"</span>],
+      <span class="k">"dmas"</span>: [<span class="s">"new_york"</span>, <span class="s">"los_angeles"</span>], <span class="k">"dayparts"</span>: [<span class="s">"primetime"</span>] }
+  ]
+}</pre>
+    <p>The API resolves the airing window + region and returns the matched conversation. Without this, a TV campaign
+      can only be approximated with <code>/discover/posts</code> keyword search — no window scoping, no impressions tie-in.</p>
+  </div>
+
+  <div class="proposal">
+    <h3><span class="rank">§3</span><br>Campaign reception rollup — <code>GET /campaigns/{id}/reception</code></h3>
+    <p><code>/ads/{ad_id}/audience-reaction</code> is per single ad and point-in-time. This rolls reactions across many ad IDs +
+      organic posts + matched TV chatter into one object <i>with a daily series</i> (so the dashboard can show decay after airing).</p>
+<pre>{
+  <span class="k">"campaign_id"</span>: <span class="s">"cmp_dtp_q2"</span>,
+  <span class="k">"window"</span>: { <span class="k">"start"</span>: <span class="s">"2026-05-01"</span>, <span class="k">"end"</span>: <span class="s">"2026-05-28"</span> },
+  <span class="k">"comment_count"</span>: <span class="n">38420</span>,
+  <span class="k">"sentiment"</span>: { <span class="k">"positive"</span>: <span class="n">0.71</span>, <span class="k">"neutral"</span>: <span class="n">0.20</span>, <span class="k">"negative"</span>: <span class="n">0.09</span> },
+  <span class="k">"attribution_rate"</span>: <span class="n">0.88</span>, <span class="k">"message_echo"</span>: <span class="n">0.73</span>,
+  <span class="k">"by_platform"</span>: [ { <span class="k">"platform"</span>: <span class="s">"tiktok"</span>, <span class="k">"share"</span>: <span class="n">0.30</span>, <span class="k">"sentiment"</span>: {…} } ],
+  <span class="k">"daily"</span>: [ { <span class="k">"date"</span>: <span class="s">"2026-05-01"</span>, <span class="k">"comments"</span>: <span class="n">2140</span>, <span class="k">"net_sentiment"</span>: <span class="n">0.61</span>, <span class="k">"airing"</span>: <span class="n">true</span> } ]
+}</pre>
+  </div>
+
+  <div class="proposal">
+    <h3><span class="rank">§4</span><br>Comment-level feed — <code>GET /campaigns/{id}/comments</code></h3>
+    <p>The anchor endpoint returns one <code>verbatim</code> per theme — not enough for a verbatim wall or filtering.
+      Paginate the actual comments with full metadata. (Equivalently: <code>?include=sample_content&amp;sample_per_bucket=N</code>
+      on <code>audience-reaction</code>.)</p>
+<pre>{ <span class="k">"data"</span>: [
+    { <span class="k">"platform"</span>: <span class="s">"youtube"</span>, <span class="k">"author"</span>: <span class="s">"StreamingDad"</span>,
+      <span class="k">"text"</span>: <span class="s">"this came on during my show and I rewound it…"</span>,
+      <span class="k">"sentiment"</span>: <span class="s">"positive"</span>, <span class="k">"theme"</span>: <span class="s">"saw it on Hulu"</span>,
+      <span class="k">"engagement"</span>: <span class="n">2100</span>, <span class="k">"posted_at"</span>: <span class="s">"2026-05-26T01:10:00Z"</span>,
+      <span class="k">"names_brand"</span>: <span class="n">true</span> }
+  ], <span class="k">"meta"</span>: { <span class="k">"next_cursor"</span>: <span class="s">"…"</span> } }</pre>
+  </div>
+
+  <div class="proposal">
+    <h3><span class="rank">§5</span><br>Canonical reaction taxonomy — <code>?taxonomy=v1</code> on audience-reaction</h3>
+    <p>Free-form <code>themes[]</code> can't be compared across campaigns. Add a versioned, standard reaction taxonomy
+      (<code>funny</code>, <code>brand_love</code>, <code>mission_resonates</code>, <code>annoyed</code>, <code>confused</code>,
+      <code>purchase_intent</code>, <code>hostile</code>) alongside the free-form themes. Powers EmotionTexture, LoveVsBacklash,
+      PurchaseIntentSignal and the cross-campaign Compare view.</p>
+  </div>
+
+  <div class="proposal">
+    <h3><span class="rank">§6</span><br>Brand attribution &amp; message pull-through — <code>attribution_rate</code>, <code>message_echo</code></h3>
+    <p>The closest social proxy to "the creative worked" when there's no conversion. <code>attribution_rate</code> = share of
+      comments naming the brand (vs only the celebrity/song); <code>message_echo</code> = share echoing the campaign's declared
+      message. The Martha Stewart example in the demo scores 92 on breakthrough but only 55 on pull-through precisely because
+      these were low — a distinction nothing in the API surfaces today.</p>
+  </div>
+
+  <div class="proposal">
+    <h3><span class="rank">§7</span><br>Reception benchmarking — <code>GET /category/{id}/reception-benchmark</code></h3>
+    <p>Percentile a campaign's pillars against the category set and against the brand's own prior campaigns
+      (<code>?compare=category|prior_campaigns</code>). Brand-dataset benchmarks exist, but nothing benchmarks
+      <i>ad reaction</i>. Powers the Compare tab's percentile bars and the median markers.</p>
+  </div>
+
+  <div class="proposal">
+    <h3><span class="rank">§8</span><br>TV impressions tie-in — <code>impressions</code> on <code>airings[]</code></h3>
+    <p>To compute conversation-per-impression (the CTV efficiency proxy that replaces CTR), attach impressions per airing
+      from a TV-measurement partner (iSpot, VideoAmp, Nielsen). Deferred to V2 until a source is locked, but the field shape
+      should be reserved on the airing object now.</p>
+  </div>
+</section>
+
+<div class="foot">
+  Reference doc · version <code class="mono">2026.05.28</code><br>
+  <a href="/reception/">← back to dashboard</a> · <a href="/bxcapi/index.html">/bxcapi spec</a>
+</div>
+
+</div>
+</body>
+</html>

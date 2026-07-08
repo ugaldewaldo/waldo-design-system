@@ -1,0 +1,83 @@
+<!--
+  component: Baseline Compare Card
+  source: waldo-labs/PROTOTYPES/reception/index.html (Reception — "This campaign vs. normal")
+  date: 2026-07-07
+  use_when:
+    - Comparing one metric across "you" vs your own baseline vs a category/benchmark baseline
+      (three grouped bars, not a single fill vs a marker — that case is Benchmark Bar)
+    - A grid of such cards summarizing lift across several metrics, each with a lift verdict badge
+  notes:
+    - "You" is the only saturated bar (var(--primary)); baselines are a neutral
+      muted-foreground ramp (0.55 / 0.28 alpha) per the multi-brand color semantics.
+    - Lift badge is a DS Badge: improvement = badge-active, decline = badge-warning
+      (a worsening metric is --warning, never --destructive).
+    - Tracks are thin (6px, var(--secondary), fully rounded) — data reads light.
+    - Differs from Benchmark Bar: that component shows one fill against a reference marker;
+      this one shows three magnitudes side by side with per-row labels and values.
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New component — Baseline Compare Card</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  body { display: block !important; }
+  svg { flex: none; min-height: fit-content; }
+  body { max-width: none !important; margin: 0 !important; padding: 48px 24px !important;
+         background: hsl(var(--background)); color: hsl(var(--foreground));
+         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; }
+  * { box-sizing: border-box; }
+  .rcp-cmp-card { border: none !important; }
+
+  .demo-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 720px; margin: 0 auto; }
+
+  /* ── Baseline Compare Card (verbatim from the prototype) ── */
+  .rcp-cmp-card { background: hsl(var(--card)); border-radius: var(--radius-2xl); padding: 20px 22px; display: flex; flex-direction: column; gap: 10px; }
+  .rcp-cmp-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .rcp-cmp-title { font-size: var(--fs-sm); font-weight: 500; letter-spacing: -0.28px; }
+  .rcp-cmp-row { display: grid; grid-template-columns: 108px 1fr 66px; gap: 12px; align-items: center; }
+  .rcp-cmp-lbl { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rcp-cmp-lbl.you { color: hsl(var(--foreground)); font-weight: 500; }
+  .rcp-cmp-track { height: 6px; background: hsl(var(--secondary)); border-radius: 9999px; overflow: hidden; }
+  .rcp-cmp-fill { display: block; height: 100%; border-radius: 9999px; }
+  .rcp-cmp-fill.you  { background: hsl(var(--primary)); }
+  .rcp-cmp-fill.base { background: hsl(var(--muted-foreground) / 0.55); }
+  .rcp-cmp-fill.cat  { background: hsl(var(--muted-foreground) / 0.28); }
+  .rcp-cmp-val { font-size: var(--fs-xs); text-align: right; font-variant-numeric: tabular-nums; color: hsl(var(--muted-foreground)); }
+  .rcp-cmp-val.you { color: hsl(var(--foreground)); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<div class="demo-row">
+
+  <div class="rcp-cmp-card">
+    <div class="rcp-cmp-head">
+      <span class="rcp-cmp-title">Daily conversation</span>
+      <span class="badge badge-active">2.4× your baseline</span>
+    </div>
+    <div class="rcp-cmp-row"><span class="rcp-cmp-lbl you">This campaign</span><span class="rcp-cmp-track"><span class="rcp-cmp-fill you" style="width:100%"></span></span><span class="rcp-cmp-val you">1,450/day</span></div>
+    <div class="rcp-cmp-row"><span class="rcp-cmp-lbl">Brand baseline</span><span class="rcp-cmp-track"><span class="rcp-cmp-fill base" style="width:41%"></span></span><span class="rcp-cmp-val">600/day</span></div>
+    <div class="rcp-cmp-row"><span class="rcp-cmp-lbl">Category</span><span class="rcp-cmp-track"><span class="rcp-cmp-fill cat" style="width:25%"></span></span><span class="rcp-cmp-val">360/day</span></div>
+  </div>
+
+  <div class="rcp-cmp-card">
+    <div class="rcp-cmp-head">
+      <span class="rcp-cmp-title">Positive share</span>
+      <span class="badge badge-warning">−10 pts vs baseline</span>
+    </div>
+    <div class="rcp-cmp-row"><span class="rcp-cmp-lbl you">This campaign</span><span class="rcp-cmp-track"><span class="rcp-cmp-fill you" style="width:82%"></span></span><span class="rcp-cmp-val you">46%</span></div>
+    <div class="rcp-cmp-row"><span class="rcp-cmp-lbl">Brand baseline</span><span class="rcp-cmp-track"><span class="rcp-cmp-fill base" style="width:100%"></span></span><span class="rcp-cmp-val">56%</span></div>
+    <div class="rcp-cmp-row"><span class="rcp-cmp-lbl">Category</span><span class="rcp-cmp-track"><span class="rcp-cmp-fill cat" style="width:79%"></span></span><span class="rcp-cmp-val">44%</span></div>
+  </div>
+
+</div>
+
+</body>
+</html>

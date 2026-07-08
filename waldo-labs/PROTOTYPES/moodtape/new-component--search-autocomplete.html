@@ -1,0 +1,61 @@
+<!--
+component: Search Autocomplete
+source: waldo-labs/PROTOTYPES/moodtape/index.html
+date: 2026-07-07
+use_when: A search input that resolves entities (tickers, brands, sectors) as the user types, with a grouped results dropdown anchored to the input; row = identifier + name + trailing metric. Enter selects the first result; clicking outside closes.
+notes: The doctrine describes the "Search / autocomplete" interactive pattern but no component ships it (checked component-index Components / Brand API / Charts). Shell = the canonical .app-search (360px, ships in waldo-ds.css) per doctrine — never a custom container; built on the DS .input-with-icon + .input atoms; the dropdown sits on hsl(var(--popover)) with var(--shadow-popover). Row hover = hsl(var(--muted)). Metric colors follow doctrine (positive --primary, negative --warning, neutral --muted-foreground).
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New component — Search Autocomplete</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  body { display: block !important; }
+  svg { flex: none; min-height: fit-content; }
+  body { max-width: none !important; font-family: 'Inter', sans-serif; background: hsl(var(--background)); color: hsl(var(--foreground)); font-size: var(--fs-sm); padding: 48px 24px 240px; }
+  .demo-note { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-bottom: 16px; }
+
+  /* ── Search Autocomplete — verbatim from the prototype ── */
+  .pos { color: hsl(var(--primary)); }
+  .neg { color: hsl(var(--warning)); }
+  .neu { color: hsl(var(--muted-foreground)); }
+  .app-search { position: relative; }
+  .search-hint { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 8px; }
+  .sa-results { position: absolute; left: 0; right: 0; top: 100%; margin-top: 8px; background: hsl(var(--popover)); border-radius: var(--radius-xl); overflow: hidden; z-index: 40; display: none; box-shadow: var(--shadow-popover); }
+  .sa-results.open { display: block; }
+  .sa-row { display: flex; align-items: center; gap: 12px; padding: 10px 16px; cursor: pointer; }
+  .sa-row + .sa-row { border-top: 1px solid hsl(var(--border)); }
+  .sa-row:hover { background: hsl(var(--muted)); }
+  .sa-row.empty { color: hsl(var(--muted-foreground)); cursor: default; }
+  .sa-row.empty:hover { background: transparent; }
+  .sa-sym { font-weight: 600; min-width: 62px; font-variant-numeric: tabular-nums; }
+  .sa-sym.sector { color: hsl(var(--muted-foreground)); font-size: var(--fs-xs); font-weight: 500; letter-spacing: .05em; }
+  .sa-name { color: hsl(var(--muted-foreground)); flex: 1; min-width: 0; }
+  .sa-meta { font-size: var(--fs-xs); font-weight: 600; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+  <div class="demo-note">Search Autocomplete — type to filter; dropdown shown open with sample results.</div>
+  <div class="app-search">
+    <div class="input-with-icon">
+      <div class="input-icon">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </div>
+      <input class="input" type="text" placeholder="Search a ticker or sector…" value="pe" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="search-hint">Results group tickers first, then sectors.</div>
+    <div class="sa-results open">
+      <div class="sa-row"><span class="sa-sym">PEP</span><span class="sa-name">PepsiCo, Inc.</span><span class="sa-meta neu">+0.13</span></div>
+      <div class="sa-row"><span class="sa-sym">AAPL</span><span class="sa-name">Apple Inc.</span><span class="sa-meta pos">+0.43</span></div>
+      <div class="sa-row"><span class="sa-sym sector">SECTOR</span><span class="sa-name">Beverages &amp; Food</span><span class="sa-meta pos">+0.21</span></div>
+    </div>
+  </div>
+</body>
+</html>

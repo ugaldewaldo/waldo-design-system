@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prospector — new business, on a schedule</title>
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  /* ── Required DS conflict overrides (doctrine — verbatim) ── */
+  /* waldo-ds.css sets html,body{height:100%;overflow:hidden} — breaks scroll.
+     Scroll override goes on html ONLY: any overflow other than visible on body
+     silently kills position:sticky (the sticky topbar scrolls away). */
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  /* waldo-ds.css sets body{display:flex!important} — collapses card widths */
+  body { display: block !important; }
+  /* waldo-ds.css sets svg{display:block} — collapses ring/icon SVGs inside flex containers */
+  svg { flex: none; min-height: fit-content; }
+
+  /* ── Shell ── */
+  .pr-shell { max-width: 1184px; margin: 0 auto; padding: 16px 24px 0; display: flex; gap: 24px; align-items: flex-start; }
+  .pr-side { width: 264px; flex: none; position: sticky; top: 76px; }
+  .pr-side .wnav-panel { width: 100%; }
+  .pr-side a.wnav-item { text-decoration: none; }
+  .pr-main { flex: 1; min-width: 0; padding-bottom: 80px; }
+  .pr-hidden { display: none !important; }
+
+  /* Sidebar — one integrated popover panel: agency chip as transparent header */
+  .pr-agency { display: flex; align-items: center; gap: 10px; margin: 4px 8px 8px; padding: 8px 12px; border-radius: var(--radius-2xl); cursor: pointer; background: transparent; transition: background 0.1s; text-decoration: none; color: inherit; }
+  .pr-agency:hover { background: hsl(var(--muted)); }
+  .pr-agency-name { font-size: var(--fs-sm); font-weight: 500; letter-spacing: -0.02em; color: hsl(var(--foreground)); line-height: 18px; }
+  .pr-agency-sub { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .pr-side-util { padding: 10px 24px 12px; display: flex; flex-direction: column; gap: 8px; }
+  .pr-integ { display: flex; align-items: center; gap: 8px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); cursor: pointer; text-decoration: none; }
+  .pr-integ:hover { color: hsl(var(--foreground)); }
+  .pr-credits { padding: 10px 24px 14px; display: flex; flex-direction: column; gap: 7px; }
+  .pr-credits-row { display: flex; justify-content: space-between; align-items: baseline; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .pr-credits-n { font-variant-numeric: tabular-nums; color: hsl(var(--foreground)); }
+  .pr-meter { height: 6px; background: hsl(var(--muted)); border-radius: var(--radius-full); overflow: hidden; }
+  .pr-meter-fill { height: 100%; background: hsl(var(--primary)); border-radius: var(--radius-full); }
+  .pr-manage { color: hsl(var(--primary)); text-decoration: none; }
+  .pr-manage:hover { opacity: 0.8; }
+
+  /* ── View head (page header — no divider line per borderless shell) ── */
+  .pr-head { margin-bottom: 22px; }
+  .pr-head-row { display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+  .pr-spacer { flex: 1; }
+  .pr-title { font-size: var(--fs-2xl); font-weight: 600; letter-spacing: -0.04em; color: hsl(var(--foreground)); display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .pr-sub { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); margin-top: 4px; }
+  .pr-sub a { color: hsl(var(--primary)); text-decoration: none; }
+  .pr-sub a:hover { opacity: 0.8; }
+
+  /* ── Brand avatar — square wav + favicon with graceful fallback to initial ── */
+  .pr-brand-av { position: relative; }
+  .pr-brand-av img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 14%; background: hsl(var(--muted)); }
+
+  /* ── Prospect Card (local component — DS gap, spec in new-component--prospect-card.html) ── */
+  .pr-stack { display: flex; flex-direction: column; gap: 14px; }
+  .pr-card { background: hsl(var(--card)); border-radius: 16px; padding: 20px 22px; cursor: pointer; transition: background 0.12s; }
+  .pr-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--card))); }
+  .pr-card.pr-static { cursor: default; }
+  .pr-card.pr-static:hover { background: hsl(var(--card)); }
+  .pr-clickable { cursor: pointer; }
+  .pr-min0 { min-width: 0; }
+  .pr-gap-top-sm { margin-top: 6px; }
+  .pr-gap-top-md { margin-top: 8px; }
+  .pr-gap-top { margin-top: 10px; }
+  .pr-gap-top-lg { margin-top: 16px; }
+  .pr-sec-label.in-card.pr-gap-top-lg { margin-top: 16px; }
+  .pr-echo.pr-gap-top { margin-top: 10px; }
+  .pr-card.is-done { opacity: 0.62; }
+  .pr-card-top { display: flex; align-items: flex-start; gap: 14px; }
+  .pr-card-id { min-width: 0; flex: 1; }
+  .pr-card-name { font-size: var(--fs-base); font-weight: 500; letter-spacing: -0.02em; color: hsl(var(--foreground)); display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+  .pr-domain { color: hsl(var(--muted-foreground)); font-size: var(--fs-xs); font-weight: 400; }
+  .pr-badges { display: flex; gap: 6px; margin-top: 7px; flex-wrap: wrap; }
+  .pr-score-wrap { margin-left: auto; text-align: right; flex-shrink: 0; }
+  .pr-score { font-size: var(--fs-2xl); font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .pr-score.s-hi { color: hsl(var(--primary)); }
+  .pr-score.s-mid { color: hsl(var(--foreground)); }
+  .pr-score.s-lo { color: hsl(var(--muted-foreground)); }
+  .pr-score-pct { font-size: var(--fs-xs); font-weight: 400; color: hsl(var(--muted-foreground)); }
+  .pr-score-lbl { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 2px; }
+  .pr-reasons { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+  /* nested blocks on a card — the on-card rule: hsl(var(--muted)), lockstep hover */
+  .pr-reason { background: hsl(var(--muted)); border-radius: var(--radius-xl); padding: 12px 14px; }
+  .pr-card:hover .pr-reason { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--muted))); }
+  .pr-reason-lbl { font-size: var(--fs-xs); font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: hsl(var(--muted-foreground)); display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+  .pr-reason-lbl.now { color: hsl(var(--highlight)); }
+  .pr-reason p { font-size: var(--fs-sm); color: color-mix(in srgb, hsl(var(--foreground)) 68%, transparent); line-height: 1.5; margin: 0; }
+  .pr-reason p b { color: hsl(var(--foreground)); font-weight: 600; }
+  .pr-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 16px; }
+  .pr-grow { flex: 1; }
+  .pr-brief-link { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); text-decoration: none; cursor: pointer; }
+  .pr-brief-link:hover { color: hsl(var(--foreground)); }
+
+  /* section label — spacing + muted label instead of a divider */
+  .pr-sec-label { font-size: var(--fs-xs); font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: color-mix(in srgb, hsl(var(--foreground)) 45%, transparent); margin: 28px 0 12px; }
+  .pr-sec-label.in-card { margin: 4px 0 0; }
+
+  /* ── Detail page ── */
+  .pr-back { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-sm); color: hsl(var(--highlight)); text-decoration: none; margin-bottom: 18px; }
+  .pr-back:hover { opacity: 0.8; }
+  .pr-detail-hd { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 24px; }
+  .pr-av-lg { width: 48px; height: 48px; font-size: var(--fs-lg); border-radius: var(--radius-lg); }
+  .pr-detail-id { flex: 1; min-width: 0; }
+  .pr-ext { color: hsl(var(--muted-foreground)); text-decoration: none; }
+  .pr-ext:hover { color: hsl(var(--foreground)); }
+  .pr-detail-grid { display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: start; }
+  .pr-detail-col { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+  .pr-lead { font-size: var(--fs-sm); color: color-mix(in srgb, hsl(var(--foreground)) 68%, transparent); line-height: 1.6; margin: 0; }
+  .pr-lead b { color: hsl(var(--foreground)); font-weight: 600; }
+
+  /* nested opening block — on-card rule */
+  .pr-opening { background: hsl(var(--muted)); border-radius: var(--radius-xl); padding: 14px 16px; }
+  .pr-opening-hl { font-size: var(--fs-sm); font-weight: 500; color: hsl(var(--foreground)); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .pr-opening p { font-size: var(--fs-sm); color: color-mix(in srgb, hsl(var(--foreground)) 68%, transparent); line-height: 1.55; margin: 6px 0 0; }
+  .pr-opening-src { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 9px; }
+
+  /* echo chip */
+  .pr-echo { display: inline-flex; align-items: center; gap: 8px; background: hsl(var(--muted)); border-radius: var(--radius-full); padding: 4px 12px 4px 5px; font-size: var(--fs-sm); font-weight: 500; color: hsl(var(--foreground)); }
+  .pr-echo .pr-echo-cat { color: hsl(var(--muted-foreground)); font-weight: 400; }
+
+  /* contacts */
+  .pr-contact-list { display: flex; flex-direction: column; }
+  .pr-mutual { color: hsl(var(--primary)); }
+  .pr-li-btn { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: var(--radius-md); color: hsl(var(--muted-foreground)); cursor: pointer; text-decoration: none; transition: background 0.1s, color 0.1s; }
+  .pr-li-btn:hover { background: hsl(var(--accent)); color: hsl(var(--foreground)); }
+  .pr-nested { background: hsl(var(--muted)); border-radius: var(--radius-xl); padding: 12px 14px; display: flex; align-items: center; gap: 12px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 14px; }
+  .pr-nested svg { flex-shrink: 0; }
+  .pr-nested .btn { margin-left: auto; }
+
+  /* side action panel */
+  .pr-act-stack { display: flex; flex-direction: column; gap: 8px; }
+  .pr-act-stack .btn { width: 100%; justify-content: center; }
+  .pr-act-note { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); text-align: center; }
+  .pr-meta-list { display: flex; flex-direction: column; }
+  .pr-meta-row { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid hsl(var(--foreground) / 0.06); font-size: var(--fs-sm); }
+  .pr-meta-row:last-child { border-bottom: none; }
+  .pr-meta-row .k { color: hsl(var(--muted-foreground)); }
+  .pr-meta-row .v { font-weight: 500; color: hsl(var(--foreground)); text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* ── Bar Track — copied verbatim from the DS showcase (#comp-bar-track) ── */
+  .bar-track { display: flex; flex-direction: column; gap: 5px; padding: 7px 6px; cursor: default; border-radius: var(--radius-md); transition: background 0.1s; }
+  .bar-track:hover { background: color-mix(in srgb, hsl(var(--foreground)) 4%, transparent); }
+  .bar-track-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .bar-track-label { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-track-val { font-size: var(--fs-xs); font-weight: 500; color: hsl(var(--foreground)); font-variant-numeric: tabular-nums; white-space: nowrap; flex: none; }
+  .bar-track-rail { height: 6px; border-radius: var(--radius-full); background: color-mix(in srgb, hsl(var(--foreground)) 8%, transparent); overflow: hidden; }
+  .bar-track-fill { height: 100%; border-radius: var(--radius-full); background: linear-gradient(to right, color-mix(in srgb, hsl(var(--primary)) 23%, transparent), hsl(var(--green-400))); }
+  .bar-track.muted .bar-track-fill { background: linear-gradient(to right, color-mix(in srgb, hsl(var(--muted-foreground)) 20%, transparent), color-mix(in srgb, hsl(var(--muted-foreground)) 55%, transparent)); }
+
+  /* ── Alert List Row — copied verbatim from the DS showcase (#comp-alert-list-row) ── */
+  .alert-list { display: flex; flex-direction: column; }
+  .alert-item { display: flex; gap: 14px; align-items: flex-start; padding: 12px 16px 0 8px; margin-bottom: 12px; cursor: pointer; border-radius: 8px; transition: background 0.12s; }
+  .alert-item:last-child { margin-bottom: 0; }
+  .alert-item:hover { background: hsl(var(--secondary)); }
+  .alert-item:hover .alert-inner { border-bottom-color: transparent; }
+  .alert-dot-col { width: 8px; flex: none; display: flex; align-items: center; justify-content: center; padding-top: 4px; }
+  .alert-dot { width: 6px; height: 6px; border-radius: 50%; background: hsl(var(--primary)); flex: none; }
+  .alert-dot.hot { background: hsl(var(--destructive)); }
+  .alert-inner { flex: 1; min-width: 0; display: flex; gap: 10px; align-items: flex-start; border-bottom: 1px solid hsl(var(--border)); padding-bottom: 12px; }
+  .alert-item:last-child .alert-inner { border-bottom: none; }
+  .alert-content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+  .alert-condition { font-size: var(--fs-sm); line-height: 20px; letter-spacing: -0.28px; }
+  .alert-condition-main { color: hsl(var(--foreground)); font-weight: 600; }
+  .alert-condition-detail { color: hsl(var(--muted-foreground)); font-weight: 400; }
+  .alert-condition-detail b { color: hsl(var(--foreground)); font-weight: 600; }
+  .alert-delivery { font-size: var(--fs-xs); font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: hsl(var(--muted-foreground)); opacity: 0.6; }
+
+  /* ── Pipeline Board (local component — DS gap, spec in new-component--board-column.html) ── */
+  .pr-board { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; align-items: start; }
+  .pr-col { background: hsl(var(--card)); border-radius: var(--radius-xl); padding: 12px; min-height: 120px; }
+  .pr-col-hd { display: flex; align-items: center; gap: 8px; font-size: var(--fs-xs); font-weight: 500; color: hsl(var(--muted-foreground)); margin-bottom: 12px; padding: 0 2px; }
+  .pr-cdot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+  .pr-cdot.stage-new { background: hsl(var(--chart-1)); }
+  .pr-cdot.stage-researching { background: hsl(var(--chart-2)); }
+  .pr-cdot.stage-outreach { background: hsl(var(--chart-3)); }
+  .pr-cdot.stage-meeting { background: hsl(var(--chart-4)); }
+  .pr-cdot.stage-won { background: hsl(var(--chart-5)); }
+  .pr-cnt { margin-left: auto; font-variant-numeric: tabular-nums; }
+  /* nested mini card — on-card rule */
+  .pr-mini { background: hsl(var(--muted)); border-radius: var(--radius-lg); padding: 10px 11px; margin-bottom: 8px; cursor: pointer; transition: background 0.12s; }
+  .pr-mini:last-child { margin-bottom: 0; }
+  .pr-mini:hover { background: color-mix(in srgb, hsl(var(--foreground)) 5%, hsl(var(--muted))); }
+  .pr-mini-top { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .pr-mini-name { font-size: var(--fs-xs); font-weight: 500; color: hsl(var(--foreground)); }
+  .pr-mini-cat { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pr-mini-foot { display: flex; align-items: center; gap: 6px; margin-top: 9px; flex-wrap: wrap; }
+  .pr-mini .select-wrap select { min-width: 0; height: 26px; font-size: var(--fs-xs); padding: 0 24px 0 8px; }
+  .pr-col-empty { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); padding: 4px 2px; }
+
+  /* ── Watchlist ── */
+  .pr-wl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+  .pr-note { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); line-height: 1.5; }
+  .pr-note b { color: hsl(var(--foreground)); font-weight: 500; }
+
+  /* ── Settings ── */
+  .pr-settings { display: flex; flex-direction: column; gap: 24px; }
+  .pr-form-col { display: flex; flex-direction: column; gap: 16px; max-width: 480px; }
+  .pr-chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pr-integ-row { display: flex; align-items: center; gap: 14px; padding: 10px 0; }
+  .pr-integ-body { flex: 1; min-width: 0; }
+  .pr-integ-name { font-size: var(--fs-sm); font-weight: 500; color: hsl(var(--foreground)); }
+  .pr-integ-desc { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 2px; }
+
+  /* ── Toast — DS wtoast, fixed bottom-center, confirmations only ── */
+  .pr-toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(16px); opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s; z-index: 90; }
+  .pr-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── API footnote ── */
+  .pr-foot { margin-top: 36px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .pr-foot a { color: color-mix(in srgb, hsl(var(--foreground)) 68%, transparent); text-decoration: none; }
+  .pr-foot a:hover { color: hsl(var(--foreground)); }
+
+  @media (max-width: 960px) {
+    .pr-shell { flex-direction: column; }
+    .pr-side { position: static; width: 100%; }
+    .pr-reasons, .pr-detail-grid, .pr-wl-grid { grid-template-columns: 1fr; }
+    .pr-board { grid-template-columns: 1fr; }
+    .app-search { width: 200px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- App Header — identity + search (no nav in header: navigation lives in the sidebar, so search takes the right slot) -->
+<header class="app-header">
+  <div class="app-header-inner">
+    <div class="app-ident">
+      <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Waldo"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
+      <span class="product">Prospector</span>
+    </div>
+    <div class="app-search input-with-icon">
+      <div class="input-icon">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </div>
+      <input class="input" type="text" id="search" placeholder="Search prospects, brands, categories…" autocomplete="off">
+    </div>
+  </div>
+</header>
+
+<div class="pr-shell">
+  <!-- Sidebar — one integrated nav panel: agency chip header + nav + utility state -->
+  <aside class="pr-side">
+    <nav class="wnav-panel">
+      <a class="pr-agency" href="#/settings">
+        <span class="wav wav-square wav-32" id="agency-av">H</span>
+        <span>
+          <span class="pr-agency-name" id="agency-name">Highline Studio</span>
+          <span class="pr-agency-sub" id="agency-sub">highlinestudio.com</span>
+        </span>
+      </a>
+      <div class="wnav-section">Workspace</div>
+      <div class="wnav-items-wrap" id="nav"></div>
+      <div class="wnav-sep"></div>
+      <div class="pr-side-util" id="integ-status"></div>
+      <div class="pr-credits">
+        <div class="pr-credits-row"><span>Prospect credits</span><span class="pr-credits-n" id="cred-n">612 / 1,000</span></div>
+        <div class="pr-meter"><div class="pr-meter-fill" style="width:61%"></div></div>
+        <div class="pr-credits-row"><span>Resets Jun 1</span><a class="pr-manage" href="#/settings">Manage</a></div>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="pr-main">
+    <div id="content"></div>
+  </main>
+</div>
+
+<div class="pr-toast" id="toast">
+  <div class="wtoast">
+    <div class="wtoast-icon">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="stroke:hsl(var(--primary))" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="wtoast-body">
+      <span class="wtoast-title" id="toast-msg"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ════════════════════ ICONS ════════════════════ */
+const I = {
+  inbox: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>',
+  pipeline: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="3" y2="20"/><line x1="9" y1="6" x2="9" y2="14"/><line x1="15" y1="6" x2="15" y2="18"/><line x1="21" y1="6" x2="21" y2="11"/><circle cx="3" cy="4" r="1.6"/><circle cx="9" cy="4" r="1.6"/><circle cx="15" cy="4" r="1.6"/><circle cx="21" cy="4" r="1.6"/></svg>',
+  eye: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>',
+  settings: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+  check: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+  x: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+  back: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>',
+  users: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  linkedin: '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zm-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79zM6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68zm1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>',
+  upload: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>',
+};
+
+/* ════════════════════ MOCK DATA — deterministic seeds (verbatim from source) ════════════════════ */
+const AGENCY = {
+  name: 'Highline Studio',
+  domain: 'highlinestudio.com',
+  blurb: 'Independent creative + media agency · Chicago · 72 people',
+  fingerprint: {
+    audiences: ['Gen Z & younger millennials', 'Wellness-driven', 'Culture-forward', 'Value-conscious', 'Mobile-first'],
+    categories: ['Better-for-you CPG', 'DTC apparel & footwear', 'Consumer fintech', 'Fast-casual food']
+  }
+};
+const PAST_CLIENTS = [
+  { id:'olipop',   name:'OLIPOP',       domain:'drinkolipop.com', cat:'Better-for-you beverage' },
+  { id:'allbirds', name:'Allbirds',     domain:'allbirds.com',    cat:'Sustainable footwear' },
+  { id:'chime',    name:'Chime',        domain:'chime.com',       cat:'Consumer fintech' },
+  { id:'sweetgrn', name:'Sweetgreen',   domain:'sweetgreen.com',  cat:'Fast-casual food' },
+  { id:'liqdeath', name:'Liquid Death', domain:'liquiddeath.com', cat:'Beverage / culture' },
+];
+const STAGES = [
+  { id:'new',         label:'New' },
+  { id:'researching', label:'Researching' },
+  { id:'outreach',    label:'Outreach' },
+  { id:'meeting',     label:'Meeting' },
+  { id:'won',         label:'Won' },
+];
+const WHYNOW_META = {
+  leadership: { label:'New CMO',          cls:'badge-highlight',   hot:false, src:'LinkedIn · job change' },
+  acquisition:{ label:'Acquired',         cls:'badge-highlight',   hot:false, src:'Press · M&A' },
+  funding:    { label:'New funding',      cls:'badge-highlight',   hot:false, src:'Press · funding round' },
+  review:     { label:'Agency review',    cls:'badge-destructive', hot:true,  src:'Trade press · AdAge' },
+  surge:      { label:'Category surge',   cls:'badge-highlight',   hot:false, src:'Category trends' },
+  expansion:  { label:'Retail expansion', cls:'badge-highlight',   hot:false, src:'Press · distribution' },
+  lull:       { label:'Campaign lull',    cls:'badge-destructive', hot:true,  src:'Paid-media spend signal' },
+};
+
+// status seeds simulate prior weeks already actioned
+const PROSPECTS = [
+  // ── Week of 2026-05-25 (current) — the 5 ──
+  { id:'poppi', brand:'Poppi', domain:'drinkpoppi.com', cat:'Better-for-you beverage',
+    week:'2026-05-25', score:94, status:'new',
+    why_related:{ echoes:'olipop', text:'Near-perfect mirror of your <b>OLIPOP</b> work — prebiotic soda, same gut-health positioning, same Gen Z wellness buyer you built that brand voice for.',
+      overlap:[['Gen Z wellness',92],['Functional CPG buyers',88],['TikTok-native',81]] },
+    why_now:{ type:'acquisition', headline:'Acquired by PepsiCo for ~$1.95B — brand team mid-reshuffle.',
+      detail:'Post-close, Poppi is standing up an independent brand marketing org inside PepsiCo and is reportedly reviewing creative partners to scale beyond founder-led social. A new VP of Brand started 3 weeks ago.', dated:'May 22, 2026' },
+    contacts:[
+      { name:'Jordan Hayes', title:'VP, Brand Marketing', li:'in/jordan-hayes', mutuals:['Maya Chen — Highline ECD','You'] },
+      { name:'Priya Anand',  title:'Director, Integrated Marketing', li:'in/priya-anand', mutuals:[] },
+      { name:'Devin Cole',   title:'Sr. Manager, Social & Creator', li:'in/devin-cole', mutuals:['Sam Ortiz — Highline'] },
+    ] },
+  { id:'cava', brand:'CAVA', domain:'cava.com', cat:'Fast-casual food',
+    week:'2026-05-25', score:90, status:'new',
+    why_related:{ echoes:'sweetgrn', text:'Direct analog to <b>Sweetgreen</b> — Mediterranean fast-casual chasing the same urban, health-forward lunch crowd you grew Sweetgreen with.',
+      overlap:[['Urban health-conscious',90],['Premium QSR diners',85],['App-loyalty users',72]] },
+    why_now:{ type:'expansion', headline:'Post-IPO unit blitz — 70+ new locations this year, first national brand push.',
+      detail:'CAVA is moving from regional darling to national brand and just elevated a CMO to lead its first above-the-line campaign. They have budget and a story but no lead creative AOR.', dated:'May 19, 2026' },
+    contacts:[
+      { name:'Lena Marsh', title:'Chief Marketing Officer', li:'in/lena-marsh', mutuals:['You'] },
+      { name:'Tariq Bell', title:'VP, Brand & Creative', li:'in/tariq-bell', mutuals:[] },
+    ] },
+  { id:'magicspoon', brand:'Magic Spoon', domain:'magicspoon.com', cat:'Better-for-you CPG',
+    week:'2026-05-25', score:88, status:'new',
+    why_related:{ echoes:'olipop', text:'Better-for-you CPG with the exact DTC-to-retail arc you ran for <b>OLIPOP</b> — high-protein cereal, playful brand, wellness shopper.',
+      overlap:[['Functional CPG buyers',86],['Gen Z wellness',78],['DTC-first shoppers',83]] },
+    why_now:{ type:'funding', headline:'Closed a Series C and landing in Target & Walmart nationwide.',
+      detail:'Retail expansion means the brand suddenly needs shopper + brand marketing muscle it has never had in-house. They just opened a "Head of Brand Marketing" req — a classic signal they are building, not just hiring a doer.', dated:'May 20, 2026' },
+    contacts:[
+      { name:'Noah Feldman', title:'Co-Founder & CEO', li:'in/noah-feldman', mutuals:[] },
+      { name:'Riley Tan', title:'Head of Growth', li:'in/riley-tan', mutuals:['Maya Chen — Highline ECD'] },
+    ] },
+  { id:'vuori', brand:'Vuori', domain:'vuori.com', cat:'Performance apparel',
+    week:'2026-05-25', score:86, status:'new',
+    why_related:{ echoes:'allbirds', text:'Premium, sustainability-leaning apparel for the same conscious-comfort buyer you know from <b>Allbirds</b> — adjacent category, identical brand sensibility.',
+      overlap:[['Conscious-comfort buyers',84],['Premium DTC apparel',88],['Active millennials',76]] },
+    why_now:{ type:'leadership', headline:'New CMO from Nike just started — and an agency review is rumored.',
+      detail:'A new CMO (ex-Nike brand lead) joined this month. New marketing leadership almost always re-evaluates agency rosters within the first quarter — the window to get on the consideration list is now.', dated:'May 16, 2026' },
+    contacts:[
+      { name:'Marcus Reed', title:'Chief Marketing Officer', li:'in/marcus-reed', mutuals:['You','Sam Ortiz — Highline'] },
+      { name:'Hana Yoo', title:'VP, Brand Marketing', li:'in/hana-yoo', mutuals:[] },
+    ] },
+  { id:'step', brand:'Step', domain:'step.com', cat:'Consumer fintech',
+    week:'2026-05-25', score:83, status:'new',
+    why_related:{ echoes:'chime', text:'Mobile-first banking for the underbanked, mass-market audience you built <b>Chime</b> for — same buyer, younger skew (teens & Gen Z).',
+      overlap:[['Mass-market mobile-first',87],['Gen Z',80],['First-account openers',74]] },
+    why_now:{ type:'lull', headline:'No major brand work in ~9 months despite a fresh raise.',
+      detail:'Step raised earlier this year but its paid-media spend signal shows a long creative lull — lots of performance, no brand. A funded brand that has gone quiet is a brand about to spend.', dated:'May 14, 2026' },
+    contacts:[
+      { name:'Alyssa Pope', title:'VP Marketing', li:'in/alyssa-pope', mutuals:[] },
+      { name:'Chris Nolan', title:'Head of Brand', li:'in/chris-nolan', mutuals:['You'] },
+    ] },
+
+  // ── Week of 2026-05-18 (prior — pre-actioned to seed pipeline/watchlist) ──
+  { id:'ghia', brand:'Ghia', domain:'drinkghia.com', cat:'Non-alc beverage',
+    week:'2026-05-18', score:89, status:'accepted', stage:'outreach', hubspot:true, playbook:true,
+    why_related:{ echoes:'liqdeath', text:'Culture-forward non-alc aperitif — the irreverent, design-led beverage lane you owned with <b>Liquid Death</b>, aimed at the sober-curious set.',
+      overlap:[['Sober-curious',88],['Design-led CPG',82],['Culture-forward',79]] },
+    why_now:{ type:'surge', headline:'Non-alc category is surging into summer; Ghia is scaling distribution.',
+      detail:'The non-alc category is up sharply YoY and Ghia is expanding retail. Timing is ideal for a brand campaign.', dated:'May 12, 2026' },
+    contacts:[ { name:'Sofia Greco', title:'Head of Marketing', li:'in/sofia-greco', mutuals:['You'] } ] },
+  { id:'rothys', brand:"Rothy's", domain:'rothys.com', cat:'Sustainable footwear',
+    week:'2026-05-18', score:85, status:'accepted', stage:'researching', hubspot:false, playbook:false,
+    why_related:{ echoes:'allbirds', text:'Sustainable footwear built on recycled materials — your <b>Allbirds</b> playbook applies almost line-for-line.',
+      overlap:[['Eco-conscious millennials',86],['Premium DTC apparel',81]] },
+    why_now:{ type:'leadership', headline:'New VP of Brand hired from a competitor.', detail:'Fresh brand leadership reassessing partners.', dated:'May 10, 2026' },
+    contacts:[ { name:'Erin Wells', title:'VP Brand', li:'in/erin-wells', mutuals:[] } ] },
+  { id:'immi', brand:'Immi', domain:'immieats.com', cat:'Better-for-you CPG',
+    week:'2026-05-18', score:81, status:'tracked',
+    why_related:{ echoes:'olipop', text:'High-protein, better-for-you instant ramen — same functional-CPG, Gen Z wellness buyer as <b>OLIPOP</b>.',
+      overlap:[['Functional CPG buyers',84],['Gen Z wellness',77]] },
+    why_now:{ type:'funding', headline:'Series B extension reported; building out the team.', detail:'Watching for a brand-leadership hire as the trigger to pitch.', dated:'May 9, 2026' },
+    contacts:[ { name:'Kevin Lee', title:'Co-Founder', li:'in/kevin-lee', mutuals:[] } ] },
+  { id:'athletic', brand:'Athletic Brewing', domain:'athleticbrewing.com', cat:'Non-alc beverage',
+    week:'2026-05-18', score:78, status:'rejected',
+    why_related:{ echoes:'liqdeath', text:'Non-alc craft beer in the beverage-culture lane.', overlap:[['Sober-curious',80]] },
+    why_now:{ type:'surge', headline:'Category tailwinds.', detail:'Rejected — they re-signed their incumbent AOR last month.', dated:'May 8, 2026' },
+    contacts:[] },
+  { id:'parade', brand:'Parade', domain:'yourparade.com', cat:'DTC apparel',
+    week:'2026-05-18', score:80, status:'tracked',
+    why_related:{ echoes:'allbirds', text:'Inclusive DTC intimates with a strong Gen Z brand voice.', overlap:[['Gen Z',83],['DTC-first shoppers',78]] },
+    why_now:{ type:'lull', headline:'Brand campaign went quiet after founder transition.', detail:'Monitoring for the next funding or leadership move.', dated:'May 7, 2026' },
+    contacts:[ { name:'Dana Brooks', title:'Acting Head of Marketing', li:'in/dana-brooks', mutuals:[] } ] },
+
+  // ── Week of 2026-05-11 (prior — one won deal) ──
+  { id:'recess', brand:'Recess', domain:'takearecess.com', cat:'Better-for-you beverage',
+    week:'2026-05-11', score:87, status:'accepted', stage:'won', hubspot:true, playbook:true,
+    why_related:{ echoes:'olipop', text:'Adaptogen + CBD sparkling drink — functional beverage in your OLIPOP wheelhouse.', overlap:[['Functional CPG buyers',85],['Gen Z wellness',79]] },
+    why_now:{ type:'funding', headline:'Raised a growth round to fund a national brand campaign.', detail:'Closed — signed Highline as lead creative AOR.', dated:'May 5, 2026' },
+    contacts:[ { name:'Mia Sato', title:'CMO', li:'in/mia-sato', mutuals:['You'] } ] },
+];
+
+// monitoring feed for tracked brands (fixed literal timestamps — deterministic)
+const SIGNALS = [
+  { brand:'Immi', type:'leadership', text:'<b>Immi</b> hired a new <b>Head of Growth Marketing</b> — a likely buying-committee signal.', when:'2 days ago' },
+  { brand:'Parade', type:'lull', text:'<b>Parade</b> launched a spring brand campaign — produced in-house, no agency credited.', when:'3 days ago' },
+  { brand:'Immi', type:'funding', text:'<b>Immi</b> Series B extension reported in trade press.', when:'5 days ago' },
+  { brand:'Parade', type:'review', text:'<b>Parade</b> posted a "Brand Marketing Lead" role — leadership gap forming.', when:'6 days ago' },
+];
+
+const WEEKS = ['2026-05-25','2026-05-18','2026-05-11'];
+const WEEK_LABEL = { '2026-05-25':'This week', '2026-05-18':'May 18', '2026-05-11':'May 11' };
+
+/* ════════════════════ STATE ════════════════════ */
+const LS_KEY = 'prospector_ds_state_v1';
+let state = load();
+function load(){
+  let s = {};
+  try { s = JSON.parse(localStorage.getItem(LS_KEY)) || {}; } catch(e){}
+  return Object.assign({
+    integrations: { linkedin:false, hubspot:false },
+    cadence: { perWeek:5, day:'Monday' },
+    over: {},            // per-prospect overrides {status, stage, hubspot, playbook}
+    activeWeek: '2026-05-25',
+    query: ''
+  }, s);
+}
+function save(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+
+// merge seed prospect with any saved override
+function P(id){ const base = PROSPECTS.find(p=>p.id===id); return Object.assign({}, base, state.over[id]||{}); }
+function allP(){ return PROSPECTS.map(p=>P(p.id)); }
+function setP(id, patch){ state.over[id] = Object.assign({}, state.over[id]||{}, patch); save(); }
+
+/* ════════════════════ HELPERS ════════════════════ */
+const $ = s => document.querySelector(s);
+const esc = s => (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function go(path){ location.hash = '#'+path; }
+function scoreCls(n){ return n>=90?'s-hi':n>=80?'s-mid':'s-lo'; }
+// brand favicon via Google's favicon service, graceful fallback to the initial on a muted square
+function brandAv(domain, letter, sizeCls){
+  const img = domain ? `<img src="https://www.google.com/s2/favicons?domain=${esc(domain)}&sz=128" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : '';
+  return `<span class="wav wav-square ${sizeCls||'wav-40'} pr-brand-av"><span>${esc(letter)}</span>${img}</span>`;
+}
+function logoMark(p, sizeCls){ return brandAv(p.domain, p.brand[0], sizeCls); }
+function initials(name){ return name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
+function toast(msg){ const t=$('#toast'); $('#toast-msg').textContent = msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2600); }
+
+/* ════════════════════ NAV ════════════════════ */
+function renderNav(){
+  const route = currentRoute();
+  const isActive = (n) => {
+    if(n.path==='/') return route==='/'||route.startsWith('/prospect')||route==='/passed';
+    return route===n.path;
+  };
+  const items = [
+    { path:'/', icon:I.inbox, label:'This Week' },
+    { path:'/pipeline', icon:I.pipeline, label:'Pipeline' },
+    { path:'/watchlist', icon:I.eye, label:'Watchlist' },
+    { path:'/settings', icon:I.settings, label:'Setup & integrations' },
+  ];
+  const queue = allP().filter(p=>p.week===state.activeWeek && p.status==='new').length;
+  const pipe = allP().filter(p=>p.status==='accepted').length;
+  const tracked = allP().filter(p=>p.status==='tracked').length;
+  const badge = (path)=> path==='/' && queue ? `<span class="wnav-count">${queue}</span>`
+    : path==='/pipeline' && pipe ? `<span class="wnav-count">${pipe}</span>`
+    : path==='/watchlist' && tracked ? `<span class="wnav-count">${tracked}</span>` : '';
+  $('#nav').innerHTML = items.map(n=>`<a class="wnav-item ${isActive(n)?'active':''}" href="#${n.path}"><span class="wnav-icon">${n.icon}</span><span class="wnav-label">${n.label}</span>${badge(n.path)}</a>`).join('');
+  // integration status — utility state lives in the sidebar panel, never the header
+  $('#integ-status').innerHTML =
+    `<a class="pr-integ" href="#/settings"><span class="wli-dot ${state.integrations.linkedin?'active':'paused'}"></span><span>${state.integrations.linkedin?'LinkedIn connected':'LinkedIn not connected'}</span></a>`+
+    `<a class="pr-integ" href="#/settings"><span class="wli-dot ${state.integrations.hubspot?'active':'paused'}"></span><span>${state.integrations.hubspot?'HubSpot synced':'HubSpot off'}</span></a>`;
+  $('#agency-name').textContent = AGENCY.name;
+  $('#agency-sub').textContent = AGENCY.domain;
+  $('#agency-av').textContent = AGENCY.name[0];
+}
+
+/* ════════════════════ VIEWS ════════════════════ */
+function renderThisWeek(){
+  const wk = state.activeWeek;
+  const list = allP().filter(p=>p.week===wk);
+  const queue = list.filter(p=>p.status==='new');
+  const actioned = list.filter(p=>p.status!=='new');
+  const weekTabs = WEEKS.map(w=>`<button type="button" class="wseg-opt ${w===wk?'active':'inactive'}" onclick="state.activeWeek='${w}';save();render()">${WEEK_LABEL[w]}</button>`).join('');
+
+  let body = '';
+  if(queue.length===0 && actioned.length===0){
+    body = emptyState('No prospects this week yet', 'Your next five will be delivered '+state.cadence.day+' morning. Adjust cadence in Setup.');
+  } else if(queue.length===0){
+    body = emptyState('You\'re all caught up', 'Every prospect for '+WEEK_LABEL[wk].toLowerCase()+' has been reviewed. Check your <a href="#/pipeline">Pipeline</a> or come back '+state.cadence.day+'.');
+  } else {
+    body = `<div class="pr-stack">${queue.map(prospectCard).join('')}</div>`;
+  }
+  let reviewed = '';
+  if(actioned.length){
+    reviewed = `<div class="pr-sec-label">Reviewed (${actioned.length})</div><div class="pr-stack">${actioned.map(prospectCard).join('')}</div>`;
+  }
+
+  $('#content').innerHTML = `
+    <div class="pr-head">
+      <div class="pr-head-row">
+        <div>
+          <h1 class="pr-title">This Week</h1>
+          <div class="pr-sub">${queue.length} new look-alike ${queue.length===1?'prospect':'prospects'} matched to ${esc(AGENCY.name)}'s past work · week of ${fmtWeek(wk)}${passedLink()}</div>
+        </div>
+        <div class="pr-spacer"></div>
+        <div class="wseg">${weekTabs}</div>
+      </div>
+    </div>
+    ${body}
+    ${reviewed}
+    ${apiFoot()}
+  `;
+}
+
+function prospectCard(p){
+  const wn = WHYNOW_META[p.why_now.type];
+  const done = p.status!=='new';
+  const statusPill = p.status==='accepted' ? `<span class="badge badge-active">Accepted</span>`
+    : p.status==='rejected' ? `<span class="badge badge-ghost">Passed</span>`
+    : p.status==='tracked' ? `<span class="badge badge-secondary">Tracking</span>` : '';
+  return `
+  <div class="pr-card ${done?'is-done':''}" data-go="/prospect/${p.id}">
+    <div class="pr-card-top">
+      ${logoMark(p)}
+      <div class="pr-card-id">
+        <div class="pr-card-name">${esc(p.brand)} <span class="pr-domain">${esc(p.domain)}</span> ${statusPill}</div>
+        <div class="pr-badges">
+          <span class="badge badge-secondary">${esc(p.cat)}</span>
+          <span class="badge ${wn.cls}">${wn.label}</span>
+        </div>
+      </div>
+      <div class="pr-score-wrap">
+        <div class="pr-score ${scoreCls(p.score)}">${p.score}<span class="pr-score-pct">/100</span></div>
+        <div class="pr-score-lbl">Match</div>
+      </div>
+    </div>
+    <div class="pr-reasons">
+      <div class="pr-reason">
+        <div class="pr-reason-lbl">Why it's a fit</div>
+        <p>${p.why_related.text}</p>
+      </div>
+      <div class="pr-reason">
+        <div class="pr-reason-lbl now">Why now</div>
+        <p>${esc(p.why_now.headline)}</p>
+      </div>
+    </div>
+    ${done ? '' : `
+    <div class="pr-actions">
+      <button class="btn btn-default btn-sm" onclick="accept('${p.id}')">Accept → Pipeline</button>
+      <button class="btn btn-secondary btn-sm" onclick="track('${p.id}')">Track</button>
+      <button class="btn btn-outline btn-sm" onclick="reject('${p.id}')">Pass</button>
+      <span class="pr-grow"></span>
+      <a class="pr-brief-link" href="#/prospect/${p.id}">View brief →</a>
+    </div>`}
+  </div>`;
+}
+
+function renderDetail(id){
+  const p = P(id);
+  if(!p || !p.brand){ $('#content').innerHTML = emptyState('Prospect not found','<a href="#/">Back to This Week</a>'); return; }
+  const wn = WHYNOW_META[p.why_now.type];
+  const client = PAST_CLIENTS.find(c=>c.id===p.why_related.echoes);
+  const liOn = state.integrations.linkedin;
+
+  const contactsHtml = p.contacts.length ? p.contacts.map(c=>`
+    <div class="wli">
+      <div class="wli-av">${esc(initials(c.name))}</div>
+      <div class="wli-body">
+        <span class="wli-name">${esc(c.name)}</span>
+        <span class="wli-sep">·</span>
+        <span class="wli-sub">${esc(c.title)}</span>
+      </div>
+      <div class="wli-right">
+        ${liOn && c.mutuals.length ? `<span class="wli-meta pr-mutual" title="${esc(c.mutuals.join(', '))}">${c.mutuals.length} mutual ${c.mutuals.length===1?'connection':'connections'}</span>` : ''}
+        <a class="pr-li-btn" href="https://linkedin.com/${esc(c.li)}" target="_blank" rel="noopener" title="LinkedIn profile">${I.linkedin}</a>
+      </div>
+    </div>`).join('') : `<p class="pr-note">No contacts surfaced yet.</p>`;
+
+  const liPrompt = !liOn ? `<div class="pr-nested">${I.linkedin}<span>Connect LinkedIn to see which contacts you and your team already know.</span><button class="btn btn-secondary btn-sm" onclick="toggleInteg('linkedin')">Connect</button></div>` : '';
+
+  const overlap = p.why_related.overlap.map(([nm,v])=>`
+    <div class="bar-track">
+      <div class="bar-track-top"><span class="bar-track-label">${esc(nm)}</span><span class="bar-track-val">${v}%</span></div>
+      <div class="bar-track-rail"><div class="bar-track-fill" style="width:${v}%"></div></div>
+    </div>`).join('');
+
+  // side action panel depends on status
+  const inPipeline = p.status==='accepted';
+  const tracked = p.status==='tracked';
+  let actionBtns = '';
+  if(inPipeline){
+    actionBtns = `
+      <span class="badge badge-active">In your pipeline · ${esc(STAGES.find(s=>s.id===(p.stage||'new')).label)}</span>
+      <button class="btn ${p.playbook?'btn-secondary':'btn-default'}" onclick="makePlaybook('${p.id}')">${p.playbook?'View pitch playbook':'Create pitch playbook'}</button>
+      <button class="btn btn-secondary" onclick="syncHubspot('${p.id}')">${p.hubspot?'Synced to HubSpot ✓':'Sync to HubSpot'}</button>`;
+  } else {
+    actionBtns = `
+      <button class="btn btn-default" onclick="accept('${p.id}')">Accept → Pipeline</button>
+      <button class="btn btn-secondary" onclick="track('${p.id}')">${tracked?'Tracking ✓ · monitor':'Track this brand'}</button>
+      ${p.status!=='rejected' ? `<button class="btn btn-outline" onclick="reject('${p.id}')">Pass</button>` : `<span class="pr-act-note">Passed on this prospect.</span>`}`;
+  }
+
+  $('#content').innerHTML = `
+    <a class="pr-back" href="#/">${I.back} This Week</a>
+    <div class="pr-detail-hd">
+      ${logoMark(p,'wav-40 pr-av-lg')}
+      <div class="pr-detail-id">
+        <h1 class="pr-title">${esc(p.brand)} <span class="pr-score ${scoreCls(p.score)}">${p.score}<span class="pr-score-pct">/100 match</span></span></h1>
+        <div class="pr-sub"><a class="pr-ext" href="https://${esc(p.domain)}" target="_blank" rel="noopener">${esc(p.domain)}</a> · ${esc(p.cat)}</div>
+      </div>
+    </div>
+    <div class="pr-detail-grid">
+      <div class="pr-detail-col">
+        <div class="wcard">
+          <div class="wcard-head"><span class="wcard-title">Why now — the opening</span></div>
+          <div class="pr-opening">
+            <div class="pr-opening-hl"><span class="badge ${wn.cls}">${wn.label}</span> ${esc(p.why_now.headline)}</div>
+            <p>${esc(p.why_now.detail)}</p>
+            <div class="pr-opening-src">${esc(wn.src)} · detected ${esc(p.why_now.dated)}</div>
+          </div>
+        </div>
+        <div class="wcard">
+          <div class="wcard-head"><span class="wcard-title">Why it's a fit</span></div>
+          <p class="pr-lead">${p.why_related.text}</p>
+          <div>
+            <div class="pr-sec-label in-card">Echoes your client</div>
+            <div class="pr-echo pr-gap-top">${brandAv(client.domain, client.name[0], 'wav-24')} ${esc(client.name)} <span class="pr-echo-cat">· ${esc(client.cat)}</span></div>
+          </div>
+          <div>
+            <div class="pr-sec-label in-card">Audience overlap</div>
+            <div class="pr-gap-top-sm">${overlap}</div>
+          </div>
+        </div>
+        <div class="wcard">
+          <div class="wcard-head"><span class="wcard-title">Probable contacts</span></div>
+          <div class="pr-contact-list">${contactsHtml}</div>
+          ${liPrompt}
+        </div>
+      </div>
+      <div class="pr-detail-col">
+        <div class="wcard">
+          <div class="wcard-head"><span class="wcard-title">Actions</span></div>
+          <div class="pr-act-stack">${actionBtns}</div>
+        </div>
+        <div class="wcard">
+          <div class="wcard-head"><span class="wcard-title">Details</span></div>
+          <div class="pr-meta-list">
+            <div class="pr-meta-row"><span class="k">Category</span><span class="v">${esc(p.cat)}</span></div>
+            <div class="pr-meta-row"><span class="k">Match score</span><span class="v">${p.score}/100</span></div>
+            <div class="pr-meta-row"><span class="k">Surfaced</span><span class="v">${fmtWeek(p.week)}</span></div>
+            <div class="pr-meta-row"><span class="k">Opening type</span><span class="v">${wn.label}</span></div>
+            <div class="pr-meta-row"><span class="k">Contacts found</span><span class="v">${p.contacts.length}</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    ${apiFoot()}
+  `;
+}
+
+function renderPipeline(){
+  const accepted = allP().filter(p=>p.status==='accepted');
+  const cols = STAGES.map(st=>{
+    const items = accepted.filter(p=>(p.stage||'new')===st.id);
+    const cards = items.map(p=>{
+      const opts = STAGES.map(s=>`<option value="${s.id}" ${(p.stage||'new')===s.id?'selected':''}>${s.label}</option>`).join('');
+      return `<div class="pr-mini" data-go="/prospect/${p.id}">
+        <div class="pr-mini-top">${logoMark(p,'wav-24')}<div class="pr-min0"><div class="pr-mini-name">${esc(p.brand)}</div><div class="pr-mini-cat">${esc(p.cat)} · ${p.score}</div></div></div>
+        <div class="pr-mini-foot">
+          <span class="select-wrap"><select onchange="setStage('${p.id}',this.value)">${opts}</select></span>
+          ${p.hubspot?`<span class="badge badge-secondary badge-sm" title="Synced to HubSpot">CRM</span>`:''}
+          ${p.playbook?`<span class="badge badge-secondary badge-sm" title="Pitch playbook ready">Playbook</span>`:''}
+        </div>
+      </div>`;
+    }).join('') || `<div class="pr-col-empty">—</div>`;
+    return `<div class="pr-col">
+      <div class="pr-col-hd"><span class="pr-cdot stage-${st.id}"></span>${st.label}<span class="pr-cnt">${items.length}</span></div>
+      ${cards}
+    </div>`;
+  }).join('');
+
+  const body = accepted.length ? `<div class="pr-board">${cols}</div>`
+    : emptyState('Your pipeline is empty','Accept prospects from <a href="#/">This Week</a> and they\'ll land here. Move them through your stages and sync to HubSpot.');
+
+  $('#content').innerHTML = `
+    <div class="pr-head"><h1 class="pr-title">Pipeline</h1><div class="pr-sub">${accepted.length} accepted ${accepted.length===1?'prospect':'prospects'} · move them stage to stage as you work the deal</div></div>
+    ${body}
+    ${apiFoot()}
+  `;
+}
+
+function passedLink(){
+  const n = allP().filter(p=>p.status==='rejected').length;
+  return n ? ` · <a href="#/passed">${n} passed →</a>` : '';
+}
+
+function renderPassed(){
+  const passed = allP().filter(p=>p.status==='rejected');
+  const rows = passed.length ? `<div class="pr-stack">${passed.map(p=>{
+    const wn = WHYNOW_META[p.why_now.type];
+    return `<div class="pr-card pr-static is-done">
+      <div class="pr-card-top">
+        ${logoMark(p)}
+        <div class="pr-card-id">
+          <div class="pr-card-name pr-clickable" data-go="/prospect/${p.id}">${esc(p.brand)} <span class="pr-domain">${esc(p.domain)}</span></div>
+          <div class="pr-badges"><span class="badge badge-secondary">${esc(p.cat)}</span><span class="badge ${wn.cls}">${wn.label}</span><span class="badge badge-ghost">Passed · ${fmtWeek(p.week)}</span></div>
+        </div>
+        <div class="pr-score-wrap"><div class="pr-score ${scoreCls(p.score)}">${p.score}<span class="pr-score-pct">/100</span></div><div class="pr-score-lbl">Match</div></div>
+      </div>
+      <div class="pr-actions">
+        <button class="btn btn-default btn-sm" onclick="accept('${p.id}')">Accept → Pipeline</button>
+        <button class="btn btn-secondary btn-sm" onclick="track('${p.id}')">Track</button>
+        <button class="btn btn-outline btn-sm" onclick="restore('${p.id}')">Move back to review</button>
+        <span class="pr-grow"></span>
+        <a class="pr-brief-link" href="#/prospect/${p.id}">View brief →</a>
+      </div>
+    </div>`;
+  }).join('')}</div>` : emptyState('Nothing passed yet', 'Prospects you pass on from <a href="#/">This Week</a> are archived here — you can always reconsider them later.');
+
+  $('#content').innerHTML = `
+    <a class="pr-back" href="#/">${I.back} This Week</a>
+    <div class="pr-head"><h1 class="pr-title">Passed</h1><div class="pr-sub">${passed.length} archived ${passed.length===1?'prospect':'prospects'} · reconsider any of them anytime</div></div>
+    ${rows}
+    ${apiFoot()}
+  `;
+}
+
+function renderWatchlist(){
+  const tracked = allP().filter(p=>p.status==='tracked');
+  const trackedRows = tracked.length ? tracked.map(p=>{
+    const wn = WHYNOW_META[p.why_now.type];
+    return `<div class="wli pr-clickable" data-go="/prospect/${p.id}">
+      ${logoMark(p,'wav-32')}
+      <div class="wli-body">
+        <span class="wli-name">${esc(p.brand)}</span>
+        <span class="wli-sep">·</span>
+        <span class="wli-sub">${esc(p.cat)} · watching for: ${wn.label.toLowerCase()}</span>
+      </div>
+      <div class="wli-right"><button class="btn btn-secondary btn-sm" onclick="accept('${p.id}')">Promote</button></div>
+    </div>`;
+  }).join('') : `<p class="pr-note">No brands tracked yet. Hit <b>Track</b> on any prospect to monitor it for an opening.</p>`;
+
+  const feed = SIGNALS.map(s=>{
+    const wn = WHYNOW_META[s.type];
+    return `<div class="alert-item">
+      <div class="alert-dot-col"><div class="alert-dot ${wn.hot?'hot':''}"></div></div>
+      <div class="alert-inner">
+        <div class="alert-content">
+          <div class="alert-condition"><span class="alert-condition-detail">${s.text}</span></div>
+          <div class="alert-delivery">${esc(s.when)} · ${wn.label}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  $('#content').innerHTML = `
+    <div class="pr-head"><h1 class="pr-title">Watchlist</h1><div class="pr-sub">Brands we monitor on your behalf — we'll surface the moment an opening appears</div></div>
+    <div class="pr-wl-grid">
+      <div class="wcard">
+        <div class="wcard-head"><span class="wcard-title">Tracked brands (${tracked.length})</span></div>
+        <div class="pr-contact-list">${trackedRows}</div>
+      </div>
+      <div class="wcard">
+        <div class="wcard-head"><span class="wcard-title">Opening signals</span></div>
+        <div class="alert-list">${feed}</div>
+      </div>
+    </div>
+    ${apiFoot()}
+  `;
+}
+
+function renderSettings(){
+  const fp = AGENCY.fingerprint;
+  const clientChips = PAST_CLIENTS.map(c=>`<span class="wtag wtag-sm">${brandAv(c.domain, c.name[0], 'wav-16')}${esc(c.name)}<span class="wtag-x" title="Remove (demo)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span></span>`).join('');
+  const audTags = fp.audiences.map(a=>`<span class="wtag wtag-sm">${esc(a)}</span>`).join('');
+  const catTags = fp.categories.map(a=>`<span class="wtag wtag-sm wtag-muted">${esc(a)}</span>`).join('');
+
+  const integ = (key, domain, name, desc, blurbOn) => `
+    <div class="pr-integ-row">
+      ${brandAv(domain, name[0], 'wav-32')}
+      <div class="pr-integ-body"><div class="pr-integ-name">${esc(name)}</div><div class="pr-integ-desc">${state.integrations[key]?esc(blurbOn):esc(desc)}</div></div>
+      <label class="wswitch">
+        <input type="checkbox" ${state.integrations[key]?'checked':''} onchange="toggleInteg('${key}')">
+        <div class="wswitch-track"><div class="wswitch-thumb"></div></div>
+      </label>
+    </div>`;
+
+  $('#content').innerHTML = `
+    <div class="pr-head"><h1 class="pr-title">Setup & integrations</h1><div class="pr-sub">Prospector learns from your past work, then delivers look-alikes on a schedule</div></div>
+
+    <div class="pr-settings">
+      <div class="wcard">
+        <div class="wcard-head"><span class="wcard-title">Your agency</span><span class="wcard-sub">${esc(AGENCY.blurb)}</span></div>
+        <div class="pr-form-col">
+          <div class="field"><label class="field-label">Agency name</label><input class="input" type="text" value="${esc(AGENCY.name)}"></div>
+          <div class="field"><label class="field-label">Website</label><input class="input" type="url" value="https://${esc(AGENCY.domain)}"></div>
+          <div class="field">
+            <label class="field-label">Past & current clients</label>
+            <span class="field-hint">Uploaded — drives your look-alike model.</span>
+            <div class="pr-chip-row pr-gap-top-sm">${clientChips}</div>
+            <div class="pr-gap-top"><button class="btn btn-secondary btn-sm" onclick="toast('Demo · client-list upload')">${I.upload} Upload client list (CSV)</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wcard">
+        <div class="wcard-head"><span class="wcard-title">Your audience & category fingerprint</span><span class="wcard-sub">Derived from the audiences your past clients addressed. We score every brand in the index against this.</span></div>
+        <div>
+          <div class="pr-sec-label in-card">Audiences</div>
+          <div class="pr-chip-row pr-gap-top-md">${audTags}</div>
+          <div class="pr-sec-label in-card pr-gap-top-lg">Categories</div>
+          <div class="pr-chip-row pr-gap-top-md">${catTags}</div>
+        </div>
+      </div>
+
+      <div class="wcard">
+        <div class="wcard-head"><span class="wcard-title">Integrations</span></div>
+        <div>
+          ${integ('linkedin','linkedin.com','LinkedIn','Connect to reveal mutual connections with prospect contacts and warm-intro paths.','Connected — mutual connections shown on every prospect.')}
+          ${integ('hubspot','hubspot.com','HubSpot','Push accepted prospects into your CRM as companies + contacts, kept in sync.','Connected — accepted prospects sync automatically.')}
+        </div>
+      </div>
+
+      <div class="wcard">
+        <div class="wcard-head"><span class="wcard-title">Delivery cadence</span></div>
+        <div class="pr-form-col">
+          <div class="field"><label class="field-label">Prospects per week</label>
+            <span class="select-wrap"><select onchange="state.cadence.perWeek=+this.value;save();toast('Cadence updated')">
+              ${[3,5,8,10].map(n=>`<option value="${n}" ${state.cadence.perWeek===n?'selected':''}>${n} per week</option>`).join('')}
+            </select></span></div>
+          <div class="field"><label class="field-label">Delivery day</label>
+            <span class="select-wrap"><select onchange="state.cadence.day=this.value;save();toast('Cadence updated')">
+              ${['Monday','Tuesday','Wednesday','Thursday','Friday'].map(d=>`<option ${state.cadence.day===d?'selected':''}>${d}</option>`).join('')}
+            </select></span></div>
+        </div>
+      </div>
+    </div>
+    ${apiFoot()}
+  `;
+}
+
+/* ════════════════════ SHARED BITS ════════════════════ */
+function emptyState(h, p){
+  return `<div class="pr-card pr-static"><div class="wempty wempty-section"><div class="wempty-title">${esc(h)}</div><div class="wempty-desc">${p}</div></div></div>`;
+}
+function apiFoot(){ return `<div class="pr-foot">Prototype for the Brand Intelligence API · <a href="endpoints.html">See every endpoint Prospector needs →</a></div>`; }
+function fmtWeek(w){ const [y,m,d]=w.split('-'); return new Date(+y,+m-1,+d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+
+/* ════════════════════ ACTIONS ════════════════════ */
+function accept(id){ setP(id,{status:'accepted', stage:'new'}); if(state.integrations.hubspot) setP(id,{hubspot:true}); toast(P(id).brand+' → Pipeline'); render(); }
+function reject(id){ setP(id,{status:'rejected'}); toast('Passed on '+P(id).brand); render(); }
+function track(id){ setP(id,{status:'tracked'}); toast('Tracking '+P(id).brand); render(); }
+function setStage(id,stage){ setP(id,{stage}); toast(P(id).brand+' → '+STAGES.find(s=>s.id===stage).label); render(); }
+function restore(id){ setP(id,{status:'new'}); toast(P(id).brand+' moved back to review'); render(); }
+function syncHubspot(id){
+  if(!state.integrations.hubspot){ toast('Connect HubSpot in Setup first'); go('/settings'); return; }
+  setP(id,{hubspot:true}); toast(P(id).brand+' synced to HubSpot'); render();
+}
+function makePlaybook(id){
+  setP(id,{playbook:true}); toast('Pitch playbook generated for '+P(id).brand);
+  render();
+}
+function toggleInteg(key){
+  state.integrations[key] = !state.integrations[key];
+  save();
+  if(key==='hubspot' && state.integrations.hubspot){ allP().filter(p=>p.status==='accepted').forEach(p=>setP(p.id,{hubspot:true})); }
+  toast((key==='linkedin'?'LinkedIn ':'HubSpot ')+(state.integrations[key]?'connected':'disconnected'));
+  render();
+}
+
+/* ════════════════════ SEARCH ════════════════════ */
+function runSearch(q){
+  state.query = q.trim().toLowerCase();
+  if(currentRoute()==='/' || currentRoute()==='/pipeline'){ applySearchFilter(); }
+}
+function applySearchFilter(){
+  const q = state.query;
+  document.querySelectorAll('.pr-card, .pr-mini').forEach(el=>{
+    const t = el.textContent.toLowerCase();
+    el.classList.toggle('pr-hidden', !!q && !t.includes(q));
+  });
+}
+
+/* ════════════════════ ROUTER ════════════════════ */
+function currentRoute(){ return (location.hash.replace(/^#/,'')||'/'); }
+function render(){
+  renderNav();
+  const r = currentRoute();
+  if(r.startsWith('/prospect/')) renderDetail(r.split('/')[2]);
+  else if(r==='/pipeline') renderPipeline();
+  else if(r==='/watchlist') renderWatchlist();
+  else if(r==='/passed') renderPassed();
+  else if(r==='/settings'||r==='/setup') renderSettings();
+  else renderThisWeek();
+  window.scrollTo(0,0);
+  if(state.query && (r==='/'||r==='/pipeline')){ $('#search').value=state.query; applySearchFilter(); }
+}
+window.addEventListener('hashchange', ()=>{ state.query=''; $('#search').value=''; render(); });
+$('#search').addEventListener('input', e=>runSearch(e.target.value));
+// delegated navigation for clickable cards/rows (keeps markup free of onclick on divs)
+document.addEventListener('click', e=>{
+  const el = e.target.closest('[data-go]');
+  if(!el) return;
+  if(e.target.closest('button, a, select, label, input')) return;
+  go(el.dataset.go);
+});
+render();
+</script>
+</body>
+</html>

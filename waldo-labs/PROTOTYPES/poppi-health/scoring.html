@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poppi — Scoring methodology</title>
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  /* waldo-ds.css sets html,body{height:100%;overflow:hidden} — breaks scroll.
+     Scroll override goes on html ONLY: any overflow other than visible on body
+     silently kills position:sticky (the sticky topbar scrolls away). */
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  /* waldo-ds.css sets body{display:flex!important} — collapses card widths */
+  body { display: block !important; }
+  /* waldo-ds.css sets svg{display:block} — collapses ring/icon SVGs inside flex containers */
+  svg { flex: none; min-height: fit-content; }
+
+  body { background: hsl(var(--background)); color: hsl(var(--foreground)); padding-bottom: 64px; }
+
+  .wrap { max-width: 1184px; margin: 0 auto; padding: 0 24px; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  .page-hero { padding: 48px 0 8px; }
+  .page-eyebrow { font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.12em; color: hsl(var(--muted-foreground)); margin-bottom: 12px; }
+  .page-hero h1 { font-size: var(--fs-4xl); letter-spacing: -0.02em; font-weight: 600; line-height: 1.15; margin: 0 0 16px; }
+  .lede { font-size: var(--fs-base); color: hsl(var(--muted-foreground)); max-width: 780px; line-height: 1.6; }
+  .lede + .lede { margin-top: 12px; }
+  .lede b { color: hsl(var(--foreground)); font-weight: 600; }
+  .lede a { color: hsl(var(--primary)); text-decoration: none; }
+
+  .sec { padding: 40px 0 0; }
+  .sec-head { margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+  .sec-head h2 { font-size: var(--fs-2xl); letter-spacing: -0.015em; font-weight: 600; line-height: 1.25; margin: 0; }
+  .sec-def { color: hsl(var(--muted-foreground)); font-size: var(--fs-sm); max-width: 760px; line-height: 1.6; }
+  .sec-def b { color: hsl(var(--foreground)); font-weight: 600; }
+  .sub-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: hsl(var(--muted-foreground)); margin: 28px 0 12px; }
+
+  code { font-family: var(--font-mono); font-size: var(--fs-xs); background: hsl(var(--secondary)); padding: 1px 6px; border-radius: 4px; color: hsl(var(--foreground)); }
+  .wcode-block-body code { background: transparent; padding: 0; }
+
+  .notation-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 32px; font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); margin: 0; padding: 0; }
+  .notation-list li { line-height: 1.6; }
+
+  .contrib-grid { display: flex; flex-direction: column; gap: 14px; }
+  .contrib-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .contrib-name { font-size: var(--fs-base); font-weight: 600; letter-spacing: -0.01em; }
+  .contrib-weight { font-family: var(--font-mono); font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); background: hsl(var(--secondary)); padding: 2px 8px; border-radius: 4px; }
+  .contrib-status { margin-left: auto; }
+  .contrib.v2 { opacity: 0.72; }
+  .contrib-body { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .contrib-col-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: hsl(var(--muted-foreground)); margin-bottom: 8px; }
+  .prop-list { display: flex; flex-direction: column; gap: 6px; font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); line-height: 1.5; }
+  .status-note { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); line-height: 1.55; }
+  .status-note b { color: hsl(var(--foreground)); font-weight: 600; }
+
+  .endpoint-list { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+  .ep-chip { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: var(--fs-xs); background: hsl(var(--secondary)); padding: 4px 10px; border-radius: 6px; color: hsl(var(--foreground)); max-width: 100%; }
+  .ep-chip .ep-method { font-size: 9px; font-weight: 700; color: hsl(var(--primary)); letter-spacing: 0.08em; }
+  .ep-chip.missing { color: hsl(var(--muted-foreground)); background: transparent; box-shadow: inset 0 0 0 1px hsl(var(--border)); }
+  .ep-chip.missing .ep-method { color: hsl(var(--destructive)); }
+
+  .compose-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0 8px; }
+  .compose-grid p { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); line-height: 1.6; margin: 0; }
+  .compose-grid p + p { margin-top: 8px; }
+
+  .wui-table td.score { color: hsl(var(--primary)); font-weight: 600; }
+  .wui-table td.over { color: hsl(var(--warning)); }
+  .wui-table td.under { color: hsl(var(--muted-foreground)); }
+  .wui-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .wui-table th.num { text-align: right; }
+  .wui-table tr.grp td { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: hsl(var(--muted-foreground)); background: hsl(var(--muted)); }
+  .wui-table td b { color: hsl(var(--foreground)); font-weight: 600; display: block; margin-bottom: 4px; }
+  .wui-table td { line-height: 1.55; }
+  .would { color: hsl(var(--muted-foreground)); font-family: var(--font-mono); font-size: 11px; font-weight: 400; margin-left: 4px; }
+
+  .foot-note { padding: 40px 0 0; text-align: center; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); line-height: 1.8; }
+  .foot-note a { color: hsl(var(--primary)); text-decoration: none; }
+
+  @media (max-width: 720px) {
+    .page-hero h1 { font-size: var(--fs-2xl); }
+    .contrib-body, .notation-list, .compose-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- App Header — canonical #comp-app-header -->
+<header class="app-header">
+  <div class="app-header-inner">
+    <div class="app-ident">
+      <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Waldo"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
+      <span class="product">Poppi Brand Health</span>
+    </div>
+    <nav class="app-nav">
+      <a href="index.html">Dashboard</a>
+      <a class="active" href="scoring.html">Scoring methodology</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+<div class="page-hero">
+  <div class="page-eyebrow">Brand health · scoring reference · v2026.05.01</div>
+  <h1>How Reputation, Presence, and Resonance are computed.</h1>
+  <p class="lede">
+    Every contributor below maps a raw signal to a 0–100 component, weighted into a single score. This page documents the exact equations, the /bxcapi endpoints and properties they require, and whether each one exists today.
+  </p>
+  <p class="lede">
+    <b>Status legend.</b> <span class="badge badge-active badge-sm">✓ Available</span> = exists in /bxcapi today · <span class="badge badge-warning badge-sm">⚠ Partial</span> = endpoint exists but a needed property doesn't · <span class="badge badge-destructive badge-sm">✗ Gap</span> = MVP requirement, not in /bxcapi yet · <span class="badge badge-secondary badge-sm">◷ V2</span> = deferred past MVP (no reliable source yet, or signal won't be accurate). In <b>Reputation</b> and <b>Presence</b>, V2 contributors drop from the formula and their weight redistributes proportionally to the remaining contributors. <b>Resonance</b> at v1 is derived directly from Reputation and Presence — see that section.
+  </p>
+
+  <div class="wcard" style="margin-top:24px;">
+    <div class="wcard-head">
+      <span class="wcard-title">Notation used in every equation</span>
+    </div>
+    <ul class="notation-list">
+      <li><code>μ_i</code>, <code>σ_i</code> — brand's trailing-28d mean and stdev of raw signal <code>s_i</code></li>
+      <li><code>Z(s) = clamp((s − μ) / σ, −3, +3)</code></li>
+      <li><code>Norm(s) = 50 + 16.67 · Z(s)</code> — maps to 0–100, 50 = your own median</li>
+      <li><code>Norm⁻(s) = 50 − 16.67 · Z(s)</code> — inverse contributors</li>
+      <li><code>decay_τ(d) = exp(−d / τ)</code> — age decay in days</li>
+      <li><code>Σ w_i = 1</code> — weights sum to 1 per score</li>
+    </ul>
+  </div>
+</div>
+
+<!-- REPUTATION -->
+<div class="sec" id="reputation">
+  <div class="sec-head">
+    <span class="badge badge-active">Reputation · Recovery analog</span>
+    <h2>Reputation — how the world is receiving the brand, with credit for how it's handling what it can.</h2>
+    <p class="sec-def">Two brands with identical sentiment can have different Reputation scores depending on how they respond. A negative spike that's been engaged with, acknowledged, and reframed shouldn't score the same as one that's been left to fester.</p>
+  </div>
+
+  <div class="wcode-block" style="margin-bottom:20px;">
+    <pre class="wcode-block-body">Reputation = clamp(
+  0.35·Norm(NetSentiment)        + 0.20·Norm⁻(ComplaintPressure)
++ 0.10·Norm(NewsTone)             + 0.15·Norm(ResponseRate24h)
++ 0.10·Norm(ClusterEngagement)    + 0.10·Norm(VoiceConsistency),
+  0, 100
+)</pre>
+  </div>
+
+  <div class="contrib-grid" id="rep-contribs"></div>
+</div>
+
+<!-- PRESENCE -->
+<div class="sec" id="presence">
+  <div class="sec-head">
+    <span class="badge badge-active">Presence · Strain analog</span>
+    <h2>Presence — how much of the category conversation the brand is generating, and whether it's quality.</h2>
+    <p class="sec-def">The score the brand has the most control over. Raw share of voice is the trunk, but quality multipliers — cadence fit, freshness, whitespace — prevent the score from rewarding spam.</p>
+  </div>
+
+  <div class="wcode-block" style="margin-bottom:20px;">
+    <pre class="wcode-block-body">Presence = clamp(
+  0.35·Norm(SOV)                + 0.15·Norm(CadenceFit)
++ 0.15·Norm(Freshness)          + 0.10·Norm(ChannelBreadth)
++ 0.10·Norm(WhitespaceHitRate)  + 0.15·Norm⁻(CategoryHeadwind),
+  0, 100
+)</pre>
+  </div>
+
+  <div class="contrib-grid" id="pre-contribs"></div>
+</div>
+
+<!-- RESONANCE -->
+<div class="sec" id="resonance">
+  <div class="sec-head">
+    <span class="badge badge-active">Resonance · Synthesis</span>
+    <h2>Resonance — is the brand's attention productive given its current reputation?</h2>
+    <p class="sec-def">For v1, Resonance is derived directly from Reputation and Presence. The intuition: your attention (Presence) is only as productive as your standing (Reputation) makes it — and the formula penalizes both wasted goodwill and overexposure. Richer contributors (earned-to-owned ratio, founder voice carry, love/pain velocity, search interest) are deferred to V2 — see the V2 section below.</p>
+  </div>
+
+  <div class="wcode-block" style="margin-bottom:20px;">
+    <pre class="wcode-block-body">Base Resonance     = 2·Reputation·Presence / (Reputation + Presence)
+                     (or 0 if both are 0)
+
+Target Presence    = 25 + 0.75·Reputation
+
+Overexposure       = max(0, Presence − Target Presence)
+Underactivation    = max(0, Target Presence − Presence)
+
+Over Penalty Wt    = 0.20 + 0.40·(1 − Reputation/100)
+Under Penalty Wt   = 0.05 + 0.15·(Reputation/100)
+
+Resonance = clamp(
+    Base Resonance
+  − Overexposure   · Over Penalty Wt
+  − Underactivation · Under Penalty Wt,
+  0, 100
+)</pre>
+  </div>
+
+  <div class="compose-grid">
+    <div class="wcard">
+      <div class="wcard-head"><span class="wcard-title">Why a harmonic mean</span></div>
+      <div>
+        <p>The base score uses the harmonic mean of Reputation and Presence — not the arithmetic average. Harmonic means are pulled toward the smaller of the two values, so a brand with one strong dimension and one weak one is graded by the weak one, not the average.</p>
+        <p>Example: <code>Rep = 100, P = 20</code> gives Base = <code>33.3</code>, not <code>60</code>. You have one thing going for you, but it's not being used.</p>
+      </div>
+    </div>
+    <div class="wcard">
+      <div class="wcard-head"><span class="wcard-title">Why a Target Presence curve</span></div>
+      <div>
+        <p>A brand with higher reputation has earned more permission to show up. Target Presence is the proportional share of category attention that fits your standing: <code>25 + 0.75·Reputation</code>.</p>
+        <p>Presence is already category-relative (your share within your competitive set), so the same curve works for a multinational, a regional chain, and a single-location service. No profile picker needed.</p>
+      </div>
+    </div>
+    <div class="wcard">
+      <div class="wcard-head"><span class="wcard-title">Why asymmetric penalties</span></div>
+      <div>
+        <p>The overexposure weight grows as Reputation falls — being loud when you're disliked is the worst sin (<code>0.20 → 0.60</code> as Reputation drops from 100 to 0).</p>
+        <p>The underactivation weight grows as Reputation rises — wasted goodwill is more costly when you have more of it (<code>0.05 → 0.20</code> as Reputation rises from 0 to 100). Quiet rebuilding gets a soft penalty; sitting on a strong brand gets a sharper one.</p>
+      </div>
+    </div>
+    <div class="wcard">
+      <div class="wcard-head"><span class="wcard-title">Why no compliance dial</span></div>
+      <div>
+        <p>I originally proposed a separate <code>compliance_sensitivity</code> for regulated industries (therapy, finance, legal) so they'd be penalized harder for overexposure. Dropped it: regulated brands that overexpose accumulate negative mentions and complaints → Reputation drops → the overexposure weight climbs naturally via the existing formula.</p>
+        <p>The system self-corrects without a separate categorical dial that would have broken at the edges (multi-location services, multinationals).</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-label">Four-quadrant reading</div>
+  <div class="wcard">
+    <div class="table-wrap">
+      <table class="wui-table">
+        <thead>
+          <tr><th></th><th>Low Presence</th><th>High Presence</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:hsl(var(--muted-foreground));text-transform:uppercase;font-size:10px;letter-spacing:0.12em;">High Reputation</td>
+            <td><b>Unused goodwill</b>Your standing is strong but you're not earning attention with it. Push.</td>
+            <td><b>Strong resonance</b>Attention is productive — both dimensions reinforcing.</td>
+          </tr>
+          <tr>
+            <td style="color:hsl(var(--muted-foreground));text-transform:uppercase;font-size:10px;letter-spacing:0.12em;">Low Reputation</td>
+            <td><b>Quiet repair mode</b>Low on both — rebuild before broadcasting. The formula's gentle here.</td>
+            <td><b>Overexposed / risky</b>Loud and disliked — attention is actively hurting. The formula punishes this hardest.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="sub-label">Worked examples</div>
+  <div class="wcard">
+    <div class="table-wrap">
+      <table class="wui-table">
+        <thead>
+          <tr>
+            <th>Scenario</th><th class="num">Rep</th><th class="num">Presence</th><th class="num">Target P</th><th class="num">Base</th><th>Δ vs target</th><th class="num">Penalty</th><th class="num">Resonance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Peak alignment</td><td class="num">100</td><td class="num">100</td><td class="num">100</td><td class="num">100</td><td>0</td><td class="num">0</td><td class="num score">100</td></tr>
+          <tr><td>Well-aligned</td><td class="num">80</td><td class="num">80</td><td class="num">85</td><td class="num">80</td><td class="under">−5 under</td><td class="num">−0.9</td><td class="num score">79</td></tr>
+          <tr><td>Unused goodwill</td><td class="num">90</td><td class="num">60</td><td class="num">92.5</td><td class="num">72</td><td class="under">−32.5 under</td><td class="num">−6.0</td><td class="num score">66</td></tr>
+          <tr><td>Overexposed</td><td class="num">40</td><td class="num">80</td><td class="num">55</td><td class="num">53.3</td><td class="over">+25 over</td><td class="num">−11.0</td><td class="num score">42</td></tr>
+          <tr><td>Quiet repair</td><td class="num">30</td><td class="num">25</td><td class="num">47.5</td><td class="num">27.3</td><td class="under">−22.5 under</td><td class="num">−2.1</td><td class="num score">25</td></tr>
+          <tr><td>Loud + disliked</td><td class="num">20</td><td class="num">80</td><td class="num">40</td><td class="num">32</td><td class="over">+40 over</td><td class="num">−20.8</td><td class="num score">11</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="sub-label">V2 — richer Resonance signals (deferred)</div>
+  <p class="sec-def" style="margin-bottom:18px;">The seven contributors below are what Resonance reads from in a future version, when there are reliable sources for engagement, period-over-period cluster deltas, search-interest data, and a curated <code>/brands/{id}/people</code> endpoint. They're shown here so the design intent is visible — but at v1 they don't move the Resonance score.</p>
+
+  <div class="contrib-grid" id="res-contribs"></div>
+</div>
+
+<!-- TIER C -->
+<div class="sec" id="tier-c">
+  <div class="sec-head">
+    <span class="badge badge-secondary">Tier C · long-tail brands · ◷ V2</span>
+    <h2>Small-brand contributors</h2>
+    <p class="sec-def">For brands under ~50 mentions/month (a local therapist, solo creator, single-location service), the default Reputation contributors will eventually get gated off and these three take their place. <b>Deferred to V2</b> — the underlying review and local-search endpoints don't exist yet. For v1, small brands run on the standard methodology with the universal Resonance formula (which works across brand sizes because Presence is already category-relative).</p>
+  </div>
+
+  <div class="contrib-grid" id="tierc-contribs"></div>
+</div>
+
+<!-- PROPERTIES SUMMARY -->
+<div class="sec" id="properties">
+  <div class="sec-head">
+    <span class="badge badge-secondary">Properties summary</span>
+    <h2>Every property the scoring system reads</h2>
+    <p class="sec-def">One row per property, across all three scores. Rows are ordered by status: MVP gaps first (these block the score from launching), then properties already available in /bxcapi, then V2 (deferred past MVP). Resonance contributor properties and Tier-C augmentations sit in the V2 group at the bottom.</p>
+  </div>
+
+  <div class="wcard">
+    <div class="table-wrap">
+      <table class="wui-table" id="prop-table"></table>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD ENDPOINTS -->
+<div class="sec" id="dashboard-endpoints">
+  <div class="sec-head">
+    <span class="badge badge-secondary">Dashboard endpoints</span>
+    <h2>Every chart and content box on /poppi-health</h2>
+    <p class="sec-def">Beyond the three score rings, the dashboard renders ~30 widgets across seven tabs. This table maps each to the /bxcapi endpoint(s) that would feed it — separate from the scoring methodology, since most of these are presentational reads, not score inputs. Rows are grouped by tab in the order they appear in the UI.</p>
+  </div>
+
+  <div class="wcard">
+    <div class="table-wrap">
+      <table class="wui-table" id="widget-table"></table>
+    </div>
+  </div>
+
+  <div class="foot-note">
+    Reference doc · methodology version <code>2026.05.01</code><br>
+    Related endpoint proposals live in api-gaps.md (source prototype) · <a href="index.html">back to dashboard</a>
+  </div>
+</div>
+
+</div>
+
+<script>
+/* ============================================================
+   CONTENT DATA — verbatim from the source prototype's scoring
+   reference; rendered with DS components.
+   ============================================================ */
+
+const STATUS_BADGE = {
+  ok:      '<span class="badge badge-active badge-sm contrib-status">✓ Available</span>',
+  partial: '<span class="badge badge-warning badge-sm contrib-status">⚠ Partial</span>',
+  gap:     '<span class="badge badge-destructive badge-sm contrib-status">✗ Gap</span>',
+  v2:      '<span class="badge badge-secondary badge-sm contrib-status">◷ V2</span>',
+};
+function typeBadge(t) { return `<span class="badge badge-outline badge-sm">${t}</span>`; }
+function ep(method, path, missing) {
+  return `<span class="ep-chip ${missing ? 'missing' : ''}"><span class="ep-method">${method}</span>${path}</span>`;
+}
+
+const REP_CONTRIBS = [
+  { name: 'NetSentiment', w: 'w = 0.35', type: 'environmental', status: 'ok',
+    raw: 'raw = Σ_m [ sign(m) · decay_7(age_m) ]\n      over mentions m in trailing 14d\nsign = +1 (pos), 0 (neu), −1 (neg), −0.5 (mix)',
+    endpoints: [ep('GET', '/brands/{id}/mentions')],
+    props: ['<code>sentiment</code> per mention (pos / neu / neg / mix)', '<code>posted_at</code> for decay'],
+    note: '<b>V2 enhancement:</b> add <code>reach</code>-weighting once we have a reliable source for it. Without reach, all mentions count equally — viral and obscure alike.' },
+  { name: 'ComplaintPressure', w: 'w = 0.20', type: 'environmental · inverse', status: 'ok',
+    raw: 'raw = Σ_c [ frequency_c · intensity_c · active_c ]\n      across active complaint clusters\nactive = 1 if cluster had ≥1 mention in last 14d',
+    endpoints: [ep('GET', '/brands/{id}/customer-complaints')],
+    props: ['<code>cluster</code>, <code>frequency</code>, <code>intensity</code>, <code>last_mention_at</code>'] },
+  { name: 'NewsTone', w: 'w = 0.10', type: 'environmental', status: 'ok',
+    raw: 'raw = Σ_n [ sign(n) · decay_14(age_n) ]\n      over mentions n where source_type = "news", trailing 30d',
+    endpoints: [ep('GET', '/brands/{id}/mentions')],
+    props: ['<code>source_type</code> filter set to <code>"news"</code>', '<code>sentiment</code> per mention', '<code>posted_at</code> for decay'],
+    note: '<b>Sourcing:</b> brand mentions already include news items via <code>source_type</code>. No separate news endpoint needed. Categories supply the broader news context but aren\'t required for this contributor.' },
+  { name: 'ResponseRate24h', w: 'w = 0.15', type: 'controllable', status: 'gap',
+    raw: 'raw = count(neg mentions with brand_replies within 24h of posted_at)\n      / count(neg mentions)\n      in trailing 14d',
+    endpoints: [ep('GET', '/brands/{id}/mentions')],
+    props: ['<code>brand_replies[]</code> on each mention object — array of <code>{ replied_at, reply_url, channel }</code>'],
+    note: '<b>Highest-priority new field.</b> Without per-mention reply detection there is no way to measure the most important controllable lever for Reputation.' },
+  { name: 'ClusterEngagement', w: 'w = 0.10', type: 'controllable', status: 'partial',
+    raw: 'raw = Σ_c [ frequency_c · 1{any owned post in 14d themed to cluster c} ]\n      across active complaint clusters',
+    endpoints: [ep('GET', '/brands/{id}/customer-complaints'), ep('GET', '/brands/{id}/owned-media/posts')],
+    props: ['From complaints: <code>cluster</code>, <code>frequency</code>', 'From owned posts: <code>themes[]</code> — canonical vocabulary that overlaps with cluster names'],
+    note: '<b>Theme dependency.</b> Owned posts need a stable canonical theme classification that overlaps with complaint cluster names. Same dependency unlocks 4 other contributors.' },
+  { name: 'VoiceConsistency', w: 'w = 0.10', type: 'controllable', status: 'partial',
+    raw: 'raw = mean( cosine(embed(post_i), brand_voice_fingerprint) )\n      over owned posts in trailing 14d',
+    endpoints: [ep('GET', '/brands/{id}/owned-media/analysis')],
+    props: ['<code>voice_similarity</code> per owned post (cosine vs. brand-voice fingerprint)', '<code>voice_fingerprint</code> on brand profile (bootstrapped from sample posts)'],
+    note: '<b>Gap:</b> the endpoint exists but doesn\'t expose per-post similarity. Aggregate "voice consistency = 0.82" is shown in the dashboard but not derived from a returned property.' },
+];
+
+const PRE_CONTRIBS = [
+  { name: 'SOV', w: 'w = 0.35', type: 'mixed', status: 'ok',
+    raw: 'volume(brand) = mentions_28d + 0.5 · owned_posts_28d + 0.7 · ad_impressions_28d\nraw = volume(brand) / Σ_c volume(c)   over competitive set ∪ {brand}',
+    endpoints: [ep('GET', '/brands/compare'), ep('GET', '/brands/{id}/competitive-set'), ep('GET', '/reports/share-of-voice')],
+    props: ['<code>mentions_count</code>, <code>owned_posts_count</code>, <code>ad_impressions</code> per brand in the competitive set', 'Stable <code>competitor_brand_ids[]</code> list'] },
+  { name: 'CadenceFit', w: 'w = 0.15', type: 'controllable', status: 'ok',
+    raw: 'p = posts_per_day across owned channels (trailing 14d)\nt = cadence_target (per-brand or category median)\nraw = min(p/t, 1) · min(t/p, 1)^0.5\n      (peaks at p = t; soft falloff above target)',
+    endpoints: [ep('GET', '/brands/{id}/owned-media/summary'), ep('GET', '/category/{id}/channel-mix')],
+    props: ['<code>posts_per_day</code> per channel from owned-media summary', 'Category-median cadence per channel for the target <code>t</code>'] },
+  { name: 'CreativeFreshness', w: 'w = 0.15', type: 'controllable', status: 'v2', v2: true,
+    raw: 'raw = count(active ads with days_active < fatigue_threshold)\n      / count(active ads)\nfatigue_threshold defaults to 30d',
+    endpoints: [ep('GET', '/brands/{id}/creative-fatigue'), ep('GET', '/brands/{id}/ads/active')],
+    props: ['<code>days_active</code> per ad', '<code>fatigue_flag</code> from <code>/creative-fatigue</code>'],
+    note: '<b>Deferred to V2:</b> we don\'t have a reliable way to measure ad distribution and fatigue accurately at MVP. Drop from the score and re-introduce once ad-library signals are validated.' },
+  { name: 'ChannelBreadth', w: 'w = 0.10', type: 'controllable', status: 'ok',
+    raw: 'raw = count(channels c where posts_in_c_14d ≥ min_cadence_c)\n      / count(target channels)',
+    endpoints: [ep('GET', '/brands/{id}/platforms'), ep('GET', '/brands/{id}/owned-media/posts')],
+    props: ['List of tracked <code>platform</code> handles', '<code>channel</code> + <code>posted_at</code> on each owned post (to count per-channel cadence)'] },
+  { name: 'WhitespaceHitRate', w: 'w = 0.10', type: 'controllable', status: 'v2', v2: true,
+    raw: 'raw = count(owned posts in 14d whose theme ∈ under_indexed_themes)\n      / count(owned posts in 14d)\nunder_indexed_themes from analysis/whitespace with momentum > 1.0',
+    endpoints: [ep('GET', '/analysis/whitespace'), ep('GET', '/brands/{id}/owned-media/posts')],
+    props: ['From whitespace: <code>theme</code>, <code>momentum</code> (canonical vocab)', 'From owned posts: <code>themes[]</code> using the same canonical vocab'],
+    note: '<b>Deferred to V2:</b> two blockers — (1) <code>/analysis/whitespace</code> in /bxcapi is missing its response example, so the returned shape isn\'t fully specified yet, and (2) owned posts need canonical theme tags to compute the intersection. Revisit once both land.' },
+  { name: 'CategoryHeadwind', w: 'w = 0.15', type: 'environmental · inverse', status: 'ok',
+    raw: 'raw = Σ_c Δ7d(SOV_c)   over competitors c (excluding brand)\n      (strong competitor momentum drags this down)',
+    endpoints: [ep('GET', '/brands/{id}/{dataset}/timeseries'), ep('GET', '/brands/compare')],
+    props: ['<code>dataset=mentions</code>, <code>grain=day</code>, 14d window per competitor'] },
+];
+
+const RES_CONTRIBS = [
+  { name: 'EarnedToOwned', w: 'w = 0.25', type: 'mixed', status: 'v2', v2: true,
+    raw: 'raw = mentions_count_7d / max(owned_posts_count_7d, 1)\n      (capped at 95th percentile of category to limit outliers)',
+    endpoints: [ep('GET', '/brands/{id}/mentions/summary'), ep('GET', '/brands/{id}/owned-media/summary')],
+    props: ['<code>total_count</code> or volume from both summaries, scoped to <code>window=7d</code>'] },
+  { name: 'EngagementVsMedian', w: 'w = 0.20', type: 'mixed', status: 'v2', v2: true,
+    raw: 'raw = engagement_rate_brand_28d / engagement_rate_category_median_28d',
+    endpoints: [ep('GET', '/brands/{id}/owned-media/summary'), ep('GET', '/brands/{id}/{dataset}/benchmark')],
+    props: ['<code>engagement_rate</code> on owned summary', '<code>dataset=engagement</code>, <code>median</code> field on benchmark response'],
+    note: '<b>Deferred to V2:</b> engagement numbers won\'t be accurate at MVP — owned posts are scanned only once on first ingestion, so likes/comments/shares are frozen at that snapshot. Pull <code>engagement</code> out of the API and the score until we can re-scan posts over time.' },
+  { name: 'LovePainVelocity', w: 'w = 0.15', type: 'environmental', status: 'v2', v2: true,
+    raw: 'raw = Δ14d(Σ love_cluster_freq) − Δ14d(Σ pain_cluster_freq)',
+    endpoints: [ep('GET', '/brands/{id}/love-letters'), ep('GET', '/brands/{id}/customer-complaints')],
+    props: ['<code>?compare=prev_window</code> param returning prior-period <code>frequency</code> alongside current', 'Or a <code>previous_frequency</code> field on each cluster'],
+    note: '<b>Gap:</b> both endpoints return current-state clusters but no period-over-period delta.' },
+  { name: 'SearchInterestGrowth', w: 'w = 0.15', type: 'environmental', status: 'v2', v2: true,
+    raw: 'raw = Δ14d(search_volume(brand_terms)) / search_volume(brand_terms)_baseline',
+    endpoints: [ep('GAP', '/brands/{id}/search-interest', true)],
+    props: ['<code>search_volume</code> timeseries for <code>brand_terms[]</code> (Google Trends-style index)', '<code>baseline</code> or comparable smoothed reference'],
+    note: '<b>Deferred to V2:</b> no validated data source yet. Google Trends is the obvious option but isn\'t a formal API; alternatives (Semrush, Glimpse) cost money and we haven\'t picked one. Defer until a source is locked in.' },
+  { name: 'AudienceFitHitRate', w: 'w = 0.10', type: 'controllable', status: 'v2', v2: true,
+    raw: 'raw = count(owned posts in 14d themed to growing love clusters)\n      / count(owned posts in 14d)\ngrowing love cluster = love cluster with Δ14d(freq) > 0',
+    endpoints: [ep('GET', '/audiences/{id}/voice-of-customer'), ep('GET', '/brands/{id}/owned-media/posts')],
+    props: ['Love clusters with <code>frequency</code> + <code>previous_frequency</code>', 'Owned posts with <code>themes[]</code> (canonical vocab)'],
+    note: '<b>Theme + delta dependency.</b> Same canonical theme vocab as ClusterEngagement / WhitespaceHitRate; same prev-window delta as LovePainVelocity.' },
+  { name: 'CrossChannelReinforcement', w: 'w = 0.10', type: 'controllable', status: 'v2', v2: true,
+    raw: 'raw = count(themes appearing in ≥3 owned channels within same 7d window)\n      / count(distinct themes posted in 7d)',
+    endpoints: [ep('GET', '/brands/{id}/owned-media/posts')],
+    props: ['<code>themes[]</code> and <code>channel</code> on each owned post'],
+    note: '<b>Theme dependency.</b> All client-side once owned posts are themed.' },
+  { name: 'FounderVoiceCarry', w: 'w = 0.05', type: 'controllable', status: 'v2', v2: true,
+    raw: 'raw = posts_from_(founder + exec + comms) accounts in 14d\n      / posts_from_(brand + founder + exec + comms) accounts in 14d\n      (defaults to 0 if no people are configured for this brand)',
+    endpoints: [ep('GAP', '/brands/{id}/people', true), ep('GET', '/brands/{id}/owned-media/posts')],
+    props: ['From people: <code>role</code> (<code>founder</code> | <code>exec</code> | <code>comms</code>), <code>platform_handles[]</code> linked to this brand', 'From owned posts: <code>handle</code> / <code>account_id</code> attribution so each post can be mapped back to a person or to the brand'],
+    note: '<b>Refactor:</b> originally engagement-weighted, but engagement isn\'t reliable at MVP (see <b>EngagementVsMedian</b>). Switched to a post-count ratio. <b>Needs <code>/brands/{id}/people</code>:</b> a curated management-team endpoint that lists each person with role + handles. The same endpoint replaces the proposed <code>account_role</code> tag on platform entries.' },
+];
+
+const TIERC_CONTRIBS = [
+  { name: 'ReviewSentiment', w: 'w = 0.30 (Reputation, replaces NetSentiment)', type: 'environmental', status: 'v2', v2: true,
+    raw: 'raw = Σ_r [ (rating_r − 3) · log(1 + helpful_votes_r) · decay_60(age_r) ]\n      over reviews on Google / Yelp / vertical platforms, trailing 180d',
+    endpoints: [ep('GAP', '/brands/{id}/reviews/summary', true)],
+    props: ['<code>platform</code> (google_business / yelp / psychology_today / healthgrades / avvo / …)', '<code>rating</code> (1–5), <code>review_text</code>, <code>helpful_votes</code>, <code>posted_at</code>'] },
+  { name: 'ReviewResponseRate', w: 'w = 0.15 (Reputation, replaces ResponseRate24h)', type: 'controllable', status: 'v2', v2: true,
+    raw: 'raw = count(last 50 reviews with a business reply)\n      / 50',
+    endpoints: [ep('GAP', '/brands/{id}/reviews/summary', true)],
+    props: ['<code>business_reply</code> on each review (<code>{ replied_at, text }</code> or <code>null</code>)'] },
+  { name: 'LocalSearchRank', w: 'w = 0.20 (Presence, replaces SOV)', type: 'environmental', status: 'v2', v2: true,
+    raw: 'raw = mean( 1 / rank ) across N target queries for service area\n      e.g. "therapist near me", "anxiety therapist brooklyn", …',
+    endpoints: [ep('GAP', '/brands/{id}/local-search-rank', true)],
+    props: ['<code>queries[]</code> with <code>rank</code> per query, <code>geo</code> filter', 'Likely a partner integration (BrightLocal, Local Falcon, etc.)'] },
+];
+
+function contribCardHtml(c) {
+  return `
+    <div class="wcard contrib ${c.v2 ? 'v2' : ''}">
+      <div class="contrib-head">
+        <span class="contrib-name">${c.name}</span>
+        <span class="contrib-weight">${c.w}</span>
+        ${typeBadge(c.type)}
+        ${STATUS_BADGE[c.status]}
+      </div>
+      <div class="wcode-block"><pre class="wcode-block-body">${c.raw}</pre></div>
+      <div class="contrib-body">
+        <div>
+          <div class="contrib-col-label">Endpoint(s)</div>
+          <div class="endpoint-list">${c.endpoints.join('')}</div>
+        </div>
+        <div>
+          <div class="contrib-col-label">Required properties</div>
+          <div class="prop-list">${c.props.map(p => `<div>${p}</div>`).join('')}</div>
+        </div>
+      </div>
+      ${c.note ? `<div class="status-note">${c.note}</div>` : ''}
+    </div>
+  `;
+}
+
+/* Properties summary rows */
+const PROP_ROWS = [
+  { grp: 'MVP gaps — blocks the score until built' },
+  { prop: '<code>themes[]</code> (canonical) on owned posts', endpoint: '<code>/brands/{id}/owned-media/posts</code>', uses: '1', by: 'ClusterEngagement', desc: 'Stable canonical theme vocabulary that overlaps with complaint clusters. (V2 contributors AudienceFitHitRate and CrossChannelReinforcement read the same vocab when they come online.)', status: 'gap' },
+  { prop: '<code>brand_replies[]</code> on each mention', endpoint: '<code>/brands/{id}/mentions</code>', uses: '1', by: 'ResponseRate24h', desc: 'Array of <code>{ replied_at, reply_url, channel }</code> per mention. Single highest-priority Reputation lever.', status: 'gap' },
+  { prop: '<code>voice_similarity</code> per owned post', endpoint: '<code>/brands/{id}/owned-media/analysis</code>', uses: '1', by: 'VoiceConsistency', desc: 'Per-post cosine similarity to a brand-voice fingerprint, plus the fingerprint itself on the brand profile.', status: 'gap' },
+  { prop: '<code>GET /brands/{id}/health</code> composite', endpoint: '<code>/brands/{id}/health</code> (new)', uses: '—', by: '(dashboard composite)', desc: 'Single read returning all three scores + <code>contributors[]</code> with weights, deltas, and <code>methodology_version</code>. Spec\'d in api-gaps.md §1.', status: 'gap' },
+  { grp: 'Available in /bxcapi today' },
+  { prop: '<code>posted_at</code> on each mention', endpoint: '<code>/brands/{id}/mentions</code>', uses: '3', by: 'NetSentiment, NewsTone, ResponseRate24h', desc: 'Timestamp used for age-decay weighting.', status: 'ok' },
+  { prop: '<code>sentiment</code> on each mention', endpoint: '<code>/brands/{id}/mentions</code>', uses: '2', by: 'NetSentiment, NewsTone', desc: 'Per-mention sentiment classification (pos / neu / neg / mix).', status: 'ok' },
+  { prop: '<code>source_type</code> on each mention', endpoint: '<code>/brands/{id}/mentions</code>', uses: '1', by: 'NewsTone', desc: 'Filter to <code>source_type = "news"</code> to isolate press mentions from social.', status: 'ok' },
+  { prop: '<code>cluster</code> &amp; <code>frequency</code> on complaint / love clusters', endpoint: '<code>/brands/{id}/customer-complaints</code> · <code>/brands/{id}/love-letters</code>', uses: '2', by: 'ComplaintPressure, ClusterEngagement', desc: 'Cluster label + current-window frequency.', status: 'ok' },
+  { prop: '<code>intensity</code> &amp; <code>last_mention_at</code> on complaint clusters', endpoint: '<code>/brands/{id}/customer-complaints</code>', uses: '1', by: 'ComplaintPressure', desc: 'Intensity 0–1 for severity weighting; <code>last_mention_at</code> for active-cluster gating.', status: 'ok' },
+  { prop: '<code>posted_at</code> &amp; <code>channel</code> on owned posts', endpoint: '<code>/brands/{id}/owned-media/posts</code>', uses: '2', by: 'CadenceFit, ChannelBreadth', desc: 'Per-post timestamp and platform attribution.', status: 'ok' },
+  { prop: '<code>posts_count</code> / <code>posts_per_day</code> aggregations', endpoint: '<code>/brands/{id}/owned-media/summary</code>', uses: '1', by: 'CadenceFit', desc: 'Pre-aggregated post volume and daily rate per channel.', status: 'ok' },
+  { prop: 'Per-competitor volume (<code>mentions_count</code>, <code>owned_posts_count</code>)', endpoint: '<code>/brands/compare</code> · <code>/brands/{id}/{dataset}/timeseries</code>', uses: '2', by: 'SOV, CategoryHeadwind', desc: 'Volume metrics per brand in the competitive set; 7d delta drives headwind.', status: 'ok' },
+  { prop: '<code>competitor_brand_ids[]</code>', endpoint: '<code>/brands/{id}/competitive-set</code>', uses: '1', by: 'SOV, CategoryHeadwind', desc: 'Stable competitive-set membership.', status: 'ok' },
+  { prop: 'Tracked platform list per brand', endpoint: '<code>/brands/{id}/platforms</code>', uses: '1', by: 'ChannelBreadth', desc: 'Which channels count toward breadth.', status: 'ok' },
+  { prop: 'Category-median cadence per channel', endpoint: '<code>/category/{id}/channel-mix</code>', uses: '1', by: 'CadenceFit', desc: 'The <code>t</code> target in the cadence formula.', status: 'ok' },
+  { grp: 'Deferred to V2 — not in the MVP score' },
+  { prop: '<code>reach</code> on each mention', endpoint: '<code>/brands/{id}/mentions</code>', uses: '0 <span class="would">(would be 3)</span>', by: 'NetSentiment, NewsTone, ResponseRate24h', desc: 'Reach-weighting for sentiment and response rules. Removed from MVP — no reliable source for accurate reach yet.', status: 'v2' },
+  { prop: '<code>engagement</code> / <code>engagement_rate</code> on owned posts', endpoint: '<code>/brands/{id}/owned-media/posts</code> · <code>/brands/{id}/owned-media/summary</code>', uses: '0 <span class="would">(would be 2)</span>', by: 'EngagementVsMedian, FounderVoiceCarry (original)', desc: 'Posts are scanned once on first ingestion, so likes / comments / shares are frozen at that snapshot. Pull from API and score until we can re-scan over time.', status: 'v2' },
+  { prop: '<code>days_active</code> &amp; <code>fatigue_flag</code> on ads', endpoint: '<code>/brands/{id}/ads/active</code> · <code>/brands/{id}/creative-fatigue</code>', uses: '0 <span class="would">(would be 1)</span>', by: 'CreativeFreshness', desc: 'Ad distribution and fatigue can\'t be measured accurately at MVP. Reintroduce once ad-library signals are validated.', status: 'v2' },
+  { prop: 'Whitespace themes + <code>momentum</code>', endpoint: '<code>/analysis/whitespace</code>', uses: '0 <span class="would">(would be 1)</span>', by: 'WhitespaceHitRate', desc: 'Endpoint exists but the response example is missing in /bxcapi — and owned posts need canonical themes to compute the intersection. Both required before this is usable.', status: 'v2' },
+  { prop: 'Brand-term search timeseries', endpoint: '<code>/brands/{id}/search-interest</code> (new)', uses: '0 <span class="would">(would be 1)</span>', by: 'SearchInterestGrowth', desc: 'No validated data source yet (Google Trends has no formal API; paid alternatives unpicked). Defer.', status: 'v2' },
+  { prop: '<code>previous_frequency</code> on clusters (or <code>?compare=prev_window</code>)', endpoint: '<code>/brands/{id}/customer-complaints</code> · <code>/brands/{id}/love-letters</code>', uses: '0 <span class="would">(would be 2)</span>', by: 'LovePainVelocity, AudienceFitHitRate', desc: 'Prior-window cluster frequency for period-over-period delta. Only used by V2 Resonance contributors — not in the v1 score.', status: 'v2' },
+  { prop: '<code>handle</code> / <code>account_id</code> attribution on each post', endpoint: '<code>/brands/{id}/owned-media/posts</code>', uses: '0 <span class="would">(would be 1)</span>', by: 'FounderVoiceCarry', desc: 'Which configured account published each post — needed to partition founder/exec posts from brand. Only used by V2 Resonance.', status: 'v2' },
+  { prop: 'Management team with roles &amp; handles', endpoint: '<code>/brands/{id}/people</code> (new)', uses: '0 <span class="would">(would be 1)</span>', by: 'FounderVoiceCarry', desc: 'Curated list of people associated with the brand with <code>role</code> and <code>platform_handles[]</code>. Only used by V2 Resonance.', status: 'v2' },
+  { prop: 'Tier C review &amp; local-search endpoints', endpoint: '<code>/brands/{id}/reviews/summary</code> · <code>/brands/{id}/local-search-rank</code> (new)', uses: '0 <span class="would">(would be 3)</span>', by: 'ReviewSentiment, ReviewResponseRate, LocalSearchRank', desc: 'Long-tail Reputation/Presence augmentations for brands with too few mentions to score well on social signals alone. Likely a partner integration (BrightLocal, Local Falcon, etc.). Deferred.', status: 'v2' },
+];
+
+/* Dashboard widget → endpoint rows */
+const WIDGET_ROWS = [
+  { grp: 'Hero — always visible across tabs' },
+  { w: 'Three score rings (Reputation / Resonance / Presence)', e: '<code>/brands/{id}/health</code> (new)', d: 'Composite of all three scores with <code>contributors[]</code> and deltas. The scoring methodology above describes how the rings are computed.', status: 'gap' },
+  { w: 'Mentions L30d sparkline tile', e: '<code>/brands/{id}/{dataset}/timeseries?dataset=mentions</code>', d: 'Daily mention-volume series feeding the pulse-strip sparkline.', status: 'ok' },
+  { w: 'Sentiment L30d sparkline tile', e: '<code>/brands/{id}/{dataset}/timeseries?dataset=sentiment</code>', d: 'Daily net-sentiment series feeding the pulse-strip sparkline.', status: 'ok' },
+  { w: 'Active creatives L30d sparkline tile', e: '<code>/brands/{id}/{dataset}/timeseries?dataset=paid-media</code>', d: 'Daily active-ad count series for the pulse-strip sparkline.', status: 'partial' },
+  { w: '90-day scrubber timeseries (base)', e: '<code>/brands/{id}/{dataset}/timeseries</code>', d: 'Daily series across mentions, sentiment, SOV — the scrubber lets the dashboard replay history.', status: 'ok' },
+  { w: '90-day scrubber event annotations', e: '<code>/brands/{id}/launches</code> (new)', d: 'Detected and curated launch events (Doc Pop, BÉIS collab, Walmart rollout) that mark the timeline.', status: 'gap' },
+  { w: '"Today\'s note" pulse line', e: '<code>/brands/{id}/health.pulse_note</code> (new)', d: 'One-line natural-language summary of the day\'s signals. Currently synthesized client-side.', status: 'gap' },
+  { grp: 'Resonance tab (default synthesis view)' },
+  { w: 'Recent mentions snapshot (3 of N)', e: '<code>/brands/{id}/mentions?limit=3</code>', d: 'Top mentions with platform, author, sentiment, text. Sort by recency or reach.', status: 'partial' },
+  { w: 'Audience themes pills', e: '<code>/brands/{id}/mentions/analysis</code>', d: 'Top discussion themes by volume, colored by sentiment.', status: 'ok' },
+  { w: 'Suggestions (top 3 coach cards)', e: '<code>/brands/{id}/recommendations?limit=3</code> (new)', d: 'Coach rollup preview shown on the synthesis view; full list lives in the Coach tab.', status: 'gap' },
+  { grp: 'Reputation tab' },
+  { w: 'Sentiment by platform stacked bars', e: '<code>/brands/{id}/mentions/summary</code>', d: 'pos / neu / neg / mix percentages per platform with volume.', status: 'ok' },
+  { w: 'Spike Detected callout', e: '<code>/brands/{id}/mentions/analysis</code>', d: 'Auto-detected mention-volume spike with the causal one-liner.', status: 'ok' },
+  { w: 'Top discussion themes pills', e: '<code>/brands/{id}/mentions/analysis</code>', d: 'Frequency × sentiment per theme.', status: 'ok' },
+  { w: 'Recent high-reach mentions list', e: '<code>/brands/{id}/mentions</code>', d: 'Mention feed sorted by reach. Reach itself is V2 in the score; widget can fall back to recency-sorted for v1.', status: 'partial' },
+  { w: 'Engagement rate on owned content', e: '<code>/posts/{id}</code> (per-post live fetch)', d: 'Aggregate engagement was removed from the API (frozen-snapshot accuracy issue). For an aggregate card we\'d need a live-engagement re-scan layer or accept stale data.', status: 'gap' },
+  { w: 'Post-launch pulse card (mini-cans · 72h)', e: '<code>/brands/{id}/post-launch-pulse</code>', d: '72-hour mention reaction + sentiment for a named launch.', status: 'ok' },
+  { w: 'Sentiment percentile vs category', e: '<code>/brands/{id}/{dataset}/benchmark?dataset=mentions</code>', d: '"P84 · top quartile" — percentile of net sentiment within the competitive set.', status: 'ok' },
+  { w: 'Reputation risk — complaint clusters', e: '<code>/brands/{id}/customer-complaints</code>', d: 'Cluster list with frequency, intensity, type, examples.', status: 'ok' },
+  { w: 'Audience voice — loves &amp; pains (VoC)', e: '<code>/audiences/{id}/voice-of-customer</code>', d: 'Top love and pain clusters with verbatim quotes. Brand-scoped variant is api-gaps.md §7.', status: 'partial' },
+  { w: 'Reputation percentile multi-metric bars', e: '<code>/brands/{id}/{dataset}/benchmark</code>', d: 'Per-metric percentile vs category (sentiment, volume, engagement, audience fit) with median + leader markers.', status: 'ok' },
+  { grp: 'Presence tab' },
+  { w: 'Presence % over 90 days area chart', e: '<code>/brands/{id}/{dataset}/timeseries?dataset=mentions</code> per competitor', d: 'One line per brand showing share of the category set over time.', status: 'ok' },
+  { w: 'Top owned posts grid (@drinkpoppi)', e: '<code>/brands/{id}/owned-media/posts</code>', d: 'Recent owned posts with thumbnails. Sorting by engagement requires live <code>/posts/{id}</code> fetches.', status: 'partial' },
+  { w: 'Theme mix · owned content donut', e: '<code>/brands/{id}/owned-media/summary</code>', d: 'Share of owned posts by canonical theme (top_themes block).', status: 'ok' },
+  { w: 'Voice consistency single-number card', e: '<code>/brands/{id}/owned-media/analysis</code>', d: 'Reads <code>voice_consistency_score</code> directly. Same field powers the Reputation contributor.', status: 'ok' },
+  { w: '"Where Poppi punches above weight" channel donut', e: '<code>/brands/{id}/owned-media/summary</code> · <code>/category/{id}/channel-mix</code>', d: 'Brand share per channel vs. category-average share.', status: 'ok' },
+  { w: 'Spend signal daily chart', e: '<code>/brands/{id}/spend-signal</code>', d: 'Directional ad-spend index over time per brand + category median.', status: 'ok' },
+  { w: 'Active creatives count + flagged-for-fatigue', e: '<code>/brands/{id}/ads/active</code> · <code>/brands/{id}/creative-fatigue</code>', d: 'Count of currently-active ads, 7-day average, new today, fatigue flags. (CreativeFreshness in the score is V2, but the display card works on the existing endpoints.)', status: 'ok' },
+  { w: 'Promo watch card', e: '<code>/brands/{id}/promo-watch</code>', d: '% of competitive set running promos, with month-over-month delta.', status: 'ok' },
+  { w: 'Posting cadence per platform', e: '<code>/brands/{id}/owned-media/summary</code>', d: 'Posts/day per channel and share of total posts. Reads <code>by_platform.avg_posts_per_day</code>.', status: 'ok' },
+  { w: 'Currently-active Poppi ads grid', e: '<code>/brands/{id}/ads/active</code>', d: 'Real ads from Meta Ad Library with hook + angle + platform + days active.', status: 'ok' },
+  { w: 'Side-by-side last 30d comparison table', e: '<code>/brands/compare</code>', d: 'Per-brand rows of mentions, sentiment, posts, engagement, ads, SOV.', status: 'ok' },
+  { w: '"Where Poppi over-indexes" themes', e: '<code>/brands/{id}/owned-media/analysis</code> + <code>/analysis/whitespace</code>', d: 'Themes the brand owns disproportionately vs the category. Inverse of whitespace.', status: 'partial' },
+  { w: '"Where Poppi under-indexes" themes', e: '<code>/analysis/whitespace</code>', d: 'Themes with high momentum but low brand coverage.', status: 'ok' },
+  { w: 'Switch-from clusters', e: '<code>/audiences/{id}/voice-of-customer</code>', d: 'Why people moved off competitors (Diet Coke, Kombucha, etc.) with frequencies. Currently embedded in VoC; could become a dedicated <code>/brands/{id}/switch-from</code>.', status: 'partial' },
+  { grp: 'Tracker tab' },
+  { w: 'User-tracked URLs + search-term feeds', e: '<code>/search</code> · <code>/discover/posts</code>', d: 'Each tracker hits search or discovery to pull fresh matches. Tracker list itself is client-side state.', status: 'ok' },
+  { grp: 'Coach tab' },
+  { w: 'Coach recommendations list (full)', e: '<code>/brands/{id}/recommendations</code> (new)', d: 'Ranked actions with <code>expected_impact: { ring, delta }</code>, evidence references, source endpoints. Spec\'d in api-gaps.md §2.', status: 'gap' },
+  { grp: 'News tab' },
+  { w: 'Recent news list (title, source, snippet, link)', e: '<code>/brands/{id}/mentions?source_type=news</code>', d: 'Brand-relevant news items filtered from the mentions stream. Endpoint exists; news-shaped fields (title vs. text, domain authority) may need verification.', status: 'partial' },
+  { grp: 'Trending tab' },
+  { w: 'Trending hashtags / X trends / Google search terms', e: '<code>/categories/{id}/trends</code> · <code>/discover/trends</code>', d: 'Where the category is heating up — TikTok hashtags, X trends, Google search terms.', status: 'ok' },
+];
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('rep-contribs').innerHTML = REP_CONTRIBS.map(contribCardHtml).join('');
+  document.getElementById('pre-contribs').innerHTML = PRE_CONTRIBS.map(contribCardHtml).join('');
+  document.getElementById('res-contribs').innerHTML = RES_CONTRIBS.map(contribCardHtml).join('');
+  document.getElementById('tierc-contribs').innerHTML = TIERC_CONTRIBS.map(contribCardHtml).join('');
+
+  document.getElementById('prop-table').innerHTML = `
+    <thead><tr>
+      <th>Property</th><th>Endpoint</th><th class="num">Uses</th><th>Used by</th><th>Description</th><th>Status</th>
+    </tr></thead>
+    <tbody>
+      ${PROP_ROWS.map(r => r.grp
+        ? `<tr class="grp"><td colspan="6">${r.grp}</td></tr>`
+        : `<tr>
+            <td>${r.prop}</td>
+            <td>${r.endpoint}</td>
+            <td class="num">${r.uses}</td>
+            <td>${r.by}</td>
+            <td>${r.desc}</td>
+            <td>${STATUS_BADGE[r.status]}</td>
+          </tr>`).join('')}
+    </tbody>
+  `;
+
+  document.getElementById('widget-table').innerHTML = `
+    <thead><tr>
+      <th>Widget</th><th>Endpoint(s)</th><th>What it shows</th><th>Status</th>
+    </tr></thead>
+    <tbody>
+      ${WIDGET_ROWS.map(r => r.grp
+        ? `<tr class="grp"><td colspan="4">${r.grp}</td></tr>`
+        : `<tr>
+            <td>${r.w}</td>
+            <td>${r.e}</td>
+            <td>${r.d}</td>
+            <td>${STATUS_BADGE[r.status]}</td>
+          </tr>`).join('')}
+    </tbody>
+  `;
+});
+</script>
+</body>
+</html>

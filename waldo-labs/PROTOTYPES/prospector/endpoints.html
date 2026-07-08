@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prospector — API coverage</title>
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  /* ── Required DS conflict overrides (doctrine — verbatim) ── */
+  /* waldo-ds.css sets html,body{height:100%;overflow:hidden} — breaks scroll.
+     Scroll override goes on html ONLY: any overflow other than visible on body
+     silently kills position:sticky (the sticky topbar scrolls away). */
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  /* waldo-ds.css sets body{display:flex!important} — collapses card widths */
+  body { display: block !important; }
+  /* waldo-ds.css sets svg{display:block} — collapses ring/icon SVGs inside flex containers */
+  svg { flex: none; min-height: fit-content; }
+
+  /* ── Page ── */
+  .pr-wrap { max-width: 1184px; margin: 0 auto; padding: 0 24px 80px; }
+  .pr-hero { padding: 44px 0 8px; }
+  .pr-eyebrow { font-size: var(--fs-xs); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: hsl(var(--muted-foreground)); margin-bottom: 12px; }
+  .pr-h1 { font-size: var(--fs-5xl); font-weight: 600; letter-spacing: -0.04em; line-height: 1.15; color: hsl(var(--foreground)); margin: 0 0 14px; }
+  .pr-h1 .hl { color: hsl(var(--highlight)); }
+  .pr-lede { font-size: var(--fs-base); color: color-mix(in srgb, hsl(var(--foreground)) 68%, transparent); max-width: 820px; line-height: 1.62; margin: 0; }
+  .pr-lede b { color: hsl(var(--foreground)); font-weight: 600; }
+  .pr-lede a { color: hsl(var(--primary)); text-decoration: none; }
+  .pr-lede a:hover { opacity: 0.8; }
+
+  /* summary — DS KPI Stat Card, 3-up */
+  .pr-sum { margin-top: 28px; grid-template-columns: repeat(3, 1fr); }
+  /* the theme ships no --fs-4xl (used by .k-value) — snap to the nearest existing
+     DS type token; theme gap reported to VALIDATOR, do not redeclare tokens here */
+  .pr-sum .k-value { font-size: var(--fs-5xl); }
+  .pr-sum .k-value.v-ok { color: hsl(var(--primary)); }
+  .pr-sum .k-value.v-partial { color: hsl(var(--warning)); }
+  .pr-sum .k-value.v-gap { color: hsl(var(--highlight)); }
+
+  /* sections — spacing + muted labels, no divider lines (borderless shell) */
+  .pr-section { padding: 40px 0 0; }
+  .pr-sec-head { margin-bottom: 20px; }
+  .pr-sec-title { font-size: var(--fs-2xl); font-weight: 600; letter-spacing: -0.04em; color: hsl(var(--foreground)); }
+  .pr-sec-def { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); margin-top: 8px; max-width: 820px; line-height: 1.55; }
+
+  /* inline code — mono is sanctioned for endpoint paths / token names */
+  .pr-code { font-family: var(--font-mono); font-size: var(--fs-xs); background: hsl(var(--muted)); padding: 1px 6px; border-radius: var(--radius-sm); color: hsl(var(--primary)); overflow-wrap: anywhere; word-break: break-word; }
+  .pr-new { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+
+  /* endpoint table — DS wui-table on a card surface */
+  .pr-table-card { background: hsl(var(--card)); border-radius: 16px; padding: 10px 14px; overflow-x: auto; }
+  .pr-table-card table.wui-table { min-width: 860px; table-layout: fixed; }
+  .pr-table-card col.c-field { width: 18%; }
+  .pr-table-card col.c-endpoint { width: 24%; }
+  .pr-table-card col.c-powers { width: 15%; }
+  .pr-table-card col.c-notes { width: 30%; }
+  .pr-table-card col.c-status { width: 13%; }
+  .pr-table-card td { color: hsl(var(--muted-foreground)); line-height: 1.55; overflow-wrap: anywhere; vertical-align: top; font-size: var(--fs-xs); }
+  .pr-table-card td:first-child { color: hsl(var(--foreground)); font-weight: 500; }
+  .pr-table-card tr.pr-grp td { font-size: var(--fs-xs); font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: color-mix(in srgb, hsl(var(--foreground)) 45%, transparent); padding-top: 16px; }
+  .pr-powers { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+
+  /* proposed-addition cards */
+  .pr-gaps { display: flex; flex-direction: column; gap: 16px; }
+  .pr-gap-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .pr-gap-method { font-family: var(--font-mono); font-size: var(--fs-sm); font-weight: 500; color: hsl(var(--foreground)); }
+  .pr-gap-method .verb { color: hsl(var(--primary)); }
+  .pr-gap-head .badge { margin-left: auto; }
+  .pr-gap-desc { font-size: var(--fs-sm); color: color-mix(in srgb, hsl(var(--foreground)) 68%, transparent); line-height: 1.62; margin: 0; }
+  .pr-gap-desc b { color: hsl(var(--foreground)); font-weight: 600; }
+  .pr-powers-line { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin: 0; }
+  .pr-powers-line b { color: color-mix(in srgb, hsl(var(--foreground)) 68%, transparent); font-weight: 500; }
+
+  /* JSON coloring inside the DS code block — tokens only */
+  .wcode-block-body .j-key { color: hsl(var(--primary)); }
+  .wcode-block-body .j-cm { color: color-mix(in srgb, hsl(var(--foreground)) 40%, transparent); }
+
+  .pr-footer-note { margin-top: 44px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .pr-footer-note a { color: color-mix(in srgb, hsl(var(--foreground)) 68%, transparent); text-decoration: none; }
+  .pr-footer-note a:hover { color: hsl(var(--foreground)); }
+
+  @media (max-width: 760px) {
+    .pr-sum { grid-template-columns: 1fr; }
+    .pr-h1 { font-size: var(--fs-2xl); }
+  }
+</style>
+</head>
+<body>
+
+<!-- App Header — identity + text navigation -->
+<header class="app-header">
+  <div class="app-header-inner">
+    <div class="app-ident">
+      <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Waldo"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
+      <span class="product">Prospector</span>
+    </div>
+    <nav class="app-nav">
+      <a href="index.html">App</a>
+      <a class="active" href="endpoints.html">API coverage</a>
+    </nav>
+  </div>
+</header>
+
+<div class="pr-wrap">
+  <div class="pr-hero">
+    <div class="pr-eyebrow">What Prospector needs from the Brand Intelligence API</div>
+    <h1 class="pr-h1">Every endpoint Prospector reads — and where the <span class="hl">gaps</span> are</h1>
+    <p class="pr-lede">Prospector turns an agency's <b>past client roster</b> into a weekly feed of look-alike brands that have an <b>opening right now</b>. Most of the raw material already exists in the Brand Intelligence API — brand &amp; audience profiles, company contacts, hiring signals, category news, alerts, and pitch-pack generation. What's missing is the connective tissue: a way to <b>ingest an agency profile</b>, a <b>multi-seed look-alike</b> ranking that blends a whole client list, and a <b>classified "opening" object</b> so "why now" stops being stitched together client-side. The CRM-sync and LinkedIn-mutuals pieces sit outside the read API as connectors.</p>
+    <div class="kpi-grid pr-sum">
+      <div class="kpi"><div class="k-value v-ok">14</div><div class="k-sub">endpoints usable today</div></div>
+      <div class="kpi"><div class="k-value v-partial">4</div><div class="k-sub">partial — exists, but unstructured</div></div>
+      <div class="kpi"><div class="k-value v-gap">7</div><div class="k-sub">proposed additions</div></div>
+    </div>
+  </div>
+
+  <!-- ════ TABLE 1 ════ -->
+  <div class="pr-section">
+    <div class="pr-sec-head">
+      <h2 class="pr-sec-title">Every endpoint Prospector reads</h2>
+      <p class="pr-sec-def">One row per field or capability the prototype consumes, ordered gaps → partial → available. "Partial" means the data exists but is unstructured for this use, or requires per-brand fan-out / diffing over time.</p>
+    </div>
+
+    <div class="pr-table-card">
+      <table class="wui-table">
+        <colgroup><col class="c-field"><col class="c-endpoint"><col class="c-powers"><col class="c-notes"><col class="c-status"></colgroup>
+        <thead><tr><th>Field / capability</th><th>Endpoint</th><th>Powers</th><th>Notes</th><th>Status</th></tr></thead>
+        <tbody>
+
+          <tr class="pr-grp"><td colspan="5">Gaps — block the product until built (detailed below)</td></tr>
+          <tr>
+            <td>Agency profile ingest</td>
+            <td><code class="pr-code">POST /agencies</code> <span class="pr-new">(new)</span></td>
+            <td class="pr-powers">Onboarding · fingerprint</td>
+            <td>Website + uploaded client list → derived audience/category fingerprint. Onboarding has nowhere to land today.</td>
+            <td><span class="badge badge-highlight">✗ Gap</span></td>
+          </tr>
+          <tr>
+            <td>Multi-seed look-alikes</td>
+            <td><code class="pr-code">POST /discover/lookalike-brands</code> <span class="pr-new">(new)</span></td>
+            <td class="pr-powers">The weekly 5 · match score</td>
+            <td>Blend a set of seed brands into one ranked, scored, de-conflicted look-alike list. The keystone — see below.</td>
+            <td><span class="badge badge-highlight">✗ Gap</span></td>
+          </tr>
+          <tr>
+            <td>Classified "opening" signal</td>
+            <td><code class="pr-code">GET /brands/{id}/openings</code> <span class="pr-new">(new)</span></td>
+            <td class="pr-powers">"Why now" box · badges</td>
+            <td>One typed object per opening (new CMO, funding, acquisition, agency review, category surge, campaign lull) with source + date.</td>
+            <td><span class="badge badge-highlight">✗ Gap</span></td>
+          </tr>
+          <tr>
+            <td>Prospect-scoped events</td>
+            <td><code class="pr-code">POST /alerts</code> <span class="pr-new">(+events)</span></td>
+            <td class="pr-powers">Watchlist feed</td>
+            <td><code class="pr-code">brand.leadership_change</code>, <code class="pr-code">brand.funding</code>, <code class="pr-code">brand.agency_review</code>, <code class="pr-code">prospect.new_opening</code>.</td>
+            <td><span class="badge badge-highlight">✗ Gap</span></td>
+          </tr>
+          <tr>
+            <td>Weekly prospect digest</td>
+            <td><code class="pr-code">POST /digests/prospect-brief</code> <span class="pr-new">(new)</span></td>
+            <td class="pr-powers">"This Week" cadence</td>
+            <td>Scheduled batch of N look-alikes with openings. Mirrors existing <code class="pr-code">/digests/monday-brief</code>.</td>
+            <td><span class="badge badge-highlight">✗ Gap</span></td>
+          </tr>
+          <tr>
+            <td>LinkedIn mutuals</td>
+            <td><code class="pr-code">GET /contacts/{id}/mutuals</code> <span class="pr-new">(connector)</span></td>
+            <td class="pr-powers">Warm-intro paths</td>
+            <td>Needs the user's own OAuth relationship graph — outside the read API. See connector note below.</td>
+            <td><span class="badge badge-highlight">✗ Gap</span></td>
+          </tr>
+          <tr>
+            <td>HubSpot CRM sync</td>
+            <td><code class="pr-code">POST /integrations/hubspot/sync</code> <span class="pr-new">(connector)</span></td>
+            <td class="pr-powers">Pipeline ↔ CRM</td>
+            <td>Outbound write to a customer's CRM — a connector/webhook, not a read endpoint. See note below.</td>
+            <td><span class="badge badge-highlight">✗ Gap</span></td>
+          </tr>
+
+          <tr class="pr-grp"><td colspan="5">Partial — data exists, but unstructured for this use</td></tr>
+          <tr>
+            <td>Brand → audience linkage</td>
+            <td><code class="pr-code">/audiences</code> + <code class="pr-code">/brands/{id}</code></td>
+            <td class="pr-powers">Fingerprint derivation</td>
+            <td>Audiences are their own index; resolving "which audiences does this client brand serve" to build a blended agency fingerprint isn't a single call.</td>
+            <td><span class="badge badge-warning">⚠ Partial</span></td>
+          </tr>
+          <tr>
+            <td>Leadership change (new CMO)</td>
+            <td><code class="pr-code">/companies/{id}/people</code></td>
+            <td class="pr-powers">"New CMO" opening</td>
+            <td>Returns current people, not a "new since {date}" event. Detecting a change means diffing snapshots client-side.</td>
+            <td><span class="badge badge-warning">⚠ Partial</span></td>
+          </tr>
+          <tr>
+            <td>Category "why-now"</td>
+            <td><code class="pr-code">/categories/{id}/news</code></td>
+            <td class="pr-powers">"Category surge" opening</td>
+            <td>News &amp; trends exist, but nothing classifies an item as an actionable opportunity for a specific brand.</td>
+            <td><span class="badge badge-warning">⚠ Partial</span></td>
+          </tr>
+          <tr>
+            <td>Incumbent / promo context</td>
+            <td><code class="pr-code">/brands/{id}/promo-watch</code></td>
+            <td class="pr-powers">Brief context</td>
+            <td>Useful competitive context for a brief, but not prospect-aware (no "is this brand between agencies" read).</td>
+            <td><span class="badge badge-warning">⚠ Partial</span></td>
+          </tr>
+
+          <tr class="pr-grp"><td colspan="5">Available today — used as-is</td></tr>
+          <tr>
+            <td>Brand search &amp; resolve</td>
+            <td><code class="pr-code">/brands/search</code></td>
+            <td class="pr-powers">Resolve clients &amp; prospects</td>
+            <td>Name/domain search → brand id. Used to resolve the uploaded client roster and every prospect.</td>
+            <td><span class="badge badge-active">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Brand profile</td>
+            <td><code class="pr-code">/brands/{id}/overview</code>, <code class="pr-code">/platforms</code></td>
+            <td class="pr-powers">Prospect detail header</td>
+            <td>Category, domain, platform presence — the prospect card + detail header.</td>
+            <td><span class="badge badge-active">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Single-audience look-alike</td>
+            <td><code class="pr-code">/audiences/{id}/brands</code></td>
+            <td class="pr-powers">Look-alike primitive</td>
+            <td>Brands sharing one audience — the closest existing primitive to our matcher, but single-seed and unscored (see keystone).</td>
+            <td><span class="badge badge-active">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Audience insights</td>
+            <td><code class="pr-code">/audiences/{id}/insights</code></td>
+            <td class="pr-powers">Audience-overlap bars</td>
+            <td>Demos/affinities behind the "why related" overlap chart.</td>
+            <td><span class="badge badge-active">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Category news &amp; trends</td>
+            <td><code class="pr-code">/categories/{id}/news</code>, <code class="pr-code">/trends</code>, <code class="pr-code">/landscape</code></td>
+            <td class="pr-powers">Category-surge evidence</td>
+            <td>Raw evidence behind a "category surge" opening and brief context.</td>
+            <td><span class="badge badge-active">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Brand momentum</td>
+            <td><code class="pr-code">/brands/{id}/market-conditions</code></td>
+            <td class="pr-powers">Opening corroboration</td>
+            <td>Is the brand in motion? Corroborates funding / expansion openings.</td>
+            <td><span class="badge badge-active">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Paid-media spend signal</td>
+            <td><code class="pr-code">/brands/{id}/spend-signal</code></td>
+            <td class="pr-powers">"Campaign lull" opening</td>
+            <td>A funded brand that's gone quiet on brand spend — directly powers the lull signal.</td>
+            <td><span class="badge badge-active">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Company contacts</td>
+            <td><code class="pr-code">/companies/{id}/people</code></td>
+            <td class="pr-powers">Probable contacts list</td>
+            <td>Marketing leaders &amp; titles → the contact cards on every prospect.</td>
+            <td><span class="badge badge-active">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Open roles / hiring</td>
+            <td><code class="pr-code">/companies/{id}/jobs</code></td>
+            <td class="pr-powers">"Building a team" signal</td>
+            <td>A "Head of Brand" req is a classic buying signal — feeds the opening detector.</td>
+            <td><span class="badge badge-active">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Find companies by attributes</td>
+            <td><code class="pr-code">/discover/companies</code></td>
+            <td class="pr-powers">Candidate sourcing</td>
+            <td>Surfacing candidate brands by category/size/geo before scoring.</td>
+            <td><span class="badge badge-active">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Find brands hiring marketing</td>
+            <td><code class="pr-code">/discover/jobs</code></td>
+            <td class="pr-powers">Opening-led sourcing</td>
+            <td>Cross-index search for brands hiring CMOs / brand leads — opening-first prospect sourcing.</td>
+            <td><span class="badge badge-active">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Alert CRUD + channels</td>
+            <td><code class="pr-code">POST /alerts</code>, <code class="pr-code">GET /events</code></td>
+            <td class="pr-powers">Watchlist monitoring</td>
+            <td>Create/list alerts on tracked brands; consume the event stream that drives the Watchlist feed.</td>
+            <td><span class="badge badge-active">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Pitch playbook generation</td>
+            <td><code class="pr-code">POST /briefs/pitch-pack</code>, <code class="pr-code">/generate</code></td>
+            <td class="pr-powers">"Create pitch playbook"</td>
+            <td>Async deliverable per accepted prospect → the pitch-playbook output.</td>
+            <td><span class="badge badge-active">✓ Available</span></td>
+          </tr>
+          <tr>
+            <td>Credits &amp; usage</td>
+            <td><code class="pr-code">/account/usage</code>, <code class="pr-code">/balance</code></td>
+            <td class="pr-powers">Sidebar credit meter</td>
+            <td>Prospect-credit balance shown in the sidebar.</td>
+            <td><span class="badge badge-active">✓ Available</span></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ════ TABLE 2: PROPOSED ADDITIONS ════ -->
+  <div class="pr-section">
+    <div class="pr-sec-head">
+      <h2 class="pr-sec-title">Proposed additions</h2>
+      <p class="pr-sec-def">The keystone is a <code class="pr-code">POST /discover/lookalike-brands</code> that blends a whole client roster into one ranked, scored list (shown first). Everything else either feeds it (agency profile, the openings object) or distributes it (events, the weekly digest). Two pieces are connectors, not read endpoints.</p>
+    </div>
+
+    <div class="pr-gaps">
+      <!-- KEYSTONE -->
+      <div class="wcard">
+        <div class="pr-gap-head">
+          <span class="pr-gap-method"><span class="verb">POST</span> /discover/lookalike-brands</span>
+          <span class="badge badge-highlight">★ Keystone</span>
+        </div>
+        <p class="pr-gap-desc">Given a <b>set</b> of seed <code class="pr-code">brand_ids</code> (the agency's client roster) plus exclusions, return a single <b>ranked, scored</b> list of look-alike brands with structured <code class="pr-code">match_reasons</code> — which seed each one echoes and on which audiences. Today <code class="pr-code">/audiences/{id}/brands</code> does one audience and returns no score, so blending five clients + de-duping + ranking is all client-side.</p>
+        <div class="wcode-block"><pre class="wcode-block-body">POST /discover/lookalike-brands
+{
+  <span class="j-key">"seed_brand_ids"</span>: ["brand_olipop", "brand_allbirds", "brand_chime", "brand_sweetgreen", "brand_liquiddeath"],
+  <span class="j-key">"exclude_brand_ids"</span>: [<span class="j-cm">// current clients + conflicts</span>],
+  <span class="j-key">"limit"</span>: 5, <span class="j-key">"min_score"</span>: 70
+}
+
+{
+  <span class="j-key">"data"</span>: [
+    {
+      <span class="j-key">"brand_id"</span>: "brand_poppi",
+      <span class="j-key">"brand_name"</span>: "Poppi",
+      <span class="j-key">"category"</span>: "Better-for-you beverage",
+      <span class="j-key">"match_score"</span>: 94,
+      <span class="j-key">"match_reasons"</span>: [
+        { <span class="j-key">"echoes_seed"</span>: "brand_olipop", <span class="j-key">"shared_audience"</span>: "Gen Z wellness", <span class="j-key">"overlap"</span>: 0.92 }
+      ]
+    }
+  ],
+  <span class="j-key">"meta"</span>: { <span class="j-key">"candidates_scored"</span>: 3120 }
+}</pre></div>
+        <p class="pr-powers-line"><b>Powers:</b> the weekly five, the match score on every card, and the "why related / echoes your client" block.</p>
+      </div>
+
+      <!-- AGENCY INGEST -->
+      <div class="wcard">
+        <div class="pr-gap-head">
+          <span class="pr-gap-method"><span class="verb">POST</span> /agencies</span>
+          <span class="badge badge-highlight">✗ Gap</span>
+        </div>
+        <p class="pr-gap-desc">Ingest an agency at onboarding: a website to crawl plus an uploaded client list, returning the resolved seed brands and a derived <b>audience + category fingerprint</b>. There's no first-class "agency" object in the API today, so the whole setup flow has nowhere to persist.</p>
+        <div class="wcode-block"><pre class="wcode-block-body">POST /agencies
+{
+  <span class="j-key">"name"</span>: "Highline Studio",
+  <span class="j-key">"website"</span>: "highlinestudio.com",
+  <span class="j-key">"client_list"</span>: ["OLIPOP", "Allbirds", "Chime", "Sweetgreen", "Liquid Death"]
+}
+
+{
+  <span class="j-key">"agency_id"</span>: "agency_highline",
+  <span class="j-key">"resolved_clients"</span>: [{ <span class="j-key">"input"</span>: "OLIPOP", <span class="j-key">"brand_id"</span>: "brand_olipop" }],
+  <span class="j-key">"fingerprint"</span>: {
+    <span class="j-key">"audiences"</span>: ["Gen Z wellness", "Culture-forward", "Value-conscious"],
+    <span class="j-key">"categories"</span>: ["Better-for-you CPG", "DTC apparel", "Consumer fintech"]
+  }
+}</pre></div>
+        <p class="pr-powers-line"><b>Powers:</b> the Setup screen, the sidebar agency identity, and the seed set passed to the look-alike matcher.</p>
+      </div>
+
+      <!-- OPENINGS -->
+      <div class="wcard">
+        <div class="pr-gap-head">
+          <span class="pr-gap-method"><span class="verb">GET</span> /brands/{id}/openings</span>
+          <span class="badge badge-highlight">✗ Gap</span>
+        </div>
+        <p class="pr-gap-desc">A classified array of <b>"why now"</b> openings per brand, each typed and sourced. Today this is reverse-engineered from <code class="pr-code">/people</code> diffs, <code class="pr-code">/jobs</code>, <code class="pr-code">/news</code>, and <code class="pr-code">/spend-signal</code> — this returns it pre-classified.</p>
+        <div class="wcode-block"><pre class="wcode-block-body">{
+  <span class="j-key">"brand_id"</span>: "brand_vuori",
+  <span class="j-key">"openings"</span>: [
+    {
+      <span class="j-key">"type"</span>: "leadership_change",    <span class="j-cm">// funding | acquisition | agency_review | category_surge | campaign_lull</span>
+      <span class="j-key">"role"</span>: "cmo",
+      <span class="j-key">"headline"</span>: "New CMO from Nike just started",
+      <span class="j-key">"since"</span>: "2026-05-16",
+      <span class="j-key">"source"</span>: { <span class="j-key">"type"</span>: "linkedin", <span class="j-key">"url"</span>: "…" },
+      <span class="j-key">"confidence"</span>: 0.88
+    }
+  ]
+}</pre></div>
+        <p class="pr-powers-line"><b>Powers:</b> the "Why now" box, every card's opening badge, and the prospect score's recency boost.</p>
+      </div>
+
+      <!-- EVENTS -->
+      <div class="wcard">
+        <div class="pr-gap-head">
+          <span class="pr-gap-method"><span class="verb">EVENTS</span> · prospect-scoped alert types</span>
+          <span class="badge badge-highlight">✗ Gap</span>
+        </div>
+        <p class="pr-gap-desc">New <code class="pr-code">event_type</code> values for <code class="pr-code">POST /alerts</code> / <code class="pr-code">GET /events</code> so a tracked brand fires the moment an opening appears — instead of leaning on generic mention alerts. <code class="pr-code">/alerts/{id}/preview</code> already gives the dry-run.</p>
+        <div class="wcode-block"><pre class="wcode-block-body">{
+  <span class="j-key">"trigger"</span>: {
+    <span class="j-key">"event_type"</span>: "brand.leadership_change",  <span class="j-cm">// brand.funding | brand.agency_review | prospect.new_opening</span>
+    <span class="j-key">"filter"</span>: { <span class="j-key">"role"</span>: "cmo" }
+  },
+  <span class="j-key">"scope"</span>: { <span class="j-key">"brand_ids"</span>: ["brand_immi", "brand_parade"] },
+  <span class="j-key">"channels"</span>: [{ <span class="j-key">"type"</span>: "in_app" }, { <span class="j-key">"type"</span>: "email" }]
+}</pre></div>
+        <p class="pr-powers-line"><b>Powers:</b> the Watchlist "opening signals" feed and the tracked-brand alerts.</p>
+      </div>
+
+      <!-- DIGEST -->
+      <div class="wcard">
+        <div class="pr-gap-head">
+          <span class="pr-gap-method"><span class="verb">POST</span> /digests/prospect-brief</span>
+          <span class="badge badge-highlight">✗ Gap</span>
+        </div>
+        <p class="pr-gap-desc">The scheduled engine behind "This Week": every <code class="pr-code">delivery_day</code>, run the look-alike matcher for an agency, attach the freshest opening to each, and emit a batch of <code class="pr-code">count</code> prospects. Mirrors the existing <code class="pr-code">/digests/monday-brief</code> and <code class="pr-code">/digests/audience-pulse</code> shapes.</p>
+        <div class="wcode-block"><pre class="wcode-block-body">POST /digests/prospect-brief
+{
+  <span class="j-key">"agency_id"</span>: "agency_highline",
+  <span class="j-key">"count"</span>: 5,
+  <span class="j-key">"delivery_day"</span>: "monday",
+  <span class="j-key">"require_opening"</span>: true     <span class="j-cm">// only surface brands with a live opening</span>
+}</pre></div>
+        <p class="pr-powers-line"><b>Powers:</b> the weekly cadence, the "come back Monday" empty state, and delivery-cadence settings.</p>
+      </div>
+
+      <!-- CONNECTORS -->
+      <div class="wcard">
+        <div class="pr-gap-head">
+          <span class="pr-gap-method"><span class="verb">CONNECTOR</span> · LinkedIn mutuals &amp; HubSpot sync</span>
+          <span class="badge badge-secondary">Out of read-API scope</span>
+        </div>
+        <p class="pr-gap-desc">Two features live <b>outside</b> the read API. <b>LinkedIn mutuals</b> needs each user's own OAuth relationship graph to answer "who do we already know here" — <code class="pr-code">/companies/{id}/people</code> gives the brand-side contacts, but the mutual edge is the customer's data, not ours. <b>HubSpot sync</b> is an outbound write/webhook that pushes accepted prospects into a customer's CRM as companies + contacts. Both are connector surfaces (OAuth + sync jobs), not endpoints we'd add to the read API itself — flagged here so the boundary is explicit.</p>
+        <p class="pr-powers-line"><b>Powers:</b> the "N mutual connections" line on contacts, the warm-intro paths, and the Pipeline → HubSpot sync indicators.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="pr-footer-note">
+    <p>Prospector · prototype for the Brand Intelligence API. <a href="index.html">Back to the app →</a></p>
+  </div>
+</div>
+
+</body>
+</html>

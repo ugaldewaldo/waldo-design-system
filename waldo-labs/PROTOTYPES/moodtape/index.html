@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moodtape — the sentiment terminal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  /* ── Required DS conflict overrides (doctrine, verbatim) ── */
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  body { display: block !important; }
+  svg { flex: none; min-height: fit-content; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    max-width: none !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: hsl(var(--background)); color: hsl(var(--foreground));
+    font-size: var(--fs-sm); line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 80px;
+  }
+  a { color: hsl(var(--primary)); text-decoration: none; cursor: pointer; }
+  a:hover { opacity: .85; }
+  button { font-family: inherit; }
+
+  .wrap { max-width: 1184px; margin: 0 auto; padding: 0 24px; }
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* Sentiment classes — data colors: positive = primary, negative = warning (data ≠ verdict), neutral = muted */
+  .pos { color: hsl(var(--primary)); }
+  .neg { color: hsl(var(--warning)); }
+  .neu { color: hsl(var(--muted-foreground)); }
+  .tabular, .k-value, svg text { font-variant-numeric: tabular-nums; }
+
+  /* Muted section label — sections separate by spacing + label, never lines */
+  .section-label { font-size: var(--fs-xs); font-weight: 500; text-transform: uppercase; letter-spacing: .07em; color: hsl(var(--muted-foreground)); margin: 32px 0 14px; }
+
+  /* ── Ticker tape (new component — no DS equivalent) ── */
+  .tape { position: sticky; top: 64px; z-index: 45; background: hsl(var(--card)); overflow: hidden; white-space: nowrap; }
+  .tape-track { display: inline-flex; padding: 8px 0; animation: tape-scroll 60s linear infinite; }
+  .tape:hover .tape-track { animation-play-state: paused; }
+  @keyframes tape-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .tape-item { display: inline-flex; align-items: center; gap: 8px; padding: 0 18px; border-right: 1px solid hsl(var(--border)); font-size: var(--fs-xs); font-variant-numeric: tabular-nums; cursor: pointer; }
+  .tape-item:hover .tp-sym { color: hsl(var(--primary)); }
+  .tp-sym { color: hsl(var(--foreground)); font-weight: 600; }
+  .tp-val { font-weight: 500; }
+  .tp-wow { font-size: 11px; }
+
+  /* ── Toolbar line — quick links left, canonical .app-search right (doctrine: search right-aligned) ── */
+  .toolbar-line { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 24px 0; }
+  .app-search { position: relative; }
+  .search-hint { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .sa-results { position: absolute; left: 0; right: 0; top: 100%; margin-top: 8px; background: hsl(var(--popover)); border-radius: var(--radius-xl); overflow: hidden; z-index: 40; display: none; box-shadow: var(--shadow-popover); }
+  .sa-results.open { display: block; }
+  .sa-row { display: flex; align-items: center; gap: 12px; padding: 10px 16px; cursor: pointer; }
+  .sa-row + .sa-row { border-top: 1px solid hsl(var(--border)); }
+  .sa-row:hover { background: hsl(var(--muted)); }
+  .sa-row.empty { color: hsl(var(--muted-foreground)); cursor: default; }
+  .sa-row.empty:hover { background: transparent; }
+  .sa-sym { font-weight: 600; min-width: 62px; font-variant-numeric: tabular-nums; }
+  .sa-sym.sector { color: hsl(var(--muted-foreground)); font-size: var(--fs-xs); font-weight: 500; letter-spacing: .05em; }
+  .sa-name { color: hsl(var(--muted-foreground)); flex: 1; min-width: 0; }
+  .sa-meta { font-size: var(--fs-xs); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  /* ── KPI grid — DS .kpi component; --fs-4xl is missing from theme + waldo-ds.css (reported to VALIDATOR), local size guard ── */
+  .kpi .k-value { font-size: var(--fs-5xl); }
+  .kpi .k-value.small { font-size: var(--fs-2xl); }
+
+  /* ── Rows of equal cards ── */
+  .row2 { display: flex; gap: 16px; align-items: stretch; margin-top: 24px; }
+  .row2 > .wcard { flex: 1; min-width: 0; }
+  /* list cap — scroll inside the list container, never the card (doctrine grid rule:
+     content taller than the row scrolls inside; the shorter sibling sets the row height) */
+  .lb-scroll { flex: 1; min-height: 0; overflow-y: auto; max-height: 214px; }
+  .wcard.mt { margin-top: 24px; }
+
+  /* ── Diverging bar (new component — no DS equivalent for a centered-zero bar) ── */
+  .dvg-row { display: grid; grid-template-columns: 150px 1fr 52px; gap: 12px; align-items: center; padding: 7px 0; }
+  .dvg-row.clickable { cursor: pointer; }
+  .dvg-row.clickable:hover .dvg-name { color: hsl(var(--foreground)); }
+  .dvg-name { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); transition: color .12s; }
+  .dvg-track { height: 6px; background: hsl(var(--secondary)); border-radius: var(--radius-full); position: relative; overflow: hidden; }
+  .dvg-mid { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: hsl(var(--foreground) / 0.15); }
+  .dvg-fill { position: absolute; top: 0; bottom: 0; border-radius: var(--radius-full); }
+  .dvg-fill.pos { background: hsl(var(--primary)); }
+  .dvg-fill.neg { background: hsl(var(--warning)); }
+  .dvg-fill.neu { background: hsl(var(--muted-foreground)); }
+  .dvg-val { font-size: var(--fs-sm); font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+
+  /* ── Leaderboard Row — copied from the DS showcase (#comp-leaderboard-row) ── */
+  .lb { display: flex; flex-direction: column; }
+  .lb-row { display: flex; gap: 14px; align-items: flex-start; padding: 12px 16px 0 8px; margin-bottom: 12px; cursor: pointer; transition: background 0.12s; border-radius: 8px; }
+  .lb-row:last-child { margin-bottom: 0; }
+  .lb-row:hover { background: hsl(var(--secondary)); }
+  .lb-row:hover .lb-main { border-bottom-color: transparent; }
+  .lb-rank { width: 24px; flex: none; font-size: var(--fs-lg); font-weight: 600; line-height: 28px; letter-spacing: -0.36px; color: hsl(var(--foreground)); text-align: center; }
+  .lb-main { flex: 1; min-width: 0; border-bottom: 1px solid hsl(var(--border)); padding-bottom: 12px; display: flex; flex-direction: column; gap: 3px; }
+  .lb-row:last-child .lb-main { border-bottom: none; }
+  .lb-name-row { display: flex; gap: 10px; align-items: center; width: 100%; }
+  .lb-brand { flex: 1; min-width: 0; font-size: var(--fs-sm); font-weight: 600; line-height: 20px; letter-spacing: -0.28px; color: hsl(var(--foreground)); }
+  .lb-meta { display: flex; gap: 8px; align-items: center; overflow: hidden; }
+  .lb-vol { font-size: var(--fs-xs); font-weight: 500; line-height: 16px; letter-spacing: -0.24px; color: hsl(var(--muted-foreground)); white-space: nowrap; flex: none; font-variant-numeric: tabular-nums; }
+  .lb-category { font-size: var(--fs-sm); font-weight: 400; line-height: 16px; letter-spacing: -0.22px; color: hsl(var(--muted-foreground)); opacity: 0.6; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .lb-delta { font-size: var(--fs-xs); font-weight: 600; white-space: nowrap; flex: none; font-variant-numeric: tabular-nums; }
+  .lb-delta.up { color: hsl(var(--primary)); }
+  .lb-delta.dn { color: hsl(var(--warning)); }
+
+  /* ── Charts ── */
+  .chart-wrap svg { display: block; width: 100%; }
+
+  /* ── Ticker detail ── */
+  .back-link { display: inline-block; color: hsl(var(--highlight)); font-size: var(--fs-sm); margin: 26px 0 16px; }
+  .detail-head { display: flex; align-items: flex-start; gap: 20px; flex-wrap: wrap; margin-bottom: 8px; }
+  .detail-sym { font-size: 34px; font-weight: 600; letter-spacing: -0.025em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .detail-co { color: hsl(var(--muted-foreground)); font-size: var(--fs-base); margin-top: 2px; }
+  .detail-price { margin-top: 8px; font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; }
+  .score-block { margin-left: auto; text-align: right; }
+  .score-cap { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 4px; font-weight: 500; }
+  .score-big { font-size: 40px; font-weight: 600; letter-spacing: -0.02em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .score-block .badge { margin-top: 10px; }
+
+  /* ── Brand portfolio chip (new component — no DS equivalent) ── */
+  .pf-chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 4px; }
+  .pf-chip { background: hsl(var(--card)); border-radius: var(--radius-xl); padding: 10px 14px; min-width: 136px; }
+  .pf-chip .pf-nm { font-size: var(--fs-sm); font-weight: 600; display: flex; justify-content: space-between; gap: 12px; }
+  .pf-chip .pf-nm .pf-v { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .pf-chip .pf-mini { height: 4px; border-radius: var(--radius-full); background: hsl(var(--secondary)); margin-top: 8px; position: relative; overflow: hidden; }
+  .pf-chip .pf-mini .dvg-mid { background: hsl(var(--foreground) / 0.15); }
+
+  .ann-note { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 10px; }
+  .chart-block { display: flex; flex-direction: column; gap: 14px; }
+
+  /* ── Proportion Bar — copied from the DS showcase (#chart-page-proportion) ── */
+  .senti-bar { height: 10px; border-radius: 9999px; overflow: hidden; display: flex; background: hsl(var(--secondary)); margin: 4px 0 2px; }
+  .senti-seg { height: 100%; }
+  .senti-seg.pos { background: hsl(var(--primary)); }
+  .senti-seg.neu { background: hsl(var(--muted-foreground)); }
+  .senti-seg.neg { background: hsl(var(--warning)); }
+  .senti-seg.mix { background: hsl(var(--highlight)); }
+  .senti-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px; }
+  .senti-legend-item { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); letter-spacing: -0.24px; color: color-mix(in srgb,hsl(var(--foreground)) 70%,transparent); font-variant-numeric: tabular-nums; }
+  .senti-swatch { width: 14px; height: 8px; border-radius: 4px; flex: none; }
+  .senti-swatch.pos { background: hsl(var(--primary)); }
+  .senti-swatch.neu { background: hsl(var(--muted-foreground)); }
+  .senti-swatch.neg { background: hsl(var(--warning)); }
+  .senti-swatch.mix { background: hsl(var(--highlight)); }
+
+  /* ── Article Card — copied from the DS showcase (#comp-article-card), on-card variant ── */
+  .news-list { display: flex; flex-direction: column; gap: 6px; }
+  .art-card { display: flex; gap: 14px; background: hsl(var(--card)); border-radius: var(--radius-xl); padding: 14px 16px; text-decoration: none; color: inherit; cursor: pointer; transition: background 0.12s; }
+  .art-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 5%, hsl(var(--card))); }
+  .art-card.on-card { background: hsl(var(--muted)); }
+  .art-card.on-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 5%, hsl(var(--muted))); }
+  .art-favicon { width: 32px; height: 32px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: relative; }
+  .art-favicon img { width: 20px; height: 20px; object-fit: contain; display: block; border-radius: 4px; position: relative; z-index: 1; }
+  .art-favicon .fdot { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: hsl(var(--muted-foreground) / 0.5); }
+  .art-body { display: flex; flex-direction: column; gap: 5px; min-width: 0; flex: 1; }
+  .art-meta { display: flex; align-items: center; gap: 8px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); flex-wrap: wrap; }
+  .art-source { font-weight: 600; color: hsl(var(--foreground)); }
+  .art-time { flex-shrink: 0; margin-left: auto; }
+  .art-title { font-size: var(--fs-sm); font-weight: 600; color: hsl(var(--foreground)); line-height: 1.4; }
+
+  .detail-actions { margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; }
+
+  /* ── Alerts ── */
+  .view-h1 { font-size: 28px; font-weight: 600; letter-spacing: -0.025em; line-height: 1.15; }
+  .lede { font-size: var(--fs-base); color: hsl(var(--muted-foreground)); max-width: 760px; line-height: 1.6; margin-top: 8px; }
+  .alert-form .field { margin-bottom: 18px; }
+  .alert-form .select-wrap { width: 100%; max-width: 320px; }
+  .alert-form .select-wrap select { width: 100%; }
+  .preview-block { background: hsl(var(--muted)); border-radius: var(--radius-xl); padding: 16px 18px; }
+  .preview-big { font-size: var(--fs-2xl); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .preview-txt { color: hsl(var(--muted-foreground)); margin-top: 6px; }
+  .preview-txt b { color: hsl(var(--foreground)); font-weight: 600; }
+  .empty-note { color: hsl(var(--muted-foreground)); font-size: var(--fs-sm); }
+  .in-card-label { margin: 24px 0 8px; }
+
+  /* ── Alert List Row — copied from the DS showcase (#comp-alert-list-row) ── */
+  .alert-list { display: flex; flex-direction: column; }
+  .alert-item { display: flex; gap: 14px; align-items: flex-start; padding: 12px 16px 0 8px; margin-bottom: 12px; cursor: pointer; border-radius: 8px; transition: background 0.12s; }
+  .alert-item:last-child { margin-bottom: 0; }
+  .alert-item:hover { background: hsl(var(--secondary)); }
+  .alert-item:hover .alert-inner { border-bottom-color: transparent; }
+  .alert-dot-col { width: 8px; flex: none; display: flex; align-items: center; justify-content: center; padding-top: 4px; }
+  .alert-dot { width: 6px; height: 6px; border-radius: 50%; background: hsl(var(--primary)); flex: none; }
+  .alert-inner { flex: 1; min-width: 0; display: flex; gap: 10px; align-items: flex-start; border-bottom: 1px solid hsl(var(--border)); padding-bottom: 12px; }
+  .alert-item:last-child .alert-inner { border-bottom: none; }
+  .alert-content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+  .alert-condition { font-size: var(--fs-sm); line-height: 20px; letter-spacing: -0.28px; }
+  .alert-condition-main { color: hsl(var(--foreground)); font-weight: 600; }
+  .alert-condition-detail { color: hsl(var(--muted-foreground)); font-weight: 400; }
+  .alert-delivery { font-size: var(--fs-xs); font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: hsl(var(--muted-foreground)); opacity: 0.6; }
+  .alert-delete { width: 16px; height: 16px; flex: none; color: hsl(var(--muted-foreground)); cursor: pointer; opacity: 0.4; transition: color 0.12s, opacity 0.12s; margin-top: 2px; }
+  .alert-delete:hover { color: hsl(var(--destructive)); opacity: 1; }
+
+  /* ── Footer — borderless shell: no border-top, spacing only ── */
+  .footer-note { max-width: 1184px; margin: 56px auto 0; padding: 0 24px; color: hsl(var(--muted-foreground)); font-size: var(--fs-xs); line-height: 1.6; }
+
+  @media (max-width: 900px) {
+    .kpi-grid { grid-template-columns: 1fr 1fr; }
+    .row2 { flex-direction: column; }
+    .detail-head { gap: 12px; }
+    .score-block { margin-left: 0; text-align: left; }
+    .dvg-row { grid-template-columns: 110px 1fr 52px; }
+    .app-nav { gap: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════ APP HEADER — canonical DS chrome ════ -->
+<header class="app-header">
+  <div class="app-header-inner">
+    <div class="app-ident">
+      <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Waldo"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
+      <span class="product">Moodtape</span>
+    </div>
+    <nav class="app-nav">
+      <a data-nav="home" onclick="go('#/')">Markets</a>
+      <a data-nav="alerts" onclick="go('#/alerts')">Alerts</a>
+      <a href="apireqs.html">API coverage</a>
+      <a href="/bxcapi/index.html">bxcAPI spec</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ════ TICKER TAPE ════ -->
+<div class="tape"><div class="tape-track" id="tape-track"></div></div>
+
+<!-- ════════════════════ HOME ════════════════════ -->
+<div id="view-home" class="view active">
+  <div class="wrap">
+    <div class="toolbar-line">
+      <div class="search-hint">Try <a onclick="go('#/ticker/AAPL')">AAPL</a>, <a onclick="go('#/ticker/TSLA')">TSLA</a>, <a onclick="go('#/ticker/NKE')">NKE</a>, or <a onclick="go('#/ticker/DIS')">DIS</a></div>
+      <div class="app-search">
+        <div class="input-with-icon">
+          <div class="input-icon">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </div>
+          <input class="input" id="search-input" type="text" placeholder="Search a ticker or sector…" autocomplete="off" spellcheck="false">
+        </div>
+        <div id="search-results" class="sa-results"></div>
+      </div>
+    </div>
+
+    <div class="section-label">Market overview</div>
+    <div id="kpi-grid" class="kpi-grid"></div>
+
+    <div class="row2">
+      <div class="wcard">
+        <div class="wcard-head"><span class="wcard-title">Sentiment by sector</span><span class="wcard-sub">Net score · −1 to +1</span></div>
+        <div id="sector-bars"></div>
+      </div>
+      <div class="wcard">
+        <div class="wcard-head"><span class="wcard-title">Biggest movers</span><span class="wcard-sub">Week-over-week Δ sentiment</span></div>
+        <div class="lb-scroll"><div id="movers" class="lb"></div></div>
+      </div>
+    </div>
+
+    <div class="wcard mt">
+      <div class="wcard-head"><span class="wcard-title">Market sentiment index</span><span class="wcard-sub">Tracked universe · 52 weeks</span></div>
+      <div id="market-trend" class="chart-wrap"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════ TICKER DETAIL ════════════════════ -->
+<div id="view-ticker" class="view">
+  <div class="wrap" id="ticker-body"></div>
+</div>
+
+<!-- ════════════════════ ALERTS ════════════════════ -->
+<div id="view-alerts" class="view">
+  <div class="wrap">
+    <a class="back-link" onclick="go('#/')">← Markets</a>
+    <h1 class="view-h1">Sentiment alerts</h1>
+    <p class="lede">Get pinged the moment the mood turns on a ticker or a whole sector — before it shows up in the price.</p>
+    <div class="row2">
+      <div class="wcard alert-form">
+        <div class="wcard-head"><span class="wcard-title">New alert</span></div>
+        <div>
+          <div class="field">
+            <span class="field-label">Trigger</span>
+            <div class="wseg" id="alert-trigger">
+              <button type="button" data-trig="drop" class="wseg-opt active" onclick="setTrigger('drop')">Sentiment drop</button>
+              <button type="button" data-trig="spike" class="wseg-opt inactive" onclick="setTrigger('spike')">Sentiment spike</button>
+              <button type="button" data-trig="vol" class="wseg-opt inactive" onclick="setTrigger('vol')">Mention-volume spike</button>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label" for="alert-scope">Watch</label>
+            <div class="select-wrap"><select id="alert-scope" onchange="renderPreview()"></select></div>
+          </div>
+          <div class="field" id="threshold-field">
+            <label class="field-label" id="threshold-label" for="alert-threshold">Magnitude threshold</label>
+            <div class="select-wrap"><select id="alert-threshold" onchange="renderPreview()">
+              <option value="0.1">Small — 0.10 move</option>
+              <option value="0.2" selected>Moderate — 0.20 move</option>
+              <option value="0.3">Large — 0.30 move</option>
+            </select></div>
+          </div>
+          <div class="field">
+            <label class="field-label" for="alert-channel">Notify via</label>
+            <div class="select-wrap"><select id="alert-channel">
+              <option>Email — me@example.com</option>
+              <option>SMS — +1 (555) 010-2293</option>
+              <option>Slack — #my-watchlist</option>
+            </select></div>
+          </div>
+          <button class="btn btn-default" onclick="createAlert()">Create alert</button>
+        </div>
+      </div>
+
+      <div class="wcard">
+        <div class="wcard-head"><span class="wcard-title">Dry-run preview</span><span class="wcard-sub">Last 30 days</span></div>
+        <div>
+          <div class="preview-block" id="preview"></div>
+          <div class="section-label in-card-label">Active alerts</div>
+          <div id="alert-list" class="alert-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer-note">
+  <p>Moodtape · a prototype for the <a href="/bxcapi/index.html">Brand Intelligence API (bxcAPI)</a>. Sentiment, prices and news on this page are illustrative mock data. <a href="apireqs.html">See exactly what it needs from the API →</a></p>
+</div>
+
+<script>
+/* ════════════════════ HELPERS ════════════════════ */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmtS = v => (v>=0?'+':'') + v.toFixed(2);
+const fmtD = v => (v>=0?'+':'') + v.toFixed(2);
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+// seeded RNG (mulberry32) so series are stable across reloads — same seeds as the source prototype
+function rng(seed){ return function(){ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+// data colors: positive = primary, negative = warning (a worsening datum is --warning, never --destructive), neutral = muted
+function sentColor(v){ if(v>=0.15) return 'hsl(var(--primary))'; if(v<=-0.15) return 'hsl(var(--warning))'; return 'hsl(var(--muted-foreground))'; }
+function sentClass(v){ return v>=0.15?'pos':v<=-0.15?'neg':'neu'; }
+function sentBadge(v){ return v>=0.15?'badge-active':v<=-0.15?'badge-warning':'badge-secondary'; }
+function sentWord(v){ return v>=0.4?'Very positive':v>=0.15?'Positive':v<=-0.4?'Very negative':v<=-0.15?'Negative':'Neutral'; }
+
+/* ════════════════════ MOCK DATA (verbatim from the source prototype — deterministic) ════════════════════ */
+const SECTORS = [
+  { id:'tech',    name:'Technology' },
+  { id:'apparel', name:'Apparel & Fashion' },
+  { id:'bev',     name:'Beverages & Food' },
+  { id:'auto',    name:'Automotive' },
+  { id:'media',   name:'Media & Entertainment' },
+  { id:'qsr',     name:'Restaurants & QSR' },
+];
+const secName = id => (SECTORS.find(s=>s.id===id)||{}).name || id;
+
+// Each ticker: a SECURITY that rolls up a portfolio of BRANDS.
+const TICKERS = [
+  { sym:'AAPL', co:'Apple Inc.',          sector:'tech',    seed:101, base:0.42, drift: 0.05, p0:182, shockW:34, shockS:+0.22, shockLbl:'Strong product event reception',
+    brands:[{n:'iPhone',s:0.46},{n:'App Store',s:0.18},{n:'Apple Watch',s:0.40},{n:'Beats',s:0.35}],
+    news:[ {t:'Reviewers call the new lineup “the most polished in years”', src:'The Verge', d:'2d', s:0.5},
+           {t:'Regulators reopen App Store fee inquiry in the EU', src:'Reuters', d:'4d', s:-0.4},
+           {t:'Holiday demand signals tick up across retail partners', src:'Bloomberg', d:'6d', s:0.3} ] },
+  { sym:'NKE',  co:'Nike, Inc.',          sector:'apparel', seed:202, base:-0.08, drift:-0.04, p0:96,  shockW:28, shockS:-0.28, shockLbl:'Backlash to ad campaign',
+    brands:[{n:'Nike',s:-0.05},{n:'Jordan',s:0.22},{n:'Converse',s:-0.18}],
+    news:[ {t:'New campaign divides social audiences', src:'AdAge', d:'1d', s:-0.45},
+           {t:'Jordan resale market stays red-hot into the holidays', src:'Hypebeast', d:'3d', s:0.4},
+           {t:'Wholesale partners flag elevated inventory', src:'WSJ', d:'5d', s:-0.3} ] },
+  { sym:'KO',   co:'The Coca-Cola Company',sector:'bev',    seed:303, base:0.28, drift: 0.02, p0:61,  shockW:40, shockS:+0.14, shockLbl:'Well-received seasonal launch',
+    brands:[{n:'Coca-Cola',s:0.34},{n:'Sprite',s:0.26},{n:'Fanta',s:0.20},{n:'Costa Coffee',s:0.12}],
+    news:[ {t:'Seasonal flavor drop trends on TikTok', src:'TikTok Trends', d:'2d', s:0.5},
+           {t:'Sugar-tax commentary resurfaces in two markets', src:'FT', d:'5d', s:-0.25},
+           {t:'Costa expands ready-to-drink range', src:'Just Drinks', d:'8d', s:0.2} ] },
+  { sym:'PEP',  co:'PepsiCo, Inc.',       sector:'bev',     seed:404, base:0.16, drift: 0.0,  p0:170, shockW:22, shockS:-0.18, shockLbl:'Snack recall chatter',
+    brands:[{n:'Pepsi',s:0.18},{n:"Lay's",s:0.10},{n:'Doritos',s:0.30},{n:'Gatorade',s:0.22},{n:'Quaker',s:-0.12}],
+    news:[ {t:'Doritos limited edition sells out within hours', src:'Snack News', d:'1d', s:0.45},
+           {t:'Quaker recall discussion spreads on Reddit', src:'Reddit r/food', d:'3d', s:-0.5},
+           {t:'Gatorade signs new athlete roster', src:'ESPN', d:'7d', s:0.3} ] },
+  { sym:'TSLA', co:'Tesla, Inc.',         sector:'auto',    seed:505, base:0.05, drift:-0.02, p0:240, shockW:31, shockS:-0.34, shockLbl:'Delivery-miss reaction',
+    brands:[{n:'Tesla',s:0.06},{n:'Powerwall',s:0.30}],
+    news:[ {t:'Quarterly deliveries land below the whisper number', src:'Reuters', d:'1d', s:-0.55},
+           {t:'Energy/storage segment praised by analysts', src:'Bloomberg', d:'4d', s:0.4},
+           {t:'Owners debate latest software update', src:'Reddit r/teslamotors', d:'6d', s:-0.1} ] },
+  { sym:'SBUX', co:'Starbucks Corporation',sector:'qsr',    seed:606, base:-0.18, drift:-0.03, p0:94,  shockW:25, shockS:-0.20, shockLbl:'Labor-relations coverage',
+    brands:[{n:'Starbucks',s:-0.20},{n:'Teavana',s:0.10}],
+    news:[ {t:'Union negotiations dominate brand mentions', src:'CNBC', d:'2d', s:-0.45},
+           {t:'Holiday cup lineup gets warm reception', src:'Today', d:'3d', s:0.4},
+           {t:'Rewards-program changes frustrate regulars', src:'Reddit r/starbucks', d:'5d', s:-0.35} ] },
+  { sym:'DIS',  co:'The Walt Disney Company',sector:'media',seed:707, base:0.22, drift: 0.04, p0:112, shockW:37, shockS:+0.26, shockLbl:'Streaming title breaks out',
+    brands:[{n:'Disney+',s:0.28},{n:'ESPN',s:0.18},{n:'Marvel',s:0.30},{n:'Pixar',s:0.40},{n:'Hulu',s:0.12}],
+    news:[ {t:'New original tops streaming charts for second week', src:'Variety', d:'1d', s:0.55},
+           {t:'Parks pricing draws online criticism', src:'LA Times', d:'4d', s:-0.3},
+           {t:'Marvel slate reveal energizes fandom', src:'IGN', d:'6d', s:0.45} ] },
+  { sym:'MCD',  co:"McDonald's Corporation",sector:'qsr',   seed:808, base:0.12, drift: 0.01, p0:288, shockW:30, shockS:+0.16, shockLbl:'Viral menu collab',
+    brands:[{n:"McDonald's",s:0.12},{n:'McCafé',s:0.20}],
+    news:[ {t:'Celebrity meal collab goes viral', src:'AdWeek', d:'2d', s:0.5},
+           {t:'Value-menu pricing debate trends', src:'Reddit r/fastfood', d:'4d', s:-0.2},
+           {t:'McCafé rewards expansion praised', src:'QSR Magazine', d:'8d', s:0.25} ] },
+  { sym:'LULU', co:'Lululemon Athletica',  sector:'apparel', seed:909, base:0.30, drift: 0.03, p0:360, shockW:33, shockS:+0.18, shockLbl:'Product launch buzz',
+    brands:[{n:'Lululemon',s:0.32},{n:'Mirror',s:-0.05}],
+    news:[ {t:'New legging line drives organic hype', src:'PopSugar', d:'2d', s:0.5},
+           {t:'Mirror hardware pivot questioned', src:'TechCrunch', d:'5d', s:-0.3},
+           {t:'Run-club community programs expand', src:'Runner’s World', d:'7d', s:0.3} ] },
+  { sym:'NFLX', co:'Netflix, Inc.',        sector:'media',   seed:110, base:0.08, drift: 0.02, p0:485, shockW:27, shockS:+0.30, shockLbl:'Tentpole release surge',
+    brands:[{n:'Netflix',s:0.08}],
+    news:[ {t:'Buzzy season finale dominates social chatter', src:'THR', d:'1d', s:0.55},
+           {t:'Password-sharing crackdown still polarizing', src:'The Verge', d:'4d', s:-0.25},
+           {t:'Ad-tier subscriber adds beat expectations', src:'Bloomberg', d:'6d', s:0.35} ] },
+];
+const tickBySym = s => TICKERS.find(t=>t.sym===s);
+
+const PLATFORMS = ['Reddit','X','News','TikTok','YouTube'];
+const WEEKS = 52;
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+// source outlet → domain for the sanctioned favicon service; unmapped sources degrade to a neutral dot
+const SRC_DOMAINS = {
+  'The Verge':'theverge.com', 'Reuters':'reuters.com', 'Bloomberg':'bloomberg.com', 'AdAge':'adage.com',
+  'Hypebeast':'hypebeast.com', 'WSJ':'wsj.com', 'TikTok Trends':'tiktok.com', 'FT':'ft.com',
+  'Just Drinks':'just-drinks.com', 'ESPN':'espn.com', 'CNBC':'cnbc.com', 'Today':'today.com',
+  'Variety':'variety.com', 'LA Times':'latimes.com', 'IGN':'ign.com', 'AdWeek':'adweek.com',
+  'QSR Magazine':'qsrmagazine.com', 'PopSugar':'popsugar.com', 'TechCrunch':'techcrunch.com',
+  'Runner’s World':'runnersworld.com', 'THR':'hollywoodreporter.com'
+};
+function srcDomain(src){ if(SRC_DOMAINS[src]) return SRC_DOMAINS[src]; if(src.indexOf('Reddit')===0) return 'reddit.com'; return null; }
+function faviconHTML(src){
+  const dom = srcDomain(src);
+  const img = dom ? '<img src="https://www.google.com/s2/favicons?domain='+dom+'&amp;sz=64" alt="" onerror="this.remove()">' : '';
+  return '<div class="art-favicon"><span class="fdot"></span>'+img+'</div>';
+}
+
+/* ── build derived series for each ticker (verbatim math from the source prototype) ── */
+function buildSeries(t){
+  if(t._built) return;
+  const r = rng(t.seed);
+  const sent = [], price = [];
+  let s = t.base - t.drift*0.5;             // start at the low end of the drift band
+  let p = t.p0 * (0.82 + r()*0.06);
+  for(let i=0;i<WEEKS;i++){
+    const target = t.base + t.drift*(i/(WEEKS-1) - 0.5);
+    s += (target - s)*0.18 + (r()-0.5)*0.05;
+    if(i===t.shockW){ s += t.shockS; }
+    s = clamp(s, -0.95, 0.95);
+    sent.push(s);
+    const dSent = i>0 ? sent[i]-sent[i-1] : 0;
+    p *= (1 + dSent*1.2 + (r()-0.5)*0.025 + 0.0015);
+    price.push(p);
+  }
+  t.sent = sent; t.price = price;
+  t.net = sent[WEEKS-1];
+  t.wow = sent[WEEKS-1] - sent[WEEKS-2];
+  t.priceNow = price[WEEKS-1];
+  t.priceWow = (price[WEEKS-1]/price[WEEKS-2]-1)*100;
+  t.volume = Math.round((4 + r()*38) * 1000);
+  let pos = clamp(0.45 + t.net*0.4, 0.12, 0.8);
+  let neg = clamp(0.28 - t.net*0.32, 0.06, 0.7);
+  let mixed = 0.1;
+  let neu = Math.max(0.04, 1 - pos - neg - mixed);
+  const dsum = pos + neg + mixed + neu;
+  t.dist = { pos: pos/dsum, neg: neg/dsum, neu: neu/dsum, mixed: mixed/dsum };
+  t.platforms = PLATFORMS.map(name=>({ name, s: clamp(t.net + (r()-0.5)*0.5, -0.95, 0.95) }));
+  t.annotations = [{ w:t.shockW, label:t.shockLbl, dir: t.shockS>=0?1:-1 }];
+  t._built = true;
+}
+TICKERS.forEach(buildSeries);
+
+function sectorNet(id){
+  const m = TICKERS.filter(t=>t.sector===id);
+  return m.reduce((a,t)=>a+t.net,0)/m.length;
+}
+function marketIndexSeries(){
+  const out = [];
+  for(let i=0;i<WEEKS;i++){ out.push(TICKERS.reduce((a,t)=>a+t.sent[i],0)/TICKERS.length); }
+  return out;
+}
+
+/* ════════════════════ ROUTING ════════════════════ */
+function go(hash){ if(location.hash===hash){ route(); } else { location.hash=hash; } }
+function showView(id){ $$('.view').forEach(v=>v.classList.remove('active')); $('#'+id).classList.add('active'); window.scrollTo(0,0); }
+function setNav(key){ $$('.app-nav a[data-nav]').forEach(a=>a.classList.toggle('active', a.dataset.nav===key)); }
+function route(){
+  const h = location.hash || '#/';
+  const m = h.match(/^#\/ticker\/([A-Za-z.]+)/);
+  if(h==='#/'||h===''){ showView('view-home'); setNav('home'); renderHome(); closeSearch(); }
+  else if(h==='#/alerts'){ showView('view-alerts'); setNav('alerts'); renderAlerts(); }
+  else if(m){ const t=tickBySym(m[1].toUpperCase()); if(t){ showView('view-ticker'); setNav('home'); renderTicker(t); } else go('#/'); }
+  else go('#/');
+}
+window.addEventListener('hashchange', route);
+
+/* ════════════════════ TICKER TAPE ════════════════════ */
+function renderTape(){
+  const items = TICKERS.map(t=>`
+    <span class="tape-item" role="link" tabindex="0" data-go="#/ticker/${t.sym}">
+      <span class="tp-sym">${t.sym}</span>
+      <span class="tp-val ${sentClass(t.net)}">${fmtS(t.net)}</span>
+      <span class="tp-wow ${t.wow>=0?'pos':'neg'}">${t.wow>=0?'▲':'▼'}${Math.abs(t.wow).toFixed(2)}</span>
+    </span>`).join('');
+  $('#tape-track').innerHTML = items + items; // duplicate for seamless loop
+}
+
+/* ════════════════════ SEARCH ════════════════════ */
+function closeSearch(){ const r=$('#search-results'); if(r) r.classList.remove('open'); const i=$('#search-input'); if(i) i.value=''; }
+function runSearch(q){
+  q = q.trim().toLowerCase();
+  const box = $('#search-results');
+  if(!q){ box.classList.remove('open'); box.innerHTML=''; return; }
+  const tk = TICKERS.filter(t=>t.sym.toLowerCase().includes(q)||t.co.toLowerCase().includes(q)||t.brands.some(b=>b.n.toLowerCase().includes(q))).slice(0,6);
+  const sc = SECTORS.filter(s=>s.name.toLowerCase().includes(q));
+  let rows = tk.map(t=>`<div class="sa-row" role="link" tabindex="0" data-go="#/ticker/${t.sym}"><span class="sa-sym">${t.sym}</span><span class="sa-name">${esc(t.co)}</span><span class="sa-meta ${sentClass(t.net)}">${fmtS(t.net)}</span></div>`).join('');
+  rows += sc.map(s=>`<div class="sa-row" role="link" tabindex="0" data-go="#/ticker/${TICKERS.find(t=>t.sector===s.id).sym}"><span class="sa-sym sector">SECTOR</span><span class="sa-name">${esc(s.name)}</span><span class="sa-meta ${sentClass(sectorNet(s.id))}">${fmtS(sectorNet(s.id))}</span></div>`).join('');
+  box.innerHTML = rows || `<div class="sa-row empty">No match for “${esc(q)}”</div>`;
+  box.classList.add('open');
+}
+
+/* ════════════════════ HOME ════════════════════ */
+function renderHome(){
+  const idx = marketIndexSeries();
+  const mNow = idx[WEEKS-1], mWow = idx[WEEKS-1]-idx[WEEKS-2];
+  const sectorsSorted = [...SECTORS].sort((a,b)=>sectorNet(b.id)-sectorNet(a.id));
+  const topSector = sectorsSorted[0];
+  const movers = [...TICKERS].sort((a,b)=>Math.abs(b.wow)-Math.abs(a.wow));
+  const biggest = movers[0];
+
+  $('#kpi-grid').innerHTML = `
+    <div class="kpi"><div class="k-label">Market sentiment</div><div class="k-value ${sentClass(mNow)}">${fmtS(mNow)}</div><div class="k-sub">${sentWord(mNow)} across ${TICKERS.length} tickers</div></div>
+    <div class="kpi"><div class="k-label">Week-over-week</div><div class="k-value ${mWow>=0?'pos':'neg'}">${fmtD(mWow)}</div><div class="k-sub">${mWow>=0?'mood improving':'mood cooling'}</div></div>
+    <div class="kpi"><div class="k-label">Top sector</div><div class="k-value small">${esc(topSector.name.split(' ')[0])}</div><div class="k-sub ${sentClass(sectorNet(topSector.id))}">${fmtS(sectorNet(topSector.id))} net</div></div>
+    <div class="kpi"><div class="k-label">Biggest mover</div><div class="k-value small">${biggest.sym} <span class="${biggest.wow>=0?'pos':'neg'}">${biggest.wow>=0?'▲':'▼'}${Math.abs(biggest.wow).toFixed(2)}</span></div><div class="k-sub">${esc(biggest.co)}</div></div>`;
+
+  // sector bars (diverging around 0)
+  $('#sector-bars').innerHTML = sectorsSorted.map(s=>{
+    const v = sectorNet(s.id); const pct = Math.abs(v)*50; // half-width max
+    const side = v>=0 ? `left:50%;width:${pct}%;` : `right:50%;width:${pct}%;`;
+    return `<div class="dvg-row clickable" role="link" tabindex="0" data-go="#/ticker/${TICKERS.find(t=>t.sector===s.id).sym}">
+      <div class="dvg-name">${esc(s.name)}</div>
+      <div class="dvg-track"><div class="dvg-mid"></div><div class="dvg-fill ${v>=0?'pos':'neg'}" style="${side}"></div></div>
+      <div class="dvg-val ${sentClass(v)}">${fmtS(v)}</div>
+    </div>`;
+  }).join('');
+
+  // movers — Leaderboard Row (trend variant)
+  $('#movers').innerHTML = movers.slice(0,7).map((t,i)=>`
+    <div class="lb-row" role="link" tabindex="0" data-go="#/ticker/${t.sym}">
+      <div class="lb-rank">${i+1}</div>
+      <div class="lb-main">
+        <div class="lb-name-row"><span class="lb-brand">${t.sym}</span><span class="lb-delta ${t.wow>=0?'up':'dn'}">${t.wow>=0?'▲':'▼'} ${Math.abs(t.wow).toFixed(2)}</span></div>
+        <div class="lb-meta"><span class="lb-vol">${fmtS(t.net)} net</span><span class="lb-category">· ${esc(t.co)}</span></div>
+      </div>
+    </div>`).join('');
+
+  // market trend (single-line sentiment chart)
+  $('#market-trend').innerHTML = lineChartSVG(idx, { color:'hsl(var(--primary))', min:-0.6, max:0.6, fmt:fmtS, area:true });
+}
+
+/* ════════════════════ CHARTS — data reads light: hairline strokes, regular-weight labels ════════════════════ */
+function lineChartSVG(series, opt){
+  const W=900,H=240,pad={l:46,r:16,t:16,b:26};
+  const n=series.length, min=opt.min, max=opt.max;
+  const x=i=>pad.l+(i/(n-1))*(W-pad.l-pad.r);
+  const y=v=>pad.t+(1-(v-min)/(max-min))*(H-pad.t-pad.b);
+  const ticks=[max, (max+min)/2, min];
+  const grid=ticks.map(g=>`<line x1="${pad.l}" y1="${y(g)}" x2="${W-pad.r}" y2="${y(g)}" style="stroke:hsl(var(--foreground) / 0.06)"/><text x="${pad.l-8}" y="${y(g)+4}" text-anchor="end" font-size="11" style="fill:hsl(var(--muted-foreground))">${opt.fmt(g)}</text>`).join('');
+  const zero = (min<0&&max>0)?`<line x1="${pad.l}" y1="${y(0)}" x2="${W-pad.r}" y2="${y(0)}" style="stroke:hsl(var(--foreground) / 0.15)" stroke-dasharray="3 3"/>`:'';
+  const pts=series.map((v,i)=>`${x(i)},${y(v)}`).join(' ');
+  const area = opt.area? `<path d="M${x(0)},${y(min)} L${series.map((v,i)=>`${x(i)},${y(v)}`).join(' L')} L${x(n-1)},${y(min)} Z" style="fill:${opt.color}" opacity="0.08"/>`:'';
+  const xl=[0,Math.floor(n/4),Math.floor(n/2),Math.floor(3*n/4),n-1].map(i=>`<text x="${x(i)}" y="${H-7}" text-anchor="middle" font-size="11" style="fill:hsl(var(--muted-foreground))">${MONTHS[(i%52)*12/52|0]}</text>`).join('');
+  return `<svg width="100%" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${grid}${zero}${area}<polyline points="${pts}" fill="none" style="stroke:${opt.color}" stroke-width="1.5" stroke-linejoin="round"/>${xl}</svg>`;
+}
+
+// dual-axis: price (right, --chart-2) over sentiment (left, --primary), with annotation markers
+function dualChartSVG(t){
+  const W=900,H=300,pad={l:48,r:54,t:18,b:30};
+  const n=WEEKS;
+  const sMin=-1, sMax=1;
+  const pVals=t.price, pMin=Math.min(...pVals)*0.97, pMax=Math.max(...pVals)*1.03;
+  const x=i=>pad.l+(i/(n-1))*(W-pad.l-pad.r);
+  const ys=v=>pad.t+(1-(v-sMin)/(sMax-sMin))*(H-pad.t-pad.b);
+  const yp=v=>pad.t+(1-(v-pMin)/(pMax-pMin))*(H-pad.t-pad.b);
+  const sTicks=[1,0.5,0,-0.5,-1];
+  const grid=sTicks.map(g=>`<line x1="${pad.l}" y1="${ys(g)}" x2="${W-pad.r}" y2="${ys(g)}" style="stroke:hsl(var(--foreground) / 0.06)"/><text x="${pad.l-8}" y="${ys(g)+4}" text-anchor="end" font-size="11" style="fill:hsl(var(--muted-foreground))">${fmtS(g)}</text>`).join('');
+  const zero=`<line x1="${pad.l}" y1="${ys(0)}" x2="${W-pad.r}" y2="${ys(0)}" style="stroke:hsl(var(--foreground) / 0.15)" stroke-dasharray="3 3"/>`;
+  const pTicks=[pMax,(pMax+pMin)/2,pMin];
+  const pAxis=pTicks.map(g=>`<text x="${W-pad.r+8}" y="${yp(g)+4}" text-anchor="start" font-size="11" style="fill:hsl(var(--muted-foreground))">$${g.toFixed(0)}</text>`).join('');
+  const pPts=pVals.map((v,i)=>`${x(i)},${yp(v)}`).join(' ');
+  const sPts=t.sent.map((v,i)=>`${x(i)},${ys(v)}`).join(' ');
+  const sArea=`<path d="M${x(0)},${ys(0)} L${t.sent.map((v,i)=>`${x(i)},${ys(v)}`).join(' L')} L${x(n-1)},${ys(0)} Z" style="fill:hsl(var(--primary))" opacity="0.07"/>`;
+  const ann=t.annotations.map(a=>{
+    const ax=x(a.w); const ac = a.dir>0 ? 'hsl(var(--primary))' : 'hsl(var(--warning))';
+    return `<line x1="${ax}" y1="${pad.t}" x2="${ax}" y2="${H-pad.b}" style="stroke:${ac}" stroke-width="1" stroke-dasharray="2 3" opacity="0.7"/>
+      <circle cx="${ax}" cy="${ys(t.sent[a.w])}" r="3.5" style="fill:${ac}"><title>${esc(a.label)}</title></circle>`;
+  }).join('');
+  const xl=[0,13,26,39,51].map(i=>`<text x="${x(i)}" y="${H-9}" text-anchor="middle" font-size="11" style="fill:hsl(var(--muted-foreground))">${MONTHS[(i%52)*12/52|0]}</text>`).join('');
+  return `<svg width="100%" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">
+    ${grid}${zero}${pAxis}${sArea}
+    <polyline points="${pPts}" fill="none" style="stroke:hsl(var(--chart-2))" stroke-width="1.5" stroke-linejoin="round"/>
+    <polyline points="${sPts}" fill="none" style="stroke:hsl(var(--primary))" stroke-width="1.5" stroke-linejoin="round"/>
+    ${ann}${xl}
+  </svg>`;
+}
+
+/* ════════════════════ TICKER DETAIL ════════════════════ */
+function renderTicker(t){
+  const cls = sentClass(t.net);
+  const annColor = t.annotations[0].dir>0 ? 'hsl(var(--primary))' : 'hsl(var(--warning))';
+  const annNote = t.annotations.map(a=>`<span class="${a.dir>0?'pos':'neg'}">●</span> wk ${a.w+1}: ${esc(a.label)}`).join(' &nbsp;·&nbsp; ');
+  $('#ticker-body').innerHTML = `
+    <a class="back-link" onclick="go('#/')">← Markets</a>
+    <div class="detail-head">
+      <div>
+        <div class="detail-sym">$${t.sym}</div>
+        <div class="detail-co">${esc(t.co)} · <a onclick="go('#/ticker/${TICKERS.find(x=>x.sector===t.sector).sym}')">${esc(secName(t.sector))}</a></div>
+        <div class="detail-price">
+          $${t.priceNow.toFixed(2)} <span class="${t.priceWow>=0?'pos':'neg'}">${t.priceWow>=0?'▲':'▼'}${Math.abs(t.priceWow).toFixed(1)}% wk</span>
+          &nbsp;·&nbsp; ${(t.volume/1000).toFixed(1)}K weekly mentions
+        </div>
+      </div>
+      <div class="score-block">
+        <div class="score-cap">Net sentiment</div>
+        <div class="score-big ${cls}">${fmtS(t.net)}</div>
+        <div><span class="badge ${sentBadge(t.net)}">${t.wow>=0?'▲':'▼'} ${Math.abs(t.wow).toFixed(2)} w/w · ${sentWord(t.net)}</span></div>
+      </div>
+    </div>
+
+    <div class="section-label">Brand portfolio · sentiment rolls up from these brands</div>
+    <div class="pf-chips">${t.brands.map(b=>{
+      const w=(Math.abs(b.s)*50);
+      const side=b.s>=0?`left:50%;width:${w}%;`:`right:50%;width:${w}%;`;
+      return `<div class="pf-chip"><div class="pf-nm"><span>${esc(b.n)}</span><span class="pf-v ${sentClass(b.s)}">${fmtS(b.s)}</span></div>
+        <div class="pf-mini"><div class="dvg-mid"></div><div class="dvg-fill ${b.s>=0?'pos':'neg'}" style="${side}"></div></div></div>`;
+    }).join('')}</div>
+
+    <div class="wcard mt">
+      <div class="wcard-head"><span class="wcard-title">Price vs. sentiment</span><span class="wcard-sub">52 weeks</span></div>
+      <div class="chart-block">
+        <div class="chart-wrap">${dualChartSVG(t)}</div>
+        <div class="trend-legend">
+          <div class="trend-legend-item"><div class="trend-swatch" style="background:hsl(var(--primary))"></div>Net sentiment (left)</div>
+          <div class="trend-legend-item"><div class="trend-swatch" style="background:hsl(var(--chart-2))"></div>Share price (right)</div>
+          <div class="trend-legend-item"><div class="trend-swatch round" style="background:${annColor};width:8px;height:8px;border-radius:50%"></div>Sentiment event</div>
+        </div>
+        <div class="ann-note">${annNote}</div>
+      </div>
+    </div>
+
+    <div class="row2">
+      <div class="wcard">
+        <div class="wcard-head"><span class="wcard-title">Sentiment mix</span><span class="wcard-sub">Share of mentions</span></div>
+        <div>
+          <div class="senti-bar">
+            <span class="senti-seg pos" style="width:${(t.dist.pos*100).toFixed(0)}%"></span>
+            <span class="senti-seg neu" style="width:${(t.dist.neu*100).toFixed(0)}%"></span>
+            <span class="senti-seg mix" style="width:${(t.dist.mixed*100).toFixed(0)}%"></span>
+            <span class="senti-seg neg" style="width:${(t.dist.neg*100).toFixed(0)}%"></span>
+          </div>
+          <div class="senti-legend">
+            <span class="senti-legend-item"><span class="senti-swatch pos"></span>Positive ${(t.dist.pos*100).toFixed(0)}%</span>
+            <span class="senti-legend-item"><span class="senti-swatch neu"></span>Neutral ${(t.dist.neu*100).toFixed(0)}%</span>
+            <span class="senti-legend-item"><span class="senti-swatch mix"></span>Mixed ${(t.dist.mixed*100).toFixed(0)}%</span>
+            <span class="senti-legend-item"><span class="senti-swatch neg"></span>Negative ${(t.dist.neg*100).toFixed(0)}%</span>
+          </div>
+          <div class="section-label in-card-label">By platform</div>
+          ${t.platforms.map(p=>{
+            const w=(Math.abs(p.s)*50);
+            const side=p.s>=0?`left:50%;width:${w}%;`:`right:50%;width:${w}%;`;
+            return `<div class="dvg-row"><div class="dvg-name">${p.name}</div><div class="dvg-track"><div class="dvg-mid"></div><div class="dvg-fill ${sentClass(p.s)}" style="${side}"></div></div><div class="dvg-val ${sentClass(p.s)}">${fmtS(p.s)}</div></div>`;
+          }).join('')}
+        </div>
+      </div>
+
+      <div class="wcard">
+        <div class="wcard-head"><span class="wcard-title">Recent news</span><span class="wcard-sub">Brand &amp; category</span></div>
+        <div class="news-list">
+          ${t.news.map(nw=>`<a class="art-card on-card">${faviconHTML(nw.src)}<div class="art-body"><div class="art-meta"><span class="art-source">${esc(nw.src)}</span><span class="badge badge-sm ${sentBadge(nw.s)}">${fmtS(nw.s)}</span><span class="art-time">${esc(nw.d)} ago</span></div><div class="art-title">${esc(nw.t)}</div></div></a>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-actions">
+      <button class="btn btn-default" onclick="go('#/alerts')">＋ Track this ticker</button>
+      <a class="btn btn-outline" href="apireqs.html">How this page maps to the API →</a>
+    </div>`;
+}
+
+/* ════════════════════ ALERTS ════════════════════ */
+let alertTrigger = 'drop';
+let userAlerts = [
+  { scope:'TSLA', trigger:'drop', thr:0.2, ch:'Slack — #my-watchlist' },
+  { scope:'sector:bev', trigger:'vol', thr:0.2, ch:'Email — me@example.com' },
+];
+function setTrigger(t){
+  alertTrigger=t;
+  $$('#alert-trigger button').forEach(b=>{
+    const on = b.dataset.trig===t;
+    b.classList.toggle('active', on);
+    b.classList.toggle('inactive', !on);
+  });
+  $('#threshold-label').textContent = t==='vol' ? 'Volume-spike threshold' : 'Magnitude threshold';
+  renderPreview();
+}
+function fillScopeSelect(){
+  const sel=$('#alert-scope');
+  const tks = TICKERS.map(t=>`<option value="${t.sym}">${t.sym} — ${esc(t.co)}</option>`).join('');
+  const scs = SECTORS.map(s=>`<option value="sector:${s.id}">SECTOR — ${esc(s.name)}</option>`).join('');
+  sel.innerHTML = tks + scs;
+}
+function scopeLabel(v){
+  if(v.startsWith('sector:')) return secName(v.split(':')[1]);
+  const t=tickBySym(v); return t? `$${t.sym}` : v;
+}
+// dry-run: replay a stable daily-resolution signal for the scope over the last 30 days (deterministic)
+function dryRun(scope, trigger, thr){
+  let base, seed;
+  if(scope.startsWith('sector:')){
+    const id=scope.split(':')[1]; const m=TICKERS.filter(t=>t.sector===id);
+    base = m.reduce((a,t)=>a+t.net,0)/m.length;
+    seed = id.split('').reduce((a,c)=>a+c.charCodeAt(0),0)*7 + 13;
+  } else {
+    const t=tickBySym(scope); if(!t) return 0; base=t.net; seed=t.seed;
+  }
+  const r = rng(seed + (trigger==='vol'?99:trigger==='spike'?7:0));
+  let s = base, fires = 0, cooldown = 0; const win = [];
+  for(let d=0; d<30; d++){
+    s += (base - s)*0.07 + (r()-0.5)*0.24;
+    win.push(s); if(win.length>3) win.shift();
+    if(cooldown>0){ cooldown--; continue; }
+    const move = win[win.length-1] - win[0];
+    const hit = trigger==='drop' ? move <= -thr
+              : trigger==='spike' ? move >= thr
+              : Math.abs(move) >= thr*0.85;
+    if(hit){ fires++; cooldown = 2; }
+  }
+  return fires;
+}
+function renderPreview(){
+  const scope=$('#alert-scope').value, thr=parseFloat($('#alert-threshold').value);
+  const n=dryRun(scope, alertTrigger, thr);
+  const trigTxt = alertTrigger==='drop'?'sentiment drops':alertTrigger==='spike'?'sentiment spikes':'mention volume spikes';
+  $('#preview').innerHTML = `<div class="preview-big ${n>0?'pos':'neu'}">${n}×</div>
+    <div class="preview-txt">This alert would have fired <b>${n} time${n===1?'':'s'}</b> in the last 30 days — whenever <b>${esc(scopeLabel(scope))}</b> ${trigTxt} by ≥ ${thr.toFixed(2)}.</div>`;
+}
+function renderAlertList(){
+  const tw = tr => tr==='drop'?'Sentiment drop':tr==='spike'?'Sentiment spike':'Volume spike';
+  $('#alert-list').innerHTML = userAlerts.length ? userAlerts.map((a,i)=>`
+    <div class="alert-item">
+      <div class="alert-dot-col"><div class="alert-dot"></div></div>
+      <div class="alert-inner">
+        <div class="alert-content">
+          <div class="alert-condition"><span class="alert-condition-main">${esc(scopeLabel(a.scope))}</span><span class="alert-condition-detail"> · ${tw(a.trigger)} ≥ ${a.thr.toFixed(2)}</span></div>
+          <div class="alert-delivery">${esc(a.ch)}</div>
+        </div>
+        <svg class="alert-delete" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" onclick="removeAlert(${i})"><path d="M2 4h12M5 4V2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 .5.5V4M6 7v5M10 7v5M3 4l.8 8.5a.5.5 0 0 0 .5.5h7.4a.5.5 0 0 0 .5-.5L13 4"/></svg>
+      </div>
+    </div>`).join('') : '<div class="empty-note">No alerts yet.</div>';
+}
+function createAlert(){
+  userAlerts.unshift({ scope:$('#alert-scope').value, trigger:alertTrigger, thr:parseFloat($('#alert-threshold').value), ch:$('#alert-channel').value });
+  renderAlertList();
+}
+function removeAlert(i){ userAlerts.splice(i,1); renderAlertList(); }
+function renderAlerts(){
+  fillScopeSelect();
+  setTrigger(alertTrigger);
+  renderAlertList();
+}
+
+/* ════════════════════ INIT ════════════════════ */
+// delegated navigation for [data-go] rows/items (click + Enter)
+document.addEventListener('click', e=>{ const el=e.target.closest('[data-go]'); if(el) go(el.dataset.go); });
+document.addEventListener('keydown', e=>{ if(e.key==='Enter'){ const el=e.target.closest('[data-go]'); if(el) go(el.dataset.go); } });
+$('#search-input').addEventListener('input', e=>runSearch(e.target.value));
+$('#search-input').addEventListener('keydown', e=>{ if(e.key==='Enter'){ const f=$('#search-results .sa-row'); if(f && !f.classList.contains('empty')) f.click(); } });
+document.addEventListener('click', e=>{ if(!e.target.closest('.app-search')) $('#search-results').classList.remove('open'); });
+renderTape();
+route();
+</script>
+</body>
+</html>

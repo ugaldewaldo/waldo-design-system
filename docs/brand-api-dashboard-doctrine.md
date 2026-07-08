@@ -60,8 +60,12 @@ Each row is the thesis made testable. Study the shipped prototypes in `waldo-lab
 
 Gold-standard references to study before building — real shipped work is the bar.
 
-- [Promo Radar](waldo-labs/promo-radar/index.html) — Brand API dashboard, canonical shell + charts
-- [Prospector](waldo-labs/prospector/index.html) — prospect-intel dashboard, dense list + drill patterns
+- [POV AMP](waldo-labs/PROTOTYPES/pov-amp/Test1/index.html) — app
+- [Prospector](waldo-labs/PROTOTYPES/prospector/index.html) — App
+- [Reception](waldo-labs/PROTOTYPES/reception/index.html)
+- [Seedit](waldo-labs/PROTOTYPES/seddit/index.html)
+- [Brand health](waldo-labs/PROTOTYPES/poppi-health/index.html)
+- [Moodtape](waldo-labs/PROTOTYPES/moodtape/index.html) — music-mood dashboard prototype
 
 ---
 
@@ -238,6 +242,12 @@ switchers, and other context controls may sit on its left side. **Exception:** w
 header has no navigation (B is empty), search may take the right slot of the header
 line itself.
 
+The search input itself always uses the canonical `.app-search` shell (360px, ships in
+`waldo-ds.css`) — never a custom search container or an ad-hoc width.
+
+The toolbar line follows the grid's **row rhythm: ~24px above and ~24px below,
+symmetric** — never tucked tight against the section above or below it.
+
 When the Waldo mark appears it is always the **SVG wordmark** — never text, never a
 placeholder square, never the word "Waldo" in a box. The wordmark path:
 
@@ -310,10 +320,12 @@ collision first. Corollary: **never name a prototype class or variant after a DS
   row taller. Only lists and HBars scroll; SVG charts have fixed height and never scroll.
 - **List height cap (standalone cards):** a list card never grows the page unbounded. In
   a full-width card (no row sibling to set the height), cap the list at **~6 visible
-  rows** and scroll the rest inside — `overflow-y: auto` on the **list container, never
-  on the card itself**, so the card header stays fixed. Applies to leaderboards, mention
-  feeds, news feeds, ranked lists. Exception: when the list is the only content of its
-  view (a dedicated tab with nothing else), it may run full length.
+  rows (~420px max)** and scroll the rest inside — `overflow-y: auto` on the **list
+  container, never on the card itself**, so the card header stays fixed. **~420px is the
+  general trigger:** any list container about to exceed it should scroll instead of
+  growing. Applies to leaderboards, mention feeds, news feeds, ranked lists. Exception:
+  when the list is the only content of its view (a dedicated tab with nothing else), it
+  may run full length.
 - Gap between rows ~24px, between columns ~16px.
 
 ### Card
@@ -604,8 +616,11 @@ _A prototype that breaks one of these is wrong. detect.js / review must reject i
 _Follow unless the specific design has a documented reason not to._
 
 - [should] Do not put search, status/integration pills, badges, buttons, or "Powered by" in the app header — the header is identity + text navigation only. Search goes on the second line (right-aligned), except when the header has no navigation.
+- [should] Do not build custom search containers — search always uses the canonical `.app-search` shell (360px, in `waldo-ds.css`).
+- [should] Do not squeeze the toolbar line (filters/segmented control + search) against its neighbors — it keeps the grid's row rhythm: ~24px above and ~24px below, symmetric.
 - [should] Do not render the Waldo mark as text or a colored box — the mark is always the SVG wordmark (the product name next to it is plain text, and may stand alone).
 - [should] Do not hardcode actions in the page header — only what the design requires.
+- [should] Do not let a list container grow past ~420px (~6 visible rows) — scroll inside the list container (`overflow-y: auto`), never on the card, and never push the row taller than its shortest sibling. Exception: a list that is the only content of its view.
 - [should] Do not put a `border-bottom` on the topbar or a `border-right` on the sidebar — the shell is borderless; zones separate by surface + spacing (see Borderless shell).
 - [should] Do not let a separator line appear below the page header — kill the injected border.
 - [should] Do not divide page sections with an `<hr>`/divider line — use spacing + a muted label.

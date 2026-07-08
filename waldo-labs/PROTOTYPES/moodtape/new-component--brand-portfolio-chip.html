@@ -1,0 +1,65 @@
+<!--
+component: Brand Portfolio Chip
+source: waldo-labs/PROTOTYPES/moodtape/index.html
+date: 2026-07-07
+use_when: A compact card chip summarizing one member of a roll-up (a brand inside a security/portfolio): name + signed metric + an embedded mini diverging bar. Rendered as a wrapping row of chips under a parent entity.
+notes: No DS equivalent (checked component-index Components / Brand API / Charts — KPI Stat Card is too large, Depth Pill has no embedded bar, Theme Pill encodes sentiment tint not a signed bar). Sits on hsl(var(--card)) elevation, no border. Mini bar reuses the Diverging Bar encoding at 4px height (data reads light). Value colors: positive --primary, negative --warning, neutral --muted-foreground. Tabular numerals.
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New component — Brand Portfolio Chip</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  body { display: block !important; }
+  svg { flex: none; min-height: fit-content; }
+  body { max-width: none !important; font-family: 'Inter', sans-serif; background: hsl(var(--background)); color: hsl(var(--foreground)); font-size: var(--fs-sm); padding: 48px 24px; }
+  .demo-note { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-bottom: 16px; }
+
+  /* ── Brand Portfolio Chip — verbatim from the prototype ── */
+  .pos { color: hsl(var(--primary)); }
+  .neg { color: hsl(var(--warning)); }
+  .neu { color: hsl(var(--muted-foreground)); }
+  .dvg-mid { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: hsl(var(--foreground) / 0.15); }
+  .dvg-fill { position: absolute; top: 0; bottom: 0; border-radius: var(--radius-full); }
+  .dvg-fill.pos { background: hsl(var(--primary)); }
+  .dvg-fill.neg { background: hsl(var(--warning)); }
+  .pf-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .pf-chip { background: hsl(var(--card)); border-radius: var(--radius-xl); padding: 10px 14px; min-width: 136px; }
+  .pf-chip .pf-nm { font-size: var(--fs-sm); font-weight: 600; display: flex; justify-content: space-between; gap: 12px; }
+  .pf-chip .pf-nm .pf-v { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .pf-chip .pf-mini { height: 4px; border-radius: var(--radius-full); background: hsl(var(--secondary)); margin-top: 8px; position: relative; overflow: hidden; }
+</style>
+</head>
+<body>
+  <div class="demo-note">Brand Portfolio Chip — one chip per brand in a security's roll-up ($PEP shown).</div>
+  <div class="pf-chips" id="pf-demo"></div>
+<script>
+  (function(){
+    var brands = [
+      { n:'Pepsi',    s: 0.18 },
+      { n:"Lay's",    s: 0.10 },
+      { n:'Doritos',  s: 0.30 },
+      { n:'Gatorade', s: 0.22 },
+      { n:'Quaker',   s: -0.12 },
+    ];
+    function cls(v){ return v>=0.15?'pos':v<=-0.15?'neg':'neu'; }
+    function fmt(v){ return (v>=0?'+':'') + v.toFixed(2); }
+    document.getElementById('pf-demo').innerHTML = brands.map(function(b){
+      var w = Math.abs(b.s)*50;
+      var side = b.s>=0 ? 'left:50%;width:'+w+'%;' : 'right:50%;width:'+w+'%;';
+      return '<div class="pf-chip">'
+        + '<div class="pf-nm"><span>' + b.n + '</span><span class="pf-v ' + cls(b.s) + '">' + fmt(b.s) + '</span></div>'
+        + '<div class="pf-mini"><div class="dvg-mid"></div><div class="dvg-fill ' + (b.s>=0?'pos':'neg') + '" style="' + side + '"></div></div>'
+        + '</div>';
+    }).join('');
+  })();
+</script>
+</body>
+</html>

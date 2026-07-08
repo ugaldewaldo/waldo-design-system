@@ -1,0 +1,108 @@
+<!--
+  component: Prospect Card
+  source: waldo-labs/PROTOTYPES/prospector/index.html (This Week / Passed views)
+  date: 2026-07-07
+  use_when:
+    - A review-queue card for an entity (brand/company) carrying identity, a 0-100 match/fit
+      score, paired reason blocks ("why it's a fit" / "why now"), and a triage action row
+      (accept / track / pass)
+    - Weekly prospect or lead-review feeds where each item is scored against the user's own profile
+  notes: >
+    Built per the on-card rule — card = hsl(var(--card)), nested reason blocks =
+    hsl(var(--muted)) with lockstep hover. Score color encodes tier: >=90 primary,
+    80-89 foreground, below muted-foreground. Opening badge: badge-highlight for a
+    normal opening, badge-destructive for a hot/urgent one. Exactly one primary
+    action (btn-default); tertiary "View brief" is a text link, never btn-ghost.
+    Brand avatar = square .wav + favicon-service image degrading to the initial.
+    Closest existing component is Opportunity Card (source + AI draft) — different
+    anatomy: this one is entity + score + reasons.
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New component — Prospect Card</title>
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  body { display: block !important; }
+  svg { flex: none; min-height: fit-content; }
+  .spec-wrap { max-width: 760px; margin: 40px auto; padding: 0 24px; }
+  .spec-title { font-size: var(--fs-2xl); font-weight: 600; letter-spacing: -0.04em; color: hsl(var(--foreground)); margin-bottom: 4px; }
+  .spec-sub { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); margin-bottom: 28px; }
+
+  /* ── Prospect Card — verbatim from the prototype ── */
+  .pr-brand-av { position: relative; }
+  .pr-brand-av img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 14%; background: hsl(var(--muted)); }
+  .pr-card { background: hsl(var(--card)); border-radius: 16px; padding: 20px 22px; cursor: pointer; transition: background 0.12s; }
+  .pr-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--card))); }
+  .pr-card.is-done { opacity: 0.62; }
+  .pr-card-top { display: flex; align-items: flex-start; gap: 14px; }
+  .pr-card-id { min-width: 0; flex: 1; }
+  .pr-card-name { font-size: var(--fs-base); font-weight: 500; letter-spacing: -0.02em; color: hsl(var(--foreground)); display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+  .pr-domain { color: hsl(var(--muted-foreground)); font-size: var(--fs-xs); font-weight: 400; }
+  .pr-badges { display: flex; gap: 6px; margin-top: 7px; flex-wrap: wrap; }
+  .pr-score-wrap { margin-left: auto; text-align: right; flex-shrink: 0; }
+  .pr-score { font-size: var(--fs-2xl); font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .pr-score.s-hi { color: hsl(var(--primary)); }
+  .pr-score.s-mid { color: hsl(var(--foreground)); }
+  .pr-score.s-lo { color: hsl(var(--muted-foreground)); }
+  .pr-score-pct { font-size: var(--fs-xs); font-weight: 400; color: hsl(var(--muted-foreground)); }
+  .pr-score-lbl { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 2px; }
+  .pr-reasons { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+  .pr-reason { background: hsl(var(--muted)); border-radius: var(--radius-xl); padding: 12px 14px; }
+  .pr-card:hover .pr-reason { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--muted))); }
+  .pr-reason-lbl { font-size: var(--fs-xs); font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: hsl(var(--muted-foreground)); display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+  .pr-reason-lbl.now { color: hsl(var(--highlight)); }
+  .pr-reason p { font-size: var(--fs-sm); color: color-mix(in srgb, hsl(var(--foreground)) 68%, transparent); line-height: 1.5; margin: 0; }
+  .pr-reason p b { color: hsl(var(--foreground)); font-weight: 600; }
+  .pr-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 16px; }
+  .pr-grow { flex: 1; }
+  .pr-brief-link { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); text-decoration: none; cursor: pointer; }
+  .pr-brief-link:hover { color: hsl(var(--foreground)); }
+</style>
+</head>
+<body>
+<div class="spec-wrap">
+  <div class="spec-title">Prospect Card</div>
+  <div class="spec-sub">Review-queue card: entity + match score + paired reason blocks + triage action row.</div>
+
+  <div class="pr-card">
+    <div class="pr-card-top">
+      <span class="wav wav-square wav-40 pr-brand-av"><span>P</span><img src="https://www.google.com/s2/favicons?domain=drinkpoppi.com&sz=128" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></span>
+      <div class="pr-card-id">
+        <div class="pr-card-name">Poppi <span class="pr-domain">drinkpoppi.com</span></div>
+        <div class="pr-badges">
+          <span class="badge badge-secondary">Better-for-you beverage</span>
+          <span class="badge badge-highlight">Acquired</span>
+        </div>
+      </div>
+      <div class="pr-score-wrap">
+        <div class="pr-score s-hi">94<span class="pr-score-pct">/100</span></div>
+        <div class="pr-score-lbl">Match</div>
+      </div>
+    </div>
+    <div class="pr-reasons">
+      <div class="pr-reason">
+        <div class="pr-reason-lbl">Why it's a fit</div>
+        <p>Near-perfect mirror of your <b>OLIPOP</b> work — prebiotic soda, same gut-health positioning, same Gen Z wellness buyer you built that brand voice for.</p>
+      </div>
+      <div class="pr-reason">
+        <div class="pr-reason-lbl now">Why now</div>
+        <p>Acquired by PepsiCo for ~$1.95B — brand team mid-reshuffle.</p>
+      </div>
+    </div>
+    <div class="pr-actions">
+      <button class="btn btn-default btn-sm">Accept → Pipeline</button>
+      <button class="btn btn-secondary btn-sm">Track</button>
+      <button class="btn btn-outline btn-sm">Pass</button>
+      <span class="pr-grow"></span>
+      <a class="pr-brief-link">View brief →</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

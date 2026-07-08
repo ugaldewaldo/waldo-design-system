@@ -1,0 +1,119 @@
+<!--
+  component: Snapshot Gallery
+  source: waldo-labs/PROTOTYPES/poppi-health/index.html (Tracker drill — screenshot mode)
+  date: 2026-07-07
+  use_when:
+    - Scrubbing through a timeline of captured page snapshots / screenshots (newest to oldest)
+    - Any image sequence where the user steps frame by frame with arrows or ←/→ keys
+  notes: |
+    No DS equivalent found in docs/component-index.md (checked Components, Brand API
+    components, and Charts) or by grepping index.html for "gallery" / "carousel" concepts
+    matching an image scrubber (Carousel is a swipe strip of cards, not a framed
+    stepper with caption + counter). Built on the DS surface ladder: frame on
+    var(--muted), pills/arrows on a translucent var(--background) mix so they read
+    over any image. Caption (left pill) shows the capture timestamp; counter (right
+    pill) shows position. Arrows hidden when there is a single frame. Keyboard: the
+    consumer wires ArrowLeft/ArrowRight to step. All colors via DS tokens.
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New component — Snapshot Gallery</title>
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  /* waldo-ds.css sets html,body{height:100%;overflow:hidden} — breaks scroll.
+     Scroll override goes on html ONLY: any overflow other than visible on body
+     silently kills position:sticky (the sticky topbar scrolls away). */
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  /* waldo-ds.css sets body{display:flex!important} — collapses card widths */
+  body { display: block !important; }
+  /* waldo-ds.css sets svg{display:block} — collapses ring/icon SVGs inside flex containers */
+  svg { flex: none; min-height: fit-content; }
+
+  body { background: hsl(var(--background)); color: hsl(var(--foreground)); padding: 48px 24px; }
+  .demo-wrap { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+  .demo-title { font-size: var(--fs-xl); font-weight: 500; letter-spacing: -0.02em; }
+  .demo-sub { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); }
+
+  /* ── Snapshot Gallery — component (verbatim from the prototype) ── */
+  .snapgal { position: relative; border-radius: var(--radius-xl); overflow: hidden; background: hsl(var(--muted)); }
+  .snapgal-frame { aspect-ratio: 16/10; width: 100%; display: flex; align-items: center; justify-content: center; }
+  .snapgal-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .snapgal-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 32px; height: 32px; border-radius: 9999px; background: color-mix(in srgb, hsl(var(--background)) 65%, transparent); color: hsl(var(--foreground)); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: var(--fs-lg); line-height: 1; padding: 0; transition: background 0.12s; font-family: inherit; }
+  .snapgal-arrow:hover { background: color-mix(in srgb, hsl(var(--background)) 85%, transparent); }
+  .snapgal-arrow.prev { left: 10px; }
+  .snapgal-arrow.next { right: 10px; }
+  .snapgal-caption { position: absolute; left: 10px; bottom: 10px; background: color-mix(in srgb, hsl(var(--background)) 70%, transparent); color: hsl(var(--foreground)); font-size: var(--fs-xs); font-weight: 500; padding: 4px 9px; border-radius: 9999px; font-variant-numeric: tabular-nums; }
+  .snapgal-counter { position: absolute; right: 10px; bottom: 10px; background: color-mix(in srgb, hsl(var(--background)) 70%, transparent); color: hsl(var(--muted-foreground)); font-size: var(--fs-xs); font-weight: 600; padding: 4px 9px; border-radius: 9999px; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<div class="demo-wrap">
+  <div>
+    <div class="demo-title">Snapshot Gallery</div>
+    <div class="demo-sub">Framed image stepper with timestamp caption + position counter. Used in the Tracker drill (screenshot mode) of the Poppi Brand Health prototype.</div>
+  </div>
+
+  <div class="snapgal" id="demo-gal">
+    <div class="snapgal-frame"><img id="gal-img" alt="Snapshot 1"></div>
+    <button class="snapgal-arrow prev" type="button" aria-label="Previous" onclick="galMove(-1)">‹</button>
+    <button class="snapgal-arrow next" type="button" aria-label="Next" onclick="galMove(1)">›</button>
+    <div class="snapgal-caption" id="gal-caption">May 15, 2:00 PM</div>
+    <div class="snapgal-counter" id="gal-counter">1 / 4</div>
+  </div>
+  <div class="demo-sub">Use ← / → to scrub between snapshots.</div>
+</div>
+
+<script>
+// Demo frames: deterministic token-colored canvases (stand-ins for captures).
+function tokenHsl(name, alpha) {
+  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return alpha != null ? `hsl(${v} / ${alpha})` : `hsl(${v})`;
+}
+const FRAME_LABELS = ['May 15, 2:00 PM', 'May 15, 8:00 PM', 'May 16, 2:00 AM', 'May 16, 8:00 AM'];
+const FRAMES = FRAME_LABELS.map((label, i) => {
+  const cnv = document.createElement('canvas');
+  cnv.width = 640; cnv.height = 400;
+  const ctx = cnv.getContext('2d');
+  const pairs = [['--card', '--secondary'], ['--muted', '--card'], ['--secondary', '--muted'], ['--card', '--muted']];
+  const grad = ctx.createLinearGradient(0, 0, 640, 400);
+  grad.addColorStop(0, tokenHsl(pairs[i][0]));
+  grad.addColorStop(1, tokenHsl(pairs[i][1]));
+  ctx.fillStyle = grad; ctx.fillRect(0, 0, 640, 400);
+  ctx.fillStyle = tokenHsl('--foreground', 0.9);
+  ctx.font = '600 32px Inter, sans-serif';
+  ctx.fillText('Snapshot ' + (i + 1), 60, 120);
+  ctx.fillStyle = tokenHsl('--muted-foreground');
+  ctx.font = '14px Inter, sans-serif';
+  ctx.fillText(label, 60, 150);
+  const chartTokens = ['--chart-1', '--chart-2', '--chart-3', '--chart-4'];
+  for (let k = 0; k < 4; k++) {
+    ctx.fillStyle = tokenHsl('--foreground', 0.07);
+    ctx.fillRect(60 + k * 135, 220, 120, 120);
+    ctx.fillStyle = tokenHsl(chartTokens[(k + i) % 4], 0.55);
+    ctx.fillRect(72 + k * 135, 232, 30, 96);
+  }
+  return cnv.toDataURL('image/png');
+});
+let galIdx = 0;
+function galRender() {
+  document.getElementById('gal-img').src = FRAMES[galIdx];
+  document.getElementById('gal-caption').textContent = FRAME_LABELS[galIdx];
+  document.getElementById('gal-counter').textContent = (galIdx + 1) + ' / ' + FRAMES.length;
+}
+function galMove(delta) {
+  galIdx = (galIdx + delta + FRAMES.length) % FRAMES.length;
+  galRender();
+}
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft') galMove(-1);
+  if (e.key === 'ArrowRight') galMove(1);
+});
+galRender();
+</script>
+</body>
+</html>

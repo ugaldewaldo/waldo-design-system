@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seddit · r/Chipotle</title>
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  /* waldo-ds.css sets html,body{height:100%;overflow:hidden} — breaks scroll.
+     Scroll override goes on html ONLY: any overflow other than visible on body
+     silently kills position:sticky (the sticky topbar scrolls away). */
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  /* waldo-ds.css sets body{display:flex!important} — collapses card widths */
+  body { display: block !important; }
+  /* waldo-ds.css sets svg{display:block} — collapses ring/icon SVGs inside flex containers */
+  svg { flex: none; min-height: fit-content; }
+
+  html { scroll-behavior: smooth; }
+  body { margin: 0; font-family: 'Inter', sans-serif; font-size: var(--fs-sm); line-height: 1.5; background: hsl(var(--background)); color: hsl(var(--foreground)); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+
+  /* ── Shell ─────────────────────────────────────────────── */
+  .sed-shell { max-width: 1184px; margin: 0 auto; padding: 0 24px; }
+  .sed-grid { display: grid; grid-template-columns: 1fr 312px; gap: 24px; align-items: start; margin-top: 16px; padding-bottom: 40px; }
+  @media (max-width: 900px) { .sed-grid { grid-template-columns: 1fr; } .sed-side { display: none; } }
+
+  /* ── Stimulus Bar (local composition: Card + Input + Button) ── */
+  .sed-stim { background: hsl(var(--card)); border-radius: 16px; padding: 10px 10px 10px 20px; display: flex; align-items: center; gap: 14px; margin-top: 16px; }
+  .sed-stim-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: hsl(var(--primary)); flex: none; }
+  .sed-stim-input { flex: 1; min-width: 0; border: none; background: transparent; font-family: 'Inter', sans-serif; font-size: var(--fs-sm); color: hsl(var(--foreground)); outline: none; }
+  .sed-stim-input::placeholder { color: hsl(var(--muted-foreground)); }
+
+  /* ── Community Banner (canonical: index.html #comp-community-banner) ── */
+  .cbanner { border-radius: 16px; overflow: hidden; background: hsl(var(--card)); width: 100%; margin-bottom: 16px; }
+  .cbanner-cover { height: 88px; background: hsl(var(--secondary)); background-image: radial-gradient(hsl(var(--foreground) / 0.06) 1px, transparent 1px); background-size: 14px 14px; }
+  .cbanner-row { display: flex; align-items: flex-end; gap: 14px; padding: 0 18px 14px; margin-top: -26px; position: relative; }
+  .cbanner-avatar { background: hsl(var(--primary)); color: hsl(var(--background)); box-shadow: 0 0 0 3px hsl(var(--card)); border-color: transparent; }
+  .cbanner-meta { flex: 1; padding-bottom: 2px; min-width: 0; }
+  .cbanner-meta h3 { font-size: var(--fs-2xl); font-weight: 600; letter-spacing: -0.02em; margin: 0; line-height: 1.2; }
+  .cbanner-sub { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+  .cbanner-members { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .cbanner-members b { color: hsl(var(--foreground)); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .cbanner-join { margin-left: auto; flex: none; }
+
+  /* ── Vote Column (canonical: index.html #comp-vote-column) ── */
+  .vote-col { width: 44px; background: hsl(var(--muted)); display: flex; flex-direction: column; align-items: center; padding: 12px 0; gap: 3px; border-radius: var(--radius-xl); }
+  .vote-arrow { width: 26px; height: 26px; border: none; background: transparent; cursor: pointer; border-radius: var(--radius); display: grid; place-items: center; color: hsl(var(--muted-foreground)); transition: background 0.12s, color 0.12s; }
+  .vote-arrow:hover { background: hsl(var(--primary) / 0.12); color: hsl(var(--primary)); }
+  .vote-arrow.dn:hover { background: hsl(var(--foreground) / 0.08); color: hsl(var(--foreground)); }
+  .vote-arrow.on-up { color: hsl(var(--primary)); }
+  .vote-arrow.on-dn { color: hsl(var(--foreground)); }
+  .vote-score { font-size: var(--fs-xs); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .vote-row { display: flex; align-items: center; gap: 4px; }
+  .vote-mini { width: 18px; height: 18px; border: none; background: transparent; cursor: pointer; color: hsl(var(--muted-foreground)); display: grid; place-items: center; border-radius: var(--radius); transition: background 0.12s, color 0.12s; }
+  .vote-mini:hover { color: hsl(var(--primary)); background: hsl(var(--primary) / 0.12); }
+  .vote-mini.dn:hover { color: hsl(var(--foreground)); background: hsl(var(--foreground) / 0.08); }
+
+  /* ── Post Card (local — DS gap, spec: new-component--post-card.html) ── */
+  .sed-post { display: flex; gap: 16px; background: hsl(var(--card)); border-radius: 16px; padding: 16px 18px; }
+  .sed-post .vote-col { flex: none; align-self: flex-start; }
+  .sed-post-body { flex: 1; min-width: 0; }
+  .sed-post-head { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .sed-post-op { font-weight: 600; color: hsl(var(--foreground)); }
+  .sed-post-verified { color: hsl(var(--primary)); }
+  .sed-post-title { font-size: var(--fs-xl); font-weight: 500; letter-spacing: -0.02em; line-height: 1.3; margin: 9px 0 6px; }
+  .sed-post-text { font-size: var(--fs-sm); color: hsl(var(--foreground) / 0.85); }
+  .sed-post-note { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: hsl(var(--muted-foreground)); border: 1px dashed hsl(var(--border)); padding: 5px 9px; border-radius: var(--radius); }
+  .sed-post-foot { display: flex; align-items: center; gap: 16px; margin-top: 13px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .sed-award { color: hsl(var(--highlight)); }
+  .sed-awards { display: flex; gap: 5px; }
+  .sed-act { border: none; background: transparent; padding: 0; font-family: inherit; font-size: inherit; color: inherit; cursor: pointer; transition: color 0.12s; }
+  .sed-act:hover { color: hsl(var(--foreground)); }
+
+  /* ── Comments header ── */
+  .sed-cmts-head { display: flex; align-items: center; justify-content: space-between; margin: 20px 2px 10px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .sed-cmts-head b { color: hsl(var(--foreground)); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .sed-sort { color: hsl(var(--primary)); }
+
+  /* ── Threaded Comment (canonical: index.html #comp-threaded-comment) ── */
+  .thread { margin-top: 4px; font-size: var(--fs-sm); line-height: 1.5; width: 100%; }
+  .thread-row { display: flex; gap: 9px; }
+  .thread-rail { flex: none; width: 32px; display: flex; flex-direction: column; align-items: center; padding-top: 3px; }
+  .thread-line { border: none; padding: 0; width: 2px; flex: 1; background: hsl(var(--border)); margin: 6px 0 0; border-radius: var(--radius-full); cursor: pointer; transition: background 0.12s; }
+  .thread-line:hover { background: hsl(var(--primary)); }
+  .thread-main { flex: 1; min-width: 0; padding-bottom: 8px; }
+  .thread-head { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .thread-user { background: transparent; border: none; padding: 0; font-family: inherit; font-size: inherit; font-weight: 600; color: hsl(var(--foreground)); cursor: pointer; border-bottom: 1px dotted hsl(var(--muted-foreground)); transition: color 0.12s, border-color 0.12s; }
+  .thread-user:hover { color: hsl(var(--primary)); border-bottom-color: hsl(var(--primary)); }
+  .thread-flair { font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 7px; border-radius: var(--radius-full); }
+  .thread-karma { font-variant-numeric: tabular-nums; }
+  .thread-dot { color: hsl(var(--muted-foreground)); opacity: 0.6; }
+  .thread-text { margin: 5px 0 2px; color: hsl(var(--foreground) / 0.9); font-size: var(--fs-sm); line-height: 1.55; }
+  .thread-foot { display: flex; align-items: center; gap: 14px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 5px; }
+  .thread-act { border: none; background: transparent; padding: 0; font-family: inherit; font-size: inherit; color: inherit; cursor: pointer; transition: color 0.12s; }
+  .thread-act:hover { color: hsl(var(--foreground)); }
+  .thread-children { margin-left: 16px; }
+  .thread.collapsed > .thread-row > .thread-main > .thread-text,
+  .thread.collapsed > .thread-row > .thread-main > .thread-foot,
+  .thread.collapsed > .thread-row > .thread-main > .thread-children { display: none; }
+  .thread.collapsed > .thread-row > .thread-rail > .thread-line { display: none; }
+  .thread-stub { display: none; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .thread.collapsed > .thread-row > .thread-main > .thread-stub { display: block; margin-top: 4px; }
+
+  /* Cast identity — categorical chart tints (avatar + flair share the tint) */
+  .cast-0  { background: hsl(var(--muted)); color: hsl(var(--muted-foreground)); border-color: transparent; }
+  .cast-1  { background: hsl(var(--chart-1) / 0.15);  color: hsl(var(--chart-1));  border-color: transparent; }
+  .cast-2  { background: hsl(var(--chart-2) / 0.15);  color: hsl(var(--chart-2));  border-color: transparent; }
+  .cast-3  { background: hsl(var(--chart-3) / 0.15);  color: hsl(var(--chart-3));  border-color: transparent; }
+  .cast-4  { background: hsl(var(--chart-4) / 0.15);  color: hsl(var(--chart-4));  border-color: transparent; }
+  .cast-5  { background: hsl(var(--chart-5) / 0.15);  color: hsl(var(--chart-5));  border-color: transparent; }
+  .cast-6  { background: hsl(var(--chart-6) / 0.15);  color: hsl(var(--chart-6));  border-color: transparent; }
+  .cast-7  { background: hsl(var(--chart-7) / 0.15);  color: hsl(var(--chart-7));  border-color: transparent; }
+  .cast-8  { background: hsl(var(--chart-8) / 0.15);  color: hsl(var(--chart-8));  border-color: transparent; }
+  .cast-9  { background: hsl(var(--chart-9) / 0.15);  color: hsl(var(--chart-9));  border-color: transparent; }
+  .cast-10 { background: hsl(var(--chart-10) / 0.15); color: hsl(var(--chart-10)); border-color: transparent; }
+  .cast-11 { background: hsl(var(--chart-11) / 0.15); color: hsl(var(--chart-11)); border-color: transparent; }
+  .cast-12 { background: hsl(var(--chart-12) / 0.15); color: hsl(var(--chart-12)); border-color: transparent; }
+  .avatar[data-u] { cursor: pointer; }
+
+  /* ── Load more / thread end ── */
+  .sed-loadmore { width: 100%; margin-top: 12px; }
+  .sed-thread-end { margin-top: 12px; padding: 12px; text-align: center; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+
+  /* ── Sidebar ── */
+  .sed-side { display: flex; flex-direction: column; gap: 16px; }
+  .sed-side .wcard { padding: 20px; gap: 12px; }
+  .sed-stats { display: flex; gap: 12px; }
+  .sed-stat { flex: 1; }
+  .sed-stat b { display: block; font-size: var(--fs-lg); font-weight: 600; font-variant-numeric: tabular-nums; color: hsl(var(--foreground)); }
+  .sed-stat span { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  /* list cap — doctrine: lists scroll past ~420px, on the list container, never the card */
+  .sed-roster { display: flex; flex-direction: column; max-height: 420px; overflow-y: auto; }
+  .sed-roster .wli { flex: none; cursor: pointer; padding: 0 4px; width: 100%; background: transparent; border: none; border-bottom: 1px solid hsl(var(--border)); font-family: inherit; font-size: inherit; color: inherit; text-align: left; }
+  .sed-roster .wli:hover { background: hsl(var(--muted)); }
+  .sed-roster .wli:last-child { border-bottom: none; }
+  .sed-powered { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+  /* ── Cast bio popover (Hover Card pattern on the popover surface) ── */
+  .sed-pop { position: absolute; z-index: 60; width: 300px; background: hsl(var(--popover)); border-radius: 16px; box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.45); opacity: 0; transform: translateY(6px) scale(0.98); pointer-events: none; transition: opacity 0.16s, transform 0.16s; overflow: hidden; }
+  .sed-pop.show { opacity: 1; transform: none; pointer-events: auto; }
+  .sed-pop-top { display: flex; align-items: center; gap: 10px; padding: 13px 14px 11px; background: hsl(var(--foreground) / 0.04); }
+  .sed-pop-name { font-size: var(--fs-sm); font-weight: 600; }
+  .sed-pop-top .thread-flair { display: inline-block; margin-top: 3px; }
+  .sed-pop-bio { padding: 12px 14px; font-size: var(--fs-xs); line-height: 1.55; color: hsl(var(--foreground) / 0.9); }
+  .sed-pop-receipt { display: flex; align-items: center; gap: 7px; padding: 10px 14px; background: hsl(var(--primary) / 0.08); font-size: 10px; color: hsl(var(--primary)); }
+  .sed-pop-receipt span { margin-left: auto; color: hsl(var(--muted-foreground)); }
+
+  /* ── Motion ── */
+  .fade { opacity: 0; transform: translateY(10px); animation: sedRise 0.5s cubic-bezier(0.2, 0.7, 0.3, 1) forwards; }
+  @keyframes sedRise { to { opacity: 1; transform: none; } }
+  .sed-d1 { animation-delay: 0.02s; }
+  .sed-d2 { animation-delay: 0.06s; }
+  .sed-d3 { animation-delay: 0.10s; }
+  .sed-d4 { animation-delay: 0.14s; }
+  .sed-d5 { animation-delay: 0.18s; }
+  .sed-d6 { animation-delay: 0.22s; }
+  .shimmer { animation: none !important; opacity: 0.35; filter: blur(1px); transition: 0.3s; }
+
+  .sed-foot { padding: 28px 0 50px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); text-align: center; }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="app-header-inner">
+    <div class="app-ident">
+      <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Waldo"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
+      <span class="product">Seddit</span>
+    </div>
+    <nav class="app-nav">
+      <a href="index.html">Rooms</a>
+      <a href="glossier.html">r/glossier</a>
+      <a class="active" href="chipotle.html">r/Chipotle</a>
+    </nav>
+  </div>
+</header>
+
+<div class="app-toolbar">
+  <div class="app-search input-with-icon">
+    <div class="input-icon">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </div>
+    <input class="input" type="text" value="r/Chipotle" spellcheck="false" aria-label="Search communities">
+  </div>
+</div>
+
+<div class="sed-shell">
+
+  <div class="sed-stim fade sed-d1">
+    <span class="sed-stim-label">Stimulus</span>
+    <input class="sed-stim-input" id="stim" value="REAL · Chipotle confirmed 1–2% price increases for 2026, and on skimpy portions the CEO's advice was that customers should 'just ask' for more (May 2026)." aria-label="Stimulus">
+    <button class="btn btn-default" id="simBtn" type="button">Simulate ▸</button>
+  </div>
+
+  <div class="sed-grid">
+    <main id="feed">
+
+      <div class="cbanner fade sed-d2">
+        <div class="cbanner-cover"></div>
+        <div class="cbanner-row">
+          <div class="avatar av-2xl cbanner-avatar">C</div>
+          <div class="cbanner-meta">
+            <h3>r/Chipotle</h3>
+            <div class="cbanner-sub">
+              <span class="badge badge-active">◆ simulated community</span>
+              <span class="cbanner-members">grounded in <b>248k</b> real r/Chipotle accounts</span>
+              <button class="btn btn-secondary btn-sm cbanner-join" id="joinBtn" type="button">Joined</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Promoted post -->
+      <div class="sed-post fade sed-d3">
+        <div class="vote-col">
+          <button class="vote-arrow" data-d="1" type="button" aria-label="Upvote"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 14 6-7 6 7"/></svg></button>
+          <span class="vote-score" data-base="1240">1.2k</span>
+          <button class="vote-arrow dn" data-d="-1" type="button" aria-label="Downvote"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 10 6 7 6-7"/></svg></button>
+        </div>
+        <div class="sed-post-body">
+          <div class="sed-post-head">
+            <span class="avatar av-xs av-brand">C</span>
+            <span class="sed-post-op">u/Chipotle</span><span class="sed-post-verified">✓</span>
+            <span class="badge badge-secondary badge-sm">From the CEO</span>
+            <span class="thread-dot">·</span><span>Promoted</span><span class="thread-dot">·</span><span>4h</span>
+          </div>
+          <div class="sed-post-title">A note on prices &amp; portions: menu prices will rise 1–2% this year. And if your portion ever looks light — just ask. Our teams are always happy to add more. 🌯</div>
+          <div class="sed-post-text">Real ingredients cost a little more, but our commitment to you hasn't changed. Feel like you got skimped? Just ask — that's what we're here for.</div>
+          <div class="sed-post-note">◇ sponsored stimulus · the cast reacts below</div>
+          <div class="sed-post-foot">
+            <span class="sed-awards"><span class="sed-award" title="Shiny">✦</span><span class="sed-award" title="Hmm">◔</span></span>
+            <span>💬 <span class="sed-cmtcount"></span> comments</span>
+            <button class="sed-act" type="button">↪ share</button>
+            <button class="sed-act" type="button">⚑ save</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sed-cmts-head fade sed-d4">
+        <div><b class="sed-cmtcount"></b> comments · <b class="sed-voicestat"></b> voices · sorted by <span class="sed-sort">most telling</span></div>
+        <span class="badge badge-active badge-sm">⇅ best</span>
+      </div>
+
+      <div id="thread"></div>
+
+      <button class="btn btn-ghost sed-loadmore fade sed-d6" id="loadmore" type="button">↓ Conjure 2 more grounded voices</button>
+
+      <div class="sed-foot">Seddit · the audience, said it. — a simulated subreddit. Every voice is grounded in a real person; the takes are theirs, the thread is conjured.</div>
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="sed-side">
+      <div class="wcard fade sed-d4">
+        <div class="wcard-head">
+          <div class="wcard-title">About this community</div>
+          <div class="wcard-sub">Chipotle's real audience, reconstructed from public signal — talking the way they actually talk. Drop a stimulus, watch them react.</div>
+        </div>
+        <div class="sed-stats">
+          <div class="sed-stat"><b class="sed-voicestat">12</b><span>voices</span></div>
+          <div class="sed-stat"><b class="sed-cmtcount">—</b><span>comments</span></div>
+          <div class="sed-stat"><b>100%</b><span>real accounts</span></div>
+        </div>
+      </div>
+
+      <div class="wcard fade sed-d5">
+        <div class="wcard-head">
+          <div class="wcard-title">The cast in this thread</div>
+        </div>
+        <div class="sed-roster" id="roster"></div>
+      </div>
+
+      <div class="wcard fade sed-d6">
+        <div class="wcard-head">
+          <div class="wcard-title">How this works</div>
+        </div>
+        <div class="wcard-body"><b>What</b> they say tracks the audience. <b>How</b> they say it is theirs — each voice grounded in one real account.</div>
+        <div class="sed-powered">Powered by Seddit · brand-audience API <span class="badge badge-secondary badge-sm">simulated · v0.1</span></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<div class="sed-pop" id="pop"></div>
+
+<script>
+/* ---------------- data (deterministic — fixed literals, no Math.random / Date) ---------------- */
+var CAST = {
+  halfscoophack: { ava: 'N', tint: 1, flair: 'Order Hacker',
+    bio: "decade-deep Chipotle veteran on a budget. the trick is half-and-half EVERYTHING — half white half brown rice, half steak half chicken — they never measure the halves right so you get more for the same price. add a $0.65 tortilla for 300 calories. massive bowl 99% of the time. ask me for the full formula.",
+    real: 'a real r/Chipotle voice' },
+  backofhouse: { ava: 'O', tint: 2, flair: 'Crew Member',
+    bio: "I work the line. your bowl is the LAST thing Chipotle is skimping — meanwhile we're out of garbage bags, cleaning supplies, and labor hours. the portion problem is a butterfly effect of corporate cutting everything. they'll hang a 'DON'T SKIMP' sign and call it fixed. (most-fined company for labor violations, btw.)",
+    real: 'a real r/Chipotle voice' },
+  calleditbefore: { ava: 'S', tint: 3, flair: 'Called It',
+    bio: "every time corporate 'fixes' something it gets worse for us. they'll say they fixed portions, then shrink the bowl so it looks full. forever loop of smaller bowls and PR promises. mark my words, I always end up right and never happy about it.",
+    real: 'a real r/Chipotle voice' },
+  stayloud: { ava: 'j', tint: 4, flair: 'Vote With Wallet',
+    bio: "stay loud online — it's the only thing that makes a corporation flinch. they only fix what embarrasses them. don't reward bad behavior, don't pre-order the apology. honestly kind of nice to see one of them held to account for once.",
+    real: 'a real r/Chipotle voice' },
+  finprintpedant: { ava: 'L', tint: 5, flair: 'Reads The Fine Print',
+    bio: "actually — if you order half-and-half meats they charge you for the more expensive one. people repeat 'hacks' that stopped working years ago. read the terms. the 'deal' usually isn't. I will be the well-actually guy and I will be correct.",
+    real: 'a real r/Chipotle voice' },
+  exmoescrew: { ava: 'w', tint: 6, flair: "Ex-Moe's",
+    bio: "quit Moe's a few months ago. we started using smaller bowls but kept 'the same portion' — nachos got way less chips, same $11. it's the whole industry's playbook. honestly you're better off sitting down somewhere to eat.",
+    real: 'a real r/Chipotle voice' },
+  cavarotation: { ava: 'b', tint: 7, flair: 'Cava-Curious',
+    bio: "I rotate between the bowl places and watch them all shrink. went back to Cava after a while and swear that bowl got smaller too. the whole category is racing to skimp. I just go wherever skimps me least that week.",
+    real: 'a real r/Chipotle voice' },
+  linecomedian: { ava: 'P', tint: 8, flair: 'Here For Jokes',
+    bio: "I'm not here for discourse, I'm here to order half chicken and uhhhh actually all chicken. the line is my stage. can I get half membership and half membership please.",
+    real: 'a real r/Chipotle voice' },
+  honestgm: { ava: 'C', tint: 9, flair: 'Store Manager',
+    bio: "manager here. corporate markets 'guaranteed portions' while cutting my labor hours so I literally can't staff the line to deliver them. the honest truth is it all comes down to them squeezing the store. we want to give you a full bowl. they won't let us staff for it.",
+    real: 'a real r/Chipotle voice' },
+  scoopwatcher: { ava: 'C', tint: 10, flair: 'Shrinkflation Watch',
+    bio: "watch the serving utensils and the bowl, not the price. that's where the cut hides — smaller scoop, smaller bowl, 'same portion.' I measure with my eyes and I am never wrong about this.",
+    real: 'a real r/Chipotle voice' },
+  hacksdead: { ava: 'd', tint: 11, flair: 'Hacks Are Dead',
+    bio: "the half-and-half thing USED to work. now they're extra careful so you get less protein, and half scoops somehow get you even less. the golden age of skimp-proofing is over. I remember when they'd bury the foil in steak without asking.",
+    real: 'a real r/Chipotle voice' },
+  Kwheinic: { ava: 'K', tint: 1, flair: 'Frontline Trainer',
+    bio: "trained new crew with 20 minutes of training myself before getting thrown to the wolves. we're drilled to take food OUT of a kids' meal if it's over 2oz. 'oh no, my CI.' the standard they actually enforce is looking right, not being generous.",
+    real: 'a real r/Chipotle voice' },
+  justaburrito: { ava: 'e', tint: 12, flair: 'Just Wants A Burrito',
+    bio: "I don't do hacks or discourse. I just want a burrito the same size as it was in 2019. every time they announce a 'deal' I get excited and then notice the catch one bite in. tired, boss.",
+    real: 'a real r/Chipotle voice' },
+  '[deleted]': { ava: '?', tint: 0, flair: null, bio: null, real: null }
+};
+
+// Reactions BLIND-generated by isolated agents to a REAL post-cutoff decision (2026 price
+// hike + CEO "just ask" portion advice). Agents saw only each persona's prior posts + a
+// neutral stimulus — never the real reactions.
+var THREAD = [
+  { u: 'calleditbefore', score: 1412, t: '4h', award: '✦',
+    html: "So their fix for small portions is me begging the teenager at the counter. Cool. Raise prices AND make me do the quality control." },
+  { u: 'backofhouse', score: 968, t: '4h', award: '◔',
+    html: "\"Just ask\" means \"we cut so much labor there's no one to fix it, so now policing your own portion is your job too.\" Raise prices, shrink the bowl, and tell the customer to do the QC. The Chipotle Standard, baby.",
+    kids: [
+      { u: 'honestgm', score: 387, t: '3h',
+        html: "Manager here. The reason portions are small is the same reason the training sucks — they cut hours so hard there's nobody on the line with time to do it right. Fix the labor model and the portions fix themselves. But that costs money, and raising prices 2% while telling people to beg for a normal scoop is easier." }
+    ] },
+  { u: 'scoopwatcher', score: 741, t: '4h',
+    html: "The 1–2% is the headline you're supposed to argue about. The real raise is the portion they already shrank. \"Just ask\" means you have to beg a stranger to give you what you paid for — that's the cut, dressed up as customer service.",
+    kids: [
+      { u: 'finprintpedant', score: 226, t: '3h',
+        html: "Exactly. \"Just ask\" means the portion you already paid for is now a negotiation. Telling people to beg the line cook for what the menu already promised isn't a fix, it's a policy." }
+    ] },
+  { u: 'stayloud', score: 633, t: '3h',
+    html: "Raising prices AND telling me to beg the teenager at the counter for the portion I already paid for? Nah. \"Just ask\" isn't a policy, it's a dodge. Pay your workers, fix your portions, and stop charging more for less.",
+    kids: [
+      { u: 'exmoescrew', score: 204, t: '3h',
+        html: "\"Just ask\" is corporate for \"we trained the line to be stingy and made it your problem to fight for what you paid for.\" I worked food service — the portion isn't an accident, it's a spec from the top. Just charge me honestly." }
+    ] },
+  { u: 'halfscoophack', score: 512, t: '4h',
+    html: "lol \"just ask.\" I've been doing the half-and-half trick for 10 years specifically BECAUSE asking doesn't work — half the time they still skimp and you're holding up the line arguing over a scoop. Now they want me to beg for what I'm already paying more for, and raise prices on top? Fix the scoops, don't tell me to ask nicer.",
+    kids: [
+      { u: 'justaburrito', score: 178, t: '3h',
+        html: "I don't want a workaround. I just want a burrito the same size it used to be. \"just ask\" is telling me to beg for something I'm already paying for." }
+    ] },
+  { u: 'linecomedian', score: 447, t: '3h',
+    html: "\"can I get a normal portion and uhhhh actually a normal portion\"" }
+];
+
+var BATCH2 = [
+  { u: 'hacksdead', score: 233, t: '3h',
+    html: "So they shrink the portions AND raise the price AND now it's my job to beg the kid at the counter for what I already paid for. Got it." },
+  { u: 'cavarotation', score: 191, t: '2h',
+    html: "So the fix for shrinking portions is me begging the counter for the amount I'm already paying for? Raising prices and shrinking the bowl at the same time and acting like it's my job to negotiate it back. The whole category does this and pretends we won't notice." }
+];
+
+/* ---------------- render ---------------- */
+var UP_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m6 14 6-7 6 7"/></svg>';
+var DN_SVG = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m6 10 6 7 6-7"/></svg>';
+
+function fmt(n) { return n >= 1000 ? (n / 1000).toFixed(1) + 'k' : '' + n; }
+
+function renderComment(c) {
+  var cast = CAST[c.u];
+  var flair = cast.flair ? '<span class="thread-flair cast-' + cast.tint + '">' + cast.flair + '</span>' : '';
+  var receipt = cast.real ? '<span class="badge badge-active badge-sm" title="' + cast.real + '">◆ real account</span>' : '';
+  var award = c.award ? '<span class="sed-award">' + c.award + '</span>' : '';
+  var kids = (c.kids || []).map(renderComment).join('');
+  return '<div class="thread">' +
+    '<div class="thread-row">' +
+      '<div class="thread-rail"><div class="avatar av-md cast-' + cast.tint + '" data-u="' + c.u + '">' + cast.ava + '</div><button class="thread-line" type="button" aria-label="Collapse thread"></button></div>' +
+      '<div class="thread-main">' +
+        '<div class="thread-head"><button class="thread-user" data-u="' + c.u + '" type="button">u/' + c.u + '</button>' + flair + receipt +
+          '<span class="thread-dot">·</span><span class="thread-karma">' + fmt(c.score) + ' pts</span><span class="thread-dot">·</span><span>' + c.t + '</span>' + award + '</div>' +
+        '<div class="thread-text">' + c.html + '</div>' +
+        '<div class="thread-stub">[+] thread collapsed</div>' +
+        '<div class="thread-foot">' +
+          '<span class="vote-row"><button class="vote-mini" data-d="1" type="button" aria-label="Upvote">' + UP_SVG + '</button><span class="vote-score" data-base="' + c.score + '">' + fmt(c.score) + '</span><button class="vote-mini dn" data-d="-1" type="button" aria-label="Downvote">' + DN_SVG + '</button></span>' +
+          '<button class="thread-act" type="button">↩ reply</button><button class="thread-act" type="button">⚑</button><button class="thread-act" type="button">···</button>' +
+        '</div>' +
+        (kids ? '<div class="thread-children">' + kids + '</div>' : '') +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function countAll(arr) { var n = 0; arr.forEach(function (c) { n++; if (c.kids) n += countAll(c.kids); }); return n; }
+function authorsOf(arr, set) { arr.forEach(function (c) { if (c.u !== '[deleted]') set.add(c.u); if (c.kids) authorsOf(c.kids, set); }); return set; }
+var RENDERED = THREAD.slice();
+
+function refreshStats() {
+  var cc = countAll(RENDERED), va = authorsOf(RENDERED, new Set()).size;
+  document.querySelectorAll('.sed-cmtcount').forEach(function (e) { e.textContent = cc; });
+  document.querySelectorAll('.sed-voicestat').forEach(function (e) { e.textContent = va; });
+}
+
+function mountList(arr, delayBase) {
+  var container = document.getElementById('thread');
+  var before = container.children.length;
+  container.insertAdjacentHTML('beforeend', arr.map(renderComment).join(''));
+  Array.prototype.slice.call(container.children, before).forEach(function (el, i) {
+    el.classList.add('fade');
+    el.style.animationDelay = (delayBase + i * 0.05) + 's';
+  });
+}
+
+mountList(THREAD, 0.14);
+refreshStats();
+
+/* roster — the full assembled cast */
+document.getElementById('roster').innerHTML = Object.keys(CAST).filter(function (u) { return u !== '[deleted]'; }).map(function (u) {
+  var c = CAST[u];
+  return '<button class="wli" data-u="' + u + '" type="button">' +
+    '<span class="wli-av cast-' + c.tint + '">' + c.ava + '</span>' +
+    '<span class="wli-body"><span class="wli-name">u/' + u + '</span><span class="wli-sep">·</span><span class="wli-sub">' + c.flair + '</span></span>' +
+  '</button>';
+}).join('');
+
+/* ---------------- interactions ---------------- */
+/* votes — post column + comment mini rows (delegated) */
+document.addEventListener('click', function (e) {
+  var btn = e.target.closest('.vote-arrow, .vote-mini');
+  if (!btn) return;
+  var box = btn.parentElement;
+  var up = box.querySelector('[data-d="1"]'), dn = box.querySelector('[data-d="-1"]');
+  var score = box.querySelector('.vote-score');
+  var base = +score.dataset.base;
+  var isUp = btn === up;
+  var wasUp = up.classList.contains('on-up'), wasDn = dn.classList.contains('on-dn');
+  up.classList.remove('on-up'); dn.classList.remove('on-dn');
+  var delta = 0;
+  if (isUp) { if (!wasUp) { up.classList.add('on-up'); delta = 1; } }
+  else { if (!wasDn) { dn.classList.add('on-dn'); delta = -1; } }
+  score.textContent = fmt(base + delta);
+});
+
+/* thread collapse (delegated) */
+document.addEventListener('click', function (e) {
+  var line = e.target.closest('.thread-line');
+  if (line) line.closest('.thread').classList.toggle('collapsed');
+});
+
+/* join toggle */
+var joinBtn = document.getElementById('joinBtn');
+joinBtn.addEventListener('click', function () {
+  var joined = joinBtn.textContent === 'Joined';
+  joinBtn.textContent = joined ? 'Join' : 'Joined';
+  joinBtn.classList.toggle('btn-secondary', !joined);
+  joinBtn.classList.toggle('btn-default', joined);
+});
+
+/* load more */
+var loadmore = document.getElementById('loadmore');
+loadmore.addEventListener('click', function () {
+  mountList(BATCH2, 0);
+  RENDERED = RENDERED.concat(BATCH2);
+  refreshStats();
+  loadmore.outerHTML = '<div class="sed-thread-end">— that’s the room. every voice above is a real account. —</div>';
+});
+
+/* cast bio popover (Hover Card pattern) */
+var pop = document.getElementById('pop');
+var pinned = false;
+function showPop(u, x, y) {
+  var c = CAST[u];
+  if (!c || !c.bio) return;
+  var flair = c.flair ? '<div><span class="thread-flair cast-' + c.tint + '">' + c.flair + '</span></div>' : '';
+  pop.innerHTML = '<div class="sed-pop-top"><div class="avatar av-lg cast-' + c.tint + '">' + c.ava + '</div>' +
+    '<div><div class="sed-pop-name">u/' + u + '</div>' + flair + '</div></div>' +
+    '<div class="sed-pop-bio">' + c.bio + '</div>' +
+    '<div class="sed-pop-receipt">◆ grounded in a real account <span>' + c.real + '</span></div>';
+  var px = x + 12, py = y + 14;
+  if (px + 300 > window.innerWidth - 12) px = window.innerWidth - 312;
+  pop.style.left = px + 'px';
+  pop.style.top = (py + window.scrollY) + 'px';
+  pop.classList.add('show');
+}
+function hidePop() { if (!pinned) pop.classList.remove('show'); }
+
+document.addEventListener('mouseover', function (e) {
+  var t = e.target.closest('[data-u]');
+  if (t && !pinned) { var r = t.getBoundingClientRect(); showPop(t.dataset.u, r.left, r.bottom); }
+});
+document.addEventListener('mouseout', function (e) {
+  var t = e.target.closest('[data-u]');
+  var to = e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('#pop');
+  if (t && !to) hidePop();
+});
+document.addEventListener('click', function (e) {
+  var t = e.target.closest('[data-u]');
+  if (t) { var r = t.getBoundingClientRect(); pinned = false; showPop(t.dataset.u, r.left, r.bottom); pinned = true; e.stopPropagation(); }
+  else if (!e.target.closest('#pop')) { pinned = false; pop.classList.remove('show'); }
+});
+
+/* re-simulate shimmer */
+document.getElementById('simBtn').addEventListener('click', function () {
+  var btn = this, old = btn.textContent;
+  document.querySelectorAll('#thread .thread, .sed-post').forEach(function (el) { el.classList.add('shimmer'); });
+  btn.textContent = 'Simulating…';
+  setTimeout(function () {
+    document.querySelectorAll('.shimmer').forEach(function (el, i) {
+      el.classList.remove('shimmer');
+      el.classList.remove('fade');
+      void el.offsetWidth;
+      el.classList.add('fade');
+      el.style.animationDelay = (i * 0.04) + 's';
+    });
+    btn.textContent = old;
+  }, 850);
+});
+</script>
+</body>
+</html>

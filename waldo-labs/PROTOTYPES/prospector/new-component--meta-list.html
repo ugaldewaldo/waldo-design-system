@@ -1,0 +1,57 @@
+<!--
+  component: Meta List (key/value rows)
+  source: waldo-labs/PROTOTYPES/prospector/index.html (prospect detail — Details card)
+  date: 2026-07-07
+  use_when:
+    - Compact key/value facts panel inside a card (category, score, dates, counts)
+    - Any entity-detail sidebar summarizing structured attributes one per row
+  notes: >
+    Doctrine already names "key/value meta" as DS-native content structure (row
+    separators inside a card are allowed), but no canonical component ships in the
+    index — this is the reference implementation. Keys muted, values foreground
+    500 + tabular numerals, hairline row separators (foreground/6%), last row
+    borderless.
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New component — Meta List</title>
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  body { display: block !important; }
+  svg { flex: none; min-height: fit-content; }
+  .spec-wrap { max-width: 420px; margin: 40px auto; padding: 0 24px; }
+  .spec-title { font-size: var(--fs-2xl); font-weight: 600; letter-spacing: -0.04em; color: hsl(var(--foreground)); margin-bottom: 4px; }
+  .spec-sub { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); margin-bottom: 28px; }
+
+  /* ── Meta List — verbatim from the prototype ── */
+  .pr-meta-list { display: flex; flex-direction: column; }
+  .pr-meta-row { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid hsl(var(--foreground) / 0.06); font-size: var(--fs-sm); }
+  .pr-meta-row:last-child { border-bottom: none; }
+  .pr-meta-row .k { color: hsl(var(--muted-foreground)); }
+  .pr-meta-row .v { font-weight: 500; color: hsl(var(--foreground)); text-align: right; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<div class="spec-wrap">
+  <div class="spec-title">Meta List</div>
+  <div class="spec-sub">Key/value facts panel on a card surface.</div>
+
+  <div class="wcard">
+    <div class="wcard-head"><span class="wcard-title">Details</span></div>
+    <div class="pr-meta-list">
+      <div class="pr-meta-row"><span class="k">Category</span><span class="v">Better-for-you beverage</span></div>
+      <div class="pr-meta-row"><span class="k">Match score</span><span class="v">94/100</span></div>
+      <div class="pr-meta-row"><span class="k">Surfaced</span><span class="v">May 25, 2026</span></div>
+      <div class="pr-meta-row"><span class="k">Opening type</span><span class="v">Acquired</span></div>
+      <div class="pr-meta-row"><span class="k">Contacts found</span><span class="v">3</span></div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

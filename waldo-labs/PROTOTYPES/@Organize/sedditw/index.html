@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>seddit · the audience, said it</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../../waldo-ds.css">
+<style>
+  /* waldo-ds.css sets html,body{height:100%;overflow:hidden} — breaks scroll.
+     Scroll override goes on html ONLY: any overflow other than visible on body
+     silently kills position:sticky (the sticky topbar scrolls away). */
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  /* waldo-ds.css sets body{display:flex!important} — collapses card widths */
+  body { display: block !important; }
+  /* waldo-ds.css sets svg{display:block} — collapses ring/icon SVGs inside flex containers */
+  svg { flex: none; min-height: fit-content; }
+
+  html { font-family: 'Inter', sans-serif; background: hsl(var(--background)); color: hsl(var(--foreground)); -webkit-font-smoothing: antialiased; }
+  body { margin: 0; font-size: var(--fs-sm); line-height: 1.5; }
+  a { color: inherit; text-decoration: none; }
+
+  .sed-wrap { max-width: 760px; margin: 0 auto; padding: 64px 20px 80px; }
+  .sed-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+  .sed-wordmark { font-size: var(--fs-5xl); font-weight: 600; letter-spacing: -0.04em; line-height: 1.1; }
+  .sed-wordmark span { color: hsl(var(--primary)); }
+  .sed-tagline { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); letter-spacing: 0.04em; margin: 0 0 26px 1px; }
+  .sed-lede { font-size: var(--fs-base); line-height: 1.55; color: hsl(var(--foreground) / 0.85); max-width: 600px; margin: 0 0 8px; }
+  .sed-lede b { color: hsl(var(--foreground)); font-weight: 600; }
+  .sed-sub { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin: 0 0 34px; line-height: 1.6; }
+
+  .sed-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  @media (max-width: 620px) { .sed-cards { grid-template-columns: 1fr; } }
+  .sed-card { display: block; background: hsl(var(--card)); border-radius: 16px; overflow: hidden; transition: background 0.15s, transform 0.18s; }
+  .sed-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 5%, hsl(var(--card))); transform: translateY(-3px); }
+  .sed-card-top { height: 74px; position: relative; background: hsl(var(--secondary)); background-image: radial-gradient(hsl(var(--foreground) / 0.06) 1px, transparent 1px); background-size: 13px 13px; }
+  .sed-card-ava { position: absolute; left: 18px; bottom: -22px; box-shadow: 0 0 0 3px hsl(var(--card)); border-color: transparent; }
+  .sed-card-body { padding: 32px 18px 18px; }
+  .sed-card-body h2 { font-size: var(--fs-xl); font-weight: 600; letter-spacing: -0.02em; color: hsl(var(--primary)); margin: 0 0 7px; }
+  .sed-stim { font-size: var(--fs-sm); color: hsl(var(--foreground) / 0.85); line-height: 1.5; margin: 0 0 13px; }
+  .sed-stim .badge { margin-right: 6px; }
+  .sed-meta { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); display: flex; gap: 12px; border-top: 1px solid hsl(var(--border)); padding-top: 11px; }
+
+  .sed-foot { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); line-height: 1.7; margin-top: 40px; max-width: 600px; }
+  .sed-foot b { color: hsl(var(--foreground) / 0.75); font-weight: 600; }
+</style>
+</head>
+<body>
+  <div class="sed-wrap">
+    <div class="sed-brand">
+      <svg width="40" height="40" viewBox="0 0 30 30" fill="none">
+        <path d="M5 6.5C5 4.6 6.6 3 8.5 3h13C23.4 3 25 4.6 25 6.5v10c0 1.9-1.6 3.5-3.5 3.5H13l-6 5.2c-.7.6-1.7.1-1.7-.8V20A1 1 0 0 1 5 19.5v-13Z" style="fill:hsl(var(--primary))"/>
+        <circle cx="11" cy="11.3" r="1.5" style="fill:hsl(var(--background))"/><circle cx="15" cy="11.3" r="1.5" style="fill:hsl(var(--background))"/><circle cx="19" cy="11.3" r="1.5" style="fill:hsl(var(--background))"/>
+      </svg>
+      <span class="sed-wordmark">s<span>e</span>ddit</span>
+    </div>
+    <p class="sed-tagline">the audience, said&nbsp;it.</p>
+
+    <p class="sed-lede">A <b>simulated subreddit.</b> Point it at a brand → it reconstructs that brand's real audience as a cast of distinct voices → drop a real decision, and watch the room react, in their own registers.</p>
+    <p class="sed-sub">◆ every voice is grounded in a real community member · reactions generated blind (the cast never sees the real responses) · pick a room ↓</p>
+
+    <div class="sed-cards">
+      <a class="sed-card" href="glossier.html">
+        <div class="sed-card-top"><div class="avatar av-xl av-brand sed-card-ava">G</div></div>
+        <div class="sed-card-body">
+          <h2>r/glossier</h2>
+          <p class="sed-stim"><span class="badge badge-highlight badge-sm">REAL</span>Glossier launches a pet line — collar, leash, and dog poop bags with the logo.</p>
+          <div class="sed-meta"><span>12 voices</span><span>·</span><span>grounded in r/glossier</span></div>
+        </div>
+      </a>
+      <a class="sed-card" href="chipotle.html">
+        <div class="sed-card-top"><div class="avatar av-xl av-brand sed-card-ava">C</div></div>
+        <div class="sed-card-body">
+          <h2>r/Chipotle</h2>
+          <p class="sed-stim"><span class="badge badge-highlight badge-sm">REAL</span>Prices rise 1–2%, and the CEO's advice on skimpy portions: "just ask" for more.</p>
+          <div class="sed-meta"><span>13 voices</span><span>·</span><span>grounded in r/Chipotle</span></div>
+        </div>
+      </a>
+    </div>
+
+    <p class="sed-foot"><b>How it works:</b> the cast is sampled from each community, distilled into individual perspectives, and each member's reaction is written by an isolated agent that sees only that person's prior posts + a neutral statement of the brand's move — never the real reactions. Real move in, real-feeling reaction out, no leakage. <b>A Waldo Labs experiment.</b></p>
+  </div>
+</body>
+</html>

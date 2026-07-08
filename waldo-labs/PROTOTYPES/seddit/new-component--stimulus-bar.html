@@ -1,0 +1,48 @@
+<!--
+  component: Stimulus Bar
+  source: waldo-labs/PROTOTYPES/seddit/ (chipotle.html, glossier.html)
+  date: 2026-07-07
+  use_when:
+    - A single-line "input + run" strip that feeds a simulation or generation view
+      (label, editable prompt/stimulus text, primary action button)
+    - Sits above the content it drives; re-running shimmers and re-enters the results
+  notes: A composition of DS atoms (Card surface + borderless inline input + .btn
+    .btn-default) captured as a pattern because the label/input/CTA strip recurs in
+    simulation-style prototypes. Label uses --primary per the doctrine's form-section-label
+    rule. The card surface stays neutral — the accent lives in the label text, not an
+    edge stripe. Exactly one .btn-default on the page (it is THE action).
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New component · Stimulus Bar</title>
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  body { display: block !important; }
+  svg { flex: none; min-height: fit-content; }
+
+  body { margin: 0; font-family: 'Inter', sans-serif; font-size: var(--fs-sm); line-height: 1.5; background: hsl(var(--background)); color: hsl(var(--foreground)); -webkit-font-smoothing: antialiased; }
+  .demo-wrap { max-width: 900px; margin: 48px auto; padding: 0 24px; }
+
+  /* Stimulus Bar — verbatim from the seddit prototype */
+  .sed-stim { background: hsl(var(--card)); border-radius: 16px; padding: 10px 10px 10px 20px; display: flex; align-items: center; gap: 14px; }
+  .sed-stim-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: hsl(var(--primary)); flex: none; }
+  .sed-stim-input { flex: 1; min-width: 0; border: none; background: transparent; font-family: 'Inter', sans-serif; font-size: var(--fs-sm); color: hsl(var(--foreground)); outline: none; }
+  .sed-stim-input::placeholder { color: hsl(var(--muted-foreground)); }
+</style>
+</head>
+<body>
+<div class="demo-wrap">
+  <div class="sed-stim">
+    <span class="sed-stim-label">Stimulus</span>
+    <input class="sed-stim-input" value="REAL · Glossier launched a pet line — a dog collar, a dog leash, and dog poop bags printed with the Glossier logo (May 2026)." aria-label="Stimulus">
+    <button class="btn btn-default" type="button">Simulate ▸</button>
+  </div>
+</div>
+</body>
+</html>

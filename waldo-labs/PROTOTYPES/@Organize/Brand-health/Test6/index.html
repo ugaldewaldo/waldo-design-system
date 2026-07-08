@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poppi — Brand Health</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../../../waldo-ui/waldo-shadcn-theme.css" />
+  <link rel="stylesheet" href="../../../../../waldo-ds.css">
+<style>
+  /* No local -rgb declarations: all six companions ship in waldo-ds.css. */
+
+  /* DS conflict overrides — waldo-ds.css forces html,body height/overflow + body flex.
+     Scroll override on html ONLY — overflow on body kills position:sticky (topbar). */
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  body { display: block !important; max-width: none !important; margin: 0 !important;
+         background: hsl(var(--background)); color: hsl(var(--foreground));
+         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; }
+  svg { flex: none; min-height: fit-content; }
+  * { box-sizing: border-box; }
+
+  /* ── Topbar (doctrine) ── */
+  .topbar { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(8px);
+            border-bottom: 1px solid hsl(var(--border)); background: color-mix(in srgb, hsl(var(--background)) 85%, transparent); }
+  .topbar-inner { max-width: 1184px; margin: 0 auto; padding: 0 24px; height: 64px; display: flex; align-items: center; gap: 32px; }
+  .topbar-brand { display: flex; align-items: center; }
+  .topbar-nav { display: flex; gap: 24px; margin-left: auto; }
+  .nav-link { font-size: 14px; color: hsl(var(--muted-foreground)); text-decoration: none; cursor: pointer; }
+  .nav-link.active { color: hsl(var(--foreground)); font-weight: 500; }
+  .topbar-powered { font-size: 13px; color: hsl(var(--muted-foreground)); white-space: nowrap; }
+
+  /* ── Shell (doctrine) ── */
+  .wrap { max-width: 1184px; margin: 0 auto; padding: 0 24px 96px; }
+  .page-header { display: flex; align-items: flex-start; justify-content: space-between;
+                 padding: 48px 0 8px; border-bottom: none !important; margin-bottom: 0 !important; }
+  .ph-left { display: flex; flex-direction: column; gap: 10px; }
+  .ph-title { font-size: 36px; font-weight: 600; line-height: 44px; letter-spacing: -1.2px; color: hsl(var(--foreground)); }
+  .ph-sub { font-size: 15px; font-weight: 400; line-height: 22px; letter-spacing: -0.2px; color: hsl(var(--muted-foreground)); }
+
+  .dashboard { display: flex; flex-direction: column; gap: 24px; }
+  .dash-row { display: flex; gap: 16px; align-items: stretch; }
+  .dash-col { flex: 1; min-width: 0; display: flex; }
+
+  .area-head { margin: 32px 0 -8px; display: flex; flex-direction: column; gap: 6px; }
+  .area-title { font-size: 22px; font-weight: 600; letter-spacing: -0.6px; }
+  .area-sub { font-size: 14px; color: hsl(var(--muted-foreground)); }
+
+  /* ── Area tabs — DS Tabs, text variant (.wtabs-text ships in waldo-ds.css) ── */
+  .area-tabs { border-bottom: 1px solid hsl(var(--border)); margin-top: 8px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: flex; flex-direction: column; gap: 24px; }
+
+  /* ── Card (doctrine) ── */
+  .card { background: hsl(var(--card)); border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 20px;
+          border: none !important; width: 100%; }
+  .card-head { display: flex; flex-direction: column; gap: 4px; }
+  .card-title { font-size: 18px; font-weight: 500; line-height: 26px; letter-spacing: -0.36px; }
+  .card-subtitle { font-size: 13px; color: hsl(var(--muted-foreground)); }
+  .card-title-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+
+  /* ── KPI Stat Card (doctrine) — Brand Health: up=good=primary, down=bad=destructive ── */
+  .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .kpi { background: hsl(var(--card)); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 8px; }
+  .kpi-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+  .k-label { font-size: 13px; font-weight: 500; letter-spacing: -0.26px; color: hsl(var(--muted-foreground)); }
+  .k-delta { font-size: 11px; font-weight: 600; padding: 2px 7px; border-radius: 6px; white-space: nowrap; }
+  .k-delta.up { color: hsl(var(--primary)); background: hsl(var(--primary) / 0.12); }
+  .k-delta.down { color: hsl(var(--destructive)); background: hsl(var(--destructive) / 0.12); }
+  .k-delta.flat { color: hsl(var(--muted-foreground)); background: hsl(var(--secondary)); }
+  .k-value { font-size: 32px; font-weight: 600; line-height: 38px; letter-spacing: -0.8px; font-variant-numeric: tabular-nums; }
+  .k-value .k-unit { font-size: 18px; color: hsl(var(--muted-foreground)); font-weight: 500; }
+  .k-sub { font-size: 12px; color: hsl(var(--muted-foreground)); line-height: 16px; }
+
+  /* ── Horizontal Bar (doctrine) ── */
+  .hbars { display: flex; flex-direction: column; gap: 2px; }
+  .hbar-row { display: flex; flex-direction: column; gap: 5px; padding: 7px 0; }
+  .hbar-inner { display: flex; align-items: center; gap: 12px; }
+  .hbar-name { font-size: 13px; color: hsl(var(--muted-foreground)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 170px; flex: none; }
+  .hbar-track { flex: 1; height: 6px; background: hsl(var(--secondary)); border-radius: 9999px; overflow: hidden; }
+  .hbar-fill { display: block; height: 100%; border-radius: 9999px; background: linear-gradient(to left, hsl(var(--primary) / 1), hsl(var(--primary) / 0.2)); }
+  .hbar-val { font-size: 12px; color: hsl(var(--foreground)); font-weight: 500; text-align: right; width: 64px; flex: none; font-variant-numeric: tabular-nums; }
+  .hbar-val .hbar-sub { color: hsl(var(--muted-foreground)); font-weight: 400; }
+
+  /* ── Proportion Bar (doctrine 5c) ── */
+  .senti { display: flex; flex-direction: column; gap: 10px; }
+  .senti-row { display: grid; grid-template-columns: 92px 1fr 44px; gap: 12px; align-items: center; }
+  .senti-label { font-size: 13px; color: hsl(var(--muted-foreground)); }
+  .senti-bar { display: flex; height: 6px; border-radius: 9999px; overflow: hidden; background: hsl(var(--secondary)); }
+  .senti-seg { height: 100%; }
+  .senti-seg.pos { background: hsl(var(--primary)); }
+  .senti-seg.neu { background: hsl(var(--muted-foreground)); }
+  .senti-seg.neg { background: hsl(var(--warning)); }
+  .senti-seg.mix { background: hsl(var(--highlight)); }
+  .senti-val { font-size: 12px; color: hsl(var(--muted-foreground)); text-align: right; font-variant-numeric: tabular-nums; }
+  .senti-legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: hsl(var(--muted-foreground)); }
+  .senti-legend .lg { display: flex; align-items: center; gap: 6px; }
+  .senti-legend .dot { width: 9px; height: 9px; border-radius: 3px; }
+
+  /* ── Theme Pill (doctrine 5d) ── */
+  .theme-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .theme-pill { display: inline-flex; align-items: center; font-size: 13px; padding: 5px 11px; border-radius: 9999px; }
+  .theme-pill.pos { color: hsl(var(--primary)); background: color-mix(in srgb, hsl(var(--primary)) 12%, transparent); border: 1px solid color-mix(in srgb, hsl(var(--primary)) 25%, transparent); }
+  .theme-pill.neu { color: hsl(var(--muted-foreground)); background: color-mix(in srgb, hsl(var(--muted-foreground)) 12%, transparent); border: 1px solid color-mix(in srgb, hsl(var(--muted-foreground)) 25%, transparent); }
+  .theme-pill.neg { color: hsl(var(--warning)); background: color-mix(in srgb, hsl(var(--warning)) 12%, transparent); border: 1px solid color-mix(in srgb, hsl(var(--warning)) 25%, transparent); }
+  .theme-pill.mix { color: hsl(var(--highlight)); background: color-mix(in srgb, hsl(var(--highlight)) 12%, transparent); border: 1px solid color-mix(in srgb, hsl(var(--highlight)) 25%, transparent); }
+  .theme-pill-freq { margin-left: 6px; opacity: 0.7; font-variant-numeric: tabular-nums; }
+
+  /* ── Leaderboard Row (doctrine) — reused for mentions / news / ads / trending / switch-from ── */
+  .lb { display: flex; flex-direction: column; }
+  /* List height cap (doctrine): standalone full-width list cards cap at ~6 visible rows;
+     the LIST scrolls, not the card, so the header stays fixed. */
+  .lb-scroll { max-height: 620px; overflow-y: auto; }
+  .lb-row { display: flex; gap: 14px; align-items: flex-start; padding: 4px 0; }
+  .lb-rank { font-size: 15px; font-weight: 600; color: hsl(var(--muted-foreground)); text-align: center; width: 22px; flex: none; padding-top: 12px; font-variant-numeric: tabular-nums; }
+  .lb-main { flex: 1; min-width: 0; border-bottom: 1px solid hsl(var(--border)); padding: 12px 0; display: flex; flex-direction: column; gap: 6px; }
+  .lb-row:last-child .lb-main { border-bottom: none; }
+  .lb-top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .lb-brand { font-size: 14px; font-weight: 600; letter-spacing: -0.2px; }
+  .lb-brand.grow { flex: 1; min-width: 0; }
+  .lb-text { font-size: 13.5px; line-height: 1.5; color: hsl(var(--foreground)); }
+  .lb-meta { font-size: 12px; color: hsl(var(--muted-foreground)); display: flex; gap: 10px; flex-wrap: wrap; }
+  .lb-quote { font-size: 13px; line-height: 1.5; color: hsl(var(--muted-foreground)); }
+
+  /* ── VoC clusters ── */
+  .voc { display: flex; flex-direction: column; gap: 12px; }
+  .voc-item { display: flex; flex-direction: column; gap: 6px; }
+  .voc-topline { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .voc-ttl { font-size: 14px; font-weight: 600; }
+  .voc-quote { font-size: 13px; line-height: 1.5; color: hsl(var(--muted-foreground)); }
+  .voc-track { height: 5px; background: hsl(var(--secondary)); border-radius: 9999px; overflow: hidden; }
+  .voc-fill { height: 100%; border-radius: 9999px; }
+  .voc-fill.love { background: hsl(var(--primary)); }
+  .voc-fill.pain { background: hsl(var(--warning)); }
+
+  /* ── Coach recommendation ── */
+  .coach { display: flex; flex-direction: column; gap: 12px; }
+  .coach-headline { font-size: 16px; font-weight: 600; letter-spacing: -0.3px; line-height: 1.35; }
+  .coach-body { font-size: 13.5px; line-height: 1.6; color: hsl(var(--muted-foreground)); }
+  .coach-evidence { background: hsl(var(--secondary)); border-radius: 12px; padding: 12px 14px; font-size: 12.5px; line-height: 1.55; color: hsl(var(--muted-foreground)); }
+  .coach-evidence b { color: hsl(var(--foreground)); font-weight: 600; }
+  .coach-sources { display: flex; flex-wrap: wrap; gap: 6px; }
+  .src-chip { font-family: 'JetBrains Mono', 'SF Mono', monospace; font-size: 11px; color: hsl(var(--muted-foreground));
+              background: hsl(var(--secondary)); border-radius: 6px; padding: 3px 8px; }
+  .coach-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .coach-date { font-size: 12px; color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; }
+
+  /* ── DS Table wrapper ── */
+  .table-scroll { overflow-x: auto; }
+  table.cmp { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.cmp th, table.cmp td { text-align: right; padding: 10px 12px; border-bottom: 1px solid hsl(var(--border)); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  table.cmp th:first-child, table.cmp td:first-child { text-align: left; }
+  table.cmp th { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
+  table.cmp tbody tr:last-child td { border-bottom: none; }
+  table.cmp tr.you td { background: hsl(var(--primary) / 0.06); }
+  table.cmp tr.you td:first-child { color: hsl(var(--primary)); font-weight: 600; }
+  table.cmp tr.cat td { color: hsl(var(--muted-foreground)); }
+  table.cmp tr.cat td:first-child { font-weight: 600; }
+
+  .metric-big { display: flex; align-items: baseline; gap: 10px; }
+  .metric-big .mv { font-size: 30px; font-weight: 600; letter-spacing: -0.6px; font-variant-numeric: tabular-nums; }
+  .metric-big .mv .k-unit { font-size: 16px; color: hsl(var(--muted-foreground)); }
+  .metric-note { font-size: 12px; color: hsl(var(--muted-foreground)); }
+
+  @media (max-width: 860px) {
+    .dash-row { flex-direction: column; }
+    .kpi-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-brand">
+      <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" style="color:hsl(var(--foreground))" xmlns="http://www.w3.org/2000/svg"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
+    </div>
+    <nav class="topbar-nav">
+      <a class="nav-link active">Dashboard</a>
+      <a class="nav-link">Alerts</a>
+      <a class="nav-link">API coverage</a>
+    </nav>
+    <span class="topbar-powered">Powered by Waldo API</span>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="page-header">
+    <div class="ph-left">
+      <h1 class="ph-title">Poppi — Brand Health</h1>
+      <p class="ph-sub">Prebiotic soda · US · trailing 30 days · 8,940 mentions</p>
+    </div>
+  </div>
+
+  <div class="dashboard">
+
+    <!-- ══ HERO KPIs ══ -->
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-top"><span class="k-label">Resonance</span><span class="k-delta up">▲ +0.2</span></div>
+        <div class="k-value">82</div>
+        <div class="k-sub">Synthesis of Reputation + Presence · zone: Strong</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-top"><span class="k-label">Reputation</span><span class="k-delta up">▲ +2</span></div>
+        <div class="k-value">85</div>
+        <div class="k-sub">How the world feels about Poppi</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-top"><span class="k-label">Presence</span><span class="k-delta up">▲ +2pts</span></div>
+        <div class="k-value">32<span class="k-unit">%</span></div>
+        <div class="k-sub">Share of the prebiotic-soda conversation</div>
+      </div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-top"><span class="k-label">Mentions · 30d</span><span class="k-delta up">▲ +12%</span></div>
+        <div class="k-value">8,940</div>
+        <div class="k-sub">Across TikTok, Instagram, X, Reddit, News, YouTube</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-top"><span class="k-label">Net sentiment</span><span class="k-delta flat">± flat</span></div>
+        <div class="k-value">68.3<span class="k-unit">%</span></div>
+        <div class="k-sub">Positive share of scored mentions</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-top"><span class="k-label">Active creatives</span><span class="k-delta down">▼ −4</span></div>
+        <div class="k-value">51</div>
+        <div class="k-sub">Live Meta ads in the Ad Library</div>
+      </div>
+    </div>
+
+    <!-- ══ AREA TABS — DS Tabs, text variant ══ -->
+    <div class="area-tabs">
+      <div class="wtabs-text" role="tablist">
+        <button class="wtab-text active" role="tab" aria-selected="true" onclick="showAreaTab('reputation',this)">Reputation</button>
+        <button class="wtab-text" role="tab" aria-selected="false" onclick="showAreaTab('presence',this)">Presence</button>
+        <button class="wtab-text" role="tab" aria-selected="false" onclick="showAreaTab('coach',this)">Next moves</button>
+        <button class="wtab-text" role="tab" aria-selected="false" onclick="showAreaTab('news',this)">News</button>
+        <button class="wtab-text" role="tab" aria-selected="false" onclick="showAreaTab('trending',this)">Trending</button>
+      </div>
+    </div>
+
+    <!-- ══ REPUTATION ══ -->
+    <div class="tab-panel active" id="tab-reputation" role="tabpanel">
+
+    <div class="area-head">
+      <div class="area-title">Reputation — how the world feels</div>
+      <div class="area-sub">Sentiment, themes and risk across earned conversation</div>
+    </div>
+
+    <div class="dash-row">
+      <div class="dash-col">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Sentiment by platform</div><div class="card-subtitle">Positive · neutral · negative · mixed share, by channel</div></div>
+          <div class="senti">
+            <div class="senti-row"><span class="senti-label">TikTok</span><span class="senti-bar"><span class="senti-seg pos" style="width:72%"></span><span class="senti-seg neu" style="width:21%"></span><span class="senti-seg neg" style="width:5%"></span><span class="senti-seg mix" style="width:2%"></span></span><span class="senti-val">72%</span></div>
+            <div class="senti-row"><span class="senti-label">Instagram</span><span class="senti-bar"><span class="senti-seg pos" style="width:68%"></span><span class="senti-seg neu" style="width:26%"></span><span class="senti-seg neg" style="width:4%"></span><span class="senti-seg mix" style="width:2%"></span></span><span class="senti-val">68%</span></div>
+            <div class="senti-row"><span class="senti-label">X</span><span class="senti-bar"><span class="senti-seg pos" style="width:54%"></span><span class="senti-seg neu" style="width:31%"></span><span class="senti-seg neg" style="width:13%"></span><span class="senti-seg mix" style="width:2%"></span></span><span class="senti-val">54%</span></div>
+            <div class="senti-row"><span class="senti-label">Reddit</span><span class="senti-bar"><span class="senti-seg pos" style="width:61%"></span><span class="senti-seg neu" style="width:24%"></span><span class="senti-seg neg" style="width:12%"></span><span class="senti-seg mix" style="width:3%"></span></span><span class="senti-val">61%</span></div>
+            <div class="senti-row"><span class="senti-label">News</span><span class="senti-bar"><span class="senti-seg pos" style="width:78%"></span><span class="senti-seg neu" style="width:18%"></span><span class="senti-seg neg" style="width:3%"></span><span class="senti-seg mix" style="width:1%"></span></span><span class="senti-val">78%</span></div>
+            <div class="senti-row"><span class="senti-label">YouTube</span><span class="senti-bar"><span class="senti-seg pos" style="width:71%"></span><span class="senti-seg neu" style="width:23%"></span><span class="senti-seg neg" style="width:4%"></span><span class="senti-seg mix" style="width:2%"></span></span><span class="senti-val">71%</span></div>
+          </div>
+          <div class="senti-legend">
+            <span class="lg"><span class="dot" style="background:hsl(var(--primary))"></span>Positive</span>
+            <span class="lg"><span class="dot" style="background:hsl(var(--muted-foreground))"></span>Neutral</span>
+            <span class="lg"><span class="dot" style="background:hsl(var(--warning))"></span>Negative</span>
+            <span class="lg"><span class="dot" style="background:hsl(var(--highlight))"></span>Mixed</span>
+          </div>
+        </div>
+      </div>
+      <div class="dash-col">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Top discussion themes</div><div class="card-subtitle">By volume · colored by sentiment</div></div>
+          <div class="theme-pills">
+            <span class="theme-pill pos">Gut health / prebiotic<span class="theme-pill-freq">2,145</span></span>
+            <span class="theme-pill pos">Soda alternative<span class="theme-pill-freq">1,410</span></span>
+            <span class="theme-pill pos">Mini-can flavors<span class="theme-pill-freq">920</span></span>
+            <span class="theme-pill pos">BÉIS × Poppi collab<span class="theme-pill-freq">740</span></span>
+            <span class="theme-pill neg">Lawsuit / settlement<span class="theme-pill-freq">610</span></span>
+            <span class="theme-pill mix">Pepsi Prebiotic entrant<span class="theme-pill-freq">540</span></span>
+            <span class="theme-pill mix">Walmart pricing<span class="theme-pill-freq">430</span></span>
+            <span class="theme-pill mix">Category saturation<span class="theme-pill-freq">310</span></span>
+            <span class="theme-pill neg">Stevia aftertaste<span class="theme-pill-freq">210</span></span>
+          </div>
+          <div class="coach-evidence"><b>Spike · May 11 (+2.4σ)</b> — Pepsi Prebiotic launch pulled Poppi into the comparison conversation. Net effect mixed — 540 Poppi-tagged mentions, 46% favorable framing.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-row">
+      <div class="dash-col">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Recent high-reach mentions</div><div class="card-subtitle">Real, from the Waldo API · sorted by reach</div></div>
+          <div class="lb lb-scroll">
+            <div class="lb-row"><div class="lb-rank">1</div><div class="lb-main">
+              <div class="lb-top"><span class="badge badge-secondary">TikTok</span><span class="lb-brand grow">@asellsworth · founder</span><span class="badge badge-default">Positive</span></div>
+              <div class="lb-text">Allison Ellsworth's Scotland-trip TikTok hits 402k likes / 6.4M views. Brand-equity halo on founder voice.</div>
+              <div class="lb-meta"><span>Founder voice</span><span>6.4M reach</span><span>4,115 comments</span></div>
+            </div></div>
+            <div class="lb-row"><div class="lb-rank">2</div><div class="lb-main">
+              <div class="lb-top"><span class="badge badge-secondary">TikTok</span><span class="lb-brand grow">@michael.dicostanzo</span><span class="badge badge-default">Positive</span></div>
+              <div class="lb-text">"Can I guess 6 Poppis (with one impostor) WITHOUT knowing what's in the box?? 👀" #tastetest — 5M views, 457k likes.</div>
+              <div class="lb-meta"><span>Taste discovery</span><span>5.0M reach</span><span>2,789 comments</span></div>
+            </div></div>
+            <div class="lb-row"><div class="lb-rank">3</div><div class="lb-main">
+              <div class="lb-top"><span class="badge badge-secondary">TikTok</span><span class="lb-brand grow">@jamescharles</span><span class="badge badge-highlight">Mixed</span></div>
+              <div class="lb-text">"Soda brands are making advent calendars now?! 💀 What do you guys think?!" #poppi — 4.5M views, 385k likes.</div>
+              <div class="lb-meta"><span>Brand maturity</span><span>4.5M reach</span><span>2,711 comments</span></div>
+            </div></div>
+            <div class="lb-row"><div class="lb-rank">4</div><div class="lb-main">
+              <div class="lb-top"><span class="badge badge-secondary">Reddit</span><span class="lb-brand grow">u/Proof-Firefighter-47 · r/Soda</span><span class="badge badge-default">Positive</span></div>
+              <div class="lb-text">"I hope they never get rid of this 😍 Local Walmart ugh it's so good."</div>
+              <div class="lb-meta"><span>Walmart pricing</span><span>210k reach</span><span>84 comments</span></div>
+            </div></div>
+            <div class="lb-row"><div class="lb-rank">5</div><div class="lb-main">
+              <div class="lb-top"><span class="badge badge-secondary">Reddit</span><span class="lb-brand grow">u/Jaybonaut · r/Soda</span><span class="badge badge-warning">Negative</span></div>
+              <div class="lb-text">"So, how gross are these? Pepsi Prebiotic" — 112 comments of taste reviews in 48h.</div>
+              <div class="lb-meta"><span>Pepsi entrant</span><span>165k reach</span><span>112 comments</span></div>
+            </div></div>
+            <div class="lb-row"><div class="lb-rank">6</div><div class="lb-main">
+              <div class="lb-top"><span class="badge badge-secondary">Reddit</span><span class="lb-brand grow">u/Zorbithia · r/Soda</span><span class="badge badge-highlight">Mixed</span></div>
+              <div class="lb-text">"Are people really drinking all of these probiotic sodas? The market is INCREDIBLY diluted."</div>
+              <div class="lb-meta"><span>Category saturation</span><span>75k reach</span><span>40 comments</span></div>
+            </div></div>
+            <div class="lb-row"><div class="lb-rank">7</div><div class="lb-main">
+              <div class="lb-top"><span class="badge badge-secondary">Reddit</span><span class="lb-brand grow">u/ThunderTatsu · r/Soda</span><span class="badge badge-default">Positive</span></div>
+              <div class="lb-text">"Any Poppi fans out there? …the ingredients are amazing! Real sugar! Tastes awesome. No caffeine."</div>
+              <div class="lb-meta"><span>Soda alternative</span><span>42k reach</span><span>16 comments</span></div>
+            </div></div>
+            <div class="lb-row"><div class="lb-rank">8</div><div class="lb-main">
+              <div class="lb-top"><span class="badge badge-secondary">Reddit</span><span class="lb-brand grow">u/madisonryy · r/classactions</span><span class="badge badge-warning">Negative</span></div>
+              <div class="lb-text">"Question regarding Poppi Lawsuit — I need help understanding this email… what are the attorneys asking for?"</div>
+              <div class="lb-meta"><span>Lawsuit</span><span>8k reach</span><span>7 comments</span></div>
+            </div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-top"><span class="k-label">Engagement rate · owned</span><span class="k-delta up">▲ +35% vs median</span></div>
+        <div class="k-value">4.2<span class="k-unit">%</span></div>
+        <div class="k-sub">Median 3.1% · Leader Liquid Death 5.4%</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-top"><span class="k-label">Post-launch pulse · 72h</span><span class="k-delta up">▲ net +</span></div>
+        <div class="k-value">68<span class="k-unit">%</span></div>
+        <div class="k-sub">Mini-cans · 12.1k mentions · Shirley Temple best of 3 flavors</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-top"><span class="k-label">Sentiment percentile</span><span class="k-delta up">top quartile</span></div>
+        <div class="k-value">P84</div>
+        <div class="k-sub">vs category set · Leader Liquid Death P92</div>
+      </div>
+    </div>
+
+    <div class="dash-row">
+      <div class="dash-col">
+        <div class="card">
+          <div class="card-head"><div class="card-title-row"><span class="card-title">Reputation risk — complaint clusters</span><span class="badge badge-warning">Watch</span></div><div class="card-subtitle">Bar = frequency · pill = intensity (0–1)</div></div>
+          <div class="hbars">
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Price creep at retail</span><span class="hbar-track"><span class="hbar-fill" style="width:31%"></span></span><span class="hbar-val">31% <span class="hbar-sub">·0.62</span></span></div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Too sweet for daily</span><span class="hbar-track"><span class="hbar-fill" style="width:24%"></span></span><span class="hbar-val">24% <span class="hbar-sub">·0.41</span></span></div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Stevia aftertaste</span><span class="hbar-track"><span class="hbar-fill" style="width:19%"></span></span><span class="hbar-val">19% <span class="hbar-sub">·0.38</span></span></div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Class-action lawsuit confusion</span><span class="hbar-track"><span class="hbar-fill" style="width:18%"></span></span><span class="hbar-val">18% <span class="hbar-sub">·0.71</span></span></div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Pepsi knockoff perception</span><span class="hbar-track"><span class="hbar-fill" style="width:14%"></span></span><span class="hbar-val">14% <span class="hbar-sub">·0.52</span></span></div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Category saturation fatigue</span><span class="hbar-track"><span class="hbar-fill" style="width:11%"></span></span><span class="hbar-val">11% <span class="hbar-sub">·0.46</span></span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="dash-col">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Reputation percentile vs category</div><div class="card-subtitle">Percentile rank · median 50 · leader marked in meta</div></div>
+          <div class="hbars">
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Net sentiment</span><span class="hbar-track"><span class="hbar-fill" style="width:84%"></span></span><span class="hbar-val">P84</span></div><div class="lb-meta">median 50 · leader 92</div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Audience fit</span><span class="hbar-track"><span class="hbar-fill" style="width:81%"></span></span><span class="hbar-val">P81</span></div><div class="lb-meta">median 50 · leader 90</div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Mention volume</span><span class="hbar-track"><span class="hbar-fill" style="width:78%"></span></span><span class="hbar-val">P78</span></div><div class="lb-meta">median 50 · leader 100</div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Engagement rate</span><span class="hbar-track"><span class="hbar-fill" style="width:78%"></span></span><span class="hbar-val">P78</span></div><div class="lb-meta">median 50 · leader 100</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-row">
+      <div class="dash-col">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Audience voice — Loves</div><div class="card-subtitle">What's working · GenZ + Millennial wellness-curious</div></div>
+          <div class="voc">
+            <div class="voc-item"><div class="voc-topline"><span class="voc-ttl">Replaced my Diet Coke habit</span><span class="senti-val">42%</span></div><div class="voc-quote">"I haven't touched a Diet Coke in 4 months. didn't even mean to quit."</div><div class="voc-track"><div class="voc-fill love" style="width:100%"></div></div></div>
+            <div class="voc-item"><div class="voc-topline"><span class="voc-ttl">Doesn't make me feel bloated</span><span class="senti-val">34%</span></div><div class="voc-quote">"finally a soda i can drink and not feel like trash an hour later"</div><div class="voc-track"><div class="voc-fill love" style="width:81%"></div></div></div>
+            <div class="voc-item"><div class="voc-topline"><span class="voc-ttl">Mini cans are perfect</span><span class="senti-val">26%</span></div><div class="voc-quote">"shirley temple mini >>> the big can. portion is exactly right."</div><div class="voc-track"><div class="voc-fill love" style="width:62%"></div></div></div>
+            <div class="voc-item"><div class="voc-topline"><span class="voc-ttl">Aesthetic for the fridge</span><span class="senti-val">18%</span></div><div class="voc-quote">"the cans just look right on the counter ngl"</div><div class="voc-track"><div class="voc-fill love" style="width:43%"></div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="dash-col">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Audience voice — Pains</div><div class="card-subtitle">What's friction</div></div>
+          <div class="voc">
+            <div class="voc-item"><div class="voc-topline"><span class="voc-ttl">Price creep at retail</span><span class="senti-val">31%</span></div><div class="voc-quote">"$3.50 a can is insane for sugar water with prebiotics in it"</div><div class="voc-track"><div class="voc-fill pain" style="width:100%"></div></div></div>
+            <div class="voc-item"><div class="voc-topline"><span class="voc-ttl">Too sweet for daily</span><span class="senti-val">24%</span></div><div class="voc-quote">"one is great. two and i'm done."</div><div class="voc-track"><div class="voc-fill pain" style="width:77%"></div></div></div>
+            <div class="voc-item"><div class="voc-topline"><span class="voc-ttl">Lawsuit confusion</span><span class="senti-val">18%</span></div><div class="voc-quote">"got an email about a class action and i have no idea what it means"</div><div class="voc-track"><div class="voc-fill pain" style="width:58%"></div></div></div>
+            <div class="voc-item"><div class="voc-topline"><span class="voc-ttl">Pepsi just copied them</span><span class="senti-val">14%</span></div><div class="voc-quote">"lol Pepsi Prebiotic is just generic Poppi"</div><div class="voc-track"><div class="voc-fill pain" style="width:45%"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+
+    <!-- ══ PRESENCE ══ -->
+    <div class="tab-panel" id="tab-presence" role="tabpanel">
+
+    <div class="area-head">
+      <div class="area-title">Presence — share of the conversation</div>
+      <div class="area-sub">Where Poppi shows up versus the prebiotic-soda category</div>
+    </div>
+
+    <div class="dash-row">
+      <div class="dash-col">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Share of conversation by channel</div><div class="card-subtitle">Poppi share of channel · category share in meta</div></div>
+          <div class="hbars">
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">TikTok</span><span class="hbar-track"><span class="hbar-fill" style="width:41%"></span></span><span class="hbar-val">41% <span class="hbar-sub">·28</span></span></div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Instagram</span><span class="hbar-track"><span class="hbar-fill" style="width:34%"></span></span><span class="hbar-val">34% <span class="hbar-sub">·32</span></span></div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Reddit</span><span class="hbar-track"><span class="hbar-fill" style="width:21%"></span></span><span class="hbar-val">21% <span class="hbar-sub">·18</span></span></div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">News</span><span class="hbar-track"><span class="hbar-fill" style="width:18%"></span></span><span class="hbar-val">18% <span class="hbar-sub">·21</span></span></div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">X</span><span class="hbar-track"><span class="hbar-fill" style="width:12%"></span></span><span class="hbar-val">12% <span class="hbar-sub">·15</span></span></div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">YouTube</span><span class="hbar-track"><span class="hbar-fill" style="width:9%"></span></span><span class="hbar-val">9% <span class="hbar-sub">·14</span></span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="dash-col">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Content theme mix — owned</div><div class="card-subtitle">Share of @drinkpoppi posts</div></div>
+          <div class="hbars">
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Product / flavors</span><span class="hbar-track"><span class="hbar-fill" style="width:64%"></span></span><span class="hbar-val">32%</span></div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Partnership / collab</span><span class="hbar-track"><span class="hbar-fill" style="width:42%"></span></span><span class="hbar-val">21%</span></div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Wellness / health</span><span class="hbar-track"><span class="hbar-fill" style="width:36%"></span></span><span class="hbar-val">18%</span></div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Retail / promo</span><span class="hbar-track"><span class="hbar-fill" style="width:28%"></span></span><span class="hbar-val">14%</span></div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Trend / TikTok</span><span class="hbar-track"><span class="hbar-fill" style="width:20%"></span></span><span class="hbar-val">10%</span></div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Other</span><span class="hbar-track"><span class="hbar-fill" style="width:10%"></span></span><span class="hbar-val">5%</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-row">
+      <div class="dash-col">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Competitive set — last 30 days</div><div class="card-subtitle">Poppi vs the functional-soda category</div></div>
+          <div class="table-scroll">
+            <table class="cmp">
+              <thead><tr><th>Brand</th><th>Mentions</th><th>Sentiment</th><th>Posts</th><th>Eng %</th><th>Ads</th><th>SOV %</th></tr></thead>
+              <tbody>
+                <tr class="you"><td>Poppi</td><td>8,940</td><td>69.4%</td><td>124</td><td>4.2</td><td>47</td><td>32</td></tr>
+                <tr><td>Olipop</td><td>11,400</td><td>62.0%</td><td>142</td><td>3.6</td><td>52</td><td>41</td></tr>
+                <tr><td>Liquid Death</td><td>5,800</td><td>71.5%</td><td>98</td><td>5.4</td><td>38</td><td>18</td></tr>
+                <tr><td>Recess</td><td>2,400</td><td>64.0%</td><td>56</td><td>3.0</td><td>18</td><td>9</td></tr>
+                <tr class="cat"><td>Category median</td><td>7,150</td><td>66.7%</td><td>105</td><td>4.05</td><td>39</td><td>25</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-row">
+      <div class="dash-col">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Where Poppi over-indexes</div><div class="card-subtitle">Themes owned disproportionately vs category</div></div>
+          <div class="hbars">
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Mini-can flavor drops</span><span class="hbar-track"><span class="hbar-fill" style="width:100%"></span></span><span class="hbar-val">+0.21</span></div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Celebrity / Hollywood collabs</span><span class="hbar-track"><span class="hbar-fill" style="width:86%"></span></span><span class="hbar-val">+0.18</span></div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Walmart-channel hero copy</span><span class="hbar-track"><span class="hbar-fill" style="width:67%"></span></span><span class="hbar-val">+0.14</span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="dash-col">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Where Poppi under-indexes</div><div class="card-subtitle">Trends with momentum you're not on</div></div>
+          <div class="hbars">
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Mocktail / functional bar</span><span class="hbar-track"><span class="hbar-fill" style="width:100%"></span></span><span class="hbar-val">1.89×</span></div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Late-night soda swap</span><span class="hbar-track"><span class="hbar-fill" style="width:75%"></span></span><span class="hbar-val">1.42×</span></div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Cost-per-serving math</span><span class="hbar-track"><span class="hbar-fill" style="width:69%"></span></span><span class="hbar-val">1.31×</span></div></div>
+            <div class="hbar-row"><div class="hbar-inner"><span class="hbar-name">Fitness / recovery use</span><span class="hbar-track"><span class="hbar-fill" style="width:65%"></span></span><span class="hbar-val">1.22×</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-row">
+      <div class="dash-col">
+        <div class="card">
+          <div class="card-head"><div class="card-title">What audiences switch from</div><div class="card-subtitle">Stated reason for choosing Poppi</div></div>
+          <div class="lb">
+            <div class="lb-row"><div class="lb-rank">1</div><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">Diet Coke</span><span class="badge badge-secondary">34%</span></div><div class="lb-quote">gut issues + aspartame anxiety + flavor variety</div></div></div>
+            <div class="lb-row"><div class="lb-rank">2</div><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">Kombucha</span><span class="badge badge-secondary">18%</span></div><div class="lb-quote">tastes better, more accessible price point, less vinegar bite</div></div></div>
+            <div class="lb-row"><div class="lb-rank">3</div><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">LaCroix</span><span class="badge badge-secondary">14%</span></div><div class="lb-quote">wanted actual flavor, not just essence</div></div></div>
+            <div class="lb-row"><div class="lb-rank">4</div><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">Olipop</span><span class="badge badge-secondary">11%</span></div><div class="lb-quote">smaller cans, cleaner branding, prefer the prebiotic taste profile</div></div></div>
+            <div class="lb-row"><div class="lb-rank">5</div><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">Energy drinks</span><span class="badge badge-secondary">8%</span></div><div class="lb-quote">afternoon pick-me-up without the crash or the chemical aftertaste</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="dash-col">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Currently-active Poppi ads</div><div class="card-subtitle">Real · Meta Ad Library</div></div>
+          <div class="lb">
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">"soda's back, but better"</span><span class="badge badge-secondary">47d live</span></div><div class="lb-meta"><span class="badge badge-outline">category reframe</span><span>Buy 1, get 1 FREE at Circle K</span></div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">"A new bombshell has entered the villa"</span><span class="badge badge-secondary">12d live</span></div><div class="lb-meta"><span class="badge badge-outline">celebrity partnership</span><span>Punch Pop × Love Island × Target</span></div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">"One Sip and You're Starstruck"</span><span class="badge badge-secondary">8d live</span></div><div class="lb-meta"><span class="badge badge-outline">new product drop</span><span>Shirley Temple — Target, Walmart, Kroger</span></div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">"Refresco, pero mejor"</span><span class="badge badge-secondary">16d live</span></div><div class="lb-meta"><span class="badge badge-outline">bilingual activation</span><span>Compra 1 y llévate 1 gratis en Circle K</span></div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">"Get 2 Poppi for $4.50"</span><span class="badge badge-secondary">31d live</span></div><div class="lb-meta"><span class="badge badge-outline">price anchor</span><span>Circle K · 5g sugar, prebiotics</span></div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">"Soda made with ingredients you can love"</span><span class="badge badge-secondary">47d live</span></div><div class="lb-meta"><span class="badge badge-outline">ingredient transparency</span><span>Universal hook · multiple variants</span></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+
+    <!-- ══ COACH ══ -->
+    <div class="tab-panel" id="tab-coach" role="tabpanel">
+
+    <div class="area-head">
+      <div class="area-title">Next moves — ranked by predicted impact</div>
+      <div class="area-sub">Recommended actions with evidence and API sources</div>
+    </div>
+
+    <div class="dash-row">
+      <div class="dash-col">
+        <div class="card">
+          <div class="coach">
+            <div class="coach-meta"><span class="badge badge-warning">Reputation</span><span class="badge badge-default">Impact +7</span><span class="coach-date">May 17</span></div>
+            <div class="coach-headline">Get ahead of the lawsuit narrative this week — before it ossifies.</div>
+            <div class="coach-body">Settlement notices reaching consumers is your fastest-growing complaint cluster (18% freq, 0.71 intensity — highest of any). A founder-led explainer + a clean FAQ reframes this from "we got caught" to "we settled and moved on" before it calcifies.</div>
+            <div class="coach-evidence">Complaint cluster <b>lawsuit confusion</b> · 0.18 freq, 0.71 intensity. r/classactions thread surfacing 4 days ago. Search interest <b>+52%</b> WoW.</div>
+            <div class="coach-sources"><span class="src-chip">brands/{id}/customer-complaints</span><span class="src-chip">brands/{id}/mentions/analysis</span><span class="src-chip">category/{id}/sentiment-shifts</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="dash-col">
+        <div class="card">
+          <div class="coach">
+            <div class="coach-meta"><span class="badge badge-default">Campaign</span><span class="badge badge-default">Impact +5</span><span class="coach-date">May 15</span></div>
+            <div class="coach-headline">Frame Pepsi Prebiotic as the proof point — you invented this.</div>
+            <div class="coach-body">Pepsi entering the category is the strongest endorsement Poppi has received. Pivot the "how do these compare?" conversation to "Pepsi just made the category we built." Founder voice carries this best — Allison's last post hit 6.4M views.</div>
+            <div class="coach-evidence">r/Soda "how gross are these? Pepsi Prebiotic" — <b>112 comments in 48h</b>, mixed sentiment (0.46). Founder TikTok @asellsworth — <b>6.4M views</b>.</div>
+            <div class="coach-sources"><span class="src-chip">discover/posts</span><span class="src-chip">brands/{id}/post-launch-pulse</span><span class="src-chip">analysis/whitespace</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-row">
+      <div class="dash-col">
+        <div class="card">
+          <div class="coach">
+            <div class="coach-meta"><span class="badge badge-default">Product</span><span class="badge badge-default">Impact +4</span><span class="coach-date">May 13</span></div>
+            <div class="coach-headline">Double-down on mini-cans through summer — flavor is your moat.</div>
+            <div class="coach-body">Mini-can launch pulled the strongest 72h sentiment of any 2026 launch (68% positive, 12.1k mentions). "Mini cans are perfect" is now a 0.26-frequency love cluster. Olipop has nothing in this format — lock the association before they react.</div>
+            <div class="coach-evidence">Post-launch pulse · Mini-can launch · <b>12.1k mentions / 72h / 68% positive</b>. Love cluster: "Mini cans are perfect" · 0.26 freq.</div>
+            <div class="coach-sources"><span class="src-chip">brands/{id}/post-launch-pulse</span><span class="src-chip">audiences/voice-of-customer</span><span class="src-chip">analysis/whitespace</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="dash-col">
+        <div class="card">
+          <div class="coach">
+            <div class="coach-meta"><span class="badge badge-default">Creative</span><span class="badge badge-default">Impact +3</span><span class="coach-date">May 10</span></div>
+            <div class="coach-headline">Run a "switch from Diet Coke" test on Meta this week.</div>
+            <div class="coach-body">34% of Poppi's audience VoC explicitly references switching from Diet Coke — gut issues top the stated reasons. No active Poppi creative names the swap. A switch brief built from these complaints is one of the lowest-CAC plays in this category historically.</div>
+            <div class="coach-evidence">Switch-from cluster · <b>Diet Coke · 0.34 freq</b> · reasons: gut issues + aspartame anxiety + flavor variety.</div>
+            <div class="coach-sources"><span class="src-chip">audiences/voice-of-customer</span><span class="src-chip">briefs/switch</span><span class="src-chip">brands/{id}/customer-complaints</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+
+    <!-- ══ NEWS ══ -->
+    <div class="tab-panel" id="tab-news" role="tabpanel">
+
+    <div class="area-head">
+      <div class="area-title">Recent news</div>
+      <div class="area-sub">What's being written about Poppi · trade, business and culture press</div>
+    </div>
+
+    <div class="dash-row">
+      <div class="dash-col">
+        <div class="card">
+          <div class="lb">
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="badge badge-default">AdAge</span><span class="badge badge-outline">brand</span><span class="coach-date" style="margin-left:auto">May 17</span></div><div class="lb-brand">BÉIS × Poppi collab targets May 20 drop with travel-themed Allison Ellsworth campaign</div><div class="lb-quote">The Shay Mitchell-founded luggage brand and prebiotic-soda maker tease a co-branded summer line — preview content already at 184k engagements on Instagram.</div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="badge badge-default">Beverage Industry</span><span class="badge badge-outline">product</span><span class="coach-date" style="margin-left:auto">May 16</span></div><div class="lb-brand">Poppi rolls out mini-can format at Walmart with three new flavors</div><div class="lb-quote">Shirley Temple, Cream Soda and Wild Berry in 7.5oz mini cans — early data shows 12.1k mentions in first 72 hours, 68% net positive.</div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="badge badge-default">CNBC</span><span class="badge badge-outline">category</span><span class="coach-date" style="margin-left:auto">May 14</span></div><div class="lb-brand">Pepsi launches national Prebiotic line — Poppi and Olipop face their first big-soda challenger</div><div class="lb-quote">Wall Street sees this as validation for the functional-soda category, but pressure on incumbents to defend share.</div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="badge badge-default">WWD</span><span class="badge badge-outline">brand</span><span class="coach-date" style="margin-left:auto">May 12</span></div><div class="lb-brand">Founder Allison Ellsworth on building a brand from a $25k Shark Tank deal to a billion-dollar category</div><div class="lb-quote">Long-form profile traces Poppi from kitchen experiments to category-defining brand. Founder TikTok remains the brand's sharpest creative asset.</div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="badge badge-warning">Reuters</span><span class="badge badge-outline">legal</span><span class="coach-date" style="margin-left:auto">May 9</span></div><div class="lb-brand">Poppi class-action settlement notices reach consumers — opt-out period now open</div><div class="lb-quote">Notices over "gut-health" marketing claims have started reaching consumers. Settlement approved; claim window through Aug 2026.</div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="badge badge-default">Modern Retail</span><span class="badge badge-outline">product</span><span class="coach-date" style="margin-left:auto">May 8</span></div><div class="lb-brand">Inside Poppi's Circle K B1G1 push — convenience as the next growth lever</div><div class="lb-quote">Poppi's Circle K Buy-1-Get-1 cycle has lifted category promo share to 38% — defensible CAC math.</div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="badge badge-default">Marketing Brew</span><span class="badge badge-outline">brand</span><span class="coach-date" style="margin-left:auto">May 7</span></div><div class="lb-brand">How Poppi turned its founder into the highest-performing creative asset in CPG</div><div class="lb-quote">@asellsworth's Scotland TikTok did 6.4M views — outperforming every paid campaign in the prebiotic-soda set last month.</div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="badge badge-default">Food Dive</span><span class="badge badge-outline">category</span><span class="coach-date" style="margin-left:auto">May 4</span></div><div class="lb-brand">Functional-soda set tightens: Olipop drops Strawberry Vanilla as Poppi readies summer push</div><div class="lb-quote">Category is now a four-brand race with rapidly accelerating innovation cycles and increasing promo intensity.</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+
+    <!-- ══ TRENDING ══ -->
+    <div class="tab-panel" id="tab-trending" role="tabpanel">
+
+    <div class="area-head">
+      <div class="area-title">Trending now</div>
+      <div class="area-sub">Where the category is heating up · ▲ primary rising · ▼ warning cooling</div>
+    </div>
+
+    <div class="dash-row">
+      <div class="dash-col">
+        <div class="card">
+          <div class="card-head"><div class="card-title">TikTok hashtags</div><div class="card-subtitle">Last 7 days</div></div>
+          <div class="lb">
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">#guttok</span><span class="badge badge-default">▲ +34%</span></div><div class="lb-meta"><span>4.4M</span><span>prebiotic vs probiotic explainer content</span></div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">#drinkpoppi</span><span class="badge badge-default">▲ +18%</span></div><div class="lb-meta"><span>2.1M</span><span>mini-can unboxings — 38% of recent posts</span></div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">#shirleytemple</span><span class="badge badge-default">▲ +22%</span></div><div class="lb-meta"><span>1.6M</span><span>mini-can flavor leading sentiment</span></div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">#prebioticsoda</span><span class="badge badge-default">▲ +11%</span></div><div class="lb-meta"><span>910k</span><span>Pepsi entry driving search</span></div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">#sodaswap</span><span class="badge badge-default">▲ +62%</span></div><div class="lb-meta"><span>780k</span><span>Diet Coke → Poppi/Olipop swap, Gen Z</span></div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">#beispoppi</span><span class="badge badge-highlight">NEW</span></div><div class="lb-meta"><span>220k</span><span>BÉIS collab teaser — drops May 20</span></div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="dash-col">
+        <div class="card">
+          <div class="card-head"><div class="card-title">X trends</div><div class="card-subtitle">US · last 24h</div></div>
+          <div class="lb">
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">Pepsi Prebiotic</span><span class="badge badge-default">▲ +212%</span></div><div class="lb-meta"><span>48k posts</span><span>launch-day comparison threads</span></div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">Poppi</span><span class="badge badge-default">▲ +47%</span></div><div class="lb-meta"><span>22k posts</span><span>BÉIS announce + settlement notices</span></div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">gut health</span><span class="badge badge-default">▲ +9%</span></div><div class="lb-meta"><span>19k posts</span><span>Poppi mentioned ~14% of the time</span></div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">Olipop</span><span class="badge badge-warning">▼ −6%</span></div><div class="lb-meta"><span>15k posts</span><span>Strawberry Vanilla momentum cooling</span></div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">BÉIS x Poppi</span><span class="badge badge-highlight">NEW</span></div><div class="lb-meta"><span>6.8k posts</span><span>co-brand reveal landing well</span></div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">Allison Ellsworth</span><span class="badge badge-default">▲ +31%</span></div><div class="lb-meta"><span>4.2k posts</span><span>Scotland TikTok crossposting to X</span></div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="dash-col">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Google search trends</div><div class="card-subtitle">Rising · US</div></div>
+          <div class="lb">
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">poppi mini cans where to buy</span><span class="badge badge-default">▲ +1,400%</span></div><div class="lb-meta"><span>Breakout</span><span>Walmart purchase intent</span></div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">pepsi prebiotic review</span><span class="badge badge-default">▲ +550%</span></div><div class="lb-meta"><span>74k/mo</span><span>halos Poppi when Pepsi reviews skew negative</span></div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">shirley temple poppi</span><span class="badge badge-default">▲ +180%</span></div><div class="lb-meta"><span>34k/mo</span><span>mini-can flavor · nostalgia framing</span></div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">poppi lawsuit settlement</span><span class="badge badge-default">▲ +71%</span></div><div class="lb-meta"><span>45k/mo</span><span>notices in mailboxes — explainer needed</span></div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">is poppi healthy</span><span class="badge badge-default">▲ +38%</span></div><div class="lb-meta"><span>110k/mo</span><span>prebiotic claims interrogated post-settlement</span></div></div></div>
+            <div class="lb-row"><div class="lb-main"><div class="lb-top"><span class="lb-brand grow">poppi vs olipop</span><span class="badge badge-default">▲ +24%</span></div><div class="lb-meta"><span>90k/mo</span><span>Pepsi entry made the category visible</span></div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function showAreaTab(name, btn) {
+    document.querySelectorAll('.tab-panel').forEach(function (p) {
+      p.classList.toggle('active', p.id === 'tab-' + name);
+    });
+    document.querySelectorAll('.area-tabs .wtab-text').forEach(function (b) {
+      var on = b === btn;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+  }
+</script>
+
+</body>
+</html>

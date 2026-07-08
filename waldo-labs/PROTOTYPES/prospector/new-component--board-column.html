@@ -1,0 +1,122 @@
+<!--
+  component: Board Column (kanban pipeline)
+  source: waldo-labs/PROTOTYPES/prospector/index.html (Pipeline view)
+  date: 2026-07-07
+  use_when:
+    - Kanban-style stage board where accepted items move through named stages
+      (New → Researching → Outreach → Meeting → Won)
+    - Any grouped-by-status column layout with compact entity mini-cards per column
+  notes: >
+    Column = hsl(var(--card)); nested mini-cards follow the on-card rule
+    (hsl(var(--muted)) + lockstep hover). Stage dots use var(--chart-1..5) — a
+    legend distinguishing many same-importance stages, per the multi-brand color
+    semantics rule. Mini-card footer holds a DS .select-wrap stage select (sized
+    down locally) plus badge-secondary indicator pills. Empty column shows a
+    muted em-dash. No borders anywhere — elevation only.
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New component — Board Column</title>
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  body { display: block !important; }
+  svg { flex: none; min-height: fit-content; }
+  .spec-wrap { max-width: 980px; margin: 40px auto; padding: 0 24px; }
+  .spec-title { font-size: var(--fs-2xl); font-weight: 600; letter-spacing: -0.04em; color: hsl(var(--foreground)); margin-bottom: 4px; }
+  .spec-sub { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); margin-bottom: 28px; }
+
+  /* ── Board Column — verbatim from the prototype ── */
+  .pr-brand-av { position: relative; }
+  .pr-brand-av img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 14%; background: hsl(var(--muted)); }
+  .pr-board { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; align-items: start; }
+  .pr-col { background: hsl(var(--card)); border-radius: var(--radius-xl); padding: 12px; min-height: 120px; }
+  .pr-col-hd { display: flex; align-items: center; gap: 8px; font-size: var(--fs-xs); font-weight: 500; color: hsl(var(--muted-foreground)); margin-bottom: 12px; padding: 0 2px; }
+  .pr-cdot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+  .pr-cdot.stage-new { background: hsl(var(--chart-1)); }
+  .pr-cdot.stage-researching { background: hsl(var(--chart-2)); }
+  .pr-cdot.stage-outreach { background: hsl(var(--chart-3)); }
+  .pr-cdot.stage-meeting { background: hsl(var(--chart-4)); }
+  .pr-cdot.stage-won { background: hsl(var(--chart-5)); }
+  .pr-cnt { margin-left: auto; font-variant-numeric: tabular-nums; }
+  .pr-mini { background: hsl(var(--muted)); border-radius: var(--radius-lg); padding: 10px 11px; margin-bottom: 8px; cursor: pointer; transition: background 0.12s; }
+  .pr-mini:last-child { margin-bottom: 0; }
+  .pr-mini:hover { background: color-mix(in srgb, hsl(var(--foreground)) 5%, hsl(var(--muted))); }
+  .pr-mini-top { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .pr-mini-name { font-size: var(--fs-xs); font-weight: 500; color: hsl(var(--foreground)); }
+  .pr-mini-cat { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pr-mini-foot { display: flex; align-items: center; gap: 6px; margin-top: 9px; flex-wrap: wrap; }
+  .pr-mini .select-wrap select { min-width: 0; height: 26px; font-size: var(--fs-xs); padding: 0 24px 0 8px; }
+  .pr-col-empty { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); padding: 4px 2px; }
+  .pr-min0 { min-width: 0; }
+</style>
+</head>
+<body>
+<div class="spec-wrap">
+  <div class="spec-title">Board Column</div>
+  <div class="spec-sub">Kanban stage board: column per stage, chart-token stage dots, on-card mini-cards with a stage select.</div>
+
+  <div class="pr-board">
+    <div class="pr-col">
+      <div class="pr-col-hd"><span class="pr-cdot stage-new"></span>New<span class="pr-cnt">0</span></div>
+      <div class="pr-col-empty">—</div>
+    </div>
+    <div class="pr-col">
+      <div class="pr-col-hd"><span class="pr-cdot stage-researching"></span>Researching<span class="pr-cnt">1</span></div>
+      <div class="pr-mini">
+        <div class="pr-mini-top">
+          <span class="wav wav-square wav-24 pr-brand-av"><span>R</span><img src="https://www.google.com/s2/favicons?domain=rothys.com&sz=128" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></span>
+          <div class="pr-min0"><div class="pr-mini-name">Rothy's</div><div class="pr-mini-cat">Sustainable footwear · 85</div></div>
+        </div>
+        <div class="pr-mini-foot">
+          <span class="select-wrap"><select>
+            <option>New</option><option selected>Researching</option><option>Outreach</option><option>Meeting</option><option>Won</option>
+          </select></span>
+        </div>
+      </div>
+    </div>
+    <div class="pr-col">
+      <div class="pr-col-hd"><span class="pr-cdot stage-outreach"></span>Outreach<span class="pr-cnt">1</span></div>
+      <div class="pr-mini">
+        <div class="pr-mini-top">
+          <span class="wav wav-square wav-24 pr-brand-av"><span>G</span><img src="https://www.google.com/s2/favicons?domain=drinkghia.com&sz=128" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></span>
+          <div class="pr-min0"><div class="pr-mini-name">Ghia</div><div class="pr-mini-cat">Non-alc beverage · 89</div></div>
+        </div>
+        <div class="pr-mini-foot">
+          <span class="select-wrap"><select>
+            <option>New</option><option>Researching</option><option selected>Outreach</option><option>Meeting</option><option>Won</option>
+          </select></span>
+          <span class="badge badge-secondary badge-sm" title="Synced to HubSpot">CRM</span>
+          <span class="badge badge-secondary badge-sm" title="Pitch playbook ready">Playbook</span>
+        </div>
+      </div>
+    </div>
+    <div class="pr-col">
+      <div class="pr-col-hd"><span class="pr-cdot stage-meeting"></span>Meeting<span class="pr-cnt">0</span></div>
+      <div class="pr-col-empty">—</div>
+    </div>
+    <div class="pr-col">
+      <div class="pr-col-hd"><span class="pr-cdot stage-won"></span>Won<span class="pr-cnt">1</span></div>
+      <div class="pr-mini">
+        <div class="pr-mini-top">
+          <span class="wav wav-square wav-24 pr-brand-av"><span>R</span><img src="https://www.google.com/s2/favicons?domain=takearecess.com&sz=128" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()"></span>
+          <div class="pr-min0"><div class="pr-mini-name">Recess</div><div class="pr-mini-cat">Better-for-you beverage · 87</div></div>
+        </div>
+        <div class="pr-mini-foot">
+          <span class="select-wrap"><select>
+            <option>New</option><option>Researching</option><option>Outreach</option><option>Meeting</option><option selected>Won</option>
+          </select></span>
+          <span class="badge badge-secondary badge-sm" title="Synced to HubSpot">CRM</span>
+          <span class="badge badge-secondary badge-sm" title="Pitch playbook ready">Playbook</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

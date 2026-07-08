@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moodtape — API coverage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  /* ── Required DS conflict overrides (doctrine, verbatim) ── */
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  body { display: block !important; }
+  svg { flex: none; min-height: fit-content; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    max-width: none !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: hsl(var(--background)); color: hsl(var(--foreground));
+    font-size: var(--fs-sm); line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 80px;
+  }
+  a { color: hsl(var(--primary)); text-decoration: none; }
+  a:hover { opacity: .85; }
+
+  .wrap { max-width: 1184px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── Hero — no border-bottom, zones separate by spacing ── */
+  .hero { padding: 48px 0 8px; }
+  .eyebrow { font-size: var(--fs-xs); font-weight: 500; text-transform: uppercase; letter-spacing: .07em; color: hsl(var(--muted-foreground)); margin-bottom: 14px; }
+  .hero h1 { font-size: 36px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 16px; }
+  .hero h1 .hl { color: hsl(var(--primary)); }
+  .lede { font-size: var(--fs-base); color: hsl(var(--muted-foreground)); max-width: 860px; line-height: 1.65; }
+  .lede b { color: hsl(var(--foreground)); font-weight: 600; }
+  .lede code { font-size: var(--fs-xs); background: hsl(var(--secondary)); padding: 1px 6px; border-radius: 4px; color: hsl(var(--foreground)); }
+
+  /* Summary — DS KPI Stat Cards; --fs-4xl missing from theme + waldo-ds.css (reported to VALIDATOR), local size guard */
+  .kpi-grid.sum { grid-template-columns: repeat(3, 1fr); margin-top: 28px; }
+  .kpi .k-value { font-size: var(--fs-5xl); }
+  .k-value.ok { color: hsl(var(--primary)); }
+  .k-value.partial { color: hsl(var(--warning)); }
+  .k-value.gap { color: hsl(var(--destructive)); }
+
+  /* ── Sections — spacing + label, never divider lines ── */
+  .section-block { padding: 44px 0 0; }
+  .sec-head { margin-bottom: 22px; }
+  .sec-head h2 { font-size: var(--fs-2xl); font-weight: 600; letter-spacing: -0.02em; }
+  .sec-head .def { color: hsl(var(--muted-foreground)); margin-top: 8px; font-size: var(--fs-sm); max-width: 860px; line-height: 1.6; }
+  .sec-head .def code { font-size: var(--fs-xs); background: hsl(var(--secondary)); padding: 1px 6px; border-radius: 4px; color: hsl(var(--foreground)); }
+
+  /* ── Endpoint table — DS .wui-table on a card surface ── */
+  .table-card { background: hsl(var(--card)); border-radius: var(--radius-2xl); overflow: hidden; }
+  .table-card .table-wrap { overflow-x: auto; }
+  .prop-table { min-width: 860px; table-layout: fixed; }
+  .prop-table col.c-field { width: 18%; } .prop-table col.c-endpoint { width: 22%; }
+  .prop-table col.c-powers { width: 15%; } .prop-table col.c-notes { width: 31%; } .prop-table col.c-status { width: 14%; }
+  .prop-table td { vertical-align: top; color: hsl(var(--muted-foreground)); line-height: 1.55; overflow-wrap: anywhere; }
+  .prop-table td:first-child { color: hsl(var(--foreground)); font-weight: 500; }
+  .prop-table td code, .prop-table td .new-tag { overflow-wrap: anywhere; word-break: break-word; }
+  .prop-table td code { font-size: var(--fs-xs); background: hsl(var(--secondary)); padding: 1px 6px; border-radius: 4px; color: hsl(var(--foreground)); }
+  .prop-table td a { color: hsl(var(--foreground)); }
+  .prop-table td a:hover { color: hsl(var(--primary)); opacity: 1; }
+  .prop-table .new-tag { color: hsl(var(--muted-foreground)); font-size: 11px; }
+  .prop-table tr.grp td { background: hsl(var(--muted)); font-size: var(--fs-xs); font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
+  .powers { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .badge { white-space: nowrap; }
+
+  /* ── Gap cards — neutral card surface; status lives in the pill, never a colored border ── */
+  .gap-card { margin-bottom: 16px; }
+  .gap-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .gap-method { font-family: var(--font-mono); font-size: var(--fs-sm); font-weight: 600; color: hsl(var(--foreground)); }
+  .gap-method .verb { color: hsl(var(--primary)); }
+  .gap-head .badge { margin-left: auto; }
+  .gap-desc { color: hsl(var(--muted-foreground)); font-size: var(--fs-sm); line-height: 1.6; }
+  .gap-desc b { color: hsl(var(--foreground)); font-weight: 600; }
+  .gap-desc code { font-size: var(--fs-xs); background: hsl(var(--secondary)); padding: 1px 6px; border-radius: 4px; color: hsl(var(--foreground)); }
+  .gap-desc i { font-style: normal; font-weight: 600; color: hsl(var(--foreground)); }
+  /* JSON syntax tint on the DS Code Block */
+  .wcode-block { background: hsl(var(--muted)); } /* nested on a card — on-card rule */
+  .j-key { color: hsl(var(--primary)); }
+  .j-str { color: hsl(var(--highlight)); }
+  .j-num { color: hsl(var(--foreground)); }
+  .j-com { color: hsl(var(--muted-foreground)); }
+  .powers-line { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .powers-line b { color: color-mix(in srgb, hsl(var(--foreground)) 75%, transparent); font-weight: 600; }
+
+  /* ── Footer — borderless ── */
+  .footer-note { max-width: 1184px; margin: 56px auto 0; padding: 0 24px; color: hsl(var(--muted-foreground)); font-size: var(--fs-xs); line-height: 1.6; }
+
+  @media (max-width: 900px) {
+    .hero h1 { font-size: 28px; }
+    .kpi-grid.sum { grid-template-columns: 1fr; }
+    .app-nav { gap: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════ APP HEADER — canonical DS chrome ════ -->
+<header class="app-header">
+  <div class="app-header-inner">
+    <div class="app-ident">
+      <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Waldo"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
+      <span class="product">Moodtape</span>
+    </div>
+    <nav class="app-nav">
+      <a href="index.html">← Back to app</a>
+      <a href="/bxcapi/index.html">bxcAPI spec</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="eyebrow">What Moodtape needs from the Brand Intelligence API</div>
+    <h1>Every endpoint Moodtape reads — and where the <span class="hl">gaps</span> are</h1>
+    <p class="lede">Moodtape is built on the <a href="/bxcapi/index.html">Brand Intelligence API (bxcAPI)</a>. The brand-level sentiment is already there — distribution, trend, themes, category roll-ups, and a <code>sentiment.drop</code> alert event all ship today. What the API is missing is a <b>securities layer</b>: nothing maps a <b>ticker</b> to the <b>portfolio of brands</b> behind it, rolls those brands into a single security-level score, or exposes a market-wide index to anchor a landing page. And by design the bxcAPI has no <b>stock-price data</b> — so the price half of every chart is an explicit external join. The additions below add that thin securities envelope on top of the brand data that already exists.</p>
+    <div class="kpi-grid sum">
+      <div class="kpi"><div class="k-label">Usable today</div><div class="k-value ok">9</div><div class="k-sub">endpoints consumed as-is</div></div>
+      <div class="kpi"><div class="k-label">Partial</div><div class="k-value partial">3</div><div class="k-sub">needs fan-out or structuring</div></div>
+      <div class="kpi"><div class="k-label">Proposed additions</div><div class="k-value gap">5</div><div class="k-sub">the missing securities envelope</div></div>
+    </div>
+  </div>
+
+  <!-- ════ TABLE 1 ════ -->
+  <div class="section-block">
+    <div class="sec-head">
+      <h2>Every endpoint Moodtape reads</h2>
+      <p class="def">One row per field or endpoint the prototype consumes. Ordered gaps → partial → available. "Partial" means the data exists but is brand-scoped (needs per-brand fan-out and a client-side roll-up) or arrives as free text rather than a structured field.</p>
+    </div>
+
+    <div class="table-card">
+      <div class="table-wrap">
+        <table class="wui-table prop-table">
+          <colgroup>
+            <col class="c-field"><col class="c-endpoint"><col class="c-powers"><col class="c-notes"><col class="c-status">
+          </colgroup>
+          <thead>
+            <tr><th>Field / capability</th><th>Endpoint</th><th>Powers</th><th>Notes</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+
+            <tr class="grp"><td colspan="5">Gaps — blocks the product until built (detailed below)</td></tr>
+            <tr>
+              <td>Ticker → brand portfolio</td>
+              <td><code>/tickers/{symbol}</code> <span class="new-tag">(new)</span></td>
+              <td class="powers">Search · every ticker page</td>
+              <td>Resolve a security to the brands it owns, with weights. The whole app starts here; today there's no securities concept in the API.</td>
+              <td><span class="badge badge-destructive">✗ Gap</span></td>
+            </tr>
+            <tr>
+              <td>Security-level sentiment roll-up</td>
+              <td><code>/tickers/{symbol}/sentiment</code> <span class="new-tag">(new)</span></td>
+              <td class="powers">Ticker score · tape · movers</td>
+              <td>One net score per ticker (weighted over its brands) + distribution + per-platform split + a sentiment timeseries — in one call instead of fanning out across brands.</td>
+              <td><span class="badge badge-destructive">✗ Gap</span></td>
+            </tr>
+            <tr>
+              <td>Market sentiment index</td>
+              <td><code>/market/sentiment-index</code> <span class="new-tag">(new)</span></td>
+              <td class="powers">Landing hero · sector bars · trend</td>
+              <td>Cross-universe (S&amp;P-500-style) index + w/w move + by-sector breakdown + 52-week trend. Today there's no above-category aggregate.</td>
+              <td><span class="badge badge-destructive">✗ Gap</span></td>
+            </tr>
+            <tr>
+              <td>Price ↔ sentiment series</td>
+              <td><code>/tickers/{symbol}/price-sentiment</code> <span class="new-tag">(new)</span></td>
+              <td class="powers">The overlay chart + event markers</td>
+              <td>Aligned price + sentiment series with change annotations. <b>Price data is out of bxcAPI scope</b> — this is an explicit external market-data join (see below).</td>
+              <td><span class="badge badge-destructive">✗ Gap</span></td>
+            </tr>
+            <tr>
+              <td>Ticker / sector alert scope</td>
+              <td><a href="/bxcapi/index.html#event-types"><code>POST /alerts</code></a> <span class="new-tag">(+scope)</span></td>
+              <td class="powers">Alert setup on a ticker/sector</td>
+              <td>The <code>sentiment.drop</code> event already exists; this just lets <code>scope</code> target a <code>ticker</code> or <code>sector</code>, not only a brand/category.</td>
+              <td><span class="badge badge-destructive">✗ Gap</span></td>
+            </tr>
+
+            <tr class="grp"><td colspan="5">Partial — data exists, but brand-scoped or unstructured</td></tr>
+            <tr>
+              <td>Per-platform sentiment split</td>
+              <td><a href="/bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions</code></a></td>
+              <td class="powers">"By platform" bars</td>
+              <td>Mentions carry a <code>platform</code> and <code>sentiment</code>, so the split is derivable — but there's no pre-aggregated per-platform breakdown, so it's a client-side group-by per brand × ticker.</td>
+              <td><span class="badge badge-warning">⚠ Partial</span></td>
+            </tr>
+            <tr>
+              <td>News headline sentiment</td>
+              <td><a href="/bxcapi/index.html#cat-news"><code>/categories/{id}/news</code></a></td>
+              <td class="powers">News feed sentiment pills</td>
+              <td>Returns category news items, but sentiment-per-headline isn't a guaranteed structured field — the pill is inferred rather than read.</td>
+              <td><span class="badge badge-warning">⚠ Partial</span></td>
+            </tr>
+            <tr>
+              <td>Portfolio roll-up math</td>
+              <td><a href="/bxcapi/index.html#brand-discovery"><code>/brands/compare</code></a></td>
+              <td class="powers">Ticker score (today's workaround)</td>
+              <td>Compares a set of brands side by side — the closest thing to a roll-up, but it returns parallel brand rows, not one weighted security score, so the weighting is done client-side.</td>
+              <td><span class="badge badge-warning">⚠ Partial</span></td>
+            </tr>
+
+            <tr class="grp"><td colspan="5">Available today — used as-is</td></tr>
+            <tr>
+              <td>Brand search</td>
+              <td><a href="/bxcapi/index.html#brand-discovery"><code>/brands/search?q=</code></a></td>
+              <td class="powers">Resolve portfolio brands</td>
+              <td>Name/category search returning brand id, name, category — used to resolve each brand in a ticker's portfolio.</td>
+              <td><span class="badge badge-active">✓ Available</span></td>
+            </tr>
+            <tr>
+              <td>Sentiment distribution + volume</td>
+              <td><a href="/bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions/summary</code></a></td>
+              <td class="powers">Sentiment mix · mention volume</td>
+              <td>Volume, sources, and positive/negative/neutral/mixed distribution per brand — the building block of every brand's score.</td>
+              <td><span class="badge badge-active">✓ Available</span></td>
+            </tr>
+            <tr>
+              <td>Sentiment trend + themes</td>
+              <td><a href="/bxcapi/index.html#brand-mentions"><code>/brands/{id}/mentions/analysis</code></a></td>
+              <td class="powers">Sentiment line · drivers</td>
+              <td>ML-derived sentiment trend over time, key discussion themes, and spike detection per brand.</td>
+              <td><span class="badge badge-active">✓ Available</span></td>
+            </tr>
+            <tr>
+              <td><code>net_sentiment</code> timeseries</td>
+              <td><a href="/bxcapi/index.html#brand-trends"><code>/brands/{id}/{dataset}/timeseries</code></a></td>
+              <td class="powers">52-week sentiment series</td>
+              <td>Daily/weekly <code>net_sentiment</code> and <code>mention_volume</code> series per brand — the sentiment half of the overlay chart.</td>
+              <td><span class="badge badge-active">✓ Available</span></td>
+            </tr>
+            <tr>
+              <td>Search-interest + sentiment context</td>
+              <td><a href="/bxcapi/index.html#market-conditions"><code>/brands/{id}/market-conditions</code></a></td>
+              <td class="powers">Ticker page context</td>
+              <td>Search-interest, mention volume and sentiment together — useful background on a security's brands.</td>
+              <td><span class="badge badge-active">✓ Available</span></td>
+            </tr>
+            <tr>
+              <td>Sector sentiment landscape</td>
+              <td><a href="/bxcapi/index.html#cat-landscape"><code>/categories/{id}/landscape</code></a></td>
+              <td class="powers">Sector bars (per category)</td>
+              <td>Category mention volume, sentiment trends, and top brands by share of voice — the per-sector input to the landing bars.</td>
+              <td><span class="badge badge-active">✓ Available</span></td>
+            </tr>
+            <tr>
+              <td>Sector sentiment shifts</td>
+              <td><a href="/bxcapi/index.html#cat-trends"><code>/category/{id}/sentiment-shifts</code></a></td>
+              <td class="powers">Sector w/w deltas</td>
+              <td>Week-over-week sentiment movement by category — drives "mood improving / cooling" and biggest-sector callouts.</td>
+              <td><span class="badge badge-active">✓ Available</span></td>
+            </tr>
+            <tr>
+              <td>Category news feed</td>
+              <td><a href="/bxcapi/index.html#cat-news"><code>/categories/{id}/news</code></a></td>
+              <td class="powers">"Recent news" (category half)</td>
+              <td>Category-level news items shown alongside brand news on the ticker page.</td>
+              <td><span class="badge badge-active">✓ Available</span></td>
+            </tr>
+            <tr>
+              <td>Alert CRUD · dry-run · events</td>
+              <td><a href="/bxcapi/index.html#alerts"><code>POST /alerts</code></a> · <a href="/bxcapi/index.html#alerts"><code>/alerts/{id}/preview</code></a></td>
+              <td class="powers">Alert form · "would have fired N×"</td>
+              <td><code>trigger</code>/<code>scope</code>/<code>channels</code> shape and the <code>sentiment.drop</code> / <code>mention.spike</code> events are reused directly; <code>preview</code>/<code>replay</code> powers the dry-run.</td>
+              <td><span class="badge badge-active">✓ Available</span></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ TABLE 2: PROPOSED ADDITIONS ════ -->
+  <div class="section-block">
+    <div class="sec-head">
+      <h2>Proposed additions</h2>
+      <p class="def">Five additions, all thin wrappers over data the API already has. The keystone is a <code>/tickers/{symbol}</code> resource that maps a security to its brand portfolio — every other addition derives from it. The one genuine outsider is stock price, which the bxcAPI should <b>not</b> own; we flag where the external join belongs.</p>
+    </div>
+
+    <div class="wcard gap-card">
+      <div class="gap-head">
+        <span class="gap-method"><span class="verb">GET</span> /tickers/{symbol}</span>
+        <span class="badge badge-highlight">✗ Gap · keystone</span>
+      </div>
+      <p class="gap-desc">The securities envelope the API is missing. Maps a <b>ticker</b> to the <b>portfolio of brands</b> behind it, with weights — so a security like <code>PEP</code> resolves to Pepsi, Lay's, Doritos, Gatorade and Quaker. Everything else (the rolled-up score, the tape, the movers, alerts) keys off this one resolution. Today there is no ticker/security concept anywhere in the bxcAPI.</p>
+<div class="wcode-block"><pre class="wcode-block-body">{
+  <span class="j-key">"symbol"</span>: <span class="j-str">"PEP"</span>,
+  <span class="j-key">"company"</span>: <span class="j-str">"PepsiCo, Inc."</span>,
+  <span class="j-key">"sector"</span>: <span class="j-str">"Beverages &amp; Food"</span>,
+  <span class="j-key">"brands"</span>: [
+    { <span class="j-key">"brand_id"</span>: <span class="j-str">"brand_pepsi"</span>,    <span class="j-key">"weight"</span>: <span class="j-num">0.34</span> },
+    { <span class="j-key">"brand_id"</span>: <span class="j-str">"brand_lays"</span>,     <span class="j-key">"weight"</span>: <span class="j-num">0.22</span> },
+    { <span class="j-key">"brand_id"</span>: <span class="j-str">"brand_doritos"</span>,  <span class="j-key">"weight"</span>: <span class="j-num">0.18</span> },
+    { <span class="j-key">"brand_id"</span>: <span class="j-str">"brand_gatorade"</span>, <span class="j-key">"weight"</span>: <span class="j-num">0.16</span> },
+    { <span class="j-key">"brand_id"</span>: <span class="j-str">"brand_quaker"</span>,   <span class="j-key">"weight"</span>: <span class="j-num">0.10</span> }
+  ]
+}</pre></div>
+      <p class="powers-line"><b>Powers:</b> search resolution, the brand-portfolio chips, and the inputs to every roll-up below.</p>
+    </div>
+
+    <div class="wcard gap-card">
+      <div class="gap-head">
+        <span class="gap-method"><span class="verb">GET</span> /tickers/{symbol}/sentiment</span>
+        <span class="badge badge-destructive">✗ Gap</span>
+      </div>
+      <p class="gap-desc">A single <b>security-level sentiment</b> object — the weighted roll-up of the portfolio's brand sentiment — plus distribution, a per-platform split, and a <code>net_sentiment</code> timeseries. Today the prototype fakes this by fanning out across <code>/brands/{id}/mentions/summary</code> for every brand and weighting client-side; this returns it in one call.</p>
+<div class="wcode-block"><pre class="wcode-block-body">{
+  <span class="j-key">"symbol"</span>: <span class="j-str">"PEP"</span>,
+  <span class="j-key">"net_sentiment"</span>: <span class="j-num">0.16</span>,
+  <span class="j-key">"wow_delta"</span>: <span class="j-num">-0.04</span>,
+  <span class="j-key">"mention_volume"</span>: <span class="j-num">21400</span>,
+  <span class="j-key">"distribution"</span>: { <span class="j-key">"positive"</span>: <span class="j-num">0.51</span>, <span class="j-key">"neutral"</span>: <span class="j-num">0.22</span>, <span class="j-key">"mixed"</span>: <span class="j-num">0.12</span>, <span class="j-key">"negative"</span>: <span class="j-num">0.15</span> },
+  <span class="j-key">"by_platform"</span>: { <span class="j-key">"reddit"</span>: <span class="j-num">0.08</span>, <span class="j-key">"x"</span>: <span class="j-num">0.21</span>, <span class="j-key">"news"</span>: <span class="j-num">0.04</span>, <span class="j-key">"tiktok"</span>: <span class="j-num">0.30</span>, <span class="j-key">"youtube"</span>: <span class="j-num">0.12</span> },
+  <span class="j-key">"series"</span>: [{ <span class="j-key">"week"</span>: <span class="j-str">"2026-05-25"</span>, <span class="j-key">"net_sentiment"</span>: <span class="j-num">0.16</span> }]
+}</pre></div>
+      <p class="powers-line"><b>Powers:</b> the big ticker score + badge, the ticker tape, the movers leaderboard, the sentiment-mix and by-platform panels.</p>
+    </div>
+
+    <div class="wcard gap-card">
+      <div class="gap-head">
+        <span class="gap-method"><span class="verb">GET</span> /market/sentiment-index</span>
+        <span class="badge badge-destructive">✗ Gap</span>
+      </div>
+      <p class="gap-desc">A single top-level read for the landing page: a market-wide <b>sentiment index</b> across the tracked universe, its week-over-week move, a by-sector breakdown, and a trend series. Today there's no aggregate above a single category, so the home view would have to fan out across every sector and ticker.</p>
+<div class="wcode-block"><pre class="wcode-block-body">{
+  <span class="j-key">"as_of"</span>: <span class="j-str">"2026-05-28"</span>,
+  <span class="j-key">"index"</span>: <span class="j-num">0.18</span>,
+  <span class="j-key">"wow_delta"</span>: <span class="j-num">0.03</span>,
+  <span class="j-key">"by_sector"</span>: [
+    { <span class="j-key">"sector"</span>: <span class="j-str">"Media &amp; Entertainment"</span>, <span class="j-key">"net_sentiment"</span>: <span class="j-num">0.21</span> },
+    { <span class="j-key">"sector"</span>: <span class="j-str">"Restaurants &amp; QSR"</span>,      <span class="j-key">"net_sentiment"</span>: <span class="j-num">-0.03</span> }
+  ],
+  <span class="j-key">"trend"</span>: [{ <span class="j-key">"week"</span>: <span class="j-str">"2026-05-25"</span>, <span class="j-key">"index"</span>: <span class="j-num">0.18</span> }]
+}</pre></div>
+      <p class="powers-line"><b>Powers:</b> the four hero KPIs, the "sentiment by sector" bars, and the 52-week market-trend chart.</p>
+    </div>
+
+    <div class="wcard gap-card">
+      <div class="gap-head">
+        <span class="gap-method"><span class="verb">GET</span> /tickers/{symbol}/price-sentiment</span>
+        <span class="badge badge-destructive">✗ Gap · external join</span>
+      </div>
+      <p class="gap-desc">The overlay chart needs <b>price and sentiment on the same timeline</b>, plus markers where sentiment turned. The sentiment side comes from the roll-up above — but <b>stock price is not, and should not be, the bxcAPI's job</b>. The honest design is for the API to expose the sentiment series and the change annotations, and for the client (or a thin gateway) to join an external market-data feed for OHLC. We flag it here so the contract for the annotation/event side is explicit.</p>
+<div class="wcode-block"><pre class="wcode-block-body">{
+  <span class="j-key">"symbol"</span>: <span class="j-str">"PEP"</span>,
+  <span class="j-key">"sentiment"</span>: [{ <span class="j-key">"week"</span>: <span class="j-str">"2026-05-25"</span>, <span class="j-key">"net_sentiment"</span>: <span class="j-num">0.16</span> }],
+  <span class="j-key">"events"</span>: [
+    { <span class="j-key">"week"</span>: <span class="j-str">"2026-03-30"</span>, <span class="j-key">"direction"</span>: <span class="j-str">"down"</span>, <span class="j-key">"magnitude"</span>: <span class="j-num">0.18</span>, <span class="j-key">"label"</span>: <span class="j-str">"Snack recall chatter"</span> }
+  ],
+  <span class="j-key">"price"</span>: <span class="j-str">"join externally — out of bxcAPI scope"</span>
+}</pre></div>
+      <p class="powers-line"><b>Powers:</b> the dual-axis price-vs-sentiment chart and its event markers.</p>
+    </div>
+
+    <div class="wcard gap-card">
+      <div class="gap-head">
+        <span class="gap-method"><span class="verb">FIELD</span> · ticker / sector alert scope</span>
+        <span class="badge badge-destructive">✗ Gap · small</span>
+      </div>
+      <p class="gap-desc">The alert machinery is done — <code>sentiment.drop</code> and <code>mention.spike</code> events, <code>preview</code>/<code>replay</code> dry-runs, channels — it just speaks <b>brands and categories</b>. Letting <code>scope</code> accept a <code>ticker</code> or <code>sector</code> (resolved through <code>/tickers/{symbol}</code>) makes the alert form map 1:1 onto a security a trader actually watches.</p>
+<div class="wcode-block"><pre class="wcode-block-body">{
+  <span class="j-key">"trigger"</span>: {
+    <span class="j-key">"event_type"</span>: <span class="j-str">"sentiment.drop"</span>,   <span class="j-com">// sentiment.drop | sentiment.spike | mention.spike</span>
+    <span class="j-key">"threshold"</span>: { <span class="j-key">"min_move"</span>: <span class="j-num">0.20</span>, <span class="j-key">"window"</span>: <span class="j-str">"4w"</span> }
+  },
+  <span class="j-key">"scope"</span>: { <span class="j-key">"ticker"</span>: <span class="j-str">"TSLA"</span> },        <span class="j-com">// or { "sector": "media" }</span>
+  <span class="j-key">"channels"</span>: [{ <span class="j-key">"type"</span>: <span class="j-str">"slack"</span>, <span class="j-key">"target"</span>: <span class="j-str">"#my-watchlist"</span> }]
+}</pre></div>
+      <p class="powers-line"><b>Powers:</b> the alert-setup scope picker and the "would have fired N times" dry-run preview.</p>
+    </div>
+  </div>
+</div>
+
+<div class="footer-note">
+  <p>Moodtape · prototype for the <a href="/bxcapi/index.html">Brand Intelligence API</a>. <a href="index.html">Back to the app →</a></p>
+</div>
+
+</body>
+</html>

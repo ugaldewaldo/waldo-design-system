@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Missing DS Components — Poppi Health</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../../../waldo-ui/waldo-shadcn-theme.css" />
+  <link rel="stylesheet" href="../../../../../waldo-ds.css">
+<style>
+  html, body { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { display: block !important; max-width: none !important; margin: 0 !important; padding: 40px 48px 120px !important; background: hsl(var(--background)); color: hsl(var(--foreground)); font-family: 'Inter', sans-serif; }
+
+  .doc-head { max-width: 1080px; margin: 0 auto 48px; }
+  .doc-title { font-size: 32px; font-weight: 600; letter-spacing: -0.04em; }
+  .doc-sub { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); margin-top: 8px; line-height: 1.6; max-width: 760px; }
+
+  .comp { max-width: 1080px; margin: 0 auto 28px; background: hsl(var(--card)); border-radius: 16px; padding: 28px 32px; }
+  .comp-name { font-size: var(--fs-lg); font-weight: 600; letter-spacing: -0.02em; }
+  .comp-meta { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); margin-top: 4px; line-height: 1.5; }
+  .comp-meta code { color: hsl(var(--primary)); font-size: var(--fs-xs); }
+  .comp-demo { margin-top: 20px; padding: 24px; background: hsl(var(--background)); border-radius: 12px; }
+  .comp-tag { display: inline-block; font-size: var(--fs-xs); font-weight: 600; padding: 3px 8px; border-radius: 6px; background: color-mix(in srgb, hsl(var(--highlight)) 12%, transparent); color: hsl(var(--highlight)); margin-left: 10px; vertical-align: middle; }
+
+  /* Trend Column */
+  .trend-col { background: hsl(var(--card)); border-radius: 16px; padding: 16px 14px; max-width: 360px; border: 1px solid hsl(var(--border)); }
+  .trend-col-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .tch-title { font-size: var(--fs-sm); font-weight: 600; }
+  .tch-sub { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-left: auto; }
+  .trend-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid hsl(var(--border)); }
+  .trend-row:last-child { border-bottom: none; }
+  .trend-rank { font-size: var(--fs-xs); font-weight: 600; color: hsl(var(--muted-foreground)); width: 22px; text-align: right; font-variant-numeric: tabular-nums; }
+  .trend-main { flex: 1; min-width: 0; }
+  .trend-tag { font-size: var(--fs-sm); font-weight: 600; line-height: 1.3; }
+  .trend-context { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 2px; line-height: 1.4; }
+  .trend-meta { display: flex; flex-direction: column; align-items: flex-end; font-size: var(--fs-xs); gap: 2px; }
+  .trend-vol { color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; font-weight: 600; }
+  .trend-delta { font-variant-numeric: tabular-nums; font-weight: 600; }
+  .trend-delta.up { color: hsl(var(--primary)); }
+  .trend-delta.dn { color: hsl(var(--destructive)); }
+</style>
+</head>
+<body>
+
+<div class="doc-head">
+  <div class="doc-title">Missing DS Components</div>
+  <div class="doc-sub">1 component from Poppi Health not yet in <code>index.html</code> — candidate for promotion to the core DS. (The other 7 already exist in the Brand API section.)</div>
+</div>
+
+<!-- Trend Column -->
+<div class="comp">
+  <div class="comp-name">Trend Column <span class="comp-tag">missing</span></div>
+  <div class="comp-meta">Ranked list per source: rank, tag, context, volume, delta. <b>up</b> = <code>hsl(var(--primary))</code>, <b>dn</b> = <code>hsl(var(--destructive))</code>.</div>
+  <div class="comp-demo">
+    <div class="trend-col">
+      <div class="trend-col-head"><span class="tch-title">TikTok hashtags</span><span class="tch-sub">last 7 days</span></div>
+      <div class="trend-row"><span class="trend-rank">1</span><div class="trend-main"><div class="trend-tag">#drinkpoppi</div><div class="trend-context">Mini-can unboxings dominate</div></div><div class="trend-meta"><span class="trend-vol">2.1M</span><span class="trend-delta up">▲ +18%</span></div></div>
+      <div class="trend-row"><span class="trend-rank">2</span><div class="trend-main"><div class="trend-tag">#guttok</div><div class="trend-context">Prebiotic vs probiotic explainers</div></div><div class="trend-meta"><span class="trend-vol">4.4M</span><span class="trend-delta up">▲ +34%</span></div></div>
+      <div class="trend-row"><span class="trend-rank">3</span><div class="trend-main"><div class="trend-tag">#sodaalternative</div><div class="trend-context">Comparison to Olipop</div></div><div class="trend-meta"><span class="trend-vol">890K</span><span class="trend-delta dn">▼ −4%</span></div></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

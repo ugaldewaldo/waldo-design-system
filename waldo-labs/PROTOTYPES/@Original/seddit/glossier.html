@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>seddit · r/glossier</title>
+<style>
+  :root{
+    --bg:#f4f1ea; --surface:#ffffff; --surface-2:#fbf9f5;
+    --border:#e5dfd3; --border-2:#efeae0;
+    --ink:#15140f; --muted:#736c5f; --faint:#a39b8c;
+    --accent:#f0512e;            /* seddit persimmon */
+    --accent-soft:#fde9e2;
+    --cool:#5566a8;              /* downvote slate */
+    --gold:#d99a36;
+    --glossier:#f4a7a0;          /* brand pink */
+    --glossier-ink:#c25b53;
+    --verify:#3f9d6c;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+    --serif:"Hoefler Text","Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Helvetica,sans-serif;
+    --shadow:0 1px 2px rgba(30,24,12,.04),0 8px 24px -12px rgba(30,24,12,.10);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(rgba(120,110,90,.035) 1px,transparent 1px);
+    background-size:18px 18px;
+  }
+  a{color:inherit;text-decoration:none}
+
+  /* ---------- top bar ---------- */
+  header{
+    position:sticky;top:0;z-index:40;background:rgba(244,241,234,.86);
+    backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--border);
+  }
+  .bar{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:18px;padding:11px 20px}
+  .brand{display:flex;align-items:center;gap:9px;cursor:pointer}
+  .bubble{width:30px;height:30px;flex:none;position:relative}
+  .bubble svg{display:block}
+  .wordmark{font-family:var(--serif);font-size:25px;letter-spacing:-.02em;font-weight:600}
+  .wordmark .said{color:var(--accent);font-style:italic}
+  .tagline{font-family:var(--mono);font-size:10.5px;color:var(--faint);letter-spacing:.02em;margin-top:2px}
+  .search{flex:1;max-width:460px;position:relative}
+  .search input{
+    width:100%;border:1px solid var(--border);background:var(--surface);border-radius:999px;
+    padding:9px 16px 9px 38px;font-family:var(--mono);font-size:12px;color:var(--ink);outline:none;
+  }
+  .search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+  .search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);opacity:.4}
+  .chip{font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--border);
+    padding:6px 12px;border-radius:999px;background:var(--surface)}
+  .me{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#ffd9b0,#f0512e);flex:none}
+
+  /* ---------- simulate strip ---------- */
+  .sim{max-width:1080px;margin:0 auto;padding:14px 20px 0}
+  .sim-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:13px 14px;
+    display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);position:relative;overflow:hidden
+  }
+  .sim-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent)}
+  .sim-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--faint);margin-left:6px}
+  .sim-input{flex:1;border:none;background:transparent;font-family:var(--sans);font-size:14px;color:var(--ink);outline:none}
+  .sim-input::placeholder{color:var(--faint)}
+  .sim-btn{
+    font-family:var(--mono);font-size:12px;font-weight:600;color:#fff;background:var(--ink);
+    border:none;border-radius:999px;padding:9px 18px;cursor:pointer;letter-spacing:.02em;white-space:nowrap;
+    transition:transform .15s,background .2s
+  }
+  .sim-btn:hover{background:var(--accent);transform:translateY(-1px)}
+  .sim-btn:active{transform:translateY(0)}
+
+  /* ---------- layout ---------- */
+  .wrap{max-width:1080px;margin:0 auto;padding:14px 20px 80px;display:grid;grid-template-columns:1fr 312px;gap:22px}
+  @media(max-width:880px){.wrap{grid-template-columns:1fr}.side{display:none}}
+
+  /* ---------- banner ---------- */
+  .banner{border-radius:16px;overflow:hidden;border:1px solid var(--border);background:var(--surface);box-shadow:var(--shadow);margin-bottom:16px}
+  .banner-top{height:88px;background:
+    radial-gradient(120% 140% at 12% 0%,#ffd3cc 0%,#f4a7a0 42%,#e98f9c 100%);
+    position:relative}
+  .banner-top::after{content:"";position:absolute;inset:0;
+    background-image:radial-gradient(rgba(255,255,255,.5) 1px,transparent 1px);background-size:14px 14px;opacity:.4}
+  .banner-row{display:flex;align-items:flex-end;gap:14px;padding:0 18px 14px;margin-top:-26px;position:relative}
+  .sub-ava{width:60px;height:60px;border-radius:50%;background:#fff;border:3px solid #fff;flex:none;
+    display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+  .sub-ava span{font-family:var(--serif);font-size:30px;color:var(--glossier-ink);line-height:1}
+  .banner-meta{flex:1;padding-bottom:2px}
+  .banner-meta h1{font-family:var(--serif);font-size:26px;margin:0;letter-spacing:-.01em}
+  .banner-meta .sub-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:3px}
+  .sim-tag{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--accent);background:var(--accent-soft);padding:3px 8px;border-radius:6px;font-weight:600}
+  .members{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+  .join{font-family:var(--mono);font-size:12px;font-weight:700;color:#fff;background:var(--accent);
+    border:none;border-radius:999px;padding:8px 20px;cursor:pointer;align-self:center;margin-bottom:4px}
+  .join.joined{background:var(--surface-2);color:var(--muted);border:1px solid var(--border)}
+
+  /* ---------- post ---------- */
+  .post{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+  .votes{flex:none;width:44px;background:var(--surface-2);display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:3px;border-right:1px solid var(--border-2)}
+  .arrow{width:26px;height:26px;border:none;background:transparent;cursor:pointer;border-radius:7px;display:grid;place-items:center;color:var(--faint);transition:.15s}
+  .arrow:hover{background:var(--accent-soft);color:var(--accent)}
+  .arrow.dn:hover{background:#e7eaf6;color:var(--cool)}
+  .arrow.on-up{color:var(--accent)} .arrow.on-dn{color:var(--cool)}
+  .score{font-family:var(--mono);font-size:12.5px;font-weight:700}
+  .post-body{flex:1;padding:14px 18px 16px;min-width:0}
+  .post-head{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+  .op-ava{width:20px;height:20px;border-radius:50%;background:var(--glossier);display:grid;place-items:center;color:#fff;font-family:var(--serif);font-size:12px}
+  .op{font-family:var(--mono);font-weight:600;color:var(--ink)}
+  .verified{color:var(--glossier-ink)}
+  .flair{font-family:var(--mono);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+    background:#fdeef0;color:var(--glossier-ink);padding:2px 7px;border-radius:5px}
+  .dot{color:var(--faint)}
+  .post-title{font-family:var(--serif);font-size:21px;line-height:1.28;margin:9px 0 7px;letter-spacing:-.01em}
+  .post-text{color:#2c2a22;font-size:14.5px}
+  .promo{display:inline-flex;align-items:center;gap:6px;margin-top:11px;font-family:var(--mono);font-size:10px;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--faint);border:1px dashed var(--border);padding:5px 9px;border-radius:7px}
+  .post-foot{display:flex;align-items:center;gap:16px;margin-top:13px;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+  .awards{display:flex;gap:5px}
+  .award{font-size:13px;filter:saturate(1.1)}
+
+  /* ---------- comments ---------- */
+  .cmts-head{display:flex;align-items:center;justify-content:space-between;margin:20px 2px 8px}
+  .cmts-head .sortl{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .cmts-head b{color:var(--ink)}
+  .sortpill{font-family:var(--mono);font-size:11px;color:var(--accent);border:1px solid var(--accent-soft);background:var(--accent-soft);padding:4px 10px;border-radius:999px}
+
+  .comment{margin-top:4px}
+  .c-row{display:flex;gap:9px}
+  .rail{flex:none;width:30px;display:flex;flex-direction:column;align-items:center;padding-top:3px}
+  .c-ava{width:30px;height:30px;border-radius:50%;flex:none;display:grid;place-items:center;color:#fff;
+    font-family:var(--serif);font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+  .thread-line{width:2px;flex:1;background:var(--border);margin:6px 0 0;border-radius:2px;cursor:pointer;transition:.15s}
+  .thread-line:hover{background:var(--accent)}
+  .c-main{flex:1;min-width:0;padding-bottom:8px}
+  .c-head{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+  .username{font-family:var(--mono);font-weight:600;color:var(--ink);cursor:pointer;border-bottom:1.5px dotted var(--faint);position:relative}
+  .username:hover{color:var(--accent);border-bottom-color:var(--accent)}
+  .uflair{font-family:var(--mono);font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 6px;border-radius:4px}
+  .receipt{display:inline-flex;align-items:center;gap:3px;font-family:var(--mono);font-size:9.5px;color:var(--verify);
+    background:#eaf6ef;padding:2px 6px;border-radius:5px;cursor:help}
+  .karma{font-family:var(--mono);font-size:11px}
+  .c-text{margin:5px 0 2px;color:#26241d;font-size:14px;line-height:1.55}
+  .c-text em{color:var(--ink);font-style:italic}
+  .c-foot{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:5px}
+  .c-foot .v{display:flex;align-items:center;gap:4px}
+  .miniarrow{width:18px;height:18px;border:none;background:transparent;cursor:pointer;color:var(--faint);display:grid;place-items:center;border-radius:5px}
+  .miniarrow:hover{color:var(--accent);background:var(--accent-soft)}
+  .miniarrow.dn:hover{color:var(--cool);background:#e7eaf6}
+  .act{cursor:pointer}.act:hover{color:var(--muted)}
+  .children{margin-left:15px;padding-left:0}
+  .collapsed > .c-row > .c-main > .c-text,
+  .collapsed > .c-row > .c-main > .c-foot,
+  .collapsed > .children{display:none}
+  .collapsed > .c-row > .rail > .thread-line{display:none}
+  .cstub{display:none;font-family:var(--mono);font-size:11px;color:var(--faint);font-style:italic}
+  .collapsed > .c-row > .c-main > .cstub{display:block;margin-top:4px}
+  .downvoted{opacity:.5}
+  .downvoted:hover{opacity:1}
+
+  /* ---------- sidebar ---------- */
+  .side > div{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden}
+  .card-h{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--faint);
+    padding:12px 15px 0}
+  .about p{padding:6px 15px 0;color:#33312a;font-size:13px}
+  .about .stats{display:flex;gap:0;padding:13px 15px 15px;margin-top:8px;border-top:1px solid var(--border-2)}
+  .stat{flex:1}.stat b{font-family:var(--mono);font-size:16px;display:block}.stat span{font-family:var(--mono);font-size:10px;color:var(--faint)}
+  .online{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--verify);margin-right:5px;vertical-align:middle}
+  .cast-item{display:flex;align-items:center;gap:10px;padding:10px 15px;cursor:pointer;border-top:1px solid var(--border-2);transition:.12s}
+  .cast-item:hover{background:var(--surface-2)}
+  .cast-item .c-ava{width:34px;height:34px;font-size:15px}
+  .cast-item .nm{font-family:var(--mono);font-size:12px;font-weight:600}
+  .cast-item .rl{font-size:11px;color:var(--muted);line-height:1.3}
+  .ethos{padding:13px 15px 15px;font-size:12px;color:var(--muted);line-height:1.5}
+  .ethos b{color:var(--ink)}
+  .ethos .powered{font-family:var(--mono);font-size:10px;letter-spacing:.04em;margin-top:9px;color:var(--faint)}
+  .ethos .powered span{color:var(--accent);font-weight:700}
+
+  /* ---------- bio popover ---------- */
+  #pop{position:absolute;z-index:60;width:300px;background:var(--surface);border:1px solid var(--border);
+    border-radius:13px;box-shadow:0 12px 40px -8px rgba(30,24,12,.28);padding:0;opacity:0;transform:translateY(6px) scale(.98);
+    pointer-events:none;transition:opacity .16s,transform .16s;overflow:hidden}
+  #pop.show{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+  .pop-top{display:flex;align-items:center;gap:10px;padding:13px 14px 11px;background:var(--surface-2);border-bottom:1px solid var(--border-2)}
+  .pop-top .c-ava{width:40px;height:40px;font-size:18px}
+  .pop-nm{font-family:var(--mono);font-size:13px;font-weight:700}
+  .pop-fl{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.05em;margin-top:3px}
+  .pop-bio{padding:12px 14px;font-size:12.5px;line-height:1.55;color:#2e2c24}
+  .pop-rcpt{display:flex;align-items:center;gap:7px;padding:10px 14px;border-top:1px solid var(--border-2);
+    background:#f5fbf7;font-family:var(--mono);font-size:10.5px;color:var(--verify)}
+  .pop-rcpt .lk{margin-left:auto;color:var(--faint);text-decoration:underline}
+
+  .fade{opacity:0;transform:translateY(10px);animation:rise .5s cubic-bezier(.2,.7,.3,1) forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+  .shimmer{animation:none!important;opacity:.35;filter:blur(1px);transition:.3s}
+
+  .loadmore{margin:10px 2px 0;padding:12px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--accent);
+    background:var(--surface);border:1px solid var(--border);border-radius:12px;cursor:pointer;box-shadow:var(--shadow);transition:.15s}
+  .loadmore:hover{background:var(--accent-soft);border-color:var(--accent)}
+  footer{max-width:1080px;margin:0 auto;padding:0 20px 50px;font-family:var(--mono);font-size:10.5px;color:var(--faint);text-align:center}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="brand" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+      <div class="bubble">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+          <path d="M5 6.5C5 4.6 6.6 3 8.5 3h13C23.4 3 25 4.6 25 6.5v10c0 1.9-1.6 3.5-3.5 3.5H13l-6 5.2c-.7.6-1.7.1-1.7-.8V20A1 1 0 0 1 5 19.5v-13Z" fill="#f0512e"/>
+          <circle cx="11" cy="11.3" r="1.5" fill="#fff"/><circle cx="15" cy="11.3" r="1.5" fill="#fff"/><circle cx="19" cy="11.3" r="1.5" fill="#fff"/>
+        </svg>
+      </div>
+      <div>
+        <div class="wordmark">s<span class="said">e</span>ddit</div>
+        <div class="tagline">the audience, said&nbsp;it.</div>
+      </div>
+    </div>
+    <div class="search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+      <input value="r/glossier" spellcheck="false">
+    </div>
+    <div class="chip">simulated&nbsp;·&nbsp;v0.1</div>
+    <div class="me"></div>
+  </div>
+</header>
+
+<div class="sim">
+  <div class="sim-card">
+    <span class="sim-label">stimulus</span>
+    <input class="sim-input" id="stim" value="REAL · Glossier launched a pet line — a dog collar, a dog leash, and dog poop bags printed with the Glossier logo (May 2026).">
+    <button class="sim-btn" onclick="resimulate()">Simulate ▸</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <main id="feed">
+
+    <div class="banner fade" style="animation-delay:.02s">
+      <div class="banner-top"></div>
+      <div class="banner-row">
+        <div class="sub-ava"><span>G</span></div>
+        <div class="banner-meta">
+          <h1>r/glossier</h1>
+          <div class="sub-line">
+            <span class="sim-tag">◆ simulated community</span>
+            <span class="members">grounded in <b style="color:var(--ink)">76k</b> real r/glossier accounts</span>
+          </div>
+        </div>
+        <button class="join joined" onclick="this.classList.toggle('joined');this.textContent=this.classList.contains('joined')?'Joined':'Join'">Joined</button>
+      </div>
+    </div>
+
+    <!-- POST -->
+    <div class="post fade" style="animation-delay:.06s">
+      <div class="votes">
+        <button class="arrow" data-d="1" onclick="vote(this,'p')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 14 6-7 6 7"/></svg></button>
+        <span class="score" data-base="1240">1.2k</span>
+        <button class="arrow dn" data-d="-1" onclick="vote(this,'p')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 10 6 7 6-7"/></svg></button>
+      </div>
+      <div class="post-body">
+        <div class="post-head">
+          <span class="op-ava">G</span>
+          <span class="op">u/glossier</span><span class="verified">✓</span>
+          <span class="flair">New Drop</span>
+          <span class="dot">·</span><span>Promoted</span><span class="dot">·</span><span>4h</span>
+        </div>
+        <div class="post-title">Introducing Glossier for Dogs — a collar, a leash, and dog poop bags, all in our signature pink. 🐶</div>
+        <div class="post-text">Because your best friend deserves the Glossier treatment too. ✨ Available online + in-store this week.</div>
+        <div class="promo">◇ sponsored stimulus · the cast reacts below</div>
+        <div class="post-foot">
+          <span class="awards"><span class="award" title="Shiny">✦</span><span class="award" title="Hmm">◔</span></span>
+          <span>💬 <span class="cmtcount"></span> comments</span>
+          <span>↪ share</span>
+          <span>⚑ save</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cmts-head fade" style="animation-delay:.10s">
+      <div class="sortl"><b class="cmtcount"></b> comments · <b class="voicestat"></b> voices · sorted by <span style="color:var(--accent)">most telling</span></div>
+      <span class="sortpill">⇅ best</span>
+    </div>
+
+    <div id="thread"></div>
+
+    <div class="loadmore fade" style="animation-delay:.5s" onclick="appendMore(this)">↓ conjure 2 more grounded voices</div>
+
+    <footer>seddit · the audience, said it. — a simulated subreddit. every voice is grounded in a real person; the takes are theirs, the thread is conjured.</footer>
+  </main>
+
+  <!-- SIDEBAR -->
+  <aside class="side">
+    <div class="about fade" style="animation-delay:.14s">
+      <div class="card-h">about this community</div>
+      <p>Glossier's real audience, reconstructed from public signal — talking the way they actually talk. Drop a stimulus, watch them react.</p>
+      <div class="stats">
+        <div class="stat"><b class="voicestat">12</b><span>voices</span></div>
+        <div class="stat"><b class="cmtcount">—</b><span>comments</span></div>
+        <div class="stat"><b>100%</b><span>real accounts</span></div>
+      </div>
+    </div>
+    <div class="fade" style="animation-delay:.18s">
+      <div class="card-h" style="padding-bottom:8px">the cast in this thread</div>
+      <div id="roster"></div>
+    </div>
+    <div class="fade" style="animation-delay:.22s">
+      <div class="card-h">how this works</div>
+      <div class="ethos">
+        <b>What</b> they say tracks the audience. <b>How</b> they say it is theirs — each voice grounded in one real account.
+        <div class="powered">powered by <span>seddit</span> · brand-audience API</div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<div id="pop"></div>
+
+<script>
+/* ---------------- data ---------------- */
+// Cast sourced from NEUTRAL r/glossier threads. Reactions BLIND-generated by isolated agents (persona's prior posts + neutral stimulus only; never shown the real reactions). Real post-cutoff move: the Glossier pet line.
+const CAST = {
+  softlaunch16:{ava:'g',color:'#9a6a8a',flair:{t:'Since 2016',bg:'#f1e8ee',c:'#74506a'},
+    bio:"hooked since 2016 when the makeup felt simple, relatable and beginner-friendly against all the 2016 full-glam. still a fave to use but, honestly, not as diehard as an adult.",real:'a real r/glossier voice'},
+  vscoghost:{ava:'t',color:'#8a6aaf',flair:{t:'Nostalgic',bg:'#ece6f4',c:'#634a86'},
+    bio:"nostalgic for peak 2017–2018 Glossier — the clairo/art-hoe/vsco era when boy brow and balm dotcom were everywhere. loves the memory more than the current brand.",real:'a real r/glossier voice'},
+  'balmbudget':{ava:'N',color:'#7a7a6a',flair:{t:'Priced Out',bg:'#eeede8',c:'#5a5a4c'},
+    bio:"used to order everything in 2017. now has bills and the prices went up, so rarely orders. priced-out, not bitter — just wants it affordable again.",real:'a real r/glossier voice'},
+  lashloyalist:{ava:'r',color:'#b0566a',flair:{t:'Mascara Loyalist',bg:'#f7e6ea',c:'#8a3a4c'},
+    bio:"Glossier's mascara is the only one that never clumps and she can't go back. loves the makeup; judges everything by whether it's actually good.",real:'a real r/glossier voice'},
+  skintintstan:{ava:'p',color:'#a85f9a',flair:{t:'Skin Tint Evangelist',bg:'#f4e7f1',c:'#7e3f72'},
+    bio:"hates the look/feel of foundation; the skin tint is the first thing that ever gave her that clean, makeup-less, glowy look. here for the products that work.",real:'a real r/glossier voice'},
+  feralpinkera:{ava:'v',color:'#b05a4a',flair:{t:'Feral Nostalgic',bg:'#f5e6e1',c:'#823f30'},
+    bio:"was 17 mixing the jelly cleanser with sugar 'like an ANIMAL,' slathering cherry balm dotcom on her 'dumb bitch mouth.' deep history, zero reverence.",real:'a real r/glossier voice'},
+  freshlyhooked:{ava:'N',color:'#e0843a',flair:{t:'New Convert',bg:'#fbecdb',c:'#a85c1d'},
+    bio:"brand-new convert — discovered Glossier THIS month from this sub, now hunting the products at Marshalls. 'y'all enabling my new beauty obsession, terrible!!' all-in, easily delighted.",real:'a real r/glossier voice'},
+  wowderwatch:{ava:'j',color:'#c08a3a',flair:{t:'Save Wowder',bg:'#f6eed9',c:'#8a611d'},
+    bio:"wowder superfan who lives in fear they'll discontinue it. loves balm dotcom + cloud paint. wants the products supported, not the lineup sprawled.",real:'a real r/glossier voice'},
+  y2k18skin:{ava:'b',color:'#8a5a7a',flair:{t:'Skincare, RIP',bg:'#f1e7ee',c:'#6a405c'},
+    bio:"2017–2018 skincare devotee — milky jelly + the solution + super bounce 'fixed my problematic skin.' wistful and specific: it doesn't work the same since they reformulated.",real:'a real r/glossier voice'},
+  paintcollector:{ava:'m',color:'#5a9a7a',flair:{t:'Cloud Paint Collector',bg:'#e6f2ec',c:'#3f7459'},
+    bio:"cloud paint + ultralip collector, owns many shades of both. wants more of what's good, not new categories.",real:'a real r/glossier voice'},
+  mintbalm4ever:{ava:'j',color:'#6a8a5a',flair:{t:'Balm Devotee',bg:'#ebf1e5',c:'#4e6a3f'},
+    bio:"OG balm dotcom (mint) + skin tint devotee — 'makes it look like you woke up with really good skin ✨.' keeps coming back after trying everything.",real:'a real r/glossier voice'},
+  afterbaumeonly:{ava:'J',color:'#6a7aaf',flair:{t:'Just The Balm',bg:'#e7ebf6',c:'#48588a'},
+    bio:"afterbaume loyalist — a little goes a long way through cold midwest winters. low-key, product-first.",real:'a real r/glossier voice'},
+};
+
+const THREAD = [
+  {u:'softlaunch16',score:734,t:'4h',award:'◔',
+   html:`lol what. the whole point was the makeup felt simple and personal, not slapping the logo on dog poop bags. this is the kind of thing brands do when they've run out of actual ideas. hard pass.`,
+   kids:[
+     {u:'wowderwatch',score:281,t:'3h',html:`girl what?? 😭 i want the actual products not a dog leash... use this energy to save wowder pls`},
+     {u:'freshlyhooked',score:166,t:'3h',html:`NOT me already adding the poop bags to my cart for a dog i don't even have yet 😭 this brand owns me now`}
+   ]},
+  {u:'vscoghost',score:612,t:'4h',award:'✦',
+   html:`lol putting the logo on poop bags is certainly a choice. the brand that made you feel like an art hoe in 2017 now wants to be on your dog's leash. i think i'll stay nostalgic for the version that just made good lip gloss.`},
+  {u:'balmbudget',score:548,t:'4h',
+   html:`I used to order everything from them. Now I can barely justify a cleanser because of the prices, and this is what they're spending on? Logo poop bags? Make the skincare affordable again and skip the dog stuff.`,
+   kids:[
+     {u:'y2k18skin',score:213,t:'3h',html:`dog poop bags but you couldn't keep super bounce vegan? maybe fix the products that actually worked before doing this`}
+   ]},
+  {u:'lashloyalist',score:421,t:'3h',
+   html:`Love the makeup but this is a hard pass for me. I came here for mascara, not a dog leash with a logo on it. Feels like they're stretching the brand way past what it's good at.`},
+  {u:'skintintstan',score:388,t:'3h',
+   html:`idk who this is for? I'm here for the skin tint, not a dog leash lol. feels like a weird use of energy when half the actual makeup is out of stock half the time`,
+   kids:[
+     {u:'paintcollector',score:147,t:'3h',html:`idk I just want more cloud paint shades not a dog leash`}
+   ]},
+  {u:'feralpinkera',score:356,t:'3h',
+   html:`girl what. i did not survive being 17 and exfoliating my face with sugar like a feral raccoon for you to put a logo on a poop bag. my dog is not a brand ambassador`},
+];
+
+const BATCH2 = [
+  {u:'mintbalm4ever',score:188,t:'3h',
+   html:`ok but this is not what I want from glossier lol… give me a new balm dotcom flavor not a dog leash`},
+  {u:'afterbaumeonly',score:121,t:'2h',
+   html:`idk who this is for, I just want the balm`},
+];
+
+/* ---------------- render ---------------- */
+function avaEl(u){const c=CAST[u];return `<div class="c-ava" style="background:${c.color}" data-u="${u}">${c.ava}</div>`;}
+function fmt(n){return n>=1000?(n/1000).toFixed(1)+'k':''+n;}
+
+function renderComment(c){
+  const cast=CAST[c.u];
+  const flair = cast.flair?`<span class="uflair" style="background:${cast.flair.bg};color:${cast.flair.c}">${cast.flair.t}</span>`:'';
+  const receipt = cast.real?`<span class="receipt" title="${cast.real}">◆ real account</span>`:'';
+  const award = c.award?`<span class="award">${c.award}</span>`:'';
+  const kids = (c.kids||[]).map(renderComment).join('');
+  const nameEl = c.deleted?`<span class="username" style="color:var(--faint);border:none;cursor:default">u/[deleted]</span>`
+    :`<span class="username" data-u="${c.u}">u/${c.u}</span>`;
+  return `<div class="comment ${c.deleted?'downvoted':''}">
+    <div class="c-row">
+      <div class="rail">${avaEl(c.u)}<div class="thread-line" onclick="collapse(this)"></div></div>
+      <div class="c-main">
+        <div class="c-head">${nameEl}${flair}${receipt}<span class="karma dot">·</span><span class="karma">${fmt(c.score)} pts</span><span class="dot">·</span><span>${c.t}</span>${award}</div>
+        <div class="c-text">${c.html}</div>
+        <div class="cstub">[+] thread collapsed</div>
+        <div class="c-foot">
+          <span class="v"><button class="miniarrow" data-d="1" onclick="vote(this,'c')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m6 14 6-7 6 7"/></svg></button><span class="score" data-base="${c.score}">${fmt(c.score)}</span><button class="miniarrow dn" data-d="-1" onclick="vote(this,'c')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m6 10 6 7 6-7"/></svg></button></span>
+          <span class="act">↩ reply</span><span class="act">⚑</span><span class="act">···</span>
+        </div>
+        ${kids?`<div class="children">${kids}</div>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+
+function countAll(arr){let n=0;for(const c of arr){n++;if(c.kids)n+=countAll(c.kids);}return n;}
+function authorsOf(arr,set){for(const c of arr){if(c.u!=='[deleted]')set.add(c.u);if(c.kids)authorsOf(c.kids,set);}return set;}
+let RENDERED=THREAD.slice();
+function refreshStats(){
+  const cc=countAll(RENDERED), va=authorsOf(RENDERED,new Set()).size;
+  document.querySelectorAll('.cmtcount').forEach(e=>e.textContent=cc);
+  document.querySelectorAll('.voicestat').forEach(e=>e.textContent=va);
+}
+function renderList(arr,delayBase){return arr.map((c,i)=>renderComment(c).replace('<div class="comment','<div style="animation-delay:'+(delayBase+i*.05)+'s" class="fade comment')).join('');}
+
+document.getElementById('thread').innerHTML = renderList(THREAD,.14);
+refreshStats();
+
+function appendMore(btn){
+  document.getElementById('thread').insertAdjacentHTML('beforeend',renderList(BATCH2,0));
+  RENDERED=RENDERED.concat(BATCH2);
+  refreshStats();
+  btn.textContent='— that’s the room. every voice above is a real account. —';
+  btn.style.color='var(--faint)';btn.style.cursor='default';btn.onclick=null;
+}
+
+/* roster — the full assembled cast */
+document.getElementById('roster').innerHTML = Object.keys(CAST).filter(u=>u!=='[deleted]').map(u=>{
+  const c=CAST[u];
+  return `<div class="cast-item" data-u="${u}"><div class="c-ava" style="background:${c.color}">${c.ava}</div>
+    <div><div class="nm">u/${u}</div><div class="rl">${c.flair.t}</div></div></div>`;
+}).join('');
+
+/* ---------------- interactions ---------------- */
+function vote(btn,kind){
+  const box=btn.parentElement;
+  const up=box.querySelector('[data-d="1"]'), dn=box.querySelector('[data-d="-1"]');
+  const score=box.querySelector('.score'); const base=+score.dataset.base;
+  const isUp=btn===up, onUp=up.classList.contains(kind==='p'?'on-up':'on-up'), onDn=dn.classList.contains('on-dn');
+  // toggle logic
+  const wasUp=up.classList.contains('on-up'), wasDn=dn.classList.contains('on-dn');
+  up.classList.remove('on-up');dn.classList.remove('on-dn');
+  let delta=0;
+  if(isUp){ if(!wasUp){up.classList.add('on-up');delta=1;} }
+  else { if(!wasDn){dn.classList.add('on-dn');delta=-1;} }
+  score.textContent = fmt(base+delta);
+}
+
+function collapse(line){
+  const comment=line.closest('.comment');
+  comment.classList.toggle('collapsed');
+}
+
+/* bio popover */
+const pop=document.getElementById('pop');
+let pinned=false;
+function showPop(u,x,y){
+  const c=CAST[u]; if(!c||!c.bio)return;
+  const flair=c.flair?`<div class="pop-fl" style="color:${c.flair.c}">${c.flair.t}</div>`:'';
+  pop.innerHTML=`<div class="pop-top"><div class="c-ava" style="background:${c.color}">${c.ava}</div>
+    <div><div class="pop-nm">u/${u}</div>${flair}</div></div>
+    <div class="pop-bio">${c.bio}</div>
+    <div class="pop-rcpt">◆ grounded in a real account <span class="lk">${c.real.split(' · ')[0]}</span></div>`;
+  let px=x+12, py=y+14;
+  if(px+300>window.innerWidth-12)px=window.innerWidth-312;
+  pop.style.left=px+'px'; pop.style.top=(py+window.scrollY)+'px';
+  pop.classList.add('show');
+}
+function hidePop(){if(!pinned)pop.classList.remove('show');}
+
+document.addEventListener('mouseover',e=>{
+  const t=e.target.closest('[data-u]');
+  if(t&&!pinned){const u=t.dataset.u;const r=t.getBoundingClientRect();showPop(u,r.left,r.bottom);}
+});
+document.addEventListener('mouseout',e=>{
+  const t=e.target.closest('[data-u]'); const to=e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest('#pop');
+  if(t&&!to)hidePop();
+});
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-u]');
+  if(t){const u=t.dataset.u;const r=t.getBoundingClientRect();pinned=false;showPop(u,r.left,r.bottom);pinned=true;e.stopPropagation();}
+  else if(!e.target.closest('#pop')){pinned=false;pop.classList.remove('show');}
+});
+
+/* re-simulate shimmer */
+function resimulate(){
+  const feed=document.getElementById('feed');
+  document.querySelectorAll('#thread .comment, .post').forEach(el=>el.classList.add('shimmer'));
+  const btn=document.querySelector('.sim-btn');const old=btn.textContent;btn.textContent='simulating…';
+  setTimeout(()=>{
+    document.querySelectorAll('.shimmer').forEach((el,i)=>{el.classList.remove('shimmer');el.classList.remove('fade');void el.offsetWidth;el.classList.add('fade');el.style.animationDelay=(i*.04)+'s';});
+    btn.textContent=old;
+  },850);
+}
+</script>
+</body>
+</html>

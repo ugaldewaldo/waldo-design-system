@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reception — Ad social-listening</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #09090B;
+    --surface: #111114;
+    --surface-2: #16161B;
+    --surface-3: #1C1C22;
+    --border: rgba(255,255,255,0.07);
+    --border-strong: rgba(255,255,255,0.12);
+    --text: #FAFAFA;
+    --text-2: #B4B4BC;
+    --text-3: #6B6B74;
+    --red: #FB7185;
+    --amber: #FBBF24;
+    --green: #4ADE80;
+    --blue: #60A5FA;
+    --gold: #F5C453;
+    /* Pillar accents */
+    --reception: #32A9A9;       /* overall */
+    --breakthrough: #F5C453;    /* attention / cut-through */
+    --sentiment: #7EE8C4;       /* reception quality */
+    --pullthrough: #A78BFA;     /* message landing */
+    --comp1: #D4D4D8; --comp2: #A1A1AA; --comp3: #71717A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { overflow-x: hidden; scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.5;
+    font-size: 14px; -webkit-font-smoothing: antialiased;
+    padding-bottom: 64px; overflow-x: hidden; width: 100%;
+  }
+  a { color: var(--sentiment); text-decoration: none; }
+  a:hover { opacity: 0.85; }
+  code, .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+  .tabular { font-variant-numeric: tabular-nums; }
+  .micro { font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; }
+
+  /* ── Top bar ── */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 32px; border-bottom: 1px solid var(--border);
+    background: rgba(9,9,11,0.85); backdrop-filter: blur(8px);
+    position: sticky; top: 0; z-index: 50;
+  }
+  .brand-mark { display: flex; align-items: center; gap: 12px; }
+  .brand-mark .logo {
+    width: 32px; height: 32px; border-radius: 9px; object-fit: cover; background: #000;
+    box-shadow: 0 0 24px rgba(50,169,169,0.4); display: flex; align-items: center; justify-content: center;
+    font-weight: 900; color: var(--reception); font-size: 18px; border: 1px solid var(--border-strong);
+  }
+  .brand-mark .name { font-weight: 800; font-size: 18px; letter-spacing: -0.01em; }
+  .brand-mark .cat { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 1px; }
+  .topbar-right { display: flex; align-items: center; gap: 16px; }
+  .topbar-meta { display: flex; align-items: center; gap: 16px; }
+  .topbar-meta .date { font-size: 12px; color: var(--text-2); font-variant-numeric: tabular-nums; }
+  .topbar-meta .powered {
+    font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.1em;
+    padding: 4px 10px; border: 1px solid var(--border); border-radius: 999px;
+  }
+  .topbar-meta .powered b { color: var(--text-2); font-weight: 600; }
+  .topbar-meta a.req-link { font-size: 12px; color: var(--text-2); }
+  .topbar-meta a.req-link:hover { color: var(--text); opacity: 1; }
+
+  /* ── App shell ── */
+  .app { min-height: 100vh; }
+  .sidebar { border-right: 1px solid var(--border); background: var(--surface); padding: 18px 14px; position: fixed; top: 0; left: 0; width: 236px; height: 100vh; overflow-y: auto; display: flex; flex-direction: column; gap: 2px; z-index: 60; }
+  .sb-brand { display: flex; align-items: center; gap: 11px; padding: 4px 8px 14px; cursor: pointer; border-radius: 10px; }
+  .sb-brand:hover { opacity: 0.9; }
+  .sb-brand .name { color: var(--text); }
+  .sb-brand .logo { width: 34px; height: 34px; border-radius: 9px; background: #000; border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; font-weight: 900; color: var(--reception); box-shadow: 0 0 24px rgba(50,169,169,0.4); flex-shrink: 0; }
+  .sb-brand .name { font-weight: 800; font-size: 17px; letter-spacing: -0.01em; }
+  .sb-brand .cat { font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.08em; }
+  .sb-section { font-size: 9.5px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-3); padding: 14px 10px 6px; }
+  .sb-link { display: flex; align-items: center; gap: 11px; padding: 9px 11px; border-radius: 10px; color: var(--text-2); font-weight: 600; font-size: 13.5px; cursor: pointer; border: none; background: none; width: 100%; text-align: left; font-family: inherit; transition: background 0.15s, color 0.15s; }
+  .sb-link:hover { background: var(--surface-2); color: var(--text); }
+  .sb-link.active { background: var(--surface-3); color: var(--text); }
+  .sb-link .ic { width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+  .sb-link.muted { opacity: 0.45; cursor: default; }
+  .sb-link.muted:hover { background: none; color: var(--text-2); }
+  .sb-brandswitch { margin-top: auto; border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; display: flex; align-items: center; gap: 10px; background: var(--surface-2); }
+  .sb-brandswitch .bs-logo { width: 26px; height: 26px; border-radius: 7px; background: #000; border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 12px; color: var(--text); flex-shrink: 0; }
+  .sb-brandswitch .bs-lbl { font-size: 9px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.1em; }
+  .sb-brandswitch .bs-name { font-size: 13px; font-weight: 700; }
+  .sb-brandswitch .bs-caret { margin-left: auto; color: var(--text-3); font-size: 12px; }
+  .main { margin-left: 236px; min-width: 0; }   /* offset for the fixed sidebar */
+
+  /* KPI strip */
+  .kpi-strip { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin: 6px 0 2px; }
+  .kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 15px 16px; }
+  .kpi .k-val { font-size: 25px; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .kpi .k-lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-top: 3px; }
+  .kpi .k-sub { font-size: 11px; color: var(--text-3); margin-top: 5px; }
+
+  /* Filter / search */
+  .list-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 18px 0 4px; }
+  .filter-pills { display: inline-flex; gap: 3px; padding: 4px; background: var(--surface-2); border: 1px solid var(--border-strong); border-radius: 999px; }
+  .filter-pill { background: none; border: none; color: var(--text-2); font: inherit; font-size: 12.5px; font-weight: 700; padding: 7px 15px; border-radius: 999px; cursor: pointer; }
+  .filter-pill.active { background: var(--reception); color: var(--bg); }
+  .search-box { flex: 1; min-width: 180px; max-width: 320px; }
+  .search-box input { width: 100%; background: var(--surface-2); border: 1px solid var(--border-strong); border-radius: 10px; color: var(--text); font: inherit; font-size: 13px; padding: 9px 13px; }
+  .search-box input:focus { outline: none; border-color: var(--reception); }
+  .search-toggle { display: none; align-items: center; justify-content: center; width: 40px; height: 38px; flex: 0 0 auto; background: var(--surface-2); border: 1px solid var(--border-strong); border-radius: 10px; color: var(--text-2); cursor: pointer; }
+  .search-toggle svg { width: 17px; height: 17px; }
+  .search-toggle:hover { color: var(--text); }
+  .add-short { display: none; }
+
+  /* Campaign cards */
+  .camp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 14px; margin-top: 14px; }
+  .camp-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px; cursor: pointer; text-align: left; font: inherit; color: inherit; width: 100%; transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s; }
+  .camp-card:hover { border-color: var(--border-strong); transform: translateY(-2px); box-shadow: 0 16px 32px -18px rgba(0,0,0,0.7); }
+  .cc-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+  .cc-status { font-size: 10px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+  .cc-status.live { color: var(--green); }
+  .cc-status.ended { color: var(--text-3); }
+  .cc-name { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.3; }
+  .cc-sub { font-size: 11.5px; color: var(--text-3); margin-top: 4px; line-height: 1.4; height: 32px; overflow: hidden; }
+  .cc-spark { height: 46px; margin: 12px 0 14px; }
+  .cc-spark svg { width: 100%; height: 100%; overflow: visible; }
+  .cc-foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding-top: 14px; border-top: 1px solid var(--border); }
+  .cc-score .s-num { font-size: 30px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .cc-score .m-lbl, .cc-net .m-lbl { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-top: 4px; }
+  .cc-net { text-align: right; }
+  .cc-net .m-val { font-size: 18px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .cc-pillars { display: flex; gap: 8px; align-items: flex-end; }
+  .ccp { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .ccp-bar { width: 8px; height: 32px; background: var(--surface-3); border-radius: 3px; display: flex; align-items: flex-end; overflow: hidden; }
+  .ccp-bar span { width: 100%; border-radius: 3px; }
+  .ccp-l { font-size: 9px; font-weight: 800; color: var(--text-3); }
+
+  /* Comparison hero (campaign detail) */
+  .cmp-hero-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+  .cmp-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; }
+  .cmp-card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .cmp-card-title { font-size: 12.5px; font-weight: 700; color: var(--text); }
+  .lift-chip { font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 999px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .lift-chip.up { background: rgba(74,222,128,0.14); color: var(--green); }
+  .lift-chip.dn { background: rgba(251,113,133,0.14); color: var(--red); }
+  .cmp-bar-row { display: grid; grid-template-columns: 100px 1fr 66px; gap: 10px; align-items: center; margin: 7px 0; }
+  .cmp-bar-row .cb-lbl { font-size: 11px; color: var(--text-2); }
+  .cmp-bar-row .cb-lbl.you { color: var(--text); font-weight: 700; }
+  .cmp-track { height: 14px; background: var(--surface-3); border-radius: 4px; overflow: hidden; }
+  .cmp-track .cb-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+  .cmp-bar-row .cb-val { font-size: 12px; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; color: var(--text-2); }
+  .cmp-bar-row .cb-val.you { color: var(--text); }
+  /* Bar fills are <span>s inside blockified grid/flex items — force block so width/height apply. */
+  .cmp-track .cb-fill, .emo-bar .emo-fill, .perc-bar .perc-fill, .think-bar .fill, .ccp-bar span { display: block; }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+
+  /* ── Campaign bar ── */
+  .camp-bar {
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    padding: 18px 0 4px;
+  }
+  .camp-select-wrap { position: relative; }
+  .camp-select {
+    appearance: none; background: var(--surface-2); border: 1px solid var(--border-strong);
+    color: var(--text); font: inherit; font-size: 14px; font-weight: 700;
+    padding: 10px 38px 10px 14px; border-radius: 10px; cursor: pointer; max-width: 100%;
+  }
+  .camp-select:focus { outline: none; border-color: var(--reception); }
+  .camp-select-wrap::after {
+    content: '▾'; position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--text-3); pointer-events: none; font-size: 12px;
+  }
+  .camp-type-chip {
+    font-size: 10px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 999px;
+  }
+  .camp-type-chip.tv { background: rgba(167,139,250,0.14); color: var(--pullthrough); }
+  .camp-type-chip.link { background: rgba(96,165,250,0.14); color: var(--blue); }
+  .camp-flight { font-size: 12px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+  .add-camp-btn {
+    margin-left: auto; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+    background: var(--text); color: var(--bg); border: none; border-radius: 10px;
+    font: inherit; font-size: 13px; font-weight: 700; letter-spacing: 0.02em;
+    padding: 9px 16px; cursor: pointer; transition: transform 0.1s, box-shadow 0.15s;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.18), 0 4px 16px rgba(0,0,0,0.35);
+  }
+  .add-camp-btn .plus { font-size: 16px; font-weight: 800; line-height: 0; margin-top: -1px; }
+  .add-camp-btn:hover { transform: translateY(-1px); }
+  .add-camp-btn:active { transform: translateY(0); }
+
+  /* ── Landing ── */
+  .landing-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding: 26px 0 4px; }
+  .landing-head h1 { font-size: 27px; font-weight: 800; letter-spacing: -0.02em; }
+  .landing-head .sub { font-size: 13px; color: var(--text-3); margin-top: 5px; }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .status-dot.live { background: var(--green); box-shadow: 0 0 8px rgba(74,222,128,0.6); }
+  .status-dot.ended { background: var(--text-3); }
+  .back-link { background: none; border: none; color: var(--text-2); font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer; padding: 0; display: inline-flex; align-items: center; gap: 5px; }
+  .back-link:hover { color: var(--text); }
+
+  /* Ring arc colors (var() is valid in CSS rules, unlike presentation attributes) */
+  #arc-reception { stroke: var(--reception); }
+  #arc-breakthrough { stroke: var(--breakthrough); }
+  #arc-sentiment { stroke: var(--sentiment); }
+  #arc-pullthrough { stroke: var(--pullthrough); }
+
+  .camp-context {
+    margin: 14px 0 6px; background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid var(--reception); border-radius: 12px; padding: 12px 16px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .camp-context .ic { color: var(--reception); flex-shrink: 0; font-size: 14px; }
+  .camp-context .ctx-label { font-size: 9.5px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-3); margin-bottom: 3px; }
+  .camp-context .ctx-text { font-size: 13px; color: var(--text); line-height: 1.5; }
+  .camp-context .ctx-where { font-size: 11.5px; color: var(--text-3); margin-top: 5px; }
+
+  /* ── Hero rings ── */
+  .hero { padding: 18px 0 8px; }
+  .hero-rings { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 14px; align-items: stretch; }
+  .ring-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 20px 16px; display: flex; flex-direction: column; align-items: center;
+    position: relative; overflow: hidden; text-align: center;
+  }
+  .ring-card.output {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent), var(--surface);
+    border-color: var(--border-strong);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 24px 48px -16px rgba(0,0,0,0.6);
+  }
+  .ring-svg { width: 124px; height: 124px; margin-bottom: 8px; }
+  .ring-card.output .ring-svg { width: 168px; height: 168px; }
+  .ring-track { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 9; }
+  .ring-card.output .ring-track { stroke-width: 10; }
+  .ring-arc { fill: none; stroke-width: 9; stroke-linecap: round; transition: stroke-dasharray 0.6s ease-out; }
+  .ring-card.output .ring-arc { stroke-width: 10; }
+  .ring-score-text { font-weight: 800; font-size: 34px; fill: var(--text); letter-spacing: -0.03em; }
+  .ring-card.output .ring-score-text { font-size: 52px; }
+  .ring-label { font-size: 10px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-2); margin-bottom: 2px; }
+  .ring-card.output .ring-label { font-size: 12px; color: var(--text); }
+  .ring-sub { font-size: 10.5px; color: var(--text-3); margin-bottom: 9px; line-height: 1.35; }
+  .ring-deltas { display: flex; gap: 12px; font-size: 11px; color: var(--text-2); font-variant-numeric: tabular-nums; margin-top: auto; }
+  .ring-delta .lbl { color: var(--text-3); font-size: 9px; display: block; }
+  .val.up { color: var(--green); } .val.dn { color: var(--red); } .val.flat { color: var(--text-2); }
+  .zone-tag {
+    display: inline-flex; align-items: center; gap: 4px; margin-top: 5px;
+    font-size: 10px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 999px;
+  }
+  .zone-good { background: rgba(74,222,128,0.15); color: var(--green); }
+  .zone-mid { background: rgba(251,191,36,0.15); color: var(--amber); }
+  .zone-low { background: rgba(251,113,133,0.15); color: var(--red); }
+
+  /* ── Pulse strip ── */
+  .pulse-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+  .pulse-tile { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px 10px; }
+  .pulse-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); }
+  .pulse-value { font-size: 23px; font-weight: 800; letter-spacing: -0.02em; margin: 4px 0 2px; font-variant-numeric: tabular-nums; }
+  .pulse-delta { font-size: 11px; font-variant-numeric: tabular-nums; }
+  .spark-row { margin-top: 10px; height: 56px; }
+  .spark-row svg { width: 100%; height: 100%; overflow: visible; }
+
+  /* ── Tabs ── */
+  .tab-nav-wrap { margin: 24px 0 8px; display: flex; justify-content: center; }
+  .tab-nav {
+    display: inline-flex; gap: 4px; padding: 6px; background: var(--surface-2);
+    border: 1px solid var(--border-strong); border-radius: 999px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+    max-width: 100%; overflow-x: auto;
+  }
+  .tab-btn {
+    background: none; border: none; color: var(--text-2); padding: 11px 26px;
+    font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
+    transition: all 0.15s; white-space: nowrap; border-radius: 999px; letter-spacing: 0.01em;
+  }
+  .tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+  .tab-btn.active { background: var(--reception); color: var(--bg); box-shadow: 0 0 24px rgba(50,169,169,0.3); }
+  .tab-panel { display: none; padding: 22px 0; }
+  .tab-panel.active { display: block; }
+
+  /* ── Sections / cards ── */
+  .section { padding: 0 0 26px; border-bottom: 1px solid var(--border); margin-bottom: 26px; }
+  .section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .section-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; gap: 12px; }
+  .section-title { font-size: 19px; font-weight: 800; letter-spacing: -0.01em; }
+  .section-sub { font-size: 12.5px; color: var(--text-3); margin: -6px 0 14px; max-width: 720px; line-height: 1.5; }
+  .grid-2 { display: grid; grid-template-columns: 1.35fr 1fr; gap: 16px; }
+  .grid-2-equal { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+  .card-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; gap: 10px; }
+  .card-title { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-2); }
+  .card-meta { font-size: 10px; color: var(--text-3); }
+
+  /* Area chart */
+  .area-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+  .area-svg { width: 100%; height: 220px; display: block; }
+  .legend-compact { display: flex; flex-wrap: wrap; gap: 14px; font-size: 11px; color: var(--text-2); margin-top: 10px; }
+  .legend-compact .lg { display: flex; align-items: center; gap: 6px; }
+  .legend-compact .lg-line { width: 14px; height: 2px; border-radius: 1px; }
+  .legend-compact .lg-tick { width: 0; height: 12px; border-left: 2px dashed var(--pullthrough); }
+
+  /* Donut */
+  .donut-wrap { display: flex; align-items: center; gap: 18px; }
+  .donut-svg { width: 128px; height: 128px; flex-shrink: 0; }
+  .donut-center { font-weight: 800; font-size: 22px; fill: var(--text); }
+  .donut-center-sub { font-size: 9px; fill: var(--text-3); font-weight: 700; letter-spacing: 0.1em; }
+  .donut-legend { flex: 1; }
+  .lg-row { display: flex; align-items: center; justify-content: space-between; font-size: 12px; padding: 3px 0; }
+  .lg-row .lg-name { display: flex; align-items: center; gap: 8px; color: var(--text-2); }
+  .lg-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+  .lg-pct { font-variant-numeric: tabular-nums; font-weight: 600; }
+
+  /* Emotion bars */
+  .emo-row { display: grid; grid-template-columns: 132px 1fr 42px; gap: 12px; align-items: center; padding: 7px 0; }
+  .emo-name { font-size: 12.5px; color: var(--text-2); display: flex; align-items: center; gap: 7px; }
+  .emo-name .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .emo-bar { height: 14px; background: var(--surface-3); border-radius: 4px; overflow: hidden; }
+  .emo-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+  .emo-val { font-size: 12px; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* Sentiment stacked */
+  .stacked-row { display: flex; align-items: center; margin-bottom: 9px; font-size: 11px; }
+  .stacked-row .row-label { width: 84px; color: var(--text-2); display: flex; align-items: center; gap: 6px; }
+  .stacked-row .row-bar { flex: 1; height: 16px; border-radius: 4px; overflow: hidden; display: flex; }
+  .seg { height: 100%; transition: width 0.4s; }
+  .seg.pos { background: var(--green); } .seg.neu { background: var(--text-3); } .seg.neg { background: var(--red); } .seg.mix { background: var(--amber); }
+  .stacked-row .row-value { margin-left: 10px; font-variant-numeric: tabular-nums; font-weight: 600; min-width: 36px; text-align: right; color: var(--text-2); }
+  .platform-favicon { width: 16px; height: 16px; border-radius: 4px; flex-shrink: 0; background: rgba(255,255,255,0.06); object-fit: contain; display: inline-block; }
+
+  /* Spike / controversy callout */
+  .callout {
+    background: linear-gradient(135deg, rgba(245,196,83,0.08), rgba(251,113,133,0.05));
+    border: 1px solid rgba(245,196,83,0.2); border-radius: 12px; padding: 14px 16px;
+    display: flex; gap: 12px; align-items: flex-start; margin-top: 4px;
+  }
+  .callout .lbl { font-size: 10px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); }
+  .callout .txt { font-size: 13px; line-height: 1.55; }
+
+  /* Theme pills */
+  .theme-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+  .theme-pill { padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 500; border: 1px solid transparent; }
+  .theme-pill.pos { background: rgba(74,222,128,0.12); color: var(--green); border-color: rgba(74,222,128,0.25); }
+  .theme-pill.neu { background: rgba(180,180,188,0.08); color: var(--text-2); border-color: rgba(180,180,188,0.18); }
+  .theme-pill.neg { background: rgba(251,113,133,0.12); color: var(--red); border-color: rgba(251,113,133,0.25); }
+  .theme-pill.mix { background: rgba(251,191,36,0.12); color: var(--amber); border-color: rgba(251,191,36,0.25); }
+  .theme-pill .freq { opacity: 0.7; margin-left: 6px; font-variant-numeric: tabular-nums; font-size: 11px; }
+
+  /* Verbatim wall */
+  .verbatim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .vb-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+  .vb-meta { display: flex; align-items: center; gap: 8px; font-size: 10.5px; color: var(--text-3); margin-bottom: 6px; }
+  .vb-meta .who { color: var(--text-2); font-weight: 600; }
+  .vb-time { font-variant-numeric: tabular-nums; }
+  .vb-time::before { content: "·"; margin-right: 6px; opacity: 0.5; }
+  .sentiment-chip { padding: 2px 7px; border-radius: 999px; font-size: 10px; font-weight: 700; letter-spacing: 0.04em; }
+  .sentiment-chip.pos { background: rgba(74,222,128,0.15); color: var(--green); }
+  .sentiment-chip.neg { background: rgba(251,113,133,0.15); color: var(--red); }
+  .sentiment-chip.neu { background: rgba(180,180,188,0.12); color: var(--text-2); }
+  .sentiment-chip.mix { background: rgba(251,191,36,0.15); color: var(--amber); }
+  .vb-text { font-size: 13px; line-height: 1.5; color: var(--text); }
+  .vb-foot { font-size: 10.5px; color: var(--text-3); margin-top: 7px; display: flex; justify-content: space-between; align-items: center; }
+  .vb-theme { font-size: 9.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); background: rgba(255,255,255,0.05); padding: 2px 7px; border-radius: 999px; }
+
+  /* Percentile bars */
+  .perc-row { display: grid; grid-template-columns: 150px 1fr 52px; gap: 14px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); }
+  .perc-row:last-child { border-bottom: none; }
+  .perc-name { font-size: 12px; color: var(--text-2); }
+  .perc-bar { position: relative; height: 16px; background: var(--surface-3); border-radius: 4px; }
+  .perc-fill { height: 100%; background: linear-gradient(90deg, var(--reception), var(--sentiment)); border-radius: 4px; }
+  .perc-bar .median-tick { position: absolute; top: -3px; bottom: -3px; width: 0; border-left: 2px dashed var(--gold); }
+  .perc-val { font-size: 12px; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* Compare table */
+  .cmp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .cmp-table th, .cmp-table td { padding: 9px 11px; text-align: right; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; }
+  .cmp-table th:first-child, .cmp-table td:first-child { text-align: left; }
+  .cmp-table th { font-size: 10px; font-weight: 700; color: var(--text-3); letter-spacing: 0.08em; text-transform: uppercase; }
+  .cmp-table tr.you td { background: rgba(50,169,169,0.06); }
+  .cmp-table tr.you td:first-child { font-weight: 700; color: var(--reception); }
+  .cmp-table tr.cat td { background: rgba(245,196,83,0.04); }
+  .cmp-table tr.cat td:first-child { font-weight: 700; color: var(--gold); font-style: italic; }
+
+  /* Pull-through panel */
+  .pt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
+  .pt-stat { background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+  .pt-stat .pt-val { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .pt-stat .pt-lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-top: 2px; }
+  .pt-stat .pt-note { font-size: 11px; color: var(--text-3); margin-top: 6px; line-height: 1.45; }
+  .pt-stat.good .pt-val { color: var(--green); } .pt-stat.warn .pt-val { color: var(--amber); } .pt-stat.bad .pt-val { color: var(--red); }
+  .think-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; font-size: 12.5px; border-bottom: 1px solid var(--border); }
+  .think-row:last-child { border-bottom: none; }
+  .think-bar { flex: 1; height: 8px; background: var(--surface-3); border-radius: 4px; overflow: hidden; }
+  .think-bar .fill { height: 100%; }
+  .think-label { min-width: 180px; color: var(--text); }
+  .think-pct { width: 42px; text-align: right; color: var(--text-2); font-variant-numeric: tabular-nums; font-weight: 600; }
+
+  /* ── Add Campaign modal ── */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 200; }
+  .modal-overlay.open { opacity: 1; pointer-events: auto; }
+  .modal {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -48%) scale(0.98);
+    width: 560px; max-width: calc(100vw - 24px); max-height: calc(100vh - 56px);
+    background: var(--surface); border: 1px solid var(--border-strong); border-radius: 16px;
+    z-index: 201; opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s;
+    display: flex; flex-direction: column; box-shadow: 0 24px 60px rgba(0,0,0,0.55); overflow: hidden;
+  }
+  .modal.open { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+  .modal-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-bottom: 1px solid var(--border); }
+  .modal-title { font-size: 18px; font-weight: 700; }
+  .modal-close { width: 32px; height: 32px; border-radius: 50%; background: var(--surface-3); color: var(--text-2); border: none; cursor: pointer; font-size: 16px; }
+  .modal-close:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+  .modal-body { padding: 18px 22px 22px; overflow-y: auto; }
+  .field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 15px; }
+  .field-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); }
+  .field-hint { font-size: 11.5px; color: var(--text-3); line-height: 1.5; }
+  .input, .textarea, .select {
+    background: var(--surface-2); border: 1px solid var(--border-strong); border-radius: 8px;
+    color: var(--text); font: inherit; font-size: 13.5px; padding: 9px 12px; width: 100%;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .input:focus, .textarea:focus, .select:focus { outline: none; border-color: var(--reception); background: var(--surface-3); }
+  .textarea { min-height: 62px; resize: vertical; line-height: 1.5; }
+  .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .mode-radio {
+    background: var(--surface-2); border: 1px solid var(--border-strong); border-radius: 12px;
+    padding: 14px; cursor: pointer; transition: border-color 0.15s, background 0.15s; text-align: left;
+    display: flex; flex-direction: column; gap: 5px; font: inherit; color: var(--text);
+  }
+  .mode-radio:hover { background: var(--surface-3); }
+  .mode-radio.selected { border-color: var(--reception); background: rgba(50,169,169,0.08); }
+  .mode-radio .mr-title { font-size: 13.5px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .mode-radio .mr-sub { font-size: 11.5px; color: var(--text-3); line-height: 1.4; }
+  .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .modal-actions { display: flex; justify-content: flex-end; gap: 8px; padding-top: 8px; border-top: 1px solid var(--border); margin-top: 4px; }
+  .btn { background: var(--surface-2); color: var(--text); border: 1px solid var(--border-strong); border-radius: 999px; font: inherit; font-size: 12px; font-weight: 600; padding: 8px 16px; cursor: pointer; }
+  .btn:hover { background: var(--surface-3); }
+  .btn.primary { background: var(--reception); color: var(--bg); border-color: var(--reception); font-weight: 700; }
+  .btn.primary:hover { filter: brightness(1.08); }
+  .mode-fields { display: none; } .mode-fields.active { display: block; }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--surface); border: 1px solid var(--border-strong); border-radius: 999px;
+    padding: 11px 18px; font-size: 13px; color: var(--text);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.55); opacity: 0; pointer-events: none;
+    transition: opacity 0.2s, transform 0.25s cubic-bezier(0.2,0.8,0.2,1); z-index: 250;
+    max-width: calc(100vw - 32px);
+  }
+  .toast.open { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .footer-note { margin-top: 40px; padding: 24px 0 0; text-align: center; font-size: 11px; color: var(--text-3); line-height: 1.7; }
+  .footer-note a { color: var(--text-2); border-bottom: 1px dashed var(--border-strong); }
+  .footer-note code { color: var(--sentiment); }
+
+  @media (max-width: 920px) {
+    .wrap { padding: 0 16px; }
+
+    /* Simplified top bar — just the page title */
+    .topbar { padding: 12px 16px; }
+    .topbar-meta { display: none; }
+    .tb-title { font-size: 15px; }
+
+    /* Sidebar collapses to a top icon strip. Drop the CSS grid → plain block flow so the document scrolls normally. */
+    .app { display: block; min-height: 0; }
+    .main { margin-left: 0; }
+    .sidebar { position: static; width: auto; height: auto; flex-direction: row; align-items: center; gap: 4px; padding: 9px 12px; overflow-x: auto; overflow-y: visible; }
+    .sb-brand { padding: 0 8px 0 0; }
+    .sb-brand .name, .sb-brand .cat { display: none; }
+    .sb-section, .sb-brandswitch, .sb-link .lbl-text { display: none; }
+    .sb-link { width: auto; padding: 9px 11px; }
+
+    /* Landing — drop the header + KPI boxes on mobile (the top bar already says "Campaigns") */
+    .landing-head, .kpi-strip { display: none; }
+    /* One row: pills + search icon + Add — matches desktop. Search input collapses to an icon. */
+    .list-controls { margin-top: 4px; flex-wrap: nowrap; gap: 8px; }
+    .filter-pills { flex: 0 1 auto; }
+    .filter-pill { padding: 7px 12px; }
+    .search-box { display: none; }
+    .search-toggle { display: inline-flex; }
+    .list-controls .add-camp-btn { flex: 0 0 auto; margin-left: auto; }
+    .add-full { display: none; }
+    .add-short { display: inline; }
+    /* Tap the search icon → input takes over the row */
+    .list-controls.searching .filter-pills,
+    .list-controls.searching .add-camp-btn { display: none; }
+    .list-controls.searching .search-box { display: block; flex: 1 1 auto; }
+    .camp-grid { grid-template-columns: 1fr; }
+
+    /* Tabs: smaller, left-aligned, horizontally scrollable */
+    .tab-nav-wrap { justify-content: flex-start; }
+    .tab-btn { padding: 10px 16px; font-size: 13px; }
+
+    /* Campaign detail — stack the campaign bar so nothing overflows */
+    .camp-bar { gap: 8px; padding: 14px 0 2px; }
+    .back-link { flex: 1 1 100%; }
+    .camp-select-wrap { flex: 1 1 100%; }
+    .camp-select { width: 100%; }
+    .camp-flight { display: none; }
+
+    /* Hero rings */
+    .hero-rings { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .ring-card.output { grid-column: 1 / -1; }
+    .ring-card { padding: 16px 10px; }
+    .ring-svg { width: 104px; height: 104px; }
+    .ring-card.output .ring-svg { width: 148px; height: 148px; }
+
+    /* Stack multi-column layouts */
+    .grid-2, .grid-2-equal, .grid-3, .verbatim-grid, .pt-grid, .cmp-hero-grid { grid-template-columns: 1fr; }
+    .add-camp-btn { margin-left: 0; }
+  }
+</style>
+</head>
+<body data-tab="overview">
+
+<div class="app">
+
+  <!-- ===== Sidebar ===== -->
+  <aside class="sidebar">
+    <a class="sb-brand" id="sb-home" href="#/" title="Home">
+      <div class="logo">R</div>
+      <div>
+        <div class="name">Reception</div>
+        <div class="cat">Ad social-listening</div>
+      </div>
+    </a>
+    <div class="sb-section">Workspace</div>
+    <button class="sb-link active" id="nav-campaigns"><span class="ic">▦</span><span class="lbl-text">Campaigns</span></button>
+    <button class="sb-link" id="nav-add"><span class="ic">＋</span><span class="lbl-text">New campaign</span></button>
+    <button class="sb-link muted"><span class="ic">🔔</span><span class="lbl-text">Alerts</span></button>
+    <button class="sb-link muted"><span class="ic">▤</span><span class="lbl-text">Reports</span></button>
+    <a class="sb-link" href="/reception/apireqs.html"><span class="ic">⚙</span><span class="lbl-text">API requirements</span></a>
+    <div class="sb-brandswitch">
+      <div class="bs-logo">LD</div>
+      <div>
+        <div class="bs-lbl">Brand</div>
+        <div class="bs-name">Liquid Death</div>
+      </div>
+      <span class="bs-caret">▾</span>
+    </div>
+  </aside>
+
+  <!-- ===== Main ===== -->
+  <div class="main">
+    <header class="topbar">
+      <div class="tb-title" id="tb-title" style="font-size:15px;font-weight:800;letter-spacing:-0.01em">Campaigns</div>
+      <div class="topbar-meta">
+        <span class="powered">powered by <b>/bxcapi</b></span>
+        <a class="req-link" href="/reception/apireqs.html">API requirements →</a>
+      </div>
+    </header>
+
+    <div class="wrap">
+
+  <!-- ===== LANDING — campaign list ===== -->
+  <div id="view-list">
+    <div class="landing-head">
+      <div>
+        <h1>Campaigns</h1>
+        <div class="sub">Social-listening on your ad campaigns — how each one actually landed.</div>
+      </div>
+    </div>
+    <div class="kpi-strip" id="kpi-strip"></div>
+    <div class="list-controls" id="list-controls">
+      <div class="filter-pills" id="filter-pills">
+        <button class="filter-pill active" data-f="all">All</button>
+        <button class="filter-pill" data-f="live">Live</button>
+        <button class="filter-pill" data-f="ended">Ended</button>
+      </div>
+      <button class="search-toggle" id="search-toggle" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line></svg>
+      </button>
+      <div class="search-box"><input id="search-input" type="text" placeholder="Search campaigns…"></div>
+      <button class="add-camp-btn" id="add-camp-btn"><span class="plus">+</span><span class="add-full">Add Campaign</span><span class="add-short">Add</span></button>
+    </div>
+    <div class="camp-grid" id="camp-list"></div>
+  </div>
+
+  <!-- ===== DETAIL — dashboard ===== -->
+  <div id="view-detail" hidden>
+
+  <!-- Campaign bar -->
+  <div class="camp-bar">
+    <button class="back-link" id="back-list">←&nbsp;All campaigns</button>
+    <div class="camp-select-wrap">
+      <select class="camp-select" id="camp-select"></select>
+    </div>
+    <span class="camp-type-chip" id="camp-type"></span>
+    <span class="camp-flight" id="camp-flight"></span>
+  </div>
+
+  <div class="camp-context">
+    <span class="ic">◎</span>
+    <div>
+      <div class="ctx-label">What we're listening for</div>
+      <div class="ctx-text" id="ctx-text"></div>
+      <div class="ctx-where" id="ctx-where"></div>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-rings">
+      <div class="ring-card output" id="rc-reception">
+        <svg class="ring-svg" viewBox="0 0 120 120">
+          <circle class="ring-track" cx="60" cy="60" r="52"></circle>
+          <circle class="ring-arc" id="arc-reception" cx="60" cy="60" r="52" transform="rotate(-90 60 60)" stroke="var(--reception)"></circle>
+          <text class="ring-score-text" id="score-reception" x="60" y="60" text-anchor="middle" dominant-baseline="central">0</text>
+        </svg>
+        <div class="ring-label">Reception Score</div>
+        <div class="ring-sub">composite ad effectiveness</div>
+        <span class="zone-tag" id="zone-reception">—</span>
+      </div>
+
+      <div class="ring-card">
+        <svg class="ring-svg" viewBox="0 0 120 120">
+          <circle class="ring-track" cx="60" cy="60" r="52"></circle>
+          <circle class="ring-arc" id="arc-breakthrough" cx="60" cy="60" r="52" transform="rotate(-90 60 60)" stroke="var(--breakthrough)"></circle>
+          <text class="ring-score-text" id="score-breakthrough" x="60" y="60" text-anchor="middle" dominant-baseline="central">0</text>
+        </svg>
+        <div class="ring-label" style="color:var(--breakthrough)">Breakthrough</div>
+        <div class="ring-sub">did it cut through?</div>
+        <div class="ring-deltas"><span class="ring-delta"><span class="lbl">vs prior</span><span id="d-breakthrough"></span></span></div>
+      </div>
+
+      <div class="ring-card">
+        <svg class="ring-svg" viewBox="0 0 120 120">
+          <circle class="ring-track" cx="60" cy="60" r="52"></circle>
+          <circle class="ring-arc" id="arc-sentiment" cx="60" cy="60" r="52" transform="rotate(-90 60 60)" stroke="var(--sentiment)"></circle>
+          <text class="ring-score-text" id="score-sentiment" x="60" y="60" text-anchor="middle" dominant-baseline="central">0</text>
+        </svg>
+        <div class="ring-label" style="color:var(--sentiment)">Sentiment</div>
+        <div class="ring-sub">how it landed</div>
+        <div class="ring-deltas"><span class="ring-delta"><span class="lbl">vs prior</span><span id="d-sentiment"></span></span></div>
+      </div>
+
+      <div class="ring-card">
+        <svg class="ring-svg" viewBox="0 0 120 120">
+          <circle class="ring-track" cx="60" cy="60" r="52"></circle>
+          <circle class="ring-arc" id="arc-pullthrough" cx="60" cy="60" r="52" transform="rotate(-90 60 60)" stroke="var(--pullthrough)"></circle>
+          <text class="ring-score-text" id="score-pullthrough" x="60" y="60" text-anchor="middle" dominant-baseline="central">0</text>
+        </svg>
+        <div class="ring-label" style="color:var(--pullthrough)">Pull-through</div>
+        <div class="ring-sub">did the message land?</div>
+        <div class="ring-deltas"><span class="ring-delta"><span class="lbl">vs prior</span><span id="d-pullthrough"></span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tabs -->
+  <div class="tab-nav-wrap">
+    <div class="tab-nav">
+      <button class="tab-btn active" data-tab="overview">Overview</button>
+      <button class="tab-btn" data-tab="sentiment">Sentiment</button>
+      <button class="tab-btn" data-tab="conversation">Conversation</button>
+      <button class="tab-btn" data-tab="compare">Compare</button>
+    </div>
+  </div>
+
+  <!-- OVERVIEW -->
+  <div class="tab-panel active" data-panel="overview">
+    <section class="section">
+      <div class="section-head"><div class="section-title">This campaign vs. normal</div><div class="card-meta">flight window vs. trailing baselines</div></div>
+      <div class="section-sub">Raw numbers don't mean much alone — what matters is how this campaign's period compares to <b>Liquid Death's own baseline</b> and the <b>category baseline</b>. That's the read on whether it actually moved anything.</div>
+      <div class="cmp-hero-grid" id="cmp-hero"></div>
+      <div class="legend-compact" style="margin-top:14px">
+        <span class="lg"><span class="lg-line" style="background:var(--reception)"></span>This campaign</span>
+        <span class="lg"><span class="lg-line" style="background:var(--comp2)"></span>Liquid Death baseline</span>
+        <span class="lg"><span class="lg-line" style="background:var(--gold)"></span>Category baseline</span>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><div class="section-title">Conversation vs. baseline, over time</div><div class="card-meta" id="ov-window"></div></div>
+      <div class="section-sub">Daily reaction volume against the brand's normal range and the category average, with airings marked. The story is the gap above the band — and on TV/CTV, the spike-and-decay after each spot (there's no click to count).</div>
+      <div class="area-wrap">
+        <svg class="area-svg" id="vol-area" viewBox="0 0 800 220" preserveAspectRatio="none"></svg>
+        <div class="legend-compact">
+          <span class="lg"><span class="lg-line" style="background:var(--reception)"></span>This campaign</span>
+          <span class="lg"><span class="lg-line" style="background:rgba(161,161,170,0.35);height:9px;border-radius:2px"></span>Brand normal range</span>
+          <span class="lg"><span class="lg-line" style="background:var(--gold);border-top:1.5px dashed var(--gold);height:0"></span>Category average</span>
+          <span class="lg"><span class="lg-tick"></span>Airing / drop</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Reception readout</div></div>
+          <div id="readout" style="font-size:13.5px;line-height:1.6;color:var(--text-2)"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">Where the conversation is</div></div>
+          <div class="donut-wrap">
+            <svg class="donut-svg" id="ov-platform-donut" viewBox="0 0 100 100"></svg>
+            <div class="donut-legend" id="ov-platform-legend"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- SENTIMENT -->
+  <div class="tab-panel" data-panel="sentiment">
+    <section class="section">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><div class="card-title">Sentiment mix</div><div class="card-meta" id="sent-count"></div></div>
+          <div class="donut-wrap">
+            <svg class="donut-svg" id="sent-donut" viewBox="0 0 100 100"></svg>
+            <div class="donut-legend" id="sent-legend"></div>
+          </div>
+          <div class="callout" id="controversy" style="margin-top:14px"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><div class="card-title">Emotional texture</div><div class="card-meta">share of reactions</div></div>
+          <div class="section-sub" style="margin:0 0 8px">Beyond positive/negative — the reaction taxonomy that tells you <i>why</i> people felt something.</div>
+          <div id="emo-bars"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><div class="section-title">Sentiment by platform</div></div>
+      <div class="section-sub">The same creative reads differently per audience. Positive share shown at right.</div>
+      <div class="card"><div id="sent-stack"></div></div>
+    </section>
+  </div>
+
+  <!-- CONVERSATION -->
+  <div class="tab-panel" data-panel="conversation">
+    <section class="section">
+      <div class="section-head"><div class="section-title">What people are saying</div><div class="card-meta" id="conv-count"></div></div>
+      <div class="section-sub">Top comments &amp; replies pulled from under the ad and from organic posts referencing it, tagged by sentiment and theme.</div>
+      <div class="verbatim-grid" id="verbatim-wall"></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><div class="section-title">Top reaction themes</div></div>
+      <div class="card"><div class="theme-pills" id="theme-pills"></div></div>
+    </section>
+  </div>
+
+  <!-- COMPARE -->
+  <div class="tab-panel" data-panel="compare">
+    <section class="section">
+      <div class="section-head"><div class="section-title">Vs. category baseline</div></div>
+      <div class="section-sub">Percentile within the beverage / RTD category competitive set over the flight window.</div>
+      <div class="card"><div id="perc-bars"></div>
+        <div class="legend-compact" style="margin-top:12px"><span class="lg"><span class="lg-tick" style="border-color:var(--gold)"></span>Category median</span></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><div class="section-title">Vs. your previous campaigns</div></div>
+      <div class="section-sub">How this campaign stacks against the brand's prior efforts and the category median.</div>
+      <div class="card"><table class="cmp-table" id="cmp-table"></table></div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><div class="section-title">Pull-through — did the message land?</div></div>
+      <div class="section-sub">On TV/CTV you can't measure clicks, so message landing is the proxy for working creative.</div>
+      <div class="pt-grid" id="pt-stats"></div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">What people think the ad is about</div></div>
+        <div id="think-rows"></div>
+      </div>
+    </section>
+  </div>
+
+  </div><!-- /view-detail -->
+
+  <div class="footer-note">
+    Prototype · mock data · demonstrates a use case for the <a href="/bxcapi/index.html">Brand × Culture API</a> (<code>/bxcapi</code>).<br>
+    See the <a href="/reception/apireqs.html">API requirements</a> page for every endpoint &amp; property this app needs — and the gaps.
+  </div>
+    </div><!-- /wrap -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- Add Campaign modal -->
+<div class="modal-overlay" id="modal-overlay"></div>
+<div class="modal" id="add-modal">
+  <div class="modal-head">
+    <div class="modal-title">Add a campaign</div>
+    <button class="modal-close" id="modal-close">✕</button>
+  </div>
+  <div class="modal-body">
+    <div class="field-label" style="margin-bottom:8px">How is this campaign defined?</div>
+    <div class="mode-grid">
+      <button class="mode-radio selected" data-mode="link">
+        <span class="mr-title">🔗 Digital</span>
+        <span class="mr-sub">Paste ad URLs or ad IDs — Meta Ad Library, YouTube, TikTok, an organic post.</span>
+      </button>
+      <button class="mode-radio" data-mode="tv">
+        <span class="mr-title">📺 TV / Display</span>
+        <span class="mr-sub">No link. Give the flight window and where it ran — we match the social chatter.</span>
+      </button>
+    </div>
+
+    <div class="field">
+      <span class="field-label">Campaign name</span>
+      <input class="input" id="f-name" placeholder="e.g. Death to Plastic — Q2 CTV flight">
+    </div>
+
+    <!-- LINK MODE -->
+    <div class="mode-fields active" data-fields="link">
+      <div class="field">
+        <span class="field-label">Ad links / IDs</span>
+        <textarea class="textarea" id="f-links" placeholder="https://www.facebook.com/ads/library/?id=…&#10;https://www.tiktok.com/@liquiddeath/video/…&#10;ad_b8c4d1e2f3a4b5c6"></textarea>
+        <span class="field-hint">One per line. We pull the creative + the comments/replies under each.</span>
+      </div>
+    </div>
+
+    <!-- TV/CTV MODE -->
+    <div class="mode-fields" data-fields="tv">
+      <div class="field">
+        <span class="field-label">Flight window</span>
+        <div class="row-2">
+          <input class="input" id="f-start" type="date" value="2026-05-01">
+          <input class="input" id="f-end" type="date" value="2026-05-28">
+        </div>
+      </div>
+      <div class="field">
+        <span class="field-label">Where it ran</span>
+        <input class="input" id="f-where" placeholder="Hulu, Roku, ESPN, Comedy Central · DMAs: NYC, LA, Chicago">
+        <span class="field-hint">Networks, streamers, and/or DMAs. Used to scope the airing window and region.</span>
+      </div>
+      <div class="field">
+        <span class="field-label">Creative reference</span>
+        <input class="input" id="f-creative" placeholder="Spot title or slogan — e.g. “Death to Plastic”">
+      </div>
+    </div>
+
+    <div class="field">
+      <span class="field-label">What you care about</span>
+      <textarea class="textarea" id="f-context" placeholder="Brand terms, slogan, hashtags, and the message you're testing — e.g. is the sustainability angle landing without reading as preachy? Watch #deathtoplastic and mentions of the mountain spring water gag."></textarea>
+      <span class="field-hint">Drives the match spec and the themes we surface.</span>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn" id="modal-cancel">Cancel</button>
+      <button class="btn primary" id="modal-create">Create campaign</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const NOW = new Date('2026-05-28T12:00:00Z');
+const RING_CIRC = 2 * Math.PI * 52;
+
+const PLATFORM_DOMAINS = {
+  tiktok: 'tiktok.com', x: 'x.com', twitter: 'x.com', reddit: 'reddit.com',
+  youtube: 'youtube.com', instagram: 'instagram.com', facebook: 'facebook.com', meta: 'facebook.com'
+};
+const favicon = (p) => `https://www.google.com/s2/favicons?domain=${PLATFORM_DOMAINS[String(p).toLowerCase()] || 'news.google.com'}&sz=64`;
+// Concrete hex for SVG presentation attributes (var() isn't reliable there).
+const COL = { reception: '#32A9A9', breakthrough: '#F5C453', sentiment: '#7EE8C4', pullthrough: '#A78BFA',
+  green: '#4ADE80', red: '#FB7185', amber: '#FBBF24', blue: '#60A5FA', gold: '#F5C453', neu: '#6B6B74', comp2: '#A1A1AA' };
+// Liquid Death's normal daily reaction volume, and the category-average brand's — the baselines every campaign is read against.
+const BRAND_BASE = 600, CAT_BASE = 360;
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=a;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296;};}
+
+// Build a 28-day volume series from a baseline + decaying spikes at each airing/drop day.
+function buildSeries(seed, baseline, spikes, catBaseline) {
+  const rnd = mulberry32(seed);
+  const days = 28, out = [];
+  for (let i = 0; i < days; i++) {
+    let v = baseline * (0.8 + rnd() * 0.4);
+    spikes.forEach(s => { if (i >= s.day) v += s.mag * Math.exp(-(i - s.day) / s.tau); });
+    out.push({ v: Math.max(0, v), cat: catBaseline * (0.85 + rnd() * 0.3) });
+  }
+  return out;
+}
+
+const CAMPAIGNS = [
+  {
+    id: 'armless-palmer', name: 'Country Club Iced Tea (“Armless Palmer”)', type: 'link', status: 'live',
+    flight: '2026-04-22 → 2026-05-26', window: 'Apr 22 – May 26',
+    where: 'Meta Ad Library · TikTok · YouTube pre-roll',
+    context: 'Is the Arnold Palmer parody reading as funny or as a cheap shot? Watch for legal/“cease &amp; desist” chatter and whether the joke overshadows the product. Terms: “Armless Palmer”, #countryclubicedtea.',
+    scores: { reception: 71, breakthrough: 88, sentiment: 58, pullthrough: 64 },
+    prior: { breakthrough: 70, sentiment: 66, pullthrough: 61 },
+    vs: [
+      { label: 'Daily conversation', fmt: 'num', unit: '/day', lift: 'x',   campaign: 1850, brand: 600, category: 360 },
+      { label: 'Net sentiment',      fmt: 'ps',  unit: '',      lift: 'pts', campaign: 14,   brand: 26,  category: 7 },
+      { label: 'Positive share',     fmt: 'pct', unit: '',      lift: 'pts', campaign: 46,   brand: 56,  category: 44 },
+      { label: 'Share of category voice', fmt: 'pct', unit: '', lift: 'pts', campaign: 34,   brand: 13,  category: 8 },
+    ],
+    sentiment: { pos: 0.46, neu: 0.22, neg: 0.32 },
+    emotions: [
+      { label: 'Funny / love the joke', pct: 0.41, color: 'var(--blue)' },
+      { label: 'Brand-love', pct: 0.19, color: 'var(--green)' },
+      { label: 'Annoyed / “gone too far”', pct: 0.18, color: 'var(--red)' },
+      { label: 'Confused / who’s it for', pct: 0.12, color: 'var(--amber)' },
+      { label: 'Purchase intent', pct: 0.10, color: 'var(--gold)' },
+    ],
+    platforms: [
+      { platform: 'tiktok', share: 0.38, color: '#69C9D0' },
+      { platform: 'x', share: 0.24, color: '#D4D4D8' },
+      { platform: 'reddit', share: 0.18, color: '#FF4500' },
+      { platform: 'youtube', share: 0.12, color: '#FF0000' },
+      { platform: 'instagram', share: 0.08, color: '#C13584' },
+    ],
+    sentByPlatform: [
+      { platform: 'tiktok', pos: 52, neu: 18, neg: 28, mix: 2 },
+      { platform: 'x', pos: 38, neu: 20, neg: 40, mix: 2 },
+      { platform: 'reddit', pos: 41, neu: 24, neg: 33, mix: 2 },
+      { platform: 'youtube', pos: 55, neu: 25, neg: 18, mix: 2 },
+    ],
+    themes: [
+      { theme: 'the parody is gold', freq: 1840, sentiment: 'pos' },
+      { theme: 'lawsuit speedrun', freq: 1210, sentiment: 'mix' },
+      { theme: 'tastes great tbh', freq: 980, sentiment: 'pos' },
+      { theme: 'punching down?', freq: 760, sentiment: 'neg' },
+      { theme: 'where to buy', freq: 540, sentiment: 'pos' },
+      { theme: 'too edgy now', freq: 430, sentiment: 'neg' },
+      { theme: 'sugar content', freq: 290, sentiment: 'neu' },
+    ],
+    comments: [
+      { platform: 'tiktok', user: '@hydrate_or_diedrate', text: 'armless palmer is the funniest name they’ve ever done and I will not be taking questions 💀', sentiment: 'pos', theme: 'the parody is gold', ts: '2026-05-24T18:00:00Z', eng: '12.4K' },
+      { platform: 'x', user: '@adlawnerd', text: 'placing my bets now on how many days until the cease & desist. classic LD move tho, the chaos IS the campaign', sentiment: 'mix', theme: 'lawsuit speedrun', ts: '2026-05-23T15:20:00Z', eng: '3.1K' },
+      { platform: 'reddit', user: 'u/beveragefiend', text: 'ok the marketing is annoying but I bought a 6-pack and the iced tea actually slaps. mad about it', sentiment: 'pos', theme: 'tastes great tbh', ts: '2026-05-22T22:10:00Z', eng: '880' },
+      { platform: 'x', user: '@justhere4snacks', text: 'feels like they’re running out of ideas and just mocking real people now. ehh', sentiment: 'neg', theme: 'punching down?', ts: '2026-05-21T13:05:00Z', eng: '640' },
+      { platform: 'youtube', user: 'GymTokGabe', text: 'the pre-roll made me laugh out loud at WORK. where do I get this', sentiment: 'pos', theme: 'where to buy', ts: '2026-05-20T09:40:00Z', eng: '1.2K' },
+      { platform: 'tiktok', user: '@sustainably.sad', text: 'i don’t get it?? is this making fun of golf or arnold palmer or me', sentiment: 'neu', theme: 'punching down?', ts: '2026-05-19T20:15:00Z', eng: '410' },
+      { platform: 'reddit', user: 'u/RTD_reviews', text: '34g of sugar in the original is wild for a “better-for-you” brand but the marketing carries it', sentiment: 'mix', theme: 'sugar content', ts: '2026-05-18T11:00:00Z', eng: '520' },
+      { platform: 'x', user: '@deadpan_dana', text: 'Liquid Death really said “lawyers love us” and committed to the bit. iconic', sentiment: 'pos', theme: 'lawsuit speedrun', ts: '2026-05-17T16:30:00Z', eng: '2.4K' },
+    ],
+    breakthrough: { soc: 0.34, perImp: 'n/a (link)', spike: 'Conversation jumped 6.2× the day the TikTok dropped — biggest single-day spike of any LD campaign this year.' },
+    pullthrough: {
+      attribution: 0.81, attributionNote: '81% of commenters named Liquid Death — the joke didn’t eclipse the brand.',
+      messageEcho: 0.58, messageEchoNote: '“iced tea / new flavor” echoed in 58% of on-topic comments.',
+      purchaseIntent: 0.10, purchaseIntentNote: 'Purchase-intent language in 1 of 10 reactions — strong for a stunt.',
+      controversy: 0.41,
+      think: [
+        { label: 'A joke about Arnold Palmer / golf', pct: 44, color: 'var(--blue)' },
+        { label: 'A new Liquid Death iced tea', pct: 38, color: 'var(--green)' },
+        { label: 'A lawsuit bait stunt', pct: 14, color: 'var(--amber)' },
+        { label: 'Not sure', pct: 4, color: 'var(--text-3)' },
+      ],
+    },
+    series: buildSeries(11, 900, [{ day: 2, mag: 5200, tau: 2.5 }, { day: 14, mag: 2600, tau: 3 }], 1400),
+    controversyText: 'High controversy (0.41). A vocal “punching down” camp on X is dragging net sentiment — worth a listening note, but engagement is overwhelmingly positive elsewhere.',
+  },
+  {
+    id: 'death-to-plastic', name: 'Death to Plastic — CTV flight', type: 'tv', status: 'live',
+    flight: '2026-05-01 → 2026-05-28', window: 'May 1 – May 28',
+    where: 'Hulu · Roku · YouTube TV · Comedy Central · DMAs: NYC, LA, Chicago, Austin',
+    context: 'Is the sustainability angle landing without reading as preachy? No click to measure on CTV — watch #deathtoplastic, the “canned water” gag, and whether people connect it to the recycled-aluminum message. Terms: “Death to Plastic”, “murder your thirst”.',
+    scores: { reception: 79, breakthrough: 64, sentiment: 82, pullthrough: 83 },
+    prior: { breakthrough: 58, sentiment: 74, pullthrough: 70 },
+    vs: [
+      { label: 'Daily conversation', fmt: 'num', unit: '/day', lift: 'x',   campaign: 1450, brand: 600, category: 360 },
+      { label: 'Net sentiment',      fmt: 'ps',  unit: '',      lift: 'pts', campaign: 62,   brand: 26,  category: 7 },
+      { label: 'Positive share',     fmt: 'pct', unit: '',      lift: 'pts', campaign: 71,   brand: 56,  category: 44 },
+      { label: 'Share of category voice', fmt: 'pct', unit: '', lift: 'pts', campaign: 21,   brand: 13,  category: 8 },
+    ],
+    sentiment: { pos: 0.71, neu: 0.20, neg: 0.09 },
+    emotions: [
+      { label: 'Brand-love', pct: 0.34, color: 'var(--green)' },
+      { label: 'Funny / love the bit', pct: 0.27, color: 'var(--blue)' },
+      { label: 'Mission resonates', pct: 0.21, color: 'var(--sentiment)' },
+      { label: 'Preachy / eye-roll', pct: 0.10, color: 'var(--amber)' },
+      { label: 'Purchase intent', pct: 0.08, color: 'var(--gold)' },
+    ],
+    platforms: [
+      { platform: 'tiktok', share: 0.30, color: '#69C9D0' },
+      { platform: 'reddit', share: 0.24, color: '#FF4500' },
+      { platform: 'x', share: 0.20, color: '#D4D4D8' },
+      { platform: 'youtube', share: 0.16, color: '#FF0000' },
+      { platform: 'instagram', share: 0.10, color: '#C13584' },
+    ],
+    sentByPlatform: [
+      { platform: 'tiktok', pos: 74, neu: 18, neg: 6, mix: 2 },
+      { platform: 'reddit', pos: 64, neu: 24, neg: 10, mix: 2 },
+      { platform: 'x', pos: 66, neu: 22, neg: 10, mix: 2 },
+      { platform: 'youtube', pos: 78, neu: 16, neg: 4, mix: 2 },
+    ],
+    themes: [
+      { theme: 'canned water is genius', freq: 1520, sentiment: 'pos' },
+      { theme: 'saw it on Hulu', freq: 1180, sentiment: 'pos' },
+      { theme: 'actually buying it now', freq: 870, sentiment: 'pos' },
+      { theme: 'love the mission', freq: 690, sentiment: 'pos' },
+      { theme: 'a little preachy', freq: 320, sentiment: 'neg' },
+      { theme: 'is aluminum better?', freq: 240, sentiment: 'neu' },
+    ],
+    comments: [
+      { platform: 'youtube', user: 'StreamingDad', text: 'this came on during my show and I genuinely rewound it. “murder your thirst” got me 😂 and I get the plastic thing now', sentiment: 'pos', theme: 'saw it on Hulu', ts: '2026-05-26T01:10:00Z', eng: '2.1K' },
+      { platform: 'reddit', user: 'u/zerowastecurious', text: 'say what you want, aluminum is infinitely recyclable and they made me care about it with a death metal water ad. respect', sentiment: 'pos', theme: 'love the mission', ts: '2026-05-25T19:25:00Z', eng: '1.4K' },
+      { platform: 'tiktok', user: '@canorbottle', text: 'POV: the liquid death ad interrupts your roku and you’re actually not mad', sentiment: 'pos', theme: 'canned water is genius', ts: '2026-05-24T17:00:00Z', eng: '18.7K' },
+      { platform: 'x', user: '@eco_skeptic', text: 'cool ad but “death to plastic” while shipping cans across the country is a bit much lol', sentiment: 'neg', theme: 'a little preachy', ts: '2026-05-23T14:40:00Z', eng: '910' },
+      { platform: 'tiktok', user: '@thirstyplanet', text: 'switched my whole fridge over after seeing this on hulu like 4 times. it worked. I’m the marketing’s victim', sentiment: 'pos', theme: 'actually buying it now', ts: '2026-05-22T08:30:00Z', eng: '6.3K' },
+      { platform: 'reddit', user: 'u/materials_eng', text: 'genuine q — is the aluminum lining actually better lifecycle-wise or is this greenwashing with good jokes?', sentiment: 'neu', theme: 'is aluminum better?', ts: '2026-05-21T12:15:00Z', eng: '780' },
+      { platform: 'youtube', user: 'CordCutterCarla', text: 'I have seen this spot 11 times on YouTube TV and I have NOT skipped once. who are you people', sentiment: 'pos', theme: 'saw it on Hulu', ts: '2026-05-20T22:50:00Z', eng: '3.0K' },
+    ],
+    breakthrough: { soc: 0.21, perImp: '2.3 comments / 10K impressions', spike: 'Steady lift, not a spike — CTV builds a sustained conversation floor rather than one viral day. Volume tracked airing-heavy weeks closely.' },
+    pullthrough: {
+      attribution: 0.88, attributionNote: '88% named Liquid Death unprompted — exceptional for a no-link TV spot.',
+      messageEcho: 0.73, messageEchoNote: 'Sustainability / “plastic” message echoed in 73% of on-topic comments — the angle landed.',
+      purchaseIntent: 0.08, purchaseIntentNote: 'Purchase-intent language in 8% of reactions, mostly “switched my fridge”.',
+      controversy: 0.12,
+      think: [
+        { label: 'Sustainability / kill plastic', pct: 52, color: 'var(--sentiment)' },
+        { label: 'Just a funny water ad', pct: 31, color: 'var(--blue)' },
+        { label: 'A new product launch', pct: 12, color: 'var(--green)' },
+        { label: 'Not sure', pct: 5, color: 'var(--text-3)' },
+      ],
+    },
+    series: buildSeries(22, 1300, [{ day: 1, mag: 1600, tau: 8 }, { day: 10, mag: 1400, tau: 7 }, { day: 20, mag: 1500, tau: 6 }], 1500),
+    controversyText: 'Low controversy (0.12). A small “preachy” cohort on X, easily outweighed. The mission message is doing real work — rare for a brand-voice ad.',
+  },
+  {
+    id: 'martha-candle', name: 'Martha Stewart “Severed Hand” Candle', type: 'link', status: 'ended',
+    flight: '2026-03-10 → 2026-04-12', window: 'Mar 10 – Apr 12',
+    where: 'Instagram · TikTok · Meta Ad Library',
+    context: 'Celebrity-led stunt drop. Risk: people talk about Martha, not Liquid Death. Watch attribution and whether the dismemberment gag overshadows the brand. Terms: “severed hand candle”, “Martha”, #liquiddeath.',
+    scores: { reception: 74, breakthrough: 92, sentiment: 76, pullthrough: 55 },
+    prior: { breakthrough: 75, sentiment: 70, pullthrough: 62 },
+    vs: [
+      { label: 'Daily conversation', fmt: 'num', unit: '/day', lift: 'x',   campaign: 2600, brand: 600, category: 360 },
+      { label: 'Net sentiment',      fmt: 'ps',  unit: '',      lift: 'pts', campaign: 52,   brand: 26,  category: 7 },
+      { label: 'Positive share',     fmt: 'pct', unit: '',      lift: 'pts', campaign: 64,   brand: 56,  category: 44 },
+      { label: 'Share of category voice', fmt: 'pct', unit: '', lift: 'pts', campaign: 41,   brand: 13,  category: 8 },
+    ],
+    sentiment: { pos: 0.64, neu: 0.24, neg: 0.12 },
+    emotions: [
+      { label: 'Funny / unhinged', pct: 0.38, color: 'var(--blue)' },
+      { label: 'Brand-love', pct: 0.22, color: 'var(--green)' },
+      { label: 'Martha is a legend', pct: 0.20, color: 'var(--pullthrough)' },
+      { label: 'Tasteless / too far', pct: 0.12, color: 'var(--red)' },
+      { label: 'Purchase intent', pct: 0.08, color: 'var(--gold)' },
+    ],
+    platforms: [
+      { platform: 'instagram', share: 0.34, color: '#C13584' },
+      { platform: 'tiktok', share: 0.30, color: '#69C9D0' },
+      { platform: 'x', share: 0.20, color: '#D4D4D8' },
+      { platform: 'reddit', share: 0.16, color: '#FF4500' },
+    ],
+    sentByPlatform: [
+      { platform: 'instagram', pos: 68, neu: 22, neg: 8, mix: 2 },
+      { platform: 'tiktok', pos: 66, neu: 22, neg: 10, mix: 2 },
+      { platform: 'x', pos: 58, neu: 26, neg: 14, mix: 2 },
+      { platform: 'reddit', pos: 60, neu: 26, neg: 12, mix: 2 },
+    ],
+    themes: [
+      { theme: 'martha ate this up', freq: 2010, sentiment: 'pos' },
+      { theme: 'sold out instantly', freq: 1340, sentiment: 'pos' },
+      { theme: 'this is unhinged (good)', freq: 1120, sentiment: 'pos' },
+      { theme: 'wait is this LD or martha', freq: 880, sentiment: 'neu' },
+      { theme: 'kinda gross', freq: 460, sentiment: 'neg' },
+      { theme: 'where to buy', freq: 380, sentiment: 'pos' },
+    ],
+    comments: [
+      { platform: 'instagram', user: '@spookyhomegoods', text: 'MARTHA STEWART holding a severed hand candle is the crossover I didn’t know I needed 😭', sentiment: 'pos', theme: 'martha ate this up', ts: '2026-04-08T18:00:00Z', eng: '24.1K' },
+      { platform: 'tiktok', user: '@candlecollector', text: 'sold out in like an hour?? I just wanted the creepy hand 😩', sentiment: 'pos', theme: 'sold out instantly', ts: '2026-04-06T15:30:00Z', eng: '9.2K' },
+      { platform: 'x', user: '@brand_watch', text: 'genuinely funny but I had to look twice to clock this was a Liquid Death thing and not just Martha being Martha', sentiment: 'neu', theme: 'wait is this LD or martha', ts: '2026-04-04T13:10:00Z', eng: '1.8K' },
+      { platform: 'reddit', user: 'u/tasteful_no', text: 'a dismembered hand to sell water is a bit much for me tbh', sentiment: 'neg', theme: 'kinda gross', ts: '2026-04-02T20:45:00Z', eng: '540' },
+      { platform: 'instagram', user: '@goth.mom.life', text: 'need the candle, need the water, need martha to narrate my life', sentiment: 'pos', theme: 'this is unhinged (good)', ts: '2026-03-30T09:20:00Z', eng: '5.6K' },
+    ],
+    breakthrough: { soc: 0.41, perImp: 'n/a (link)', spike: 'Largest breakthrough of the year — Martha’s own repost drove a 9× single-day spike. Reach was huge; attribution was the weak spot.' },
+    pullthrough: {
+      attribution: 0.63, attributionNote: 'Only 63% named Liquid Death — a chunk of the conversation was “Martha being chaotic”, not the brand.',
+      messageEcho: 0.34, messageEchoNote: 'Product/“water” echoed in just 34% — the gag pulled focus from the brand.',
+      purchaseIntent: 0.08, purchaseIntentNote: 'Strong intent, but mostly for the candle, not the water.',
+      controversy: 0.22,
+      think: [
+        { label: 'A Martha Stewart bit', pct: 37, color: 'var(--pullthrough)' },
+        { label: 'A Liquid Death stunt', pct: 33, color: 'var(--green)' },
+        { label: 'A candle drop', pct: 22, color: 'var(--blue)' },
+        { label: 'Not sure', pct: 8, color: 'var(--text-3)' },
+      ],
+    },
+    series: buildSeries(33, 700, [{ day: 3, mag: 6400, tau: 2 }, { day: 5, mag: 3000, tau: 3 }], 1300),
+    controversyText: 'Moderate controversy (0.22). The bigger risk here isn’t backlash — it’s attribution: the celebrity is out-shining the brand (see Pull-through).',
+  },
+];
+
+let current = CAMPAIGNS[0];
+
+// ── Chart helpers ──────────────────────────────────────────
+function zoneFor(s) {
+  if (s >= 78) return { cls: 'zone-good', tag: 'Strong reception' };
+  if (s >= 62) return { cls: 'zone-mid', tag: 'Mixed reception' };
+  return { cls: 'zone-low', tag: 'Underperforming' };
+}
+function setRing(arcEl, scoreEl, value) {
+  const pct = Math.max(0, Math.min(1, value / 100));
+  arcEl.setAttribute('stroke-dasharray', `${pct * RING_CIRC} ${RING_CIRC}`);
+  scoreEl.textContent = Math.round(value);
+}
+function fmtDelta(d) {
+  if (Math.abs(d) < 0.5) return `<span class="val flat">±0</span>`;
+  const cls = d > 0 ? 'up' : 'dn', arrow = d > 0 ? '▲' : '▼';
+  return `<span class="val ${cls}">${arrow} ${Math.abs(Math.round(d))}</span>`;
+}
+function donut(svgEl, slices, centerVal, centerSub) {
+  const cx = 50, cy = 50, r = 38, sw = 13; let acc = 0;
+  let html = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="${sw}"/>`;
+  slices.forEach(s => {
+    const start = acc, end = acc + s.pct;
+    const sa = start * 2 * Math.PI - Math.PI / 2, ea = end * 2 * Math.PI - Math.PI / 2;
+    const x1 = cx + r * Math.cos(sa), y1 = cy + r * Math.sin(sa);
+    const x2 = cx + r * Math.cos(ea), y2 = cy + r * Math.sin(ea);
+    const large = s.pct > 0.5 ? 1 : 0;
+    html += `<path d="M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${x2.toFixed(2)} ${y2.toFixed(2)}" fill="none" stroke="${s.color}" stroke-width="${sw}" stroke-linecap="butt"/>`;
+    acc = end;
+  });
+  if (centerVal !== undefined) {
+    html += `<text class="donut-center" x="50" y="48" text-anchor="middle" dominant-baseline="central">${centerVal}</text>`;
+    html += `<text class="donut-center-sub" x="50" y="62" text-anchor="middle">${centerSub}</text>`;
+  }
+  svgEl.innerHTML = html;
+}
+function sparkline(el, vals, color) {
+  const W = 200, H = 56, pad = 3;
+  const min = Math.min(...vals), max = Math.max(...vals), range = max - min || 1;
+  const pts = vals.map((v, i) => {
+    const x = pad + (i / (vals.length - 1)) * (W - 2 * pad);
+    const y = H - pad - ((v - min) / range) * (H - 2 * pad);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+  const area = `M${pad},${H} L${pts.join(' L')} L${W - pad},${H} Z`;
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:100%;">
+    <path d="${area}" fill="${color}" opacity="0.12"/>
+    <path d="M${pts.join(' L')}" stroke="${color}" stroke-width="2" fill="none"/>
+  </svg>`;
+}
+
+// ── Renderers ──────────────────────────────────────────────
+function renderHero() {
+  const c = current;
+  setRing($('arc-reception'), $('score-reception'), c.scores.reception);
+  setRing($('arc-breakthrough'), $('score-breakthrough'), c.scores.breakthrough);
+  setRing($('arc-sentiment'), $('score-sentiment'), c.scores.sentiment);
+  setRing($('arc-pullthrough'), $('score-pullthrough'), c.scores.pullthrough);
+  const z = zoneFor(c.scores.reception);
+  const zt = $('zone-reception'); zt.className = 'zone-tag ' + z.cls; zt.textContent = z.tag;
+  $('d-breakthrough').innerHTML = fmtDelta(c.scores.breakthrough - c.prior.breakthrough);
+  $('d-sentiment').innerHTML = fmtDelta(c.scores.sentiment - c.prior.sentiment);
+  $('d-pullthrough').innerHTML = fmtDelta(c.scores.pullthrough - c.prior.pullthrough);
+}
+
+// Comparison hero — this campaign vs brand baseline vs category baseline
+function fmtMetric(v, fmt) { return fmt === 'num' ? v.toLocaleString() : fmt === 'ps' ? (v > 0 ? '+' : '') + v + '%' : v + '%'; }
+function liftText(m) {
+  if (m.lift === 'x') { const r = m.campaign / m.brand; return { txt: r.toFixed(1) + '× your baseline', up: r >= 1 }; }
+  const d = Math.round(m.campaign - m.brand); return { txt: (d >= 0 ? '+' : '') + d + ' pts vs baseline', up: d >= 0 };
+}
+function renderCompareHero() {
+  const c = current;
+  $('cmp-hero').innerHTML = c.vs.map(m => {
+    const max = Math.max(m.campaign, m.brand, m.category) || 1;
+    const L = liftText(m);
+    const bar = (lbl, val, col, cls) =>
+      `<div class="cmp-bar-row"><span class="cb-lbl ${cls}">${lbl}</span><span class="cmp-track"><span class="cb-fill" style="width:${Math.max(2, val / max * 100).toFixed(0)}%;background:${col}"></span></span><span class="cb-val ${cls}">${fmtMetric(val, m.fmt)}${m.unit || ''}</span></div>`;
+    return `<div class="cmp-card">
+      <div class="cmp-card-head"><span class="cmp-card-title">${m.label}</span><span class="lift-chip ${L.up ? 'up' : 'dn'}">${L.txt}</span></div>
+      ${bar('This campaign', m.campaign, COL.reception, 'you')}
+      ${bar('LD baseline', m.brand, COL.comp2, '')}
+      ${bar('Category', m.category, COL.gold, '')}
+    </div>`;
+  }).join('');
+}
+
+function renderContext() {
+  const c = current;
+  $('camp-type').textContent = c.type === 'tv' ? 'TV / Display' : 'Digital';
+  $('camp-type').className = 'camp-type-chip ' + c.type;
+  $('camp-flight').textContent = c.flight;
+  $('ctx-text').innerHTML = c.context;
+  $('ctx-where').innerHTML = '<b style="color:var(--text-2)">Where it ran:</b> ' + c.where;
+}
+
+function renderArea() {
+  const c = current, W = 800, H = 220, pad = 12, n = c.series.length;
+  const maxV = Math.max(...c.series.map(d => d.v)) * 1.1;
+  const xAt = i => pad + (i / (n - 1)) * (W - 2 * pad);
+  const yAt = v => H - pad - (v / maxV) * (H - 2 * pad - 14);
+  let html = '';
+  for (let g = 1; g <= 3; g++) { const y = pad + (g / 4) * (H - 2 * pad - 14); html += `<line x1="${pad}" x2="${W - pad}" y1="${y}" y2="${y}" stroke="rgba(255,255,255,0.04)"/>`; }
+  // brand "normal range" band (±25% around the brand baseline)
+  const bandTop = yAt(BRAND_BASE * 1.25), bandBot = yAt(BRAND_BASE * 0.75);
+  html += `<rect x="${pad}" y="${bandTop.toFixed(1)}" width="${W - 2 * pad}" height="${(bandBot - bandTop).toFixed(1)}" fill="${COL.comp2}" opacity="0.10"/>`;
+  html += `<line x1="${pad}" x2="${W - pad}" y1="${yAt(BRAND_BASE).toFixed(1)}" y2="${yAt(BRAND_BASE).toFixed(1)}" stroke="${COL.comp2}" stroke-width="1" opacity="0.5"/>`;
+  // category average (dashed)
+  html += `<line x1="${pad}" x2="${W - pad}" y1="${yAt(CAT_BASE).toFixed(1)}" y2="${yAt(CAT_BASE).toFixed(1)}" stroke="${COL.gold}" stroke-width="1.4" stroke-dasharray="4 4" opacity="0.8"/>`;
+  // airing markers (spikes)
+  const spikeDays = (c.id === 'armless-palmer') ? [2, 14] : (c.id === 'death-to-plastic') ? [1, 10, 20] : [3, 5];
+  spikeDays.forEach(d => {
+    const x = xAt(d);
+    html += `<line x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="${pad}" y2="${H - pad}" stroke="${COL.pullthrough}" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.7"/>`;
+    html += `<text x="${x.toFixed(1)}" y="${pad - 2}" fill="${COL.pullthrough}" font-size="8.5" text-anchor="middle">${c.type === 'tv' ? '📺' : '▼'}</text>`;
+  });
+  // campaign line + fill
+  const pts = c.series.map((d, i) => `${xAt(i).toFixed(1)},${yAt(d.v).toFixed(1)}`);
+  html += `<path d="M${pad},${H - pad} L${pts.join(' L')} L${W - pad},${H - pad} Z" fill="${COL.reception}" opacity="0.12"/>`;
+  html += `<path d="M${pts.join(' L')}" stroke="${COL.reception}" stroke-width="2.4" fill="none"/>`;
+  $('vol-area').innerHTML = html;
+  $('ov-window').textContent = c.window + ' · daily';
+}
+
+function platformDonut(svgEl, legendEl, platforms) {
+  donut(svgEl, platforms.map(p => ({ pct: p.share, color: p.color })));
+  legendEl.innerHTML = platforms.map(p => `
+    <div class="lg-row">
+      <span class="lg-name"><img class="platform-favicon" src="${favicon(p.platform)}" alt="" loading="lazy"> ${p.platform}</span>
+      <span class="lg-pct">${Math.round(p.share * 100)}%</span>
+    </div>`).join('');
+}
+
+function renderReadout() {
+  const c = current, net = Math.round((c.sentiment.pos - c.sentiment.neg) * 100);
+  $('readout').innerHTML = `
+    <p><b style="color:var(--text)">${c.name}</b> earned a Reception Score of <b style="color:var(--reception)">${c.scores.reception}</b> — ${zoneFor(c.scores.reception).tag.toLowerCase()}.</p>
+    <p style="margin-top:10px">Breakthrough is <b style="color:var(--breakthrough)">${c.scores.breakthrough}</b> (${c.breakthrough.spike})</p>
+    <p style="margin-top:10px">Net sentiment <b style="color:${net >= 0 ? 'var(--green)' : 'var(--red)'}">${net > 0 ? '+' : ''}${net}%</b>; the message ${c.scores.pullthrough >= 70 ? 'landed well' : 'is at risk of being eclipsed'} (pull-through ${c.scores.pullthrough}). ${c.pullthrough.attributionNote}</p>`;
+}
+
+function renderSentiment() {
+  const c = current, s = c.sentiment;
+  donut($('sent-donut'), [
+    { pct: s.pos, color: COL.green }, { pct: s.neu, color: COL.neu }, { pct: s.neg, color: COL.red }
+  ], (Math.round((s.pos - s.neg) * 100) > 0 ? '+' : '') + Math.round((s.pos - s.neg) * 100), 'NET');
+  $('sent-legend').innerHTML = [
+    { n: 'Positive', v: s.pos, c: COL.green }, { n: 'Neutral', v: s.neu, c: COL.neu }, { n: 'Negative', v: s.neg, c: COL.red }
+  ].map(r => `<div class="lg-row"><span class="lg-name"><span class="lg-dot" style="background:${r.c}"></span>${r.n}</span><span class="lg-pct">${Math.round(r.v * 100)}%</span></div>`).join('');
+  const totalC = c.comments.length, allComments = c.themes.reduce((a, t) => a + t.freq, 0);
+  $('sent-count').textContent = allComments.toLocaleString() + ' reactions analyzed';
+  $('controversy').innerHTML = `<div><div class="lbl">Controversy index · ${c.pullthrough.controversy.toFixed(2)}</div><div class="txt" style="margin-top:4px">${c.controversyText}</div></div>`;
+
+  const maxE = Math.max(...c.emotions.map(e => e.pct));
+  $('emo-bars').innerHTML = c.emotions.map(e => `
+    <div class="emo-row">
+      <span class="emo-name"><span class="dot" style="background:${e.color}"></span>${e.label}</span>
+      <span class="emo-bar"><span class="emo-fill" style="width:${(e.pct / maxE * 100).toFixed(0)}%;background:${e.color}"></span></span>
+      <span class="emo-val">${Math.round(e.pct * 100)}%</span>
+    </div>`).join('');
+
+  $('sent-stack').innerHTML = c.sentByPlatform.map(p => `
+    <div class="stacked-row">
+      <span class="row-label"><img class="platform-favicon" src="${favicon(p.platform)}" alt="" loading="lazy">${p.platform}</span>
+      <span class="row-bar">
+        <span class="seg pos" style="width:${p.pos}%"></span><span class="seg neu" style="width:${p.neu}%"></span>
+        <span class="seg neg" style="width:${p.neg}%"></span><span class="seg mix" style="width:${p.mix}%"></span>
+      </span>
+      <span class="row-value">${p.pos}%</span>
+    </div>`).join('');
+}
+
+function relTime(iso) {
+  const t = new Date(iso), d = Math.floor((NOW - t) / 86400000);
+  if (d < 1) return 'today'; if (d < 7) return d + 'd ago';
+  const w = Math.floor(d / 7); if (w < 5) return w + 'w ago';
+  return Math.floor(d / 30) + 'mo ago';
+}
+function renderConversation() {
+  const c = current;
+  $('conv-count').textContent = c.themes.reduce((a, t) => a + t.freq, 0).toLocaleString() + ' comments · top shown';
+  $('verbatim-wall').innerHTML = c.comments.map(m => `
+    <div class="vb-card">
+      <div class="vb-meta">
+        <img class="platform-favicon" src="${favicon(m.platform)}" alt="" loading="lazy">
+        <span class="who">${m.user}</span>
+        <span class="vb-time">${relTime(m.ts)}</span>
+        <span style="margin-left:auto" class="sentiment-chip ${m.sentiment}">${m.sentiment.toUpperCase()}</span>
+      </div>
+      <div class="vb-text">${m.text}</div>
+      <div class="vb-foot"><span class="vb-theme">${m.theme}</span><span>♥ ${m.eng}</span></div>
+    </div>`).join('');
+  const maxF = Math.max(...c.themes.map(t => t.freq));
+  $('theme-pills').innerHTML = c.themes.map(t => {
+    const scale = 0.9 + (t.freq / maxF) * 0.45;
+    return `<span class="theme-pill ${t.sentiment}" style="font-size:${(12 * scale).toFixed(1)}px">${t.theme}<span class="freq">${t.freq.toLocaleString()}</span></span>`;
+  }).join('');
+}
+
+function renderCompare() {
+  const c = current;
+  // percentile vs category
+  const percs = [
+    { n: 'Breakthrough', v: c.scores.breakthrough, med: 50 },
+    { n: 'Net sentiment', v: c.scores.sentiment, med: 55 },
+    { n: 'Brand-love share', v: Math.round((c.emotions.find(e => /love/i.test(e.label))?.pct || 0.2) * 260), med: 48 },
+    { n: 'Pull-through', v: c.scores.pullthrough, med: 52 },
+    { n: 'Purchase intent', v: Math.round((c.pullthrough.purchaseIntent) * 600), med: 40 },
+  ].map(p => ({ ...p, v: Math.min(99, p.v) }));
+  $('perc-bars').innerHTML = percs.map(p => `
+    <div class="perc-row">
+      <span class="perc-name">${p.n}</span>
+      <span class="perc-bar"><span class="perc-fill" style="width:${p.v}%"></span><span class="median-tick" style="left:${p.med}%"></span></span>
+      <span class="perc-val">P${p.v}</span>
+    </div>`).join('');
+
+  // compare table: this + priors + category
+  const rows = CAMPAIGNS.map(x => ({
+    name: x.id === c.id ? x.name + ' (this)' : x.name, cls: x.id === c.id ? 'you' : '',
+    bt: x.scores.breakthrough, net: Math.round((x.sentiment.pos - x.sentiment.neg) * 100),
+    love: Math.round((x.emotions.find(e => /love/i.test(e.label))?.pct || 0) * 100),
+    attr: Math.round(x.pullthrough.attribution * 100), pt: x.scores.pullthrough,
+  }));
+  rows.push({ name: 'Category median', cls: 'cat', bt: 50, net: 18, love: 17, attr: 64, pt: 52 });
+  $('cmp-table').innerHTML = `
+    <thead><tr><th>Campaign</th><th>Breakthrough</th><th>Net sent.</th><th>Brand-love</th><th>Attribution</th><th>Pull-through</th></tr></thead>
+    <tbody>${rows.map(r => `<tr class="${r.cls}"><td>${r.name}</td><td>${r.bt}</td><td>${r.net > 0 ? '+' : ''}${r.net}%</td><td>${r.love}%</td><td>${r.attr}%</td><td>${r.pt}</td></tr>`).join('')}</tbody>`;
+
+  // pull-through stats
+  const pt = c.pullthrough;
+  const cls = (v, hi, mid) => v >= hi ? 'good' : v >= mid ? 'warn' : 'bad';
+  $('pt-stats').innerHTML = `
+    <div class="pt-stat ${cls(pt.attribution, 0.8, 0.65)}"><div class="pt-val">${Math.round(pt.attribution * 100)}%</div><div class="pt-lbl">Brand attribution</div><div class="pt-note">${pt.attributionNote}</div></div>
+    <div class="pt-stat ${cls(pt.messageEcho, 0.6, 0.45)}"><div class="pt-val">${Math.round(pt.messageEcho * 100)}%</div><div class="pt-lbl">Message echo</div><div class="pt-note">${pt.messageEchoNote}</div></div>
+    <div class="pt-stat ${cls(pt.purchaseIntent, 0.09, 0.06)}"><div class="pt-val">${Math.round(pt.purchaseIntent * 100)}%</div><div class="pt-lbl">Purchase intent</div><div class="pt-note">${pt.purchaseIntentNote}</div></div>`;
+  $('think-rows').innerHTML = pt.think.map(t => `
+    <div class="think-row"><span class="think-label">${t.label}</span><span class="think-bar"><span class="fill" style="width:${t.pct}%;background:${t.color}"></span></span><span class="think-pct">${t.pct}%</span></div>`).join('');
+}
+
+function renderAll() {
+  renderContext(); renderHero(); renderCompareHero(); renderArea();
+  platformDonut($('ov-platform-donut'), $('ov-platform-legend'), current.platforms);
+  renderReadout(); renderSentiment(); renderConversation(); renderCompare();
+}
+
+// ── Landing (KPI strip + filterable card grid) ──
+let listFilter = 'all', listSearch = '';
+function fmtK(n) { return n >= 1000 ? (n / 1000).toFixed(1) + 'K' : '' + n; }
+function renderKPIs() {
+  const live = CAMPAIGNS.filter(c => c.status === 'live').length;
+  const avg = Math.round(CAMPAIGNS.reduce((s, c) => s + c.scores.reception, 0) / CAMPAIGNS.length);
+  const top = [...CAMPAIGNS].sort((a, b) => b.scores.reception - a.scores.reception)[0];
+  const totalConv = CAMPAIGNS.reduce((s, c) => s + c.themes.reduce((a, t) => a + t.freq, 0), 0);
+  $('kpi-strip').innerHTML = `
+    <div class="kpi"><div class="k-val">${live}</div><div class="k-lbl">Live campaigns</div><div class="k-sub">${CAMPAIGNS.length} tracked total</div></div>
+    <div class="kpi"><div class="k-val">${avg}</div><div class="k-lbl">Avg Reception</div><div class="k-sub">across all campaigns</div></div>
+    <div class="kpi"><div class="k-val" style="color:var(--reception)">${top.scores.reception}</div><div class="k-lbl">Top performer</div><div class="k-sub">${top.name}</div></div>
+    <div class="kpi"><div class="k-val">${fmtK(totalConv)}</div><div class="k-lbl">Reactions analyzed</div><div class="k-sub">across tracked campaigns</div></div>`;
+}
+function renderCards() {
+  let list = CAMPAIGNS.filter(c => listFilter === 'all' || c.status === listFilter);
+  if (listSearch) list = list.filter(c => (c.name + ' ' + c.where).toLowerCase().includes(listSearch));
+  list = list.sort((a, b) => (a.status === b.status ? b.scores.reception - a.scores.reception : a.status === 'live' ? -1 : 1));
+  if (!list.length) { $('camp-list').innerHTML = `<div style="color:var(--text-3);font-size:13px;padding:24px 4px">No campaigns match.</div>`; return; }
+  $('camp-list').innerHTML = list.map(c => {
+    const net = Math.round((c.sentiment.pos - c.sentiment.neg) * 100);
+    const z = zoneFor(c.scores.reception);
+    const sc = z.cls === 'zone-good' ? COL.green : z.cls === 'zone-mid' ? COL.amber : COL.red;
+    const pill = [['B', c.scores.breakthrough, COL.breakthrough], ['S', c.scores.sentiment, COL.sentiment], ['P', c.scores.pullthrough, COL.pullthrough]];
+    return `<button class="camp-card" data-id="${c.id}">
+      <div class="cc-top">
+        <span class="cc-status ${c.status}">${c.status === 'live' ? '● Live' : 'Ended'}</span>
+        <span class="camp-type-chip ${c.type}">${c.type === 'tv' ? 'TV / Display' : 'Digital'}</span>
+      </div>
+      <div class="cc-name">${c.name}</div>
+      <div class="cc-sub">${c.window} · ${c.where}</div>
+      <div class="cc-spark" data-spark="${c.id}"></div>
+      <div class="cc-foot">
+        <div class="cc-score"><div class="s-num" style="color:${sc}">${c.scores.reception}</div><div class="m-lbl">Reception</div></div>
+        <div class="cc-pillars">${pill.map(p => `<div class="ccp"><div class="ccp-bar"><span style="height:${p[1]}%;background:${p[2]}"></span></div><div class="ccp-l">${p[0]}</div></div>`).join('')}</div>
+        <div class="cc-net"><div class="m-val" style="color:${net >= 0 ? COL.green : COL.red}">${net > 0 ? '+' : ''}${net}%</div><div class="m-lbl">Net sent.</div></div>
+      </div>
+    </button>`;
+  }).join('');
+  list.forEach(c => { const el = document.querySelector(`[data-spark="${c.id}"]`); if (el) sparkline(el, c.series.map(d => d.v), COL.reception); });
+  document.querySelectorAll('.camp-card').forEach(r => r.addEventListener('click', () => openCampaign(r.dataset.id)));
+}
+function renderList() { renderKPIs(); renderCards(); }
+
+// ── Routing — each campaign has its own URL (#/c/<id>) so browser back/forward & deep links work ──
+function showDetail(c) {
+  current = c;
+  $('camp-select').value = c.id;
+  renderAll();
+  $('tb-title').textContent = c.name;
+  $('view-list').hidden = true; $('view-detail').hidden = false;
+}
+function showList() {
+  renderList();
+  $('tb-title').textContent = 'Campaigns';
+  $('view-detail').hidden = true; $('view-list').hidden = false;
+}
+function renderRoute() {
+  const m = location.hash.match(/^#\/c\/(.+)/);
+  const c = m && CAMPAIGNS.find(x => x.id === decodeURIComponent(m[1]));
+  if (c) showDetail(c); else showList();
+  window.scrollTo({ top: 0 });
+}
+function openCampaign(id) { location.hash = '#/c/' + encodeURIComponent(id); }
+function goHome() { if (location.hash && location.hash !== '#/') location.hash = '#/'; else renderRoute(); }
+window.addEventListener('hashchange', renderRoute);
+
+// ── Campaign select ──
+function buildSelect() {
+  $('camp-select').innerHTML = CAMPAIGNS.map((c) => `<option value="${c.id}">Liquid Death — ${c.name}</option>`).join('');
+}
+$('camp-select').addEventListener('change', e => openCampaign(e.target.value));
+
+// ── Tabs ──
+document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => {
+  const t = btn.dataset.tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.dataset.panel === t));
+  document.body.dataset.tab = t;
+}));
+
+// ── Modal ──
+function openModal() { $('modal-overlay').classList.add('open'); $('add-modal').classList.add('open'); }
+function closeModal() { $('modal-overlay').classList.remove('open'); $('add-modal').classList.remove('open'); }
+$('add-camp-btn').addEventListener('click', openModal);
+$('back-list').addEventListener('click', e => { e.preventDefault(); goHome(); });
+$('nav-campaigns').addEventListener('click', goHome);
+$('sb-home').addEventListener('click', e => { e.preventDefault(); goHome(); });
+$('nav-add').addEventListener('click', openModal);
+// Filters + search
+document.querySelectorAll('.filter-pill').forEach(p => p.addEventListener('click', () => {
+  listFilter = p.dataset.f;
+  document.querySelectorAll('.filter-pill').forEach(x => x.classList.toggle('active', x === p));
+  renderCards();
+}));
+$('search-input').addEventListener('input', e => { listSearch = e.target.value.trim().toLowerCase(); renderCards(); });
+// Mobile: search icon expands the input over the row; tapping again collapses + clears.
+$('search-toggle').addEventListener('click', () => {
+  const lc = $('list-controls');
+  if (lc.classList.toggle('searching')) { $('search-input').focus(); }
+  else { $('search-input').value = ''; listSearch = ''; renderCards(); }
+});
+$('search-input').addEventListener('keydown', e => { if (e.key === 'Escape') $('search-toggle').click(); });
+$('modal-close').addEventListener('click', closeModal);
+$('modal-cancel').addEventListener('click', closeModal);
+$('modal-overlay').addEventListener('click', closeModal);
+document.querySelectorAll('.mode-radio').forEach(r => r.addEventListener('click', () => {
+  document.querySelectorAll('.mode-radio').forEach(x => x.classList.toggle('selected', x === r));
+  const m = r.dataset.mode;
+  document.querySelectorAll('.mode-fields').forEach(f => f.classList.toggle('active', f.dataset.fields === m));
+}));
+let toastTimer;
+function toast(msg) {
+  $('toast').textContent = msg; $('toast').classList.add('open');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => $('toast').classList.remove('open'), 4200);
+}
+$('modal-create').addEventListener('click', () => {
+  const name = $('f-name').value.trim() || 'Untitled campaign';
+  const mode = document.querySelector('.mode-radio.selected').dataset.mode;
+  closeModal();
+  toast(mode === 'tv'
+    ? `“${name}” queued — matching social chatter to your airing window. Index builds in ~24h.`
+    : `“${name}” queued — pulling creative + comments. Reception will populate shortly.`);
+  // Reset
+  ['f-name', 'f-links', 'f-where', 'f-creative', 'f-context'].forEach(id => { if ($(id)) $(id).value = ''; });
+});
+
+// ── Init ──
+buildSelect();
+renderRoute();   // render from the URL hash — supports deep links to a campaign
+</script>
+</body>
+</html>

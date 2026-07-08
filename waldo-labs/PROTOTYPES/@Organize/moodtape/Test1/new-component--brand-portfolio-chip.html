@@ -1,0 +1,65 @@
+<!--
+  component: Brand Portfolio Chip
+  source: waldo-labs/moodtape/Test1/index.html (DS rebuild of waldo-labs/moodtape)
+  date: 2026-07-03
+  use_when:
+    - A wrapping row of compact per-brand stat chips that roll up into a parent entity (portfolio → ticker, sub-brands → parent brand)
+    - Each item needs a name, a signed score, and a tiny directional bar, denser than a KPI Stat Card
+  notes:
+    - Composes the Diverging Bar (see new-component--diverging-bar.html) as its mini bar
+    - Chip surface = hsl(var(--card)) (elevation, no border, per card doctrine), radius var(--radius-lg)
+    - Value colored by the data rule: positive var(--primary), negative var(--warning), neutral var(--muted-foreground); tabular-nums, Inter
+    - No DS equivalent found in docs/component-index.md — KPI Stat Card is too heavy, Filter Chip / Theme Pill carry no data bar
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<title>New component — Brand Portfolio Chip</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../../../waldo-ds.css">
+<style>
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; display: block !important;
+         max-width: none !important; margin: 0 !important; padding: 40px;
+         background: hsl(var(--background)); color: hsl(var(--foreground)); }
+  svg { flex: none; min-height: fit-content; }
+
+  .pf-chips { display: flex; flex-wrap: wrap; gap: 10px; max-width: 680px; }
+  .pf-chip { background: hsl(var(--card)); border-radius: var(--radius-lg); padding: 10px 13px;
+             min-width: 140px; display: flex; flex-direction: column; gap: 4px; }
+  .pf-chip-top { font-size: var(--fs-sm); font-weight: 500; display: flex;
+                 justify-content: space-between; gap: 10px; color: hsl(var(--foreground)); }
+  .pf-chip-val { font-weight: 500; font-variant-numeric: tabular-nums; }
+  .pf-chip .dvg-track { margin-top: 4px; }
+
+  /* mini diverging bar (composed component) */
+  .dvg-track { position: relative; height: 6px; background: hsl(var(--secondary)); border-radius: var(--radius-full); }
+  .dvg-mid { position: absolute; left: 50%; top: -3px; bottom: -3px; width: 2px; border-radius: 1px;
+             background: color-mix(in srgb, hsl(var(--foreground)) 30%, transparent);
+             transform: translateX(-50%); }
+  .dvg-fill { position: absolute; top: 0; bottom: 0; border-radius: var(--radius-full); }
+  .dvg-fill.pos { left: 50%; background: hsl(var(--primary)); }
+  .dvg-fill.neg { right: 50%; background: hsl(var(--warning)); }
+  .pos { color: hsl(var(--primary)); }
+  .neg { color: hsl(var(--warning)); }
+  .neu { color: hsl(var(--muted-foreground)); }
+</style>
+</head>
+<body>
+<div class="pf-chips" id="demo"></div>
+<script>
+  const BRANDS = [
+    { n:'Disney+', s:0.28 }, { n:'ESPN', s:0.18 }, { n:'Marvel', s:0.30 },
+    { n:'Pixar', s:0.40 }, { n:'Hulu', s:0.12 }, { n:'Converse', s:-0.18 },
+  ];
+  const cls = v => v>=0.15?'pos':v<=-0.15?'neg':'neu';
+  document.getElementById('demo').innerHTML = BRANDS.map(b => `
+    <div class="pf-chip">
+      <div class="pf-chip-top"><span>${b.n}</span><span class="pf-chip-val ${cls(b.s)}">${(b.s>=0?'+':'')+b.s.toFixed(2)}</span></div>
+      <div class="dvg-track"><div class="dvg-mid"></div><div class="dvg-fill ${b.s>=0?'pos':'neg'}" style="width:${Math.abs(b.s)*50}%"></div></div>
+    </div>`).join('');
+</script>
+</body>
+</html>

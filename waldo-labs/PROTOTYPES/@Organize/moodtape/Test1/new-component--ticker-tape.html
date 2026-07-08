@@ -1,0 +1,66 @@
+<!--
+  component: Ticker Tape
+  source: waldo-labs/moodtape/Test1/index.html (DS rebuild of waldo-labs/moodtape)
+  date: 2026-07-03
+  use_when:
+    - A horizontally scrolling marquee of compact entity metrics (ticker, score, delta) pinned under the topbar
+    - Ambient "live market" framing where many entities need at-a-glance sentiment
+  notes:
+    - Content is duplicated once for a seamless loop; animation pauses on hover and under prefers-reduced-motion
+    - Values are Inter + tabular-nums (never monospace); positive = var(--primary), negative = var(--warning), neutral = var(--muted-foreground)
+    - Sits on hsl(var(--card)) with a hsl(var(--border)) bottom border; items separated by the same border
+    - No DS equivalent found in docs/component-index.md (Components / Brand API / Charts) or index.html grep
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<title>New component — Ticker Tape</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../../../waldo-ds.css">
+<style>
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; display: block !important;
+         max-width: none !important; margin: 0 !important; padding: 40px 0;
+         background: hsl(var(--background)); color: hsl(var(--foreground)); }
+  svg { flex: none; min-height: fit-content; }
+
+  .tape { border-top: 1px solid hsl(var(--border)); border-bottom: 1px solid hsl(var(--border));
+          background: hsl(var(--card)); overflow: hidden; white-space: nowrap; }
+  .tape-track { display: inline-flex; gap: 0; padding: 7px 0; animation: tape-scroll 60s linear infinite; }
+  .tape:hover .tape-track { animation-play-state: paused; }
+  @keyframes tape-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .tape-track { animation: none; } }
+  .tape-item { display: inline-flex; align-items: center; gap: 8px; padding: 0 18px;
+               border-right: 1px solid hsl(var(--border)); font-size: var(--fs-xs);
+               font-variant-numeric: tabular-nums; cursor: pointer; }
+  .tape-item .tape-sym { color: hsl(var(--foreground)); font-weight: 500; }
+  .tape-item .tape-net { font-weight: 500; }
+  .tape-item .tape-wow { font-size: 11px; }
+  .pos { color: hsl(var(--primary)); }
+  .neg { color: hsl(var(--warning)); }
+  .neu { color: hsl(var(--muted-foreground)); }
+</style>
+</head>
+<body>
+<div class="tape"><div class="tape-track" id="tape-track"></div></div>
+<script>
+  const DATA = [
+    { sym:'AAPL', net:'+0.46', wow:'▲0.03', dir:'pos', wdir:'pos' },
+    { sym:'NKE',  net:'-0.11', wow:'▼0.04', dir:'neg', wdir:'neg' },
+    { sym:'KO',   net:'+0.29', wow:'▲0.01', dir:'pos', wdir:'pos' },
+    { sym:'TSLA', net:'+0.02', wow:'▼0.06', dir:'neu', wdir:'neg' },
+    { sym:'SBUX', net:'-0.21', wow:'▼0.02', dir:'neg', wdir:'neg' },
+    { sym:'DIS',  net:'+0.25', wow:'▲0.05', dir:'pos', wdir:'pos' },
+  ];
+  const items = DATA.map(d => `
+    <span class="tape-item">
+      <span class="tape-sym">${d.sym}</span>
+      <span class="tape-net ${d.dir}">${d.net}</span>
+      <span class="tape-wow ${d.wdir}">${d.wow}</span>
+    </span>`).join('');
+  document.getElementById('tape-track').innerHTML = items + items; // duplicate for seamless loop
+</script>
+</body>
+</html>

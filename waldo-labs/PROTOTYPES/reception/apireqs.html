@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reception — API requirements</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  /* ── Required DS conflict overrides (doctrine — verbatim) ──
+     waldo-ds.css sets html,body{height:100%;overflow:hidden} — breaks scroll.
+     Scroll override goes on html ONLY: any overflow other than visible on body
+     silently kills position:sticky (the sticky topbar scrolls away). */
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  /* waldo-ds.css sets body{display:flex!important} — collapses card widths */
+  body { display: block !important; }
+  /* waldo-ds.css sets svg{display:block} — collapses ring/icon SVGs inside flex containers */
+  svg { flex: none; min-height: fit-content; }
+
+  body { max-width: none !important; margin: 0 !important; padding: 0 !important;
+         background: hsl(var(--background)); color: hsl(var(--foreground));
+         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+         -webkit-font-smoothing: antialiased; }
+  * { box-sizing: border-box; }
+  .wcard, .req-contrib { border: none !important; }
+  code { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 12px;
+         background: hsl(var(--secondary)); padding: 1px 6px; border-radius: 4px; color: hsl(var(--foreground)); }
+
+  /* Pillar identity colors — chart palette (three same-importance categories) */
+  .pillar-bt { color: hsl(var(--chart-7)); }
+  .pillar-sent { color: hsl(var(--chart-8)); }
+  .pillar-pt { color: hsl(var(--chart-5)); }
+
+  /* ── Shell ── */
+  .req-wrap { max-width: 1184px; margin: 0 auto; padding: 0 24px 96px; }
+  .req-hero { padding: 48px 0 8px; }
+  .req-eyebrow { font-size: var(--fs-xs); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: hsl(var(--muted-foreground)); margin-bottom: 14px; }
+  .req-h1 { font-size: 34px; letter-spacing: -0.9px; font-weight: 600; line-height: 1.2; margin: 0 0 18px; }
+  .req-lede { font-size: var(--fs-base); color: hsl(var(--muted-foreground)); max-width: 800px; line-height: 1.6; margin: 0 0 12px; }
+  .req-lede b { color: hsl(var(--foreground)); font-weight: 600; }
+  .req-lede a { color: hsl(var(--primary)); text-decoration: none; }
+  .req-lede a:hover { opacity: 0.85; }
+  .req-legend-ok { color: hsl(var(--primary)); }
+  .req-legend-partial { color: hsl(var(--warning)); }
+  .req-legend-gap { color: hsl(var(--destructive)); }
+  .req-legend-v2 { color: hsl(var(--muted-foreground)); }
+
+  .req-section { margin: 56px 0 0; }
+  .req-section-head { margin-bottom: 20px; }
+  .req-section-head h2 { font-size: var(--fs-2xl); letter-spacing: -0.5px; font-weight: 600; line-height: 1.25; margin: 10px 0 0; }
+  .req-def { color: hsl(var(--muted-foreground)); margin-top: 8px; font-size: var(--fs-sm); max-width: 800px; line-height: 1.6; }
+
+  /* Notation card */
+  .req-notation-title { font-size: var(--fs-xs); font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: hsl(var(--muted-foreground)); }
+  .req-notation-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 32px; font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); margin: 0; padding: 0; }
+  .req-notation-list li { padding-left: 14px; position: relative; line-height: 1.55; }
+  .req-notation-list li::before { content: "•"; color: hsl(var(--muted-foreground)); position: absolute; left: 0; }
+
+  /* Equation block — code, mono allowed */
+  .req-eq { border-radius: 12px; background: hsl(var(--card));
+    padding: 16px 20px; margin: 18px 0 24px; font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: var(--fs-xs); color: color-mix(in srgb, hsl(var(--foreground)) 80%, transparent); line-height: 1.7;
+    white-space: pre-wrap; word-break: break-word; overflow-x: auto; }
+  .req-eq .w { color: hsl(var(--highlight)); }
+
+  /* Contributor spec card */
+  .req-contrib-grid { display: flex; flex-direction: column; gap: 14px; }
+  .req-contrib { background: hsl(var(--card)); border-radius: var(--radius-2xl); padding: 20px 22px; }
+  .req-contrib.v2 { opacity: 0.75; }
+  .req-contrib-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+  .req-contrib-name { font-size: var(--fs-base); font-weight: 600; letter-spacing: -0.2px; }
+  .req-contrib-weight { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); background: hsl(var(--secondary)); padding: 2px 8px; border-radius: 4px; }
+  .req-contrib-head .req-status { margin-left: auto; }
+  .req-raw { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); background: hsl(var(--muted)); padding: 10px 12px; border-radius: 8px; margin: 0 0 14px; white-space: pre-wrap; line-height: 1.6; }
+  .req-contrib-body { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 18px; }
+  .req-col-title { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: hsl(var(--muted-foreground)); margin-bottom: 8px; }
+  .req-endpoints { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+  .req-endpoint { display: inline-flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: var(--fs-xs);
+    background: hsl(var(--secondary)); padding: 4px 10px; border-radius: 6px; color: hsl(var(--foreground)); max-width: 100%; overflow: hidden; }
+  .req-endpoint .method { font-size: 9px; font-weight: 600; color: hsl(var(--primary)); letter-spacing: 0.08em; flex: none; }
+  .req-endpoint.missing { color: hsl(var(--muted-foreground)); background: transparent; box-shadow: inset 0 0 0 1px hsl(var(--border)); }
+  .req-endpoint.missing .method { color: hsl(var(--destructive)); }
+  .req-props { display: flex; flex-direction: column; gap: 6px; font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); line-height: 1.5; }
+  .req-note { margin-top: 14px; padding-top: 12px; border-top: 1px solid hsl(var(--border)); font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); line-height: 1.55; }
+  .req-note b { color: hsl(var(--foreground)); font-weight: 500; }
+
+  .req-v2-label { margin: 32px 0 14px; font-size: var(--fs-xs); font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: hsl(var(--muted-foreground)); }
+
+  /* Tables — DS wui-table on a card */
+  .req-table-card { background: hsl(var(--card)); border-radius: var(--radius-2xl); padding: 8px 12px; overflow-x: auto; }
+  table.wui-table td { font-size: var(--fs-sm); line-height: 1.55; color: hsl(var(--muted-foreground)); }
+  table.wui-table td:first-child { color: hsl(var(--foreground)); font-weight: 500; min-width: 210px; }
+  table.wui-table tr.req-grp td { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: hsl(var(--muted-foreground)); background: hsl(var(--muted)); }
+  .req-would { color: hsl(var(--muted-foreground)); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; margin-left: 4px; }
+
+  /* Proposals */
+  .req-proposal { background: hsl(var(--card)); border-radius: var(--radius-2xl); padding: 22px 24px; margin-bottom: 16px; }
+  .req-proposal h3 { font-size: var(--fs-base); font-weight: 600; letter-spacing: -0.2px; margin: 0 0 6px; line-height: 1.5; }
+  .req-proposal .req-rank { display: block; font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: hsl(var(--muted-foreground)); margin-bottom: 4px; }
+  .req-proposal p { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); line-height: 1.6; margin: 8px 0; }
+  .req-proposal p code, .req-proposal h3 code { background: hsl(var(--secondary)); }
+  .req-proposal pre { background: hsl(var(--muted)); border-radius: 8px; padding: 14px 16px; overflow-x: auto;
+    font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: var(--fs-xs); line-height: 1.6;
+    color: hsl(var(--muted-foreground)); margin: 10px 0; }
+  .req-proposal pre .k { color: hsl(var(--primary)); }
+  .req-proposal pre .s { color: hsl(var(--highlight)); }
+  .req-proposal pre .n { color: hsl(var(--muted-foreground)); }
+  .req-httpsig { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: var(--fs-xs); color: hsl(var(--primary));
+    background: hsl(var(--muted)); border-radius: 8px; padding: 8px 14px; margin: 8px 0; }
+
+  .req-foot { padding: 48px 0 0; text-align: center; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); line-height: 1.8; }
+  .req-foot a { color: hsl(var(--primary)); text-decoration: none; }
+  .req-foot a:hover { opacity: 0.85; }
+
+  @media (max-width: 720px) {
+    .req-h1 { font-size: 26px; }
+    .req-contrib-body { grid-template-columns: 1fr; }
+    .req-notation-list { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== App Header (canonical) ===== -->
+<header class="app-header">
+  <div class="app-header-inner">
+    <div class="app-ident">
+      <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" style="color:var(--foreground)" xmlns="http://www.w3.org/2000/svg" aria-label="Waldo"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
+      <span class="product">Reception</span>
+    </div>
+    <nav class="app-nav">
+      <a href="index.html">← Dashboard</a>
+      <a class="active" href="apireqs.html">API requirements</a>
+    </nav>
+  </div>
+</header>
+
+<div class="req-wrap">
+
+<div class="req-hero">
+  <div class="req-eyebrow">Ad social-listening · scoring &amp; endpoint reference · v2026.05.28</div>
+  <h1 class="req-h1">How <span class="pillar-bt">Breakthrough</span>, <span class="pillar-sent">Sentiment</span>, and <span class="pillar-pt">Pull-through</span> are computed.</h1>
+  <p class="req-lede">
+    Reception measures the qualitative effectiveness of an ad campaign from the social conversation it generates —
+    especially on TV/CTV, where there's no click to count. Every contributor below maps a raw signal to a 0–100
+    component, weighted into a pillar; the three pillars roll into one <b>Reception Score</b>. This page documents
+    the equations, the <code>/bxcapi</code> endpoints and properties they require, whether each
+    exists today, and the additions the API needs.
+  </p>
+  <p class="req-lede">
+    <b>Status legend.</b>
+    <span class="req-legend-ok">✓ Available</span> = exists in /bxcapi today ·
+    <span class="req-legend-partial">⚠ Partial</span> = endpoint exists but a needed property/scope doesn't ·
+    <span class="req-legend-gap">✗ Gap</span> = MVP requirement, not in /bxcapi yet ·
+    <span class="req-legend-v2">◷ V2</span> = deferred past MVP (no reliable source yet).
+    The anchor already exists: <code>GET /ads/{ad_id}/audience-reaction</code> returns sentiment +
+    verbatim themes from comments under a creative. The gaps are about <b>user-owned campaigns</b>,
+    <b>TV/CTV-airing→social linkage</b>, <b>campaign-level rollups</b>, <b>comment drill-in</b>, and <b>benchmarking</b>.
+  </p>
+
+  <div class="wcard" style="margin-top:24px">
+    <div class="req-notation-title">Notation used in the equations</div>
+    <ul class="req-notation-list">
+      <li><code>conv(c)</code> — comments + posts reacting to campaign <code>c</code> in the flight window</li>
+      <li><code>Norm(x) = clamp(50 + 16.67·Z(x), 0, 100)</code> — percentile-style 0–100 mapping</li>
+      <li><code>Z(x)</code> — standardized vs the category competitive set over the window</li>
+      <li><code>decay_τ(d) = exp(−d / τ)</code> — age decay in days from airing</li>
+      <li><code>on_topic</code> — comments matched to the campaign's <code>context</code> spec</li>
+      <li><code>Σ w_i = 1</code> — weights sum to 1 per pillar</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ════════════ BREAKTHROUGH ════════════ -->
+<div class="req-section" id="breakthrough">
+  <div class="req-section-head">
+    <span class="badge badge-outline pillar-bt">Breakthrough · attention</span>
+    <h2><span class="pillar-bt">Breakthrough</span> — did the ad cut through, or did it air to silence?</h2>
+    <p class="req-def">The hardest thing to measure on TV/CTV is whether anyone noticed. Breakthrough reads the volume and
+      share of conversation a campaign generates relative to its own baseline and the category — not impressions you bought.</p>
+  </div>
+
+  <div class="req-eq bt">Breakthrough = clamp(
+  <span class="w">0.35</span>·Norm(ConversationLift)   + <span class="w">0.30</span>·Norm(ShareOfConversation)
++ <span class="w">0.20</span>·Norm(ConversationPerImpression) + <span class="w">0.15</span>·Norm(SpikeMagnitude),
+  0, 100
+)</div>
+
+  <div class="req-contrib-grid">
+
+    <div class="req-contrib">
+      <div class="req-contrib-head">
+        <span class="req-contrib-name">ConversationLift</span>
+        <span class="req-contrib-weight">w = 0.35</span>
+        <span class="badge badge-outline">mixed</span>
+        <span class="badge badge-warning req-status">⚠ Partial</span>
+      </div>
+      <div class="req-raw">raw = conv(campaign, window) / baseline_conv(brand, trailing_90d)</div>
+      <div class="req-contrib-body">
+        <div><div class="req-col-title">Endpoint(s)</div>
+          <div class="req-endpoints">
+            <span class="req-endpoint missing"><span class="method">GAP</span>/campaigns/{id}/reception</span>
+            <span class="req-endpoint"><span class="method">GET</span>/ads/{ad_id}/audience-reaction</span>
+            <span class="req-endpoint"><span class="method">GET</span>/discover/posts</span>
+          </div>
+        </div>
+        <div><div class="req-col-title">Required properties</div>
+          <div class="req-props">
+            <div><code>comment_count</code> + daily volume series for the campaign</div>
+            <div>A brand baseline conversation rate</div>
+          </div>
+        </div>
+      </div>
+      <div class="req-note"><b>Partial:</b> <code>audience-reaction</code> gives a per-ad <code>comment_count</code> at a point in time, and <code>discover/posts</code> finds posts by keyword — but there's no campaign-scoped rollup with a daily series. Needs <code>/campaigns/{id}/reception</code> (proposal §1, §3).</div>
+    </div>
+
+    <div class="req-contrib">
+      <div class="req-contrib-head">
+        <span class="req-contrib-name">ShareOfConversation</span>
+        <span class="req-contrib-weight">w = 0.30</span>
+        <span class="badge badge-outline">mixed</span>
+        <span class="badge badge-warning req-status">⚠ Partial</span>
+      </div>
+      <div class="req-raw">raw = conv(campaign) / Σ_c conv(category competitive set)   over window</div>
+      <div class="req-contrib-body">
+        <div><div class="req-col-title">Endpoint(s)</div>
+          <div class="req-endpoints">
+            <span class="req-endpoint"><span class="method">GET</span>/brands/{id}/{dataset}/timeseries</span>
+            <span class="req-endpoint missing"><span class="method">GAP</span>/category/{id}/reception-benchmark</span>
+          </div>
+        </div>
+        <div><div class="req-col-title">Required properties</div>
+          <div class="req-props">
+            <div><code>dataset=mentions</code> volume per brand in the set</div>
+            <div>Category total conversation for the window denominator</div>
+          </div>
+        </div>
+      </div>
+      <div class="req-note"><b>Partial:</b> brand-level mention timeseries exists, but tying it to a specific campaign's conversation and a category denominator needs the reception-benchmark endpoint (proposal §7).</div>
+    </div>
+
+    <div class="req-contrib">
+      <div class="req-contrib-head">
+        <span class="req-contrib-name">ConversationPerImpression</span>
+        <span class="req-contrib-weight">w = 0.20</span>
+        <span class="badge badge-secondary">TV / CTV</span>
+        <span class="badge badge-destructive req-status">✗ Gap</span>
+      </div>
+      <div class="req-raw">raw = conv(campaign) / tv_impressions(campaign, window)
+(the CTV/TV efficiency proxy — replaces CTR when there is no click)</div>
+      <div class="req-contrib-body">
+        <div><div class="req-col-title">Endpoint(s)</div>
+          <div class="req-endpoints">
+            <span class="req-endpoint missing"><span class="method">GAP</span>POST /campaigns (airings[])</span>
+            <span class="req-endpoint missing"><span class="method">GAP</span>/campaigns/{id}/reception</span>
+          </div>
+        </div>
+        <div><div class="req-col-title">Required properties</div>
+          <div class="req-props">
+            <div><code>airings[]</code> with <code>impressions</code> (TV-measurement partner, e.g. iSpot)</div>
+            <div>Window-scoped conversation count</div>
+          </div>
+        </div>
+      </div>
+      <div class="req-note"><b>The headline TV gap.</b> There's no way today to attach a TV/CTV airing (no URL) and divide conversation by impressions. Falls back to <code>n/a</code> for link campaigns. See proposals §2 and §8.</div>
+    </div>
+
+    <div class="req-contrib">
+      <div class="req-contrib-head">
+        <span class="req-contrib-name">SpikeMagnitude</span>
+        <span class="req-contrib-weight">w = 0.15</span>
+        <span class="badge badge-secondary">environmental</span>
+        <span class="badge badge-warning req-status">⚠ Partial</span>
+      </div>
+      <div class="req-raw">raw = peak_day_conv / median_day_conv   anchored to airing/drop days</div>
+      <div class="req-contrib-body">
+        <div><div class="req-col-title">Endpoint(s)</div>
+          <div class="req-endpoints">
+            <span class="req-endpoint"><span class="method">GET</span>/brands/{id}/mentions/analysis</span>
+            <span class="req-endpoint missing"><span class="method">GAP</span>/campaigns/{id}/reception</span>
+          </div>
+        </div>
+        <div><div class="req-col-title">Required properties</div>
+          <div class="req-props">
+            <div>Spike detection on the campaign's daily series</div>
+            <div>Airing/drop days to anchor the spike window</div>
+          </div>
+        </div>
+      </div>
+      <div class="req-note"><b>Partial:</b> brand-level spike detection exists in <code>mentions/analysis</code>; campaign-scoped + airing-anchored spikes need the campaign rollup.</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════ SENTIMENT ════════════ -->
+<div class="req-section" id="sentiment">
+  <div class="req-section-head">
+    <span class="badge badge-outline pillar-sent">Sentiment · reception quality</span>
+    <h2><span class="pillar-sent">Sentiment</span> — how did people feel, and why?</h2>
+    <p class="req-def">Net positive/negative is the trunk, but the texture — funny, annoying, confusing, brand-love —
+      is what tells a creative team whether the ad worked. The anchor endpoint already returns this; the gap is a
+      standard reaction taxonomy so campaigns are comparable.</p>
+  </div>
+
+  <div class="req-eq sent">Sentiment = clamp(
+  <span class="w">0.40</span>·Norm(NetSentiment)   + <span class="w">0.25</span>·Norm(EmotionTexture)
++ <span class="w">0.20</span>·Norm(LoveVsBacklash) + <span class="w">0.15</span>·Norm⁻(ControversyIndex),
+  0, 100
+)</div>
+
+  <div class="req-contrib-grid">
+
+    <div class="req-contrib">
+      <div class="req-contrib-head">
+        <span class="req-contrib-name">NetSentiment</span>
+        <span class="req-contrib-weight">w = 0.40</span>
+        <span class="badge badge-secondary">environmental</span>
+        <span class="badge badge-active req-status">✓ Available</span>
+      </div>
+      <div class="req-raw">raw = sentiment.positive − sentiment.negative   over campaign reactions</div>
+      <div class="req-contrib-body">
+        <div><div class="req-col-title">Endpoint(s)</div>
+          <div class="req-endpoints">
+            <span class="req-endpoint"><span class="method">GET</span>/ads/{ad_id}/audience-reaction</span>
+            <span class="req-endpoint"><span class="method">GET</span>/brands/{id}/mentions</span>
+          </div>
+        </div>
+        <div><div class="req-col-title">Required properties</div>
+          <div class="req-props">
+            <div><code>sentiment: { positive, neutral, negative }</code> on the reaction object</div>
+            <div><code>sentiment</code> per mention for organic posts</div>
+          </div>
+        </div>
+      </div>
+      <div class="req-note"><b>Available:</b> <code>audience-reaction</code> returns exactly this distribution per ad. The only gap is unioning many ads into one campaign figure (proposal §3).</div>
+    </div>
+
+    <div class="req-contrib">
+      <div class="req-contrib-head">
+        <span class="req-contrib-name">EmotionTexture</span>
+        <span class="req-contrib-weight">w = 0.25</span>
+        <span class="badge badge-secondary">environmental</span>
+        <span class="badge badge-warning req-status">⚠ Partial</span>
+      </div>
+      <div class="req-raw">raw = balance of reactions across the taxonomy
+{funny, brand_love, mission, annoyed, confused, purchase_intent}</div>
+      <div class="req-contrib-body">
+        <div><div class="req-col-title">Endpoint(s)</div>
+          <div class="req-endpoints">
+            <span class="req-endpoint"><span class="method">GET</span>/ads/{ad_id}/audience-reaction</span>
+          </div>
+        </div>
+        <div><div class="req-col-title">Required properties</div>
+          <div class="req-props">
+            <div><code>themes[]</code> with <code>{ theme, frequency, verbatim }</code></div>
+            <div>A canonical <code>reaction_taxonomy</code> mapping (proposal §5)</div>
+          </div>
+        </div>
+      </div>
+      <div class="req-note"><b>Partial:</b> <code>themes[]</code> exist but are free-form per ad (<code>hook_resonates</code>, <code>price_complaint</code>…). Cross-campaign comparison needs a standard emotion/reaction taxonomy.</div>
+    </div>
+
+    <div class="req-contrib">
+      <div class="req-contrib-head">
+        <span class="req-contrib-name">LoveVsBacklash</span>
+        <span class="req-contrib-weight">w = 0.20</span>
+        <span class="badge badge-secondary">environmental</span>
+        <span class="badge badge-warning req-status">⚠ Partial</span>
+      </div>
+      <div class="req-raw">raw = share(brand_love) / (share(brand_love) + share(hostile))</div>
+      <div class="req-contrib-body">
+        <div><div class="req-col-title">Endpoint(s)</div>
+          <div class="req-endpoints">
+            <span class="req-endpoint"><span class="method">GET</span>/ads/{ad_id}/audience-reaction</span>
+          </div>
+        </div>
+        <div><div class="req-col-title">Required properties</div>
+          <div class="req-props">
+            <div><code>brand_love</code> &amp; <code>hostile</code> as taxonomy buckets</div>
+          </div>
+        </div>
+      </div>
+      <div class="req-note"><b>Partial:</b> derivable once the reaction taxonomy (proposal §5) lands; today it's inferred from free-form themes.</div>
+    </div>
+
+    <div class="req-contrib">
+      <div class="req-contrib-head">
+        <span class="req-contrib-name">ControversyIndex</span>
+        <span class="req-contrib-weight">w = 0.15</span>
+        <span class="badge badge-secondary">environmental · inverse</span>
+        <span class="badge badge-active req-status">✓ Available</span>
+      </div>
+      <div class="req-raw">raw = bimodality of sentiment = 1 − |pos − neg| · (1 − neu)
+(high when love and hate coexist — polarizing creative)</div>
+      <div class="req-contrib-body">
+        <div><div class="req-col-title">Endpoint(s)</div>
+          <div class="req-endpoints">
+            <span class="req-endpoint"><span class="method">GET</span>/ads/{ad_id}/audience-reaction</span>
+          </div>
+        </div>
+        <div><div class="req-col-title">Required properties</div>
+          <div class="req-props">
+            <div>Sentiment distribution (computed client-side)</div>
+          </div>
+        </div>
+      </div>
+      <div class="req-note"><b>Available:</b> fully derived from the sentiment distribution. Per-platform breakdown (to localize where the controversy lives) would benefit from <code>?group_by=platform</code>.</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════ PULL-THROUGH ════════════ -->
+<div class="req-section" id="pullthrough">
+  <div class="req-section-head">
+    <span class="badge badge-outline pillar-pt">Pull-through · message landing</span>
+    <h2><span class="pillar-pt">Pull-through</span> — did the brand and message survive the joke?</h2>
+    <p class="req-def">A viral ad that people can't attribute to your brand is wasted reach. Pull-through measures whether
+      commenters name the brand, repeat the intended message, and signal intent — the closest social proxy to
+      "the creative did its job" when there's no conversion to track.</p>
+  </div>
+
+  <div class="req-eq pt">Pull-through = clamp(
+  <span class="w">0.40</span>·Norm(BrandAttributionRate) + <span class="w">0.35</span>·Norm(MessageEcho)
++ <span class="w">0.25</span>·Norm(PurchaseIntentSignal),
+  0, 100
+)</div>
+
+  <div class="req-contrib-grid">
+
+    <div class="req-contrib">
+      <div class="req-contrib-head">
+        <span class="req-contrib-name">BrandAttributionRate</span>
+        <span class="req-contrib-weight">w = 0.40</span>
+        <span class="badge badge-outline">mixed</span>
+        <span class="badge badge-destructive req-status">✗ Gap</span>
+      </div>
+      <div class="req-raw">raw = count(comments naming the brand) / count(on_topic comments)
+(vs naming only the celebrity, song, or meme)</div>
+      <div class="req-contrib-body">
+        <div><div class="req-col-title">Endpoint(s)</div>
+          <div class="req-endpoints">
+            <span class="req-endpoint missing"><span class="method">GAP</span>/campaigns/{id}/reception</span>
+            <span class="req-endpoint"><span class="method">GET</span>/ads/{ad_id}/audience-reaction</span>
+          </div>
+        </div>
+        <div><div class="req-col-title">Required properties</div>
+          <div class="req-props">
+            <div><code>attribution_rate</code> on the reaction object</div>
+            <div>or comment-level brand-mention tags (proposal §4)</div>
+          </div>
+        </div>
+      </div>
+      <div class="req-note"><b>Gap:</b> the single most important pull-through signal — and the one celebrity stunts fail. Not exposed today. See proposals §4, §6.</div>
+    </div>
+
+    <div class="req-contrib">
+      <div class="req-contrib-head">
+        <span class="req-contrib-name">MessageEcho</span>
+        <span class="req-contrib-weight">w = 0.35</span>
+        <span class="badge badge-outline">mixed</span>
+        <span class="badge badge-warning req-status">⚠ Partial</span>
+      </div>
+      <div class="req-raw">raw = count(on_topic comments echoing the intended message/hook)
+/ count(on_topic comments)   — message from the campaign context spec</div>
+      <div class="req-contrib-body">
+        <div><div class="req-col-title">Endpoint(s)</div>
+          <div class="req-endpoints">
+            <span class="req-endpoint missing"><span class="method">GAP</span>/campaigns/{id}/reception</span>
+            <span class="req-endpoint"><span class="method">GET</span>/ads/{ad_id}/audience-reaction</span>
+          </div>
+        </div>
+        <div><div class="req-col-title">Required properties</div>
+          <div class="req-props">
+            <div><code>message_echo</code> on the reaction object</div>
+            <div>The campaign's <code>context</code>/message terms to match against</div>
+          </div>
+        </div>
+      </div>
+      <div class="req-note"><b>Partial:</b> partly derivable by matching <code>themes[]</code> against the user's context, but a server-side <code>message_echo</code> scored against the declared message is cleaner (proposal §6).</div>
+    </div>
+
+    <div class="req-contrib">
+      <div class="req-contrib-head">
+        <span class="req-contrib-name">PurchaseIntentSignal</span>
+        <span class="req-contrib-weight">w = 0.25</span>
+        <span class="badge badge-secondary">environmental</span>
+        <span class="badge badge-warning req-status">⚠ Partial</span>
+      </div>
+      <div class="req-raw">raw = share(comments with intent language: "where to buy", "switched", "bought")</div>
+      <div class="req-contrib-body">
+        <div><div class="req-col-title">Endpoint(s)</div>
+          <div class="req-endpoints">
+            <span class="req-endpoint"><span class="method">GET</span>/ads/{ad_id}/audience-reaction</span>
+          </div>
+        </div>
+        <div><div class="req-col-title">Required properties</div>
+          <div class="req-props">
+            <div><code>purchase_intent</code> bucket in the reaction taxonomy</div>
+          </div>
+        </div>
+      </div>
+      <div class="req-note"><b>Partial:</b> a <code>purchase_intent</code> theme appears in some reactions today; standardizing it in the taxonomy (proposal §5) makes it reliable.</div>
+    </div>
+
+  </div>
+
+  <div class="req-v2-label">V2 — deferred signals</div>
+  <p class="req-def" style="margin-bottom:18px">Two enhancements are deferred until reliable sources exist; they don't move the v1 score.</p>
+  <div class="req-contrib-grid">
+    <div class="req-contrib v2">
+      <div class="req-contrib-head">
+        <span class="req-contrib-name">ReachWeightedReception</span>
+        <span class="req-contrib-weight">re-weights all pillars</span>
+        <span class="badge badge-secondary">environmental</span>
+        <span class="badge badge-secondary req-status">◷ V2</span>
+      </div>
+      <div class="req-raw">weight each comment by estimated reach of its author/post</div>
+      <div class="req-note"><b>Deferred:</b> same reach gap the Poppi prototype flagged — no reliable per-comment reach source yet, so viral and obscure reactions count equally at v1.</div>
+    </div>
+    <div class="req-contrib v2">
+      <div class="req-contrib-head">
+        <span class="req-contrib-name">SentimentDecayHalfLife</span>
+        <span class="req-contrib-weight">diagnostic</span>
+        <span class="badge badge-secondary">environmental</span>
+        <span class="badge badge-secondary req-status">◷ V2</span>
+      </div>
+      <div class="req-raw">how fast conversation decays after each airing (staying power)</div>
+      <div class="req-note"><b>Deferred:</b> needs the campaign daily series (proposal §3) stable first; then half-life becomes a clean staying-power diagnostic.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ════════════ PROPERTIES SUMMARY ════════════ -->
+<div class="req-section" id="properties">
+  <div class="req-section-head">
+    <span class="badge badge-secondary">Properties summary</span>
+    <h2>Every property the scoring system reads</h2>
+    <p class="req-def">One row per property across all three pillars. Ordered by status: MVP gaps first (these block the
+      score), then properties available today, then V2.</p>
+  </div>
+
+  <div class="req-table-card">
+    <table class="wui-table">
+      <thead><tr><th>Property</th><th>Endpoint</th><th>Uses</th><th>Used by</th><th>Description</th><th>Status</th></tr></thead>
+      <tbody>
+
+        <tr class="req-grp"><td colspan="6">MVP gaps — blocks the score until built</td></tr>
+        <tr>
+          <td>User-owned campaign object</td>
+          <td><code>POST /campaigns</code> · <code>GET /campaigns/{id}</code> <span class="req-would">(new)</span></td>
+          <td>—</td>
+          <td>(everything)</td>
+          <td>Define your own campaign by ad IDs <b>or</b> a TV/CTV airing spec. The API is brand/competitor-scoped today. Proposal §1.</td>
+          <td><span class="badge badge-destructive">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td><code>airings[]</code> + <code>match</code> spec (no URL)</td>
+          <td><code>POST /campaigns</code> <span class="req-would">(new)</span></td>
+          <td>2</td>
+          <td>ConversationPerImpression, ConversationLift</td>
+          <td>Window + network/DMA/dayparts + match terms, returning attributable conversation. The headline TV/CTV gap. Proposal §2.</td>
+          <td><span class="badge badge-destructive">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td>Campaign-level reception rollup + daily series</td>
+          <td><code>/campaigns/{id}/reception</code> <span class="req-would">(new)</span></td>
+          <td>5</td>
+          <td>ConversationLift, SpikeMagnitude, NetSentiment, BrandAttributionRate, MessageEcho</td>
+          <td>Rolls <code>audience-reaction</code> across many ads + organic + matched TV chatter, with a sentiment time series. Proposal §3.</td>
+          <td><span class="badge badge-destructive">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td><code>attribution_rate</code></td>
+          <td><code>/ads/{id}/audience-reaction</code> + campaign rollup</td>
+          <td>1</td>
+          <td>BrandAttributionRate</td>
+          <td>Share of comments naming the brand vs only the celebrity/song. Highest-leverage pull-through field. Proposal §6.</td>
+          <td><span class="badge badge-destructive">✗ Gap</span></td>
+        </tr>
+
+        <tr class="req-grp"><td colspan="6">Available in /bxcapi today</td></tr>
+        <tr>
+          <td><code>sentiment: {pos, neu, neg}</code></td>
+          <td><code>/ads/{id}/audience-reaction</code></td>
+          <td>3</td>
+          <td>NetSentiment, ControversyIndex, LoveVsBacklash</td>
+          <td>Sentiment distribution from comments &amp; replies under an ad — the anchor for the whole app.</td>
+          <td><span class="badge badge-active">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td><code>themes[] {theme, frequency, verbatim}</code></td>
+          <td><code>/ads/{id}/audience-reaction</code></td>
+          <td>3</td>
+          <td>EmotionTexture, MessageEcho, theme pills</td>
+          <td>Verbatim themes per ad. Free-form today (canonical taxonomy is the V2/gap — proposal §5).</td>
+          <td><span class="badge badge-active">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td><code>comment_count</code></td>
+          <td><code>/ads/{id}/audience-reaction</code></td>
+          <td>1</td>
+          <td>ConversationLift</td>
+          <td>Reactions counted per ad creative. Needs campaign-level union + daily series for the chart.</td>
+          <td><span class="badge badge-active">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Classified ad object (<code>hook</code>, <code>angle</code>, <code>days_running</code>)</td>
+          <td><code>/brands/{id}/ads/active</code></td>
+          <td>1</td>
+          <td>Link-mode campaign creative</td>
+          <td>Creative metadata for link-defined campaigns (hook/angle/format/CTA/landing page).</td>
+          <td><span class="badge badge-active">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Paid campaign objects (copy, dates, platform)</td>
+          <td><code>/brands/{id}/paid-media/campaigns</code></td>
+          <td>1</td>
+          <td>Link-mode campaign import</td>
+          <td>Existing campaign inventory with flight dates &amp; platform — seeds a link campaign.</td>
+          <td><span class="badge badge-active">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Keyword post discovery</td>
+          <td><code>/discover/posts</code> · <code>/search</code></td>
+          <td>2</td>
+          <td>ConversationLift, verbatim wall</td>
+          <td>Finds organic posts referencing the ad/slogan — the basis for TV/CTV matching before a formal airing endpoint.</td>
+          <td><span class="badge badge-active">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Per-post comments &amp; engagement</td>
+          <td><code>/posts/{post_id}</code></td>
+          <td>1</td>
+          <td>Verbatim wall drill-in</td>
+          <td>Live fetch of comments/engagement for a specific post in the conversation.</td>
+          <td><span class="badge badge-active">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Brand mention volume timeseries</td>
+          <td><code>/brands/{id}/{dataset}/timeseries</code></td>
+          <td>1</td>
+          <td>ShareOfConversation</td>
+          <td>Daily mention volume per brand — the category denominator for share of conversation.</td>
+          <td><span class="badge badge-active">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Mention spike detection</td>
+          <td><code>/brands/{id}/mentions/analysis</code></td>
+          <td>1</td>
+          <td>SpikeMagnitude</td>
+          <td>Auto-detected volume spikes with causal one-liners; needs campaign scoping + airing anchoring.</td>
+          <td><span class="badge badge-active">✓ Available</span></td>
+        </tr>
+
+        <tr class="req-grp"><td colspan="6">Deferred to V2 — not in the MVP score</td></tr>
+        <tr>
+          <td>Canonical <code>reaction_taxonomy</code></td>
+          <td><code>/ads/{id}/audience-reaction?taxonomy=v1</code> <span class="req-would">(new)</span></td>
+          <td>0 <span class="req-would">(would be 3)</span></td>
+          <td>EmotionTexture, LoveVsBacklash, PurchaseIntentSignal</td>
+          <td>Standard buckets (funny, brand_love, annoyed, confused, purchase_intent…) so reactions compare across campaigns. Proposal §5.</td>
+          <td><span class="badge badge-secondary">◷ V2</span></td>
+        </tr>
+        <tr>
+          <td><code>message_echo</code> vs declared message</td>
+          <td><code>/campaigns/{id}/reception</code> <span class="req-would">(new)</span></td>
+          <td>0 <span class="req-would">(would be 1)</span></td>
+          <td>MessageEcho</td>
+          <td>Server-scored echo of the campaign's declared message; partly client-derivable today. Proposal §6.</td>
+          <td><span class="badge badge-secondary">◷ V2</span></td>
+        </tr>
+        <tr>
+          <td>Per-comment <code>reach</code></td>
+          <td><code>/ads/{id}/audience-reaction</code></td>
+          <td>0 <span class="req-would">(would be 4)</span></td>
+          <td>ReachWeightedReception</td>
+          <td>Reach-weight reactions so a 2M-view dunk outweighs a 12-like reply. No reliable source yet.</td>
+          <td><span class="badge badge-secondary">◷ V2</span></td>
+        </tr>
+        <tr>
+          <td>TV <code>impressions</code> per airing</td>
+          <td><code>POST /campaigns (airings[])</code> <span class="req-would">(new)</span></td>
+          <td>0 <span class="req-would">(would be 1)</span></td>
+          <td>ConversationPerImpression</td>
+          <td>TV-measurement-partner impressions (iSpot, etc.) to compute conversation-per-impression. Proposal §8.</td>
+          <td><span class="badge badge-secondary">◷ V2</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ════════════ DASHBOARD ENDPOINTS ════════════ -->
+<div class="req-section" id="dashboard-endpoints">
+  <div class="req-section-head">
+    <span class="badge badge-secondary">Dashboard endpoints</span>
+    <h2>Every widget on /reception</h2>
+    <p class="req-def">Beyond the three pillar rings, the dashboard renders these widgets across four tabs. This maps each to
+      the /bxcapi endpoint(s) that would feed it — most are presentational reads on top of the campaign rollup.</p>
+  </div>
+
+  <div class="req-table-card">
+    <table class="wui-table">
+      <thead><tr><th>Widget</th><th>Endpoint(s)</th><th>What it shows</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr class="req-grp"><td colspan="4">Hero — always visible</td></tr>
+        <tr>
+          <td>Reception Score + 3 pillar rings</td>
+          <td><code>/campaigns/{id}/reception</code> <span class="req-would">(new)</span></td>
+          <td>Composite + Breakthrough / Sentiment / Pull-through with deltas vs prior campaign.</td>
+          <td><span class="badge badge-destructive">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td>Pulse tiles (volume · net sentiment · share of conv.)</td>
+          <td><code>/campaigns/{id}/reception</code> + <code>timeseries</code></td>
+          <td>Headline numbers + sparklines for the flight window.</td>
+          <td><span class="badge badge-warning">⚠ Partial</span></td>
+        </tr>
+        <tr>
+          <td>"What we're listening for" context box</td>
+          <td><code>GET /campaigns/{id}</code> <span class="req-would">(new)</span></td>
+          <td>The user-supplied context/match spec + where it ran.</td>
+          <td><span class="badge badge-destructive">✗ Gap</span></td>
+        </tr>
+
+        <tr class="req-grp"><td colspan="4">Overview tab</td></tr>
+        <tr>
+          <td>Conversation-over-time area + airing markers</td>
+          <td><code>/campaigns/{id}/reception</code> (daily series) + <code>airings[]</code></td>
+          <td>Daily volume vs category baseline, with airing/drop annotations — the TV decay story.</td>
+          <td><span class="badge badge-destructive">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td>Platform mix donut</td>
+          <td><code>/ads/{id}/audience-reaction</code> · <code>/discover/posts</code></td>
+          <td>Where the conversation lives (TikTok / X / Reddit / YT / IG), grouped by platform.</td>
+          <td><span class="badge badge-warning">⚠ Partial</span></td>
+        </tr>
+
+        <tr class="req-grp"><td colspan="4">Sentiment tab</td></tr>
+        <tr>
+          <td>Sentiment donut + net</td>
+          <td><code>/ads/{id}/audience-reaction</code></td>
+          <td>pos / neu / neg distribution with net in the center.</td>
+          <td><span class="badge badge-active">✓ Available</span></td>
+        </tr>
+        <tr>
+          <td>Emotional texture bars</td>
+          <td><code>audience-reaction?taxonomy=v1</code> <span class="req-would">(new)</span></td>
+          <td>Reaction taxonomy distribution (funny / brand-love / annoyed / confused / intent).</td>
+          <td><span class="badge badge-warning">⚠ Partial</span></td>
+        </tr>
+        <tr>
+          <td>Sentiment by platform stacked bars</td>
+          <td><code>audience-reaction?group_by=platform</code></td>
+          <td>pos/neu/neg per platform. Grouping param is the only addition.</td>
+          <td><span class="badge badge-warning">⚠ Partial</span></td>
+        </tr>
+        <tr>
+          <td>Controversy callout</td>
+          <td>(client-derived from sentiment)</td>
+          <td>Polarization index + a listening note.</td>
+          <td><span class="badge badge-active">✓ Available</span></td>
+        </tr>
+
+        <tr class="req-grp"><td colspan="4">Conversation tab</td></tr>
+        <tr>
+          <td>Verbatim wall (comment cards)</td>
+          <td><code>/campaigns/{id}/comments</code> <span class="req-would">(new)</span> · <code>/posts/{id}</code></td>
+          <td>Paginated comments w/ author, platform, timestamp, engagement, sentiment, theme. Proposal §4.</td>
+          <td><span class="badge badge-destructive">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td>Top reaction themes pills</td>
+          <td><code>/ads/{id}/audience-reaction</code></td>
+          <td>Themes with frequency counts, colored by sentiment.</td>
+          <td><span class="badge badge-active">✓ Available</span></td>
+        </tr>
+
+        <tr class="req-grp"><td colspan="4">Compare tab</td></tr>
+        <tr>
+          <td>Percentile-vs-category bars</td>
+          <td><code>/category/{id}/reception-benchmark</code> <span class="req-would">(new)</span></td>
+          <td>Percentile on breakthrough, sentiment, brand-love, pull-through, intent. Proposal §7.</td>
+          <td><span class="badge badge-destructive">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td>Vs-your-previous-campaigns table</td>
+          <td><code>GET /campaigns?brand_id=…</code> <span class="req-would">(new)</span></td>
+          <td>Per-campaign rows of breakthrough, net sentiment, brand-love, attribution, pull-through.</td>
+          <td><span class="badge badge-destructive">✗ Gap</span></td>
+        </tr>
+        <tr>
+          <td>Pull-through stats + "what people think it's about"</td>
+          <td><code>/campaigns/{id}/reception</code> (<code>attribution_rate</code>, <code>message_echo</code>)</td>
+          <td>Attribution, message echo, purchase intent + the perceived-subject breakdown.</td>
+          <td><span class="badge badge-destructive">✗ Gap</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ════════════ PROPOSED ADDITIONS ════════════ -->
+<div class="req-section" id="proposals">
+  <div class="req-section-head">
+    <span class="badge badge-secondary">Proposed bxcAPI additions</span>
+    <h2>What the API needs to ship Reception</h2>
+    <p class="req-def">Eight additions, in rough order of leverage. The first two — user-owned campaigns and TV/CTV
+      airing→social linkage — are what make this product possible at all; the rest make it efficient.</p>
+  </div>
+
+  <div class="req-proposal">
+    <h3><span class="req-rank">§1 · highest leverage</span>User-owned campaigns — <code>POST /campaigns</code>, <code>GET /campaigns/{id}</code></h3>
+    <p>Today the API is brand/competitor-scoped (<code>/brands/{id}/…</code>). Reception needs a first-class object the
+      user creates and owns — defined either by ad IDs (link mode) or a TV/CTV airing spec (no URL).</p>
+    <div class="req-httpsig">POST /campaigns</div>
+<pre>{
+  <span class="k">"name"</span>: <span class="s">"Death to Plastic — Q2 CTV flight"</span>,
+  <span class="k">"brand_id"</span>: <span class="s">"brand_liquiddeath_001"</span>,
+  <span class="k">"type"</span>: <span class="s">"tv"</span>,                      <span class="n">// "link" | "tv"</span>
+  <span class="k">"ad_ids"</span>: [],                       <span class="n">// link mode</span>
+  <span class="k">"airings"</span>: [ /* see §2 */ ],         <span class="n">// tv mode</span>
+  <span class="k">"context"</span>: <span class="s">"Is the sustainability angle landing without reading preachy?"</span>,
+  <span class="k">"match"</span>: { <span class="k">"terms"</span>: [<span class="s">"death to plastic"</span>, <span class="s">"murder your thirst"</span>], <span class="k">"hashtags"</span>: [<span class="s">"#deathtoplastic"</span>] }
+}</pre>
+    <p>Returns a <code>campaign_id</code> and an index-build status. <code>GET /campaigns?brand_id=…</code> lists a brand's
+      campaigns (powers the campaign switcher and the vs-previous-campaigns table).</p>
+  </div>
+
+  <div class="req-proposal">
+    <h3><span class="req-rank">§2 · the TV/CTV unlock</span>Airing→social linkage — <code>airings[]</code> + <code>match</code> on a campaign</h3>
+    <p>The whole reason TV/CTV is hard: there's no permalink. Let a campaign be defined by <b>where and when</b> it aired
+      plus a match spec, and have the API attribute social conversation to that window.</p>
+<pre>{
+  <span class="k">"airings"</span>: [
+    { <span class="k">"start"</span>: <span class="s">"2026-05-01"</span>, <span class="k">"end"</span>: <span class="s">"2026-05-28"</span>,
+      <span class="k">"networks"</span>: [<span class="s">"hulu"</span>, <span class="s">"roku"</span>, <span class="s">"comedy_central"</span>],
+      <span class="k">"dmas"</span>: [<span class="s">"new_york"</span>, <span class="s">"los_angeles"</span>], <span class="k">"dayparts"</span>: [<span class="s">"primetime"</span>] }
+  ]
+}</pre>
+    <p>The API resolves the airing window + region and returns the matched conversation. Without this, a TV campaign
+      can only be approximated with <code>/discover/posts</code> keyword search — no window scoping, no impressions tie-in.</p>
+  </div>
+
+  <div class="req-proposal">
+    <h3><span class="req-rank">§3</span>Campaign reception rollup — <code>GET /campaigns/{id}/reception</code></h3>
+    <p><code>/ads/{ad_id}/audience-reaction</code> is per single ad and point-in-time. This rolls reactions across many ad IDs +
+      organic posts + matched TV chatter into one object <b>with a daily series</b> (so the dashboard can show decay after airing).</p>
+<pre>{
+  <span class="k">"campaign_id"</span>: <span class="s">"cmp_dtp_q2"</span>,
+  <span class="k">"window"</span>: { <span class="k">"start"</span>: <span class="s">"2026-05-01"</span>, <span class="k">"end"</span>: <span class="s">"2026-05-28"</span> },
+  <span class="k">"comment_count"</span>: <span class="n">38420</span>,
+  <span class="k">"sentiment"</span>: { <span class="k">"positive"</span>: <span class="n">0.71</span>, <span class="k">"neutral"</span>: <span class="n">0.20</span>, <span class="k">"negative"</span>: <span class="n">0.09</span> },
+  <span class="k">"attribution_rate"</span>: <span class="n">0.88</span>, <span class="k">"message_echo"</span>: <span class="n">0.73</span>,
+  <span class="k">"by_platform"</span>: [ { <span class="k">"platform"</span>: <span class="s">"tiktok"</span>, <span class="k">"share"</span>: <span class="n">0.30</span>, <span class="k">"sentiment"</span>: {…} } ],
+  <span class="k">"daily"</span>: [ { <span class="k">"date"</span>: <span class="s">"2026-05-01"</span>, <span class="k">"comments"</span>: <span class="n">2140</span>, <span class="k">"net_sentiment"</span>: <span class="n">0.61</span>, <span class="k">"airing"</span>: <span class="n">true</span> } ]
+}</pre>
+  </div>
+
+  <div class="req-proposal">
+    <h3><span class="req-rank">§4</span>Comment-level feed — <code>GET /campaigns/{id}/comments</code></h3>
+    <p>The anchor endpoint returns one <code>verbatim</code> per theme — not enough for a verbatim wall or filtering.
+      Paginate the actual comments with full metadata. (Equivalently: <code>?include=sample_content&amp;sample_per_bucket=N</code>
+      on <code>audience-reaction</code>.)</p>
+<pre>{ <span class="k">"data"</span>: [
+    { <span class="k">"platform"</span>: <span class="s">"youtube"</span>, <span class="k">"author"</span>: <span class="s">"StreamingDad"</span>,
+      <span class="k">"text"</span>: <span class="s">"this came on during my show and I rewound it…"</span>,
+      <span class="k">"sentiment"</span>: <span class="s">"positive"</span>, <span class="k">"theme"</span>: <span class="s">"saw it on Hulu"</span>,
+      <span class="k">"engagement"</span>: <span class="n">2100</span>, <span class="k">"posted_at"</span>: <span class="s">"2026-05-26T01:10:00Z"</span>,
+      <span class="k">"names_brand"</span>: <span class="n">true</span> }
+  ], <span class="k">"meta"</span>: { <span class="k">"next_cursor"</span>: <span class="s">"…"</span> } }</pre>
+  </div>
+
+  <div class="req-proposal">
+    <h3><span class="req-rank">§5</span>Canonical reaction taxonomy — <code>?taxonomy=v1</code> on audience-reaction</h3>
+    <p>Free-form <code>themes[]</code> can't be compared across campaigns. Add a versioned, standard reaction taxonomy
+      (<code>funny</code>, <code>brand_love</code>, <code>mission_resonates</code>, <code>annoyed</code>, <code>confused</code>,
+      <code>purchase_intent</code>, <code>hostile</code>) alongside the free-form themes. Powers EmotionTexture, LoveVsBacklash,
+      PurchaseIntentSignal and the cross-campaign Compare view.</p>
+  </div>
+
+  <div class="req-proposal">
+    <h3><span class="req-rank">§6</span>Brand attribution &amp; message pull-through — <code>attribution_rate</code>, <code>message_echo</code></h3>
+    <p>The closest social proxy to "the creative worked" when there's no conversion. <code>attribution_rate</code> = share of
+      comments naming the brand (vs only the celebrity/song); <code>message_echo</code> = share echoing the campaign's declared
+      message. The Martha Stewart example in the demo scores 92 on breakthrough but only 55 on pull-through precisely because
+      these were low — a distinction nothing in the API surfaces today.</p>
+  </div>
+
+  <div class="req-proposal">
+    <h3><span class="req-rank">§7</span>Reception benchmarking — <code>GET /category/{id}/reception-benchmark</code></h3>
+    <p>Percentile a campaign's pillars against the category set and against the brand's own prior campaigns
+      (<code>?compare=category|prior_campaigns</code>). Brand-dataset benchmarks exist, but nothing benchmarks
+      <b>ad reaction</b>. Powers the Compare tab's percentile bars and the median markers.</p>
+  </div>
+
+  <div class="req-proposal">
+    <h3><span class="req-rank">§8</span>TV impressions tie-in — <code>impressions</code> on <code>airings[]</code></h3>
+    <p>To compute conversation-per-impression (the CTV efficiency proxy that replaces CTR), attach impressions per airing
+      from a TV-measurement partner (iSpot, VideoAmp, Nielsen). Deferred to V2 until a source is locked, but the field shape
+      should be reserved on the airing object now.</p>
+  </div>
+</div>
+
+<div class="req-foot">
+  Reference doc · version <code>2026.05.28</code><br>
+  <a href="index.html">← back to dashboard</a>
+</div>
+
+</div>
+</body>
+</html>

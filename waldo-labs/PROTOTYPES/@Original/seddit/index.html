@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>seddit · the audience, said it</title>
+<style>
+  :root{
+    --bg:#f4f1ea; --surface:#fff; --border:#e5dfd3; --ink:#15140f; --muted:#736c5f; --faint:#a39b8c;
+    --accent:#f0512e; --accent-soft:#fde9e2;
+    --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+    --serif:"Hoefler Text","Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Helvetica,sans-serif;
+    --shadow:0 1px 2px rgba(30,24,12,.04),0 10px 30px -14px rgba(30,24,12,.14);
+  }
+  *{box-sizing:border-box}
+  a{color:inherit;text-decoration:none}
+  .card h2{color:var(--accent)}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+    background-image:radial-gradient(rgba(120,110,90,.04) 1px,transparent 1px);background-size:18px 18px;
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 20px}
+  .wrap{max-width:760px;width:100%;margin:0 auto;padding:64px 0 80px}
+  .brand{display:flex;align-items:center;gap:11px;margin-bottom:6px}
+  .bubble svg{display:block}
+  .wordmark{font-family:var(--serif);font-size:42px;letter-spacing:-.02em;font-weight:600}
+  .wordmark .said{color:var(--accent);font-style:italic}
+  .tagline{font-family:var(--mono);font-size:12px;color:var(--faint);letter-spacing:.04em;margin:0 0 26px 1px}
+  .lede{font-size:17px;line-height:1.55;color:#33312a;max-width:600px;margin:0 0 8px}
+  .lede b{color:var(--ink)}
+  .sub{font-family:var(--mono);font-size:11.5px;color:var(--muted);margin:0 0 34px;line-height:1.6}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:620px){.cards{grid-template-columns:1fr}}
+  .card{display:block;background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden;
+    box-shadow:var(--shadow);transition:transform .18s,box-shadow .18s}
+  .card:hover{transform:translateY(-3px);box-shadow:0 14px 38px -12px rgba(30,24,12,.24)}
+  .card-top{height:74px;position:relative}
+  .card-top.g{background:radial-gradient(120% 150% at 15% 0%,#ffd3cc,#f4a7a0 50%,#e98f9c)}
+  .card-top.c{background:radial-gradient(120% 150% at 15% 0%,#c1352b,#a81612 50%,#2a0f0d)}
+  .card-top::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.45) 1px,transparent 1px);background-size:13px 13px;opacity:.4}
+  .sub-ava{position:absolute;left:18px;bottom:-22px;width:50px;height:50px;border-radius:50%;background:#fff;border:3px solid #fff;
+    display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.14);font-family:var(--serif);font-size:25px}
+  .sub-ava.g{color:#c25b53} .sub-ava.c{color:#a81612}
+  .card-body{padding:30px 18px 18px}
+  .card-body h2{font-family:var(--serif);font-size:21px;margin:0 0 7px}
+  .stim{font-size:13.5px;color:#3a382f;line-height:1.5;margin:0 0 13px}
+  .stim .tag{font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.1em;color:var(--accent);
+    background:var(--accent-soft);padding:2px 6px;border-radius:5px;margin-right:6px}
+  .meta{font-family:var(--mono);font-size:11px;color:var(--faint);display:flex;gap:12px;border-top:1px solid #efeae0;padding-top:11px}
+  .foot{font-family:var(--mono);font-size:11px;color:var(--faint);line-height:1.7;margin-top:40px;max-width:600px}
+  .foot b{color:var(--muted)}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <span class="bubble"><svg width="40" height="40" viewBox="0 0 30 30" fill="none"><path d="M5 6.5C5 4.6 6.6 3 8.5 3h13C23.4 3 25 4.6 25 6.5v10c0 1.9-1.6 3.5-3.5 3.5H13l-6 5.2c-.7.6-1.7.1-1.7-.8V20A1 1 0 0 1 5 19.5v-13Z" fill="#f0512e"/><circle cx="11" cy="11.3" r="1.5" fill="#fff"/><circle cx="15" cy="11.3" r="1.5" fill="#fff"/><circle cx="19" cy="11.3" r="1.5" fill="#fff"/></svg></span>
+      <span class="wordmark">s<span class="said">e</span>ddit</span>
+    </div>
+    <p class="tagline">the audience, said&nbsp;it.</p>
+
+    <p class="lede">A <b>simulated subreddit.</b> Point it at a brand → it reconstructs that brand's real audience as a cast of distinct voices → drop a real decision, and watch the room react, in their own registers.</p>
+    <p class="sub">◆ every voice is grounded in a real community member · reactions generated blind (the cast never sees the real responses) · pick a room ↓</p>
+
+    <div class="cards">
+      <a class="card" href="glossier.html">
+        <div class="card-top g"><div class="sub-ava g">G</div></div>
+        <div class="card-body">
+          <h2>r/glossier</h2>
+          <p class="stim"><span class="tag">REAL</span>Glossier launches a pet line — collar, leash, and dog poop bags with the logo.</p>
+          <div class="meta"><span>12 voices</span><span>·</span><span>grounded in r/glossier</span></div>
+        </div>
+      </a>
+      <a class="card" href="chipotle.html">
+        <div class="card-top c"><div class="sub-ava c">C</div></div>
+        <div class="card-body">
+          <h2>r/Chipotle</h2>
+          <p class="stim"><span class="tag">REAL</span>Prices rise 1–2%, and the CEO's advice on skimpy portions: "just ask" for more.</p>
+          <div class="meta"><span>12 voices</span><span>·</span><span>grounded in r/Chipotle</span></div>
+        </div>
+      </a>
+    </div>
+
+    <p class="foot"><b>How it works:</b> the cast is sampled from each community, distilled into individual perspectives, and each member's reaction is written by an isolated agent that sees only that person's prior posts + a neutral statement of the brand's move — never the real reactions. Real move in, real-feeling reaction out, no leakage. <b>A Waldo Labs experiment.</b></p>
+  </div>
+</body>
+</html>

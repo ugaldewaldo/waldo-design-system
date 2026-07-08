@@ -1,0 +1,66 @@
+<!--
+component: Ticker Tape
+source: waldo-labs/PROTOTYPES/moodtape/index.html
+date: 2026-07-07
+use_when: A horizontally auto-scrolling strip of compact entity + metric readouts (ticker symbol, score, delta) pinned under the app header; each item clickable to drill into the entity. Pauses on hover.
+notes: Not in component-index (checked Components, Brand API, Charts). Built for Moodtape's sentiment terminal. Data colors follow doctrine — positive = --primary, negative = --warning, neutral = --muted-foreground. Track duplicated once in JS for a seamless loop. Sits on hsl(var(--card)) elevation, no border (borderless shell). Tabular numerals throughout.
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New component — Ticker Tape</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  body { display: block !important; }
+  svg { flex: none; min-height: fit-content; }
+  body { max-width: none !important; font-family: 'Inter', sans-serif; background: hsl(var(--background)); color: hsl(var(--foreground)); font-size: var(--fs-sm); padding: 48px 24px; }
+  .demo-note { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-bottom: 16px; }
+
+  /* ── Ticker Tape — verbatim from the prototype ── */
+  .pos { color: hsl(var(--primary)); }
+  .neg { color: hsl(var(--warning)); }
+  .neu { color: hsl(var(--muted-foreground)); }
+  .tape { background: hsl(var(--card)); overflow: hidden; white-space: nowrap; }
+  .tape-track { display: inline-flex; padding: 8px 0; animation: tape-scroll 60s linear infinite; }
+  .tape:hover .tape-track { animation-play-state: paused; }
+  @keyframes tape-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .tape-item { display: inline-flex; align-items: center; gap: 8px; padding: 0 18px; border-right: 1px solid hsl(var(--border)); font-size: var(--fs-xs); font-variant-numeric: tabular-nums; cursor: pointer; }
+  .tape-item:hover .tp-sym { color: hsl(var(--primary)); }
+  .tp-sym { color: hsl(var(--foreground)); font-weight: 600; }
+  .tp-val { font-weight: 500; }
+  .tp-wow { font-size: 11px; }
+</style>
+</head>
+<body>
+  <div class="demo-note">Ticker Tape — auto-scrolling metric strip. Hover to pause. Click an item to drill.</div>
+  <div class="tape"><div class="tape-track" id="tape-track"></div></div>
+<script>
+  (function(){
+    var items = [
+      { sym:'AAPL', val:'+0.43', cls:'pos', wow:'▲0.01', wcls:'pos' },
+      { sym:'NKE',  val:'-0.11', cls:'neu', wow:'▼0.03', wcls:'neg' },
+      { sym:'KO',   val:'+0.29', cls:'pos', wow:'▲0.01', wcls:'pos' },
+      { sym:'PEP',  val:'+0.13', cls:'neu', wow:'▼0.02', wcls:'neg' },
+      { sym:'TSLA', val:'-0.02', cls:'neu', wow:'▼0.05', wcls:'neg' },
+      { sym:'SBUX', val:'-0.21', cls:'neg', wow:'▼0.02', wcls:'neg' },
+      { sym:'DIS',  val:'+0.26', cls:'pos', wow:'▲0.03', wcls:'pos' },
+      { sym:'MCD',  val:'+0.15', cls:'pos', wow:'▲0.02', wcls:'pos' },
+    ];
+    var html = items.map(function(t){
+      return '<span class="tape-item">'
+        + '<span class="tp-sym">' + t.sym + '</span>'
+        + '<span class="tp-val ' + t.cls + '">' + t.val + '</span>'
+        + '<span class="tp-wow ' + t.wcls + '">' + t.wow + '</span>'
+        + '</span>';
+    }).join('');
+    document.getElementById('tape-track').innerHTML = html + html; // duplicate for seamless loop
+  })();
+</script>
+</body>
+</html>

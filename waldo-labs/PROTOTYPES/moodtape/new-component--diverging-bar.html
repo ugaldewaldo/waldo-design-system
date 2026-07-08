@@ -1,0 +1,73 @@
+<!--
+component: Diverging Bar
+source: waldo-labs/PROTOTYPES/moodtape/index.html
+date: 2026-07-07
+use_when: A signed metric (−1…+1 or −100%…+100%) shown per row as a thin bar diverging from a centered zero line — sentiment by sector, sentiment by platform, or any positive/negative balance. Row = fixed-width muted label + centered track + trailing signed value.
+notes: No DS equivalent for a centered-zero bar (Bar Track, Benchmark Bar, HBar and Proportion Bar are all left-anchored — checked component-index all three sections). Track hsl(var(--secondary)) 6px (data reads light), midline hsl(var(--foreground) / 0.15). Fill direction from the midline; color = doctrine data encoding: positive --primary, negative --warning, neutral --muted-foreground. Width = abs(value) × 50% of the track. Tabular numerals on values.
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New component — Diverging Bar</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  body { display: block !important; }
+  svg { flex: none; min-height: fit-content; }
+  body { max-width: none !important; font-family: 'Inter', sans-serif; background: hsl(var(--background)); color: hsl(var(--foreground)); font-size: var(--fs-sm); padding: 48px 24px; }
+  .demo-note { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-bottom: 16px; }
+  .demo-card { max-width: 520px; }
+
+  /* ── Diverging Bar — verbatim from the prototype ── */
+  .pos { color: hsl(var(--primary)); }
+  .neg { color: hsl(var(--warning)); }
+  .neu { color: hsl(var(--muted-foreground)); }
+  .dvg-row { display: grid; grid-template-columns: 150px 1fr 52px; gap: 12px; align-items: center; padding: 7px 0; }
+  .dvg-row.clickable { cursor: pointer; }
+  .dvg-row.clickable:hover .dvg-name { color: hsl(var(--foreground)); }
+  .dvg-name { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); transition: color .12s; }
+  .dvg-track { height: 6px; background: hsl(var(--secondary)); border-radius: var(--radius-full); position: relative; overflow: hidden; }
+  .dvg-mid { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: hsl(var(--foreground) / 0.15); }
+  .dvg-fill { position: absolute; top: 0; bottom: 0; border-radius: var(--radius-full); }
+  .dvg-fill.pos { background: hsl(var(--primary)); }
+  .dvg-fill.neg { background: hsl(var(--warning)); }
+  .dvg-fill.neu { background: hsl(var(--muted-foreground)); }
+  .dvg-val { font-size: var(--fs-sm); font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; }
+</style>
+</head>
+<body>
+  <div class="demo-note">Diverging Bar — signed metric per row, zero centered. Fill grows left/right from the midline.</div>
+  <div class="wcard demo-card">
+    <div class="wcard-head"><span class="wcard-title">Sentiment by sector</span><span class="wcard-sub">Net score · −1 to +1</span></div>
+    <div id="dvg-demo"></div>
+  </div>
+<script>
+  (function(){
+    var rows = [
+      { name:'Technology',            v: 0.43 },
+      { name:'Media & Entertainment', v: 0.26 },
+      { name:'Beverages & Food',      v: 0.21 },
+      { name:'Automotive',            v: -0.02 },
+      { name:'Apparel & Fashion',     v: 0.10 },
+      { name:'Restaurants & QSR',     v: -0.03 },
+    ];
+    function cls(v){ return v>=0.15?'pos':v<=-0.15?'neg':'neu'; }
+    function fmt(v){ return (v>=0?'+':'') + v.toFixed(2); }
+    document.getElementById('dvg-demo').innerHTML = rows.map(function(r){
+      var pct = Math.abs(r.v)*50; // half-width max
+      var side = r.v>=0 ? 'left:50%;width:'+pct+'%;' : 'right:50%;width:'+pct+'%;';
+      return '<div class="dvg-row clickable">'
+        + '<div class="dvg-name">' + r.name + '</div>'
+        + '<div class="dvg-track"><div class="dvg-mid"></div><div class="dvg-fill ' + (r.v>=0?'pos':'neg') + '" style="' + side + '"></div></div>'
+        + '<div class="dvg-val ' + cls(r.v) + '">' + fmt(r.v) + '</div>'
+        + '</div>';
+    }).join('');
+  })();
+</script>
+</body>
+</html>

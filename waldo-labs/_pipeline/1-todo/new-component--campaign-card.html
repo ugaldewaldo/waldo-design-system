@@ -1,0 +1,138 @@
+<!--
+  component: Campaign Card
+  source: waldo-labs/PROTOTYPES/reception/index.html (Reception — Ad social-listening)
+  date: 2026-07-07
+  use_when:
+    - Grid of trackable entities (campaigns, experiments, launches) each carrying a status,
+      a headline 0-100 score, an embedded sparkline, and 2-3 secondary sub-scores
+    - Clickable summary card that routes to a detail dashboard for the entity
+  notes:
+    - Composition of existing DS pieces: card surface + Live Badge + Badge (secondary) +
+      embedded Sparkline + zone-colored score (good=primary, watch=warning, risk=destructive).
+    - The pillar mini-bars use the HBar alpha-fill encoding (one hue, magnitude by opacity:
+      alpha = 0.30 + value/max x 0.70).
+    - Net sentiment delta: positive = primary, negative = warning (a metric, never destructive).
+    - Whole card is a <button> for keyboard access; hover lightens with a neutral mix.
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New component — Campaign Card</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  body { display: block !important; }
+  svg { flex: none; min-height: fit-content; }
+  body { max-width: none !important; margin: 0 !important; padding: 48px 24px !important;
+         background: hsl(var(--background)); color: hsl(var(--foreground));
+         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-font-smoothing: antialiased; }
+  * { box-sizing: border-box; }
+  .rcp-camp-card { border: none !important; }
+
+  .demo-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; max-width: 720px; margin: 0 auto; }
+
+  /* ── Campaign Card (verbatim from the prototype) ── */
+  .rcp-camp-card { background: hsl(var(--card)); border-radius: var(--radius-2xl); padding: 20px;
+    display: flex; flex-direction: column; gap: 10px; cursor: pointer; text-align: left;
+    font: inherit; color: inherit; width: 100%; transition: background 0.12s; }
+  .rcp-camp-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--card))); }
+  .rcp-cc-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .rcp-cc-name { font-size: var(--fs-base); font-weight: 600; letter-spacing: -0.32px; line-height: 1.35; }
+  .rcp-cc-meta { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); line-height: 1.45; min-height: 34px; overflow: hidden; }
+  .rcp-cc-spark { height: 40px; margin: 2px 0 4px; }
+  .rcp-cc-spark svg { width: 100%; height: 100%; overflow: visible; }
+  .rcp-cc-foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding-top: 12px; border-top: 1px solid hsl(var(--border)); }
+  .rcp-cc-score-num { font-size: 28px; font-weight: 600; letter-spacing: -0.6px; line-height: 1; font-variant-numeric: tabular-nums; }
+  .rcp-cc-score-num.zone-good { color: hsl(var(--primary)); }
+  .rcp-cc-score-num.zone-mid  { color: hsl(var(--warning)); }
+  .rcp-cc-score-num.zone-low  { color: hsl(var(--destructive)); }
+  .rcp-cc-mlbl { font-size: 10px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: hsl(var(--muted-foreground)); margin-top: 5px; }
+  .rcp-cc-net { text-align: right; }
+  .rcp-cc-net-val { font-size: var(--fs-base); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .rcp-cc-net-val.up { color: hsl(var(--primary)); }
+  .rcp-cc-net-val.dn { color: hsl(var(--warning)); }
+  .rcp-cc-pillars { display: flex; gap: 10px; align-items: flex-end; }
+  .rcp-ccp { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .rcp-ccp-bar { width: 6px; height: 28px; background: hsl(var(--secondary)); border-radius: 9999px; display: flex; align-items: flex-end; overflow: hidden; }
+  .rcp-ccp-bar span { display: block; width: 100%; border-radius: 9999px; }
+  .rcp-ccp-l { font-size: 10px; font-weight: 400; color: hsl(var(--muted-foreground)); }
+
+  /* Live Badge (canonical) */
+  .live-badge { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-xs); font-weight: 500; padding: 4px 10px; border-radius: 20px; letter-spacing: -0.24px; white-space: nowrap; }
+  .live-badge.active { background: color-mix(in srgb,hsl(var(--destructive)) 10%,transparent); color: hsl(var(--destructive)); }
+  .live-badge.inactive { background: hsl(var(--secondary)); color: hsl(var(--muted-foreground)); }
+  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: hsl(var(--destructive)); flex: none; }
+  @keyframes live-pulse { 0%,100%{ opacity:1; transform:scale(1); } 50%{ opacity:0.5; transform:scale(1.4); } }
+  .live-dot.pulse { animation: live-pulse 1.4s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) { .live-dot.pulse { animation: none; } }
+</style>
+</head>
+<body>
+
+<div class="demo-row">
+
+  <button class="rcp-camp-card" type="button">
+    <div class="rcp-cc-top">
+      <span class="live-badge active"><span class="live-dot pulse"></span>Live</span>
+      <span class="badge badge-secondary">TV / Display</span>
+    </div>
+    <div class="rcp-cc-name">Death to Plastic — CTV flight</div>
+    <div class="rcp-cc-meta">May 1 – May 28 · Hulu · Roku · YouTube TV · Comedy Central</div>
+    <div class="rcp-cc-spark" id="spark-1"></div>
+    <div class="rcp-cc-foot">
+      <div><div class="rcp-cc-score-num zone-good">79</div><div class="rcp-cc-mlbl">Reception</div></div>
+      <div class="rcp-cc-pillars">
+        <div class="rcp-ccp"><div class="rcp-ccp-bar"><span style="height:64%;background:hsl(var(--primary) / 0.75)"></span></div><div class="rcp-ccp-l">B</div></div>
+        <div class="rcp-ccp"><div class="rcp-ccp-bar"><span style="height:82%;background:hsl(var(--primary) / 0.87)"></span></div><div class="rcp-ccp-l">S</div></div>
+        <div class="rcp-ccp"><div class="rcp-ccp-bar"><span style="height:83%;background:hsl(var(--primary) / 0.88)"></span></div><div class="rcp-ccp-l">P</div></div>
+      </div>
+      <div class="rcp-cc-net"><div class="rcp-cc-net-val up">+62%</div><div class="rcp-cc-mlbl">Net sent.</div></div>
+    </div>
+  </button>
+
+  <button class="rcp-camp-card" type="button">
+    <div class="rcp-cc-top">
+      <span class="live-badge inactive">Ended</span>
+      <span class="badge badge-secondary">Digital</span>
+    </div>
+    <div class="rcp-cc-name">Martha Stewart "Severed Hand" Candle</div>
+    <div class="rcp-cc-meta">Mar 10 – Apr 12 · Instagram · TikTok · Meta Ad Library</div>
+    <div class="rcp-cc-spark" id="spark-2"></div>
+    <div class="rcp-cc-foot">
+      <div><div class="rcp-cc-score-num zone-mid">74</div><div class="rcp-cc-mlbl">Reception</div></div>
+      <div class="rcp-cc-pillars">
+        <div class="rcp-ccp"><div class="rcp-ccp-bar"><span style="height:92%;background:hsl(var(--primary) / 0.94)"></span></div><div class="rcp-ccp-l">B</div></div>
+        <div class="rcp-ccp"><div class="rcp-ccp-bar"><span style="height:76%;background:hsl(var(--primary) / 0.83)"></span></div><div class="rcp-ccp-l">S</div></div>
+        <div class="rcp-ccp"><div class="rcp-ccp-bar"><span style="height:55%;background:hsl(var(--primary) / 0.69)"></span></div><div class="rcp-ccp-l">P</div></div>
+      </div>
+      <div class="rcp-cc-net"><div class="rcp-cc-net-val up">+52%</div><div class="rcp-cc-mlbl">Net sent.</div></div>
+    </div>
+  </button>
+
+</div>
+
+<script>
+  // Embedded sparkline (DS Sparkline recipe) — deterministic fixture values
+  function sparkline(el, vals) {
+    var W = 200, H = 40, pad = 3;
+    var min = Math.min.apply(null, vals), max = Math.max.apply(null, vals), range = (max - min) || 1;
+    var pts = vals.map(function (v, i) {
+      var x = pad + (i / (vals.length - 1)) * (W - 2 * pad);
+      var y = H - pad - ((v - min) / range) * (H - 2 * pad);
+      return x.toFixed(1) + ',' + y.toFixed(1);
+    });
+    el.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" width="100%" height="100%">'
+      + '<path d="M' + pad + ',' + H + ' L' + pts.join(' L') + ' L' + (W - pad) + ',' + H + ' Z" style="fill:hsl(var(--primary))" opacity="0.10"/>'
+      + '<path d="M' + pts.join(' L') + '" style="stroke:hsl(var(--primary))" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>'
+      + '</svg>';
+  }
+  sparkline(document.getElementById('spark-1'), [1200, 2800, 2400, 2100, 1900, 2600, 2300, 2000, 1800, 2500, 2200, 1900]);
+  sparkline(document.getElementById('spark-2'), [700, 900, 6800, 5200, 6100, 3800, 2600, 1900, 1400, 1100, 900, 800]);
+</script>
+</body>
+</html>

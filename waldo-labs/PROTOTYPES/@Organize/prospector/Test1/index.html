@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prospector — new business, on a schedule</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../../../waldo-ds.css">
+<style>
+  /* waldo-ds.css sets html,body{height:100%;overflow:hidden} — breaks scroll.
+     Scroll override goes on html ONLY: any overflow other than visible on body
+     silently kills position:sticky (the sticky topbar scrolls away). */
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  /* waldo-ds.css sets body{display:flex!important} — collapses card widths */
+  body { display: block !important; }
+  /* waldo-ds.css sets svg{display:block} — collapses ring/icon SVGs inside flex containers */
+  svg { flex: none; min-height: fit-content; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    max-width: none !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: hsl(var(--background)); color: hsl(var(--foreground));
+    font-size: var(--fs-sm); line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: hsl(var(--primary)); text-decoration: none; }
+  a:hover { opacity: .85; }
+  button { font-family: inherit; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  /* ── App Header (doctrine) — one line: A identity + B text navigation, nothing else ── */
+  .app-header {
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(8px);
+    background: color-mix(in srgb, hsl(var(--background)) 85%, transparent);
+  }
+  .app-header-inner { height: 64px; padding: 0 28px; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+  .app-ident { display: flex; align-items: center; gap: 14px; min-width: 0; }
+  .app-ident .product { font-size: var(--fs-lg); font-weight: 500; letter-spacing: -0.02em; white-space: nowrap; }
+  .app-nav { display: flex; align-items: center; gap: 24px; }
+  .app-nav a { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); }
+  .app-nav a:hover { color: hsl(var(--foreground)); opacity: 1; }
+  .app-nav a.active { color: hsl(var(--foreground)); font-weight: 500; }
+
+  /* ── App shell — layout only, tokens only (borderless: zones separate by surface) ── */
+  .app { display: grid; grid-template-columns: 252px 1fr; min-height: calc(100vh - 64px); }
+
+  .sidebar {
+    display: flex; flex-direction: column;
+    position: sticky; top: 64px; height: calc(100vh - 64px);
+  }
+
+  /* Agency chip = header of the integrated nav panel (borderless shell) */
+  .agency-chip {
+    margin: 4px 8px 6px; padding: 8px 10px; border: none; text-align: left; width: calc(100% - 16px);
+    border-radius: var(--radius-lg); background: transparent; cursor: pointer;
+    display: flex; align-items: center; gap: 10px; transition: background .12s; color: hsl(var(--foreground));
+  }
+  .agency-chip:hover { background: hsl(var(--muted)); }
+  .agency-chip .a-name { font-weight: 500; font-size: var(--fs-sm); line-height: 1.25; }
+  .agency-chip .a-sub { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+
+  /* wnav-panel ships at a fixed 288px (floating-panel context) — fit it to the sidebar */
+  .side-nav.wnav-panel { width: auto; margin: 14px 12px 0; padding: 8px 0; }
+  .side-nav .wnav-item { text-decoration: none; }
+  .side-nav .wnav-item, .side-nav .wnav-item:hover { color: color-mix(in srgb, hsl(var(--foreground)) 70%, transparent); }
+  .side-nav .wnav-item.active { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
+  .side-nav .wnav-item .wnav-icon svg { width: 15px; height: 15px; }
+  .watch-dot { margin-left: auto; width: 6px; height: 6px; border-radius: 50%; background: hsl(var(--highlight)); flex: none; }
+
+  .side-foot { margin-top: auto; padding: 14px 16px 18px; }
+  .side-foot .lbl { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); display: flex; justify-content: space-between; font-variant-numeric: tabular-nums; }
+  /* DS Progress pattern (showcase #comp-progress) */
+  .credit-track { height: 6px; background: hsl(var(--muted)); border-radius: var(--radius-full); overflow: hidden; margin: 8px 0 6px; }
+  .credit-fill { height: 100%; background: hsl(var(--primary)); border-radius: var(--radius-full); }
+
+  /* ── Main + toolbar line — search lives HERE, never in the header (doctrine) ── */
+  .main { display: flex; flex-direction: column; min-width: 0; }
+  .app-toolbar {
+    max-width: 1184px; width: 100%; margin: 0 auto; padding: 18px 28px 0;
+    display: flex; align-items: center; justify-content: flex-end; gap: 16px;
+  }
+  .searchbox { width: 360px; max-width: 100%; }
+  .searchbox .input { height: 36px; }
+
+  .content { padding: 28px 28px 80px; max-width: 1184px; width: 100%; margin: 0 auto; }
+
+  /* ── Page header (doctrine — border killed) ── */
+  .page-head { margin-bottom: 22px; border-bottom: none !important; }
+  .page-head h1 { font-size: 28px; font-weight: 600; letter-spacing: -0.8px; line-height: 36px; }
+  .page-head .sub { color: hsl(var(--muted-foreground)); margin-top: 5px; font-size: var(--fs-sm); }
+  .page-head .row { display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+  .page-head .spacer { flex: 1; }
+
+  /* ── Prospect Card — DS gap, built to the wcard family (see new-component--prospect-card.html) ── */
+  .pstack { display: flex; flex-direction: column; gap: 14px; }
+  .pcard {
+    background: hsl(var(--card)); border-radius: 16px; padding: 20px 24px;
+    cursor: pointer; transition: background .14s;
+  }
+  .pcard:hover { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--card))); }
+  /* on-card rule: nested blocks lighten in lockstep with the parent hover so they never flatten into it */
+  .pcard:hover .reason { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--muted))); }
+  .pcard.is-done { opacity: .6; }
+  .pcard-top { display: flex; align-items: flex-start; gap: 14px; }
+  .pcard-id { min-width: 0; }
+  .pcard-name { font-size: var(--fs-base); font-weight: 500; letter-spacing: -0.02em; display: flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+  .pcard-domain { color: hsl(var(--muted-foreground)); font-size: var(--fs-xs); font-weight: 400; }
+  .pcard-badges { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .pcard-match { margin-left: auto; text-align: right; flex: none; }
+  .match-num { font-size: 22px; font-weight: 500; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: hsl(var(--foreground)); }
+  .match-num.hi { color: hsl(var(--primary)); }
+  .match-num .den { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); font-weight: 400; }
+  .match-label { font-size: 10px; color: hsl(var(--muted-foreground)); font-weight: 500; text-transform: uppercase; letter-spacing: .06em; }
+
+  .reason-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+  .reason { background: hsl(var(--muted)); border-radius: var(--radius-lg); padding: 12px 14px; }
+  .reason-lbl { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: hsl(var(--muted-foreground)); display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .reason-lbl svg { width: 13px; height: 13px; }
+  .reason-lbl.opening { color: hsl(var(--highlight)); }
+  .reason-lbl.opening.hot { color: hsl(var(--destructive)); }
+  .reason p { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); line-height: 1.5; }
+  .reason p b { color: hsl(var(--foreground)); font-weight: 500; }
+
+  .pcard-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; padding-top: 14px; border-top: 1px solid hsl(var(--border)); }
+  .pcard-actions .grow { flex: 1; }
+  .btn svg { width: 14px; height: 14px; }
+
+  /* Brand avatar — DS Avatar (square = brands) + sanctioned favicon with graceful fallback */
+  .brand-av { position: relative; overflow: hidden; }
+  .brand-av img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 14%; background: hsl(var(--foreground)); display: none; }
+  .brand-av.has-logo img { display: block; }
+  .wav.av-56 { width: 56px; height: 56px; font-size: var(--fs-lg); border-radius: var(--radius-lg); }
+  .wav.av-28 { width: 28px; height: 28px; font-size: var(--fs-xs); }
+
+  /* ── Detail page ── */
+  .back-link { display: inline-flex; align-items: center; gap: 6px; color: hsl(var(--highlight)); font-weight: 500; font-size: var(--fs-sm); margin-bottom: 18px; }
+  .back-link svg { width: 14px; height: 14px; }
+  .detail-grid { display: grid; grid-template-columns: 1fr 332px; gap: 16px; align-items: start; }
+  .detail-col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .detail-hd { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 22px; }
+  .detail-hd h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.8px; display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .detail-hd .domain { color: hsl(var(--muted-foreground)); font-size: var(--fs-sm); margin-top: 3px; }
+  .detail-hd .domain a { color: hsl(var(--muted-foreground)); border-bottom: 1px dashed hsl(var(--border)); }
+  .detail-hd .match-num { font-size: var(--fs-lg); }
+
+  .wcard.tight { padding: 22px 24px; gap: 14px; }
+  .panel-h { font-size: var(--fs-xs); font-weight: 500; text-transform: uppercase; letter-spacing: .05em; color: hsl(var(--muted-foreground)); display: flex; align-items: center; gap: 8px; }
+  .panel-h svg { width: 15px; height: 15px; }
+  .lead { font-size: var(--fs-sm); line-height: 1.6; color: hsl(var(--muted-foreground)); }
+  .lead b { color: hsl(var(--foreground)); font-weight: 500; }
+
+  /* Why-now callout — DS Alert family; highlight variant is a local extension (opening = emphasis, hot = alert) */
+  .walert.walert-highlight { background: hsl(var(--highlight) / .08); border-color: hsl(var(--highlight) / .25); color: hsl(var(--foreground)); }
+  .walert.walert-highlight .walert-icon { color: hsl(var(--highlight)); }
+  .walert-src { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 9px; display: flex; align-items: center; gap: 6px; }
+  .walert-src svg { width: 12px; height: 12px; }
+
+  .note { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .sec-label { font-size: var(--fs-xs); font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: hsl(var(--muted-foreground)); }
+
+  /* Echo chip — Tag + square Avatar composition */
+  .echo-chip { display: inline-flex; align-items: center; gap: 8px; background: hsl(var(--secondary)); border-radius: var(--radius-full); padding: 5px 14px 5px 6px; font-size: var(--fs-sm); font-weight: 500; width: fit-content; }
+
+  /* Contacts — DS List Item (wli) rows */
+  .contact-list .wli { height: 48px; padding: 0 4px; }
+  .contact-list .wli:hover { background: transparent; }
+  .mutual { color: hsl(var(--primary)); }
+  .li-link { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: var(--radius-full); color: hsl(var(--muted-foreground)); transition: background .1s, color .1s; }
+  .li-link:hover { background: hsl(var(--muted)); color: hsl(var(--foreground)); opacity: 1; }
+  .li-link svg { width: 14px; height: 14px; }
+
+  /* Side action panel */
+  .side-actions .btn { width: 100%; justify-content: center; }
+  .side-actions { gap: 9px; display: flex; flex-direction: column; }
+  .meta-list { font-size: var(--fs-sm); }
+  .meta-list .ml-row { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-bottom: 1px solid hsl(var(--border)); }
+  .meta-list .ml-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .meta-list .k { color: hsl(var(--muted-foreground)); }
+  .meta-list .v { font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; }
+
+  /* ── Pipeline Board — DS gap (see new-component--pipeline-board.html) ── */
+  .pboard { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 14px; align-items: start; }
+  .pcol { background: hsl(var(--card)); border-radius: 16px; padding: 12px; min-height: 120px; }
+  .pcol-hd { display: flex; align-items: center; gap: 8px; font-size: var(--fs-xs); font-weight: 500; color: hsl(var(--muted-foreground)); margin-bottom: 12px; padding: 0 2px; }
+  .pcol-dot { width: 7px; height: 7px; border-radius: 50%; background: hsl(var(--muted-foreground) / .5); flex: none; }
+  .pcol-dot.won { background: hsl(var(--primary)); }
+  .pcol-cnt { margin-left: auto; font-variant-numeric: tabular-nums; }
+  .mini-card { background: hsl(var(--muted)); border-radius: var(--radius-lg); padding: 11px 12px; margin-bottom: 9px; cursor: pointer; transition: background .12s; }
+  .mini-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 5%, hsl(var(--muted))); }
+  .mini-card:last-child { margin-bottom: 0; }
+  .mc-top { display: flex; align-items: center; gap: 9px; }
+  .mc-name { font-weight: 500; font-size: var(--fs-sm); }
+  .mc-cat { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .mc-foot { display: flex; align-items: center; gap: 6px; margin-top: 9px; flex-wrap: wrap; }
+  .mini-sel select { height: 28px; padding: 0 26px 0 10px; font-size: var(--fs-xs); }
+  .mc-flag { display: inline-flex; align-items: center; }
+  .mc-flag svg { width: 12px; height: 12px; }
+
+  /* ── Watchlist ── */
+  .wl-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+  .tracked-list .wli { height: 52px; padding: 0 4px; }
+  .tracked-list .wli:hover { background: transparent; }
+
+  /* Alert List Row — canonical (showcase #comp-alert-list-row) */
+  .alert-list { display: flex; flex-direction: column; }
+  .alert-item { display: flex; gap: 14px; align-items: flex-start; padding: 12px 16px 0 8px; margin-bottom: 12px; cursor: pointer; border-radius: 8px; transition: background 0.12s; }
+  .alert-item:last-child { margin-bottom: 0; }
+  .alert-item:hover { background: hsl(var(--secondary)); }
+  .alert-item:hover .alert-inner { border-bottom-color: transparent; }
+  .alert-dot-col { width: 8px; flex: none; display: flex; align-items: center; justify-content: center; padding-top: 4px; }
+  .alert-dot { width: 6px; height: 6px; border-radius: 50%; background: hsl(var(--primary)); flex: none; }
+  .alert-inner { flex: 1; min-width: 0; display: flex; gap: 10px; align-items: flex-start; border-bottom: 1px solid hsl(var(--border)); padding-bottom: 12px; }
+  .alert-item:last-child .alert-inner { border-bottom: none; }
+  .alert-content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+  .alert-condition { font-size: var(--fs-sm); line-height: 20px; letter-spacing: -0.28px; }
+  .alert-condition-main { color: hsl(var(--foreground)); font-weight: 600; }
+  .alert-condition-detail { color: hsl(var(--muted-foreground)); font-weight: 400; }
+  .alert-delivery { font-size: var(--fs-xs); font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: hsl(var(--muted-foreground)); opacity: 0.6; }
+
+  /* ── HBar — canonical (showcase #chart-page-hbar, inline variant) ── */
+  .ds-hbars { display: flex; flex-direction: column; }
+  .ds-hbar-row {
+    display: flex; flex-direction: row; align-items: center;
+    height: 32px; padding: 6px 12px; gap: 12px;
+    border-radius: 8px; cursor: pointer;
+    transition: background .12s;
+  }
+  .ds-hbar-row:hover { background: hsl(var(--muted)); }
+  .ds-hbar-name {
+    width: 180px; flex: none;
+    font-size: var(--fs-sm); font-weight: 400; line-height: 20px; letter-spacing: -0.28px;
+    color: hsl(var(--muted-foreground));
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .ds-hbar-inner { flex: 1; display: flex; align-items: center; gap: 12px; }
+  .ds-hbar-track { flex: 1; height: 6px; background: hsl(var(--muted)); border-radius: 12px; overflow: hidden; }
+  .ds-hbar-fill  { height: 100%; border-radius: var(--radius-full); background: linear-gradient(to right, color-mix(in srgb, hsl(var(--primary)) 23%, transparent), hsl(var(--green-400))); }
+  .ds-hbar-val {
+    width: 46px; flex: none; text-align: right;
+    font-size: var(--fs-xs); font-weight: 400; line-height: 16px; letter-spacing: -0.24px;
+    color: hsl(var(--muted-foreground));
+  }
+
+  /* ── Settings ── */
+  .form-col { display: flex; flex-direction: column; gap: 16px; max-width: 480px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .fp-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .integ-row { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid hsl(var(--border)); }
+  .integ-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .integ-row .it { flex: 1; }
+  .integ-row .it h3 { font-size: var(--fs-sm); font-weight: 500; }
+  .integ-row .it p { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 2px; }
+  .integ-icon { color: hsl(var(--muted-foreground)); }
+  .integ-icon svg { width: 18px; height: 18px; }
+
+  .api-foot { margin-top: 44px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .api-foot a { color: color-mix(in srgb, hsl(var(--foreground)) 68%, transparent); border-bottom: 1px dashed hsl(var(--border)); }
+
+  /* ── Toast — DS wtoast, fixed bottom-center (doctrine) ── */
+  .toast-vp { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(20px); opacity: 0; pointer-events: none; transition: all .25s; z-index: 90; }
+  .toast-vp.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast-vp .wtoast-icon { color: hsl(var(--primary)); }
+
+  .mobile-nav { display: none; }
+
+  @media (max-width: 940px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .mobile-nav { display: flex; gap: 4px; overflow-x: auto; padding: 8px 14px; position: sticky; top: 64px; z-index: 39; background: hsl(var(--background)); }
+    .mobile-nav .wnav-item { white-space: nowrap; text-decoration: none; }
+    .mobile-nav .wnav-item.active { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
+    .app-header-inner { padding: 0 16px; }
+    .app-nav { gap: 14px; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .reason-row { grid-template-columns: 1fr; }
+    .pboard { grid-template-columns: 1fr; }
+    .wl-grid { grid-template-columns: 1fr; }
+    .app-toolbar { padding: 14px 16px 0; }
+    .content { padding: 20px 16px 80px; }
+    .pcol { min-height: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════ APP HEADER (doctrine) — A identity + B text navigation, one line ════ -->
+<header class="app-header">
+  <div class="app-header-inner">
+    <div class="app-ident">
+      <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Waldo"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
+      <span class="product">Prospector</span>
+    </div>
+    <nav class="app-nav">
+      <a href="#/" data-route="dashboard">Dashboard</a>
+      <a href="#/watchlist" data-route="alerts">Alerts</a>
+      <a href="../endpoints.html">API coverage</a>
+      <a href="/bxcapi/index.html">bxcAPI</a>
+    </nav>
+  </div>
+</header>
+
+<div class="app">
+  <!-- ════ SIDEBAR — one integrated nav panel (borderless shell) ════ -->
+  <aside class="sidebar">
+    <div class="side-nav wnav-panel">
+      <button class="agency-chip" onclick="go('/settings')">
+        <div class="wav wav-square wav-32" id="agency-av">H</div>
+        <div style="min-width:0">
+          <div class="a-name" id="agency-name">Highline Studio</div>
+          <div class="a-sub" id="agency-sub">highlinestudio.com</div>
+        </div>
+      </button>
+      <div class="wnav-section">Workspace</div>
+      <div class="wnav-items-wrap" id="nav"></div>
+    </div>
+
+    <div class="side-foot">
+      <div class="lbl"><span>Prospect credits</span><span id="cred-n">612 / 1,000</span></div>
+      <div class="credit-track"><div class="credit-fill" style="width:61%"></div></div>
+      <div class="lbl"><span>Resets Jun 1</span><a href="#/settings" style="font-weight:500">Manage</a></div>
+    </div>
+  </aside>
+
+  <!-- ════ MAIN ════ -->
+  <div class="main">
+    <!-- second line — search row (doctrine: search never in the header when nav exists) -->
+    <div class="app-toolbar">
+      <div class="searchbox input-with-icon">
+        <div class="input-icon">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <input class="input" type="text" id="search" placeholder="Search prospects, brands, categories…" autocomplete="off">
+      </div>
+    </div>
+    <div class="mobile-nav" id="mobile-nav"></div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<div class="toast-vp" id="toast">
+  <div class="wtoast">
+    <div class="wtoast-icon" id="toast-icon"></div>
+    <div class="wtoast-body"><span class="wtoast-title" id="toast-msg"></span></div>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════ ICONS ════════════════════════ */
+const I = {
+  inbox: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>',
+  pipeline: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="3" y2="20"/><line x1="9" y1="6" x2="9" y2="14"/><line x1="15" y1="6" x2="15" y2="18"/><line x1="21" y1="6" x2="21" y2="11"/><circle cx="3" cy="4" r="1.6"/><circle cx="9" cy="4" r="1.6"/><circle cx="15" cy="4" r="1.6"/><circle cx="21" cy="4" r="1.6"/></svg>',
+  eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>',
+  settings: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+  link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>',
+  users: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  spark: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/><circle cx="12" cy="12" r="3"/></svg>',
+  bolt: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+  back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>',
+  check: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+  x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+  doc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>',
+  arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>',
+  hub: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 9V4M12 15v5M9 12H4M15 12h5"/></svg>',
+  linkedin: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14zm-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79zM6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68zm1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>',
+  building: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="9" y1="6" x2="9" y2="6"/><line x1="15" y1="6" x2="15" y2="6"/><line x1="9" y1="10" x2="9" y2="10"/><line x1="15" y1="10" x2="15" y2="10"/><line x1="9" y1="14" x2="9" y2="14"/><line x1="15" y1="14" x2="15" y2="14"/><path d="M9 22v-4h6v4"/></svg>',
+  dollar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+  trend: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
+  swap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>',
+  upload: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>',
+  target: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+};
+
+/* ════════════════════════ MOCK DATA — verbatim from the source prototype (visual hex fields dropped) ════════════════════════ */
+const AGENCY = {
+  name: 'Highline Studio',
+  domain: 'highlinestudio.com',
+  blurb: 'Independent creative + media agency · Chicago · 72 people',
+  fingerprint: {
+    audiences: ['Gen Z & younger millennials', 'Wellness-driven', 'Culture-forward', 'Value-conscious', 'Mobile-first'],
+    categories: ['Better-for-you CPG', 'DTC apparel & footwear', 'Consumer fintech', 'Fast-casual food']
+  }
+};
+const PAST_CLIENTS = [
+  { id:'olipop',   name:'OLIPOP',       domain:'drinkolipop.com', cat:'Better-for-you beverage' },
+  { id:'allbirds', name:'Allbirds',     domain:'allbirds.com',    cat:'Sustainable footwear' },
+  { id:'chime',    name:'Chime',        domain:'chime.com',       cat:'Consumer fintech' },
+  { id:'sweetgrn', name:'Sweetgreen',   domain:'sweetgreen.com',  cat:'Fast-casual food' },
+  { id:'liqdeath', name:'Liquid Death', domain:'liquiddeath.com', cat:'Beverage / culture' },
+];
+const STAGES = [
+  { id:'new',         label:'New' },
+  { id:'researching', label:'Researching' },
+  { id:'outreach',    label:'Outreach' },
+  { id:'meeting',     label:'Meeting' },
+  { id:'won',         label:'Won' },
+];
+const WHYNOW_META = {
+  leadership: { label:'New CMO', icon:I.users,   hot:false, src:'LinkedIn · job change' },
+  acquisition:{ label:'Acquired',icon:I.swap,    hot:false, src:'Press · M&A' },
+  funding:    { label:'New funding', icon:I.dollar, hot:false, src:'Press · funding round' },
+  review:     { label:'Agency review', icon:I.swap, hot:true, src:'Trade press · AdAge' },
+  surge:      { label:'Category surge', icon:I.trend, hot:false, src:'Category trends' },
+  expansion:  { label:'Retail expansion', icon:I.building, hot:false, src:'Press · distribution' },
+  lull:       { label:'Campaign lull', icon:I.trend, hot:true, src:'Paid-media spend signal' },
+};
+
+// status seeds simulate prior weeks already actioned
+const PROSPECTS = [
+  // ── Week of 2026-05-25 (current) — the 5 ──
+  { id:'poppi', brand:'Poppi', domain:'drinkpoppi.com', cat:'Better-for-you beverage',
+    week:'2026-05-25', score:94, status:'new',
+    why_related:{ echoes:'olipop', text:'Near-perfect mirror of your <b>OLIPOP</b> work — prebiotic soda, same gut-health positioning, same Gen Z wellness buyer you built that brand voice for.',
+      overlap:[['Gen Z wellness',92],['Functional CPG buyers',88],['TikTok-native',81]] },
+    why_now:{ type:'acquisition', headline:'Acquired by PepsiCo for ~$1.95B — brand team mid-reshuffle.',
+      detail:'Post-close, Poppi is standing up an independent brand marketing org inside PepsiCo and is reportedly reviewing creative partners to scale beyond founder-led social. A new VP of Brand started 3 weeks ago.', dated:'May 22, 2026' },
+    contacts:[
+      { name:'Jordan Hayes', title:'VP, Brand Marketing', li:'in/jordan-hayes', mutuals:['Maya Chen — Highline ECD','You'] },
+      { name:'Priya Anand',  title:'Director, Integrated Marketing', li:'in/priya-anand', mutuals:[] },
+      { name:'Devin Cole',   title:'Sr. Manager, Social & Creator', li:'in/devin-cole', mutuals:['Sam Ortiz — Highline'] },
+    ] },
+  { id:'cava', brand:'CAVA', domain:'cava.com', cat:'Fast-casual food',
+    week:'2026-05-25', score:90, status:'new',
+    why_related:{ echoes:'sweetgrn', text:'Direct analog to <b>Sweetgreen</b> — Mediterranean fast-casual chasing the same urban, health-forward lunch crowd you grew Sweetgreen with.',
+      overlap:[['Urban health-conscious',90],['Premium QSR diners',85],['App-loyalty users',72]] },
+    why_now:{ type:'expansion', headline:'Post-IPO unit blitz — 70+ new locations this year, first national brand push.',
+      detail:'CAVA is moving from regional darling to national brand and just elevated a CMO to lead its first above-the-line campaign. They have budget and a story but no lead creative AOR.', dated:'May 19, 2026' },
+    contacts:[
+      { name:'Lena Marsh', title:'Chief Marketing Officer', li:'in/lena-marsh', mutuals:['You'] },
+      { name:'Tariq Bell', title:'VP, Brand & Creative', li:'in/tariq-bell', mutuals:[] },
+    ] },
+  { id:'magicspoon', brand:'Magic Spoon', domain:'magicspoon.com', cat:'Better-for-you CPG',
+    week:'2026-05-25', score:88, status:'new',
+    why_related:{ echoes:'olipop', text:'Better-for-you CPG with the exact DTC-to-retail arc you ran for <b>OLIPOP</b> — high-protein cereal, playful brand, wellness shopper.',
+      overlap:[['Functional CPG buyers',86],['Gen Z wellness',78],['DTC-first shoppers',83]] },
+    why_now:{ type:'funding', headline:'Closed a Series C and landing in Target & Walmart nationwide.',
+      detail:'Retail expansion means the brand suddenly needs shopper + brand marketing muscle it has never had in-house. They just opened a "Head of Brand Marketing" req — a classic signal they are building, not just hiring a doer.', dated:'May 20, 2026' },
+    contacts:[
+      { name:'Noah Feldman', title:'Co-Founder & CEO', li:'in/noah-feldman', mutuals:[] },
+      { name:'Riley Tan', title:'Head of Growth', li:'in/riley-tan', mutuals:['Maya Chen — Highline ECD'] },
+    ] },
+  { id:'vuori', brand:'Vuori', domain:'vuori.com', cat:'Performance apparel',
+    week:'2026-05-25', score:86, status:'new',
+    why_related:{ echoes:'allbirds', text:'Premium, sustainability-leaning apparel for the same conscious-comfort buyer you know from <b>Allbirds</b> — adjacent category, identical brand sensibility.',
+      overlap:[['Conscious-comfort buyers',84],['Premium DTC apparel',88],['Active millennials',76]] },
+    why_now:{ type:'leadership', headline:'New CMO from Nike just started — and an agency review is rumored.',
+      detail:'A new CMO (ex-Nike brand lead) joined this month. New marketing leadership almost always re-evaluates agency rosters within the first quarter — the window to get on the consideration list is now.', dated:'May 16, 2026' },
+    contacts:[
+      { name:'Marcus Reed', title:'Chief Marketing Officer', li:'in/marcus-reed', mutuals:['You','Sam Ortiz — Highline'] },
+      { name:'Hana Yoo', title:'VP, Brand Marketing', li:'in/hana-yoo', mutuals:[] },
+    ] },
+  { id:'step', brand:'Step', domain:'step.com', cat:'Consumer fintech',
+    week:'2026-05-25', score:83, status:'new',
+    why_related:{ echoes:'chime', text:'Mobile-first banking for the underbanked, mass-market audience you built <b>Chime</b> for — same buyer, younger skew (teens & Gen Z).',
+      overlap:[['Mass-market mobile-first',87],['Gen Z',80],['First-account openers',74]] },
+    why_now:{ type:'lull', headline:'No major brand work in ~9 months despite a fresh raise.',
+      detail:'Step raised earlier this year but its paid-media spend signal shows a long creative lull — lots of performance, no brand. A funded brand that has gone quiet is a brand about to spend.', dated:'May 14, 2026' },
+    contacts:[
+      { name:'Alyssa Pope', title:'VP Marketing', li:'in/alyssa-pope', mutuals:[] },
+      { name:'Chris Nolan', title:'Head of Brand', li:'in/chris-nolan', mutuals:['You'] },
+    ] },
+
+  // ── Week of 2026-05-18 (prior — pre-actioned to seed pipeline/watchlist) ──
+  { id:'ghia', brand:'Ghia', domain:'drinkghia.com', cat:'Non-alc beverage',
+    week:'2026-05-18', score:89, status:'accepted', stage:'outreach', hubspot:true, playbook:true,
+    why_related:{ echoes:'liqdeath', text:'Culture-forward non-alc aperitif — the irreverent, design-led beverage lane you owned with <b>Liquid Death</b>, aimed at the sober-curious set.',
+      overlap:[['Sober-curious',88],['Design-led CPG',82],['Culture-forward',79]] },
+    why_now:{ type:'surge', headline:'Non-alc category is surging into summer; Ghia is scaling distribution.',
+      detail:'The non-alc category is up sharply YoY and Ghia is expanding retail. Timing is ideal for a brand campaign.', dated:'May 12, 2026' },
+    contacts:[ { name:'Sofia Greco', title:'Head of Marketing', li:'in/sofia-greco', mutuals:['You'] } ] },
+  { id:'rothys', brand:"Rothy's", domain:'rothys.com', cat:'Sustainable footwear',
+    week:'2026-05-18', score:85, status:'accepted', stage:'researching', hubspot:false, playbook:false,
+    why_related:{ echoes:'allbirds', text:'Sustainable footwear built on recycled materials — your <b>Allbirds</b> playbook applies almost line-for-line.',
+      overlap:[['Eco-conscious millennials',86],['Premium DTC apparel',81]] },
+    why_now:{ type:'leadership', headline:'New VP of Brand hired from a competitor.', detail:'Fresh brand leadership reassessing partners.', dated:'May 10, 2026' },
+    contacts:[ { name:'Erin Wells', title:'VP Brand', li:'in/erin-wells', mutuals:[] } ] },
+  { id:'immi', brand:'Immi', domain:'immieats.com', cat:'Better-for-you CPG',
+    week:'2026-05-18', score:81, status:'tracked',
+    why_related:{ echoes:'olipop', text:'High-protein, better-for-you instant ramen — same functional-CPG, Gen Z wellness buyer as <b>OLIPOP</b>.',
+      overlap:[['Functional CPG buyers',84],['Gen Z wellness',77]] },
+    why_now:{ type:'funding', headline:'Series B extension reported; building out the team.', detail:'Watching for a brand-leadership hire as the trigger to pitch.', dated:'May 9, 2026' },
+    contacts:[ { name:'Kevin Lee', title:'Co-Founder', li:'in/kevin-lee', mutuals:[] } ] },
+  { id:'athletic', brand:'Athletic Brewing', domain:'athleticbrewing.com', cat:'Non-alc beverage',
+    week:'2026-05-18', score:78, status:'rejected',
+    why_related:{ echoes:'liqdeath', text:'Non-alc craft beer in the beverage-culture lane.', overlap:[['Sober-curious',80]] },
+    why_now:{ type:'surge', headline:'Category tailwinds.', detail:'Rejected — they re-signed their incumbent AOR last month.', dated:'May 8, 2026' },
+    contacts:[] },
+  { id:'parade', brand:'Parade', domain:'yourparade.com', cat:'DTC apparel',
+    week:'2026-05-18', score:80, status:'tracked',
+    why_related:{ echoes:'allbirds', text:'Inclusive DTC intimates with a strong Gen Z brand voice.', overlap:[['Gen Z',83],['DTC-first shoppers',78]] },
+    why_now:{ type:'lull', headline:'Brand campaign went quiet after founder transition.', detail:'Monitoring for the next funding or leadership move.', dated:'May 7, 2026' },
+    contacts:[ { name:'Dana Brooks', title:'Acting Head of Marketing', li:'in/dana-brooks', mutuals:[] } ] },
+
+  // ── Week of 2026-05-11 (prior — one won deal) ──
+  { id:'recess', brand:'Recess', domain:'takearecess.com', cat:'Better-for-you beverage',
+    week:'2026-05-11', score:87, status:'accepted', stage:'won', hubspot:true, playbook:true,
+    why_related:{ echoes:'olipop', text:'Adaptogen + CBD sparkling drink — functional beverage in your OLIPOP wheelhouse.', overlap:[['Functional CPG buyers',85],['Gen Z wellness',79]] },
+    why_now:{ type:'funding', headline:'Raised a growth round to fund a national brand campaign.', detail:'Closed — signed Highline as lead creative AOR.', dated:'May 5, 2026' },
+    contacts:[ { name:'Mia Sato', title:'CMO', li:'in/mia-sato', mutuals:['You'] } ] },
+];
+
+// monitoring feed for tracked brands
+const SIGNALS = [
+  { brand:'Immi', type:'leadership', text:'<b>Immi</b> hired a new <b>Head of Growth Marketing</b> — a likely buying-committee signal.', when:'2 days ago' },
+  { brand:'Parade', type:'lull', text:'<b>Parade</b> launched a spring brand campaign — produced in-house, no agency credited.', when:'3 days ago' },
+  { brand:'Immi', type:'funding', text:'<b>Immi</b> Series B extension reported in trade press.', when:'5 days ago' },
+  { brand:'Parade', type:'review', text:'<b>Parade</b> posted a "Brand Marketing Lead" role — leadership gap forming.', when:'6 days ago' },
+];
+
+const WEEKS = ['2026-05-25','2026-05-18','2026-05-11'];
+const WEEK_LABEL = { '2026-05-25':'This week', '2026-05-18':'May 18', '2026-05-11':'May 11' };
+
+/* ════════════════════════ STATE ════════════════════════ */
+const LS_KEY = 'prospector_ds_test1_state_v1';
+let state = load();
+function load(){
+  let s = {};
+  try { s = JSON.parse(localStorage.getItem(LS_KEY)) || {}; } catch(e){}
+  return Object.assign({
+    integrations: { linkedin:false, hubspot:false },
+    cadence: { perWeek:5, day:'Monday' },
+    over: {},            // per-prospect overrides {status, stage, hubspot, playbook}
+    activeWeek: '2026-05-25',
+    query: ''
+  }, s);
+}
+function save(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+
+// merge seed prospect with any saved override
+function P(id){ const base = PROSPECTS.find(p=>p.id===id); return Object.assign({}, base, state.over[id]||{}); }
+function allP(){ return PROSPECTS.map(p=>P(p.id)); }
+function setP(id, patch){ state.over[id] = Object.assign({}, state.over[id]||{}, patch); save(); }
+
+/* ════════════════════════ HELPERS ════════════════════════ */
+const $ = s => document.querySelector(s);
+const esc = s => (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function go(path){ location.hash = '#'+path; }
+function matchCls(n){ return n>=90?'hi':''; }
+// real brand favicon via Google's favicon service (doctrine-sanctioned), graceful fallback to the DS avatar initial
+function brandAv(domain, letter, sizeCls){
+  const img = domain ? `<img src="https://www.google.com/s2/favicons?domain=${esc(domain)}&sz=128" alt="" loading="lazy" referrerpolicy="no-referrer" onload="if(this.naturalWidth>1)this.parentNode.classList.add('has-logo');else this.remove();" onerror="this.remove()">` : '';
+  return `<div class="wav wav-square ${sizeCls||'wav-40'} brand-av">${img}<span>${esc(letter)}</span></div>`;
+}
+function logoMark(p, sizeCls){ return brandAv(p.domain, p.brand[0], sizeCls); }
+function initials(name){ return name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase(); }
+function toast(msg){ const t=$('#toast'); $('#toast-icon').innerHTML=I.check; $('#toast-msg').textContent=msg; t.classList.add('show'); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),2600); }
+function openingBadge(wn){ return `<span class="badge ${wn.hot?'badge-destructive':'badge-highlight'}">${wn.label}</span>`; }
+
+/* ════════════════════════ NAV ════════════════════════ */
+function renderNav(){
+  const route = currentRoute();
+  const isActive = (n) => {
+    if(n.path==='/') return route==='/'||route.startsWith('/prospect');
+    return route===n.path;
+  };
+  const items = [
+    { path:'/', icon:I.inbox, label:'This Week' },
+    { path:'/pipeline', icon:I.pipeline, label:'Pipeline' },
+    { path:'/watchlist', icon:I.eye, label:'Watchlist' },
+    { path:'/settings', icon:I.settings, label:'Setup & integrations' },
+  ];
+  const queue = allP().filter(p=>p.week===state.activeWeek && p.status==='new').length;
+  const pipe = allP().filter(p=>p.status==='accepted').length;
+  const tracked = allP().filter(p=>p.status==='tracked').length;
+  const badge = (path)=> path==='/' && queue ? `<span class="wnav-count">${queue}</span>`
+    : path==='/pipeline' && pipe ? `<span class="wnav-count">${pipe}</span>`
+    : path==='/watchlist' && tracked ? `<span class="watch-dot" title="${tracked} tracked"></span>` : '';
+  const html = items.map(n=>`<a class="wnav-item ${isActive(n)?'active':''}" href="#${n.path}"><span class="wnav-icon">${n.icon}</span><span class="wnav-label">${n.label}</span>${badge(n.path)}</a>`).join('');
+  $('#nav').innerHTML = html;
+  $('#mobile-nav').innerHTML = items.map(n=>`<a class="wnav-item ${isActive(n)?'active':''}" href="#${n.path}"><span class="wnav-icon">${n.icon}</span><span class="wnav-label">${n.label}</span>${badge(n.path)}</a>`).join('');
+  // header nav (B) active state — Alerts owns /watchlist, Dashboard owns the rest
+  document.querySelectorAll('.app-nav a[data-route]').forEach(a=>{
+    a.classList.toggle('active', a.dataset.route==='alerts' ? route==='/watchlist' : route!=='/watchlist');
+  });
+  $('#agency-name').textContent = AGENCY.name;
+  $('#agency-sub').textContent = AGENCY.domain;
+  $('#agency-av').textContent = AGENCY.name[0];
+}
+
+/* ════════════════════════ VIEWS ════════════════════════ */
+function renderThisWeek(){
+  const wk = state.activeWeek;
+  const list = allP().filter(p=>p.week===wk);
+  const queue = list.filter(p=>p.status==='new');
+  const actioned = list.filter(p=>p.status!=='new');
+  const weekTabs = WEEKS.map(w=>`<button class="wseg-opt ${w===wk?'active':'inactive'}" onclick="state.activeWeek='${w}';save();render()">${WEEK_LABEL[w]}</button>`).join('');
+
+  let body = '';
+  if(queue.length===0 && actioned.length===0){
+    body = emptyState('No prospects this week yet', 'Your next five will be delivered '+state.cadence.day+' morning. Adjust cadence in Setup.');
+  } else if(queue.length===0){
+    body = emptyState('You\'re all caught up', 'Every prospect for '+WEEK_LABEL[wk].toLowerCase()+' has been reviewed. Check your <a href="#/pipeline">Pipeline</a> or come back '+state.cadence.day+'.');
+  } else {
+    body = `<div class="pstack">${queue.map(prospectCard).join('')}</div>`;
+  }
+  let reviewed = '';
+  if(actioned.length){
+    reviewed = `<div class="sec-label" style="margin:32px 0 12px">Reviewed (${actioned.length})</div><div class="pstack">${actioned.map(prospectCard).join('')}</div>`;
+  }
+
+  $('#content').innerHTML = `
+    <div class="page-head">
+      <div class="row">
+        <div>
+          <h1>This Week</h1>
+          <div class="sub">${queue.length} new look-alike ${queue.length===1?'prospect':'prospects'} matched to ${AGENCY.name}'s past work · week of ${fmtWeek(wk)}${passedLink()}</div>
+        </div>
+        <div class="spacer"></div>
+        <div class="wseg">${weekTabs}</div>
+      </div>
+    </div>
+    ${body}
+    ${reviewed}
+    ${apiFoot()}
+  `;
+}
+
+function prospectCard(p){
+  const wn = WHYNOW_META[p.why_now.type];
+  const done = p.status!=='new';
+  const statusPill = p.status==='accepted' ? `<span class="badge badge-active">Accepted</span>`
+    : p.status==='rejected' ? `<span class="badge badge-secondary">Passed</span>`
+    : p.status==='tracked' ? `<span class="badge badge-default">Tracking</span>` : '';
+  return `
+  <div class="pcard ${done?'is-done':''}" role="button" tabindex="0" data-go="/prospect/${p.id}">
+    <div class="pcard-top">
+      ${logoMark(p)}
+      <div class="pcard-id">
+        <div class="pcard-name">${esc(p.brand)} <span class="pcard-domain">${esc(p.domain)}</span> ${statusPill}</div>
+        <div class="pcard-badges">
+          <span class="badge badge-secondary">${esc(p.cat)}</span>
+          ${openingBadge(wn)}
+        </div>
+      </div>
+      <div class="pcard-match">
+        <div class="match-num ${matchCls(p.score)}">${p.score}<span class="den">/100</span></div>
+        <div class="match-label">Match</div>
+      </div>
+    </div>
+    <div class="reason-row">
+      <div class="reason">
+        <div class="reason-lbl">${I.target} Why it's a fit</div>
+        <p>${p.why_related.text}</p>
+      </div>
+      <div class="reason">
+        <div class="reason-lbl opening ${wn.hot?'hot':''}">${I.bolt} Why now</div>
+        <p>${esc(p.why_now.headline)}</p>
+      </div>
+    </div>
+    ${done ? '' : `
+    <div class="pcard-actions" role="presentation" data-stop>
+      <button class="btn btn-default btn-sm" onclick="accept('${p.id}')">${I.check} Accept → Pipeline</button>
+      <button class="btn btn-outline btn-sm" onclick="track('${p.id}')">${I.eye} Track</button>
+      <button class="btn btn-outline btn-sm" onclick="reject('${p.id}')">${I.x} Pass</button>
+      <div class="grow"></div>
+      <button class="btn btn-outline btn-sm" onclick="go('/prospect/${p.id}')">View brief ${I.arrow}</button>
+    </div>`}
+  </div>`;
+}
+
+function renderDetail(id){
+  const p = P(id);
+  if(!p || !p.brand){ $('#content').innerHTML = emptyState('Prospect not found','<a href="#/">Back to This Week</a>'); return; }
+  const wn = WHYNOW_META[p.why_now.type];
+  const client = PAST_CLIENTS.find(c=>c.id===p.why_related.echoes);
+  const liOn = state.integrations.linkedin;
+
+  const contactsHtml = p.contacts.length ? `<div class="contact-list">${p.contacts.map(c=>`
+    <div class="wli">
+      <div class="wav wav-round wav-32">${initials(c.name)}</div>
+      <div class="wli-body">
+        <span class="wli-name">${esc(c.name)}</span>
+        <span class="wli-sep">·</span>
+        <span class="wli-sub">${esc(c.title)}${liOn && c.mutuals.length ? ` · <span class="mutual">${c.mutuals.length} mutual ${c.mutuals.length===1?'connection':'connections'}: ${esc(c.mutuals.join(', '))}</span>` : ''}</span>
+      </div>
+      <div class="wli-right">
+        <a class="li-link" href="https://linkedin.com/${esc(c.li)}" target="_blank" rel="noopener" title="LinkedIn profile">${I.linkedin}</a>
+      </div>
+    </div>`).join('')}</div>` : `<p class="note">No contacts surfaced yet.</p>`;
+
+  const liPrompt = !liOn ? `
+    <div class="walert walert-info walert-sm" style="margin-top:14px">
+      <span class="walert-icon">${I.linkedin}</span>
+      <div class="walert-body"><div class="walert-desc">Connect LinkedIn to see which contacts you and your team already know.</div></div>
+      <button class="btn btn-outline btn-sm" onclick="toggleInteg('linkedin')">Connect</button>
+    </div>` : '';
+
+  const overlap = p.why_related.overlap.map(([nm,v])=>`
+    <div class="ds-hbar-row">
+      <div class="ds-hbar-name">${esc(nm)}</div>
+      <div class="ds-hbar-inner">
+        <div class="ds-hbar-track"><div class="ds-hbar-fill" style="width:${v}%"></div></div>
+        <div class="ds-hbar-val">${v}%</div>
+      </div>
+    </div>`).join('');
+
+  // side action panel depends on status
+  const inPipeline = p.status==='accepted';
+  const tracked = p.status==='tracked';
+  let actionBtns = '';
+  if(inPipeline){
+    actionBtns = `
+      <span class="badge badge-active" style="align-self:flex-start;margin-bottom:3px">In your pipeline · ${STAGES.find(s=>s.id===(p.stage||'new')).label}</span>
+      <button class="btn ${p.playbook?'btn-outline':'btn-default'}" onclick="makePlaybook('${p.id}')">${I.doc} ${p.playbook?'View pitch playbook':'Create pitch playbook'}</button>
+      <button class="btn btn-outline" onclick="syncHubspot('${p.id}')">${I.hub} ${p.hubspot?'Synced to HubSpot ✓':'Sync to HubSpot'}</button>`;
+  } else {
+    actionBtns = `
+      <button class="btn btn-default" onclick="accept('${p.id}')">${I.check} Accept → Pipeline</button>
+      <button class="btn btn-outline" onclick="track('${p.id}')">${I.eye} ${tracked?'Tracking ✓ · monitor':'Track this brand'}</button>
+      ${p.status!=='rejected' ? `<button class="btn btn-outline" onclick="reject('${p.id}')">${I.x} Pass</button>` : `<div class="note" style="text-align:center;margin-top:6px">Passed on this prospect.</div>`}`;
+  }
+
+  $('#content').innerHTML = `
+    <a class="back-link" href="#/">${I.back} Back to This Week</a>
+    <div class="detail-hd">
+      ${logoMark(p,'av-56')}
+      <div style="flex:1">
+        <h1>${esc(p.brand)} <span class="match-num ${matchCls(p.score)}">${p.score}<span class="den">/100 match</span></span></h1>
+        <div class="domain"><a href="https://${esc(p.domain)}" target="_blank" rel="noopener">${esc(p.domain)}</a> · ${esc(p.cat)}</div>
+      </div>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-col">
+        <div class="wcard tight">
+          <div class="panel-h">${I.bolt} Why now — the opening</div>
+          <div class="walert ${wn.hot?'walert-destructive':'walert-highlight'}">
+            <span class="walert-icon">${wn.icon}</span>
+            <div class="walert-body">
+              <div class="walert-title">${esc(p.why_now.headline)}</div>
+              <div class="walert-desc">${esc(p.why_now.detail)}</div>
+              <div class="walert-src">${I.spark} ${esc(wn.src)} · detected ${esc(p.why_now.dated)}</div>
+            </div>
+          </div>
+        </div>
+        <div class="wcard tight">
+          <div class="panel-h">${I.target} Why it's a fit</div>
+          <p class="lead">${p.why_related.text}</p>
+          <div class="sec-label">Echoes your client</div>
+          <div class="echo-chip">${brandAv(client.domain, client.name[0], 'wav-24')} ${esc(client.name)} · <span class="note">${esc(client.cat)}</span></div>
+          <div class="sec-label" style="margin-top:6px">Audience overlap</div>
+          <div class="ds-hbars">${overlap}</div>
+        </div>
+        <div class="wcard tight">
+          <div class="panel-h">${I.users} Probable contacts</div>
+          ${contactsHtml}
+          ${liPrompt}
+        </div>
+      </div>
+      <div class="detail-col">
+        <div class="wcard tight side-actions">
+          <div class="panel-h">Actions</div>
+          ${actionBtns}
+        </div>
+        <div class="wcard tight">
+          <div class="panel-h">Details</div>
+          <div class="meta-list">
+            <div class="ml-row"><span class="k">Category</span><span class="v">${esc(p.cat)}</span></div>
+            <div class="ml-row"><span class="k">Match score</span><span class="v">${p.score}/100</span></div>
+            <div class="ml-row"><span class="k">Surfaced</span><span class="v">${fmtWeek(p.week)}</span></div>
+            <div class="ml-row"><span class="k">Opening type</span><span class="v">${wn.label}</span></div>
+            <div class="ml-row"><span class="k">Contacts found</span><span class="v">${p.contacts.length}</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    ${apiFoot()}
+  `;
+}
+
+function renderPipeline(){
+  const accepted = allP().filter(p=>p.status==='accepted');
+  const cols = STAGES.map(st=>{
+    const items = accepted.filter(p=>(p.stage||'new')===st.id);
+    const cards = items.map(p=>{
+      const opts = STAGES.map(s=>`<option value="${s.id}" ${(p.stage||'new')===s.id?'selected':''}>${s.label}</option>`).join('');
+      return `<div class="mini-card" role="button" tabindex="0" data-go="/prospect/${p.id}">
+        <div class="mc-top">${logoMark(p,'wav-24')}<div style="min-width:0"><div class="mc-name">${esc(p.brand)}</div><div class="mc-cat">${esc(p.cat)} · ${p.score}</div></div></div>
+        <div class="mc-foot" role="presentation" data-stop>
+          <span class="select-wrap mini-sel"><select onchange="setStage('${p.id}',this.value)">${opts}</select></span>
+          ${p.hubspot?`<span class="badge badge-secondary badge-sm mc-flag" title="Synced to HubSpot">${I.hub}</span>`:''}
+          ${p.playbook?`<span class="badge badge-secondary badge-sm mc-flag" title="Pitch playbook ready">${I.doc}</span>`:''}
+        </div>
+      </div>`;
+    }).join('') || `<div class="note" style="padding:6px 2px">—</div>`;
+    return `<div class="pcol">
+      <div class="pcol-hd"><span class="pcol-dot ${st.id==='won'?'won':''}"></span>${st.label}<span class="pcol-cnt">${items.length}</span></div>
+      ${cards}
+    </div>`;
+  }).join('');
+
+  const body = accepted.length ? `<div class="pboard">${cols}</div>`
+    : emptyState('Your pipeline is empty','Accept prospects from <a href="#/">This Week</a> and they\'ll land here. Drag them through your stages and sync to HubSpot.');
+
+  $('#content').innerHTML = `
+    <div class="page-head"><h1>Pipeline</h1><div class="sub">${accepted.length} accepted ${accepted.length===1?'prospect':'prospects'} · move them stage to stage as you work the deal</div></div>
+    ${body}
+    ${apiFoot()}
+  `;
+}
+
+function passedLink(){
+  const n = allP().filter(p=>p.status==='rejected').length;
+  return n ? ` · <a href="#/passed">${n} passed →</a>` : '';
+}
+
+function renderPassed(){
+  const passed = allP().filter(p=>p.status==='rejected');
+  const rows = passed.length ? `<div class="pstack">${passed.map(p=>{
+    const wn = WHYNOW_META[p.why_now.type];
+    return `<div class="pcard is-done" style="cursor:default">
+      <div class="pcard-top">
+        ${logoMark(p)}
+        <div class="pcard-id">
+          <div class="pcard-name" style="cursor:pointer" role="button" tabindex="0" data-go="/prospect/${p.id}">${esc(p.brand)} <span class="pcard-domain">${esc(p.domain)}</span></div>
+          <div class="pcard-badges"><span class="badge badge-secondary">${esc(p.cat)}</span>${openingBadge(wn)}<span class="badge badge-secondary">Passed · ${fmtWeek(p.week)}</span></div>
+        </div>
+        <div class="pcard-match"><div class="match-num ${matchCls(p.score)}">${p.score}<span class="den">/100</span></div><div class="match-label">Match</div></div>
+      </div>
+      <div class="pcard-actions">
+        <button class="btn btn-default btn-sm" onclick="accept('${p.id}')">${I.check} Accept → Pipeline</button>
+        <button class="btn btn-outline btn-sm" onclick="track('${p.id}')">${I.eye} Track</button>
+        <button class="btn btn-outline btn-sm" onclick="restore('${p.id}')">${I.swap} Move back to review</button>
+        <div class="grow"></div>
+        <button class="btn btn-outline btn-sm" onclick="go('/prospect/${p.id}')">View brief ${I.arrow}</button>
+      </div>
+    </div>`;
+  }).join('')}</div>` : emptyState('Nothing passed yet', 'Prospects you pass on from <a href="#/">This Week</a> are archived here — you can always reconsider them later.');
+
+  $('#content').innerHTML = `
+    <a class="back-link" href="#/">${I.back} Back to This Week</a>
+    <div class="page-head"><h1>Passed</h1><div class="sub">${passed.length} archived ${passed.length===1?'prospect':'prospects'} · reconsider any of them anytime</div></div>
+    ${rows}
+    ${apiFoot()}
+  `;
+}
+
+function renderWatchlist(){
+  const tracked = allP().filter(p=>p.status==='tracked');
+  const trackedRows = tracked.length ? `<div class="tracked-list">${tracked.map(p=>{
+    const wn = WHYNOW_META[p.why_now.type];
+    return `<div class="wli">
+      ${logoMark(p,'wav-32')}
+      <div class="wli-body" style="cursor:pointer;min-width:0" role="button" tabindex="0" data-go="/prospect/${p.id}">
+        <span class="wli-name">${esc(p.brand)}</span>
+        <span class="wli-sep">·</span>
+        <span class="wli-sub">${esc(p.cat)} · watching for: ${wn.label.toLowerCase()}</span>
+      </div>
+      <div class="wli-right">
+        <button class="btn btn-outline btn-sm" onclick="accept('${p.id}')">${I.check} Promote</button>
+      </div>
+    </div>`;
+  }).join('')}</div>` : `<p class="note">No brands tracked yet. Hit <b>Track</b> on any prospect to monitor it for an opening.</p>`;
+
+  const feed = `<div class="alert-list">${SIGNALS.map(s=>{
+    const wn = WHYNOW_META[s.type];
+    return `<div class="alert-item">
+      <div class="alert-dot-col"><div class="alert-dot"></div></div>
+      <div class="alert-inner">
+        <div class="alert-content">
+          <div class="alert-condition"><span class="alert-condition-detail">${s.text}</span></div>
+          <div class="alert-delivery">${esc(s.when)} · ${wn.label}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+
+  $('#content').innerHTML = `
+    <div class="page-head"><h1>Watchlist</h1><div class="sub">Brands we monitor on your behalf — we'll surface the moment an opening appears</div></div>
+    <div class="wl-grid">
+      <div class="wcard tight"><div class="panel-h">${I.eye} Tracked brands (${tracked.length})</div>${trackedRows}</div>
+      <div class="wcard tight"><div class="panel-h">${I.spark} Opening signals</div>${feed}</div>
+    </div>
+    ${apiFoot()}
+  `;
+}
+
+function renderSettings(){
+  const fp = AGENCY.fingerprint;
+  const clientChips = PAST_CLIENTS.map(c=>`<span class="wtag wtag-sm">${brandAv(c.domain, c.name[0], 'wav-16')}${esc(c.name)}<span class="wtag-x" title="(demo)"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2l8 8M10 2l-8 8"/></svg></span></span>`).join('');
+  const audTags = fp.audiences.map(a=>`<span class="badge badge-default badge-lg">${esc(a)}</span>`).join(' ');
+  const catTags = fp.categories.map(a=>`<span class="badge badge-secondary badge-lg">${esc(a)}</span>`).join(' ');
+
+  const integ = (key, name, desc, iconHtml, blurbOn) => `
+    <div class="integ-row">
+      <div class="wav wav-square wav-40 integ-icon">${iconHtml}</div>
+      <div class="it"><h3>${name}</h3><p>${state.integrations[key]?blurbOn:desc}</p></div>
+      <label class="wswitch">
+        <input type="checkbox" ${state.integrations[key]?'checked':''} onchange="toggleInteg('${key}')">
+        <span class="wswitch-track"><span class="wswitch-thumb"></span></span>
+      </label>
+    </div>`;
+
+  $('#content').innerHTML = `
+    <div class="page-head"><h1>Setup & integrations</h1><div class="sub">Prospector learns from your past work, then delivers look-alikes on a schedule</div></div>
+
+    <div class="detail-col">
+    <div class="wcard tight">
+      <div class="panel-h">${I.building} Your agency</div>
+      <div class="form-col">
+        <div class="field"><label class="field-label">Agency name</label><input class="input" type="text" value="${esc(AGENCY.name)}"></div>
+        <div class="field"><label class="field-label">Website</label><input class="input" type="url" value="https://${esc(AGENCY.domain)}"></div>
+        <div class="field">
+          <label class="field-label">Past & current clients</label>
+          <span class="field-hint">Uploaded — drives your look-alike model</span>
+          <div class="chips" style="margin-top:6px">${clientChips}</div>
+          <button class="btn btn-outline btn-sm" style="margin-top:10px;align-self:flex-start" onclick="toast('Demo · client-list upload')">${I.upload} Upload client list (CSV)</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="wcard tight">
+      <div class="panel-h">${I.spark} Your audience & category fingerprint</div>
+      <p class="note">Derived from the audiences your past clients addressed. We score every brand in the index against this.</p>
+      <div class="sec-label">Audiences</div>
+      <div class="fp-tags">${audTags}</div>
+      <div class="sec-label" style="margin-top:6px">Categories</div>
+      <div class="fp-tags">${catTags}</div>
+    </div>
+
+    <div class="wcard tight">
+      <div class="panel-h">${I.link} Integrations</div>
+      <div>
+        ${integ('linkedin','LinkedIn','Connect to reveal mutual connections with prospect contacts and warm-intro paths.', I.linkedin, 'Connected — mutual connections shown on every prospect.')}
+        ${integ('hubspot','HubSpot','Push accepted prospects into your CRM as companies + contacts, kept in sync.', I.hub, 'Connected — accepted prospects sync automatically.')}
+      </div>
+    </div>
+
+    <div class="wcard tight">
+      <div class="panel-h">${I.inbox} Delivery cadence</div>
+      <div class="form-col" style="max-width:280px">
+        <div class="field"><label class="field-label">Prospects per week</label>
+          <span class="select-wrap" style="width:100%"><select style="width:100%" onchange="state.cadence.perWeek=+this.value;save();toast('Cadence updated')">
+            ${[3,5,8,10].map(n=>`<option value="${n}" ${state.cadence.perWeek===n?'selected':''}>${n} per week</option>`).join('')}
+          </select></span></div>
+        <div class="field"><label class="field-label">Delivery day</label>
+          <span class="select-wrap" style="width:100%"><select style="width:100%" onchange="state.cadence.day=this.value;save();toast('Cadence updated')">
+            ${['Monday','Tuesday','Wednesday','Thursday','Friday'].map(d=>`<option ${state.cadence.day===d?'selected':''}>${d}</option>`).join('')}
+          </select></span></div>
+      </div>
+    </div>
+    </div>
+    ${apiFoot()}
+  `;
+}
+
+/* ════════════════════════ SHARED BITS ════════════════════════ */
+function emptyState(h, p){ return `<div class="wcard"><div class="wempty wempty-section"><div class="wempty-title">${esc(h)}</div><div class="wempty-desc">${p}</div></div></div>`; }
+function apiFoot(){ return `<div class="api-foot">Prototype for the <b>bxcAPI</b> · <a href="/prospector/endpoints.html">See every endpoint Prospector needs →</a> · <a href="/bxcapi/index.html">Brand Intelligence API spec</a></div>`; }
+function fmtWeek(w){ const [y,m,d]=w.split('-'); return new Date(y,m-1,d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+
+/* ════════════════════════ ACTIONS ════════════════════════ */
+function accept(id){ setP(id,{status:'accepted', stage:'new'}); if(state.integrations.hubspot) setP(id,{hubspot:true}); toast(P(id).brand+' → Pipeline'); render(); }
+function reject(id){ setP(id,{status:'rejected'}); toast('Passed on '+P(id).brand); render(); }
+function track(id){ setP(id,{status:'tracked'}); toast('Tracking '+P(id).brand); render(); }
+function setStage(id,stage){ setP(id,{stage}); toast(P(id).brand+' → '+STAGES.find(s=>s.id===stage).label); render(); }
+function restore(id){ setP(id,{status:'new'}); toast(P(id).brand+' moved back to review'); render(); }
+function syncHubspot(id){
+  if(!state.integrations.hubspot){ toast('Connect HubSpot in Setup first'); go('/settings'); return; }
+  setP(id,{hubspot:true}); toast(P(id).brand+' synced to HubSpot'); render();
+}
+function makePlaybook(id){
+  setP(id,{playbook:true}); toast('Pitch playbook generated for '+P(id).brand);
+  // open a representative generated playbook (example output)
+  window.open('/pitch-playbook/reddish-ag1.html','_blank','noopener');
+  render();
+}
+function toggleInteg(key){
+  state.integrations[key] = !state.integrations[key];
+  save();
+  if(key==='hubspot' && state.integrations.hubspot){ allP().filter(p=>p.status==='accepted').forEach(p=>setP(p.id,{hubspot:true})); }
+  toast((key==='linkedin'?'LinkedIn ':'HubSpot ')+(state.integrations[key]?'connected':'disconnected'));
+  render();
+}
+
+/* ════════════════════════ SEARCH ════════════════════════ */
+function runSearch(q){
+  state.query = q.trim().toLowerCase();
+  // lightweight: filter the visible cards on This Week & Pipeline
+  if(currentRoute()==='/' || currentRoute()==='/pipeline'){ applySearchFilter(); }
+}
+function applySearchFilter(){
+  const q = state.query;
+  document.querySelectorAll('.pcard, .mini-card').forEach(el=>{
+    const t = el.textContent.toLowerCase();
+    el.style.display = (!q || t.includes(q)) ? '' : 'none';
+  });
+}
+
+/* ════════════════════════ ROUTER ════════════════════════ */
+function currentRoute(){ return (location.hash.replace(/^#/,'')||'/'); }
+function render(){
+  renderNav();
+  const r = currentRoute();
+  if(r.startsWith('/prospect/')) renderDetail(r.split('/')[2]);
+  else if(r==='/pipeline') renderPipeline();
+  else if(r==='/watchlist') renderWatchlist();
+  else if(r==='/passed') renderPassed();
+  else if(r==='/settings'||r==='/setup') renderSettings();
+  else renderThisWeek();
+  window.scrollTo(0,0);
+  if(state.query && (r==='/'||r==='/pipeline')){ $('#search').value=state.query; applySearchFilter(); }
+}
+window.addEventListener('hashchange', ()=>{ state.query=''; $('#search').value=''; render(); });
+$('#search').addEventListener('input', e=>runSearch(e.target.value));
+// delegated navigation for clickable cards/rows (data-go) — buttons/links/selects and data-stop zones win
+$('#content').addEventListener('click', e=>{
+  if(e.target.closest('button, a, select, [data-stop]')) return;
+  const t = e.target.closest('[data-go]');
+  if(t) go(t.dataset.go);
+});
+$('#content').addEventListener('keydown', e=>{
+  if(e.key!=='Enter') return;
+  const t = e.target.closest('[data-go]');
+  if(t && t===e.target) go(t.dataset.go);
+});
+render();
+</script>
+</body>
+</html>

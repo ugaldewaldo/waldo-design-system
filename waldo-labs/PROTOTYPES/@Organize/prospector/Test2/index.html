@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prospector — Option C (roomy)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../../../waldo-ds.css">
+<style>
+  /* ── Required DS conflict overrides (doctrine, verbatim) ── */
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  body { display: block !important; }
+  svg { flex: none; min-height: fit-content; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    max-width: none !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: hsl(var(--background)); color: hsl(var(--foreground));
+    font-size: var(--fs-sm); line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: hsl(var(--primary)); text-decoration: none; }
+  a:hover { opacity: .85; }
+  button { font-family: inherit; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  /* ── App shell — borderless: zones separate by surface + spacing, never lines ── */
+  .app { display: grid; grid-template-columns: 264px 1fr; min-height: 100vh; }
+
+  /* Sidebar — no border-right; a single integrated nav panel */
+  .sidebar { display: flex; flex-direction: column; gap: 20px; padding: 22px 18px; position: sticky; top: 0; height: 100vh; }
+  .side-logo { padding: 4px 10px 0; color: hsl(var(--foreground)); }
+
+  /* One integrated popover panel: chip header + nav items */
+  .nav-panel { background: hsl(var(--popover)); border-radius: var(--radius-3xl); padding: 8px; }
+  .acct-chip {
+    display: flex; align-items: center; gap: 11px; width: 100%; text-align: left; border: none; cursor: pointer;
+    background: transparent; color: hsl(var(--foreground)); border-radius: var(--radius-2xl);
+    padding: 10px 11px; transition: background .12s;
+  }
+  .acct-chip:hover { background: hsl(var(--muted)); }
+  .acct-name { font-size: var(--fs-sm); font-weight: 600; line-height: 1.3; }
+  .acct-sub { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .nav-sep-label { font-size: var(--fs-xs); font-weight: 500; letter-spacing: .07em; text-transform: uppercase; color: hsl(var(--muted-foreground)); padding: 12px 12px 6px; }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 11px; padding: 9px 12px; border-radius: var(--radius-xl);
+    font-size: var(--fs-sm); font-weight: 500; color: color-mix(in srgb, hsl(var(--foreground)) 72%, transparent);
+    text-decoration: none; transition: background .12s, color .12s; margin-bottom: 2px;
+  }
+  .nav-item:hover { background: hsl(var(--muted)); color: hsl(var(--foreground)); opacity: 1; }
+  .nav-item.active { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
+  .nav-item svg { width: 17px; height: 17px; flex: none; }
+  .nav-item .n-count { margin-left: auto; font-size: var(--fs-xs); font-weight: 600; color: hsl(var(--primary)); font-variant-numeric: tabular-nums; }
+  .nav-item .n-dot { margin-left: auto; width: 6px; height: 6px; border-radius: 50%; background: hsl(var(--highlight)); }
+
+  /* Credits — bottom of sidebar, no top border */
+  .credits { margin-top: auto; padding: 4px 12px; }
+  .credits .cr-row { display: flex; justify-content: space-between; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; }
+  .cr-track { height: 6px; background: hsl(var(--muted)); border-radius: var(--radius-full); overflow: hidden; margin: 9px 0 7px; }
+  .cr-fill { height: 100%; width: 61%; background: hsl(var(--primary)); border-radius: var(--radius-full); }
+
+  /* ── Main / topbar — borderless, blur only ── */
+  .main { display: flex; flex-direction: column; min-width: 0; }
+  .topbar {
+    height: 64px; position: sticky; top: 0; z-index: 40;
+    backdrop-filter: blur(8px);
+    background: color-mix(in srgb, hsl(var(--background)) 82%, transparent);
+    display: flex; align-items: center; gap: 16px; padding: 0 40px;
+  }
+  .searchbox { flex: 1; max-width: 460px; }
+  .searchbox .input { height: 40px; }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .integ-badge { cursor: default; }
+  .integ-badge .badge-dot { background: currentColor; }
+  .topbar-powered { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); white-space: nowrap; }
+
+  .content { padding: 40px 40px 90px; max-width: 1080px; width: 100%; margin: 0 auto; }
+
+  /* ── Page hero — Prospector identity, big and roomy ── */
+  .hero { margin-bottom: 40px; border-bottom: none !important; }
+  .hero h1 { font-size: 36px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.05; }
+  .hero .sub { color: hsl(var(--muted-foreground)); margin-top: 9px; font-size: var(--fs-base); }
+
+  /* ── This Week section header ── */
+  .sec-head { display: flex; align-items: flex-end; gap: 20px; margin-bottom: 22px; }
+  .sec-head h2 { font-size: var(--fs-2xl); font-weight: 600; letter-spacing: -0.02em; }
+  .sec-head .sec-sub { color: hsl(var(--muted-foreground)); margin-top: 6px; font-size: var(--fs-sm); }
+  .sec-head .spacer { flex: 1; }
+
+  /* ── Prospect Card — roomy variant on the wcard family ── */
+  .pstack { display: flex; flex-direction: column; gap: 18px; }
+  .pcard {
+    background: hsl(var(--card)); border-radius: var(--radius-3xl); padding: 28px 30px;
+    cursor: pointer; transition: background .14s;
+  }
+  .pcard:hover { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--card))); }
+  .pcard:hover .reason { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--muted))); }
+
+  .pcard-top { display: flex; align-items: flex-start; gap: 16px; }
+  .pcard-id { min-width: 0; }
+  .pcard-name { font-size: var(--fs-lg); font-weight: 600; letter-spacing: -0.02em; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .pcard-domain { color: hsl(var(--muted-foreground)); font-size: var(--fs-sm); font-weight: 400; }
+  .pcard-badges { display: flex; gap: 7px; margin-top: 11px; flex-wrap: wrap; }
+  .pcard-match { margin-left: auto; text-align: right; flex: none; padding-left: 16px; }
+  .match-num { font-size: 30px; font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: hsl(var(--foreground)); line-height: 1; }
+  .match-num.hi { color: hsl(var(--primary)); }
+  .match-num .den { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); font-weight: 400; }
+  .match-label { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); font-weight: 500; text-transform: uppercase; letter-spacing: .06em; margin-top: 6px; }
+
+  .reason-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 22px; }
+  .reason { background: hsl(var(--muted)); border-radius: var(--radius-2xl); padding: 16px 18px; }
+  .reason-lbl { font-size: var(--fs-xs); font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: hsl(var(--muted-foreground)); display: flex; align-items: center; gap: 7px; margin-bottom: 9px; }
+  .reason-lbl svg { width: 14px; height: 14px; }
+  .reason-lbl.opening { color: hsl(var(--highlight)); }
+  .reason-lbl.opening.hot { color: hsl(var(--destructive)); }
+  .reason p { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); line-height: 1.6; }
+  .reason p b { color: hsl(var(--foreground)); font-weight: 500; }
+
+  .pcard-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 22px; padding-top: 20px; border-top: 1px solid hsl(var(--border)); }
+  .pcard-actions .grow { flex: 1; }
+  .btn svg { width: 15px; height: 15px; }
+
+  /* Brand avatar — DS square Avatar + sanctioned favicon w/ graceful fallback */
+  .brand-av { position: relative; overflow: hidden; }
+  .brand-av img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 14%; background: hsl(var(--foreground)); display: none; }
+  .brand-av.has-logo img { display: block; }
+  .wav.av-52 { width: 52px; height: 52px; font-size: var(--fs-lg); border-radius: var(--radius-2xl); }
+
+  @media (max-width: 940px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .topbar { padding: 0 18px; }
+    .content { padding: 26px 18px 80px; }
+    .reason-row { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- ════ SIDEBAR ════ -->
+  <aside class="sidebar">
+    <div class="side-logo">
+      <svg width="66" height="17" viewBox="0 0 69.75 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Waldo"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
+    </div>
+
+    <div class="nav-panel">
+      <button class="acct-chip">
+        <div class="wav wav-square wav-32">H</div>
+        <div style="min-width:0">
+          <div class="acct-name">Highline Studio</div>
+          <div class="acct-sub">highlinestudio.com</div>
+        </div>
+      </button>
+      <div class="nav-sep-label">Workspace</div>
+      <a class="nav-item active" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+        <span>This Week</span><span class="n-count">4</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="3" y2="20"/><line x1="9" y1="6" x2="9" y2="14"/><line x1="15" y1="6" x2="15" y2="18"/><line x1="21" y1="6" x2="21" y2="11"/><circle cx="3" cy="4" r="1.6"/><circle cx="9" cy="4" r="1.6"/><circle cx="15" cy="4" r="1.6"/><circle cx="21" cy="4" r="1.6"/></svg>
+        <span>Pipeline</span><span class="n-count">5</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span>Watchlist</span><span class="n-dot" title="new signals"></span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Setup &amp; integrations</span>
+      </a>
+    </div>
+
+    <div class="credits">
+      <div class="cr-row"><span>Prospect credits</span><span class="tabular">612 / 1,000</span></div>
+      <div class="cr-track"><div class="cr-fill"></div></div>
+      <div class="cr-row"><span>Resets Jun 1</span><a href="#" style="font-weight:500">Manage</a></div>
+    </div>
+  </aside>
+
+  <!-- ════ MAIN ════ -->
+  <div class="main">
+    <div class="topbar">
+      <div class="searchbox input-with-icon">
+        <div class="input-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <input class="input" type="text" placeholder="Search prospects, brands, categories…" autocomplete="off">
+      </div>
+      <div class="topbar-right">
+        <span class="badge badge-lg integ-badge badge-secondary" title="LinkedIn"><span class="badge-dot"></span>Connect LinkedIn</span>
+        <span class="badge badge-lg integ-badge badge-secondary" title="HubSpot"><span class="badge-dot"></span>HubSpot off</span>
+        <span class="topbar-powered">Powered by Waldo API</span>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- Page hero — Prospector identity with presence -->
+      <div class="hero">
+        <h1>Prospector</h1>
+        <div class="sub">New business engine · look-alike prospects matched to Highline Studio's past work.</div>
+      </div>
+
+      <!-- This Week section -->
+      <div class="sec-head">
+        <div>
+          <h2>This Week</h2>
+          <div class="sec-sub">4 new prospects · week of May 25, 2026 · <a href="#">1 passed →</a></div>
+        </div>
+        <div class="spacer"></div>
+        <div class="wseg">
+          <button class="wseg-opt active">This week</button>
+          <button class="wseg-opt inactive">May 18</button>
+          <button class="wseg-opt inactive">May 11</button>
+        </div>
+      </div>
+
+      <div class="pstack" id="pstack"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const I = {
+  target: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+  bolt: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+  eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>',
+  x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+  arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>',
+};
+
+const PROSPECTS = [
+  { brand:'Poppi', domain:'drinkpoppi.com', cat:'Better-for-you beverage', opening:'Acquired', hot:false, score:94,
+    fit:'Near-perfect mirror of your <b>OLIPOP</b> work — prebiotic soda, same gut-health positioning, same Gen Z wellness buyer you built that brand voice for.',
+    now:'Acquired by PepsiCo for ~$1.95B — brand team mid-reshuffle, reviewing creative partners.' },
+  { brand:'CAVA', domain:'cava.com', cat:'Fast-casual food', opening:'Retail expansion', hot:false, score:90,
+    fit:'Direct analog to <b>Sweetgreen</b> — Mediterranean fast-casual chasing the same urban, health-forward lunch crowd you grew Sweetgreen with.',
+    now:'Post-IPO unit blitz — 70+ new locations this year, first national brand push, no lead creative AOR.' },
+  { brand:'Magic Spoon', domain:'magicspoon.com', cat:'Better-for-you CPG', opening:'New funding', hot:false, score:88,
+    fit:'Better-for-you CPG with the exact DTC-to-retail arc you ran for <b>OLIPOP</b> — high-protein cereal, playful brand, wellness shopper.',
+    now:'Closed a Series C and landing in Target &amp; Walmart nationwide.' },
+  { brand:'Vuori', domain:'vuori.com', cat:'Performance apparel', opening:'Agency review', hot:true, score:86,
+    fit:'Premium, sustainability-leaning apparel for the same conscious-comfort buyer you know from <b>Allbirds</b> — adjacent category, identical brand sensibility.',
+    now:'New CMO from Nike just started — and an agency review is rumored.' },
+];
+
+const esc = s => (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+function brandAv(domain, letter){
+  const img = `<img src="https://www.google.com/s2/favicons?domain=${esc(domain)}&sz=128" alt="" loading="lazy" referrerpolicy="no-referrer" onload="if(this.naturalWidth>1)this.parentNode.classList.add('has-logo');else this.remove();" onerror="this.remove()">`;
+  return `<div class="wav wav-square av-52 brand-av">${img}<span>${esc(letter)}</span></div>`;
+}
+
+function card(p){
+  const openBadge = p.hot ? `<span class="badge badge-destructive">${esc(p.opening)}</span>` : `<span class="badge badge-highlight">${esc(p.opening)}</span>`;
+  return `
+  <div class="pcard" role="button" tabindex="0">
+    <div class="pcard-top">
+      ${brandAv(p.domain, p.brand[0])}
+      <div class="pcard-id">
+        <div class="pcard-name">${esc(p.brand)} <span class="pcard-domain">${esc(p.domain)}</span></div>
+        <div class="pcard-badges">
+          <span class="badge badge-secondary">${esc(p.cat)}</span>
+          ${openBadge}
+        </div>
+      </div>
+      <div class="pcard-match">
+        <div class="match-num ${p.score>=90?'hi':''}">${p.score}<span class="den">/100</span></div>
+        <div class="match-label">Match</div>
+      </div>
+    </div>
+    <div class="reason-row">
+      <div class="reason">
+        <div class="reason-lbl">${I.target} Why it's a fit</div>
+        <p>${p.fit}</p>
+      </div>
+      <div class="reason">
+        <div class="reason-lbl opening ${p.hot?'hot':''}">${I.bolt} Why now</div>
+        <p>${p.now}</p>
+      </div>
+    </div>
+    <div class="pcard-actions">
+      <button class="btn btn-default btn-sm">${I.check} Accept → Pipeline</button>
+      <button class="btn btn-outline btn-sm">${I.eye} Track</button>
+      <button class="btn btn-outline btn-sm">${I.x} Pass</button>
+      <div class="grow"></div>
+      <button class="btn btn-outline btn-sm">View brief ${I.arrow}</button>
+    </div>
+  </div>`;
+}
+
+document.getElementById('pstack').innerHTML = PROSPECTS.map(card).join('');
+</script>
+</body>
+</html>

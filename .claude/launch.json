@@ -9,6 +9,12 @@
       "autoPort": true
     },
     {
+      "name": "waldo-os-labs",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "/Users/miguelugalde/GitHub/waldo-labs/public", "-l", "3105"],
+      "port": 3105
+    },
+    {
       "name": "doctrine-panel",
       "runtimeExecutable": "node",
       "runtimeArgs": ["waldo-labs/doctrine-panel/server.js"],

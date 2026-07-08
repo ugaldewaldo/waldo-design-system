@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!--
+  component: Pipeline Board
+  source: waldo-labs/prospector/Test1/index.html (DS rebuild of waldo-labs/prospector/index.html)
+  date: 2026-07-03
+  use_when:
+    - Kanban-style stage view of a working set (prospects, deals, tasks) where each item moves through ordered stages
+    - Compact per-item cards with an inline stage switcher and small status flags
+  notes:
+    - No core-DS or Brand API kanban exists (checked component-index.md all three sections + grep of index.html for "kanban"/"board").
+    - Elevation ladder, no borders (doctrine "on-card" rule): column = hsl(var(--card)) on background, mini card = hsl(var(--muted)) on column; hover = color-mix(foreground 5%, muted).
+    - Column dots are neutral (muted-foreground / 0.5) — NOT chart palette; only the terminal "Won" stage is hsl(var(--primary)) (positive state).
+    - Stage switcher reuses the DS select (.select-wrap) at a compact 28px height.
+    - Status flags (CRM synced, playbook ready) = badge badge-secondary badge-sm with a 12px icon.
+    - Item identity = DS Avatar (wav wav-square wav-24) + favicon fallback pattern.
+-->
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<title>New component — Pipeline Board</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../../../waldo-ds.css">
+<style>
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  body { display: block !important; max-width: none !important; }
+  svg { flex: none; min-height: fit-content; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: hsl(var(--background)); color: hsl(var(--foreground)); font-size: var(--fs-sm); line-height: 1.5; padding: 48px; }
+  .demo-wrap { max-width: 1100px; margin: 0 auto; }
+
+  /* ── Pipeline Board ── */
+  .pboard { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 14px; align-items: start; }
+  .pcol { background: hsl(var(--card)); border-radius: 16px; padding: 12px; min-height: 120px; }
+  .pcol-hd { display: flex; align-items: center; gap: 8px; font-size: var(--fs-xs); font-weight: 500; color: hsl(var(--muted-foreground)); margin-bottom: 12px; padding: 0 2px; }
+  .pcol-dot { width: 7px; height: 7px; border-radius: 50%; background: hsl(var(--muted-foreground) / .5); flex: none; }
+  .pcol-dot.won { background: hsl(var(--primary)); }
+  .pcol-cnt { margin-left: auto; font-variant-numeric: tabular-nums; }
+  .mini-card { background: hsl(var(--muted)); border-radius: var(--radius-lg); padding: 11px 12px; margin-bottom: 9px; cursor: pointer; transition: background .12s; }
+  .mini-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 5%, hsl(var(--muted))); }
+  .mini-card:last-child { margin-bottom: 0; }
+  .mc-top { display: flex; align-items: center; gap: 9px; }
+  .mc-name { font-weight: 500; font-size: var(--fs-sm); }
+  .mc-cat { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .mc-foot { display: flex; align-items: center; gap: 6px; margin-top: 9px; flex-wrap: wrap; }
+  .mini-sel select { height: 28px; padding: 0 26px 0 10px; font-size: var(--fs-xs); }
+  .mc-flag { display: inline-flex; align-items: center; }
+  .mc-flag svg { width: 12px; height: 12px; }
+  .note { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+</style>
+</head>
+<body>
+<div class="demo-wrap">
+  <div class="pboard">
+    <div class="pcol">
+      <div class="pcol-hd"><span class="pcol-dot"></span>New<span class="pcol-cnt">0</span></div>
+      <div class="note" style="padding:6px 2px">—</div>
+    </div>
+    <div class="pcol">
+      <div class="pcol-hd"><span class="pcol-dot"></span>Researching<span class="pcol-cnt">1</span></div>
+      <div class="mini-card">
+        <div class="mc-top"><div class="wav wav-square wav-24"><span>R</span></div><div style="min-width:0"><div class="mc-name">Rothy's</div><div class="mc-cat">Sustainable footwear · 85</div></div></div>
+        <div class="mc-foot">
+          <span class="select-wrap mini-sel"><select><option>New</option><option selected>Researching</option><option>Outreach</option><option>Meeting</option><option>Won</option></select></span>
+        </div>
+      </div>
+    </div>
+    <div class="pcol">
+      <div class="pcol-hd"><span class="pcol-dot"></span>Outreach<span class="pcol-cnt">1</span></div>
+      <div class="mini-card">
+        <div class="mc-top"><div class="wav wav-square wav-24"><span>G</span></div><div style="min-width:0"><div class="mc-name">Ghia</div><div class="mc-cat">Non-alc beverage · 89</div></div></div>
+        <div class="mc-foot">
+          <span class="select-wrap mini-sel"><select><option>New</option><option>Researching</option><option selected>Outreach</option><option>Meeting</option><option>Won</option></select></span>
+          <span class="badge badge-secondary badge-sm mc-flag" title="Synced to CRM"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 9V4M12 15v5M9 12H4M15 12h5"/></svg></span>
+          <span class="badge badge-secondary badge-sm mc-flag" title="Playbook ready"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+        </div>
+      </div>
+    </div>
+    <div class="pcol">
+      <div class="pcol-hd"><span class="pcol-dot"></span>Meeting<span class="pcol-cnt">0</span></div>
+      <div class="note" style="padding:6px 2px">—</div>
+    </div>
+    <div class="pcol">
+      <div class="pcol-hd"><span class="pcol-dot won"></span>Won<span class="pcol-cnt">1</span></div>
+      <div class="mini-card">
+        <div class="mc-top"><div class="wav wav-square wav-24"><span>R</span></div><div style="min-width:0"><div class="mc-name">Recess</div><div class="mc-cat">Better-for-you beverage · 87</div></div></div>
+        <div class="mc-foot">
+          <span class="select-wrap mini-sel"><select><option>New</option><option>Researching</option><option>Outreach</option><option>Meeting</option><option selected>Won</option></select></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

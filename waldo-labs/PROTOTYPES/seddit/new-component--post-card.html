@@ -1,0 +1,86 @@
+<!--
+  component: Post Card
+  source: waldo-labs/PROTOTYPES/seddit/ (chipotle.html, glossier.html)
+  date: 2026-07-07
+  use_when:
+    - Displaying a forum/subreddit-style post (OP head, title, body) with a vote affordance
+    - A promoted/sponsored post acting as the stimulus at the top of a simulated thread
+  notes: Composes the existing Vote Column (#comp-vote-column), Avatar (.avatar .av-xs
+    .av-brand) and Badge (.badge-secondary) on a neutral card surface. Distinct from
+    Comment Card (flat mention feed card) and Threaded Comment (nested replies): this is
+    the root post that a thread hangs off. Verified check = --primary; award glyphs =
+    --highlight (decorative emphasis, no urgency); sponsored note = dashed muted chip.
+-->
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New component · Post Card</title>
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  body { display: block !important; }
+  svg { flex: none; min-height: fit-content; }
+
+  body { margin: 0; font-family: 'Inter', sans-serif; font-size: var(--fs-sm); line-height: 1.5; background: hsl(var(--background)); color: hsl(var(--foreground)); -webkit-font-smoothing: antialiased; }
+  .demo-wrap { max-width: 720px; margin: 48px auto; padding: 0 24px; }
+
+  /* Vote Column (canonical: index.html #comp-vote-column) — dependency */
+  .vote-col { width: 44px; background: hsl(var(--muted)); display: flex; flex-direction: column; align-items: center; padding: 12px 0; gap: 3px; border-radius: var(--radius-xl); }
+  .vote-arrow { width: 26px; height: 26px; border: none; background: transparent; cursor: pointer; border-radius: var(--radius); display: grid; place-items: center; color: hsl(var(--muted-foreground)); transition: background 0.12s, color 0.12s; }
+  .vote-arrow:hover { background: hsl(var(--primary) / 0.12); color: hsl(var(--primary)); }
+  .vote-arrow.dn:hover { background: hsl(var(--foreground) / 0.08); color: hsl(var(--foreground)); }
+  .vote-arrow.on-up { color: hsl(var(--primary)); }
+  .vote-arrow.on-dn { color: hsl(var(--foreground)); }
+  .vote-score { font-size: var(--fs-xs); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  /* Post Card — verbatim from the seddit prototype */
+  .sed-post { display: flex; gap: 16px; background: hsl(var(--card)); border-radius: 16px; padding: 16px 18px; }
+  .sed-post .vote-col { flex: none; align-self: flex-start; }
+  .sed-post-body { flex: 1; min-width: 0; }
+  .sed-post-head { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .sed-post-op { font-weight: 600; color: hsl(var(--foreground)); }
+  .sed-post-verified { color: hsl(var(--primary)); }
+  .sed-post-title { font-size: var(--fs-xl); font-weight: 500; letter-spacing: -0.02em; line-height: 1.3; margin: 9px 0 6px; }
+  .sed-post-text { font-size: var(--fs-sm); color: hsl(var(--foreground) / 0.85); }
+  .sed-post-note { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: hsl(var(--muted-foreground)); border: 1px dashed hsl(var(--border)); padding: 5px 9px; border-radius: var(--radius); }
+  .sed-post-foot { display: flex; align-items: center; gap: 16px; margin-top: 13px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .sed-award { color: hsl(var(--highlight)); }
+  .sed-awards { display: flex; gap: 5px; }
+  .sed-post-dot { color: hsl(var(--muted-foreground)); opacity: 0.6; }
+  .sed-act { border: none; background: transparent; padding: 0; font-family: inherit; font-size: inherit; color: inherit; cursor: pointer; transition: color 0.12s; }
+  .sed-act:hover { color: hsl(var(--foreground)); }
+</style>
+</head>
+<body>
+<div class="demo-wrap">
+  <div class="sed-post">
+    <div class="vote-col">
+      <button class="vote-arrow" type="button" aria-label="Upvote"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 14 6-7 6 7"/></svg></button>
+      <span class="vote-score">1.2k</span>
+      <button class="vote-arrow dn" type="button" aria-label="Downvote"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 10 6 7 6-7"/></svg></button>
+    </div>
+    <div class="sed-post-body">
+      <div class="sed-post-head">
+        <span class="avatar av-xs av-brand">G</span>
+        <span class="sed-post-op">u/glossier</span><span class="sed-post-verified">✓</span>
+        <span class="badge badge-secondary badge-sm">New Drop</span>
+        <span class="sed-post-dot">·</span><span>Promoted</span><span class="sed-post-dot">·</span><span>4h</span>
+      </div>
+      <div class="sed-post-title">Introducing Glossier for Dogs — a collar, a leash, and dog poop bags, all in our signature pink. 🐶</div>
+      <div class="sed-post-text">Because your best friend deserves the Glossier treatment too. ✨ Available online + in-store this week.</div>
+      <div class="sed-post-note">◇ sponsored stimulus · the cast reacts below</div>
+      <div class="sed-post-foot">
+        <span class="sed-awards"><span class="sed-award" title="Shiny">✦</span><span class="sed-award" title="Hmm">◔</span></span>
+        <span>💬 8 comments</span>
+        <button class="sed-act" type="button">↪ share</button>
+        <button class="sed-act" type="button">⚑ save</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

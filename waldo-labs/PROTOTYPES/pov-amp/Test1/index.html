@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POV AMP — agency cockpit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../../waldo-ds.css">
+<style>
+  /* waldo-ds.css sets html,body{height:100%;overflow:hidden} — breaks scroll.
+     Scroll override goes on html ONLY: any overflow other than visible on body
+     silently kills position:sticky (the sticky topbar scrolls away). */
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  /* waldo-ds.css sets body{display:flex!important} — collapses card widths */
+  body { display: block !important; }
+  /* waldo-ds.css sets svg{display:block} — collapses ring/icon SVGs inside flex containers */
+  svg { flex: none; min-height: fit-content; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    max-width: none !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: hsl(var(--background)); color: hsl(var(--foreground));
+    font-size: var(--fs-sm); line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: hsl(var(--primary)); text-decoration: none; }
+  a:hover { opacity: .85; }
+  button { font-family: inherit; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  /* ── App shell ── */
+  .app { display: grid; grid-template-columns: 256px 1fr; min-height: 100vh; }
+
+  /* ── Sidebar ── */
+  .sidebar { border-right: 1px solid hsl(var(--border)); display: flex; flex-direction: column; position: sticky; top: 0; height: 100vh; }
+  .side-brand { display: flex; flex-direction: column; gap: 6px; padding: 20px 20px 14px; color: hsl(var(--foreground)); }
+  .side-product { font-size: var(--fs-xs); letter-spacing: .06em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
+
+  /* Client switcher (agency manages this brand) */
+  .client-chip { margin: 4px 12px 10px; padding: 10px 12px; border: none; text-align: left; width: calc(100% - 24px);
+    border-radius: var(--radius-lg); background: hsl(var(--secondary)); cursor: pointer;
+    display: flex; align-items: center; gap: 10px; transition: background .12s; color: hsl(var(--foreground)); }
+  .client-chip:hover { background: color-mix(in srgb, hsl(var(--foreground)) 6%, hsl(var(--secondary))); }
+  .client-chip .c-name { font-weight: 500; font-size: var(--fs-sm); line-height: 1.25; }
+  .client-chip .c-sub { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .client-chip .c-chev { margin-left: auto; color: hsl(var(--muted-foreground)); display: flex; }
+  .client-chip .c-chev svg { width: 15px; height: 15px; }
+
+  /* Nav — DS wnav; fit the floating 288px panel to the sidebar */
+  .side-nav { flex: 1; overflow-y: auto; }
+  .side-nav.wnav-panel { width: auto; margin: 0 8px; padding: 4px 0; background: transparent; border-radius: 0; }
+  .side-nav .wnav-item { text-decoration: none; cursor: pointer; }
+  .side-nav .wnav-item, .side-nav .wnav-item:hover { color: color-mix(in srgb, hsl(var(--foreground)) 70%, transparent); }
+  .side-nav .wnav-item.active { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
+  .side-nav .wnav-item .wnav-icon svg { width: 15px; height: 15px; }
+  .side-nav .wnav-items-wrap { padding: 0 8px; }
+  .side-nav .wnav-section { padding: 12px 16px 6px; }
+
+  .side-foot { padding: 12px 16px 16px; border-top: 1px solid hsl(var(--border)); }
+  .side-foot .foot-links { display: flex; flex-direction: column; gap: 2px; margin-bottom: 12px; }
+  .foot-link { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border: none; background: transparent; width: 100%; text-align: left; font: inherit; border-radius: var(--radius-md); color: hsl(var(--muted-foreground)); cursor: pointer; font-size: var(--fs-sm); }
+  .foot-link:hover { background: color-mix(in srgb, hsl(var(--foreground)) 5%, transparent); color: hsl(var(--foreground)); }
+  .foot-link svg { width: 15px; height: 15px; flex: none; }
+  .side-foot .lbl { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); display: flex; justify-content: space-between; font-variant-numeric: tabular-nums; }
+  .credit-track { height: 6px; background: hsl(var(--muted)); border-radius: var(--radius-full); overflow: hidden; margin: 8px 0 6px; }
+  .credit-fill { height: 100%; background: hsl(var(--primary)); border-radius: var(--radius-full); }
+
+  /* ── Main / topbar ── */
+  .main { display: flex; flex-direction: column; min-width: 0; }
+  .topbar { height: 60px; position: sticky; top: 0; z-index: 40; backdrop-filter: blur(8px);
+    background: color-mix(in srgb, hsl(var(--background)) 85%, transparent);
+    border-bottom: 1px solid hsl(var(--border)); display: flex; align-items: center; gap: 16px; padding: 0 28px; }
+  .searchbox { flex: 1; max-width: 420px; }
+  .searchbox .input { height: 36px; }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+  .topbar-powered { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); white-space: nowrap; }
+
+  .content { padding: 28px; max-width: 1120px; width: 100%; margin: 0 auto; }
+
+  /* ── Page header (doctrine — border killed) ── */
+  .page-head { margin-bottom: 22px; border-bottom: none !important; display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.8px; line-height: 34px; }
+  .page-head .sub { color: hsl(var(--muted-foreground)); margin-top: 5px; font-size: var(--fs-sm); }
+  .page-head .spacer { flex: 1; }
+
+  /* ── Views ── */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ── KPI Stat Card — canonical (showcase #comp-kpi-stat-card) ── */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+  .kpi { background: hsl(var(--card)); border-radius: var(--radius-2xl); padding: 22px; display: flex; flex-direction: column; gap: 8px; position: relative; }
+  .k-label { font-size: var(--fs-sm); font-weight: 500; line-height: 20px; letter-spacing: -0.28px; color: hsl(var(--muted-foreground)); }
+  .k-value { font-size: var(--fs-3xl); font-weight: 600; line-height: 34px; letter-spacing: -0.6px; font-variant-numeric: tabular-nums; }
+  .k-sub { font-size: var(--fs-xs); font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: hsl(var(--muted-foreground)); }
+  .k-delta { position: absolute; top: 16px; right: 16px; border: none; }
+  .k-delta.good { background: hsl(var(--primary) / 0.12); color: hsl(var(--primary)); }
+
+  /* ── Feed toolbar ── */
+  .feed-toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+  .feed-note { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-left: auto; }
+
+  /* ── Opportunity Card — DS gap, built to the wcard/comment-card family
+       (see _pipeline/1-todo/new-component--opportunity-card.html) ── */
+  .opp-stack { display: flex; flex-direction: column; gap: 14px; }
+  .opp-card { background: hsl(var(--card)); border-radius: 16px; padding: 20px 24px; transition: background .14s; }
+  .opp-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--card))); }
+  .opp-card.is-skipped { opacity: .45; }
+  .opp-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .opp-favicon { width: 14px; height: 14px; border-radius: 2px; flex: none; }
+  .opp-source { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); }
+  .opp-time { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); opacity: .6; }
+  .opp-match { margin-left: auto; flex: none; }
+  .opp-title { font-size: var(--fs-base); font-weight: 500; letter-spacing: -0.02em; line-height: 1.45; margin-top: 12px; }
+  .opp-excerpt { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); line-height: 1.55; margin-top: 5px; }
+  .opp-draft { background: hsl(var(--secondary)); border-radius: var(--radius-lg); padding: 14px 16px; margin-top: 14px; }
+  .opp-draft-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: hsl(var(--primary)); display: flex; align-items: center; gap: 6px; margin-bottom: 7px; }
+  .opp-draft-label svg { width: 12px; height: 12px; }
+  .opp-draft-label .pov-ref { color: hsl(var(--muted-foreground)); text-transform: none; letter-spacing: -0.01em; font-weight: 400; }
+  .opp-draft p { font-size: var(--fs-sm); line-height: 1.6; color: hsl(var(--foreground)); }
+  .opp-actions { display: flex; align-items: center; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid hsl(var(--border)); }
+  .opp-teach { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-left: auto; }
+
+  /* ── Comment Card — canonical (showcase #comp-comment-card) ── */
+  .convo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .comment-card { background: hsl(var(--card)); border-radius: var(--radius-xl); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; transition: background 0.12s; cursor: pointer; }
+  .comment-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 6%, hsl(var(--card))); }
+  .comment-meta { display: flex; align-items: center; gap: 6px; }
+  .comment-favicon { width: 14px; height: 14px; border-radius: 2px; flex: none; }
+  .comment-author { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .comment-time { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); flex: none; opacity: 0.6; }
+  .comment-sentiment { font-size: 10px; font-weight: 600; letter-spacing: 0.04em; padding: 2px 7px; border-radius: var(--radius-full); flex: none; }
+  .comment-sentiment.pos { background: color-mix(in srgb, hsl(var(--primary)) 12%, transparent); color: hsl(var(--primary)); }
+  .comment-sentiment.neu { background: color-mix(in srgb, hsl(var(--muted-foreground)) 12%, transparent); color: hsl(var(--muted-foreground)); }
+  .comment-sentiment.neg { background: color-mix(in srgb, hsl(var(--warning)) 12%, transparent); color: hsl(var(--warning)); }
+  .comment-body { font-size: var(--fs-sm); color: hsl(var(--foreground)); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .comment-foot { display: flex; align-items: center; justify-content: space-between; }
+  .comment-count { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); opacity: 0.6; }
+
+  /* ── POV Library ── */
+  .pov-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: stretch; }
+  .pov-card { background: hsl(var(--card)); border-radius: 16px; padding: 22px 24px; display: flex; flex-direction: column; gap: 14px; }
+  .pov-top { display: flex; align-items: flex-start; gap: 12px; }
+  .pov-statement { font-size: var(--fs-lg); font-weight: 500; letter-spacing: -0.02em; line-height: 1.35; flex: 1; }
+  .pov-sec-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: hsl(var(--muted-foreground)); margin-bottom: 6px; }
+  .pov-evidence { background: hsl(var(--secondary)); border-radius: var(--radius-lg); padding: 12px 14px; }
+  .pov-evidence ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .pov-evidence li { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); line-height: 1.5; padding-left: 14px; position: relative; }
+  .pov-evidence li::before { content: ''; position: absolute; left: 0; top: 9px; width: 5px; height: 5px; border-radius: 50%; background: hsl(var(--primary) / .6); }
+  .pov-counter { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); line-height: 1.55; }
+  .pov-counter b { color: hsl(var(--foreground)); font-weight: 500; }
+  .pov-foot { display: flex; align-items: center; gap: 16px; margin-top: auto; padding-top: 12px; border-top: 1px solid hsl(var(--border)); font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; }
+  .pov-foot .v { color: hsl(var(--foreground)); font-weight: 500; }
+
+  /* ── Style Guide ── */
+  .row { display: flex; gap: 16px; align-items: stretch; margin-bottom: 16px; }
+  .row > * { flex: 1; min-width: 0; }
+  .row:last-child { margin-bottom: 0; }
+  .sg-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .ds-hbars { display: flex; flex-direction: column; }
+  .ds-hbar-row { display: flex; flex-direction: row; align-items: center; height: 32px; padding: 6px 0; gap: 12px; }
+  .ds-hbar-name { width: 130px; flex: none; font-size: var(--fs-sm); font-weight: 400; line-height: 20px; letter-spacing: -0.28px; color: hsl(var(--muted-foreground)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ds-hbar-track { flex: 1; height: 6px; background: hsl(var(--muted)); border-radius: 12px; overflow: hidden; }
+  .ds-hbar-fill { height: 100%; border-radius: var(--radius-full); background: hsl(var(--primary)); }
+  .ds-hbar-val { width: 40px; flex: none; text-align: right; font-size: var(--fs-xs); font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; }
+
+  .sring { background: transparent; padding: 0; display: flex; flex-direction: column; align-items: center; }
+  .sring-svg { width: 120px; height: 120px; display: block; flex: none; }
+  .sring-track { fill: none; stroke: color-mix(in srgb, hsl(var(--foreground)) 8%, transparent); stroke-width: 4; }
+  .sring-arc { fill: none; stroke-width: 4; stroke-linecap: round; }
+  .sring.good .sring-arc { stroke: hsl(var(--primary)); }
+  .sring-num { font-size: 28px; font-weight: 400; letter-spacing: -0.02em; fill: hsl(var(--foreground)); }
+  .sring-label { font-size: var(--fs-xs); font-weight: 400; letter-spacing: -0.02em; color: hsl(var(--muted-foreground)); margin-top: 8px; }
+  .sring-delta { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 6px; font-variant-numeric: tabular-nums; }
+  .sring-delta .up { color: hsl(var(--primary)); font-weight: 500; }
+  .ring-center { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; flex: 1; }
+
+  .quote-card { background: hsl(var(--muted)); border-radius: var(--radius-xl); padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+  .quote-title { font-size: var(--fs-sm); font-weight: 600; color: hsl(var(--foreground)); }
+  .quote-text { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); line-height: 1.5; }
+  .quote-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .alert-list { display: flex; flex-direction: column; }
+  .alert-item { display: flex; gap: 14px; align-items: flex-start; padding: 12px 16px 0 8px; margin-bottom: 12px; border-radius: 8px; }
+  .alert-item:last-child { margin-bottom: 0; }
+  .alert-dot-col { width: 8px; flex: none; display: flex; align-items: center; justify-content: center; padding-top: 4px; }
+  .alert-dot { width: 6px; height: 6px; border-radius: 50%; background: hsl(var(--primary)); flex: none; }
+  .alert-inner { flex: 1; min-width: 0; display: flex; gap: 10px; align-items: flex-start; border-bottom: 1px solid hsl(var(--border)); padding-bottom: 12px; }
+  .alert-item:last-child .alert-inner { border-bottom: none; }
+  .alert-content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+  .alert-condition { font-size: var(--fs-sm); line-height: 20px; letter-spacing: -0.28px; }
+  .alert-condition-main { color: hsl(var(--foreground)); font-weight: 600; }
+  .alert-condition-detail { color: hsl(var(--muted-foreground)); font-weight: 400; }
+  .alert-delivery { font-size: var(--fs-xs); font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: hsl(var(--muted-foreground)); opacity: 0.6; }
+  .card-scroll { overflow-y: auto; max-height: 330px; }
+
+  /* ── Prompt Logs ── */
+  .log-cost { color: hsl(var(--muted-foreground)); }
+  .agent-badge { font-variant-numeric: tabular-nums; }
+
+  /* ── Toast — DS wtoast, fixed bottom-center (doctrine) ── */
+  .toast-vp { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(20px); opacity: 0; pointer-events: none; transition: all .25s; z-index: 90; }
+  .toast-vp.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast-vp .wtoast-icon { color: hsl(var(--primary)); }
+
+  .api-foot { margin-top: 30px; padding-top: 18px; border-top: 1px solid hsl(var(--border)); font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+
+  .mobile-nav { display: none; }
+
+  @media (max-width: 940px) {
+    .app { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .mobile-nav { display: flex; gap: 4px; overflow-x: auto; padding: 8px 14px; border-bottom: 1px solid hsl(var(--border)); position: sticky; top: 60px; z-index: 39; background: hsl(var(--background)); }
+    .mobile-nav .wnav-item { white-space: nowrap; cursor: pointer; }
+    .mobile-nav .wnav-item.active { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
+    .kpi-grid { grid-template-columns: 1fr 1fr; }
+    .pov-grid, .convo-grid, .row { grid-template-columns: 1fr; flex-direction: column; }
+    .topbar { padding: 0 16px; }
+    .content { padding: 20px 16px 80px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- ════ SIDEBAR ════ -->
+  <aside class="sidebar">
+    <div class="side-brand">
+      <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Waldo"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
+      <div class="side-product">POV AMP · Agency cockpit</div>
+    </div>
+
+    <button class="client-chip" onclick="toast('Switch client — demo (agency manages many brands)')">
+      <div class="wav wav-square wav-32">P</div>
+      <div style="min-width:0">
+        <div class="c-name">Poppi</div>
+        <div class="c-sub">poppi.com · client</div>
+      </div>
+      <span class="c-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+    </button>
+
+    <div class="side-nav wnav-panel">
+      <div class="wnav-items-wrap" id="nav"></div>
+    </div>
+
+    <div class="side-foot">
+      <div class="foot-links">
+        <button class="foot-link" onclick="toast('Brands & clients — demo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg><span>Brands &amp; clients</span></button>
+        <button class="foot-link" onclick="toast('Team & permissions — demo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Team &amp; permissions</span></button>
+        <button class="foot-link" onclick="toast('Integrations & API — demo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span>Integrations &amp; API</span></button>
+      </div>
+      <div class="lbl"><span>Waldo API credits</span><span>612 / 1,000</span></div>
+      <div class="credit-track"><div class="credit-fill" style="width:61%"></div></div>
+      <div class="lbl"><span>Resets Aug 1</span><a href="#logs" style="font-weight:500">Usage</a></div>
+    </div>
+  </aside>
+
+  <!-- ════ MAIN ════ -->
+  <div class="main">
+    <div class="topbar">
+      <div class="searchbox input-with-icon">
+        <div class="input-icon">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <input class="input" type="text" placeholder="Search opportunities, POVs, conversations…" autocomplete="off">
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-powered">Powered by Waldo API</span>
+        <div class="wav wav-square wav-32">JW</div>
+      </div>
+    </div>
+    <div class="mobile-nav" id="mobile-nav"></div>
+    <div class="content">
+
+      <!-- ── VIEW: Oportunidades ── -->
+      <div class="view active" id="view-opps">
+        <div class="page-head">
+          <div>
+            <h1>Opportunities</h1>
+            <div class="sub">Threads where Poppi's POVs land — scored against 4 active POVs.</div>
+          </div>
+          <div class="spacer"></div>
+          <button class="btn btn-default btn-sm" onclick="toast('POV capture opens in the editor — demo')">Capture a POV</button>
+        </div>
+
+        <div class="kpi-grid">
+          <div class="kpi">
+            <span class="badge badge-sm k-delta good">▲ 6 new</span>
+            <div class="k-label">Open opportunities</div>
+            <div class="k-value">18</div>
+            <div class="k-sub">across Reddit, LinkedIn &amp; X</div>
+          </div>
+          <div class="kpi">
+            <div class="k-label">Avg match score</div>
+            <div class="k-value">84%</div>
+            <div class="k-sub">threads your POVs directly answer</div>
+          </div>
+          <div class="kpi">
+            <span class="badge badge-sm k-delta good">▲ 4</span>
+            <div class="k-label">Replies posted · 7d</div>
+            <div class="k-value">12</div>
+            <div class="k-sub">every one reviewed by the team</div>
+          </div>
+          <div class="kpi">
+            <div class="k-label">Edits learned</div>
+            <div class="k-value">47</div>
+            <div class="k-sub">style guide confidence 91%</div>
+          </div>
+        </div>
+
+        <div class="feed-toolbar">
+          <div class="wseg" role="group" aria-label="Filter by platform">
+            <button class="wseg-opt active" onclick="segSelect(this)">All</button>
+            <button class="wseg-opt inactive" onclick="segSelect(this)">Reddit</button>
+            <button class="wseg-opt inactive" onclick="segSelect(this)">LinkedIn</button>
+            <button class="wseg-opt inactive" onclick="segSelect(this)">X</button>
+          </div>
+          <span class="feed-note">Scored against Poppi's 4 POVs · updated 12 min ago</span>
+        </div>
+
+        <div class="opp-stack">
+          <div class="opp-card">
+            <div class="opp-meta">
+              <img class="opp-favicon" src="https://www.google.com/s2/favicons?domain=reddit.com&amp;sz=64" alt="">
+              <span class="opp-source">r/startups · Reddit</span>
+              <span class="opp-time">24 replies · 2h ago</span>
+              <span class="opp-match badge badge-active badge-sm">92% match</span>
+            </div>
+            <div class="opp-title">Does posting on LinkedIn every day actually move the needle, or is it just vanity?</div>
+            <div class="opp-excerpt">"Everyone says consistency wins, but I've been posting daily for 4 months and pipeline hasn't moved. What am I missing?"</div>
+            <div class="opp-draft">
+              <div class="opp-draft-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                Draft ready <span class="pov-ref">· grounded in "Daily cadence is the wrong thing to optimize"</span>
+              </div>
+              <p>Daily cadence is the wrong thing to optimize. Reach you can't defend is vanity; a take your peers actually argue with in the comments is distribution. I'd post a quarter as often and say something I'm willing to be wrong about.</p>
+            </div>
+            <div class="opp-actions">
+              <button class="btn btn-default btn-sm" onclick="toast('Draft opened in the editor — demo')">Edit &amp; post</button>
+              <button class="btn btn-secondary btn-sm" onclick="skipOpp(this)">Skip</button>
+              <span class="opp-teach">Team review before it goes out. Nothing posts on autopilot.</span>
+            </div>
+          </div>
+
+          <div class="opp-card">
+            <div class="opp-meta">
+              <img class="opp-favicon" src="https://www.google.com/s2/favicons?domain=linkedin.com&amp;sz=64" alt="">
+              <span class="opp-source">VP Marketing thread · LinkedIn</span>
+              <span class="opp-time">41 comments · 5h ago</span>
+              <span class="opp-match badge badge-active badge-sm">87% match</span>
+            </div>
+            <div class="opp-title">"We're cutting our social listening budget in half next quarter. Convince me I'm wrong."</div>
+            <div class="opp-excerpt">A category VP is publicly weighing whether monitoring dashboards justify their line item — 40+ senior marketers in the comments.</div>
+            <div class="opp-draft">
+              <div class="opp-draft-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                Draft ready <span class="pov-ref">· grounded in "Listening without responding is wasted budget"</span>
+              </div>
+              <p>You might be half right. Listening that ends in a dashboard is wasted budget — cut it. The value of knowing about a conversation is showing up in it, in public, with a point of view. Keep the half that gets you into the reply.</p>
+            </div>
+            <div class="opp-actions">
+              <button class="btn btn-default btn-sm" onclick="toast('Draft opened in the editor — demo')">Edit &amp; post</button>
+              <button class="btn btn-secondary btn-sm" onclick="skipOpp(this)">Skip</button>
+              <span class="opp-teach">Team review before it goes out. Nothing posts on autopilot.</span>
+            </div>
+          </div>
+
+          <div class="opp-card">
+            <div class="opp-meta">
+              <img class="opp-favicon" src="https://www.google.com/s2/favicons?domain=x.com&amp;sz=64" alt="">
+              <span class="opp-source">@growthnotes · X</span>
+              <span class="opp-time">118 replies · 9h ago</span>
+              <span class="opp-match badge badge-active badge-sm">81% match</span>
+            </div>
+            <div class="opp-title">"Hot take: AI-written posts are killing LinkedIn. You can smell them from the first line."</div>
+            <div class="opp-excerpt">Viral thread — mostly agreement, a few dissenters arguing the tooling isn't the problem.</div>
+            <div class="opp-draft">
+              <div class="opp-draft-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                Draft ready <span class="pov-ref">· grounded in "AI should draft, humans should decide"</span>
+              </div>
+              <p>AI posts on autopilot are spam with better grammar — agreed. But the fix isn't less AI, it's a human who has to say yes. Drafting is a machine's job; deciding is yours. The posts you can smell skipped the second step.</p>
+            </div>
+            <div class="opp-actions">
+              <button class="btn btn-default btn-sm" onclick="toast('Draft opened in the editor — demo')">Edit &amp; post</button>
+              <button class="btn btn-secondary btn-sm" onclick="skipOpp(this)">Skip</button>
+              <span class="opp-teach">Team review before it goes out. Nothing posts on autopilot.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── VIEW: Conversaciones (social listening) ── -->
+      <div class="view" id="view-convo">
+        <div class="page-head">
+          <div>
+            <h1>Conversations</h1>
+            <div class="sub">What people are saying about Poppi — the raw material for opportunities.</div>
+          </div>
+        </div>
+        <div class="convo-grid">
+          <div class="comment-card">
+            <div class="comment-meta">
+              <img class="comment-favicon" src="https://www.google.com/s2/favicons?domain=reddit.com&amp;sz=64" alt="">
+              <span class="comment-author">u/gutcheck_ · r/functionalsoda</span>
+              <span class="comment-time">3h ago</span>
+              <span class="comment-sentiment pos">POS</span>
+            </div>
+            <div class="comment-body">Swapped my afternoon coke for Poppi and honestly the gut-health thing might be marketing but I feel less bloated. Hooked.</div>
+            <div class="comment-foot"><span class="comment-count">87 comments</span></div>
+          </div>
+          <div class="comment-card">
+            <div class="comment-meta">
+              <img class="comment-favicon" src="https://www.google.com/s2/favicons?domain=tiktok.com&amp;sz=64" alt="">
+              <span class="comment-author">@wellnessnina · TikTok</span>
+              <span class="comment-time">6h ago</span>
+              <span class="comment-sentiment mix">MIX</span>
+            </div>
+            <div class="comment-body">Poppi tastes great but 5g of sugar isn't exactly "healthy soda." Love the vibe, skeptical of the claims.</div>
+            <div class="comment-foot"><span class="comment-count">210 comments</span></div>
+          </div>
+          <div class="comment-card">
+            <div class="comment-meta">
+              <img class="comment-favicon" src="https://www.google.com/s2/favicons?domain=x.com&amp;sz=64" alt="">
+              <span class="comment-author">@sodadad · X</span>
+              <span class="comment-time">11h ago</span>
+              <span class="comment-sentiment neg">NEG</span>
+            </div>
+            <div class="comment-body">Every functional soda tastes like flat kombucha with a marketing budget. Poppi included. Change my mind.</div>
+            <div class="comment-foot"><span class="comment-count">44 comments</span></div>
+          </div>
+          <div class="comment-card">
+            <div class="comment-meta">
+              <img class="comment-favicon" src="https://www.google.com/s2/favicons?domain=reddit.com&amp;sz=64" alt="">
+              <span class="comment-author">u/macro_mom · r/nutrition</span>
+              <span class="comment-time">1d ago</span>
+              <span class="comment-sentiment neu">NEU</span>
+            </div>
+            <div class="comment-body">Anyone actually read the prebiotic research on these? Genuinely asking before I switch my kids off juice.</div>
+            <div class="comment-foot"><span class="comment-count">63 comments</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── VIEW: POV Library ── -->
+      <div class="view" id="view-povs">
+        <div class="page-head">
+          <div>
+            <h1>POV Library</h1>
+            <div class="sub">Poppi's points of view — the tests every draft is grounded in.</div>
+          </div>
+        </div>
+        <div class="pov-grid">
+          <div class="pov-card">
+            <div class="pov-top"><div class="pov-statement">"Listening without responding is wasted budget."</div><span class="badge badge-active badge-sm">Active</span></div>
+            <div class="pov-evidence"><div class="pov-sec-label">Evidence</div><ul>
+              <li>Dashboards inform decks; replies build pipeline — 3 client cases captured from calls.</li>
+              <li>Reply-first accounts saw 2–4x more inbound than monitor-only peers in our sample.</li>
+            </ul></div>
+            <div class="pov-counter"><b>Counterpoint it survives:</b> "listening informs strategy" — true, but strategy that never surfaces in public is invisible to buyers.</div>
+            <div class="pov-foot"><span>Used in <span class="v">14</span> replies</span><span>Avg match <span class="v">87%</span></span><span>Last used 5h ago</span></div>
+          </div>
+          <div class="pov-card">
+            <div class="pov-top"><div class="pov-statement">"AI should draft, humans should decide."</div><span class="badge badge-active badge-sm">Active</span></div>
+            <div class="pov-evidence"><div class="pov-sec-label">Evidence</div><ul>
+              <li>Autopilot posts read as spam; reviewed drafts keep the author's judgment in the loop.</li>
+              <li>Our own edit-rate: 71% of drafts ship with changes — the human step is real, not ceremonial.</li>
+            </ul></div>
+            <div class="pov-counter"><b>Counterpoint it survives:</b> "review doesn't scale" — one-click review of a good draft takes seconds, not hours.</div>
+            <div class="pov-foot"><span>Used in <span class="v">22</span> replies</span><span>Avg match <span class="v">83%</span></span><span>Last used 9h ago</span></div>
+          </div>
+          <div class="pov-card">
+            <div class="pov-top"><div class="pov-statement">"You're the distribution channel."</div><span class="badge badge-active badge-sm">Active</span></div>
+            <div class="pov-evidence"><div class="pov-sec-label">Evidence</div><ul>
+              <li>People argue with companies but converse with people — reply threads under personal posts run 3x longer.</li>
+              <li>Founder-voice posts outperform the brand account on every channel we track.</li>
+            </ul></div>
+            <div class="pov-counter"><b>Counterpoint it survives:</b> "the brand needs its own voice" — it does, for announcements; conversations belong to people.</div>
+            <div class="pov-foot"><span>Used in <span class="v">9</span> replies</span><span>Avg match <span class="v">79%</span></span><span>Last used 1d ago</span></div>
+          </div>
+          <div class="pov-card">
+            <div class="pov-top"><div class="pov-statement">"Daily cadence is the wrong thing to optimize."</div><span class="badge badge-secondary badge-sm">Draft</span></div>
+            <div class="pov-evidence"><div class="pov-sec-label">Evidence</div><ul>
+              <li>Captured from Tuesday's pipeline call — needs one more supporting case before activating.</li>
+              <li>Post-frequency vs. inbound shows no correlation past 2 posts/week in our data.</li>
+            </ul></div>
+            <div class="pov-counter"><b>Counterpoint to resolve:</b> "algorithms reward consistency" — reconcile with reach-vs-defensibility framing.</div>
+            <div class="pov-foot"><span>Used in <span class="v">3</span> replies</span><span>Avg match <span class="v">88%</span></span><span>Captured 2d ago</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── VIEW: Style Guide ── -->
+      <div class="view" id="view-style">
+        <div class="page-head">
+          <div>
+            <h1>Style Guide</h1>
+            <div class="sub">Poppi's voice — learned from writing samples and refined by every edit.</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="wcard">
+            <div class="wcard-head"><span class="wcard-title">Voice profile</span><span class="wcard-sub">Derived from 32 writing samples · refined by 47 edits</span></div>
+            <div class="sg-pills">
+              <span class="badge badge-secondary">Short declaratives</span>
+              <span class="badge badge-secondary">No hedging</span>
+              <span class="badge badge-secondary">First person</span>
+              <span class="badge badge-secondary">Concrete numbers</span>
+              <span class="badge badge-secondary">Closes with a question</span>
+              <span class="badge badge-secondary">No emojis</span>
+            </div>
+            <div>
+              <div class="pov-sec-label">Attribute strength</div>
+              <div class="ds-hbars">
+                <div class="ds-hbar-row"><span class="ds-hbar-name">Direct</span><div class="ds-hbar-track"><div class="ds-hbar-fill" style="width:92%;opacity:1"></div></div><span class="ds-hbar-val">92</span></div>
+                <div class="ds-hbar-row"><span class="ds-hbar-name">Plain-spoken</span><div class="ds-hbar-track"><div class="ds-hbar-fill" style="width:85%;opacity:0.95"></div></div><span class="ds-hbar-val">85</span></div>
+                <div class="ds-hbar-row"><span class="ds-hbar-name">Contrarian</span><div class="ds-hbar-track"><div class="ds-hbar-fill" style="width:78%;opacity:0.89"></div></div><span class="ds-hbar-val">78</span></div>
+                <div class="ds-hbar-row"><span class="ds-hbar-name">Data-backed</span><div class="ds-hbar-track"><div class="ds-hbar-fill" style="width:64%;opacity:0.79"></div></div><span class="ds-hbar-val">64</span></div>
+                <div class="ds-hbar-row"><span class="ds-hbar-name">Playful</span><div class="ds-hbar-track"><div class="ds-hbar-fill" style="width:41%;opacity:0.61"></div></div><span class="ds-hbar-val">41</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="wcard">
+            <div class="wcard-head"><span class="wcard-title">Guide confidence</span><span class="wcard-sub">How closely drafts read like Poppi</span></div>
+            <div class="ring-center">
+              <div class="sring good">
+                <svg class="sring-svg" viewBox="0 0 120 120">
+                  <circle class="sring-track" cx="60" cy="60" r="52"/>
+                  <circle class="sring-arc" cx="60" cy="60" r="52" stroke-dasharray="297 327" transform="rotate(-90 60 60)"/>
+                  <text class="sring-num" x="60" y="60" dominant-baseline="central" text-anchor="middle">91</text>
+                </svg>
+                <div class="sring-label">Style confidence</div>
+                <div class="sring-delta">7D AVG <span class="up">▲ 2.4</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="wcard">
+            <div class="wcard-head"><span class="wcard-title">Sounds like Poppi</span><span class="wcard-sub">Reference sentences the guide writes toward</span></div>
+            <div class="quote-list">
+              <div class="quote-card"><div class="quote-title">From a posted reply · Jun 28</div><div class="quote-text">"The metric everyone optimizes for is the one that matters least."</div></div>
+              <div class="quote-card"><div class="quote-title">From a writing sample · call transcript</div><div class="quote-text">"I'd rather lose an argument in public than win one nobody saw."</div></div>
+              <div class="quote-card"><div class="quote-title">From a posted reply · Jun 21</div><div class="quote-text">"Buyers don't remember who monitored the conversation. They remember who answered."</div></div>
+            </div>
+          </div>
+          <div class="wcard">
+            <div class="wcard-head"><span class="wcard-title">Learned from your edits</span><span class="wcard-sub">Every edit refines the guide — latest lessons</span></div>
+            <div class="alert-list card-scroll">
+              <div class="alert-item"><div class="alert-dot-col"><span class="alert-dot"></span></div><div class="alert-inner"><div class="alert-content"><span class="alert-condition"><span class="alert-condition-main">Cut "I think" openers</span> <span class="alert-condition-detail">— deleted in 6 of 8 recent drafts.</span></span><span class="alert-delivery">Applied to generate-reply · 2d ago</span></div></div></div>
+              <div class="alert-item"><div class="alert-dot-col"><span class="alert-dot"></span></div><div class="alert-inner"><div class="alert-content"><span class="alert-condition"><span class="alert-condition-main">Prefer "buyers" over "audiences"</span> <span class="alert-condition-detail">— swapped in every edited draft this week.</span></span><span class="alert-delivery">Applied to derive-style-guide · 3d ago</span></div></div></div>
+              <div class="alert-item"><div class="alert-dot-col"><span class="alert-dot"></span></div><div class="alert-inner"><div class="alert-content"><span class="alert-condition"><span class="alert-condition-main">Close founder replies with a question</span> <span class="alert-condition-detail">— pattern found across 5 posted replies.</span></span><span class="alert-delivery">Applied to generate-reply · 5d ago</span></div></div></div>
+              <div class="alert-item"><div class="alert-dot-col"><span class="alert-dot"></span></div><div class="alert-inner"><div class="alert-content"><span class="alert-condition"><span class="alert-condition-main">Never open by restating the thread</span> <span class="alert-condition-detail">— rewrote every draft that did.</span></span><span class="alert-delivery">Applied to generate-reply · 1w ago</span></div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── VIEW: Prompt Logs ── -->
+      <div class="view" id="view-logs">
+        <div class="page-head">
+          <div>
+            <h1>Runs</h1>
+            <div class="sub">Read-only agent run history · platform admins only.</div>
+          </div>
+        </div>
+        <div class="wcard" style="padding:0;gap:0">
+          <div class="table-wrap">
+            <table class="wui-table">
+              <thead><tr><th style="padding-left:24px">Run</th><th>Agent</th><th>User</th><th>Duration</th><th>Tokens</th><th>Cost</th><th>When</th></tr></thead>
+              <tbody>
+                <tr><td style="padding-left:24px" class="tabular">run_8f42</td><td><span class="badge badge-secondary badge-sm agent-badge">score-opportunity</span></td><td>justin@waldo.fyi</td><td class="tabular">4.2s</td><td class="tabular">6,240</td><td class="tabular log-cost">$0.048</td><td class="log-cost">12 min ago</td></tr>
+                <tr><td style="padding-left:24px" class="tabular">run_8f41</td><td><span class="badge badge-secondary badge-sm agent-badge">generate-reply</span></td><td>justin@waldo.fyi</td><td class="tabular">11.8s</td><td class="tabular">14,912</td><td class="tabular log-cost">$0.212</td><td class="log-cost">14 min ago</td></tr>
+                <tr><td style="padding-left:24px" class="tabular">run_8f3e</td><td><span class="badge badge-secondary badge-sm agent-badge">derive-style-guide</span></td><td>jenny@waldo.fyi</td><td class="tabular">27.4s</td><td class="tabular">41,077</td><td class="tabular log-cost">$0.633</td><td class="log-cost">1h ago</td></tr>
+                <tr><td style="padding-left:24px" class="tabular">run_8f3b</td><td><span class="badge badge-secondary badge-sm agent-badge">generate-reply</span></td><td>justin@waldo.fyi</td><td class="tabular">9.6s</td><td class="tabular">12,480</td><td class="tabular log-cost">$0.178</td><td class="log-cost">3h ago</td></tr>
+                <tr><td style="padding-left:24px" class="tabular">run_8f37</td><td><span class="badge badge-secondary badge-sm agent-badge">learn-from-edit</span></td><td>justin@waldo.fyi</td><td class="tabular">6.1s</td><td class="tabular">8,355</td><td class="tabular log-cost">$0.121</td><td class="log-cost">3h ago</td></tr>
+                <tr><td style="padding-left:24px" class="tabular">run_8f2f</td><td><span class="badge badge-secondary badge-sm agent-badge">score-opportunity</span></td><td>jenny@waldo.fyi</td><td class="tabular">3.8s</td><td class="tabular">5,904</td><td class="tabular log-cost">$0.044</td><td class="log-cost">5h ago</td></tr>
+                <tr><td style="padding-left:24px" class="tabular">run_8f2a</td><td><span class="badge badge-secondary badge-sm agent-badge">generate-reply</span></td><td>justin@waldo.fyi</td><td class="tabular">10.9s</td><td class="tabular">13,668</td><td class="tabular log-cost">$0.195</td><td class="log-cost">7h ago</td></tr>
+                <tr><td style="padding-left:24px" class="tabular">run_8f19</td><td><span class="badge badge-secondary badge-sm agent-badge">derive-style-guide</span></td><td>justin@waldo.fyi</td><td class="tabular">24.7s</td><td class="tabular">38,210</td><td class="tabular log-cost">$0.590</td><td class="log-cost">1d ago</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row" style="margin-top:16px">
+          <div class="wcard">
+            <div class="wcard-head"><span class="wcard-title">Step trace — run_8f42</span><span class="wcard-sub">score-opportunity · per-run steps, inputs and outputs</span></div>
+            <div class="wcode-block">
+              <div class="wcode-block-header">
+                <button class="wcode-block-action" onclick="toast('Trace copied — demo')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                  Copy trace
+                </button>
+              </div>
+              <pre class="wcode-block-body">step 1 · fetch-thread        r/startups · 24 replies · ok · 0.4s
+step 2 · embed-povs          4 active POVs · cached · 0.1s
+step 3 · score               pov="daily-cadence" → 0.92  (0.8+ = POV directly answers it)
+                             pov="listening-budget" → 0.31
+                             pov="ai-drafts" → 0.24
+step 4 · verdict             surface · queue=opportunities · cost $0.048</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── VIEW: shared placeholder (not-yet-built sections) ── -->
+      <div class="view" id="view-soon">
+        <div class="page-head">
+          <div>
+            <h1 id="soon-title">Section</h1>
+            <div class="sub" id="soon-sub">Part of the expanded agency ecosystem.</div>
+          </div>
+        </div>
+        <div class="wcard" style="background:transparent;padding:0">
+          <div class="wempty wempty-page">
+            <div class="wempty-icon" id="soon-icon"></div>
+            <div class="wempty-title" id="soon-empty-title">Available when connected to Poppi's Waldo workspace</div>
+            <div class="wempty-desc" id="soon-empty-desc">This view will draw live data from the Waldo Brand Intelligence API.</div>
+            <div class="wempty-action"><button class="btn btn-default" style="height:32px;font-size:var(--fs-sm)" onclick="toast('Connect workspace — demo')">Connect workspace</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="api-foot">Prototype · POV AMP recreated on the Waldo Design System · agency cockpit shell · synthetic data, fixed to Jul 3, 2026</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-vp" id="toast-vp">
+  <div class="wtoast">
+    <div class="wtoast-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <div class="wtoast-body"><span class="wtoast-title" id="toast-msg"></span></div>
+  </div>
+</div>
+
+<script>
+/* ════ ICONS ════ */
+var IC = {
+  target: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+  chat:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+  trend:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
+  swords: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" y1="19" x2="19" y2="13"/><line x1="16" y1="16" x2="20" y2="20"/><polyline points="9.5 14.5 21 3 18 3"/></svg>',
+  book:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+  pen:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
+  msg:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"/><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/></svg>',
+  inbox:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>',
+  clock:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  send:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
+  pulse:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
+  logs:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>'
+};
+
+/* ════ NAV MODEL ════
+   view: id of a real .view · null: routes to the shared placeholder */
+var NAV = [
+  { section: 'Listen' },
+  { id: 'opps',  label: 'Opportunities',   icon: 'target', count: 18, view: 'opps' },
+  { id: 'convo', label: 'Conversations',   icon: 'chat',   view: 'convo' },
+  { id: 'trends',label: 'Trends & signals',icon: 'trend',  view: null },
+  { id: 'comp',  label: 'Competitors',     icon: 'swords', view: null },
+  { section: 'Voice' },
+  { id: 'povs',  label: 'POV Library',     icon: 'book',   count: 4, view: 'povs' },
+  { id: 'style', label: 'Style guide',     icon: 'pen',    view: 'style' },
+  { id: 'msg',   label: 'Messages & narrative', icon: 'msg', view: null },
+  { section: 'Publish' },
+  { id: 'queue', label: 'Review queue',    icon: 'inbox',  count: 6, view: null },
+  { id: 'sched', label: 'Scheduled',       icon: 'clock',  view: null },
+  { id: 'pub',   label: 'Published',       icon: 'send',   view: null },
+  { section: 'Measure' },
+  { id: 'impact',label: 'Impact & performance', icon: 'pulse', view: null },
+  { id: 'logs',  label: 'Runs',            icon: 'logs',   view: 'logs' }
+];
+
+/* ════ RENDER NAV ════ */
+(function () {
+  var html = '';
+  NAV.forEach(function (n) {
+    if (n.section) { html += '<div class="wnav-section">' + n.section + '</div>'; return; }
+    var count = n.count != null ? '<span class="wnav-count">' + n.count + '</span>' : '';
+    html += '<a class="wnav-item" data-id="' + n.id + '" onclick="go(\'' + n.id + '\')">'
+          + '<span class="wnav-icon">' + IC[n.icon] + '</span>'
+          + '<span class="wnav-label">' + n.label + '</span>' + count + '</a>';
+  });
+  document.getElementById('nav').innerHTML = html;
+
+  // Mobile: top-level real views only
+  var mob = '';
+  NAV.filter(function (n) { return n.view; }).forEach(function (n) {
+    mob += '<a class="wnav-item" data-id="' + n.id + '" onclick="go(\'' + n.id + '\')"><span class="wnav-label">' + n.label + '</span></a>';
+  });
+  document.getElementById('mobile-nav').innerHTML = mob;
+})();
+
+/* ════ ROUTER ════ */
+function go(id) {
+  var item = NAV.find(function (n) { return n.id === id; });
+  if (!item) return;
+
+  document.querySelectorAll('.view').forEach(function (v) { v.classList.remove('active'); });
+  if (item.view) {
+    document.getElementById('view-' + item.view).classList.add('active');
+  } else {
+    // placeholder — populate with this section's name + icon
+    document.getElementById('soon-title').textContent = item.label;
+    document.getElementById('soon-icon').innerHTML = IC[item.icon];
+    document.getElementById('soon-empty-title').textContent = item.label + " — available when connected to Poppi's Waldo workspace";
+    document.getElementById('view-soon').classList.add('active');
+  }
+  document.querySelectorAll('.wnav-item').forEach(function (a) {
+    a.classList.toggle('active', a.dataset.id === id);
+  });
+  if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
+  window.scrollTo(0, 0);
+}
+
+/* Deep-link on load */
+(function () {
+  var id = location.hash.replace('#', '');
+  go(NAV.find(function (n) { return n.id === id; }) ? id : 'opps');
+})();
+
+/* ════ INTERACTIONS ════ */
+function segSelect(btn) {
+  btn.parentElement.querySelectorAll('.wseg-opt').forEach(function (b) {
+    b.classList.toggle('active', b === btn);
+    b.classList.toggle('inactive', b !== btn);
+  });
+}
+function skipOpp(btn) {
+  btn.closest('.opp-card').classList.add('is-skipped');
+  toast('Skipped — the feed learns from what you pass on');
+}
+document.querySelectorAll('.opp-favicon, .comment-favicon').forEach(function (img) {
+  img.addEventListener('error', function () { img.style.visibility = 'hidden'; });
+});
+var toastTimer = null;
+function toast(msg) {
+  document.getElementById('toast-msg').textContent = msg;
+  var vp = document.getElementById('toast-vp');
+  vp.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { vp.classList.remove('show'); }, 2600);
+}
+</script>
+</body>
+</html>

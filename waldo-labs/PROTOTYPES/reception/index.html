@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reception — Ad social-listening</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  /* ── Required DS conflict overrides (doctrine — verbatim) ──
+     waldo-ds.css sets html,body{height:100%;overflow:hidden} — breaks scroll.
+     Scroll override goes on html ONLY: any overflow other than visible on body
+     silently kills position:sticky (the sticky topbar scrolls away). */
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  /* waldo-ds.css sets body{display:flex!important} — collapses card widths */
+  body { display: block !important; }
+  /* waldo-ds.css sets svg{display:block} — collapses ring/icon SVGs inside flex containers */
+  svg { flex: none; min-height: fit-content; }
+
+  body { max-width: none !important; margin: 0 !important; padding: 0 !important;
+         background: hsl(var(--background)); color: hsl(var(--foreground));
+         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+         -webkit-font-smoothing: antialiased; }
+  * { box-sizing: border-box; }
+
+  /* Kill any injected card border ([class*=card] DS collision) — elevation only */
+  .wcard, .kpi, .comment-card, .rcp-camp-card, .rcp-cmp-card { border: none !important; }
+
+  /* ── Shell ── */
+  .rcp-wrap { max-width: 1184px; margin: 0 auto; padding: 0 24px 96px; }
+  .rcp-page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; padding: 40px 0 24px; }
+  .rcp-ph-title { font-size: 32px; font-weight: 600; line-height: 40px; letter-spacing: -0.8px; color: hsl(var(--foreground)); }
+  .rcp-ph-sub { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); margin-top: 6px; }
+  .rcp-section { margin: 36px 0 0; }
+  .rcp-section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 6px; }
+  .rcp-section-title { font-size: var(--fs-lg); font-weight: 600; letter-spacing: -0.36px; }
+  .rcp-section-meta { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; }
+  .rcp-section-sub { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); line-height: 1.55; max-width: 720px; margin-bottom: 16px; }
+  .rcp-grid-2 { display: flex; gap: 16px; align-items: stretch; }
+  .rcp-grid-2 > * { flex: 1; min-width: 0; }
+  .rcp-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .rcp-card-slim { padding: 20px 24px; gap: 12px; }
+  .rcp-num { font-variant-numeric: tabular-nums; }
+
+  /* ── Landing controls ── */
+  .rcp-controls { display: flex; align-items: center; gap: 12px; margin: 24px 0; }
+  .rcp-search { width: 300px; max-width: 100%; margin-left: auto; }
+  .rcp-search .input { height: 36px; }
+
+  /* ── Campaign card (composed: wcard shell + spk sparkline + DS badges) ── */
+  .rcp-camp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+  .rcp-camp-card { background: hsl(var(--card)); border-radius: var(--radius-2xl); padding: 20px;
+    display: flex; flex-direction: column; gap: 10px; cursor: pointer; text-align: left;
+    font: inherit; color: inherit; width: 100%; transition: background 0.12s; }
+  .rcp-camp-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--card))); }
+  .rcp-cc-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .rcp-cc-name { font-size: var(--fs-base); font-weight: 600; letter-spacing: -0.32px; line-height: 1.35; }
+  .rcp-cc-meta { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); line-height: 1.45; min-height: 34px; overflow: hidden; }
+  .rcp-cc-spark { height: 40px; margin: 2px 0 4px; }
+  .rcp-cc-spark svg { width: 100%; height: 100%; overflow: visible; }
+  .rcp-cc-foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding-top: 12px; border-top: 1px solid hsl(var(--border)); }
+  .rcp-cc-score-num { font-size: 28px; font-weight: 600; letter-spacing: -0.6px; line-height: 1; font-variant-numeric: tabular-nums; }
+  .rcp-cc-score-num.zone-good { color: hsl(var(--primary)); }
+  .rcp-cc-score-num.zone-mid  { color: hsl(var(--warning)); }
+  .rcp-cc-score-num.zone-low  { color: hsl(var(--destructive)); }
+  .rcp-cc-mlbl { font-size: 10px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: hsl(var(--muted-foreground)); margin-top: 5px; }
+  .rcp-cc-net { text-align: right; }
+  .rcp-cc-net-val { font-size: var(--fs-base); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .rcp-cc-net-val.up { color: hsl(var(--primary)); }
+  .rcp-cc-net-val.dn { color: hsl(var(--warning)); }
+  .rcp-cc-pillars { display: flex; gap: 10px; align-items: flex-end; }
+  .rcp-ccp { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .rcp-ccp-bar { width: 6px; height: 28px; background: hsl(var(--secondary)); border-radius: 9999px; display: flex; align-items: flex-end; overflow: hidden; }
+  .rcp-ccp-bar span { display: block; width: 100%; border-radius: 9999px; }
+  .rcp-ccp-l { font-size: 10px; font-weight: 400; color: hsl(var(--muted-foreground)); }
+  .rcp-empty { color: hsl(var(--muted-foreground)); font-size: var(--fs-sm); padding: 24px 4px; }
+
+  /* ── Detail: campaign bar + context ── */
+  .rcp-camp-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 24px 0 0; }
+  .rcp-back { background: none; border: none; color: hsl(var(--highlight)); font: inherit; font-size: var(--fs-sm); cursor: pointer; padding: 0; display: inline-flex; align-items: center; gap: 5px; }
+  .rcp-back:hover { opacity: 0.85; }
+  .rcp-flight { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; }
+  .rcp-context { margin-top: 16px; }
+  .rcp-ctx-eyebrow { font-size: var(--fs-xs); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
+  .rcp-ctx-text { font-size: var(--fs-sm); line-height: 1.55; color: hsl(var(--foreground)); }
+  .rcp-ctx-where { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .rcp-ctx-where b { color: hsl(var(--foreground)); font-weight: 500; }
+
+  /* ── Score Ring (canonical — showcase #comp-score-ring) ── */
+  .sring-row { display: flex; gap: 16px; align-items: stretch; }
+  .sring-row > .sring { flex: 1; min-width: 0; }
+  .sring { background: hsl(var(--card)); border-radius: var(--radius-xl); padding: 22px 20px; display: flex; flex-direction: column; align-items: center; }
+  .sring.hero { padding: 28px 24px; box-shadow: 0 0 0 1px color-mix(in srgb, hsl(var(--foreground)) 6%, transparent), 0 24px 48px -18px color-mix(in srgb, hsl(var(--background)) 85%, transparent); }
+  .sring-svg { width: 120px; height: 120px; display: block; flex: none; }
+  .sring.hero .sring-svg { width: 184px; height: 184px; }
+  .sring-track { fill: none; stroke: color-mix(in srgb, hsl(var(--foreground)) 8%, transparent); stroke-width: 4; }
+  .sring.hero .sring-track { stroke-width: 5; }
+  .sring-arc { fill: none; stroke-width: 4; stroke-linecap: round; transition: stroke-dasharray 0.5s ease-out; }
+  .sring.hero .sring-arc { stroke-width: 5; }
+  .sring.good .sring-arc { stroke: hsl(var(--primary)); }
+  .sring.watch .sring-arc { stroke: hsl(var(--warning)); }
+  .sring.risk .sring-arc { stroke: hsl(var(--destructive)); }
+  .sring-num { font-size: 28px; font-weight: 400; letter-spacing: -0.02em; fill: hsl(var(--foreground)); }
+  .sring.hero .sring-num { font-size: 44px; }
+  .sring-label { font-size: var(--fs-xs); font-weight: 400; letter-spacing: -0.02em; color: hsl(var(--muted-foreground)); margin-top: 8px; }
+  .sring.hero .sring-label { font-size: var(--fs-sm); color: hsl(var(--foreground)); margin-top: 12px; }
+  .sring-delta { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 6px; font-variant-numeric: tabular-nums; }
+  .sring-delta .up { color: hsl(var(--primary)); font-weight: 500; }
+  .sring-delta .dn { color: hsl(var(--destructive)); font-weight: 500; }
+  .rcp-ring-sub { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 2px; }
+  .rcp-zone { margin-top: 8px; }
+
+  /* ── Tabs (DS text variant — bar line is component-internal) ── */
+  .rcp-tabs { border-bottom: 1px solid hsl(var(--border)); margin-top: 32px; }
+  .rcp-tab-panel { display: none; }
+  .rcp-tab-panel.active { display: block; }
+
+  /* ── Baseline compare card (campaign vs brand vs category) ── */
+  .rcp-cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .rcp-cmp-card { background: hsl(var(--card)); border-radius: var(--radius-2xl); padding: 20px 22px; display: flex; flex-direction: column; gap: 10px; }
+  .rcp-cmp-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .rcp-cmp-title { font-size: var(--fs-sm); font-weight: 500; letter-spacing: -0.28px; }
+  .rcp-cmp-row { display: grid; grid-template-columns: 108px 1fr 66px; gap: 12px; align-items: center; }
+  .rcp-cmp-lbl { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rcp-cmp-lbl.you { color: hsl(var(--foreground)); font-weight: 500; }
+  .rcp-cmp-track { height: 6px; background: hsl(var(--secondary)); border-radius: 9999px; overflow: hidden; }
+  .rcp-cmp-fill { display: block; height: 100%; border-radius: 9999px; }
+  .rcp-cmp-fill.you  { background: hsl(var(--primary)); }
+  .rcp-cmp-fill.base { background: hsl(var(--muted-foreground) / 0.55); }
+  .rcp-cmp-fill.cat  { background: hsl(var(--muted-foreground) / 0.28); }
+  .rcp-cmp-val { font-size: var(--fs-xs); text-align: right; font-variant-numeric: tabular-nums; color: hsl(var(--muted-foreground)); }
+  .rcp-cmp-val.you { color: hsl(var(--foreground)); font-weight: 500; }
+  .rcp-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 14px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .rcp-legend .lg { display: flex; align-items: center; gap: 6px; }
+  .rcp-legend .lg-swatch { width: 14px; height: 6px; border-radius: 4px; flex: none; }
+  .rcp-legend .lg-dash { width: 14px; height: 0; border-top: 1.5px dashed hsl(var(--muted-foreground)); flex: none; }
+  .rcp-legend .lg-tick { width: 0; height: 12px; border-left: 2px dashed hsl(var(--highlight)); flex: none; }
+
+  /* ── Area chart ── */
+  .rcp-area-svg { width: 100%; height: 220px; display: block; }
+
+  /* ── Donut (SVG, thin ring) ── */
+  .rcp-donut-wrap { display: flex; align-items: center; gap: 20px; }
+  .rcp-donut-svg { width: 128px; height: 128px; flex: none; }
+  .rcp-donut-legend { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .rcp-lg-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: var(--fs-xs); }
+  .rcp-lg-name { display: flex; align-items: center; gap: 8px; color: hsl(var(--muted-foreground)); text-transform: capitalize; }
+  .rcp-lg-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .rcp-lg-pct { font-variant-numeric: tabular-nums; font-weight: 500; color: hsl(var(--foreground)); }
+  .rcp-favicon { width: 14px; height: 14px; border-radius: 2px; flex: none; background: hsl(var(--secondary)); object-fit: contain; }
+
+  /* ── Readout ── */
+  .rcp-readout { font-size: var(--fs-sm); line-height: 1.6; color: hsl(var(--muted-foreground)); display: flex; flex-direction: column; gap: 10px; }
+  .rcp-readout b { font-weight: 600; color: hsl(var(--foreground)); }
+  .rcp-readout .hl-primary { color: hsl(var(--primary)); }
+  .rcp-readout .hl-warn { color: hsl(var(--warning)); }
+
+  /* ── Emotion / distribution bars (HBar-family rows) ── */
+  .rcp-hbar-row { display: grid; grid-template-columns: 168px 1fr 44px; gap: 12px; align-items: center; padding: 7px 0; }
+  .rcp-hbar-name { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); display: flex; align-items: center; gap: 7px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rcp-hbar-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+  .rcp-hbar-dot.pos { background: hsl(var(--primary)); }
+  .rcp-hbar-dot.neg { background: hsl(var(--warning)); }
+  .rcp-hbar-dot.neu { background: hsl(var(--muted-foreground)); }
+  .rcp-hbar-dot.mix { background: hsl(var(--highlight)); }
+  .rcp-hbar-track { height: 6px; background: hsl(var(--secondary)); border-radius: 9999px; overflow: hidden; }
+  .rcp-hbar-fill { display: block; height: 100%; border-radius: 9999px; }
+  .rcp-hbar-fill.pos { background: hsl(var(--primary)); }
+  .rcp-hbar-fill.neg { background: hsl(var(--warning)); }
+  .rcp-hbar-fill.neu { background: hsl(var(--muted-foreground)); }
+  .rcp-hbar-fill.mix { background: hsl(var(--highlight)); }
+  .rcp-hbar-val { font-size: var(--fs-xs); font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; color: hsl(var(--muted-foreground)); }
+
+  /* ── Proportion Bar (canonical — showcase #chart-page-proportion) ── */
+  .senti-row { display: flex; align-items: center; gap: 14px; padding: 7px 0; }
+  .senti-label { width: 110px; flex: none; font-size: var(--fs-sm); font-weight: 400; letter-spacing: -0.28px; color: hsl(var(--muted-foreground)); display: flex; align-items: center; gap: 8px; text-transform: capitalize; }
+  .senti-bar { flex: 1; height: 10px; border-radius: 9999px; overflow: hidden; display: flex; background: hsl(var(--secondary)); }
+  .senti-seg { height: 100%; }
+  .senti-seg.pos { background: hsl(var(--primary)); }
+  .senti-seg.neu { background: hsl(var(--muted-foreground)); }
+  .senti-seg.neg { background: hsl(var(--warning)); }
+  .senti-seg.mix { background: hsl(var(--highlight)); }
+  .senti-val { width: 40px; flex: none; text-align: right; font-size: var(--fs-sm); font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.28px; color: hsl(var(--muted-foreground)); }
+  .senti-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 14px; padding-top: 14px; border-top: 1px solid hsl(var(--border)); }
+  .senti-legend-item { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); letter-spacing: -0.24px; color: color-mix(in srgb,hsl(var(--foreground)) 70%,transparent); }
+  .senti-swatch { width: 14px; height: 8px; border-radius: 4px; flex: none; }
+  .senti-swatch.pos { background: hsl(var(--primary)); }
+  .senti-swatch.neu { background: hsl(var(--muted-foreground)); }
+  .senti-swatch.neg { background: hsl(var(--warning)); }
+  .senti-swatch.mix { background: hsl(var(--highlight)); }
+
+  /* ── Theme Pill (canonical — showcase #comp-theme-pill) ── */
+  .theme-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+  .theme-pill { display: inline-flex; align-items: center; padding: 5px 11px; border-radius: 9999px; font-size: var(--fs-xs); font-weight: 500; letter-spacing: -0.02em; border: 1px solid transparent; }
+  .theme-pill.pos { background: color-mix(in srgb,hsl(var(--primary)) 12%,transparent); color: hsl(var(--primary)); border-color: color-mix(in srgb,hsl(var(--primary)) 25%,transparent); }
+  .theme-pill.neu { background: color-mix(in srgb,hsl(var(--muted-foreground)) 10%,transparent); color: hsl(var(--muted-foreground)); border-color: color-mix(in srgb,hsl(var(--muted-foreground)) 22%,transparent); }
+  .theme-pill.neg { background: color-mix(in srgb,hsl(var(--warning)) 12%,transparent); color: hsl(var(--warning)); border-color: color-mix(in srgb,hsl(var(--warning)) 25%,transparent); }
+  .theme-pill.mix { background: color-mix(in srgb,hsl(var(--highlight)) 12%,transparent); color: hsl(var(--highlight)); border-color: color-mix(in srgb,hsl(var(--highlight)) 25%,transparent); }
+  .theme-pill-freq { opacity: 0.7; margin-left: 6px; font-variant-numeric: tabular-nums; }
+
+  /* ── Live Badge (canonical — showcase #comp-live-badge) ── */
+  .live-badge { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-xs); font-weight: 500; padding: 4px 10px; border-radius: 20px; letter-spacing: -0.24px; white-space: nowrap; }
+  .live-badge.active { background: color-mix(in srgb,hsl(var(--destructive)) 10%,transparent); color: hsl(var(--destructive)); }
+  .live-badge.inactive { background: hsl(var(--secondary)); color: hsl(var(--muted-foreground)); }
+  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: hsl(var(--destructive)); flex: none; }
+  @keyframes live-pulse { 0%,100%{ opacity:1; transform:scale(1); } 50%{ opacity:0.5; transform:scale(1.4); } }
+  .live-dot.pulse { animation: live-pulse 1.4s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) { .live-dot.pulse { animation: none; } }
+
+  /* ── Benchmark Bar (canonical — showcase #comp-benchmark-bar) ── */
+  .bench-bar { display: flex; flex-direction: column; gap: 6px; }
+  .bench-bar-top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .bench-bar-label { font-size: var(--fs-xs); font-weight: 400; color: hsl(var(--foreground)); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bench-bar-right { display: flex; align-items: baseline; gap: 5px; flex: none; }
+  .bench-bar-val { font-size: var(--fs-xs); font-weight: 400; color: hsl(var(--foreground)); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .bench-bar-ref { font-size: var(--fs-xs); font-weight: 400; color: hsl(var(--muted-foreground)); white-space: nowrap; }
+  .bench-bar-track { position: relative; height: 6px; border-radius: 9999px; background: color-mix(in srgb, hsl(var(--foreground)) 8%, transparent); overflow: visible; }
+  .bench-bar-fill { display: block; height: 100%; border-radius: 9999px; transition: width 0.3s ease; }
+  .bench-bar-marker { position: absolute; top: -3px; bottom: -3px; width: 2px; border-radius: 1px; background: color-mix(in srgb, hsl(var(--foreground)) 30%, transparent); transform: translateX(-50%); }
+  .bench-bar.good .bench-bar-fill { background: hsl(var(--primary)); }
+  .bench-bar.bad  .bench-bar-fill { background: hsl(var(--destructive)); }
+  .bench-bar.warn .bench-bar-fill { background: hsl(var(--warning)); }
+  .bench-bar.neutral .bench-bar-fill { background: color-mix(in srgb, hsl(var(--muted-foreground)) 50%, transparent); }
+  .rcp-bench-stack { display: flex; flex-direction: column; gap: 14px; }
+
+  /* ── Comment Card foot theme label (composition on the DS comment-card) ── */
+  .rcp-verbatim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .rcp-comment-theme { font-size: 10px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: hsl(var(--muted-foreground)); background: hsl(var(--secondary)); padding: 2px 8px; border-radius: 9999px; }
+
+  /* ── Compare table extras (wui-table) ── */
+  .rcp-table-card { overflow-x: auto; }
+  table.wui-table td { font-variant-numeric: tabular-nums; }
+  tr.rcp-you td:first-child { color: hsl(var(--primary)); font-weight: 600; }
+  tr.rcp-cat td { color: hsl(var(--muted-foreground)); }
+
+  /* ── Pull-through stat tiles (DS KPI card) ── */
+  /* the theme ships no --fs-4xl (canonical .k-value size, 30px) — guard with the
+     nearest theme token until VALIDATOR lands the token (reported) */
+  .k-value { font-size: var(--fs-5xl); }
+  .rcp-pt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px; }
+  .k-value.pt-good { color: hsl(var(--primary)); }
+  .k-value.pt-warn { color: hsl(var(--warning)); }
+  .k-value.pt-bad  { color: hsl(var(--destructive)); }
+
+  /* ── Toast (DS banner, bottom-center) ── */
+  .rcp-toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(12px);
+    z-index: 250; opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.25s cubic-bezier(0.2,0.8,0.2,1);
+    width: max-content; max-width: calc(100vw - 32px); }
+  .rcp-toast.open { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── Footer note ── */
+  .rcp-foot { margin-top: 56px; text-align: center; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); line-height: 1.7; }
+  .rcp-foot a { color: hsl(var(--primary)); text-decoration: none; }
+  .rcp-foot a:hover { opacity: 0.85; }
+
+  /* ── Dialog form ── */
+  .rcp-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .rcp-mode-fields { display: none; }
+  .rcp-mode-fields.active { display: block; }
+  .rcp-dialog-form { display: flex; flex-direction: column; gap: 16px; }
+
+  @media (max-width: 860px) {
+    .rcp-grid-2, .rcp-cmp-grid, .rcp-verbatim-grid, .rcp-pt-grid, .rcp-grid-3 { display: flex; flex-direction: column; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .sring-row { flex-wrap: wrap; }
+    .sring-row > .sring { flex: 1 1 40%; }
+    .sring-row > .sring.hero { flex: 1 1 100%; }
+    .rcp-controls { flex-wrap: wrap; }
+    .rcp-search { margin-left: 0; width: 100%; }
+    .rcp-tabs { overflow-x: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== App Header (canonical — showcase #comp-app-header) ===== -->
+<header class="app-header">
+  <div class="app-header-inner">
+    <div class="app-ident">
+      <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" style="color:var(--foreground)" xmlns="http://www.w3.org/2000/svg" aria-label="Waldo"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
+      <span class="product">Reception</span>
+    </div>
+    <nav class="app-nav">
+      <a class="active" href="#/" id="nav-campaigns">Campaigns</a>
+      <a href="#" id="nav-add">New campaign</a>
+      <a href="apireqs.html">API requirements</a>
+    </nav>
+  </div>
+</header>
+
+<div class="rcp-wrap">
+
+  <!-- ===== LANDING — campaign list ===== -->
+  <div id="view-list">
+    <div class="rcp-page-head">
+      <div>
+        <div class="rcp-ph-title">Campaigns</div>
+        <div class="rcp-ph-sub">Liquid Death · Social-listening on your ad campaigns — how each one actually landed.</div>
+      </div>
+      <button class="btn btn-default" id="add-camp-btn">Add campaign</button>
+    </div>
+
+    <div class="kpi-grid" id="kpi-strip"></div>
+
+    <div class="rcp-controls">
+      <div class="wseg" id="filter-seg">
+        <button class="wseg-opt active" data-f="all" type="button">All</button>
+        <button class="wseg-opt inactive" data-f="live" type="button">Live</button>
+        <button class="wseg-opt inactive" data-f="ended" type="button">Ended</button>
+      </div>
+      <div class="rcp-search input-with-icon">
+        <div class="input-icon">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <input class="input" id="search-input" type="text" placeholder="Search campaigns…">
+      </div>
+    </div>
+
+    <div class="rcp-camp-grid" id="camp-list"></div>
+  </div>
+
+  <!-- ===== DETAIL — campaign dashboard ===== -->
+  <div id="view-detail" hidden>
+
+    <div class="rcp-camp-bar">
+      <button class="rcp-back" id="back-list">← All campaigns</button>
+      <div class="select-wrap"><select id="camp-select"></select></div>
+      <span class="badge badge-secondary" id="camp-type"></span>
+      <span class="rcp-flight" id="camp-flight"></span>
+    </div>
+
+    <div class="wcard rcp-card-slim rcp-context">
+      <div class="rcp-ctx-eyebrow">What we're listening for</div>
+      <div class="rcp-ctx-text" id="ctx-text"></div>
+      <div class="rcp-ctx-where" id="ctx-where"></div>
+    </div>
+
+    <!-- Hero — Reception Score + pillar rings (DS Score Ring) -->
+    <div class="rcp-section">
+      <div class="sring-row">
+        <div class="sring hero" id="ring-card-reception">
+          <svg class="sring-svg" viewBox="0 0 120 120">
+            <circle class="sring-track" cx="60" cy="60" r="52"/>
+            <circle class="sring-arc" id="arc-reception" cx="60" cy="60" r="52" transform="rotate(-90 60 60)"/>
+            <text class="sring-num" id="score-reception" x="60" y="60" dominant-baseline="central" text-anchor="middle">0</text>
+          </svg>
+          <div class="sring-label">Reception Score</div>
+          <div class="rcp-ring-sub">composite ad effectiveness</div>
+          <span class="badge rcp-zone" id="zone-reception">—</span>
+        </div>
+
+        <div class="sring" id="ring-card-breakthrough">
+          <svg class="sring-svg" viewBox="0 0 120 120">
+            <circle class="sring-track" cx="60" cy="60" r="52"/>
+            <circle class="sring-arc" id="arc-breakthrough" cx="60" cy="60" r="52" transform="rotate(-90 60 60)"/>
+            <text class="sring-num" id="score-breakthrough" x="60" y="60" dominant-baseline="central" text-anchor="middle">0</text>
+          </svg>
+          <div class="sring-label">Breakthrough</div>
+          <div class="rcp-ring-sub">did it cut through?</div>
+          <div class="sring-delta">VS PRIOR <span id="d-breakthrough"></span></div>
+        </div>
+
+        <div class="sring" id="ring-card-sentiment">
+          <svg class="sring-svg" viewBox="0 0 120 120">
+            <circle class="sring-track" cx="60" cy="60" r="52"/>
+            <circle class="sring-arc" id="arc-sentiment" cx="60" cy="60" r="52" transform="rotate(-90 60 60)"/>
+            <text class="sring-num" id="score-sentiment" x="60" y="60" dominant-baseline="central" text-anchor="middle">0</text>
+          </svg>
+          <div class="sring-label">Sentiment</div>
+          <div class="rcp-ring-sub">how it landed</div>
+          <div class="sring-delta">VS PRIOR <span id="d-sentiment"></span></div>
+        </div>
+
+        <div class="sring" id="ring-card-pullthrough">
+          <svg class="sring-svg" viewBox="0 0 120 120">
+            <circle class="sring-track" cx="60" cy="60" r="52"/>
+            <circle class="sring-arc" id="arc-pullthrough" cx="60" cy="60" r="52" transform="rotate(-90 60 60)"/>
+            <text class="sring-num" id="score-pullthrough" x="60" y="60" dominant-baseline="central" text-anchor="middle">0</text>
+          </svg>
+          <div class="sring-label">Pull-through</div>
+          <div class="rcp-ring-sub">did the message land?</div>
+          <div class="sring-delta">VS PRIOR <span id="d-pullthrough"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs (DS Tabs — text variant) -->
+    <div class="rcp-tabs">
+      <div class="wtabs-text" role="tablist" aria-label="Campaign views">
+        <button class="wtab-text active" role="tab" aria-selected="true"  data-tab="overview"     onclick="showAreaTab('overview', this)">Overview</button>
+        <button class="wtab-text"        role="tab" aria-selected="false" data-tab="sentiment"    onclick="showAreaTab('sentiment', this)">Sentiment</button>
+        <button class="wtab-text"        role="tab" aria-selected="false" data-tab="conversation" onclick="showAreaTab('conversation', this)">Conversation</button>
+        <button class="wtab-text"        role="tab" aria-selected="false" data-tab="compare"      onclick="showAreaTab('compare', this)">Compare</button>
+      </div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div class="rcp-tab-panel active" id="tab-overview" role="tabpanel">
+      <div class="rcp-section">
+        <div class="rcp-section-head">
+          <div class="rcp-section-title">This campaign vs. normal</div>
+          <div class="rcp-section-meta">flight window vs. trailing baselines</div>
+        </div>
+        <div class="rcp-section-sub">Raw numbers don't mean much alone — what matters is how this campaign's period compares to <b>Liquid Death's own baseline</b> and the <b>category baseline</b>. That's the read on whether it actually moved anything.</div>
+        <div class="rcp-cmp-grid" id="cmp-hero"></div>
+        <div class="rcp-legend">
+          <span class="lg"><span class="lg-swatch" data-fill="primary"></span>This campaign</span>
+          <span class="lg"><span class="lg-swatch" data-fill="base"></span>Liquid Death baseline</span>
+          <span class="lg"><span class="lg-swatch" data-fill="cat"></span>Category baseline</span>
+        </div>
+      </div>
+
+      <div class="rcp-section">
+        <div class="rcp-section-head">
+          <div class="rcp-section-title">Conversation vs. baseline, over time</div>
+          <div class="rcp-section-meta" id="ov-window"></div>
+        </div>
+        <div class="rcp-section-sub">Daily reaction volume against the brand's normal range and the category average, with airings marked. The story is the gap above the band — and on TV/CTV, the spike-and-decay after each spot (there's no click to count).</div>
+        <div class="wcard">
+          <svg class="rcp-area-svg" id="vol-area" viewBox="0 0 800 220" preserveAspectRatio="none"></svg>
+          <div class="rcp-legend">
+            <span class="lg"><span class="lg-swatch" data-fill="primary"></span>This campaign</span>
+            <span class="lg"><span class="lg-swatch" data-fill="band"></span>Brand normal range</span>
+            <span class="lg"><span class="lg-dash"></span>Category average</span>
+            <span class="lg"><span class="lg-tick"></span>Airing / drop</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rcp-section">
+        <div class="rcp-grid-2">
+          <div class="wcard">
+            <div class="wcard-head"><span class="wcard-title">Reception readout</span></div>
+            <div class="rcp-readout" id="readout"></div>
+          </div>
+          <div class="wcard">
+            <div class="wcard-head"><span class="wcard-title">Where the conversation is</span></div>
+            <div class="rcp-donut-wrap">
+              <svg class="rcp-donut-svg" id="ov-platform-donut" viewBox="0 0 100 100"></svg>
+              <div class="rcp-donut-legend" id="ov-platform-legend"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SENTIMENT -->
+    <div class="rcp-tab-panel" id="tab-sentiment" role="tabpanel">
+      <div class="rcp-section">
+        <div class="rcp-grid-2">
+          <div class="wcard">
+            <div class="wcard-head">
+              <span class="wcard-title">Sentiment mix</span>
+              <span class="wcard-sub" id="sent-count"></span>
+            </div>
+            <div class="rcp-donut-wrap">
+              <svg class="rcp-donut-svg" id="sent-donut" viewBox="0 0 100 100"></svg>
+              <div class="rcp-donut-legend" id="sent-legend"></div>
+            </div>
+            <div class="walert walert-warning" id="controversy"></div>
+          </div>
+          <div class="wcard">
+            <div class="wcard-head">
+              <span class="wcard-title">Emotional texture</span>
+              <span class="wcard-sub">Beyond positive/negative — the reaction taxonomy that tells you why people felt something. Share of reactions.</span>
+            </div>
+            <div id="emo-bars"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rcp-section">
+        <div class="rcp-section-head"><div class="rcp-section-title">Sentiment by platform</div></div>
+        <div class="rcp-section-sub">The same creative reads differently per audience. Positive share shown at right.</div>
+        <div class="wcard">
+          <div id="sent-stack"></div>
+          <div class="senti-legend">
+            <span class="senti-legend-item"><span class="senti-swatch pos"></span>Positive</span>
+            <span class="senti-legend-item"><span class="senti-swatch neu"></span>Neutral</span>
+            <span class="senti-legend-item"><span class="senti-swatch neg"></span>Negative</span>
+            <span class="senti-legend-item"><span class="senti-swatch mix"></span>Mixed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONVERSATION -->
+    <div class="rcp-tab-panel" id="tab-conversation" role="tabpanel">
+      <div class="rcp-section">
+        <div class="rcp-section-head">
+          <div class="rcp-section-title">What people are saying</div>
+          <div class="rcp-section-meta" id="conv-count"></div>
+        </div>
+        <div class="rcp-section-sub">Top comments &amp; replies pulled from under the ad and from organic posts referencing it, tagged by sentiment and theme.</div>
+        <div class="rcp-verbatim-grid" id="verbatim-wall"></div>
+      </div>
+
+      <div class="rcp-section">
+        <div class="rcp-section-head"><div class="rcp-section-title">Top reaction themes</div></div>
+        <div class="wcard"><div class="theme-pills" id="theme-pills"></div></div>
+      </div>
+    </div>
+
+    <!-- COMPARE -->
+    <div class="rcp-tab-panel" id="tab-compare" role="tabpanel">
+      <div class="rcp-section">
+        <div class="rcp-section-head"><div class="rcp-section-title">Vs. category baseline</div></div>
+        <div class="rcp-section-sub">Percentile within the beverage / RTD category competitive set over the flight window. The marker is the category median.</div>
+        <div class="wcard"><div class="rcp-bench-stack" id="perc-bars"></div></div>
+      </div>
+
+      <div class="rcp-section">
+        <div class="rcp-section-head"><div class="rcp-section-title">Vs. your previous campaigns</div></div>
+        <div class="rcp-section-sub">How this campaign stacks against the brand's prior efforts and the category median.</div>
+        <div class="wcard rcp-table-card"><table class="wui-table" id="cmp-table"></table></div>
+      </div>
+
+      <div class="rcp-section">
+        <div class="rcp-section-head"><div class="rcp-section-title">Pull-through — did the message land?</div></div>
+        <div class="rcp-section-sub">On TV/CTV you can't measure clicks, so message landing is the proxy for working creative.</div>
+        <div class="rcp-pt-grid" id="pt-stats"></div>
+        <div class="wcard">
+          <div class="wcard-head"><span class="wcard-title">What people think the ad is about</span></div>
+          <div id="think-rows"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /view-detail -->
+
+  <div class="rcp-foot">
+    Prototype · mock data · demonstrates a use case for the Brand × Culture API (<code>/bxcapi</code>).<br>
+    See the <a href="apireqs.html">API requirements</a> page for every endpoint &amp; property this app needs — and the gaps.
+  </div>
+
+</div><!-- /rcp-wrap -->
+
+<!-- ===== Add Campaign dialog (DS Dialog) ===== -->
+<div class="dialog-backdrop" id="modal-backdrop">
+  <div class="wdialog wdialog-sm" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="wdialog-header">
+      <span class="wdialog-title" id="modal-title">Add a campaign</span>
+      <button class="wdialog-close" id="modal-close" aria-label="Close">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="wdialog-body">
+      <div class="rcp-dialog-form">
+        <div class="field">
+          <span class="field-label">How is this campaign defined?</span>
+          <div class="wradio-group">
+            <label class="wradio-field">
+              <input type="radio" name="camp-mode" value="link" checked>
+              <span class="wradio green"><span class="wradio-dot"></span></span>
+              <span class="wradio-label">
+                <span class="wradio-text">Digital</span>
+                <span class="wradio-desc">Paste ad URLs or ad IDs — Meta Ad Library, YouTube, TikTok, an organic post.</span>
+              </span>
+            </label>
+            <label class="wradio-field">
+              <input type="radio" name="camp-mode" value="tv">
+              <span class="wradio green"><span class="wradio-dot"></span></span>
+              <span class="wradio-label">
+                <span class="wradio-text">TV / Display</span>
+                <span class="wradio-desc">No link. Give the flight window and where it ran — we match the social chatter.</span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="field-label">Campaign name</span>
+          <input class="input" id="f-name" placeholder="e.g. Death to Plastic — Q2 CTV flight">
+        </div>
+
+        <!-- LINK MODE -->
+        <div class="rcp-mode-fields active" data-fields="link">
+          <div class="field">
+            <span class="field-label">Ad links / IDs</span>
+            <textarea class="input" id="f-links" placeholder="https://www.facebook.com/ads/library/?id=…&#10;https://www.tiktok.com/@liquiddeath/video/…&#10;ad_b8c4d1e2f3a4b5c6"></textarea>
+            <span class="field-hint">One per line. We pull the creative + the comments/replies under each.</span>
+          </div>
+        </div>
+
+        <!-- TV/CTV MODE -->
+        <div class="rcp-mode-fields" data-fields="tv">
+          <div class="rcp-dialog-form">
+            <div class="field">
+              <span class="field-label">Flight window</span>
+              <div class="rcp-row-2">
+                <input class="input" id="f-start" type="date" value="2026-05-01">
+                <input class="input" id="f-end" type="date" value="2026-05-28">
+              </div>
+            </div>
+            <div class="field">
+              <span class="field-label">Where it ran</span>
+              <input class="input" id="f-where" placeholder="Hulu, Roku, ESPN, Comedy Central · DMAs: NYC, LA, Chicago">
+              <span class="field-hint">Networks, streamers, and/or DMAs. Used to scope the airing window and region.</span>
+            </div>
+            <div class="field">
+              <span class="field-label">Creative reference</span>
+              <input class="input" id="f-creative" placeholder="Spot title or slogan — e.g. &quot;Death to Plastic&quot;">
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="field-label">What you care about</span>
+          <textarea class="input" id="f-context" placeholder="Brand terms, slogan, hashtags, and the message you're testing — e.g. is the sustainability angle landing without reading as preachy? Watch #deathtoplastic and mentions of the mountain spring water gag."></textarea>
+          <span class="field-hint">Drives the match spec and the themes we surface.</span>
+        </div>
+      </div>
+    </div>
+    <div class="wdialog-footer">
+      <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
+      <button class="btn btn-default" id="modal-create">Create campaign</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="rcp-toast" id="toast-wrap">
+  <div class="wbanner"><span class="wbanner-msg" id="toast-msg"></span></div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+// Deterministic anchor — never new Date() (doctrine)
+const NOW = new Date('2026-05-28T12:00:00Z');
+const RING_CIRC = 2 * Math.PI * 52;
+
+const PLATFORM_DOMAINS = {
+  tiktok: 'tiktok.com', x: 'x.com', twitter: 'x.com', reddit: 'reddit.com',
+  youtube: 'youtube.com', instagram: 'instagram.com', facebook: 'facebook.com', meta: 'facebook.com'
+};
+const favicon = (p) => `https://www.google.com/s2/favicons?domain=${PLATFORM_DOMAINS[String(p).toLowerCase()] || 'news.google.com'}&sz=64`;
+
+// Liquid Death's normal daily reaction volume, and the category-average brand's.
+const BRAND_BASE = 600, CAT_BASE = 360;
+// Seeded PRNG — identical data on every reload (doctrine)
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=a;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296;};}
+
+// Build a 28-day volume series from a baseline + decaying spikes at each airing/drop day.
+function buildSeries(seed, baseline, spikes, catBaseline) {
+  const rnd = mulberry32(seed);
+  const days = 28, out = [];
+  for (let i = 0; i < days; i++) {
+    let v = baseline * (0.8 + rnd() * 0.4);
+    spikes.forEach(s => { if (i >= s.day) v += s.mag * Math.exp(-(i - s.day) / s.tau); });
+    out.push({ v: Math.max(0, v), cat: catBaseline * (0.85 + rnd() * 0.3) });
+  }
+  return out;
+}
+
+const CAMPAIGNS = [
+  {
+    id: 'armless-palmer', name: 'Country Club Iced Tea ("Armless Palmer")', type: 'link', status: 'live',
+    flight: '2026-04-22 → 2026-05-26', window: 'Apr 22 – May 26',
+    where: 'Meta Ad Library · TikTok · YouTube pre-roll',
+    context: 'Is the Arnold Palmer parody reading as funny or as a cheap shot? Watch for legal/"cease &amp; desist" chatter and whether the joke overshadows the product. Terms: "Armless Palmer", #countryclubicedtea.',
+    scores: { reception: 71, breakthrough: 88, sentiment: 58, pullthrough: 64 },
+    prior: { breakthrough: 70, sentiment: 66, pullthrough: 61 },
+    vs: [
+      { label: 'Daily conversation', fmt: 'num', unit: '/day', lift: 'x',   campaign: 1850, brand: 600, category: 360 },
+      { label: 'Net sentiment',      fmt: 'ps',  unit: '',      lift: 'pts', campaign: 14,   brand: 26,  category: 7 },
+      { label: 'Positive share',     fmt: 'pct', unit: '',      lift: 'pts', campaign: 46,   brand: 56,  category: 44 },
+      { label: 'Share of category voice', fmt: 'pct', unit: '', lift: 'pts', campaign: 34,   brand: 13,  category: 8 },
+    ],
+    sentiment: { pos: 0.46, neu: 0.22, neg: 0.32 },
+    emotions: [
+      { label: 'Funny / love the joke', pct: 0.41, tone: 'pos' },
+      { label: 'Brand-love', pct: 0.19, tone: 'pos' },
+      { label: 'Annoyed / "gone too far"', pct: 0.18, tone: 'neg' },
+      { label: 'Confused / who is it for', pct: 0.12, tone: 'mix' },
+      { label: 'Purchase intent', pct: 0.10, tone: 'pos' },
+    ],
+    platforms: [
+      { platform: 'tiktok', share: 0.38 },
+      { platform: 'x', share: 0.24 },
+      { platform: 'reddit', share: 0.18 },
+      { platform: 'youtube', share: 0.12 },
+      { platform: 'instagram', share: 0.08 },
+    ],
+    sentByPlatform: [
+      { platform: 'tiktok', pos: 52, neu: 18, neg: 28, mix: 2 },
+      { platform: 'x', pos: 38, neu: 20, neg: 40, mix: 2 },
+      { platform: 'reddit', pos: 41, neu: 24, neg: 33, mix: 2 },
+      { platform: 'youtube', pos: 55, neu: 25, neg: 18, mix: 2 },
+    ],
+    themes: [
+      { theme: 'the parody is gold', freq: 1840, sentiment: 'pos' },
+      { theme: 'lawsuit speedrun', freq: 1210, sentiment: 'mix' },
+      { theme: 'tastes great tbh', freq: 980, sentiment: 'pos' },
+      { theme: 'punching down?', freq: 760, sentiment: 'neg' },
+      { theme: 'where to buy', freq: 540, sentiment: 'pos' },
+      { theme: 'too edgy now', freq: 430, sentiment: 'neg' },
+      { theme: 'sugar content', freq: 290, sentiment: 'neu' },
+    ],
+    comments: [
+      { platform: 'tiktok', user: '@hydrate_or_diedrate', text: 'armless palmer is the funniest name they’ve ever done and I will not be taking questions 💀', sentiment: 'pos', theme: 'the parody is gold', ts: '2026-05-24T18:00:00Z', eng: '12.4K' },
+      { platform: 'x', user: '@adlawnerd', text: 'placing my bets now on how many days until the cease & desist. classic LD move tho, the chaos IS the campaign', sentiment: 'mix', theme: 'lawsuit speedrun', ts: '2026-05-23T15:20:00Z', eng: '3.1K' },
+      { platform: 'reddit', user: 'u/beveragefiend', text: 'ok the marketing is annoying but I bought a 6-pack and the iced tea actually slaps. mad about it', sentiment: 'pos', theme: 'tastes great tbh', ts: '2026-05-22T22:10:00Z', eng: '880' },
+      { platform: 'x', user: '@justhere4snacks', text: 'feels like they’re running out of ideas and just mocking real people now. ehh', sentiment: 'neg', theme: 'punching down?', ts: '2026-05-21T13:05:00Z', eng: '640' },
+      { platform: 'youtube', user: 'GymTokGabe', text: 'the pre-roll made me laugh out loud at WORK. where do I get this', sentiment: 'pos', theme: 'where to buy', ts: '2026-05-20T09:40:00Z', eng: '1.2K' },
+      { platform: 'tiktok', user: '@sustainably.sad', text: 'i don’t get it?? is this making fun of golf or arnold palmer or me', sentiment: 'neu', theme: 'punching down?', ts: '2026-05-19T20:15:00Z', eng: '410' },
+      { platform: 'reddit', user: 'u/RTD_reviews', text: '34g of sugar in the original is wild for a “better-for-you” brand but the marketing carries it', sentiment: 'mix', theme: 'sugar content', ts: '2026-05-18T11:00:00Z', eng: '520' },
+      { platform: 'x', user: '@deadpan_dana', text: 'Liquid Death really said “lawyers love us” and committed to the bit. iconic', sentiment: 'pos', theme: 'lawsuit speedrun', ts: '2026-05-17T16:30:00Z', eng: '2.4K' },
+    ],
+    breakthrough: { soc: 0.34, perImp: 'n/a (link)', spike: 'Conversation jumped 6.2× the day the TikTok dropped — biggest single-day spike of any LD campaign this year.' },
+    pullthrough: {
+      attribution: 0.81, attributionNote: '81% of commenters named Liquid Death — the joke didn’t eclipse the brand.',
+      messageEcho: 0.58, messageEchoNote: '“iced tea / new flavor” echoed in 58% of on-topic comments.',
+      purchaseIntent: 0.10, purchaseIntentNote: 'Purchase-intent language in 1 of 10 reactions — strong for a stunt.',
+      controversy: 0.41,
+      think: [
+        { label: 'A joke about Arnold Palmer / golf', pct: 44 },
+        { label: 'A new Liquid Death iced tea', pct: 38 },
+        { label: 'A lawsuit bait stunt', pct: 14 },
+        { label: 'Not sure', pct: 4 },
+      ],
+    },
+    series: buildSeries(11, 900, [{ day: 2, mag: 5200, tau: 2.5 }, { day: 14, mag: 2600, tau: 3 }], 1400),
+    spikeDays: [2, 14],
+    controversyText: 'A vocal "punching down" camp on X is dragging net sentiment — worth a listening note, but engagement is overwhelmingly positive elsewhere.',
+    controversyLevel: 'High controversy',
+  },
+  {
+    id: 'death-to-plastic', name: 'Death to Plastic — CTV flight', type: 'tv', status: 'live',
+    flight: '2026-05-01 → 2026-05-28', window: 'May 1 – May 28',
+    where: 'Hulu · Roku · YouTube TV · Comedy Central · DMAs: NYC, LA, Chicago, Austin',
+    context: 'Is the sustainability angle landing without reading as preachy? No click to measure on CTV — watch #deathtoplastic, the "canned water" gag, and whether people connect it to the recycled-aluminum message. Terms: "Death to Plastic", "murder your thirst".',
+    scores: { reception: 79, breakthrough: 64, sentiment: 82, pullthrough: 83 },
+    prior: { breakthrough: 58, sentiment: 74, pullthrough: 70 },
+    vs: [
+      { label: 'Daily conversation', fmt: 'num', unit: '/day', lift: 'x',   campaign: 1450, brand: 600, category: 360 },
+      { label: 'Net sentiment',      fmt: 'ps',  unit: '',      lift: 'pts', campaign: 62,   brand: 26,  category: 7 },
+      { label: 'Positive share',     fmt: 'pct', unit: '',      lift: 'pts', campaign: 71,   brand: 56,  category: 44 },
+      { label: 'Share of category voice', fmt: 'pct', unit: '', lift: 'pts', campaign: 21,   brand: 13,  category: 8 },
+    ],
+    sentiment: { pos: 0.71, neu: 0.20, neg: 0.09 },
+    emotions: [
+      { label: 'Brand-love', pct: 0.34, tone: 'pos' },
+      { label: 'Funny / love the bit', pct: 0.27, tone: 'pos' },
+      { label: 'Mission resonates', pct: 0.21, tone: 'pos' },
+      { label: 'Preachy / eye-roll', pct: 0.10, tone: 'mix' },
+      { label: 'Purchase intent', pct: 0.08, tone: 'pos' },
+    ],
+    platforms: [
+      { platform: 'tiktok', share: 0.30 },
+      { platform: 'reddit', share: 0.24 },
+      { platform: 'x', share: 0.20 },
+      { platform: 'youtube', share: 0.16 },
+      { platform: 'instagram', share: 0.10 },
+    ],
+    sentByPlatform: [
+      { platform: 'tiktok', pos: 74, neu: 18, neg: 6, mix: 2 },
+      { platform: 'reddit', pos: 64, neu: 24, neg: 10, mix: 2 },
+      { platform: 'x', pos: 66, neu: 22, neg: 10, mix: 2 },
+      { platform: 'youtube', pos: 78, neu: 16, neg: 4, mix: 2 },
+    ],
+    themes: [
+      { theme: 'canned water is genius', freq: 1520, sentiment: 'pos' },
+      { theme: 'saw it on Hulu', freq: 1180, sentiment: 'pos' },
+      { theme: 'actually buying it now', freq: 870, sentiment: 'pos' },
+      { theme: 'love the mission', freq: 690, sentiment: 'pos' },
+      { theme: 'a little preachy', freq: 320, sentiment: 'neg' },
+      { theme: 'is aluminum better?', freq: 240, sentiment: 'neu' },
+    ],
+    comments: [
+      { platform: 'youtube', user: 'StreamingDad', text: 'this came on during my show and I genuinely rewound it. “murder your thirst” got me 😂 and I get the plastic thing now', sentiment: 'pos', theme: 'saw it on Hulu', ts: '2026-05-26T01:10:00Z', eng: '2.1K' },
+      { platform: 'reddit', user: 'u/zerowastecurious', text: 'say what you want, aluminum is infinitely recyclable and they made me care about it with a death metal water ad. respect', sentiment: 'pos', theme: 'love the mission', ts: '2026-05-25T19:25:00Z', eng: '1.4K' },
+      { platform: 'tiktok', user: '@canorbottle', text: 'POV: the liquid death ad interrupts your roku and you’re actually not mad', sentiment: 'pos', theme: 'canned water is genius', ts: '2026-05-24T17:00:00Z', eng: '18.7K' },
+      { platform: 'x', user: '@eco_skeptic', text: 'cool ad but “death to plastic” while shipping cans across the country is a bit much lol', sentiment: 'neg', theme: 'a little preachy', ts: '2026-05-23T14:40:00Z', eng: '910' },
+      { platform: 'tiktok', user: '@thirstyplanet', text: 'switched my whole fridge over after seeing this on hulu like 4 times. it worked. I’m the marketing’s victim', sentiment: 'pos', theme: 'actually buying it now', ts: '2026-05-22T08:30:00Z', eng: '6.3K' },
+      { platform: 'reddit', user: 'u/materials_eng', text: 'genuine q — is the aluminum lining actually better lifecycle-wise or is this greenwashing with good jokes?', sentiment: 'neu', theme: 'is aluminum better?', ts: '2026-05-21T12:15:00Z', eng: '780' },
+      { platform: 'youtube', user: 'CordCutterCarla', text: 'I have seen this spot 11 times on YouTube TV and I have NOT skipped once. who are you people', sentiment: 'pos', theme: 'saw it on Hulu', ts: '2026-05-20T22:50:00Z', eng: '3.0K' },
+    ],
+    breakthrough: { soc: 0.21, perImp: '2.3 comments / 10K impressions', spike: 'Steady lift, not a spike — CTV builds a sustained conversation floor rather than one viral day. Volume tracked airing-heavy weeks closely.' },
+    pullthrough: {
+      attribution: 0.88, attributionNote: '88% named Liquid Death unprompted — exceptional for a no-link TV spot.',
+      messageEcho: 0.73, messageEchoNote: 'Sustainability / “plastic” message echoed in 73% of on-topic comments — the angle landed.',
+      purchaseIntent: 0.08, purchaseIntentNote: 'Purchase-intent language in 8% of reactions, mostly “switched my fridge”.',
+      controversy: 0.12,
+      think: [
+        { label: 'Sustainability / kill plastic', pct: 52 },
+        { label: 'Just a funny water ad', pct: 31 },
+        { label: 'A new product launch', pct: 12 },
+        { label: 'Not sure', pct: 5 },
+      ],
+    },
+    series: buildSeries(22, 1300, [{ day: 1, mag: 1600, tau: 8 }, { day: 10, mag: 1400, tau: 7 }, { day: 20, mag: 1500, tau: 6 }], 1500),
+    spikeDays: [1, 10, 20],
+    controversyText: 'A small "preachy" cohort on X, easily outweighed. The mission message is doing real work — rare for a brand-voice ad.',
+    controversyLevel: 'Low controversy',
+  },
+  {
+    id: 'martha-candle', name: 'Martha Stewart "Severed Hand" Candle', type: 'link', status: 'ended',
+    flight: '2026-03-10 → 2026-04-12', window: 'Mar 10 – Apr 12',
+    where: 'Instagram · TikTok · Meta Ad Library',
+    context: 'Celebrity-led stunt drop. Risk: people talk about Martha, not Liquid Death. Watch attribution and whether the dismemberment gag overshadows the brand. Terms: "severed hand candle", "Martha", #liquiddeath.',
+    scores: { reception: 74, breakthrough: 92, sentiment: 76, pullthrough: 55 },
+    prior: { breakthrough: 75, sentiment: 70, pullthrough: 62 },
+    vs: [
+      { label: 'Daily conversation', fmt: 'num', unit: '/day', lift: 'x',   campaign: 2600, brand: 600, category: 360 },
+      { label: 'Net sentiment',      fmt: 'ps',  unit: '',      lift: 'pts', campaign: 52,   brand: 26,  category: 7 },
+      { label: 'Positive share',     fmt: 'pct', unit: '',      lift: 'pts', campaign: 64,   brand: 56,  category: 44 },
+      { label: 'Share of category voice', fmt: 'pct', unit: '', lift: 'pts', campaign: 41,   brand: 13,  category: 8 },
+    ],
+    sentiment: { pos: 0.64, neu: 0.24, neg: 0.12 },
+    emotions: [
+      { label: 'Funny / unhinged', pct: 0.38, tone: 'pos' },
+      { label: 'Brand-love', pct: 0.22, tone: 'pos' },
+      { label: 'Martha is a legend', pct: 0.20, tone: 'pos' },
+      { label: 'Tasteless / too far', pct: 0.12, tone: 'neg' },
+      { label: 'Purchase intent', pct: 0.08, tone: 'pos' },
+    ],
+    platforms: [
+      { platform: 'instagram', share: 0.34 },
+      { platform: 'tiktok', share: 0.30 },
+      { platform: 'x', share: 0.20 },
+      { platform: 'reddit', share: 0.16 },
+    ],
+    sentByPlatform: [
+      { platform: 'instagram', pos: 68, neu: 22, neg: 8, mix: 2 },
+      { platform: 'tiktok', pos: 66, neu: 22, neg: 10, mix: 2 },
+      { platform: 'x', pos: 58, neu: 26, neg: 14, mix: 2 },
+      { platform: 'reddit', pos: 60, neu: 26, neg: 12, mix: 2 },
+    ],
+    themes: [
+      { theme: 'martha ate this up', freq: 2010, sentiment: 'pos' },
+      { theme: 'sold out instantly', freq: 1340, sentiment: 'pos' },
+      { theme: 'this is unhinged (good)', freq: 1120, sentiment: 'pos' },
+      { theme: 'wait is this LD or martha', freq: 880, sentiment: 'neu' },
+      { theme: 'kinda gross', freq: 460, sentiment: 'neg' },
+      { theme: 'where to buy', freq: 380, sentiment: 'pos' },
+    ],
+    comments: [
+      { platform: 'instagram', user: '@spookyhomegoods', text: 'MARTHA STEWART holding a severed hand candle is the crossover I didn’t know I needed 😭', sentiment: 'pos', theme: 'martha ate this up', ts: '2026-04-08T18:00:00Z', eng: '24.1K' },
+      { platform: 'tiktok', user: '@candlecollector', text: 'sold out in like an hour?? I just wanted the creepy hand 😩', sentiment: 'pos', theme: 'sold out instantly', ts: '2026-04-06T15:30:00Z', eng: '9.2K' },
+      { platform: 'x', user: '@brand_watch', text: 'genuinely funny but I had to look twice to clock this was a Liquid Death thing and not just Martha being Martha', sentiment: 'neu', theme: 'wait is this LD or martha', ts: '2026-04-04T13:10:00Z', eng: '1.8K' },
+      { platform: 'reddit', user: 'u/tasteful_no', text: 'a dismembered hand to sell water is a bit much for me tbh', sentiment: 'neg', theme: 'kinda gross', ts: '2026-04-02T20:45:00Z', eng: '540' },
+      { platform: 'instagram', user: '@goth.mom.life', text: 'need the candle, need the water, need martha to narrate my life', sentiment: 'pos', theme: 'this is unhinged (good)', ts: '2026-03-30T09:20:00Z', eng: '5.6K' },
+    ],
+    breakthrough: { soc: 0.41, perImp: 'n/a (link)', spike: 'Largest breakthrough of the year — Martha’s own repost drove a 9× single-day spike. Reach was huge; attribution was the weak spot.' },
+    pullthrough: {
+      attribution: 0.63, attributionNote: 'Only 63% named Liquid Death — a chunk of the conversation was “Martha being chaotic”, not the brand.',
+      messageEcho: 0.34, messageEchoNote: 'Product/“water” echoed in just 34% — the gag pulled focus from the brand.',
+      purchaseIntent: 0.08, purchaseIntentNote: 'Strong intent, but mostly for the candle, not the water.',
+      controversy: 0.22,
+      think: [
+        { label: 'A Martha Stewart bit', pct: 37 },
+        { label: 'A Liquid Death stunt', pct: 33 },
+        { label: 'A candle drop', pct: 22 },
+        { label: 'Not sure', pct: 8 },
+      ],
+    },
+    series: buildSeries(33, 700, [{ day: 3, mag: 6400, tau: 2 }, { day: 5, mag: 3000, tau: 3 }], 1300),
+    spikeDays: [3, 5],
+    controversyText: 'The bigger risk here isn’t backlash — it’s attribution: the celebrity is out-shining the brand (see Pull-through).',
+    controversyLevel: 'Moderate controversy',
+  },
+];
+
+let current = CAMPAIGNS[0];
+
+// ── Zones / helpers ────────────────────────────────────────
+function zoneFor(s) {
+  if (s >= 78) return { cls: 'good', badge: 'badge-active', tag: 'Strong reception' };
+  if (s >= 62) return { cls: 'watch', badge: 'badge-warning', tag: 'Mixed reception' };
+  return { cls: 'risk', badge: 'badge-destructive', tag: 'Underperforming' };
+}
+function setRing(cardEl, arcEl, scoreEl, value) {
+  const pct = Math.max(0, Math.min(1, value / 100));
+  arcEl.setAttribute('stroke-dasharray', `${(pct * RING_CIRC).toFixed(1)} ${RING_CIRC.toFixed(1)}`);
+  scoreEl.textContent = Math.round(value);
+  cardEl.classList.remove('good', 'watch', 'risk');
+  cardEl.classList.add(zoneFor(value).cls);
+}
+function fmtDelta(d) {
+  if (Math.abs(d) < 0.5) return `<span>±0</span>`;
+  const cls = d > 0 ? 'up' : 'dn', arrow = d > 0 ? '▲' : '▼';
+  return `<span class="${cls}">${arrow} ${Math.abs(Math.round(d))}</span>`;
+}
+// Alpha-fill encoding (doctrine — HBar): magnitude by opacity, one hue
+function tealAlpha(v, max) { return (0.30 + (v / (max || 1)) * 0.70).toFixed(2); }
+
+// ── SVG builders (colors via style= — SVG attrs don't resolve var()) ──
+function donut(svgEl, slices, centerVal, centerSub) {
+  const cx = 50, cy = 50, r = 38, sw = 9; let acc = 0;
+  let html = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" style="stroke:hsl(var(--foreground) / 0.06)" stroke-width="${sw}"/>`;
+  slices.forEach(s => {
+    const start = acc, end = acc + Math.min(s.pct, 0.999);
+    const sa = start * 2 * Math.PI - Math.PI / 2, ea = end * 2 * Math.PI - Math.PI / 2;
+    const x1 = cx + r * Math.cos(sa), y1 = cy + r * Math.sin(sa);
+    const x2 = cx + r * Math.cos(ea), y2 = cy + r * Math.sin(ea);
+    const large = (end - start) > 0.5 ? 1 : 0;
+    html += `<path d="M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${x2.toFixed(2)} ${y2.toFixed(2)}" fill="none" style="stroke:${s.color}" stroke-width="${sw}" stroke-linecap="butt"/>`;
+    acc = start + s.pct;
+  });
+  if (centerVal !== undefined) {
+    html += `<text x="50" y="47" text-anchor="middle" dominant-baseline="central" font-size="18" font-weight="400" style="fill:hsl(var(--foreground))">${centerVal}</text>`;
+    html += `<text x="50" y="62" text-anchor="middle" font-size="7" letter-spacing="1" style="fill:hsl(var(--muted-foreground))">${centerSub}</text>`;
+  }
+  svgEl.innerHTML = html;
+}
+function sparkline(el, vals) {
+  const W = 200, H = 40, pad = 3;
+  const min = Math.min(...vals), max = Math.max(...vals), range = max - min || 1;
+  const pts = vals.map((v, i) => {
+    const x = pad + (i / (vals.length - 1)) * (W - 2 * pad);
+    const y = H - pad - ((v - min) / range) * (H - 2 * pad);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+  const area = `M${pad},${H} L${pts.join(' L')} L${W - pad},${H} Z`;
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" width="100%" height="100%">
+    <path d="${area}" style="fill:hsl(var(--primary))" opacity="0.10"/>
+    <path d="M${pts.join(' L')}" style="stroke:hsl(var(--primary))" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+  </svg>`;
+}
+
+// ── Renderers ──────────────────────────────────────────────
+function renderHero() {
+  const c = current;
+  setRing($('ring-card-reception'), $('arc-reception'), $('score-reception'), c.scores.reception);
+  setRing($('ring-card-breakthrough'), $('arc-breakthrough'), $('score-breakthrough'), c.scores.breakthrough);
+  setRing($('ring-card-sentiment'), $('arc-sentiment'), $('score-sentiment'), c.scores.sentiment);
+  setRing($('ring-card-pullthrough'), $('arc-pullthrough'), $('score-pullthrough'), c.scores.pullthrough);
+  const z = zoneFor(c.scores.reception);
+  const zt = $('zone-reception'); zt.className = 'badge rcp-zone ' + z.badge; zt.textContent = z.tag;
+  $('d-breakthrough').innerHTML = fmtDelta(c.scores.breakthrough - c.prior.breakthrough);
+  $('d-sentiment').innerHTML = fmtDelta(c.scores.sentiment - c.prior.sentiment);
+  $('d-pullthrough').innerHTML = fmtDelta(c.scores.pullthrough - c.prior.pullthrough);
+}
+
+// Comparison — this campaign vs brand baseline vs category baseline
+function fmtMetric(v, fmt) { return fmt === 'num' ? v.toLocaleString('en-US') : fmt === 'ps' ? (v > 0 ? '+' : '') + v + '%' : v + '%'; }
+function liftText(m) {
+  if (m.lift === 'x') { const r = m.campaign / m.brand; return { txt: r.toFixed(1) + '× your baseline', up: r >= 1 }; }
+  const d = Math.round(m.campaign - m.brand); return { txt: (d >= 0 ? '+' : '') + d + ' pts vs baseline', up: d >= 0 };
+}
+function renderCompareHero() {
+  const c = current;
+  $('cmp-hero').innerHTML = c.vs.map(m => {
+    const max = Math.max(m.campaign, m.brand, m.category) || 1;
+    const L = liftText(m);
+    const bar = (lbl, val, fillCls, youCls) =>
+      `<div class="rcp-cmp-row"><span class="rcp-cmp-lbl ${youCls}">${lbl}</span><span class="rcp-cmp-track"><span class="rcp-cmp-fill ${fillCls}" style="width:${Math.max(2, val / max * 100).toFixed(0)}%"></span></span><span class="rcp-cmp-val ${youCls}">${fmtMetric(val, m.fmt)}${m.unit || ''}</span></div>`;
+    return `<div class="rcp-cmp-card">
+      <div class="rcp-cmp-head"><span class="rcp-cmp-title">${m.label}</span><span class="badge ${L.up ? 'badge-active' : 'badge-warning'}">${L.txt}</span></div>
+      ${bar('This campaign', m.campaign, 'you', 'you')}
+      ${bar('LD baseline', m.brand, 'base', '')}
+      ${bar('Category', m.category, 'cat', '')}
+    </div>`;
+  }).join('');
+}
+
+function renderContext() {
+  const c = current;
+  $('camp-type').textContent = c.type === 'tv' ? 'TV / Display' : 'Digital';
+  $('camp-flight').textContent = c.flight;
+  $('ctx-text').innerHTML = c.context;
+  $('ctx-where').innerHTML = '<b>Where it ran:</b> ' + c.where;
+}
+
+function renderArea() {
+  const c = current, W = 800, H = 220, pad = 12, n = c.series.length;
+  const maxV = Math.max(...c.series.map(d => d.v)) * 1.1;
+  const xAt = i => pad + (i / (n - 1)) * (W - 2 * pad);
+  const yAt = v => H - pad - (v / maxV) * (H - 2 * pad - 14);
+  let html = '';
+  // subtle gridlines
+  for (let g = 1; g <= 3; g++) {
+    const y = pad + (g / 4) * (H - 2 * pad - 14);
+    html += `<line x1="${pad}" x2="${W - pad}" y1="${y.toFixed(1)}" y2="${y.toFixed(1)}" style="stroke:hsl(var(--foreground) / 0.05)" stroke-width="1"/>`;
+  }
+  // brand "normal range" band (±25% around the brand baseline)
+  const bandTop = yAt(BRAND_BASE * 1.25), bandBot = yAt(BRAND_BASE * 0.75);
+  html += `<rect x="${pad}" y="${bandTop.toFixed(1)}" width="${W - 2 * pad}" height="${(bandBot - bandTop).toFixed(1)}" style="fill:hsl(var(--muted-foreground))" opacity="0.10"/>`;
+  html += `<line x1="${pad}" x2="${W - pad}" y1="${yAt(BRAND_BASE).toFixed(1)}" y2="${yAt(BRAND_BASE).toFixed(1)}" style="stroke:hsl(var(--muted-foreground))" stroke-width="1" opacity="0.5"/>`;
+  // category average — dashed neutral reference (doctrine)
+  html += `<line x1="${pad}" x2="${W - pad}" y1="${yAt(CAT_BASE).toFixed(1)}" y2="${yAt(CAT_BASE).toFixed(1)}" style="stroke:hsl(var(--muted-foreground))" stroke-width="1.2" stroke-dasharray="4 4" opacity="0.8"/>`;
+  // airing / drop markers
+  c.spikeDays.forEach(d => {
+    const x = xAt(d);
+    html += `<line x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="${pad}" y2="${H - pad}" style="stroke:hsl(var(--highlight))" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>`;
+    html += `<text x="${x.toFixed(1)}" y="${pad - 2}" font-size="8.5" text-anchor="middle" style="fill:hsl(var(--highlight))">▼</text>`;
+  });
+  // campaign line + light area fill (hairline — data reads light)
+  const pts = c.series.map((d, i) => `${xAt(i).toFixed(1)},${yAt(d.v).toFixed(1)}`);
+  html += `<path d="M${pad},${H - pad} L${pts.join(' L')} L${W - pad},${H - pad} Z" style="fill:hsl(var(--primary))" opacity="0.10"/>`;
+  html += `<path d="M${pts.join(' L')}" style="stroke:hsl(var(--primary))" stroke-width="1.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>`;
+  $('vol-area').innerHTML = html;
+  $('ov-window').textContent = c.window + ' · daily';
+}
+
+function platformDonut(svgEl, legendEl, platforms) {
+  const withColor = platforms.map((p, i) => ({ ...p, color: `hsl(var(--chart-${i + 1}))` }));
+  donut(svgEl, withColor.map(p => ({ pct: p.share, color: p.color })));
+  legendEl.innerHTML = withColor.map(p => `
+    <div class="rcp-lg-row">
+      <span class="rcp-lg-name"><img class="rcp-favicon" src="${favicon(p.platform)}" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'rcp-lg-dot'}))"><span class="rcp-lg-dot" style="background:${p.color}"></span>${p.platform}</span>
+      <span class="rcp-lg-pct">${Math.round(p.share * 100)}%</span>
+    </div>`).join('');
+}
+
+function renderReadout() {
+  const c = current, net = Math.round((c.sentiment.pos - c.sentiment.neg) * 100);
+  $('readout').innerHTML = `
+    <p><b>${c.name}</b> earned a Reception Score of <b class="hl-primary">${c.scores.reception}</b> — ${zoneFor(c.scores.reception).tag.toLowerCase()}.</p>
+    <p>Breakthrough is <b>${c.scores.breakthrough}</b>. ${c.breakthrough.spike}</p>
+    <p>Net sentiment <b class="${net >= 0 ? 'hl-primary' : 'hl-warn'}">${net > 0 ? '+' : ''}${net}%</b>; the message ${c.scores.pullthrough >= 70 ? 'landed well' : 'is at risk of being eclipsed'} (pull-through ${c.scores.pullthrough}). ${c.pullthrough.attributionNote}</p>`;
+}
+
+function renderSentiment() {
+  const c = current, s = c.sentiment;
+  const net = Math.round((s.pos - s.neg) * 100);
+  donut($('sent-donut'), [
+    { pct: s.pos, color: 'hsl(var(--primary))' },
+    { pct: s.neu, color: 'hsl(var(--muted-foreground))' },
+    { pct: s.neg, color: 'hsl(var(--warning))' },
+  ], (net > 0 ? '+' : '') + net, 'NET');
+  $('sent-legend').innerHTML = [
+    { n: 'Positive', v: s.pos, sw: 'pos' }, { n: 'Neutral', v: s.neu, sw: 'neu' }, { n: 'Negative', v: s.neg, sw: 'neg' }
+  ].map(r => `<div class="rcp-lg-row"><span class="rcp-lg-name"><span class="senti-swatch ${r.sw}"></span>${r.n}</span><span class="rcp-lg-pct">${Math.round(r.v * 100)}%</span></div>`).join('');
+  const allComments = c.themes.reduce((a, t) => a + t.freq, 0);
+  $('sent-count').textContent = allComments.toLocaleString('en-US') + ' reactions analyzed';
+  $('controversy').innerHTML = `
+    <span class="walert-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></span>
+    <div class="walert-body">
+      <div class="walert-title">${c.controversyLevel} · index ${c.pullthrough.controversy.toFixed(2)}</div>
+      <div class="walert-desc">${c.controversyText}</div>
+    </div>`;
+
+  const maxE = Math.max(...c.emotions.map(e => e.pct));
+  $('emo-bars').innerHTML = c.emotions.map(e => `
+    <div class="rcp-hbar-row">
+      <span class="rcp-hbar-name"><span class="rcp-hbar-dot ${e.tone}"></span>${e.label}</span>
+      <span class="rcp-hbar-track"><span class="rcp-hbar-fill ${e.tone}" style="width:${(e.pct / maxE * 100).toFixed(0)}%"></span></span>
+      <span class="rcp-hbar-val">${Math.round(e.pct * 100)}%</span>
+    </div>`).join('');
+
+  $('sent-stack').innerHTML = c.sentByPlatform.map(p => `
+    <div class="senti-row">
+      <span class="senti-label"><img class="rcp-favicon" src="${favicon(p.platform)}" alt="" loading="lazy" onerror="this.remove()">${p.platform}</span>
+      <span class="senti-bar">
+        <span class="senti-seg pos" style="width:${p.pos}%"></span><span class="senti-seg neu" style="width:${p.neu}%"></span>
+        <span class="senti-seg neg" style="width:${p.neg}%"></span><span class="senti-seg mix" style="width:${p.mix}%"></span>
+      </span>
+      <span class="senti-val">${p.pos}%</span>
+    </div>`).join('');
+}
+
+function relTime(iso) {
+  const t = new Date(iso), d = Math.floor((NOW - t) / 86400000);
+  if (d < 1) return 'today'; if (d < 7) return d + 'd ago';
+  const w = Math.floor(d / 7); if (w < 5) return w + 'w ago';
+  return Math.floor(d / 30) + 'mo ago';
+}
+function renderConversation() {
+  const c = current;
+  $('conv-count').textContent = c.themes.reduce((a, t) => a + t.freq, 0).toLocaleString('en-US') + ' comments · top shown';
+  $('verbatim-wall').innerHTML = c.comments.map(m => `
+    <div class="comment-card">
+      <div class="comment-meta">
+        <img class="comment-favicon" src="${favicon(m.platform)}" alt="" loading="lazy" onerror="this.remove()">
+        <span class="comment-author">${m.user}</span>
+        <span class="comment-time">${relTime(m.ts)}</span>
+        <span class="comment-sentiment ${m.sentiment}">${m.sentiment.toUpperCase()}</span>
+      </div>
+      <div class="comment-body">${m.text}</div>
+      <div class="comment-foot">
+        <span class="rcp-comment-theme">${m.theme}</span>
+        <span class="comment-count">♥ ${m.eng}</span>
+      </div>
+    </div>`).join('');
+  // Theme Pill rule: one fixed text size — volume lives in the count, never the font
+  $('theme-pills').innerHTML = c.themes.map(t =>
+    `<span class="theme-pill ${t.sentiment}">${t.theme}<span class="theme-pill-freq">${t.freq.toLocaleString('en-US')}</span></span>`
+  ).join('');
+}
+
+function renderCompare() {
+  const c = current;
+  // Percentile vs category — DS Benchmark Bar (marker = category median)
+  const percs = [
+    { n: 'Breakthrough', v: c.scores.breakthrough, med: 50 },
+    { n: 'Net sentiment', v: c.scores.sentiment, med: 55 },
+    { n: 'Brand-love share', v: Math.round((c.emotions.find(e => /love/i.test(e.label))?.pct || 0.2) * 260), med: 48 },
+    { n: 'Pull-through', v: c.scores.pullthrough, med: 52 },
+    { n: 'Purchase intent', v: Math.round((c.pullthrough.purchaseIntent) * 600), med: 40 },
+  ].map(p => ({ ...p, v: Math.min(99, p.v) }));
+  $('perc-bars').innerHTML = percs.map(p => `
+    <div class="bench-bar ${p.v >= p.med ? 'good' : 'warn'}">
+      <div class="bench-bar-top">
+        <span class="bench-bar-label">${p.n}</span>
+        <div class="bench-bar-right">
+          <span class="bench-bar-val">P${p.v}</span>
+          <span class="bench-bar-ref">median P${p.med}</span>
+        </div>
+      </div>
+      <div class="bench-bar-track">
+        <div class="bench-bar-fill" style="width:${p.v}%"></div>
+        <div class="bench-bar-marker" style="left:${p.med}%"></div>
+      </div>
+    </div>`).join('');
+
+  // Compare table: this + priors + category median
+  const rows = CAMPAIGNS.map(x => ({
+    name: x.id === c.id ? x.name + ' (this)' : x.name, cls: x.id === c.id ? 'row-selected rcp-you' : '',
+    bt: x.scores.breakthrough, net: Math.round((x.sentiment.pos - x.sentiment.neg) * 100),
+    love: Math.round((x.emotions.find(e => /love/i.test(e.label))?.pct || 0) * 100),
+    attr: Math.round(x.pullthrough.attribution * 100), pt: x.scores.pullthrough,
+  }));
+  rows.push({ name: 'Category median', cls: 'rcp-cat', bt: 50, net: 18, love: 17, attr: 64, pt: 52 });
+  $('cmp-table').innerHTML = `
+    <thead><tr><th>Campaign</th><th>Breakthrough</th><th>Net sent.</th><th>Brand-love</th><th>Attribution</th><th>Pull-through</th></tr></thead>
+    <tbody>${rows.map(r => `<tr class="${r.cls}"><td>${r.name}</td><td>${r.bt}</td><td>${r.net > 0 ? '+' : ''}${r.net}%</td><td>${r.love}%</td><td>${r.attr}%</td><td>${r.pt}</td></tr>`).join('')}</tbody>`;
+
+  // Pull-through stats — DS KPI cards; verdict color: good=primary, warn=warning, bad=destructive
+  const pt = c.pullthrough;
+  const cls = (v, hi, mid) => v >= hi ? 'pt-good' : v >= mid ? 'pt-warn' : 'pt-bad';
+  $('pt-stats').innerHTML = `
+    <div class="kpi"><div class="k-label">Brand attribution</div><div class="k-value ${cls(pt.attribution, 0.8, 0.65)}">${Math.round(pt.attribution * 100)}%</div><div class="k-sub">${pt.attributionNote}</div></div>
+    <div class="kpi"><div class="k-label">Message echo</div><div class="k-value ${cls(pt.messageEcho, 0.6, 0.45)}">${Math.round(pt.messageEcho * 100)}%</div><div class="k-sub">${pt.messageEchoNote}</div></div>
+    <div class="kpi"><div class="k-label">Purchase intent</div><div class="k-value ${cls(pt.purchaseIntent, 0.09, 0.06)}">${Math.round(pt.purchaseIntent * 100)}%</div><div class="k-sub">${pt.purchaseIntentNote}</div></div>`;
+
+  // What people think it's about — single-metric distribution, alpha-teal encoding
+  const maxT = Math.max(...pt.think.map(t => t.pct));
+  $('think-rows').innerHTML = pt.think.map(t => `
+    <div class="rcp-hbar-row">
+      <span class="rcp-hbar-name">${t.label}</span>
+      <span class="rcp-hbar-track"><span class="rcp-hbar-fill" style="width:${t.pct}%;background:hsl(var(--primary) / ${tealAlpha(t.pct, maxT)})"></span></span>
+      <span class="rcp-hbar-val">${t.pct}%</span>
+    </div>`).join('');
+}
+
+function renderAll() {
+  renderContext(); renderHero(); renderCompareHero(); renderArea();
+  platformDonut($('ov-platform-donut'), $('ov-platform-legend'), current.platforms);
+  renderReadout(); renderSentiment(); renderConversation(); renderCompare();
+}
+
+// ── Landing (KPI strip + filterable card grid) ──
+let listFilter = 'all', listSearch = '';
+function fmtK(n) { return n >= 1000 ? (n / 1000).toFixed(1) + 'K' : '' + n; }
+function renderKPIs() {
+  const live = CAMPAIGNS.filter(c => c.status === 'live').length;
+  const avg = Math.round(CAMPAIGNS.reduce((s, c) => s + c.scores.reception, 0) / CAMPAIGNS.length);
+  const top = [...CAMPAIGNS].sort((a, b) => b.scores.reception - a.scores.reception)[0];
+  const totalConv = CAMPAIGNS.reduce((s, c) => s + c.themes.reduce((a, t) => a + t.freq, 0), 0);
+  $('kpi-strip').innerHTML = `
+    <div class="kpi"><div class="k-label">Live campaigns</div><div class="k-value">${live}</div><div class="k-sub">${CAMPAIGNS.length} tracked total</div></div>
+    <div class="kpi"><div class="k-label">Avg Reception</div><div class="k-value">${avg}</div><div class="k-sub">across all campaigns</div></div>
+    <div class="kpi"><div class="k-label">Top performer</div><div class="k-value pt-good">${top.scores.reception}</div><div class="k-sub">${top.name}</div></div>
+    <div class="kpi"><div class="k-label">Reactions analyzed</div><div class="k-value">${fmtK(totalConv)}</div><div class="k-sub">across tracked campaigns</div></div>`;
+}
+function renderCards() {
+  let list = CAMPAIGNS.filter(c => listFilter === 'all' || c.status === listFilter);
+  if (listSearch) list = list.filter(c => (c.name + ' ' + c.where).toLowerCase().includes(listSearch));
+  list = [...list].sort((a, b) => (a.status === b.status ? b.scores.reception - a.scores.reception : a.status === 'live' ? -1 : 1));
+  if (!list.length) { $('camp-list').innerHTML = `<div class="rcp-empty">No campaigns match.</div>`; return; }
+  $('camp-list').innerHTML = list.map(c => {
+    const net = Math.round((c.sentiment.pos - c.sentiment.neg) * 100);
+    const z = zoneFor(c.scores.reception);
+    const zoneCls = z.cls === 'good' ? 'zone-good' : z.cls === 'watch' ? 'zone-mid' : 'zone-low';
+    const pillars = [['B', c.scores.breakthrough], ['S', c.scores.sentiment], ['P', c.scores.pullthrough]];
+    const status = c.status === 'live'
+      ? `<span class="live-badge active"><span class="live-dot pulse"></span>Live</span>`
+      : `<span class="live-badge inactive">Ended</span>`;
+    return `<button class="rcp-camp-card" data-id="${c.id}" type="button">
+      <div class="rcp-cc-top">
+        ${status}
+        <span class="badge badge-secondary">${c.type === 'tv' ? 'TV / Display' : 'Digital'}</span>
+      </div>
+      <div class="rcp-cc-name">${c.name}</div>
+      <div class="rcp-cc-meta">${c.window} · ${c.where}</div>
+      <div class="rcp-cc-spark" data-spark="${c.id}"></div>
+      <div class="rcp-cc-foot">
+        <div><div class="rcp-cc-score-num ${zoneCls}">${c.scores.reception}</div><div class="rcp-cc-mlbl">Reception</div></div>
+        <div class="rcp-cc-pillars">${pillars.map(p => `<div class="rcp-ccp"><div class="rcp-ccp-bar"><span style="height:${p[1]}%;background:hsl(var(--primary) / ${tealAlpha(p[1], 100)})"></span></div><div class="rcp-ccp-l">${p[0]}</div></div>`).join('')}</div>
+        <div class="rcp-cc-net"><div class="rcp-cc-net-val ${net >= 0 ? 'up' : 'dn'}">${net > 0 ? '+' : ''}${net}%</div><div class="rcp-cc-mlbl">Net sent.</div></div>
+      </div>
+    </button>`;
+  }).join('');
+  list.forEach(c => { const el = document.querySelector(`[data-spark="${c.id}"]`); if (el) sparkline(el, c.series.map(d => d.v)); });
+  document.querySelectorAll('.rcp-camp-card').forEach(r => r.addEventListener('click', () => openCampaign(r.dataset.id)));
+}
+function renderList() { renderKPIs(); renderCards(); }
+
+// ── Routing — each campaign has its own URL (#/c/<id>) so back/forward & deep links work ──
+function showDetail(c) {
+  current = c;
+  $('camp-select').value = c.id;
+  renderAll();
+  document.title = 'Reception — ' + c.name;
+  $('view-list').hidden = true; $('view-detail').hidden = false;
+}
+function showList() {
+  renderList();
+  document.title = 'Reception — Ad social-listening';
+  $('view-detail').hidden = true; $('view-list').hidden = false;
+}
+function renderRoute() {
+  const m = location.hash.match(/^#\/c\/(.+)/);
+  const c = m && CAMPAIGNS.find(x => x.id === decodeURIComponent(m[1]));
+  if (c) showDetail(c); else showList();
+  window.scrollTo({ top: 0 });
+}
+function openCampaign(id) { location.hash = '#/c/' + encodeURIComponent(id); }
+function goHome() { if (location.hash && location.hash !== '#/') location.hash = '#/'; else renderRoute(); }
+window.addEventListener('hashchange', renderRoute);
+
+// ── Campaign select ──
+function buildSelect() {
+  $('camp-select').innerHTML = CAMPAIGNS.map(c => `<option value="${c.id}">Liquid Death — ${c.name}</option>`).join('');
+}
+$('camp-select').addEventListener('change', e => openCampaign(e.target.value));
+
+// ── Tabs (canonical switching JS — brand-api components) ──
+function showAreaTab(name, btn) {
+  document.querySelectorAll('.rcp-tab-panel').forEach(function (p) {
+    p.classList.toggle('active', p.id === 'tab-' + name);
+  });
+  document.querySelectorAll('.rcp-tabs .wtab-text').forEach(function (b) {
+    var on = b === btn;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+}
+
+// ── Dialog ──
+function openModal() { $('modal-backdrop').classList.add('open'); }
+function closeModal() { $('modal-backdrop').classList.remove('open'); }
+$('add-camp-btn').addEventListener('click', openModal);
+$('nav-add').addEventListener('click', e => { e.preventDefault(); openModal(); });
+$('nav-campaigns').addEventListener('click', e => { e.preventDefault(); goHome(); });
+$('back-list').addEventListener('click', e => { e.preventDefault(); goHome(); });
+$('modal-close').addEventListener('click', closeModal);
+$('modal-cancel').addEventListener('click', closeModal);
+$('modal-backdrop').addEventListener('click', e => { if (e.target === $('modal-backdrop')) closeModal(); });
+document.querySelectorAll('input[name="camp-mode"]').forEach(r => r.addEventListener('change', () => {
+  const m = document.querySelector('input[name="camp-mode"]:checked').value;
+  document.querySelectorAll('.rcp-mode-fields').forEach(f => f.classList.toggle('active', f.dataset.fields === m));
+}));
+
+// ── Filters + search ──
+document.querySelectorAll('#filter-seg .wseg-opt').forEach(p => p.addEventListener('click', () => {
+  listFilter = p.dataset.f;
+  document.querySelectorAll('#filter-seg .wseg-opt').forEach(x => {
+    const on = x === p;
+    x.classList.toggle('active', on);
+    x.classList.toggle('inactive', !on);
+  });
+  renderCards();
+}));
+$('search-input').addEventListener('input', e => { listSearch = e.target.value.trim().toLowerCase(); renderCards(); });
+$('search-input').addEventListener('keydown', e => { if (e.key === 'Escape') { e.target.value = ''; listSearch = ''; renderCards(); } });
+
+// ── Toast (confirmations only, bottom-center, auto-dismiss) ──
+let toastTimer;
+function toast(msg) {
+  $('toast-msg').textContent = msg;
+  $('toast-wrap').classList.add('open');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => $('toast-wrap').classList.remove('open'), 2600);
+}
+$('modal-create').addEventListener('click', () => {
+  const name = $('f-name').value.trim() || 'Untitled campaign';
+  const mode = document.querySelector('input[name="camp-mode"]:checked').value;
+  closeModal();
+  toast(mode === 'tv'
+    ? `“${name}” queued — matching social chatter to your airing window. Index builds in ~24h.`
+    : `“${name}” queued — pulling creative + comments. Reception will populate shortly.`);
+  ['f-name', 'f-links', 'f-where', 'f-creative', 'f-context'].forEach(id => { if ($(id)) $(id).value = ''; });
+});
+
+// ── Init ──
+buildSelect();
+renderRoute();   // render from the URL hash — supports deep links to a campaign
+</script>
+</body>
+</html>
