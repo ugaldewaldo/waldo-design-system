@@ -55,13 +55,15 @@ Ownership (don't edit across the line — pass a change request to the owner ins
 - `.tsx` components · `globals.css` · `tailwind.config.ts` → **Component Library**
 - The Figma Master DS file + its variables → **Figma Master**
 - `waldo-labs/` prototypes → **Brand API Prototypes**
+- `brand-kit/` (marketing pattern library: social, emails, backgrounds, collateral, doctrine) → **Brand Kit**
 
 **Which session are you?** (root is shared, so state your role at the start of a session by what you work on):
 - cwd inside `waldo-labs/` → you are **Brand API Prototypes** (also read `waldo-labs/CLAUDE.md`).
+- cwd inside `brand-kit/` → you are **Brand Kit** (marketing assets; also read `brand-kit/README.md`). Tracks Linear project "Marketing Brand Kit" (MAR-2279). Note: `brand-kit/DESIGN.md` is vendored from `waldo-agentic` — marketing-only palette IS allowed there, unlike product UI.
 - working `tools/detect.js` · `token-catalog.yaml` · `build-waldo-ds.sh`/`waldo-ds.css` · the guard/CI/sync → you are **Validador** (also read `tools/CLAUDE.md`).
 - working `.tsx` components · `globals.css` · `tailwind.config.ts` (+ their demos in `index.html`) → you are **Component Library**.
 - working `usage-doctrine.yaml` · `lint-doctrine.js` · `/ds-*` skills → you are **Intelligence Layer**.
-Only Brand API is dir-scoped (`waldo-labs/`); Validador / Component Library / Intelligence Layer all work from the repo root and are distinguished by the files above, not by folder.
+Brand API (`waldo-labs/`) and Brand Kit (`brand-kit/`) are dir-scoped; Validador / Component Library / Intelligence Layer all work from the repo root and are distinguished by the files above, not by folder.
 
 To change a color/token: edit `tokens.json` → `globals.css` → `tailwind.config.ts`, fix any hardcoded `.tsx`, run `bash tools/build-waldo-ds.sh`, `/ds-verify`, commit/push; ask Validador to add the token to `token-catalog.yaml`; ask Figma Master to write it to Figma via MCP. The guard blocks the commit if any of this is incomplete.
 

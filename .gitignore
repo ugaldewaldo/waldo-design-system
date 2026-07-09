@@ -22,3 +22,6 @@ npm-debug.log
 
 # Doctrines app runtime backups
 docs/*.bak
+
+# Session tooling
+.impeccable/
