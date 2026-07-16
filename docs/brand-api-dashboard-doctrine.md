@@ -304,6 +304,20 @@ body { display: block !important; }
 svg { flex: none; min-height: fit-content; }
 ```
 
+**Publishing as a claude.ai artifact** — the artifact wrapper injects its own unlayered
+`body { background:#faf9f5; color:#141413 }` (light theme), which cuts off the color
+inheritance the DS sets on `html`. Any text without an explicit `color` renders
+near-black on the dark surface. When a prototype ships as an artifact, add this to the
+overrides block (the prototype's own script must add `class="dark"` to `<html>`,
+since the artifact wrapper strips attributes from the source `<html>` tag):
+```css
+/* claude.ai artifact wrapper injects body{background:#faf9f5;color:#141413} */
+html.dark, html.dark body { background: hsl(var(--background)); color: hsl(var(--foreground)); }
+```
+Never patch wrapper collisions ad hoc — extend this block instead, so the fix ships to
+every future artifact. And before reporting a published artifact, screenshot the
+**published URL**, not the local file — wrapper collisions only reproduce there.
+
 Beyond the overrides, known `waldo-ds.css` collisions to guard against (all bit real
 prototypes): a bare `section { display:none }`, `.input { height:40px }`, and a border
 injected via `[class*=card]`. If a generic class name goes wrong, suspect a DS
@@ -609,6 +623,7 @@ _A prototype that breaks one of these is wrong. detect.js / review must reject i
 - [hard] Do not declare `html`/`body` with `height:100%` or `overflow:hidden` — breaks scroll.
 - [hard] Do not put `overflow` other than `visible` on `body` — it silently kills `position: sticky` (the scroll override belongs on `html` only).
 - [hard] Do not omit the required DS conflict overrides.
+- [hard] Do not report a claude.ai artifact as done without a screenshot of the **published URL** — the artifact wrapper injects `body{background;color}` styles that only reproduce there, and any text relying on inherited color goes black (see "Publishing as a claude.ai artifact").
 - [hard] Do not stack anything under the header identity — no subtitle, tagline, or descriptor below the logo/name; the header lockup is one line.
 
 ### Should — strong defaults
