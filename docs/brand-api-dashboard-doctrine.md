@@ -288,6 +288,23 @@ The page title matches the prototype name; the subtitle is a short product descr
 ⚠️ `waldo-ds.css` injects a `border-bottom` on `.page-header` — always kill it with
 `border-bottom: none !important`.
 
+### Buttons — variant selection (from the Button/Dialog usage doctrine)
+
+The variant encodes the surface, not your preference. Getting this wrong is the #1
+"doesn't look like Waldo" tell:
+
+- **View-level primary CTA** (page header, card action): `btn btn-default` —
+  green-700 fill + white text. **ONE default button per view/card/dialog**, max.
+- **Dialog footer primary CTA**: `btn btn-white`, 44px tall × 192px wide, right-aligned
+  in a space-between footer. NOT `btn-default` — dialogs confirm with the white button
+  (copy the footer markup from the `index.html` Dialog recipes verbatim).
+- **Secondary actions**: `btn-ghost` (with border) or `btn-bare` (no border) — never a
+  second filled button next to a primary.
+- **Destructive**: `destructive` (soft, coral/10%) for in-context danger;
+  `destructive-solid` ONLY inside confirmation dialogs, never first-touch.
+- `btn-secondary` = zinc fill for toolbar/contextual actions; `btn-white` outside dialog
+  footers only over images/color backgrounds.
+
 ### Page shell
 
 **Required DS conflict overrides** — these are load-bearing fixes for `waldo-ds.css`
@@ -635,6 +652,7 @@ _A prototype that breaks one of these is wrong. detect.js / review must reject i
 - [hard] Do not omit the required DS conflict overrides.
 - [hard] Do not report a claude.ai artifact as done without a screenshot of the **published URL** — the artifact wrapper injects `body{background;color}` styles that only reproduce there, and any text relying on inherited color goes black (see "Publishing as a claude.ai artifact").
 - [hard] Do not publish an artifact whose HTML hasn't passed `node tools/detect.js <file>` with 0 errors — publishing IS shipping, same bar as a commit (see "Publishing as a claude.ai artifact").
+- [hard] Do not use `btn-default` as a dialog footer CTA — dialog footers confirm with `btn-white` (44px × 192px); copy the footer markup from the `index.html` Dialog recipes (see "Buttons — variant selection").
 - [hard] Do not stack anything under the header identity — no subtitle, tagline, or descriptor below the logo/name; the header lockup is one line.
 
 ### Should — strong defaults
