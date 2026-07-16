@@ -136,6 +136,16 @@ const TW_FOREIGN_PALETTE =
 
 /* ── Scanner ───────────────────────────────────────────────────── */
 
+// CSS properties whose value is a color — used by the def/use mismatch check (rule 10)
+const COLOR_PROPS = new Set([
+  'color', 'background', 'background-color', 'background-image', 'border', 'border-color',
+  'border-top-color', 'border-right-color', 'border-bottom-color', 'border-left-color',
+  'outline', 'outline-color', 'fill', 'stroke', 'box-shadow', 'text-shadow',
+  'caret-color', 'text-decoration-color', 'accent-color', 'stop-color', 'column-rule-color',
+]);
+const HSL_TRIPLET = /^\d+(?:\.\d+)?(?:deg)?\s+\d+(?:\.\d+)?%\s+\d+(?:\.\d+)?%$/;
+const NUM_TRIPLET = /^\d+(?:\.\d+)?\s+\d+(?:\.\d+)?\s+\d+(?:\.\d+)?$/;
+
 function scanFile(filePath, rules) {
   const findings = [];
   const text = fs.readFileSync(filePath, 'utf8');
@@ -144,6 +154,14 @@ function scanFile(filePath, rules) {
     findings.push({ file: filePath, line, severity, rule, message, suggestion: suggestion || null });
 
   let inBlock = false; // inside a multi-line /* */ comment
+
+  // rule 10 state — custom-property definitions and consumptions, cross-checked after the loop.
+  // Same-file only by design: a self-contained prototype/artifact vendors its theme inline, so a
+  // token defined as hex but consumed as hsl(var()) (or a triplet consumed bare) is fully visible
+  // here — and it's the exact mismatch that renders transparent fills / invisible text (PRO-2741).
+  const propDefs = new Map();  // name → { value, line } (first definition wins)
+  const hslUses = new Map();   // name → first line consumed as hsl(var(--name))
+  const bareUses = new Map();  // name → first line consumed as bare var(--name) in a color property
 
   lines.forEach((rawLine, i) => {
     const n = i + 1;
@@ -260,7 +278,47 @@ function scanFile(filePath, rules) {
         }
       }
     }
+
+    // 10 (collect). custom-property definitions + consumptions — cross-checked after the loop
+    for (const m of line.matchAll(/(--[a-zA-Z][\w-]*)\s*:\s*([^;{}]+)[;}]/g)) {
+      if (!propDefs.has(m[1])) propDefs.set(m[1], { value: m[2].trim(), line: n });
+    }
+    for (const m of line.matchAll(/hsl\(\s*var\((--[a-zA-Z][\w-]*)/g)) {
+      if (!hslUses.has(m[1])) hslUses.set(m[1], n);
+    }
+    for (const m of line.matchAll(/var\((--[a-zA-Z][\w-]*)\)/g)) {
+      const pre = line.slice(Math.max(0, m.index - 5), m.index);
+      if (/(?:hsla?|rgba?)\($/.test(pre)) continue; // wrapped — handled above
+      const propM = line.slice(0, m.index).match(/([a-zA-Z-]+)\s*:\s*[^;{]*$/);
+      if (!propM || !COLOR_PROPS.has(propM[1].toLowerCase())) continue;
+      if (!bareUses.has(m[1])) bareUses.set(m[1], n);
+    }
   });
+
+  // 10 (check). def/use form mismatch — the color parses as invalid and silently drops,
+  // so buttons lose their fill and text goes transparent/black with zero other symptoms.
+  for (const [name, useLine] of hslUses) {
+    const def = propDefs.get(name);
+    if (!def) continue; // defined in another file (linked theme) — out of per-file scope
+    if (/#[0-9a-fA-F]{3,8}\b/.test(def.value) || /^rgba?\(/.test(def.value)) {
+      add(useLine, 'error', 'hsl-hex-token',
+        `${name} is defined as "${def.value}" (L${def.line}) but consumed as hsl(var(${name})) — hsl(<hex>) is invalid and the color silently drops`,
+        `redefine ${name} as an HSL triplet (H S% L%) to match its hsl(var()) consumers — stale vendored theme? re-vendor from the current DS`);
+    } else if (NUM_TRIPLET.test(def.value)) {
+      add(useLine, 'error', 'hsl-hex-token',
+        `${name} is defined as the RGB triplet "${def.value}" (L${def.line}) but consumed as hsl(var(${name})) — wrong color model, renders as a different color`,
+        `redefine ${name} as an HSL triplet (H S% L%) to match its hsl(var()) consumers`);
+    }
+  }
+  for (const [name, useLine] of bareUses) {
+    const def = propDefs.get(name);
+    if (!def) continue;
+    if (HSL_TRIPLET.test(def.value) || NUM_TRIPLET.test(def.value)) {
+      add(useLine, 'error', 'bare-triplet-var',
+        `${name} is defined as the triplet "${def.value}" (L${def.line}) but consumed bare as var(${name}) in a color — invalid, the declaration silently drops`,
+        `wrap it: hsl(var(${name}))`);
+    }
+  }
 
   return findings;
 }

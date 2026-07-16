@@ -318,6 +318,16 @@ Never patch wrapper collisions ad hoc — extend this block instead, so the fix 
 every future artifact. And before reporting a published artifact, screenshot the
 **published URL**, not the local file — wrapper collisions only reproduce there.
 
+Artifacts can't `<link>` the theme (CSP blocks external requests), so they **vendor it
+inline** — which means a stale vendored copy ships silently. A theme whose primitives
+are still hex while the CSS consumes `hsl(var(--token))` renders transparent button
+fills and invisible text (the PRO-2741 class of bug). Two mandatory gates:
+1. Vendor the theme from the **current** DS (`waldo-ui/waldo-shadcn-theme.css`, or
+   waldo-agentic's registry at its current UPSTREAM pin) — never from an old checkout.
+2. Run `node tools/detect.js <artifact-file>` on the exact HTML you are about to
+   publish (any explicit path works, even outside the repo) — it must exit 0. The
+   `hsl-hex-token` / `bare-triplet-var` rules catch the def/use mismatch statically.
+
 Beyond the overrides, known `waldo-ds.css` collisions to guard against (all bit real
 prototypes): a bare `section { display:none }`, `.input { height:40px }`, and a border
 injected via `[class*=card]`. If a generic class name goes wrong, suspect a DS
@@ -624,6 +634,7 @@ _A prototype that breaks one of these is wrong. detect.js / review must reject i
 - [hard] Do not put `overflow` other than `visible` on `body` — it silently kills `position: sticky` (the scroll override belongs on `html` only).
 - [hard] Do not omit the required DS conflict overrides.
 - [hard] Do not report a claude.ai artifact as done without a screenshot of the **published URL** — the artifact wrapper injects `body{background;color}` styles that only reproduce there, and any text relying on inherited color goes black (see "Publishing as a claude.ai artifact").
+- [hard] Do not publish an artifact whose HTML hasn't passed `node tools/detect.js <file>` with 0 errors — publishing IS shipping, same bar as a commit (see "Publishing as a claude.ai artifact").
 - [hard] Do not stack anything under the header identity — no subtitle, tagline, or descriptor below the logo/name; the header lockup is one line.
 
 ### Should — strong defaults
