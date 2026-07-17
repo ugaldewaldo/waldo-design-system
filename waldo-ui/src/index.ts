@@ -216,4 +216,6 @@ export { Toggle, toggleVariants } from "./components/ui/toggle";
 
 export { ToggleGroup, ToggleGroupItem } from "./components/ui/toggle-group";
 
+export { WaldoLogo } from "./components/ui/waldo-logo";
+
 export { useIsMobile } from "./hooks/use-mobile";
