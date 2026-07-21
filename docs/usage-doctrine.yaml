@@ -740,8 +740,10 @@ components:
       padding 28, column gap 20, no border) / .wcard-head / .wcard-title (20px medium -2%)
       / .wcard-sub (14px regular muted) / .wcard-body / .wcard-footer. Never re-declare
       card header sizes locally in a prototype — copy from showcase #comp-card.
-      React layer (card.tsx) is shadcn default and not yet aligned to the 20/14 spec
-      (CardTitle: leading-none font-semibold) — aligning it needs Miguel's approval.
+      React layer (card.tsx): surface aligned to canon on 2026-07-17 with Miguel's approval
+      (border and shadow removed, radius 16 / rounded-2xl). Header type ramp (CardTitle
+      20px medium -2% / CardDescription 14px muted) is still shadcn default — aligning
+      that part still needs Miguel's approval.
 
   - component: Sidebar
     use_when:

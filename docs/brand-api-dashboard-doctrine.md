@@ -288,6 +288,23 @@ The page title matches the prototype name; the subtitle is a short product descr
 ⚠️ `waldo-ds.css` injects a `border-bottom` on `.page-header` — always kill it with
 `border-bottom: none !important`.
 
+### Buttons — variant selection (from the Button/Dialog usage doctrine)
+
+The variant encodes the surface, not your preference. Getting this wrong is the #1
+"doesn't look like Waldo" tell:
+
+- **View-level primary CTA** (page header, card action): `btn btn-default` —
+  green-700 fill + white text. **ONE default button per view/card/dialog**, max.
+- **Dialog footer primary CTA**: `btn btn-white`, 44px tall × 192px wide, right-aligned
+  in a space-between footer. NOT `btn-default` — dialogs confirm with the white button
+  (copy the footer markup from the `index.html` Dialog recipes verbatim).
+- **Secondary actions**: `btn-ghost` (with border) or `btn-bare` (no border) — never a
+  second filled button next to a primary.
+- **Destructive**: `destructive` (soft, coral/10%) for in-context danger;
+  `destructive-solid` ONLY inside confirmation dialogs, never first-touch.
+- `btn-secondary` = zinc fill for toolbar/contextual actions; `btn-white` outside dialog
+  footers only over images/color backgrounds.
+
 ### Page shell
 
 **Required DS conflict overrides** — these are load-bearing fixes for `waldo-ds.css`
@@ -303,6 +320,30 @@ body { display: block !important; }
 /* waldo-ds.css sets svg{display:block} — collapses ring/icon SVGs inside flex containers */
 svg { flex: none; min-height: fit-content; }
 ```
+
+**Publishing as a claude.ai artifact** — the artifact wrapper injects its own unlayered
+`body { background:#faf9f5; color:#141413 }` (light theme), which cuts off the color
+inheritance the DS sets on `html`. Any text without an explicit `color` renders
+near-black on the dark surface. When a prototype ships as an artifact, add this to the
+overrides block (the prototype's own script must add `class="dark"` to `<html>`,
+since the artifact wrapper strips attributes from the source `<html>` tag):
+```css
+/* claude.ai artifact wrapper injects body{background:#faf9f5;color:#141413} */
+html.dark, html.dark body { background: hsl(var(--background)); color: hsl(var(--foreground)); }
+```
+Never patch wrapper collisions ad hoc — extend this block instead, so the fix ships to
+every future artifact. And before reporting a published artifact, screenshot the
+**published URL**, not the local file — wrapper collisions only reproduce there.
+
+Artifacts can't `<link>` the theme (CSP blocks external requests), so they **vendor it
+inline** — which means a stale vendored copy ships silently. A theme whose primitives
+are still hex while the CSS consumes `hsl(var(--token))` renders transparent button
+fills and invisible text (the PRO-2741 class of bug). Two mandatory gates:
+1. Vendor the theme from the **current** DS (`waldo-ui/waldo-shadcn-theme.css`, or
+   waldo-agentic's registry at its current UPSTREAM pin) — never from an old checkout.
+2. Run `node tools/detect.js <artifact-file>` on the exact HTML you are about to
+   publish (any explicit path works, even outside the repo) — it must exit 0. The
+   `hsl-hex-token` / `bare-triplet-var` rules catch the def/use mismatch statically.
 
 Beyond the overrides, known `waldo-ds.css` collisions to guard against (all bit real
 prototypes): a bare `section { display:none }`, `.input { height:40px }`, and a border
@@ -609,6 +650,9 @@ _A prototype that breaks one of these is wrong. detect.js / review must reject i
 - [hard] Do not declare `html`/`body` with `height:100%` or `overflow:hidden` — breaks scroll.
 - [hard] Do not put `overflow` other than `visible` on `body` — it silently kills `position: sticky` (the scroll override belongs on `html` only).
 - [hard] Do not omit the required DS conflict overrides.
+- [hard] Do not report a claude.ai artifact as done without a screenshot of the **published URL** — the artifact wrapper injects `body{background;color}` styles that only reproduce there, and any text relying on inherited color goes black (see "Publishing as a claude.ai artifact").
+- [hard] Do not publish an artifact whose HTML hasn't passed `node tools/detect.js <file>` with 0 errors — publishing IS shipping, same bar as a commit (see "Publishing as a claude.ai artifact").
+- [hard] Do not use `btn-default` as a dialog footer CTA — dialog footers confirm with `btn-white` (44px × 192px); copy the footer markup from the `index.html` Dialog recipes (see "Buttons — variant selection").
 - [hard] Do not stack anything under the header identity — no subtitle, tagline, or descriptor below the logo/name; the header lockup is one line.
 
 ### Should — strong defaults

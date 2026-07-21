@@ -225,6 +225,7 @@ Components reference **semantic tokens only** — never primitives directly.
 
 ### Brand green (product)
 - `green-700: #2a6c6d` → **default button fill + white text** (6.06:1 AA)
+- ⚠️ **Dialog footers are the exception:** the primary CTA inside a dialog/modal footer (`.wdialog-footer` / `DialogFooter`) is `btn-white`, never the green primary fill. Cancel = `btn-outline`; destructive confirmations = `btn-destructive`. Source: `docs/usage-doctrine.yaml` → Button + Dialog.
 - `green-500: #32a9a9` → primary brand · `accent-brand` · field labels · focus rings · accents
 - `green-600: #2c797a` → hover state of green-500 fills
 

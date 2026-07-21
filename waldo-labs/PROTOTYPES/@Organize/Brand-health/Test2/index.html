@@ -216,7 +216,7 @@ body { background: hsl(var(--background)); color: hsl(var(--foreground)); font-f
 .ds-hbar-name { width: 120px; flex: none; font-size: var(--fs-sm); font-weight: 400; line-height: 20px; letter-spacing: -0.28px; color: hsl(var(--muted-foreground)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ds-hbar-inner { flex: 1; display: flex; align-items: center; gap: 12px; }
 .ds-hbar-track { flex: 1; height: 6px; background: hsl(var(--muted)); border-radius: 12px; overflow: hidden; }
-.ds-hbar-fill { height: 100%; border-radius: 9999px; background: linear-gradient(to right, color-mix(in srgb, hsl(var(--primary)) 23%, transparent), rgb(var(--green-400))); }
+.ds-hbar-fill { height: 100%; border-radius: 9999px; background: linear-gradient(to right, color-mix(in srgb, hsl(var(--primary)) 23%, transparent), hsl(var(--green-400))); }
 .ds-hbar-val { width: 46px; flex: none; text-align: right; font-size: var(--fs-xs); font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; }
 .ds-hbar-row.stacked { flex-direction: column; align-items: stretch; height: auto; padding: 8px 12px; gap: 4px; }
 .ds-hbar-row.stacked .ds-hbar-name { width: auto; }
@@ -228,7 +228,7 @@ body { background: hsl(var(--background)); color: hsl(var(--foreground)); font-f
 .bar-track-label { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .bar-track-val { font-size: var(--fs-xs); font-weight: 500; color: hsl(var(--foreground)); font-variant-numeric: tabular-nums; white-space: nowrap; flex: none; }
 .bar-track-rail { height: 6px; border-radius: 9999px; background: color-mix(in srgb, hsl(var(--foreground)) 8%, transparent); overflow: hidden; }
-.bar-track-fill { height: 100%; border-radius: 9999px; background: linear-gradient(to right, color-mix(in srgb, hsl(var(--primary)) 23%, transparent), rgb(var(--green-400))); }
+.bar-track-fill { height: 100%; border-radius: 9999px; background: linear-gradient(to right, color-mix(in srgb, hsl(var(--primary)) 23%, transparent), hsl(var(--green-400))); }
 .bar-track.muted .bar-track-fill { background: linear-gradient(to right, color-mix(in srgb, hsl(var(--muted-foreground)) 20%, transparent), color-mix(in srgb, hsl(var(--muted-foreground)) 55%, transparent)); }
 .bar-track.warn .bar-track-fill { background: linear-gradient(to right, color-mix(in srgb, hsl(var(--warning)) 23%, transparent), hsl(var(--warning))); }
 .bar-track-note { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); opacity: 0.7; }
@@ -853,7 +853,7 @@ tr.median-row td:first-child { font-style: normal; }
     </div>
     <div class="wdialog-footer">
       <button class="btn btn-ghost" id="trk-cancel">Cancel</button>
-      <button class="btn btn-default" id="trk-save">Create tracker</button>
+      <button class="btn btn-white" id="trk-save">Create tracker</button>
     </div>
   </div>
 </div>
