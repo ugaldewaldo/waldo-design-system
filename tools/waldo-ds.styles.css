@@ -873,16 +873,16 @@ table.wui-table tbody tr.row-selected td { background: hsl(var(--primary) / 0.04
       .wdd-sep { height:1px;background:hsl(var(--border));margin:4px 0; }
 
 /* ── style block 8 ── */
-.wdialog { background:hsl(var(--card));border:1px solid hsl(var(--foreground) / 0.08);border-radius:32px;box-shadow:var(--shadow-dialog);display:flex;flex-direction:column;width:100%;position:relative; }
+.wdialog { background:hsl(var(--card));border:1px solid hsl(var(--foreground) / 0.08);border-radius:32px;box-shadow:var(--shadow-dialog);display:flex;flex-direction:column;width:100%;max-height:calc(100dvh - 2rem);position:relative; }
       .wdialog-sm  { max-width:560px; }
       .wdialog-md  { max-width:720px; }
       .wdialog-lg  { max-width:960px; }
-      .wdialog-header { display:flex;align-items:center;justify-content:space-between;padding:28px 32px 20px; }
+      .wdialog-header { flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:28px 32px 20px; }
       .wdialog-title  { font-size:var(--fs-xl);font-weight:500;letter-spacing:-0.01em;color:hsl(var(--foreground)); }
       .wdialog-close  { display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;border:none;background:transparent;color:hsl(var(--muted-foreground));cursor:pointer;transition:background .1s,color .1s; }
       .wdialog-close:hover { background:hsl(var(--accent));color:hsl(var(--foreground)); }
-      .wdialog-body   { padding:0 32px 28px; }
-      .wdialog-footer { display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:20px 32px 28px; }
+      .wdialog-body   { flex:1;overflow-y:auto;padding:0 32px 28px; }
+      .wdialog-footer { flex-shrink:0;display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:20px 32px 28px; }
 
 /* ── style block 9 ── */
 .wtag {
