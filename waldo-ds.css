@@ -1113,6 +1113,11 @@ table.wui-table tbody tr.row-selected td { background: hsl(var(--primary) / 0.04
       .wtab-pill:hover { color:hsl(var(--foreground)); }
       .wtab-pill.active { background:color-mix(in srgb,hsl(var(--foreground)) 14%,transparent);color:hsl(var(--foreground));font-weight:500;box-shadow:0 1px 2px rgba(0,0,0,0.2); }
 
+      /* Compact scale (React: size="sm") — tab rows beside a chart or in a card header,
+         where the 14px row is too heavy. Radius and active fill are unchanged. */
+      .wtabs-pill.sm { padding:0;background:transparent;gap:4px; }
+      .wtabs-pill.sm .wtab-pill { padding:7px 12px;font-size:var(--fs-xs);font-weight:500; }
+
       /* Pill primary tabs — Waldo extension. Main page navigation; at most one per page. */
       .wtabs-pill.primary { background:color-mix(in srgb,hsl(var(--foreground)) 3%,transparent); }
       .wtabs-pill.primary .wtab-pill { padding:6px 16px;color:color-mix(in srgb,hsl(var(--foreground)) 70%,transparent); }

@@ -11,7 +11,8 @@ export type { InputProps } from "./components/ui/input";
 export { Badge, badgeVariants } from "./components/ui/badge";
 export type { BadgeProps } from "./components/ui/badge";
 
-export { Avatar, AvatarImage, AvatarFallback, AvatarGroup } from "./components/ui/avatar";
+export { Avatar, AvatarImage, AvatarFallback, AvatarGroup, EntityAvatar } from "./components/ui/avatar";
+export type { EntityAvatarProps } from "./components/ui/avatar";
 
 export { Checkbox, CheckboxField } from "./components/ui/checkbox";
 
@@ -217,5 +218,44 @@ export { Toggle, toggleVariants } from "./components/ui/toggle";
 export { ToggleGroup, ToggleGroupItem } from "./components/ui/toggle-group";
 
 export { WaldoLogo } from "./components/ui/waldo-logo";
+
+// ── Console patterns (from the Brand API dashboard) ───────────────────────────
+export { PageHeader } from "./components/ui/page-header";
+export type { PageHeaderProps } from "./components/ui/page-header";
+
+export { EntityChip, EntityChipAdd } from "./components/ui/entity-chip";
+export type { EntityChipProps, EntityChipAddProps } from "./components/ui/entity-chip";
+
+export { SearchTrigger } from "./components/ui/search-trigger";
+export type { SearchTriggerProps } from "./components/ui/search-trigger";
+
+export { SecretField } from "./components/ui/secret-field";
+export type { SecretFieldProps } from "./components/ui/secret-field";
+
+export { KvPill } from "./components/ui/kv-pill";
+export type { KvPillProps } from "./components/ui/kv-pill";
+
+// ── Hand-drawn chart primitives ───────────────────────────────────────────────
+export {
+  ChartTooltipPanel, ChartTooltipLabel, ChartTooltipRows,
+  ChartTooltipRow, ChartTooltipTotal, ChartTooltipCaption,
+} from "./components/ui/chart-tooltip-panel";
+export type {
+  ChartTooltipPanelProps, ChartTooltipRowProps, ChartTooltipTotalProps,
+} from "./components/ui/chart-tooltip-panel";
+
+export { ChartLegendRow } from "./components/ui/chart-legend-row";
+export type { ChartLegendRowProps, ChartLegendItem } from "./components/ui/chart-legend-row";
+
+export { DayColumnChart } from "./components/ui/day-column-chart";
+export type { DayColumnChartProps, DayColumnSeries } from "./components/ui/day-column-chart";
+
+export { SparkBars } from "./components/ui/spark-bars";
+export type {
+  SparkBarsProps, SparkBarsDatum, SparkBarsTip, SparkBarsTipCode, SparkBarsTone,
+} from "./components/ui/spark-bars";
+
+export { ShareBar } from "./components/ui/share-bar";
+export type { ShareBarProps, ShareSegment } from "./components/ui/share-bar";
 
 export { useIsMobile } from "./hooks/use-mobile";

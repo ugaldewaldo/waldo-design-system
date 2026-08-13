@@ -49,7 +49,7 @@
 
 <!-- Components panel -->
 <div id="tb-panel-components" class="tb-panel">
-<div id="wb-sidebar" class="wnav-panel" style="margin:8px 8px 8px 40px;height:calc(100% - 16px);border-radius:var(--radius-3xl);padding:8px 0;">
+<div id="wb-sidebar" class="wnav-panel" style="margin:8px 8px 8px 40px;height:calc(100% - 16px);border-radius:var(--radius-3xl);padding:8px 0;overflow-y:auto;scrollbar-width:none;">
   <div class="wnav-search">
     <div class="input-with-icon">
       <div class="input-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
@@ -1312,6 +1312,27 @@ const items = [{ file, id, error: &quot;Unable to process&quot; }]')">Copy</butt
         <div class="demo-code-bar">
           <span class="demo-code-label">&lt;Avatar size="32" shape="square"&gt;&lt;AvatarFallback&gt;NI&lt;/AvatarFallback&gt;&lt;/Avatar&gt;</span>
           <button class="copy-btn" onclick="copyCode(this,'&lt;Avatar size=&quot;32&quot; shape=&quot;square&quot;&gt;\n  &lt;AvatarImage src=&quot;logo.png&quot; /&gt;\n  &lt;AvatarFallback&gt;NI&lt;/AvatarFallback&gt;\n&lt;/Avatar&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">EntityAvatar — image → type icon → initial fallback chain</div>
+      <p class="comp-sub" style="margin-bottom:10px">Tracked entities arrive with three levels of available art: a brand usually has a favicon, an audience or category never does, and a just-created entity has only its name. EntityAvatar walks that chain in one place so every list, chip and table row degrades identically.</p>
+      <div class="demo-block">
+        <div class="demo-canvas" style="align-items:center;gap:16px">
+          <div class="wav wav-square wav-32" style="background:color-mix(in srgb,hsl(var(--chart-1)) 18%,transparent);color:hsl(var(--chart-1))">NI</div>
+          <div class="wav wav-square wav-32" style="background:hsl(var(--muted));color:color-mix(in srgb,hsl(var(--foreground)) 70%,transparent);display:flex;align-items:center;justify-content:center">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
+          </div>
+          <div class="wav wav-square wav-32" style="background:hsl(var(--muted));color:color-mix(in srgb,hsl(var(--foreground)) 70%,transparent);display:flex;align-items:center;justify-content:center">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2H2v10l9.29 9.29a1 1 0 0 0 1.42 0l8.58-8.58a1 1 0 0 0 0-1.42Z"/><circle cx="7" cy="7" r="1"/></svg>
+          </div>
+          <div class="wav wav-square wav-32" style="background:hsl(var(--muted))">T</div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;EntityAvatar name="Nike" image={favicon} shape="square" /&gt; · &lt;EntityAvatar name="Sneaker collectors" icon={&lt;Users /&gt;} shape="square" /&gt;</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;EntityAvatar name=&quot;Nike&quot; image={favicon} shape=&quot;square&quot; /&gt;\n&lt;EntityAvatar name=&quot;Sneaker collectors&quot; icon={&lt;Users /&gt;} shape=&quot;square&quot; /&gt;\n&lt;EntityAvatar name=&quot;Tesla&quot; shape=&quot;square&quot; /&gt;   {/* → T */}')">Copy</button>
         </div>
       </div>
     </div>
@@ -3732,6 +3753,26 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
         <div class="demo-code-bar">
           <span class="demo-code-label">&lt;TabsList variant="pill"&gt;&lt;TabsTrigger value="files"&gt;Files&lt;/TabsTrigger&gt;…&lt;/TabsList&gt;</span>
           <button class="copy-btn" onclick="copyCode(this,'&lt;Tabs defaultValue=&quot;files&quot;&gt;\n  &lt;TabsList variant=&quot;pill&quot;&gt;\n    &lt;TabsTrigger value=&quot;files&quot;&gt;Files&lt;/TabsTrigger&gt;\n    &lt;TabsTrigger value=&quot;shared&quot;&gt;Shared&lt;/TabsTrigger&gt;\n  &lt;/TabsList&gt;\n&lt;/Tabs&gt;')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pill, compact size -->
+    <div class="section">
+      <div class="section-title">Pill · size sm — time ranges and other controls that sit beside a chart</div>
+      <div class="demo-block">
+        <div class="demo-canvas col" style="gap:16px;align-items:flex-start">
+          <div class="wtabs-pill sm" id="tabs-pill-sm">
+            <button class="wtab-pill" onclick="switchTab('tabs-pill-sm',this)">1D</button>
+            <button class="wtab-pill" onclick="switchTab('tabs-pill-sm',this)">1W</button>
+            <button class="wtab-pill active" onclick="switchTab('tabs-pill-sm',this)">1M</button>
+            <button class="wtab-pill" onclick="switchTab('tabs-pill-sm',this)">YTD</button>
+            <button class="wtab-pill" onclick="switchTab('tabs-pill-sm',this)">Custom</button>
+          </div>
+        </div>
+        <div class="demo-code-bar">
+          <span class="demo-code-label">&lt;TabsTrigger variant="pill" size="sm" value="1m"&gt;1M&lt;/TabsTrigger&gt; — a time-range row is NOT a separate component</span>
+          <button class="copy-btn" onclick="copyCode(this,'&lt;Tabs defaultValue=&quot;1m&quot;&gt;\n  &lt;TabsList variant=&quot;pill&quot;&gt;\n    &lt;TabsTrigger variant=&quot;pill&quot; size=&quot;sm&quot; value=&quot;1d&quot;&gt;1D&lt;/TabsTrigger&gt;\n    &lt;TabsTrigger variant=&quot;pill&quot; size=&quot;sm&quot; value=&quot;1m&quot;&gt;1M&lt;/TabsTrigger&gt;\n  &lt;/TabsList&gt;\n&lt;/Tabs&gt;')">Copy</button>
         </div>
       </div>
     </div>
@@ -8678,7 +8719,7 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
 <!-- Brand API panel -->
 <div id="tb-panel-brand-api" class="tb-panel">
-<div id="wb-brand-api-sidebar" class="wnav-panel" style="margin:8px 8px 8px 40px;height:calc(100% - 16px);border-radius:var(--radius-3xl);padding:8px 0;">
+<div id="wb-brand-api-sidebar" class="wnav-panel" style="margin:8px 8px 8px 40px;height:calc(100% - 16px);border-radius:var(--radius-3xl);padding:8px 0;overflow-y:auto;scrollbar-width:none;">
   <div class="sb-group">
     <div class="sb-group-label">Brand API</div>
     <div class="sb-items-wrap">
@@ -8707,6 +8748,11 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <button class="sb-item" onclick="brandApiGo('comp-theme-pill',this)">Theme Pill</button>
     <button class="sb-item" onclick="brandApiGo('comp-threaded-comment',this)">Threaded Comment</button>
     <button class="sb-item" onclick="brandApiGo('comp-tracker-item',this)">Tracker Item</button>
+    <button class="sb-item" onclick="brandApiGo('comp-entity-chip',this)">Entity Chip</button>
+    <button class="sb-item" onclick="brandApiGo('comp-kv-pill',this)">Kv Pill</button>
+    <button class="sb-item" onclick="brandApiGo('comp-page-header',this)">Page Header</button>
+    <button class="sb-item" onclick="brandApiGo('comp-search-trigger',this)">Search Trigger</button>
+    <button class="sb-item" onclick="brandApiGo('comp-secret-field',this)">Secret Field</button>
     <button class="sb-item" onclick="brandApiGo('comp-vote-column',this)">Vote Column</button>
     <button class="sb-item" onclick="brandApiGo('comp-waldo-logo',this)">Waldo Logo</button>
     </div>
@@ -8714,11 +8760,16 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   <div class="sb-group">
     <div class="sb-group-label">Charts</div>
     <div class="sb-items-wrap">
+    <button class="sb-item" onclick="brandApiGo('chart-page-legend-row',this)">Chart Legend Row</button>
+    <button class="sb-item" onclick="brandApiGo('chart-page-tooltip-panel',this)">Chart Tooltip Panel</button>
     <button class="sb-item" onclick="brandApiGo('chart-page-column-card',this)">Column Cards</button>
+    <button class="sb-item" onclick="brandApiGo('chart-page-day-column',this)">Day Column Chart</button>
     <button class="sb-item" onclick="brandApiGo('chart-page-gantt',this)">Gantt</button>
     <button class="sb-item" onclick="brandApiGo('chart-page-hbar',this)">Horizontal Bar</button>
     <button class="sb-item" onclick="brandApiGo('chart-page-proportion',this)">Proportion Bar</button>
     <button class="sb-item" onclick="brandApiGo('chart-page-segbar',this)">Segmented Bar</button>
+    <button class="sb-item" onclick="brandApiGo('chart-page-share-bar',this)">Share Bar</button>
+    <button class="sb-item" onclick="brandApiGo('chart-page-spark-bars',this)">Spark Bars</button>
     <button class="sb-item" onclick="brandApiGo('chart-page-sparkline',this)">Sparkline</button>
     <button class="sb-item" onclick="brandApiGo('chart-page-trend',this)">Trend Line</button>
     </div>
@@ -11239,6 +11290,237 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
   </div>
 </div>
 
+<div id="comp-page-header" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Page Header</div>
+    <div class="page-desc">The top of a console page: 30px title, optional muted scope suffix, subtitle, and actions pinned right. The <code>scope</code> is a label, not a control — it disambiguates twin pages that exist at two scopes without adding another way to navigate.</div>
+  </div>
+
+  <style>
+    .wpage-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; width: 100%; }
+    .wpage-title { display: flex; align-items: center; gap: 12px; font-size: var(--fs-3xl); font-weight: 500; letter-spacing: -0.02em; color: hsl(var(--foreground)); }
+    .wpage-scope { color: hsl(var(--muted-foreground) / 0.5); }
+    .wpage-sub { margin-top: 12px; font-size: var(--fs-sm); letter-spacing: -0.02em; color: hsl(var(--muted-foreground)); }
+    .wpage-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; padding-top: 4px; }
+  </style>
+
+  <div class="section">
+    <div class="section-title">With scope, subtitle and actions</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div class="wpage-head">
+          <div>
+            <div class="wpage-title">Mentions <span class="wpage-scope">Nike</span></div>
+            <div class="wpage-sub">Every mention we captured this period, with its source and sentiment.</div>
+          </div>
+          <div class="wpage-actions">
+            <button class="btn btn-ghost btn-sm">Export report</button>
+            <button class="btn btn-sm">Add to watchlist</button>
+          </div>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;PageHeader title="Mentions" scope="Nike" subtitle="…" actions={…} /&gt;</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Title only — organization scope, where the chrome already names it</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div class="wpage-head">
+          <div><div class="wpage-title">Share of Voice</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /#comp-page-header -->
+
+<div id="comp-entity-chip" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Entity Chip</div>
+    <div class="page-desc">A tracked entity as a pill: favicon or type icon, then the name with its kind underneath. Two lines is the point — a brand, an audience and a category can share a name, so the kind travels with it. The dashed sibling adds a new entity to the row.</div>
+  </div>
+
+  <style>
+    .wechip { display: flex; align-items: center; gap: 9px; flex-shrink: 0; border-radius: var(--radius-full); background: hsl(var(--foreground) / 0.04); padding: 8px 16px 8px 10px; border: none; cursor: pointer; transition: background-color 0.1s; }
+    .wechip:hover { background: hsl(var(--foreground) / 0.08); }
+    .wechip-art { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; flex-shrink: 0; border-radius: var(--radius-md); object-fit: cover; color: hsl(var(--foreground) / 0.7); }
+    .wechip-text { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; line-height: 1; }
+    .wechip-name { font-size: var(--fs-sm); letter-spacing: -0.02em; color: hsl(var(--foreground)); white-space: nowrap; }
+    .wechip-kind { font-size: var(--fs-xs); letter-spacing: -0.02em; color: hsl(var(--muted-foreground)); white-space: nowrap; }
+    .wechip-add { display: flex; align-items: center; height: 46px; flex-shrink: 0; border-radius: var(--radius-full); border: 1px dashed hsl(var(--border) / 0.12); background: transparent; padding: 0 16px; font-size: var(--fs-sm); letter-spacing: -0.02em; color: hsl(var(--foreground) / 0.7); cursor: pointer; transition: border-color 0.1s, color 0.1s; }
+    .wechip-add:hover { border-color: hsl(var(--border) / 0.25); color: hsl(var(--foreground)); }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Coverage row — brands, an audience, a category</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="wechip">
+          <span class="wechip-art" style="background:hsl(var(--chart-1) / 0.18);font-size:var(--fs-xs);font-weight:500;">N</span>
+          <span class="wechip-text"><span class="wechip-name">Nike</span><span class="wechip-kind">Brand</span></span>
+        </button>
+        <button class="wechip">
+          <span class="wechip-art" style="background:hsl(var(--chart-6) / 0.18);font-size:var(--fs-xs);font-weight:500;">A</span>
+          <span class="wechip-text"><span class="wechip-name">Adidas</span><span class="wechip-kind">Brand</span></span>
+        </button>
+        <button class="wechip">
+          <span class="wechip-art">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
+          </span>
+          <span class="wechip-text"><span class="wechip-name">Sneaker collectors</span><span class="wechip-kind">Audience</span></span>
+        </button>
+        <button class="wechip">
+          <span class="wechip-art">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2H2v10l9.29 9.29a1 1 0 0 0 1.42 0l8.58-8.58a1 1 0 0 0 0-1.42Z"/><circle cx="7" cy="7" r="1"/></svg>
+          </span>
+          <span class="wechip-text"><span class="wechip-name">Performance footwear</span><span class="wechip-kind">Category</span></span>
+        </button>
+        <button class="wechip-add">+ Add</button>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;EntityChip name="Nike" kind="Brand" image={favicon} /&gt; · &lt;EntityChipAdd /&gt;</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Name only — when the kind is obvious from context</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="wechip"><span class="wechip-text"><span class="wechip-name">Tesla</span></span></button>
+        <button class="wechip"><span class="wechip-text"><span class="wechip-name">Spotify</span></span></button>
+      </div>
+    </div>
+  </div>
+</div><!-- /#comp-entity-chip -->
+
+<div id="comp-search-trigger" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Search Trigger</div>
+    <div class="page-desc">The pill in a top bar that opens the ⌘K command palette. It looks like an input but it is a button — typing happens inside the Command dialog, so a real input here would trap focus and duplicate the palette's own field. Composes <code>Kbd</code> for the shortcut hint.</div>
+  </div>
+
+  <style>
+    .wsearch-trigger { display: flex; align-items: center; gap: 8px; height: 36px; width: 144px; border-radius: var(--radius-full); border: 1px solid hsl(var(--border) / 0.12); background: hsl(var(--background)); padding: 0 14px; cursor: pointer; transition: border-color 0.1s; }
+    .wsearch-trigger:hover { border-color: hsl(var(--border) / 0.25); }
+    .wsearch-trigger svg { flex-shrink: 0; color: hsl(var(--foreground) / 0.6); }
+    .wsearch-placeholder { flex: 1; text-align: left; font-size: var(--fs-sm); letter-spacing: -0.02em; color: hsl(var(--foreground) / 0.6); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .wsearch-kbd { flex-shrink: 0; font-size: var(--fs-xs); font-weight: 500; letter-spacing: -0.02em; color: hsl(var(--muted-foreground)); }
+  </style>
+
+  <div class="section">
+    <div class="section-title">In a top bar</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="display:flex;align-items:center;justify-content:flex-end;gap:20px;">
+        <button class="btn btn-ghost btn-sm">Feedback</button>
+        <button class="wsearch-trigger">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <span class="wsearch-placeholder">Search...</span>
+          <span class="wsearch-kbd">⌘K</span>
+        </button>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;SearchTrigger onClick={() =&gt; setOpen(true)} /&gt;</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Custom placeholder, no shortcut hint</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="display:flex;align-items:center;gap:12px;">
+        <button class="wsearch-trigger" style="width:200px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <span class="wsearch-placeholder">Search brands...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div><!-- /#comp-search-trigger -->
+
+<div id="comp-secret-field" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Secret Field</div>
+    <div class="page-desc">A credential the user needs to copy but shouldn't have sitting in plain sight. Reveal and copy are separate affordances — copying is the common case and must not require exposing the value first. Masking is display-only: it defends against a shoulder or a screen recording, it is not a security control.</div>
+  </div>
+
+  <style>
+    .wsecret { display: flex; align-items: center; gap: 8px; border-radius: var(--radius-xl); border: 1px solid hsl(var(--border) / 0.14); background: hsl(var(--background) / 0.4); padding: 10px 14px; }
+    .wsecret-value { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-mono); font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); }
+    .wsecret-action { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; flex-shrink: 0; border: none; background: transparent; border-radius: var(--radius-md); color: hsl(var(--muted-foreground)); cursor: pointer; transition: color 0.1s; }
+    .wsecret-action:hover { color: hsl(var(--foreground)); }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Masked by default — reveal and copy</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div class="wsecret" style="width:100%;max-width:420px;">
+          <code class="wsecret-value" id="secret-demo-value">waldo_sk_••••••••••••••c2f4</code>
+          <button class="wsecret-action" id="secret-demo-eye" aria-label="Reveal value" onclick="secretDemoToggle()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button class="wsecret-action" id="secret-demo-copy" aria-label="Copy value" onclick="secretDemoCopy()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16V4a2 2 0 0 1 2-2h10"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;SecretField value="waldo_sk_…" visiblePrefix="waldo_sk_" /&gt;</span>
+      </div>
+      <script>
+      (function(){
+        var full = 'waldo_sk_9f3c1e8b7a204d6fc2f4';
+        var masked = 'waldo_sk_' + '•'.repeat(14) + 'c2f4';
+        var shown = false;
+        window.secretDemoToggle = function(){
+          shown = !shown;
+          document.getElementById('secret-demo-value').textContent = shown ? full : masked;
+          document.getElementById('secret-demo-eye').setAttribute('aria-label', shown ? 'Hide value' : 'Reveal value');
+        };
+        window.secretDemoCopy = function(){
+          if (navigator.clipboard) navigator.clipboard.writeText(full);
+          var btn = document.getElementById('secret-demo-copy');
+          btn.style.color = 'hsl(var(--primary))';
+          setTimeout(function(){ btn.style.color = ''; }, 1400);
+        };
+      })();
+      </script>
+    </div>
+  </div>
+</div><!-- /#comp-secret-field -->
+
+<div id="comp-kv-pill" class="waldo-page">
+  <div class="page-header">
+    <div class="page-title">Kv Pill</div>
+    <div class="page-desc">A label and its value on one baseline, in a pill. For metadata that is read, not acted on — a row of these under an expanded record beats a two-column table when the values are short. Use Badge instead when the value carries its own colour semantics.</div>
+  </div>
+
+  <style>
+    .wkv { display: inline-flex; align-items: baseline; gap: 6px; border-radius: var(--radius-full); background: hsl(var(--foreground) / 0.05); padding: 4px 12px; font-size: var(--fs-xs); letter-spacing: -0.02em; white-space: nowrap; }
+    .wkv-label { color: hsl(var(--muted-foreground)); }
+    .wkv-value { color: hsl(var(--foreground)); }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Metadata row under an expanded mention</div>
+    <div class="demo-block">
+      <div class="demo-canvas" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <span class="wkv"><span class="wkv-label">Source:</span><span class="wkv-value">Reddit</span></span>
+        <span class="wkv"><span class="wkv-label">Reach:</span><span class="wkv-value">48.2K</span></span>
+        <span class="wkv"><span class="wkv-label">Sentiment:</span><span class="wkv-value">Positive</span></span>
+        <span class="wkv"><span class="wkv-label">Captured:</span><span class="wkv-value">2 h ago</span></span>
+        <span class="wkv"><span class="wkv-label">Mention:</span><span class="wkv-value" style="font-family:var(--font-mono);">mnt_8fa2c1</span></span>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code-label">&lt;KvPill label="Source" value="Reddit" /&gt;</span>
+      </div>
+    </div>
+  </div>
+</div><!-- /#comp-kv-pill -->
 <div id="chart-page-hbar" class="waldo-page">
   <div class="chart-page-header">
     <div class="chart-page-title">Horizontal Bar</div>
@@ -11898,6 +12180,256 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
     <div class="demo-code-bar"><span class="demo-code-label">.colcard-row > .colcard-col (.colcard-card.pos|neg + .colcard-label)</span></div>
   </div>
 </div><!-- /#chart-page-column-card -->
+<div id="chart-page-tooltip-panel" class="waldo-page">
+  <div class="chart-page-title">Chart Tooltip Panel</div>
+  <div class="chart-page-desc">The floating panel for charts drawn by hand rather than by Recharts. Purely presentational — it does not position itself and knows nothing about the chart; the chart owns the hover math. Charts compose this instead of restyling a popover each time. For charts built on the DS <code>Chart</code> wrapper, use <code>ChartTooltipContent</code> instead — that one speaks Recharts' payload shape.</div>
+
+  <style>
+    .wctip { border-radius: var(--radius-xl); border: 1px solid hsl(var(--border) / 0.12); background: hsl(var(--popover) / 0.95); padding: 12px 14px; box-shadow: var(--shadow-popover); backdrop-filter: blur(12px); }
+    .wctip-label { margin-bottom: 10px; font-size: var(--fs-sm); font-weight: 500; letter-spacing: -0.02em; color: hsl(var(--foreground)); }
+    .wctip-rows { display: flex; flex-direction: column; gap: 6px; }
+    .wctip-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: var(--fs-sm); }
+    .wctip-name { display: flex; align-items: center; gap: 10px; white-space: nowrap; color: hsl(var(--foreground) / 0.7); }
+    .wctip-dot { width: 7px; height: 7px; flex-shrink: 0; border-radius: var(--radius-full); }
+    .wctip-val { font-weight: 500; font-variant-numeric: tabular-nums; color: hsl(var(--foreground)); }
+    .wctip-total { margin-top: 10px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-top: 1px solid hsl(var(--border) / 0.1); padding-top: 10px; font-size: var(--fs-sm); }
+    .wctip-total-label { color: hsl(var(--foreground) / 0.55); }
+    .wctip-caption { margin-top: 10px; display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; }
+    .wctip-caption-main { font-size: var(--fs-sm); font-variant-numeric: tabular-nums; color: hsl(var(--foreground) / 0.55); }
+    .wctip-caption-sub { font-size: var(--fs-xs); font-variant-numeric: tabular-nums; color: hsl(var(--foreground) / 0.35); }
+  </style>
+
+  <div class="chart-demo-block">
+    <div class="chart-demo-label">Label + series rows + total — the day-column shape</div>
+    <div class="demo-canvas" style="display:flex;align-items:flex-start;gap:32px;flex-wrap:wrap;">
+      <div class="wctip" style="width:210px;">
+        <div class="wctip-label">10 Jul</div>
+        <div class="wctip-rows">
+          <div class="wctip-row"><span class="wctip-name"><span class="wctip-dot" style="background:hsl(var(--chart-1))"></span>Nike</span><span class="wctip-val">163</span></div>
+          <div class="wctip-row"><span class="wctip-name"><span class="wctip-dot" style="background:hsl(var(--chart-6))"></span>Adidas</span><span class="wctip-val">70</span></div>
+        </div>
+        <div class="wctip-total"><span class="wctip-total-label">Total mentions</span><span class="wctip-val">233</span></div>
+      </div>
+
+      <div class="wctip" style="width:200px;">
+        <div class="wctip-rows">
+          <div class="wctip-row"><span class="wctip-name"><span class="wctip-dot" style="background:hsl(var(--chart-1))"></span>Positive</span><span class="wctip-val">1,204</span></div>
+          <div class="wctip-row"><span class="wctip-name"><span class="wctip-dot" style="background:hsl(var(--chart-2))"></span>Neutral</span><span class="wctip-val">318</span></div>
+          <div class="wctip-row"><span class="wctip-name"><span class="wctip-dot" style="background:hsl(var(--warning))"></span>Negative</span><span class="wctip-val">42</span></div>
+        </div>
+        <div class="wctip-caption">
+          <span class="wctip-caption-main">8:35am – 8:40am</span>
+          <span class="wctip-caption-sub">1:35am – 1:40am UTC</span>
+        </div>
+      </div>
+
+      <div class="wctip">
+        <div class="wctip-row" style="gap:10px;">
+          <span class="wctip-name"><span class="wctip-dot" style="background:hsl(var(--chart-1))"></span>Nike</span>
+          <span class="wctip-val">58%</span>
+          <span style="font-variant-numeric:tabular-nums;color:hsl(var(--foreground) / 0.55);">1,204 mentions</span>
+        </div>
+      </div>
+    </div>
+    <div class="demo-code-bar">
+      <span class="demo-code-label">&lt;ChartTooltipPanel&gt;&lt;ChartTooltipLabel/&gt;&lt;ChartTooltipRows&gt;&lt;ChartTooltipRow dot="hsl(var(--chart-1))" …/&gt;&lt;/&gt;&lt;ChartTooltipTotal/&gt;&lt;/&gt;</span>
+    </div>
+  </div>
+</div><!-- /#chart-page-tooltip-panel -->
+<div id="chart-page-legend-row" class="waldo-page">
+  <div class="chart-page-title">Chart Legend Row</div>
+  <div class="chart-page-desc">The horizontal legend under a hand-drawn chart: dot, series name, and its share or value. Wraps, so it degrades on narrow cards instead of clipping. Hover an item to dim the others — pass the hovered index back to the chart so both dim together. For Recharts charts on the DS <code>Chart</code> wrapper, use <code>ChartLegendContent</code> instead.</div>
+
+  <style>
+    .wclegend { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; }
+    .wclegend-item { display: flex; align-items: center; gap: 8px; font-size: var(--fs-xs); letter-spacing: -0.02em; white-space: nowrap; transition: opacity 0.1s; }
+    .wclegend:hover .wclegend-item { opacity: 0.45; }
+    .wclegend .wclegend-item:hover { opacity: 1; }
+    .wclegend-dot { width: 7px; height: 7px; flex-shrink: 0; border-radius: var(--radius-full); }
+    .wclegend-name { color: hsl(var(--muted-foreground)); }
+    .wclegend-val { font-variant-numeric: tabular-nums; color: hsl(var(--foreground)); }
+  </style>
+
+  <div class="chart-demo-block">
+    <div class="chart-demo-label">Six series with shares — hover to isolate</div>
+    <div class="demo-canvas">
+      <div class="wclegend" style="width:100%;max-width:680px;">
+        <span class="wclegend-item"><span class="wclegend-dot" style="background:hsl(var(--chart-1))"></span><span class="wclegend-name">Nike</span><span class="wclegend-val">31%</span></span>
+        <span class="wclegend-item"><span class="wclegend-dot" style="background:hsl(var(--chart-6))"></span><span class="wclegend-name">Adidas</span><span class="wclegend-val">24%</span></span>
+        <span class="wclegend-item"><span class="wclegend-dot" style="background:hsl(var(--chart-7))"></span><span class="wclegend-name">New Balance</span><span class="wclegend-val">17%</span></span>
+        <span class="wclegend-item"><span class="wclegend-dot" style="background:hsl(var(--chart-4))"></span><span class="wclegend-name">Asics</span><span class="wclegend-val">12%</span></span>
+        <span class="wclegend-item"><span class="wclegend-dot" style="background:hsl(var(--chart-5))"></span><span class="wclegend-name">Puma</span><span class="wclegend-val">9%</span></span>
+        <span class="wclegend-item"><span class="wclegend-dot" style="background:hsl(var(--chart-9))"></span><span class="wclegend-name">On Running</span><span class="wclegend-val">7%</span></span>
+      </div>
+    </div>
+    <div class="demo-code-bar">
+      <span class="demo-code-label">&lt;ChartLegendRow items={[{name:"Nike", color:"hsl(var(--chart-1))", value:"31%"}, …]} /&gt;</span>
+    </div>
+  </div>
+</div><!-- /#chart-page-legend-row -->
+<div id="chart-page-day-column" class="waldo-page">
+  <div class="chart-page-title">Day Column Chart</div>
+  <div class="chart-page-desc">One thin capsule per day, stacked by series — a dense period at a glance inside a card. At rest the columns are hairline capsules at 80%; the hovered column <strong>widens</strong> and goes fully opaque, which is what makes a 6px column hoverable at all. Use a stacked Bar chart instead when the buckets need axes, gridlines or labels.</div>
+
+  <style>
+    .wdaycol { position: relative; }
+    .wdaycol-plot { position: relative; display: flex; align-items: flex-end; height: 140px; }
+    .wdaycol-slot { position: relative; display: flex; flex: 1; align-items: flex-end; justify-content: center; height: 100%; }
+    .wdaycol-bar { display: flex; flex-direction: column-reverse; overflow: hidden; width: 6px; border-radius: var(--radius-full); opacity: 0.8; box-shadow: inset 0 0 0 0.5px hsl(var(--background) / 0.45); transition: width 0.1s, opacity 0.1s, border-radius 0.1s; }
+    .wdaycol-slot:hover .wdaycol-bar { width: 24px; opacity: 1; border-radius: var(--radius-md); }
+    .wdaycol-tip { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); z-index: 20; pointer-events: none; opacity: 0; transition: opacity 0.1s; }
+    .wdaycol-slot:hover .wdaycol-tip { opacity: 1; }
+    .wdaycol-axis { margin-top: 12px; display: flex; justify-content: space-between; font-size: var(--fs-xs); letter-spacing: -0.02em; color: hsl(var(--muted-foreground)); }
+  </style>
+
+  <div class="chart-demo-block">
+    <div class="chart-demo-label">Mentions per day, two brands — hover a column</div>
+    <div class="demo-canvas">
+      <div class="wcard" style="width:100%;max-width:680px;padding:20px;gap:0;">
+        <div class="wcard-head"><div class="wcard-sub">Mentions per day</div></div>
+        <!-- Headroom for the tooltip, which rises above the hovered column. In
+             production the chart sits at the bottom of a tall card and the tooltip
+             overlays the card's own empty space — reproduced here. -->
+        <div class="wdaycol" style="padding-top:160px;">
+          <div class="wdaycol-plot" id="daycol-plot"></div>
+          <div class="wdaycol-axis"><span>1 Jul</span><span>8 Jul</span><span>15 Jul</span><span>22 Jul</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="demo-code-bar">
+      <span class="demo-code-label">&lt;DayColumnChart dates={…} axisTicks={…} series={[{name:"Nike", color:"hsl(var(--chart-1))", values:[…]}]} /&gt;</span>
+    </div>
+    <script>
+    (function(){
+      var days = ['1 Jul','2 Jul','3 Jul','4 Jul','5 Jul','6 Jul','7 Jul','8 Jul','9 Jul','10 Jul','11 Jul','12 Jul','13 Jul','14 Jul','15 Jul','16 Jul','17 Jul','18 Jul','19 Jul','20 Jul','21 Jul','22 Jul'];
+      var nike =   [82,96,74,110,128,91,68,104,142,163,138,120,155,171,149,132,168,180,157,144,176,190];
+      var adidas = [41,38,52,44,61,49,33,57,66,70,58,64,72,81,69,60,77,84,71,66,80,88];
+      var plot = document.getElementById('daycol-plot');
+      if (!plot) return;
+      var totals = days.map(function(_, i){ return nike[i] + adidas[i]; });
+      var max = Math.max.apply(null, totals);
+      plot.innerHTML = days.map(function(d, i){
+        var total = totals[i];
+        return '<div class="wdaycol-slot">' +
+          '<div class="wdaycol-tip"><div class="wctip" style="width:210px;">' +
+            '<div class="wctip-label">' + d + '</div>' +
+            '<div class="wctip-rows">' +
+              '<div class="wctip-row"><span class="wctip-name"><span class="wctip-dot" style="background:hsl(var(--chart-1))"></span>Nike</span><span class="wctip-val">' + nike[i] + '</span></div>' +
+              '<div class="wctip-row"><span class="wctip-name"><span class="wctip-dot" style="background:hsl(var(--chart-6))"></span>Adidas</span><span class="wctip-val">' + adidas[i] + '</span></div>' +
+            '</div>' +
+            '<div class="wctip-total"><span class="wctip-total-label">Total mentions</span><span class="wctip-val">' + total + '</span></div>' +
+          '</div></div>' +
+          '<div class="wdaycol-bar" style="height:' + ((total / max) * 100) + '%">' +
+            '<div style="height:' + ((nike[i] / total) * 100) + '%;background:hsl(var(--chart-1))"></div>' +
+            '<div style="height:' + ((adidas[i] / total) * 100) + '%;background:hsl(var(--chart-6))"></div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    })();
+    </script>
+  </div>
+</div><!-- /#chart-page-day-column -->
+<div id="chart-page-spark-bars" class="waldo-page">
+  <div class="chart-page-title">Spark Bars</div>
+  <div class="chart-page-desc">Recent activity as 2px bars, one per time bucket, with failures stacked on top of each bar. Reads as volume first and health second: a wall of even teal is fine, red caps are not. Use the <a href="#" onclick="brandApiGo('chart-page-sparkline',null);return false;">Sparkline</a> instead for a single trajectory with no failure dimension.</div>
+
+  <style>
+    .wspark { position: relative; }
+    .wspark-track { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; height: 56px; width: 100%; overflow: hidden; border-bottom: 1px solid hsl(var(--border) / 0.12); }
+    .wspark-col { display: flex; flex-direction: column; align-items: stretch; gap: 2px; width: 2px; flex-shrink: 0; }
+    .wspark-seg { border-radius: var(--radius-full); }
+    .wspark-main { background: hsl(var(--primary) / 0.55); transition: background-color 0.075s; }
+    .wspark-col:hover .wspark-main { background: hsl(var(--primary)); }
+    .wspark-err { background: hsl(var(--destructive)); }
+    .wspark-warn { background: hsl(var(--warning)); }
+  </style>
+
+  <div class="chart-demo-block">
+    <div class="chart-demo-label">Inside an activity card — bars carry error and warning caps</div>
+    <div class="demo-canvas">
+      <div class="wcard" style="width:100%;max-width:560px;padding:20px;gap:16px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
+          <div style="display:flex;flex-direction:column;gap:2px;">
+            <span style="font-size:var(--fs-xl);font-weight:500;letter-spacing:-0.02em;color:hsl(var(--foreground));">3,412</span>
+            <span style="font-size:var(--fs-xs);color:hsl(var(--muted-foreground));">Total requests</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:16px;font-size:var(--fs-xs);color:hsl(var(--muted-foreground));">
+            <span style="display:flex;align-items:center;gap:6px;"><span class="wctip-dot" style="background:hsl(var(--destructive))"></span>Errors 14</span>
+            <span style="display:flex;align-items:center;gap:6px;"><span class="wctip-dot" style="background:hsl(var(--warning))"></span>Warnings 6</span>
+          </div>
+        </div>
+        <div class="wspark"><div class="wspark-track" id="spark-track" role="img" aria-label="Activity chart"></div></div>
+      </div>
+    </div>
+    <div class="demo-code-bar">
+      <span class="demo-code-label">&lt;SparkBars data={[{v:0.4}, {v:0.8, e:0.1}, …]} /&gt;</span>
+    </div>
+    <script>
+    (function(){
+      var track = document.getElementById('spark-track');
+      if (!track) return;
+      var vals = [0.34,0.52,0.41,0.66,0.48,0.72,0.58,0.39,0.61,0.77,0.55,0.43,0.68,0.81,0.62,0.49,0.74,0.86,0.65,0.53,0.79,0.91,0.70,0.58,0.83,0.95,0.72,0.61,0.88,0.76];
+      var errs = {5:0.06, 12:0.04, 21:0.08, 27:0.05};
+      var warns = {9:0.04, 25:0.05};
+      var H = 56;
+      track.innerHTML = vals.map(function(v, i){
+        var h = Math.max(6, v * H);
+        var parts = '';
+        if (warns[i]) parts += '<div class="wspark-seg wspark-warn" style="height:' + (warns[i] * H) + 'px"></div>';
+        if (errs[i])  parts += '<div class="wspark-seg wspark-err" style="height:' + (errs[i] * H) + 'px"></div>';
+        parts += '<div class="wspark-seg wspark-main" style="height:' + h + 'px"></div>';
+        return '<div class="wspark-col">' + parts + '</div>';
+      }).join('');
+    })();
+    </script>
+  </div>
+</div><!-- /#chart-page-spark-bars -->
+<div id="chart-page-share-bar" class="waldo-page">
+  <div class="chart-page-title">Share Bar</div>
+  <div class="chart-page-desc">A 6px track split by share, one segment per entity. Hovering a segment names it and dims its siblings, which is what lets a 3px sliver still be readable. React counterpart of the <a href="#" onclick="brandApiGo('chart-page-segbar',null);return false;">Segmented Bar</a> — that one is the tall labelled version, this one is the thin inline version with a hover tooltip. Pass a total larger than the sum to leave unused quota visible as empty track.</div>
+
+  <style>
+    .wsharebar { position: relative; }
+    .wsharebar-pad { display: flex; width: 100%; padding: 4px 0; }
+    .wsharebar-track { display: flex; gap: 2px; height: 6px; width: 100%; overflow: hidden; border-radius: var(--radius-full); background: hsl(var(--secondary)); }
+    .wsharebar-seg { height: 100%; min-width: 3px; transition: opacity 0.1s; }
+    .wsharebar-pad:hover .wsharebar-seg { opacity: 0.45; }
+    .wsharebar-track .wsharebar-seg:hover { opacity: 1; }
+    .wsharebar-seg .wsharebar-tip { position: absolute; bottom: calc(100% + 8px); z-index: 20; pointer-events: none; opacity: 0; transition: opacity 0.1s; transform: translateX(-50%); }
+  </style>
+
+  <div class="chart-demo-block">
+    <div class="chart-demo-label">Credits by entity, against a 50K plan limit — hover a segment</div>
+    <div class="demo-canvas">
+      <div style="width:100%;max-width:680px;display:flex;flex-direction:column;gap:16px;">
+        <div class="wsharebar">
+          <div class="wsharebar-pad">
+            <div class="wsharebar-track">
+              <div class="wsharebar-seg" style="width:24%;background:hsl(var(--chart-1))" title="Nike · 24% · 12,040 credits"></div>
+              <div class="wsharebar-seg" style="width:11%;background:hsl(var(--chart-6))" title="Adidas · 11% · 5,480 credits"></div>
+              <div class="wsharebar-seg" style="width:6%;background:hsl(var(--chart-7))" title="New Balance · 6% · 3,020 credits"></div>
+              <div class="wsharebar-seg" style="width:2%;background:hsl(var(--chart-4))" title="Asics · 2% · 1,010 credits"></div>
+            </div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:var(--fs-xs);color:hsl(var(--muted-foreground));">
+            <span>43% of plan used</span>
+            <span style="font-variant-numeric:tabular-nums;">21.5K / 50K credits</span>
+          </div>
+        </div>
+
+        <div class="wclegend">
+          <span class="wclegend-item"><span class="wclegend-dot" style="background:hsl(var(--chart-1))"></span><span class="wclegend-name">Nike</span><span class="wclegend-val">24%</span></span>
+          <span class="wclegend-item"><span class="wclegend-dot" style="background:hsl(var(--chart-6))"></span><span class="wclegend-name">Adidas</span><span class="wclegend-val">11%</span></span>
+          <span class="wclegend-item"><span class="wclegend-dot" style="background:hsl(var(--chart-7))"></span><span class="wclegend-name">New Balance</span><span class="wclegend-val">6%</span></span>
+          <span class="wclegend-item"><span class="wclegend-dot" style="background:hsl(var(--chart-4))"></span><span class="wclegend-name">Asics</span><span class="wclegend-val">2%</span></span>
+        </div>
+      </div>
+    </div>
+    <div class="demo-code-bar">
+      <span class="demo-code-label">&lt;ShareBar segments={[{name:"Nike", color:"hsl(var(--chart-1))", value:12040}]} total={50000} valueLabel="credits" /&gt;</span>
+    </div>
+  </div>
+</div><!-- /#chart-page-share-bar -->
 <div id="comp-code-block" class="waldo-page">
   <div class="page-header">
     <div class="page-title">Code Block</div>
@@ -11961,6 +12493,8 @@ WALDO_WORKSPACE_ID=ws_nike-competitive-2026</pre>
 </div>
   </div><!-- close section2 -->
 </div><!-- /#comp-code-block + section1 -->
+
+
 
 </div><!-- /#wb-brand-api-main -->
 </div><!-- /#tb-panel-brand-api -->
@@ -12409,7 +12943,7 @@ node tools/detect.js src/components/ --json    # JSON for CI
 
 <!-- Foundations panel -->
 <div id="tb-panel-foundations" class="tb-panel">
-  <div id="wb-foundations-sidebar" class="wnav-panel" style="margin:8px 8px 8px 40px;height:calc(100% - 16px);border-radius:var(--radius-3xl);padding:8px 0;">
+  <div id="wb-foundations-sidebar" class="wnav-panel" style="margin:8px 8px 8px 40px;height:calc(100% - 16px);border-radius:var(--radius-3xl);padding:8px 0;overflow-y:auto;scrollbar-width:none;">
     <div class="sb-group">
       <div class="sb-group-label">Foundation</div>
       <div class="sb-items-wrap">

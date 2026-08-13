@@ -68,7 +68,7 @@ patterns. `use_when` is joined in from `usage-doctrine.yaml`. Machine-readable c
 - **Tooltip** `#comp-tooltip` — use when: Explaining icon-only buttons · Showing keyboard shortcuts · Non-essential supplementary info
 - **Wizard Dialog** `#comp-wizard-dialog` — use when: Multi-step onboarding flows · Setup flows that need contextual images/previews on the right
 
-## Brand API components (27)
+## Brand API components (32)
 
 Dashboard-specific patterns for Brand API prototypes — not core atoms.
 
@@ -97,10 +97,15 @@ Dashboard-specific patterns for Brand API prototypes — not core atoms.
 - **Theme Pill** `#comp-theme-pill`
 - **Threaded Comment** `#comp-threaded-comment` — use when: Nested discussion threads (comment + replies) with a collapsible rail — community/forum conversation surfaces · Showing reply hierarchy where a subtree can be collapsed
 - **Tracker Item** `#comp-tracker-item` — use when: A saved watch/tracker row — query + kind/status badges + meta line + embedded sparkline + icon actions · A list of monitored searches/competitors with pause/archive/delete controls
+- **Entity Chip** `#comp-entity-chip` — use when: A tracked entity as a pill — favicon or type icon, name, and its kind underneath · Coverage rows listing the brands, audiences and categories a project tracks · EntityChipAdd as the dashed trailing affordance that adds a new entity to the row
+- **Kv Pill** `#comp-kv-pill` — use when: 'Label and value on one baseline in a pill — "Status: 200", "Region: us-east-1"' · A row of short metadata under an expanded record or log row
+- **Page Header** `#comp-page-header` — use when: The top of any console page — title, optional scope suffix, subtitle, actions pinned right · Twin pages that exist at two scopes (a project's Usage vs the organization's) where the title alone is ambiguous
+- **Search Trigger** `#comp-search-trigger` — use when: The pill in a top bar that opens the ⌘K command palette · Any place a search affordance should look like a field but open a dialog
+- **Secret Field** `#comp-secret-field` — use when: Showing back a credential the user needs to copy — API key, token, webhook signing secret · Anywhere a value should be copyable without being exposed on screen first
 - **Vote Column** `#comp-vote-column` — use when: Upvote/downvote affordance on a post or feed item (vertical column variant) · Inline vote row on a comment (mini variant)
 - **Waldo Logo** `#comp-waldo-logo` — use when: Displaying the Waldo wordmark in topbars, splash screens, or branded surfaces
 
-## Charts / Data-viz (16)
+## Charts / Data-viz (21)
 
 - **Area Charts** `#chart-page-area`
 - **Bar Charts** `#chart-page-bar`
@@ -118,3 +123,8 @@ Dashboard-specific patterns for Brand API prototypes — not core atoms.
 - **Gantt** `#chart-page-gantt`
 - **Segmented Bar** `#chart-page-segbar` — use when: Showing proportional distribution of topics, themes, or categories across a brand's content · Comparing message mix between two brands side by side (one bar per brand) · Sentiment breakdown where each segment's share matters visually
 - **Column Cards** `#chart-page-column-card` — use when: Week-over-week or period comparison of engagement metrics (posts, interactions, delta %) · When the magnitude of each period should be visually encoded by card height
+- **Chart Tooltip Panel** `#chart-page-tooltip-panel` — use when: The floating panel for any chart drawn by hand rather than by Recharts · Composing a hover breakdown: label, series rows with colour dots, an optional total or caption
+- **Chart Legend Row** `#chart-page-legend-row` — use when: The horizontal legend under a hand-drawn chart — dot, series name, share or value · Legends that must wrap on narrow cards instead of clipping
+- **Day Column Chart** `#chart-page-day-column` — use when: A dense period at a glance inside a card — one thin capsule per day, stacked by series · Usage or volume over a month where the shape matters more than exact values
+- **Spark Bars** `#chart-page-spark-bars` — use when: Recent activity as 2px bars, one per time bucket, with failures stacked on top · Inside a card beside the numbers it summarizes (total requests, success rate)
+- **Share Bar** `#chart-page-share-bar` — use when: A 6px track split by share, one segment per project/entity/topic · Hover naming a segment with its percentage and absolute value, dimming its siblings · React surfaces — this is the React counterpart of the vanilla Segmented Bar chart page

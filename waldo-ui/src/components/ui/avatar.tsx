@@ -80,6 +80,46 @@ const AvatarFallback = React.forwardRef<
 ));
 AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName;
 
+// ── EntityAvatar — image → icon → initial fallback chain ──────────────────────
+//
+// Waldo extension. Tracked entities come from three sources with three levels of
+// available art: a brand usually has a favicon, an audience or category never
+// does, and a just-created entity has nothing but its name. This walks that
+// chain in one place so every list, chip and table row degrades the same way.
+//
+//   <EntityAvatar name="Serval AI" image={favicon} shape="square" />
+//   <EntityAvatar name="IT & Ops leaders" icon={<Users />} shape="square" />
+//   <EntityAvatar name="IT Support AI" />        {/* → "I" */}
+//
+// Prefer plain Avatar + AvatarImage/AvatarFallback when the art is always
+// present, or when the fallback is not derived from the name.
+
+export interface EntityAvatarProps extends Omit<AvatarProps, "children"> {
+  /** Entity name — supplies the alt text and the initial fallback. */
+  name: string;
+  /** Logo or favicon URL. Falls through to `icon`, then the initial, if absent or broken. */
+  image?: string;
+  /** Icon for entities that have no art of their own (audiences, categories). */
+  icon?: React.ReactNode;
+}
+
+const EntityAvatar = React.forwardRef<
+  React.ElementRef<typeof AvatarPrimitive.Root>,
+  EntityAvatarProps
+>(({ name, image, icon, ...props }, ref) => (
+  <Avatar ref={ref} {...props}>
+    {image && <AvatarImage src={image} alt={name} />}
+    <AvatarFallback>
+      {icon ? (
+        <span className="flex items-center justify-center [&_svg]:size-[55%]">{icon}</span>
+      ) : (
+        name.charAt(0).toUpperCase()
+      )}
+    </AvatarFallback>
+  </Avatar>
+));
+EntityAvatar.displayName = "EntityAvatar";
+
 // ── AvatarGroup — overlapping avatars with overflow count ─────────────────────
 
 interface AvatarGroupProps {
@@ -117,4 +157,4 @@ function AvatarGroup({ children, max, size = "32", shape = "round", className }:
   );
 }
 
-export { Avatar, AvatarImage, AvatarFallback, AvatarGroup };
+export { Avatar, AvatarImage, AvatarFallback, AvatarGroup, EntityAvatar };

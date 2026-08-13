@@ -91,6 +91,8 @@ const config: Config = {
           850: "rgb(var(--zinc-850) / <alpha-value>)",
           900: "rgb(var(--zinc-900) / <alpha-value>)",
           950: "rgb(var(--zinc-950) / <alpha-value>)",
+          975: "rgb(var(--zinc-975) / <alpha-value>)",
+          990: "rgb(var(--zinc-990) / <alpha-value>)",
         },
       },
 
