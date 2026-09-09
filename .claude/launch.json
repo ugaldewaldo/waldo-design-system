@@ -2,23 +2,57 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "api-dashboard",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/miguelugalde/GitHub/API-Dashboard",
+        "run",
+        "dev"
+      ],
+      "port": 5173,
+      "autoPort": true
+    },
+    {
       "name": "waldo-ds",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["serve", "/Users/miguelugalde/Desktop/waldo-design-system"],
+      "runtimeArgs": [
+        "serve",
+        "/Users/miguelugalde/GitHub/waldo-design-system"
+      ],
       "port": 4501,
       "autoPort": true
     },
     {
       "name": "waldo-os-labs",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["serve", "/Users/miguelugalde/GitHub/waldo-labs/public", "-l", "3105"],
+      "runtimeArgs": [
+        "serve",
+        "/Users/miguelugalde/GitHub/waldo-labs/public",
+        "-l",
+        "3105"
+      ],
       "port": 3105
     },
     {
       "name": "doctrine-panel",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["waldo-labs/doctrine-panel/server.js"],
+      "runtimeArgs": [
+        "waldo-labs/doctrine-panel/server.js"
+      ],
       "port": 4174
+    },
+    {
+      "name": "brand-kit-app",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/miguelugalde/GitHub/Brand-kit",
+        "run",
+        "dev"
+      ],
+      "port": 5174,
+      "autoPort": true
     }
   ]
 }

@@ -402,7 +402,7 @@ Linear PRO-2461 tracks Tailwind config alignment with Steve.
 ## Git
 
 ```bash
-cd /Users/miguelugalde/Desktop/waldo-design-system
+cd /Users/miguelugalde/GitHub/waldo-design-system
 git add -A && git commit -m "..." && git push
 ```
 
