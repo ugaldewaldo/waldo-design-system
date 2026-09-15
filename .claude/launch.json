@@ -53,6 +53,28 @@
       ],
       "port": 5174,
       "autoPort": true
+    },
+    {
+      "name": "waldo-ui-preview",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "preview",
+        "--prefix",
+        "/Users/miguelugalde/GitHub/waldo-design-system/waldo-ui"
+      ],
+      "port": 4400
+    },
+    {
+      "name": "adveron-preview",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--prefix",
+        "/Users/miguelugalde/GitHub/waldo-design-system/adveron-preview"
+      ],
+      "port": 4500
     }
   ]
 }

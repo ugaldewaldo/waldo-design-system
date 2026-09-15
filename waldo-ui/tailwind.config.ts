@@ -6,6 +6,9 @@ const config: Config = {
   darkMode: ["class"],
   content: [
     "./src/**/*.{ts,tsx}",
+    // The live-component preview (see preview/) renders the real components,
+    // so its own markup has to be scanned too.
+    "./preview/**/*.{ts,tsx}",
     // Consuming apps should extend this pattern:
     // "./app/**/*.{ts,tsx}",
     // "./components/**/*.{ts,tsx}",

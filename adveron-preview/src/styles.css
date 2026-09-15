@@ -1,0 +1,25 @@
+/* The app's own stylesheet, imported whole rather than restated: the Tailwind
+   entry, the vendored Waldo theme, the Adveron brand layer and the @theme
+   bridge all come from the file the product ships. */
+@import "./../adveron-src/app/globals.css";
+
+/* Two sources, both named explicitly. Automatic detection finds neither: the
+   app tree is reached through a symlink this project gitignores, and Tailwind
+   skips ignored paths — which is why every brand utility came out empty until
+   these lines existed. */
+@source "../adveron-src";
+@source "./";
+
+/* next/font sets these three on <html> in the app; here they come from the
+   Google Fonts link in index.html, so the faces match what ships. */
+:root {
+  --font-sans: "Inter";
+  --font-display: "IBM Plex Sans";
+  --font-mono: "Geist Mono";
+}
+
+body {
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  -webkit-font-smoothing: antialiased;
+}
