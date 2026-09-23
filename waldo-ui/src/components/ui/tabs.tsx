@@ -20,6 +20,12 @@ import { cn } from "@/lib/utils";
 //           active pill on a subtle track; inactive = foreground/70.
 //           Use for: main page navigation — at most one per page.
 //
+// size: default (14px) · sm (12px, tighter padding) — for tab rows that sit
+//       beside a chart or inside a card header. Set it on TabsTrigger; TabsList
+//       needs no size (its gap is the same at both scales). A time-range row
+//       (1D · 1W · 1M · YTD) is variant="pill" size="sm" — not a separate
+//       component.
+//
 // Built on Radix UI Tabs for full keyboard + ARIA support.
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -92,8 +98,15 @@ const tabsTriggerVariants = cva(
           "data-[state=active]:shadow-surface",
         ],
       },
+      // Compact scale for controls that sit beside a chart or inside a card
+      // header, where the default 14px row is too heavy. Radius and active fill
+      // are unchanged — only type size and vertical padding tighten.
+      size: {
+        default: "",
+        sm: "text-xs py-[7px]",
+      },
     },
-    defaultVariants: { variant: "text" },
+    defaultVariants: { variant: "text", size: "default" },
   }
 );
 
@@ -104,10 +117,10 @@ interface TabsTriggerProps
 const TabsTrigger = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
   TabsTriggerProps
->(({ className, variant, ...props }, ref) => (
+>(({ className, variant, size, ...props }, ref) => (
   <TabsPrimitive.Trigger
     ref={ref}
-    className={cn(tabsTriggerVariants({ variant }), className)}
+    className={cn(tabsTriggerVariants({ variant, size }), className)}
     {...props}
   />
 ));

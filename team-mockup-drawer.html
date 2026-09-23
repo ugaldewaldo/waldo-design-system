@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team — Member drawer</title>
+<link rel="stylesheet" href="waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="waldo-ds.css">
+<style>
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; display: block !important; max-width: none !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: hsl(var(--background)); color: hsl(var(--foreground));
+    font-size: var(--fs-sm); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  svg { flex: none; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  /* ── Top bar ── */
+  .topbar { display: flex; align-items: center; gap: 14px; height: 56px; padding: 0 22px;
+    border-bottom: 1px solid hsl(var(--border)); }
+  .tb-logo { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; }
+  .tb-logo svg { width: 26px; height: 26px; }
+  .tb-org { display: flex; align-items: center; gap: 7px; padding: 6px 8px; border-radius: var(--radius-md);
+    color: hsl(var(--foreground)); font-weight: 500; cursor: pointer; background: transparent; border: none; font-size: var(--fs-sm); }
+  .tb-org:hover { background: hsl(var(--muted)); }
+  .tb-org svg { width: 14px; height: 14px; color: hsl(var(--muted-foreground)); }
+  .tb-spacer { flex: 1; }
+  .tb-feedback { color: hsl(var(--muted-foreground)); cursor: pointer; }
+  .tb-feedback:hover { color: hsl(var(--foreground)); }
+  .tb-search { display: flex; align-items: center; gap: 10px; width: 200px; padding: 7px 12px;
+    background: hsl(var(--secondary)); border-radius: var(--radius-md); color: hsl(var(--muted-foreground)); cursor: text; }
+  .tb-search svg { width: 15px; height: 15px; }
+  .tb-search .kbd { margin-left: auto; font-size: var(--fs-xs); opacity: .7; }
+  .tb-avatar { width: 28px; height: 28px; border-radius: 9999px; overflow: hidden; flex: none;
+    background: linear-gradient(135deg, hsl(var(--chart-4)), hsl(var(--chart-1))); }
+
+  /* ── Icon rail ── */
+  .shell { display: grid; grid-template-columns: 56px 1fr; min-height: calc(100vh - 56px); }
+  .rail { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 16px 0;
+    border-right: 1px solid hsl(var(--border)); }
+  .rail-item { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+    border-radius: var(--radius-md); color: hsl(var(--muted-foreground)); cursor: pointer; }
+  .rail-item svg { width: 18px; height: 18px; }
+  .rail-item:hover { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
+  .rail-item.active { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
+  .rail-item.gear { margin-top: auto; }
+
+  /* ── Main ── */
+  .main { padding: 40px 48px; }
+  .wrap { max-width: 1120px; margin: 0 auto; }
+  .page-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+  .page-title { font-size: var(--fs-3xl); font-weight: 600; letter-spacing: -0.9px; line-height: 1.1; }
+  .page-sub { margin-top: 8px; color: hsl(var(--muted-foreground)); font-size: var(--fs-sm); }
+
+  /* ── Team table ── */
+  .team { margin-top: 34px; }
+  .tm-name { display: flex; align-items: center; gap: 12px; }
+  .tm-nm { font-weight: 500; color: hsl(var(--foreground)); }
+  .tm-role.owner { color: hsl(var(--primary)); }
+  .tm-role { color: color-mix(in srgb, hsl(var(--foreground)) 72%, transparent); }
+  .tm-email { color: hsl(var(--muted-foreground)); }
+  .tm-status { display: inline-flex; align-items: center; gap: 7px; }
+  .tm-status .dot { width: 6px; height: 6px; border-radius: 9999px; }
+  .tm-status.active { color: hsl(var(--primary)); }
+  .tm-status.active .dot { background: hsl(var(--primary)); }
+  .tm-status.invited { color: hsl(var(--warning)); }
+  .tm-status.invited .dot { background: hsl(var(--warning)); }
+
+  .proj-cell { display: inline-flex; align-items: center; gap: 7px; padding: 4px 10px 4px 8px;
+    border-radius: 9999px; background: hsl(var(--foreground) / 0.05); color: color-mix(in srgb, hsl(var(--foreground)) 82%, transparent);
+    font-size: var(--fs-xs); font-weight: 500; border: 1px solid transparent; }
+  .proj-cell svg { width: 13px; height: 13px; color: hsl(var(--muted-foreground)); }
+  .proj-cell.zero { color: hsl(var(--muted-foreground)); }
+  .proj-count { font-variant-numeric: tabular-nums; }
+
+  .tm-actions { display: flex; align-items: center; justify-content: flex-end; }
+  .tm-more { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+    border-radius: var(--radius-md); color: hsl(var(--muted-foreground)); cursor: pointer; background: transparent; border: none; }
+  .tm-more:hover { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
+  .team-foot { margin-top: 22px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+
+  table.wui-table td { padding: 14px 12px; }
+  table.wui-table th { padding: 8px 12px; }
+  table.wui-table tbody tr { cursor: pointer; }
+
+  /* ── Right drawer ── */
+  .drawer-scrim { position: fixed; inset: 0; background: hsl(var(--background) / 0.6);
+    opacity: 0; pointer-events: none; transition: opacity .18s; z-index: 90; }
+  .drawer-scrim.open { opacity: 1; pointer-events: all; }
+  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 400px; max-width: 92vw;
+    background: hsl(var(--card)); border-left: 1px solid hsl(var(--border) / 0.20);
+    box-shadow: -24px 0 64px rgba(0,0,0,0.5); display: flex; flex-direction: column;
+    transform: translateX(100%); transition: transform .22s cubic-bezier(.32,.72,0,1); z-index: 100; }
+  .drawer.open { transform: translateX(0); }
+
+  .dw-header { flex-shrink: 0; padding: 24px 24px 20px; border-bottom: 1px solid hsl(var(--foreground) / 0.06); }
+  .dw-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .dw-close { width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;
+    border-radius: 9999px; border: none; background: transparent; color: hsl(var(--muted-foreground)); cursor: pointer; flex: none; }
+  .dw-close:hover { background: hsl(var(--accent)); color: hsl(var(--foreground)); }
+  .dw-id { display: flex; align-items: center; gap: 13px; margin-top: 2px; }
+  .dw-name { font-size: var(--fs-xl); font-weight: 500; letter-spacing: -0.01em; color: hsl(var(--foreground)); }
+  .dw-email { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 2px; }
+
+  .dw-meta { display: flex; gap: 10px; margin-top: 18px; }
+  .dw-metacard { flex: 1; padding: 10px 12px; background: hsl(var(--foreground) / 0.04); border-radius: var(--radius-lg); }
+  .dw-metalabel { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); text-transform: uppercase; letter-spacing: 0.06em; }
+  .dw-metaval { margin-top: 5px; font-size: var(--fs-sm); font-weight: 500; display: inline-flex; align-items: center; gap: 7px; }
+  .dw-metaval.owner { color: hsl(var(--primary)); }
+  .dw-metaval .dot { width: 6px; height: 6px; border-radius: 9999px; }
+  .dw-metaval.active { color: hsl(var(--primary)); }
+  .dw-metaval.active .dot { background: hsl(var(--primary)); }
+  .dw-metaval.invited { color: hsl(var(--warning)); }
+  .dw-metaval.invited .dot { background: hsl(var(--warning)); }
+
+  .dw-body { flex: 1; overflow-y: auto; padding: 20px 24px; }
+  .dw-sechead { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; }
+  .dw-sectitle { font-size: var(--fs-sm); font-weight: 500; color: hsl(var(--foreground)); }
+  .dw-seccount { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; }
+  .dw-secsub { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-bottom: 12px; }
+
+  .dw-proj { display: flex; align-items: center; gap: 12px; padding: 12px 0;
+    border-bottom: 1px solid hsl(var(--foreground) / 0.06); cursor: pointer; }
+  .dw-proj:last-child { border-bottom: none; }
+  .dw-picon { width: 34px; height: 34px; border-radius: var(--radius-md); flex: none;
+    display: flex; align-items: center; justify-content: center; background: hsl(var(--foreground) / 0.06); color: hsl(var(--muted-foreground)); }
+  .dw-picon svg { width: 16px; height: 16px; }
+  .dw-pinfo { flex: 1; min-width: 0; }
+  .dw-ptitle { display: block; font-size: var(--fs-sm); font-weight: 500; color: hsl(var(--foreground)); }
+  .dw-psub { display: block; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-top: 1px; }
+
+  .dw-footer { flex-shrink: 0; padding: 16px 24px; border-top: 1px solid hsl(var(--foreground) / 0.06);
+    display: flex; align-items: center; gap: 10px; }
+  .dw-footer .grow { flex: 1; }
+
+  /* ── Row actions menu ── */
+  .menu-scrim { position: fixed; inset: 0; z-index: 110; display: none; }
+  .menu-scrim.open { display: block; }
+  .row-menu { position: fixed; z-index: 120; display: none;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.45), 0 0 0 1px hsl(var(--foreground) / 0.06); }
+  .row-menu.open { display: block; }
+  .wdd-item svg.wdd-ic { color: color-mix(in srgb, hsl(var(--foreground)) 50%, transparent); flex-shrink: 0; }
+  .wdd-sectlabel { padding: 6px 16px 4px; font-size: var(--fs-xs); font-weight: 500;
+    text-transform: uppercase; letter-spacing: 0.06em; color: hsl(var(--muted-foreground)); }
+  .rm-text { font-size: var(--fs-sm); line-height: 1.55; color: color-mix(in srgb, hsl(var(--foreground)) 72%, transparent); }
+  .rm-text b { color: hsl(var(--foreground)); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="tb-logo"><svg viewBox="0 0 32 32" fill="none"><path d="M16 3 L28 27 H20 L16 17 L12 27 H4 Z" style="fill:hsl(var(--destructive))"/></svg></span>
+  <button class="tb-org">Serval
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 9l4-4 4 4M8 15l4 4 4-4"/></svg>
+  </button>
+  <div class="tb-spacer"></div>
+  <span class="tb-feedback">Feedback</span>
+  <div class="tb-search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    <span>Search…</span><span class="kbd">⌘K</span>
+  </div>
+  <div class="tb-avatar"></div>
+</div>
+
+<div class="shell">
+  <nav class="rail">
+    <span class="rail-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+    <span class="rail-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5M4 19h16M8 16l3-4 3 2 4-6"/></svg></span>
+    <span class="rail-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg></span>
+    <span class="rail-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 3-5 6-5s6 2 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M15.5 14.2c2 .4 3.5 2 3.5 4.3"/></svg></span>
+    <span class="rail-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="8.5" y="14" width="7" height="7" rx="1.5"/></svg></span>
+    <span class="rail-item gear"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3 1a7 7 0 0 0-2-1.2l-.3-2.5H10.7l-.3 2.5a7 7 0 0 0-2 1.2l-2.3-1-2 3.4 2 1.5A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.5 2 3.4 2.3-1a7 7 0 0 0 2 1.2l.3 2.5h2.6l.3-2.5a7 7 0 0 0 2-1.2l2.3 1 2-3.4-2-1.5c.1-.4.1-.8.1-1.2Z"/></svg></span>
+  </nav>
+
+  <main class="main">
+    <div class="wrap">
+      <div class="page-head">
+        <div>
+          <h1 class="page-title">Team</h1>
+          <div class="page-sub">Who can access this API account, and what they can do.</div>
+        </div>
+        <button class="btn btn-white btn-sm">Invite member</button>
+      </div>
+
+      <div class="team">
+        <div class="table-wrap">
+          <table class="wui-table">
+            <thead>
+              <tr>
+                <th style="width:30%">Member</th>
+                <th style="width:22%">Email</th>
+                <th style="width:12%">Role</th>
+                <th style="width:16%">Projects</th>
+                <th style="width:14%">Status</th>
+                <th style="width:6%"></th>
+              </tr>
+            </thead>
+            <tbody id="teamBody"></tbody>
+          </table>
+        </div>
+        <div class="team-foot">Keys are tied to user + team — removing a member invalidates their keys immediately.</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Member drawer -->
+<div class="drawer-scrim" id="dwScrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true">
+  <div class="dw-header">
+    <div class="dw-top">
+      <div class="dw-id">
+        <span class="avatar av-xl" id="dwAvatar">RV</span>
+        <div>
+          <div class="dw-name" id="dwName">Romy Vassilev</div>
+          <div class="dw-email" id="dwEmail">romy@serval.ai</div>
+        </div>
+      </div>
+      <button class="dw-close" id="dwClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="dw-body">
+    <div class="dw-sechead">
+      <span class="dw-sectitle">Projects</span>
+      <span class="dw-seccount" id="dwCount">2 of 4</span>
+    </div>
+    <div class="dw-secsub">Toggle which projects this member can access.</div>
+    <div id="dwProjects"></div>
+  </div>
+
+  <div class="dw-footer">
+    <span class="grow"></span>
+    <button class="btn btn-outline btn-sm" id="dwCancel">Cancel</button>
+    <button class="btn btn-white btn-sm" id="dwSave">Save changes</button>
+  </div>
+</aside>
+
+<!-- Row actions menu -->
+<div class="menu-scrim" id="menuScrim"></div>
+<div class="wdd row-menu" id="rowMenu"></div>
+
+<!-- Remove confirmation -->
+<div class="dialog-backdrop" id="rmBackdrop">
+  <div class="wdialog wdialog-sm" role="dialog" aria-modal="true">
+    <div class="wdialog-header">
+      <div class="wdialog-title">Remove member</div>
+      <button class="wdialog-close" id="rmClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="wdialog-body">
+      <p class="rm-text" id="rmText"></p>
+    </div>
+    <div class="wdialog-footer">
+      <button class="btn btn-outline btn-sm" id="rmCancel">Cancel</button>
+      <button class="btn btn-destructive btn-sm" id="rmConfirm">Remove member</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  var PROJECTS = [
+    { id: 'ops',  name: 'IT & Ops Watch',  api: 'Brand Intelligence API' },
+    { id: 'mine', name: 'My Project',      api: 'Brand Intelligence API' },
+    { id: 'radar',name: 'Competitor Radar',api: 'Brand Intelligence API' },
+    { id: 'q3',   name: 'Q3 Launch',       api: 'Audience API' }
+  ];
+
+  var MEMBERS = [
+    { id: 'romy',  name: 'Romy Vassilev', email: 'romy@serval.ai',  initials: 'RV', role: 'Owner',  roleClass: 'owner', status: 'active',  projects: ['ops','mine','radar','q3'] },
+    { id: 'mig',   name: 'Miguel Santos',  email: 'miguel@serval.ai', initials: 'MS', role: 'Admin',  roleClass: '',      status: 'active',  projects: ['ops','mine','radar'] },
+    { id: 'steve', name: 'Steve Chen',     email: 'steve@serval.ai',  initials: 'SC', role: 'Member', roleClass: '',      status: 'active',  projects: ['ops','q3'] },
+    { id: 'dev',   name: 'dev@serval.ai',  email: 'dev@serval.ai',    initials: '?',  role: 'Member', roleClass: '',      status: 'invited', projects: [] }
+  ];
+
+  var folderIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>';
+  var chevronIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>';
+  var moreIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/></svg>';
+  var checkIcon = '<svg class="checkbox-check" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="hsl(var(--primary-foreground))" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>';
+
+  function renderTable() {
+    document.getElementById('teamBody').innerHTML = MEMBERS.map(function(m) {
+      var n = m.projects.length;
+      var zero = n === 0 ? ' zero' : '';
+      var label = n === 1 ? '1 project' : n + ' projects';
+      return '<tr data-member="' + m.id + '">'
+        + '<td><div class="tm-name">'
+          + '<span class="avatar av-md">' + m.initials + '</span>'
+          + '<span class="tm-nm">' + m.name + '</span>'
+        + '</div></td>'
+        + '<td class="tm-email">' + m.email + '</td>'
+        + '<td class="tm-role ' + m.roleClass + '">' + m.role + '</td>'
+        + '<td><span class="proj-cell' + zero + '">'
+            + folderIcon + '<span class="proj-count">' + label + '</span>' + chevronIcon
+          + '</span></td>'
+        + '<td><span class="tm-status ' + m.status + '"><span class="dot"></span>'
+            + (m.status === 'active' ? 'Active' : 'Invited') + '</span></td>'
+        + '<td><div class="tm-actions"><button class="tm-more" data-member="' + m.id + '">' + moreIcon + '</button></div></td>'
+        + '</tr>';
+    }).join('');
+
+    document.querySelectorAll('#teamBody tr').forEach(function(tr) {
+      tr.addEventListener('click', function(e) {
+        if (e.target.closest('.tm-more')) return;
+        openDrawer(tr.getAttribute('data-member'));
+      });
+    });
+
+    document.querySelectorAll('.tm-more').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        openMenu(btn.getAttribute('data-member'), btn);
+      });
+    });
+  }
+
+  var scrim = document.getElementById('dwScrim');
+  var drawer = document.getElementById('drawer');
+  var draft = {}, activeMember = null;
+
+  function updateCount() {
+    var n = PROJECTS.filter(function(p){ return draft[p.id]; }).length;
+    document.getElementById('dwCount').textContent = n + ' of ' + PROJECTS.length;
+  }
+
+  function openDrawer(memberId) {
+    var m = MEMBERS.find(function(x){ return x.id === memberId; });
+    activeMember = m;
+    draft = {}; m.projects.forEach(function(p){ draft[p] = true; });
+
+    document.getElementById('dwAvatar').textContent = m.initials;
+    document.getElementById('dwName').textContent = m.name;
+    document.getElementById('dwEmail').textContent = m.email;
+
+    document.getElementById('dwProjects').innerHTML = PROJECTS.map(function(p) {
+      var on = draft[p.id] ? ' checked' : '';
+      return '<label class="dw-proj" data-proj="' + p.id + '">'
+        + '<span class="dw-picon">' + folderIcon + '</span>'
+        + '<span class="dw-pinfo"><span class="dw-ptitle">' + p.name + '</span>'
+          + '<span class="dw-psub">' + p.api + '</span></span>'
+        + '<span class="wswitch"><input type="checkbox"' + on + '>'
+          + '<span class="wswitch-track"><span class="wswitch-thumb"></span></span></span>'
+        + '</label>';
+    }).join('');
+
+    document.querySelectorAll('#dwProjects input').forEach(function(inp) {
+      inp.addEventListener('change', function() {
+        var pid = inp.closest('.dw-proj').getAttribute('data-proj');
+        if (inp.checked) draft[pid] = true; else delete draft[pid];
+        updateCount();
+      });
+    });
+
+    updateCount();
+    scrim.classList.add('open');
+    drawer.classList.add('open');
+  }
+
+  function closeDrawer() { scrim.classList.remove('open'); drawer.classList.remove('open'); }
+
+  function save() {
+    activeMember.projects = PROJECTS.filter(function(p){ return draft[p.id]; }).map(function(p){ return p.id; });
+    renderTable();
+    closeDrawer();
+  }
+
+  document.getElementById('dwClose').addEventListener('click', closeDrawer);
+  document.getElementById('dwCancel').addEventListener('click', closeDrawer);
+  document.getElementById('dwSave').addEventListener('click', save);
+  scrim.addEventListener('click', closeDrawer);
+
+  // ── Row actions menu ──
+  var ICONS = {
+    projects: '<svg class="wdd-ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>',
+    copy:     '<svg class="wdd-ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>',
+    resend:   '<svg class="wdd-ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
+    remove:   '<svg class="wdd-ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M6 6l1 14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-14"/></svg>',
+    check:    '<span class="wdd-check"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>'
+  };
+  var ROLES = ['Owner', 'Admin', 'Member'];
+
+  var menuScrim = document.getElementById('menuScrim');
+  var rowMenu = document.getElementById('rowMenu');
+  var menuMember = null;
+
+  function openMenu(memberId, btn) {
+    var m = MEMBERS.find(function(x){ return x.id === memberId; });
+    menuMember = m;
+
+    var html = '<div class="wdd-item" data-act="manage">' + ICONS.projects + 'Manage projects</div>';
+    if (m.status === 'invited') {
+      html += '<div class="wdd-item" data-act="resend">' + ICONS.resend + 'Resend invite</div>';
+    }
+    html += '<div class="wdd-sep"></div>'
+      + '<div class="wdd-sectlabel">Role</div>'
+      + ROLES.map(function(r) {
+          var act = r === m.role ? ' wdd-active' : '';
+          return '<div class="wdd-item' + act + '" data-act="role" data-role="' + r + '">' + r + ICONS.check + '</div>';
+        }).join('')
+      + '<div class="wdd-sep"></div>'
+      + '<div class="wdd-item" data-act="remove">' + ICONS.remove + 'Remove from team</div>';
+    rowMenu.innerHTML = html;
+
+    // position: right edge aligned to button, below it
+    var rect = btn.getBoundingClientRect();
+    rowMenu.style.top = (rect.bottom + 6) + 'px';
+    rowMenu.style.left = (rect.right - 256) + 'px';
+
+    menuScrim.classList.add('open');
+    rowMenu.classList.add('open');
+
+    rowMenu.querySelectorAll('.wdd-item').forEach(function(item) {
+      item.addEventListener('click', function() { onMenuAction(item.getAttribute('data-act'), item); });
+    });
+  }
+
+  function closeMenu() { menuScrim.classList.remove('open'); rowMenu.classList.remove('open'); }
+
+  function onMenuAction(act, item) {
+    var m = menuMember;
+    if (act === 'manage') { closeMenu(); openDrawer(m.id); return; }
+    if (act === 'role') {
+      m.role = item.getAttribute('data-role');
+      m.roleClass = m.role === 'Owner' ? 'owner' : '';
+      renderTable();
+      closeMenu();
+      return;
+    }
+    if (act === 'remove') { closeMenu(); openRemove(m); return; }
+    // copy / resend — mock, just close
+    closeMenu();
+  }
+
+  menuScrim.addEventListener('click', closeMenu);
+
+  // ── Remove confirmation ──
+  var rmBackdrop = document.getElementById('rmBackdrop');
+  var rmMember = null;
+
+  function openRemove(m) {
+    rmMember = m;
+    document.getElementById('rmText').innerHTML =
+      'Remove <b>' + m.name + '</b> from the team? Their API keys are invalidated immediately and they lose access to all assigned projects.';
+    rmBackdrop.classList.add('open');
+  }
+  function closeRemove() { rmBackdrop.classList.remove('open'); }
+  function confirmRemove() {
+    var i = MEMBERS.indexOf(rmMember);
+    if (i > -1) MEMBERS.splice(i, 1);
+    renderTable();
+    closeRemove();
+  }
+  document.getElementById('rmClose').addEventListener('click', closeRemove);
+  document.getElementById('rmCancel').addEventListener('click', closeRemove);
+  document.getElementById('rmConfirm').addEventListener('click', confirmRemove);
+  rmBackdrop.addEventListener('click', function(e){ if (e.target === rmBackdrop) closeRemove(); });
+
+  renderTable();
+</script>
+</body>
+</html>

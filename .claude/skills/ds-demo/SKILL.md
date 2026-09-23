@@ -15,7 +15,7 @@ This skill forces a doctrine-first workflow. Every step is mandatory. Skipping a
 ## Step 1 — Read the doctrine entry
 
 ```bash
-grep -A 40 "component: <COMPONENT_NAME>" /Users/miguelugalde/Desktop/waldo-design-system/docs/usage-doctrine.yaml
+grep -A 40 "component: <COMPONENT_NAME>" /Users/miguelugalde/GitHub/waldo-design-system/docs/usage-doctrine.yaml
 ```
 
 Extract and internalize:

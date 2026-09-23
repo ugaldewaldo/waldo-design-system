@@ -254,8 +254,10 @@ Components reference **semantic tokens only** — never primitives directly.
 ### Zinc surfaces
 | Token | Hex | Semantic | Use |
 |-------|-----|----------|-----|
-| zinc-950 | #171819 | `surface-default` | App background |
-| zinc-900 | #202123 | `surface-elevated` | Cards, panels |
+| zinc-990 | #0d0d0d | `surface-default` | App background |
+| zinc-975 | #131314 | `surface-elevated` | Cards, panels |
+| zinc-950 | #171819 | — | Pre-2026-08 background (no semantic role) |
+| zinc-900 | #202123 | — | Pre-2026-08 card (no semantic role) |
 | zinc-850 | #242528 | `surface-elevated-alt` | Sidebar |
 | zinc-800 | #27282b | `surface-sunken` | Inputs, code |
 | zinc-750 | #2d2f33 | `secondary` · `surface-popover` | Secondary button bg · menus, dropdowns |
@@ -400,7 +402,7 @@ Linear PRO-2461 tracks Tailwind config alignment with Steve.
 ## Git
 
 ```bash
-cd /Users/miguelugalde/Desktop/waldo-design-system
+cd /Users/miguelugalde/GitHub/waldo-design-system
 git add -A && git commit -m "..." && git push
 ```
 

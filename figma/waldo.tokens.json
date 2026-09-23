@@ -65,10 +65,20 @@
       "900": {
         "value": "#202123",
         "type": "color",
-        "description": "ANCHOR \u2014 card / elevated"
+        "description": "elevated surface, pre-2026-08"
       },
       "950": {
         "value": "#171819",
+        "type": "color",
+        "description": "app background, pre-2026-08"
+      },
+      "975": {
+        "value": "#131314",
+        "type": "color",
+        "description": "ANCHOR \u2014 card / elevated"
+      },
+      "990": {
+        "value": "#0d0d0d",
         "type": "color",
         "description": "ANCHOR \u2014 app background"
       }
@@ -656,11 +666,11 @@
   "semantic": {
     "surface": {
       "default": {
-        "value": "{primitives.zinc.950}",
+        "value": "{primitives.zinc.990}",
         "type": "color"
       },
       "elevated": {
-        "value": "{primitives.zinc.900}",
+        "value": "{primitives.zinc.975}",
         "type": "color"
       },
       "elevated-alt": {

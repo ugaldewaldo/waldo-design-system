@@ -18,13 +18,16 @@ cd "$ROOT" || exit 1
 fail=0
 
 # 1. detect.js on staged, scannable files — excluding index.html (the DS showcase
-#    reference, full of example colors by design) and tools/ (infra, not product UI;
-#    the detector's own source legitimately contains hex literals as detection logic).
+#    reference, full of example colors by design), tools/ (infra, not product UI;
+#    the detector's own source legitimately contains hex literals as detection logic),
+#    and brand-kit/preview/ (mockups of third-party surfaces, where LinkedIn blue and
+#    friends are the whole point and are correctly absent from our token catalog).
 staged="$(git diff --cached --name-only --diff-filter=ACM \
   | grep -E '\.(html|css|tsx|jsx|ts|js|vue|svelte)$' \
   | grep -vx 'index.html' \
   | grep -v '^tools/' \
-  | grep -v '^waldo-labs/' || true)"
+  | grep -v '^waldo-labs/' \
+  | grep -v '^brand-kit/preview/' || true)"
 if [ -n "$staged" ]; then
   count="$(printf '%s\n' "$staged" | grep -c .)"
   echo "▶ detect.js on $count staged file(s)…"

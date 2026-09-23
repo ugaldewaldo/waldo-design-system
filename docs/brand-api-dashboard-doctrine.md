@@ -338,7 +338,7 @@ every future artifact. And before reporting a published artifact, screenshot the
 Artifacts can't `<link>` the theme (CSP blocks external requests), so they **vendor it
 inline** — which means a stale vendored copy ships silently. A theme whose primitives
 are still hex while the CSS consumes `hsl(var(--token))` renders transparent button
-fills and invisible text (the PRO-2741 class of bug). Two mandatory gates:
+fills and invisible text. Two mandatory gates:
 1. Vendor the theme from the **current** DS (`waldo-ui/waldo-shadcn-theme.css`, or
    waldo-agentic's registry at its current UPSTREAM pin) — never from an old checkout.
 2. Run `node tools/detect.js <artifact-file>` on the exact HTML you are about to
@@ -654,6 +654,7 @@ _A prototype that breaks one of these is wrong. detect.js / review must reject i
 - [hard] Do not publish an artifact whose HTML hasn't passed `node tools/detect.js <file>` with 0 errors — publishing IS shipping, same bar as a commit (see "Publishing as a claude.ai artifact").
 - [hard] Do not use `btn-default` as a dialog footer CTA — dialog footers confirm with `btn-white` (44px × 192px); copy the footer markup from the `index.html` Dialog recipes (see "Buttons — variant selection").
 - [hard] Do not stack anything under the header identity — no subtitle, tagline, or descriptor below the logo/name; the header lockup is one line.
+- [hard] Do not add a `border` to a card or to any block nested on a card — the whole surface ladder separates by elevation, never by a line. Kill injected borders instead of overriding their color (see "Card" and the `on-card` rule).
 
 ### Should — strong defaults
 
@@ -669,7 +670,6 @@ _Follow unless the specific design has a documented reason not to._
 - [should] Do not let a separator line appear below the page header — kill the injected border.
 - [should] Do not divide page sections with an `<hr>`/divider line — use spacing + a muted label.
 - [should] Do not split the sidebar identity chip and the nav into two separate boxes — one integrated `var(--popover)` panel, chip as transparent header.
-- [should] Do not add a `border` to cards — elevation only.
 - [should] Do not tint a card background with accent/status tokens (`--primary`, `--warning`, `--destructive`, `--highlight`, `--chart-*`) — in any state, hover included. Status color lives in pills and labels, not surfaces; neutral hover lightening is fine.
 - [should] Do not put the KPI delta inline below the value — badge, top-right.
 - [should] Do not use `--highlight` for HBar fills — HBars are always teal.

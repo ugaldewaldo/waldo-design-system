@@ -6,6 +6,9 @@ const config: Config = {
   darkMode: ["class"],
   content: [
     "./src/**/*.{ts,tsx}",
+    // The live-component preview (see preview/) renders the real components,
+    // so its own markup has to be scanned too.
+    "./preview/**/*.{ts,tsx}",
     // Consuming apps should extend this pattern:
     // "./app/**/*.{ts,tsx}",
     // "./components/**/*.{ts,tsx}",
@@ -91,6 +94,8 @@ const config: Config = {
           850: "rgb(var(--zinc-850) / <alpha-value>)",
           900: "rgb(var(--zinc-900) / <alpha-value>)",
           950: "rgb(var(--zinc-950) / <alpha-value>)",
+          975: "rgb(var(--zinc-975) / <alpha-value>)",
+          990: "rgb(var(--zinc-990) / <alpha-value>)",
         },
       },
 

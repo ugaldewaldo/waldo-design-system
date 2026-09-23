@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center gap-1 rounded-full font-semibold text-xs tracking-[-0.01em] transition-colors select-none whitespace-nowrap",
+  "inline-flex items-center gap-1 rounded-md font-medium text-xs tracking-[-0.01em] transition-colors select-none whitespace-nowrap",
   {
     variants: {
       variant: {
@@ -21,6 +21,15 @@ const badgeVariants = cva(
         default: "px-2   py-0.5 text-xs",
         lg:      "px-2.5 py-1   text-sm",
       },
+      /**
+       * A chip carrying a value a machine returned — a status, a code, a count —
+       * is set in the mono face and upper case. A chip carrying human language
+       * ("Coming soon", a role) stays in the interface face.
+       */
+      mono: {
+        true:  "font-mono font-medium uppercase tracking-[0.06em]",
+        false: "",
+      },
       dot: {
         true:  "",
         false: "",
@@ -29,6 +38,7 @@ const badgeVariants = cva(
     defaultVariants: {
       variant: "default",
       size: "default",
+      mono: false,
       dot: false,
     },
   }
@@ -38,9 +48,9 @@ export interface BadgeProps
   extends React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof badgeVariants> {}
 
-function Badge({ className, variant, size, dot, children, ...props }: BadgeProps) {
+function Badge({ className, variant, size, mono, dot, children, ...props }: BadgeProps) {
   return (
-    <span className={cn(badgeVariants({ variant, size, dot, className }))} {...props}>
+    <span className={cn(badgeVariants({ variant, size, mono, dot, className }))} {...props}>
       {dot && (
         <span
           className={cn(

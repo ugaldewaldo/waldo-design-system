@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insights — Patagonia</title>
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  /* waldo-ds.css sets html,body{height:100%;overflow:hidden} — breaks scroll.
+     Scroll override goes on html ONLY: any overflow other than visible on body
+     silently kills position:sticky (the sticky topbar scrolls away). */
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  /* waldo-ds.css sets body{display:flex!important} — collapses card widths */
+  body { display: block !important; }
+  /* waldo-ds.css sets svg{display:block} — collapses ring/icon SVGs inside flex containers */
+  svg { flex: none; min-height: fit-content; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    max-width: none !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: hsl(var(--background)); color: hsl(var(--foreground));
+    font-size: var(--fs-sm); line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: hsl(var(--primary)); text-decoration: none; }
+  a:hover { opacity: .85; }
+  a.btn, a.btn:hover { opacity: 1; }
+  button { font-family: inherit; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  /* ── App shell — canonical .app-header on top (identity + search in the
+       no-nav exception slot); sidebar is workspace nav, additional to it. ── */
+  .app { display: grid; grid-template-columns: 256px 1fr; gap: 28px; max-width: 1184px; margin: 0 auto; padding: 0 24px; min-height: calc(100vh - 64px); }
+
+  /* ── Sidebar — boxless: chip + nav sit directly on the background ── */
+  .sidebar { display: flex; flex-direction: column; position: sticky; top: 64px; height: calc(100vh - 64px); padding: 14px 0; }
+  .side-panel { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .client-chip { padding: 12px 14px; border: none; text-align: left; width: 100%;
+    background: transparent; cursor: pointer; border-radius: var(--radius-lg);
+    display: flex; align-items: center; gap: 10px; transition: background .12s; color: hsl(var(--foreground)); }
+  .client-chip:hover { background: hsl(var(--muted)); }
+  .client-chip .c-name { font-weight: 500; font-size: var(--fs-sm); line-height: 1.25; }
+  .client-chip .c-sub { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .client-chip .c-chev { margin-left: auto; color: hsl(var(--muted-foreground)); display: flex; }
+  .client-chip .c-chev svg { width: 15px; height: 15px; }
+
+  .side-nav { flex: 1; overflow-y: auto; }
+  .side-nav.wnav-panel { width: auto; margin: 0; padding: 2px 0 8px; background: transparent; border-radius: 0; }
+  .side-nav .wnav-item { text-decoration: none; cursor: pointer; }
+  .side-nav .wnav-item, .side-nav .wnav-item:hover { color: color-mix(in srgb, hsl(var(--foreground)) 70%, transparent); }
+  .side-nav .wnav-item.active { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
+  .side-nav .wnav-item .wnav-icon svg { width: 15px; height: 15px; }
+  .side-nav .wnav-items-wrap { padding: 0 8px; }
+  .side-nav .wnav-section { padding: 12px 16px 6px; }
+
+  .side-foot { padding: 14px 16px; }
+  .side-foot .lbl { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); display: flex; justify-content: space-between; font-variant-numeric: tabular-nums; }
+  .credit-track { height: 6px; background: hsl(var(--muted)); border-radius: var(--radius-full); overflow: hidden; margin: 8px 0 6px; }
+  .credit-fill { height: 100%; background: hsl(var(--primary)); border-radius: var(--radius-full); }
+
+  /* ── Main column ── */
+  .main { display: flex; flex-direction: column; min-width: 0; }
+  .content { padding: 28px 0; width: 100%; }
+
+  /* ── Page header (doctrine — injected border killed) ── */
+  .page-head { margin-bottom: 22px; border-bottom: none !important; display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.8px; line-height: 34px; }
+  .page-head .sub { color: hsl(var(--muted-foreground)); margin-top: 5px; font-size: var(--fs-sm); }
+  .page-head .spacer { flex: 1; }
+
+  /* ── Views ── */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ── Feed toolbar — row rhythm ── */
+  .feed-toolbar { display: flex; align-items: center; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+  .feed-note { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-left: auto; }
+
+  /* ── Insight Card — Recommendation/Opportunity Card family
+       (showcase #comp-recommendation-card / #comp-opportunity-card) ── */
+  .opp-stack { display: flex; flex-direction: column; gap: 14px; }
+  .opp-card { background: hsl(var(--card)); border-radius: 16px; padding: 20px 24px; transition: background .14s; }
+  .opp-card:hover { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--card))); }
+  .opp-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .opp-source { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); }
+  .opp-time { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); opacity: .6; }
+  .opp-match { margin-left: auto; flex: none; }
+  .opp-title { font-size: var(--fs-base); font-weight: 500; letter-spacing: -0.02em; line-height: 1.45; margin-top: 12px; }
+  .opp-excerpt { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); line-height: 1.55; margin-top: 5px; }
+  /* nested on-card block = muted; lockstep hover with the parent card (doctrine) */
+  .opp-draft { background: hsl(var(--muted)); border-radius: var(--radius-lg); padding: 14px 16px; margin-top: 14px; transition: background .14s; }
+  .opp-card:hover .opp-draft { background: color-mix(in srgb, hsl(var(--foreground)) 4%, hsl(var(--muted))); }
+  .opp-draft-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: hsl(var(--primary)); display: flex; align-items: center; gap: 6px; margin-bottom: 7px; flex-wrap: wrap; }
+  .opp-draft-label svg { width: 12px; height: 12px; }
+  .opp-draft-ref { color: hsl(var(--muted-foreground)); text-transform: none; letter-spacing: -0.01em; font-weight: 400; }
+  .evidence-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .evidence-list li { font-size: var(--fs-sm); color: hsl(var(--foreground) / 0.9); line-height: 1.55; padding-left: 14px; position: relative; }
+  .evidence-list li::before { content: ''; position: absolute; left: 0; top: 9px; width: 5px; height: 5px; border-radius: 50%; background: hsl(var(--primary) / .6); }
+  .evidence-list .src { color: hsl(var(--muted-foreground)); font-size: var(--fs-xs); }
+  .opp-actions { display: flex; align-items: center; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid hsl(var(--border)); flex-wrap: wrap; }
+  .opp-teach { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-left: auto; }
+  .ins-spark { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+  .ins-spark svg { display: block; }
+  .ins-spark-note { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+
+  /* ── Toast — DS wtoast, fixed bottom-center (doctrine) ── */
+  .toast-vp { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(20px); opacity: 0; pointer-events: none; transition: all .25s; z-index: 90; }
+  .toast-vp.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast-vp .wtoast-icon { color: hsl(var(--primary)); }
+
+  .api-foot { margin-top: 30px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+
+  .mobile-nav { display: none; }
+
+  @media (max-width: 940px) {
+    .app { grid-template-columns: 1fr; gap: 0; padding: 0 16px; }
+    .sidebar { display: none; }
+    .mobile-nav { display: flex; gap: 4px; overflow-x: auto; padding: 8px 14px; position: sticky; top: 64px; z-index: 39; background: hsl(var(--background)); }
+    .mobile-nav .wnav-item { white-space: nowrap; cursor: pointer; }
+    .mobile-nav .wnav-item.active { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
+    .content { padding: 20px 0 80px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════ APP HEADER — canonical chrome: identity + search (no-nav exception) ════ -->
+<header class="app-header">
+  <div class="app-header-inner">
+    <div class="app-ident">
+      <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Waldo"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
+      <span class="product">Insights</span>
+    </div>
+    <div class="app-search input-with-icon">
+      <div class="input-icon">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </div>
+      <input class="input" type="text" placeholder="Search insights, signals, evidence…" autocomplete="off">
+    </div>
+  </div>
+</header>
+
+<div class="app">
+  <!-- ════ SIDEBAR — workspace nav, additional to the header ════ -->
+  <aside class="sidebar">
+    <div class="side-panel">
+      <button class="client-chip" onclick="toast('Switch brand — demo (one cockpit, many brands)')">
+        <div class="wav wav-square wav-32">P</div>
+        <div style="min-width:0">
+          <div class="c-name">Patagonia</div>
+          <div class="c-sub">patagonia.com · brand</div>
+        </div>
+        <span class="c-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button>
+
+      <div class="side-nav wnav-panel">
+        <div class="wnav-items-wrap" id="nav"></div>
+      </div>
+
+      <div class="side-foot">
+        <div class="lbl"><span>Waldo API credits</span><span>731 / 1,000</span></div>
+        <div class="credit-track"><div class="credit-fill" style="width:73%"></div></div>
+        <div class="lbl"><span>Resets Aug 1</span><a href="#runs" style="font-weight:500">Usage</a></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ════ MAIN ════ -->
+  <div class="main">
+    <div class="mobile-nav" id="mobile-nav"></div>
+    <div class="content">
+
+      <!-- ── VIEW: Insights feed ── -->
+      <div class="view active" id="view-feed">
+        <div class="page-head">
+          <div>
+            <h1>Insights</h1>
+            <div class="sub">What the signals say about Patagonia — distilled, ranked, and backed by evidence.</div>
+          </div>
+          <div class="spacer"></div>
+          <button class="btn btn-default btn-sm" onclick="toast('Custom signal builder — demo')">New custom signal</button>
+        </div>
+
+        <div class="feed-toolbar">
+          <div class="wseg" role="group" aria-label="Filter by insight type">
+            <button class="wseg-opt active" onclick="segFilter(this, 'all')">All</button>
+            <button class="wseg-opt inactive" onclick="segFilter(this, 'risk')">Risks</button>
+            <button class="wseg-opt inactive" onclick="segFilter(this, 'opp')">Opportunities</button>
+            <button class="wseg-opt inactive" onclick="segFilter(this, 'momentum')">Momentum</button>
+          </div>
+          <span class="feed-note">Distilled from 12,480 signals · updated 26 min ago</span>
+        </div>
+
+        <div class="opp-stack">
+
+          <div class="opp-card" data-kind="risk">
+            <div class="opp-meta">
+              <span class="badge badge-warning badge-sm">Risk</span>
+              <span class="opp-source">Positioning · Competitors</span>
+              <span class="opp-time">214 signals · news &amp; LinkedIn · 2h ago</span>
+              <span class="opp-match badge badge-secondary badge-sm">92% confidence</span>
+            </div>
+            <div class="opp-title">Competitors are pairing speed with sustainability — Patagonia risks reading slow on innovation.</div>
+            <div class="opp-excerpt">Salomon and Hoka now lead with performance claims wrapped in sustainability language. Patagonia's gear story is absent from that frame — the durability message must show up next to performance, not instead of it.</div>
+            <div class="opp-draft">
+              <div class="opp-draft-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Evidence <span class="opp-draft-ref">· 3 of 214 signals</span>
+              </div>
+              <ul class="evidence-list">
+                <li>"Salomon's S/LAB launch copy leads with 'fastest, lightest, lowest-footprint' — 38 stories picked up the framing. <span class="src">Category News · Jun 30</span></li>
+                <li>"Hoka's trail campaign pairs carbon plates with recycled uppers in every headline. <span class="src">Paid Ads signal · Jun 24</span></li>
+                <li>"Patagonia mentioned in 4% of 'fast and sustainable' gear conversations — vs 31% for Salomon. <span class="src">Audience convos · 30d</span></li>
+              </ul>
+            </div>
+            <div class="opp-actions">
+              <button class="btn btn-default btn-sm" onclick="toast('Evidence drill — demo')">Open evidence</button>
+              <button class="btn btn-secondary btn-sm" onclick="toast('Saved to weekly report — demo')">Save</button>
+              <span class="opp-teach">Reactions teach the ranking. Nothing ships without a source.</span>
+            </div>
+          </div>
+
+          <div class="opp-card" data-kind="opp">
+            <div class="opp-meta">
+              <span class="badge badge-active badge-sm">Opportunity</span>
+              <span class="opp-source">Culture · TikTok</span>
+              <span class="opp-time">1,890 signals · TikTok &amp; Reddit · 6h ago</span>
+              <span class="opp-match badge badge-secondary badge-sm">88% confidence</span>
+            </div>
+            <div class="opp-title">#TrailTok is exploding and Patagonia is missing from it.</div>
+            <div class="opp-excerpt">Trail content is up 4x in 12 weeks to 40M+ weekly views, driven by creators, not brands. Salomon dominates the space through athlete seeding; Patagonia appears only in thrift-find videos.</div>
+            <div class="ins-spark">
+              <svg width="220" height="36" viewBox="0 0 220 36" xmlns="http://www.w3.org/2000/svg" aria-label="TrailTok weekly views, 12 weeks, rising">
+                <path d="M2,32 L22,31 L42,30 L62,28 L82,27 L102,24 L122,22 L142,18 L162,14 L182,10 L202,6 L218,3" fill="none" style="stroke:hsl(var(--primary))" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+              </svg>
+              <span class="ins-spark-note">#TrailTok weekly views · 12 weeks · ▲ 4.1x</span>
+            </div>
+            <div class="opp-draft">
+              <div class="opp-draft-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Evidence <span class="opp-draft-ref">· 3 of 1,890 signals</span>
+              </div>
+              <ul class="evidence-list">
+                <li>"Top 50 #TrailTok creators: 11 wear Salomon on camera, 2 mention Patagonia — both secondhand finds. <span class="src">Creator scan · Jul 2</span></li>
+                <li>"'Patagonia thrift haul' videos average 2.1x the engagement of the brand's own posts. <span class="src">Owned media signal · 30d</span></li>
+                <li>"r/trailrunning threads asking 'does Patagonia even make running gear?' — 3 this month. <span class="src">Audience convos · Jun</span></li>
+              </ul>
+            </div>
+            <div class="opp-actions">
+              <button class="btn btn-default btn-sm" onclick="toast('Evidence drill — demo')">Open evidence</button>
+              <button class="btn btn-secondary btn-sm" onclick="toast('Saved to weekly report — demo')">Save</button>
+              <span class="opp-teach">Reactions teach the ranking. Nothing ships without a source.</span>
+            </div>
+          </div>
+
+          <div class="opp-card" data-kind="momentum">
+            <div class="opp-meta">
+              <span class="badge badge-highlight badge-sm">Momentum</span>
+              <span class="opp-source">Narrative · Earned media</span>
+              <span class="opp-time">640 signals · news &amp; Reddit · 1d ago</span>
+              <span class="opp-match badge badge-secondary badge-sm">90% confidence</span>
+            </div>
+            <div class="opp-title">The repair story is Patagonia's strongest narrative — and it's compounding.</div>
+            <div class="opp-excerpt">Repair &amp; Worn Wear now drive 41% of earned coverage, up from 28% last quarter, and carry the highest positive share of any theme. The audience tells the story unprompted — the brand barely has to.</div>
+            <div class="opp-draft">
+              <div class="opp-draft-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                Evidence <span class="opp-draft-ref">· 3 of 640 signals</span>
+              </div>
+              <ul class="evidence-list">
+                <li>"r/BuyItForLife repair thread hit 142 comments — every top reply names Patagonia's free zipper fix. <span class="src">Brand mentions · Jul 7</span></li>
+                <li>"'Worn Wear' search interest at a 12-month high, outpacing 'Patagonia sale' for the first time. <span class="src">Market trends · Jun</span></li>
+                <li>"9 of the 12 highest-engagement earned stories this month are repair-led, none paid. <span class="src">Category News · 30d</span></li>
+              </ul>
+            </div>
+            <div class="opp-actions">
+              <button class="btn btn-default btn-sm" onclick="toast('Evidence drill — demo')">Open evidence</button>
+              <button class="btn btn-secondary btn-sm" onclick="toast('Saved to weekly report — demo')">Save</button>
+              <span class="opp-teach">Reactions teach the ranking. Nothing ships without a source.</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── VIEW: shared placeholder (not-yet-built sections) ── -->
+      <div class="view" id="view-soon">
+        <div class="page-head">
+          <div>
+            <h1 id="soon-title">Section</h1>
+            <div class="sub">Part of the Insights cockpit.</div>
+          </div>
+        </div>
+        <div class="wcard" style="background:transparent;padding:0">
+          <div class="wempty wempty-page">
+            <div class="wempty-icon" id="soon-icon"></div>
+            <div class="wempty-title" id="soon-empty-title">Available when connected to Patagonia's Waldo workspace</div>
+            <div class="wempty-desc">This view will draw live signal data from the Waldo Brand Intelligence API.</div>
+            <div class="wempty-action"><button class="btn btn-default" style="height:32px;font-size:var(--fs-sm)" onclick="toast('Connect workspace — demo')">Connect workspace</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="api-foot">Prototype · Patagonia Insights cockpit on the Waldo Design System · synthetic data, fixed to Jul 10, 2026</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast-vp" id="toast-vp">
+  <div class="wtoast">
+    <div class="wtoast-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <div class="wtoast-body"><span class="wtoast-title" id="toast-msg"></span></div>
+  </div>
+</div>
+
+<script>
+/* ════ ICONS ════ */
+var IC = {
+  spark:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3"/><path d="M18.4 5.6l-2.1 2.1"/><path d="M21 12h-3"/><path d="M12 21v-3"/><path d="M5.6 18.4l2.1-2.1"/><path d="M3 12h3"/><path d="M5.6 5.6l2.1 2.1"/><circle cx="12" cy="12" r="3"/></svg>',
+  bookmark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>',
+  doc:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+  flag:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>',
+  chat:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+  trend:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
+  swords: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" y1="19" x2="19" y2="13"/><line x1="16" y1="16" x2="20" y2="20"/><polyline points="9.5 14.5 21 3 18 3"/></svg>',
+  send:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
+  ad:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3h-8"/><path d="M12 3v4"/></svg>',
+  gauge:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>',
+  logs:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>'
+};
+
+/* ════ NAV MODEL ════ */
+var NAV = [
+  { section: 'Insights' },
+  { id: 'feed',   label: 'Feed',             icon: 'spark',    count: 18, view: 'feed' },
+  { id: 'saved',  label: 'Saved',            icon: 'bookmark', count: 6,  view: null },
+  { id: 'weekly', label: 'Weekly report',    icon: 'doc',      view: null },
+  { section: 'Signals' },
+  { id: 'ment',   label: 'Brand mentions',   icon: 'flag',   view: null },
+  { id: 'convo',  label: 'Audience convos',  icon: 'chat',   count: 288, view: null },
+  { id: 'trends', label: 'Market trends',    icon: 'trend',  view: null },
+  { id: 'comp',   label: 'Competitors',      icon: 'swords', view: null },
+  { id: 'owned',  label: 'Owned media',      icon: 'send',   view: null },
+  { id: 'ads',    label: 'Ads',              icon: 'ad',     view: null },
+  { section: 'Measure' },
+  { id: 'cover',  label: 'Coverage',         icon: 'gauge',  view: null },
+  { id: 'runs',   label: 'Runs',             icon: 'logs',   view: null }
+];
+
+/* ════ RENDER NAV ════ */
+(function () {
+  var html = '';
+  NAV.forEach(function (n) {
+    if (n.section) { html += '<div class="wnav-section">' + n.section + '</div>'; return; }
+    var count = n.count != null ? '<span class="wnav-count">' + n.count + '</span>' : '';
+    html += '<a class="wnav-item" data-id="' + n.id + '" onclick="go(\'' + n.id + '\')">'
+          + '<span class="wnav-icon">' + IC[n.icon] + '</span>'
+          + '<span class="wnav-label">' + n.label + '</span>' + count + '</a>';
+  });
+  document.getElementById('nav').innerHTML = html;
+
+  var mob = '';
+  NAV.filter(function (n) { return n.view; }).forEach(function (n) {
+    mob += '<a class="wnav-item" data-id="' + n.id + '" onclick="go(\'' + n.id + '\')"><span class="wnav-label">' + n.label + '</span></a>';
+  });
+  document.getElementById('mobile-nav').innerHTML = mob;
+})();
+
+/* ════ ROUTER ════ */
+function go(id) {
+  var item = NAV.find(function (n) { return n.id === id; });
+  if (!item) return;
+  document.querySelectorAll('.view').forEach(function (v) { v.classList.remove('active'); });
+  if (item.view) {
+    document.getElementById('view-' + item.view).classList.add('active');
+  } else {
+    document.getElementById('soon-title').textContent = item.label;
+    document.getElementById('soon-icon').innerHTML = IC[item.icon];
+    document.getElementById('soon-empty-title').textContent = item.label + " — available when connected to Patagonia's Waldo workspace";
+    document.getElementById('view-soon').classList.add('active');
+  }
+  document.querySelectorAll('.wnav-item').forEach(function (a) {
+    a.classList.toggle('active', a.dataset.id === id);
+  });
+  if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id);
+  window.scrollTo(0, 0);
+}
+
+/* Deep-link on load */
+(function () {
+  var id = location.hash.replace('#', '');
+  go(NAV.find(function (n) { return n.id === id; }) ? id : 'feed');
+})();
+
+/* ════ INTERACTIONS ════ */
+function segFilter(btn, kind) {
+  btn.parentElement.querySelectorAll('.wseg-opt').forEach(function (b) {
+    b.classList.toggle('active', b === btn);
+    b.classList.toggle('inactive', b !== btn);
+  });
+  document.querySelectorAll('#view-feed .opp-card').forEach(function (card) {
+    card.style.display = (kind === 'all' || card.dataset.kind === kind) ? '' : 'none';
+  });
+}
+var toastTimer = null;
+function toast(msg) {
+  document.getElementById('toast-msg').textContent = msg;
+  var vp = document.getElementById('toast-vp');
+  vp.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { vp.classList.remove('show'); }, 2600);
+}
+</script>
+</body>
+</html>

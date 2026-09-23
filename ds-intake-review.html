@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DS Intake Review — API Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <!-- Theme FIRST, then the generated vanilla layer — the DS consumer contract. -->
+  <link rel="stylesheet" href="waldo-ui/waldo-shadcn-theme.css" />
+  <link rel="stylesheet" href="waldo-ds.css" />
+  <style>
+    /* ── Review-page chrome ────────────────────────────────────────────────
+       This page is a one-off review surface, not a DS artifact. The component
+       classes below mirror the demo CSS in index.html so every piece can be
+       seen in one scroll; index.html remains the canonical showcase.
+    ─────────────────────────────────────────────────────────────────────── */
+    * { box-sizing: border-box; }
+
+    /* waldo-ds.css locks the page down for the showcase's app-shell layout:
+       `html,body{height:100%;overflow:hidden}` plus `body{display:flex!important}`.
+       Any plain scrolling document that links it inherits that lock, so undo it
+       here. The !important is required to beat the one in the layer. */
+    html, body { height: auto !important; overflow: visible !important; }
+    body { display: block !important; max-width: none !important; }
+
+    body {
+      margin: 0; padding: 0; background: hsl(var(--background)); color: hsl(var(--foreground));
+      font-family: 'Inter', system-ui, sans-serif; letter-spacing: -0.02em;
+      -webkit-font-smoothing: antialiased;
+    }
+    .rv-wrap { max-width: 1000px; margin: 0 auto; padding: 56px 32px 120px; }
+    .rv-kicker { font-size: var(--fs-xs); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: hsl(var(--primary)); }
+    .rv-h1 { font-size: var(--fs-6xl); font-weight: 500; margin: 12px 0 0; }
+    .rv-lede { font-size: var(--fs-base); line-height: 1.6; color: hsl(var(--muted-foreground)); margin: 16px 0 0; max-width: 72ch; }
+    .rv-h2 { font-size: var(--fs-2xl); font-weight: 500; margin: 72px 0 0; }
+    .rv-h2-note { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); margin: 8px 0 0; max-width: 78ch; line-height: 1.6; }
+    .rv-item { margin-top: 36px; padding-top: 28px; border-top: 1px solid hsl(var(--border) / 0.1); }
+    .rv-item:first-of-type { border-top: none; }
+    .rv-name { font-size: var(--fs-lg); font-weight: 500; }
+    .rv-why { font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); margin: 6px 0 0; max-width: 78ch; line-height: 1.6; }
+    .rv-stage { margin-top: 20px; padding: 28px; border-radius: var(--radius-2xl); background: hsl(var(--card)); display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+    .rv-stage.col { flex-direction: column; align-items: stretch; }
+    .rv-api { margin-top: 12px; padding: 10px 14px; border-radius: var(--radius-lg); background: hsl(var(--muted)); font-family: var(--font-mono); font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); overflow-x: auto; }
+    .rv-tag { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: var(--radius-full); font-size: var(--fs-xs); font-weight: 500; }
+    .rv-tag-new { background: hsl(var(--primary) / 0.14); color: hsl(var(--primary)); }
+    .rv-tag-chg { background: hsl(var(--accent-highlight) / 0.14); color: hsl(var(--accent-highlight)); }
+    .rv-tag-hold { background: hsl(var(--foreground) / 0.08); color: hsl(var(--muted-foreground)); }
+    .rv-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+    /* Surface before/after */
+    .rv-ba { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 24px; }
+    .rv-ba-pane { border-radius: var(--radius-2xl); padding: 24px; border: 1px solid hsl(var(--border) / 0.1); }
+    .rv-ba-old { background: hsl(var(--zinc-950)); }
+    .rv-ba-new { background: hsl(var(--zinc-990)); }
+    .rv-ba-label { font-size: var(--fs-xs); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: hsl(var(--muted-foreground)); }
+    .rv-ba-card { margin-top: 14px; border-radius: var(--radius-2xl); padding: 20px; }
+    .rv-ba-card-old { background: hsl(var(--zinc-900)); }
+    .rv-ba-card-new { background: hsl(var(--zinc-975)); }
+    .rv-ba-hex { font-family: var(--font-mono); font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+    .rv-table { width: 100%; border-collapse: collapse; margin-top: 24px; font-size: var(--fs-sm); }
+    .rv-table th { text-align: left; font-weight: 500; color: hsl(var(--muted-foreground)); padding: 10px 12px; border-bottom: 1px solid hsl(var(--border) / 0.12); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.06em; }
+    .rv-table td { padding: 12px; border-bottom: 1px solid hsl(var(--border) / 0.06); vertical-align: top; }
+    .rv-table td:last-child, .rv-table th:last-child { text-align: right; font-variant-numeric: tabular-nums; }
+    .rv-warn { color: hsl(var(--warning)); }
+    .rv-good { color: hsl(var(--primary)); }
+
+    /* ── Promoted component classes (mirror of index.html demos) ─────────── */
+    .wpage-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; width: 100%; }
+    .wpage-title { display: flex; align-items: center; gap: 12px; font-size: var(--fs-3xl); font-weight: 500; color: hsl(var(--foreground)); }
+    .wpage-scope { color: hsl(var(--muted-foreground) / 0.5); }
+    .wpage-sub { margin-top: 12px; font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); }
+    .wpage-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; padding-top: 4px; }
+
+    .wechip { display: flex; align-items: center; gap: 9px; flex-shrink: 0; border-radius: var(--radius-full); background: hsl(var(--foreground) / 0.04); padding: 8px 16px 8px 10px; border: none; cursor: pointer; transition: background-color 0.1s; font-family: inherit; }
+    .wechip:hover { background: hsl(var(--foreground) / 0.08); }
+    .wechip-art { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; flex-shrink: 0; border-radius: var(--radius-md); color: hsl(var(--foreground) / 0.7); }
+    .wechip-text { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; line-height: 1; }
+    .wechip-name { font-size: var(--fs-sm); color: hsl(var(--foreground)); white-space: nowrap; }
+    .wechip-kind { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); white-space: nowrap; }
+    .wechip-add { display: flex; align-items: center; height: 46px; flex-shrink: 0; border-radius: var(--radius-full); border: 1px dashed hsl(var(--border) / 0.12); background: transparent; padding: 0 16px; font-size: var(--fs-sm); color: hsl(var(--foreground) / 0.7); cursor: pointer; font-family: inherit; transition: border-color 0.1s, color 0.1s; }
+    .wechip-add:hover { border-color: hsl(var(--border) / 0.25); color: hsl(var(--foreground)); }
+
+    .wsearch-trigger { display: flex; align-items: center; gap: 8px; height: 36px; width: 144px; border-radius: var(--radius-full); border: 1px solid hsl(var(--border) / 0.12); background: hsl(var(--background)); padding: 0 14px; cursor: pointer; transition: border-color 0.1s; font-family: inherit; }
+    .wsearch-trigger:hover { border-color: hsl(var(--border) / 0.25); }
+    .wsearch-trigger svg { flex-shrink: 0; color: hsl(var(--foreground) / 0.6); }
+    .wsearch-placeholder { flex: 1; text-align: left; font-size: var(--fs-sm); color: hsl(var(--foreground) / 0.6); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .wsearch-kbd { flex-shrink: 0; font-size: var(--fs-xs); font-weight: 500; color: hsl(var(--muted-foreground)); }
+
+    .wsecret { display: flex; align-items: center; gap: 8px; border-radius: var(--radius-xl); border: 1px solid hsl(var(--border) / 0.14); background: hsl(var(--background) / 0.4); padding: 10px 14px; }
+    .wsecret-value { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-mono); font-size: var(--fs-sm); color: hsl(var(--muted-foreground)); }
+    .wsecret-action { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; flex-shrink: 0; border: none; background: transparent; border-radius: var(--radius-md); color: hsl(var(--muted-foreground)); cursor: pointer; transition: color 0.1s; }
+    .wsecret-action:hover { color: hsl(var(--foreground)); }
+
+    .wkv { display: inline-flex; align-items: baseline; gap: 6px; border-radius: var(--radius-full); background: hsl(var(--foreground) / 0.05); padding: 4px 12px; font-size: var(--fs-xs); white-space: nowrap; }
+    .wkv-label { color: hsl(var(--muted-foreground)); }
+    .wkv-value { color: hsl(var(--foreground)); }
+
+    .wctip { border-radius: var(--radius-xl); border: 1px solid hsl(var(--border) / 0.12); background: hsl(var(--popover) / 0.95); padding: 12px 14px; box-shadow: var(--shadow-popover); backdrop-filter: blur(12px); }
+    .wctip-label { margin-bottom: 10px; font-size: var(--fs-sm); font-weight: 500; color: hsl(var(--foreground)); }
+    .wctip-rows { display: flex; flex-direction: column; gap: 6px; }
+    .wctip-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: var(--fs-sm); }
+    .wctip-name { display: flex; align-items: center; gap: 10px; white-space: nowrap; color: hsl(var(--foreground) / 0.7); }
+    .wctip-dot { width: 7px; height: 7px; flex-shrink: 0; border-radius: var(--radius-full); }
+    .wctip-val { font-weight: 500; font-variant-numeric: tabular-nums; color: hsl(var(--foreground)); }
+    .wctip-total { margin-top: 10px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-top: 1px solid hsl(var(--border) / 0.1); padding-top: 10px; font-size: var(--fs-sm); }
+    .wctip-total-label { color: hsl(var(--foreground) / 0.55); }
+    .wctip-caption { margin-top: 10px; display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; }
+    .wctip-caption-main { font-size: var(--fs-sm); font-variant-numeric: tabular-nums; color: hsl(var(--foreground) / 0.55); }
+    .wctip-caption-sub { font-size: var(--fs-xs); font-variant-numeric: tabular-nums; color: hsl(var(--foreground) / 0.35); }
+
+    .wclegend { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; }
+    .wclegend-item { display: flex; align-items: center; gap: 8px; font-size: var(--fs-xs); white-space: nowrap; transition: opacity 0.1s; }
+    .wclegend:hover .wclegend-item { opacity: 0.45; }
+    .wclegend .wclegend-item:hover { opacity: 1; }
+    .wclegend-dot { width: 7px; height: 7px; flex-shrink: 0; border-radius: var(--radius-full); }
+    .wclegend-name { color: hsl(var(--muted-foreground)); }
+    .wclegend-val { font-variant-numeric: tabular-nums; color: hsl(var(--foreground)); }
+
+    .wdaycol-plot { position: relative; display: flex; align-items: flex-end; height: 140px; }
+    .wdaycol-slot { position: relative; display: flex; flex: 1; align-items: flex-end; justify-content: center; height: 100%; }
+    .wdaycol-bar { display: flex; flex-direction: column-reverse; overflow: hidden; width: 6px; border-radius: var(--radius-full); opacity: 0.8; box-shadow: inset 0 0 0 0.5px hsl(var(--background) / 0.45); transition: width 0.1s, opacity 0.1s, border-radius 0.1s; }
+    .wdaycol-slot:hover .wdaycol-bar { width: 24px; opacity: 1; border-radius: var(--radius-md); }
+    .wdaycol-tip { position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); z-index: 20; pointer-events: none; opacity: 0; transition: opacity 0.1s; }
+    .wdaycol-slot:hover .wdaycol-tip { opacity: 1; }
+    .wdaycol-axis { margin-top: 12px; display: flex; justify-content: space-between; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+
+    .wspark-track { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; height: 56px; width: 100%; overflow: hidden; border-bottom: 1px solid hsl(var(--border) / 0.12); }
+    .wspark-col { display: flex; flex-direction: column; align-items: stretch; gap: 2px; width: 2px; flex-shrink: 0; }
+    .wspark-seg { border-radius: var(--radius-full); }
+    .wspark-main { background: hsl(var(--primary) / 0.55); transition: background-color 0.075s; }
+    .wspark-col:hover .wspark-main { background: hsl(var(--primary)); }
+    .wspark-err { background: hsl(var(--destructive)); }
+    .wspark-warn { background: hsl(var(--warning)); }
+
+    .wsharebar-pad { display: flex; width: 100%; padding: 4px 0; }
+    .wsharebar-track { display: flex; gap: 2px; height: 6px; width: 100%; overflow: hidden; border-radius: var(--radius-full); background: hsl(var(--secondary)); }
+    .wsharebar-seg { height: 100%; min-width: 3px; transition: opacity 0.1s; }
+    .wsharebar-pad:hover .wsharebar-seg { opacity: 0.45; }
+    .wsharebar-track .wsharebar-seg:hover { opacity: 1; }
+
+    @media (max-width: 720px) {
+      .rv-ba { grid-template-columns: 1fr; }
+      .rv-wrap { padding: 32px 20px 80px; }
+    }
+  </style>
+</head>
+<body>
+<div class="rv-wrap">
+
+  <div class="rv-kicker">DS intake review</div>
+  <h1 class="rv-h1">API Dashboard → Waldo DS</h1>
+  <p class="rv-lede">
+    Everything the Brand API dashboard designed that the DS was missing, in one scroll.
+    Ten pieces promoted, two folded into components that already existed, three deliberately held back,
+    and one token change that touches every prototype. This page renders on the new ramp, so what you
+    see below is the DS as it now is, not a mockup of it.
+  </p>
+
+  <!-- ─────────────────────────── SURFACES ─────────────────────────── -->
+  <h2 class="rv-h2">The surface ramp <span class="rv-tag rv-tag-chg">changed</span></h2>
+  <p class="rv-h2-note">
+    The one change here that isn't additive. Modelled as two new zinc steps with the semantics
+    repointed, so <code>zinc-950</code> and <code>zinc-900</code> keep their values and just lose
+    their semantic role. Nothing that references the steps directly moves.
+  </p>
+
+  <div class="rv-ba">
+    <div class="rv-ba-pane rv-ba-old">
+      <div class="rv-ba-label">Before</div>
+      <div class="rv-ba-hex" style="margin-top:6px" data-token="--zinc-950" data-role="background"></div>
+      <div class="rv-ba-card rv-ba-card-old">
+        <div style="font-size:var(--fs-lg);font-weight:500">Share of Voice</div>
+        <div class="rv-ba-hex" style="margin-top:6px" data-token="--zinc-900" data-role="card"></div>
+      </div>
+    </div>
+    <div class="rv-ba-pane rv-ba-new">
+      <div class="rv-ba-label">After</div>
+      <div class="rv-ba-hex" style="margin-top:6px" data-token="--zinc-990" data-role="background"></div>
+      <div class="rv-ba-card rv-ba-card-new">
+        <div style="font-size:var(--fs-lg);font-weight:500">Share of Voice</div>
+        <div class="rv-ba-hex" style="margin-top:6px" data-token="--zinc-975" data-role="card"></div>
+      </div>
+    </div>
+  </div>
+
+  <table class="rv-table">
+    <thead><tr><th>What it does to each cue</th><th>Before</th><th>After</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Text contrast</strong> — zinc-200 on the background<br>
+            <span style="color:hsl(var(--muted-foreground));font-size:var(--fs-xs)">The one that got better.</span></td>
+        <td>11.85:1</td><td class="rv-good">12.96:1</td>
+      </tr>
+      <tr>
+        <td><strong class="rv-warn">background↔card separation</strong><br>
+            <span style="color:hsl(var(--muted-foreground));font-size:var(--fs-xs)">This is the <strong>only</strong> thing drawing a card — <code>.wcard</code> has no border and no shadow. Look at the two panels above: the card is harder to find on the right.</span></td>
+        <td>9 steps · 1.103</td><td class="rv-warn">6 steps · 1.047</td>
+      </tr>
+      <tr>
+        <td><strong class="rv-warn">shadow-surface darkening</strong><br>
+            <span style="color:hsl(var(--muted-foreground));font-size:var(--fs-xs)">A black shadow can only darken toward black, and the ground moved 10 steps closer to it. Four consumers: active tab pill, slider thumb, tooltip, toast.</span></td>
+        <td>7 steps</td><td class="rv-warn">4 steps</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="rv-h2-note">
+    <strong>Open decision, yours:</strong> both losses are ~43%. The fix I'd recommend is swapping the
+    black shadow for a top inset light edge: on a dark ramp, elevation reads better as light than as
+    shadow, and it scales <strong>with</strong> the background getting darker instead of against it. I didn't
+    apply it because it puts a visible light edge on every card, which is a look change, not a fix.
+  </p>
+
+  <!-- ─────────────────────────── NEW ─────────────────────────── -->
+  <h2 class="rv-h2">Promoted <span class="rv-tag rv-tag-new">10 new</span></h2>
+  <p class="rv-h2-note">Each is live in <code>waldo-ui/src/components/ui/</code>, exported, demoed in index.html and documented in usage-doctrine.yaml.</p>
+
+  <div class="rv-item">
+    <div class="rv-name">Page Header</div>
+    <p class="rv-why">The single highest-value piece here: the DS had no page header, so every prototype re-invented the title row with different type sizes and gaps. The muted suffix is a <strong>label</strong>, not a control: it disambiguates twin pages (a project's Usage vs the org's) without adding another way to navigate.</p>
+    <div class="rv-stage col">
+      <div class="wpage-head">
+        <div>
+          <div class="wpage-title">Mentions <span class="wpage-scope">Nike</span></div>
+          <div class="wpage-sub">Every mention we captured this period, with its source and sentiment.</div>
+        </div>
+        <div class="wpage-actions">
+          <button class="btn btn-ghost btn-sm">Export report</button>
+          <button class="btn btn-sm">Add to watchlist</button>
+        </div>
+      </div>
+    </div>
+    <div class="rv-api">&lt;PageHeader title="Mentions" scope="Nike" subtitle="…" actions={…} /&gt;</div>
+  </div>
+
+  <div class="rv-item">
+    <div class="rv-name">Entity Chip · Entity Chip Add</div>
+    <p class="rv-why">Two lines is the point: a brand, an audience and a category can share a name, so the kind travels with it. It falls back favicon, then type icon, then nothing. The dashed sibling ends the row.</p>
+    <div class="rv-stage">
+      <button class="wechip">
+        <span class="wechip-art" style="background:hsl(var(--chart-1) / 0.18);font-size:var(--fs-xs);font-weight:500">N</span>
+        <span class="wechip-text"><span class="wechip-name">Nike</span><span class="wechip-kind">Brand</span></span>
+      </button>
+      <button class="wechip">
+        <span class="wechip-art" style="background:hsl(var(--chart-6) / 0.18);font-size:var(--fs-xs);font-weight:500">A</span>
+        <span class="wechip-text"><span class="wechip-name">Adidas</span><span class="wechip-kind">Brand</span></span>
+      </button>
+      <button class="wechip">
+        <span class="wechip-art"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg></span>
+        <span class="wechip-text"><span class="wechip-name">Sneaker collectors</span><span class="wechip-kind">Audience</span></span>
+      </button>
+      <button class="wechip">
+        <span class="wechip-art"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2H2v10l9.29 9.29a1 1 0 0 0 1.42 0l8.58-8.58a1 1 0 0 0 0-1.42Z"/><circle cx="7" cy="7" r="1"/></svg></span>
+        <span class="wechip-text"><span class="wechip-name">Performance footwear</span><span class="wechip-kind">Category</span></span>
+      </button>
+      <button class="wechip-add">+ Add</button>
+    </div>
+    <div class="rv-api">&lt;EntityChip name="Nike" kind="Brand" image={favicon} /&gt; · &lt;EntityChipAdd /&gt;</div>
+  </div>
+
+  <div class="rv-item">
+    <div class="rv-name">Search Trigger</div>
+    <p class="rv-why">Looks like an input, is a button. Typing happens inside the ⌘K palette, so a real input here would trap focus and duplicate the palette's own field. Composes the DS <code>Kbd</code> for the hint.</p>
+    <div class="rv-stage" style="justify-content:flex-end;gap:20px">
+      <button class="btn btn-ghost btn-sm">Feedback</button>
+      <button class="wsearch-trigger">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span class="wsearch-placeholder">Search...</span>
+        <span class="wsearch-kbd">⌘K</span>
+      </button>
+    </div>
+    <div class="rv-api">&lt;SearchTrigger onClick={() =&gt; setOpen(true)} /&gt;</div>
+  </div>
+
+  <div class="rv-item">
+    <div class="rv-name">Secret Field <span style="font-size:var(--fs-xs);color:hsl(var(--muted-foreground))">— try the eye and the copy</span></div>
+    <p class="rv-why">Reveal and copy are deliberately separate: copying is the common case and shouldn't require putting the key on screen first. Masking is display-only. It defends against a shoulder or a screen recording, not against an attacker.</p>
+    <div class="rv-stage col">
+      <div class="wsecret" style="max-width:420px">
+        <code class="wsecret-value" id="sv">waldo_sk_••••••••••••••c2f4</code>
+        <button class="wsecret-action" id="se" aria-label="Reveal value" onclick="tog()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+        <button class="wsecret-action" id="sc" aria-label="Copy value" onclick="cp()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16V4a2 2 0 0 1 2-2h10"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="rv-api">&lt;SecretField value="waldo_sk_…" visiblePrefix="waldo_sk_" /&gt;</div>
+  </div>
+
+  <div class="rv-item">
+    <div class="rv-name">Kv Pill</div>
+    <p class="rv-why">Label and value on one baseline. For metadata that's read, not acted on. It beats a two-column table when the values are short. Use Badge instead when the value carries its own colour meaning.</p>
+    <div class="rv-stage" style="gap:8px">
+      <span class="wkv"><span class="wkv-label">Source:</span><span class="wkv-value">Reddit</span></span>
+      <span class="wkv"><span class="wkv-label">Reach:</span><span class="wkv-value">48.2K</span></span>
+      <span class="wkv"><span class="wkv-label">Sentiment:</span><span class="wkv-value">Positive</span></span>
+      <span class="wkv"><span class="wkv-label">Captured:</span><span class="wkv-value">2 h ago</span></span>
+      <span class="wkv"><span class="wkv-label">Mention:</span><span class="wkv-value" style="font-family:var(--font-mono)">mnt_8fa2c1</span></span>
+    </div>
+    <div class="rv-api">&lt;KvPill label="Source" value="Reddit" /&gt;</div>
+  </div>
+
+  <div class="rv-item">
+    <div class="rv-name">Chart Tooltip Panel <span class="rv-tag rv-tag-new" style="margin-left:6px">the one that mattered most</span></div>
+    <p class="rv-why">The dashboard had grown <strong>four separately-styled copies</strong> of this same floating panel: the day chart, the spark bars, the share bar, and a custom Recharts tooltip. That's what the DS exists to stop. The three charts below all consume this one, which is why they look like one system.</p>
+    <div class="rv-stage" style="align-items:flex-start;gap:32px">
+      <div class="wctip" style="width:210px">
+        <div class="wctip-label">10 Jul</div>
+        <div class="wctip-rows">
+          <div class="wctip-row"><span class="wctip-name"><span class="wctip-dot" style="background:hsl(var(--chart-1))"></span>Nike</span><span class="wctip-val">163</span></div>
+          <div class="wctip-row"><span class="wctip-name"><span class="wctip-dot" style="background:hsl(var(--chart-6))"></span>Adidas</span><span class="wctip-val">70</span></div>
+        </div>
+        <div class="wctip-total"><span class="wctip-total-label">Total mentions</span><span class="wctip-val">233</span></div>
+      </div>
+      <div class="wctip" style="width:200px">
+        <div class="wctip-rows">
+          <div class="wctip-row"><span class="wctip-name"><span class="wctip-dot" style="background:hsl(var(--chart-1))"></span>Positive</span><span class="wctip-val">1,204</span></div>
+          <div class="wctip-row"><span class="wctip-name"><span class="wctip-dot" style="background:hsl(var(--chart-2))"></span>Neutral</span><span class="wctip-val">318</span></div>
+          <div class="wctip-row"><span class="wctip-name"><span class="wctip-dot" style="background:hsl(var(--warning))"></span>Negative</span><span class="wctip-val">42</span></div>
+        </div>
+        <div class="wctip-caption"><span class="wctip-caption-main">8:35am – 8:40am</span><span class="wctip-caption-sub">1:35am – 1:40am UTC</span></div>
+      </div>
+    </div>
+    <div class="rv-api">&lt;ChartTooltipPanel&gt;&lt;ChartTooltipLabel/&gt;&lt;ChartTooltipRows&gt;&lt;ChartTooltipRow dot="hsl(var(--chart-1))" …/&gt;&lt;ChartTooltipTotal/&gt;&lt;/ChartTooltipPanel&gt;</div>
+  </div>
+
+  <div class="rv-item">
+    <div class="rv-name">Chart Legend Row <span style="font-size:var(--fs-xs);color:hsl(var(--muted-foreground))">— hover to isolate</span></div>
+    <p class="rv-why">Four hand-built copies of this existed too. The DS shipped no legend at all for hand-drawn charts, so every consumer rebuilt it.</p>
+    <div class="rv-stage col">
+      <div class="wclegend">
+        <span class="wclegend-item"><span class="wclegend-dot" style="background:hsl(var(--chart-1))"></span><span class="wclegend-name">Nike</span><span class="wclegend-val">31%</span></span>
+        <span class="wclegend-item"><span class="wclegend-dot" style="background:hsl(var(--chart-6))"></span><span class="wclegend-name">Adidas</span><span class="wclegend-val">24%</span></span>
+        <span class="wclegend-item"><span class="wclegend-dot" style="background:hsl(var(--chart-7))"></span><span class="wclegend-name">New Balance</span><span class="wclegend-val">17%</span></span>
+        <span class="wclegend-item"><span class="wclegend-dot" style="background:hsl(var(--chart-4))"></span><span class="wclegend-name">Asics</span><span class="wclegend-val">12%</span></span>
+        <span class="wclegend-item"><span class="wclegend-dot" style="background:hsl(var(--chart-5))"></span><span class="wclegend-name">Puma</span><span class="wclegend-val">9%</span></span>
+        <span class="wclegend-item"><span class="wclegend-dot" style="background:hsl(var(--chart-9))"></span><span class="wclegend-name">On Running</span><span class="wclegend-val">7%</span></span>
+      </div>
+    </div>
+    <div class="rv-api">&lt;ChartLegendRow items={[…]} activeIndex={i} onItemHover={setI} /&gt;</div>
+  </div>
+
+  <div class="rv-item">
+    <div class="rv-name">Day Column Chart <span style="font-size:var(--fs-xs);color:hsl(var(--muted-foreground))">— hover a column, it widens</span></div>
+    <p class="rv-why">Hairline capsules at rest; the hovered column widens from 6px to 24px and goes fully opaque. The widening isn't decoration; it's what makes a 6px column hoverable at all. Newest of the ten (one commit old at intake), so treat the interaction as unsettled.</p>
+    <div class="rv-stage col">
+      <div style="padding-top:170px">
+        <div class="wdaycol-plot" id="dc"></div>
+        <div class="wdaycol-axis"><span>1 Jul</span><span>8 Jul</span><span>15 Jul</span><span>22 Jul</span></div>
+      </div>
+    </div>
+    <div class="rv-api">&lt;DayColumnChart dates={…} axisTicks={…} series={[{name, color:"hsl(var(--chart-1))", values}]} /&gt;</div>
+  </div>
+
+  <div class="rv-item">
+    <div class="rv-name">Spark Bars</div>
+    <p class="rv-why">Volume first, health second: a wall of even teal is fine, red caps are not. The DS Sparkline is a line with no failure dimension, whereas this carries errors and warnings stacked on each bar.</p>
+    <div class="rv-stage col">
+      <div class="rv-row" style="justify-content:space-between">
+        <div>
+          <div style="font-size:var(--fs-xl);font-weight:500">3,412</div>
+          <div style="font-size:var(--fs-xs);color:hsl(var(--muted-foreground))">Total requests</div>
+        </div>
+        <div class="rv-row" style="gap:16px;font-size:var(--fs-xs);color:hsl(var(--muted-foreground))">
+          <span class="rv-row" style="gap:6px"><span class="wctip-dot" style="background:hsl(var(--destructive))"></span>Errors 14</span>
+          <span class="rv-row" style="gap:6px"><span class="wctip-dot" style="background:hsl(var(--warning))"></span>Warnings 6</span>
+        </div>
+      </div>
+      <div class="wspark-track" id="sp" role="img" aria-label="Activity chart"></div>
+    </div>
+    <div class="rv-api">&lt;SparkBars data={[{v:0.4}, {v:0.8, e:0.1}, …]} /&gt;</div>
+  </div>
+
+  <div class="rv-item">
+    <div class="rv-name">Share Bar <span style="font-size:var(--fs-xs);color:hsl(var(--muted-foreground))">— hover a segment, siblings dim</span></div>
+    <p class="rv-why">The dimming is what makes a 3px sliver readable. Passing a total larger than the sum leaves unused quota visible as empty track — that produces the 43%-of-plan read below.</p>
+    <div class="rv-stage col">
+      <div class="wsharebar-pad">
+        <div class="wsharebar-track">
+          <div class="wsharebar-seg" style="width:24%;background:hsl(var(--chart-1))" title="Nike · 24% · 12,040 credits"></div>
+          <div class="wsharebar-seg" style="width:11%;background:hsl(var(--chart-6))" title="Adidas · 11% · 5,480 credits"></div>
+          <div class="wsharebar-seg" style="width:6%;background:hsl(var(--chart-7))" title="New Balance · 6% · 3,020 credits"></div>
+          <div class="wsharebar-seg" style="width:2%;background:hsl(var(--chart-4))" title="Asics · 2% · 1,010 credits"></div>
+        </div>
+      </div>
+      <div class="rv-row" style="justify-content:space-between;font-size:var(--fs-xs);color:hsl(var(--muted-foreground))">
+        <span>43% of plan used</span><span style="font-variant-numeric:tabular-nums">21.5K / 50K credits</span>
+      </div>
+    </div>
+    <div class="rv-api">&lt;ShareBar segments={[…]} total={50000} valueLabel="credits" /&gt;</div>
+  </div>
+
+  <!-- ─────────────────────────── CHANGED ─────────────────────────── -->
+  <h2 class="rv-h2">Folded into existing components <span class="rv-tag rv-tag-chg">2 changed</span></h2>
+  <p class="rv-h2-note">The dashboard built these as new components. They aren't. They're variants of things the DS already had, and adding them as components would have been duplication.</p>
+
+  <div class="rv-item">
+    <div class="rv-name">Tabs — new <code>size="sm"</code></div>
+    <p class="rv-why">
+      The dashboard's "time range" control was a separate component. It's just Tabs at a smaller scale, so Tabs gained a size and the component went away.
+      Two judgment calls I'd flag: the source used squared corners (from its Figma node) and a recessed <code>bg-muted</code> active fill. I kept the DS's full-round and <code>bg-secondary</code> — <code>bg-muted</code> is the <strong>recessed/disabled</strong> role, so using it for an active state inverts what the token means. The dashboard session tested both side by side and agreed the DS version reads better on the new dark ramp.
+    </p>
+    <div class="rv-stage col" style="gap:24px">
+      <div>
+        <div style="font-size:var(--fs-xs);color:hsl(var(--muted-foreground));margin-bottom:10px">Default size — unchanged</div>
+        <div class="wtabs-pill">
+          <button class="wtab-pill active">Overview</button>
+          <button class="wtab-pill">Signals</button>
+          <button class="wtab-pill">Contacts</button>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:var(--fs-xs);color:hsl(var(--muted-foreground));margin-bottom:10px">size="sm" — new</div>
+        <div class="wtabs-pill sm">
+          <button class="wtab-pill">1D</button>
+          <button class="wtab-pill">1W</button>
+          <button class="wtab-pill active">1M</button>
+          <button class="wtab-pill">YTD</button>
+          <button class="wtab-pill">Custom</button>
+        </div>
+      </div>
+    </div>
+    <div class="rv-api">&lt;TabsTrigger variant="pill" size="sm" value="1m"&gt;1M&lt;/TabsTrigger&gt;</div>
+  </div>
+
+  <div class="rv-item">
+    <div class="rv-name">Avatar — new <code>EntityAvatar</code></div>
+    <p class="rv-why">Tracked entities arrive with three levels of available art: a brand usually has a favicon, an audience or category never does, and a just-created entity has only its name. This walks the chain in one place so every list, chip and table row degrades identically.</p>
+    <div class="rv-stage">
+      <div class="wav wav-square wav-32" style="background:hsl(var(--chart-1) / 0.18);color:hsl(var(--chart-1))">NI</div>
+      <div class="wav wav-square wav-32" style="background:hsl(var(--muted));color:hsl(var(--foreground) / 0.7);display:flex;align-items:center;justify-content:center">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>
+      </div>
+      <div class="wav wav-square wav-32" style="background:hsl(var(--muted));color:hsl(var(--foreground) / 0.7);display:flex;align-items:center;justify-content:center">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2H2v10l9.29 9.29a1 1 0 0 0 1.42 0l8.58-8.58a1 1 0 0 0 0-1.42Z"/><circle cx="7" cy="7" r="1"/></svg>
+      </div>
+      <div class="wav wav-square wav-32" style="background:hsl(var(--muted))">T</div>
+      <span style="font-size:var(--fs-xs);color:hsl(var(--muted-foreground))">favicon → type icon → initial</span>
+    </div>
+    <div class="rv-api">&lt;EntityAvatar name="Nike" image={favicon} shape="square" /&gt;</div>
+  </div>
+
+  <!-- ─────────────────────────── HELD ─────────────────────────── -->
+  <h2 class="rv-h2">Held back <span class="rv-tag rv-tag-hold">3 not taken</span></h2>
+  <p class="rv-h2-note">
+    All three are real patterns worth having. None is a lift-and-shift: each needs an API designed
+    before it belongs in the DS, and shipping them half-shaped would be worse than waiting.
+  </p>
+  <div class="rv-item">
+    <div class="rv-name">Project / org scope switcher</div>
+    <p class="rv-why">The split control where the name navigates and the chevron opens the switcher (Supabase's model), plus a ✕ that closes the project back to the org. Genuinely new: neither Breadcrumb nor App Header covers it. It is entangled with the dashboard's routing and scenario state, so it's a design task.</p>
+  </div>
+  <div class="rv-item">
+    <div class="rv-name">Nav Rail</div>
+    <p class="rv-why">An icon rail that expands to labels on hover <strong>over</strong> the content, so the layout never shifts, where the DS shadcn Sidebar pushes content instead. The behaviour is sound; it hardcodes its own nav items and its gap-based grouping, so it needs an items API with a group concept first.</p>
+  </div>
+  <div class="rv-item">
+    <div class="rv-name">Spec Note</div>
+    <p class="rv-why">The per-screen spec annotation (PRO-2816), globally toggleable. Useful to every prototype, but it's coupled to the dashboard's own spec-notes data file, so it has to ship prop-driven, carrying no content of its own.</p>
+  </div>
+
+  <h2 class="rv-h2">Still owed</h2>
+  <p class="rv-h2-note">
+    Two follow-ups outside this session's ownership: the two new surface hexes need adding to
+    <code>docs/token-catalog.yaml</code> (Validador owns that file), and the new variables need writing
+    to Figma via MCP (Figma Master — and that one needs your explicit go-ahead).
+    Also worth knowing: this is pushed on <code>feature/pro-2908-dialog-scroll-contained</code>,
+    not on <code>main</code>, and two other sessions are waiting on the merge to pick the ramp up.
+  </p>
+
+</div>
+
+<script>
+  (function(){
+    // Swatch labels: read the real token value off the document rather than
+    // hardcoding a hex, so this page can't drift from the DS it documents.
+    document.querySelectorAll('[data-token]').forEach(function(el){
+      var probe = document.createElement('div');
+      probe.style.color = 'hsl(var(' + el.dataset.token + '))';
+      document.body.appendChild(probe);
+      var m = getComputedStyle(probe).color.match(/\d+/g);
+      document.body.removeChild(probe);
+      var hex = m ? '#' + m.slice(0,3).map(function(n){
+        return ('0' + parseInt(n,10).toString(16)).slice(-2);
+      }).join('') : '';
+      el.textContent = el.dataset.role + ' · ' + el.dataset.token.replace('--','') + ' · ' + hex;
+    });
+
+    var full = 'waldo_sk_9f3c1e8b7a204d6fc2f4';
+    var masked = 'waldo_sk_' + '•'.repeat(14) + 'c2f4';
+    var shown = false;
+    window.tog = function(){
+      shown = !shown;
+      document.getElementById('sv').textContent = shown ? full : masked;
+      document.getElementById('se').setAttribute('aria-label', shown ? 'Hide value' : 'Reveal value');
+    };
+    window.cp = function(){
+      if (navigator.clipboard) navigator.clipboard.writeText(full);
+      var b = document.getElementById('sc');
+      b.style.color = 'hsl(var(--primary))';
+      setTimeout(function(){ b.style.color = ''; }, 1400);
+    };
+
+    // Day column chart
+    var days = ['1 Jul','2 Jul','3 Jul','4 Jul','5 Jul','6 Jul','7 Jul','8 Jul','9 Jul','10 Jul','11 Jul','12 Jul','13 Jul','14 Jul','15 Jul','16 Jul','17 Jul','18 Jul','19 Jul','20 Jul','21 Jul','22 Jul'];
+    var nike =   [82,96,74,110,128,91,68,104,142,163,138,120,155,171,149,132,168,180,157,144,176,190];
+    var adidas = [41,38,52,44,61,49,33,57,66,70,58,64,72,81,69,60,77,84,71,66,80,88];
+    var totals = days.map(function(_, i){ return nike[i] + adidas[i]; });
+    var max = Math.max.apply(null, totals);
+    document.getElementById('dc').innerHTML = days.map(function(d, i){
+      var t = totals[i];
+      return '<div class="wdaycol-slot">' +
+        '<div class="wdaycol-tip"><div class="wctip" style="width:210px">' +
+          '<div class="wctip-label">' + d + '</div><div class="wctip-rows">' +
+          '<div class="wctip-row"><span class="wctip-name"><span class="wctip-dot" style="background:hsl(var(--chart-1))"></span>Nike</span><span class="wctip-val">' + nike[i] + '</span></div>' +
+          '<div class="wctip-row"><span class="wctip-name"><span class="wctip-dot" style="background:hsl(var(--chart-6))"></span>Adidas</span><span class="wctip-val">' + adidas[i] + '</span></div>' +
+          '</div><div class="wctip-total"><span class="wctip-total-label">Total mentions</span><span class="wctip-val">' + t + '</span></div>' +
+        '</div></div>' +
+        '<div class="wdaycol-bar" style="height:' + ((t / max) * 100) + '%">' +
+          '<div style="height:' + ((nike[i] / t) * 100) + '%;background:hsl(var(--chart-1))"></div>' +
+          '<div style="height:' + ((adidas[i] / t) * 100) + '%;background:hsl(var(--chart-6))"></div>' +
+        '</div></div>';
+    }).join('');
+
+    // Spark bars
+    var vals = [0.34,0.52,0.41,0.66,0.48,0.72,0.58,0.39,0.61,0.77,0.55,0.43,0.68,0.81,0.62,0.49,0.74,0.86,0.65,0.53,0.79,0.91,0.70,0.58,0.83,0.95,0.72,0.61,0.88,0.76];
+    var errs = {5:0.06, 12:0.04, 21:0.08, 27:0.05};
+    var warns = {9:0.04, 25:0.05};
+    var H = 56;
+    document.getElementById('sp').innerHTML = vals.map(function(v, i){
+      var p = '';
+      if (warns[i]) p += '<div class="wspark-seg wspark-warn" style="height:' + (warns[i] * H) + 'px"></div>';
+      if (errs[i])  p += '<div class="wspark-seg wspark-err" style="height:' + (errs[i] * H) + 'px"></div>';
+      p += '<div class="wspark-seg wspark-main" style="height:' + Math.max(6, v * H) + 'px"></div>';
+      return '<div class="wspark-col">' + p + '</div>';
+    }).join('');
+
+    // Tabs demo — click to switch active
+    document.querySelectorAll('.wtabs-pill').forEach(function(g){
+      g.addEventListener('click', function(e){
+        if (!e.target.classList.contains('wtab-pill')) return;
+        g.querySelectorAll('.wtab-pill').forEach(function(b){ b.classList.remove('active'); });
+        e.target.classList.add('active');
+      });
+    });
+  })();
+</script>
+</body>
+</html>

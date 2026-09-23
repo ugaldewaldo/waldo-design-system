@@ -127,7 +127,15 @@ components:
       - Decorative icons that don't represent a person or brand — use Icon
     prefer_over:
       - Icon: when representing a specific person or brand rather than a generic concept
-    notes: round = people, square = brands. Sizes 16/24/32/40px.
+    notes: |
+      round = people, square = brands. Sizes 16/24/32/40px.
+
+      EntityAvatar (Waldo extension) walks the image → icon → initial fallback chain in one place.
+      Tracked entities arrive with three levels of available art: a brand usually has a favicon, an
+      audience or category never does, and a just-created entity has only its name. Use it so every
+      list, chip and table row degrades identically. Pass shape="square" for brand-shaped entities.
+      Use plain Avatar + AvatarImage/AvatarFallback when the art is always present, or when the
+      fallback is not derived from the name.
 
   - component: Tag / TagInput
     use_when:
@@ -242,6 +250,14 @@ components:
       + shadow-surface. Vanilla: .wtabs-pill.primary > .wtab-pill.
       Inactive on text/pill variants: text-muted-foreground, hover to foreground. Built on Radix Tabs; disabled opacity-40.
       Figma node 83931-3758.
+
+      SIZE: default (14px) and sm (12px, py-[7px]). Set size on TabsTrigger; TabsList needs no size
+      (its gap is the same at both scales). Use sm for tab rows that sit beside a chart or inside a
+      card header, where the 14px row is too heavy.
+      A time-range row (1D · 1W · 1M · YTD · Custom) is variant="pill" size="sm" — it is NOT a
+      separate component. Radius stays rounded-full and the active fill stays bg-secondary at both
+      sizes: bg-muted is the recessed/disabled role, so using it for an ACTIVE state inverts the
+      token's meaning, however good it looks next to a chart.
 
   - component: Alert
     use_when:
@@ -1616,6 +1632,251 @@ components:
       SVG arrows use stroke=currentColor so they track the button color token.
       Classes: .vote-col, .vote-arrow(.dn/.on-up/.on-dn), .vote-score, .vote-row, .vote-mini(.dn).
 
+  # ── Console patterns (intake from the Brand API dashboard, 2026-08) ──────────
+
+  - component: Page Header
+    use_when:
+      - The top of any console page — title, optional scope suffix, subtitle, actions pinned right
+      - Twin pages that exist at two scopes (a project's Usage vs the organization's) where the title alone is ambiguous
+    dont_use_when:
+      - Section headings inside a page — use a section title, not a second h1
+      - Card headers — use the Card head classes
+    prefer_over:
+      - A hand-built title row: every prototype was re-inventing this block with different type sizes and gaps
+    notes: |
+      Waldo extension — no shadcn equivalent. Title is text-3xl (30px) font-medium tracking -2%,
+      text-foreground (never text-white). Subtitle text-sm muted, mt-3. Actions shrink-0 gap-3 pt-1.
+      `scope` renders in muted-foreground/50 beside the title and is a LABEL, not a control — it
+      disambiguates scope without adding another way to navigate. Omit it when the surrounding
+      chrome already names the scope (an org-level page whose top bar shows the org name).
+      Note the prop is `title` on an Omit<HTMLAttributes,"title"> base — the DOM `title` attribute
+      is a string tooltip and cannot carry a node.
+
+  - component: Entity Chip
+    use_when:
+      - A tracked entity as a pill — favicon or type icon, name, and its kind underneath
+      - Coverage rows listing the brands, audiences and categories a project tracks
+      - EntityChipAdd as the dashed trailing affordance that adds a new entity to the row
+    dont_use_when:
+      - User-entered removable labels — use Tag
+      - A status or count — use Badge
+      - Something that filters a list — use FilterChip
+    prefer_over:
+      - Badge: when the element identifies an entity rather than labelling a state
+      - ListItem: when the entities sit in a horizontal wrapping row rather than stacked rows
+    notes: |
+      Waldo extension. Figma API-DASHBOARD node 34:480 (chip) / 34:498 (add).
+      Two lines is the point: a brand, an audience and a category can share a name, so the kind
+      travels with it. Image 24px rounded-md; icon fallback 18px at foreground/70.
+      Name text-sm foreground, kind text-xs muted-foreground.
+      The secondary line prop is `kind`, NOT `type` — `type` is the DOM attribute on <button>.
+      Fill foreground/[0.04], hover foreground/[0.08], rounded-full, py-2 pl-2.5 pr-4.
+
+  - component: Search Trigger
+    use_when:
+      - The pill in a top bar that opens the ⌘K command palette
+      - Any place a search affordance should look like a field but open a dialog
+    dont_use_when:
+      - Real in-place search that filters as you type — use Input
+      - A bare label + chevron that opens a filter dropdown — use FilterTrigger
+    prefer_over:
+      - Input: a real input beside a palette traps focus and duplicates the palette's own field
+    notes: |
+      Waldo extension. Figma API-DASHBOARD node 25:675. It is a <button> that looks like an input.
+      h-9 w-36 rounded-full, border-border/[0.12], bg-background; hover raises the border to /[0.25].
+      Composes Kbd for the shortcut slot (bg-transparent so it reads as a hint, not a key cap).
+      Pass shortcut={null} to hide the hint. Pair with Command inside a Dialog for the palette itself.
+
+  - component: Secret Field
+    use_when:
+      - Showing back a credential the user needs to copy — API key, token, webhook signing secret
+      - Anywhere a value should be copyable without being exposed on screen first
+    dont_use_when:
+      - The user is entering a secret rather than reading one back — use Input type="password"
+      - The value is a non-sensitive URL — use CopyLink
+    prefer_over:
+      - CopyLink: when the value is sensitive and should be masked by default
+    notes: |
+      Waldo extension. Reveal and copy are SEPARATE affordances because copying is the common case
+      and must not require exposing the value. Masking is display-only — the real value is in the
+      DOM, as it must be for copy to work. It defends against a shoulder or a screen recording;
+      it is not a security control.
+      Mono type is intentional here (the value is a credential, i.e. code) — one of the few places
+      the Inter-only rule yields, alongside code blocks, kbd and hex swatches.
+      visiblePrefix keeps a recognisable head ("waldo_sk_"); visibleSuffix keeps the last 4.
+
+  - component: Kv Pill
+    use_when:
+      - 'Label and value on one baseline in a pill — "Status: 200", "Region: us-east-1"'
+      - A row of short metadata under an expanded record or log row
+    dont_use_when:
+      - A status with its own colour semantics — use Badge
+      - The pill is removable — use Tag
+      - Values are long or need to align across rows — use a Table
+    prefer_over:
+      - Table: when there are a handful of short values and a table's chrome costs more than it gives
+    notes: |
+      Waldo extension. bg-foreground/[0.05], rounded-full, px-3 py-1, text-xs.
+      Label muted-foreground with a colon, value foreground. items-baseline so a mono value
+      still sits on the label's baseline.
+
+  # ── Hand-drawn chart primitives ─────────────────────────────────────────────
+
+  - component: Chart Tooltip Panel
+    use_when:
+      - The floating panel for any chart drawn by hand rather than by Recharts
+      - Composing a hover breakdown: label, series rows with colour dots, an optional total or caption
+    dont_use_when:
+      - The chart is built on the DS Chart wrapper — use ChartTooltipContent from chart.tsx, which speaks Recharts' payload shape
+      - A general-purpose hover preview of an entity — use HoverCard
+    prefer_over:
+      - A hand-styled popover per chart: the source dashboard grew four separately-styled copies of this exact panel
+    notes: |
+      Waldo extension. Purely presentational: it does NOT position itself and does not know about
+      Recharts. The chart owns the hover math and gives it a positioned wrapper.
+      Surface: bg-popover/95, border-border/[0.12], rounded-xl, shadow-popover, backdrop-blur-md.
+      Parts: ChartTooltipPanel (shell, optional fixed `width`), ChartTooltipLabel (heading),
+      ChartTooltipRows (stack), ChartTooltipRow (dot + name + tabular value),
+      ChartTooltipTotal (summary above a divider), ChartTooltipCaption (centred time range).
+      `dot` takes a CSS colour, so pass a token: hsl(var(--chart-1)), rgb(var(--destructive)).
+      Values are tabular-nums so stacked numbers align.
+
+  - component: Chart Legend Row
+    use_when:
+      - The horizontal legend under a hand-drawn chart — dot, series name, share or value
+      - Legends that must wrap on narrow cards instead of clipping
+    dont_use_when:
+      - The chart is built on the DS Chart wrapper — use ChartLegend / ChartLegendContent from chart.tsx
+      - There is only one series — a legend for one thing is noise
+    prefer_over:
+      - A hand-built legend: four copies of this existed across one dashboard
+    notes: |
+      Waldo extension. Wraps (gap-x-5 gap-y-2). Dot 7px rounded-full from a CSS colour token.
+      Name muted-foreground, value tabular-nums foreground, both text-xs.
+      Pass activeIndex + onItemHover to link the legend to the chart: the non-active items drop
+      to opacity-45, matching the dimming ShareBar uses on its own segments.
+
+  - component: Day Column Chart
+    use_when:
+      - A dense period at a glance inside a card — one thin capsule per day, stacked by series
+      - Usage or volume over a month where the shape matters more than exact values
+    dont_use_when:
+      - The buckets need axes, gridlines or per-bar labels — use a stacked Bar chart
+      - There is a single series with no composition — use Sparkline or Trend Line
+    prefer_over:
+      - Bar chart: when the chart lives inside a card and should read as a shape, not a table of bars
+    notes: |
+      Waldo extension. Source: API-DASHBOARD Usage block. At rest columns are hairline capsules
+      (barWidth 6, rounded-full, opacity-80). The hovered column WIDENS to activeBarWidth (24) and
+      goes fully opaque, dropping to rounded-md so it stays a column and not a pill — the widening
+      is what makes a 6px column hoverable at all.
+      Series colours are CSS colours: pass hsl(var(--chart-N)).
+      `dates` labels every column and drives the tooltip heading; `axisTicks` is the sparser set
+      actually printed under the chart.
+      An inset hairline in rgb(var(--background)/0.45) gives each capsule a crisp edge and tames
+      the irradiation bloom that makes bright thin bars read wider than they are.
+      The hover-widen interaction is NEW (one commit old at intake) — not settled canon yet.
+
+  - component: Spark Bars
+    use_when:
+      - Recent activity as 2px bars, one per time bucket, with failures stacked on top
+      - Inside a card beside the numbers it summarizes (total requests, success rate)
+    dont_use_when:
+      - A single trajectory with no failure dimension — use Sparkline
+      - The buckets need axes or labels — use a real Bar chart
+    prefer_over:
+      - Sparkline: when health (errors, warnings) matters as much as volume
+    notes: |
+      Waldo extension. Figma API-DASHBOARD node 6:2003. Reads as volume first, health second:
+      a wall of even teal is fine, red caps are not.
+      Bars are 2px wide with rounded-full — on a 2px box that resolves to the 1px cap the design
+      calls for, without an arbitrary radius.
+      Values are 0–1 fractions of the available height, not absolute counts — the caller normalizes,
+      so the component never has to know the scale. minBarHeight keeps an empty bucket visible.
+      Hover hit-testing is nearest-bar across the whole track, because 2px bars cannot be hovered
+      individually. Tone dots: 2xx chart-1, 3xx chart-2, 4xx warning, 5xx destructive.
+      Composes ChartTooltipPanel for the breakdown.
+
+  - component: Share Bar
+    use_when:
+      - A 6px track split by share, one segment per project/entity/topic
+      - Hover naming a segment with its percentage and absolute value, dimming its siblings
+      - React surfaces — this is the React counterpart of the vanilla Segmented Bar chart page
+    dont_use_when:
+      - A single value against a maximum — use Progress
+      - Comparing absolute values across entities — use Benchmark Bar or Dual-Bar Row
+    prefer_over:
+      - Progress: when the track is composed of several series rather than one filled portion
+    notes: |
+      Waldo extension. Sibling dimming to opacity-45 on hover is what makes a 3px sliver readable;
+      min-w-[3px] guarantees a tiny segment still has a hit target.
+      `total` defaults to the sum of segments — pass a larger total (a plan limit, a quota) to leave
+      the unused remainder visible as empty track (bg-secondary).
+      4px of vertical padding above and below keeps the thin track easy to hit without changing its
+      visual height.
+      Segment colours are CSS colours: pass hsl(var(--chart-N)).
+      Composes ChartTooltipPanel so it matches DayColumnChart and SparkBars.
+
+  - component: Treemap
+    use_when:
+      - One whole divided into many parts, where the long tail still has to be visible
+      - A fixed band (a panel row, a card) that a ranked list of 6+ shares must fit
+      - "Top communities / top domains / top themes panels — share of total, not comparison"
+    dont_use_when:
+      - Few enough parts to read on one 6px track — use Share Bar
+      - The reader has to compare values across entities rather than see a whole divided — use a horizontal bar chart
+      - Values that are not parts of one total — area implies a whole
+    prefer_over:
+      - Share Bar: when the tail would collapse to slivers on a single track
+      - Pie Chart: when there are more slices than a circle can label
+    notes: |
+      Waldo extension. Source of the layout: the Brand API console's "Top communities" panel on
+      GET /v1/brands/{id}/mentions/summary, where a tail of domains and subreddits has to fit 180px.
+      Rows pack greedily — 1 tile, then 2, then 4 — each row's height its share of the total and
+      each tile's width its share of its row. No measurement pass, so it renders on the server and
+      stays stable while the panel resizes.
+      Colours are the chart palette in rank order (chart-1 = largest), so rank reads before any
+      label. Pass `color` on a tile to override.
+      A tile under 12% of its row, or in a row under 34px, drops its labels and keeps the name and
+      value on `title` and `aria-label` — the tail stays reachable without printing clipped text.
+      Label chips are `rounded-full` on a `bg-background/80` scrim, at `text-xs`: the scrim is what
+      keeps a label legible on chart-4 and on chart-9 alike.
+      Sibling dimming to opacity-45 on hover, and ChartTooltipPanel for the breakdown, so it matches
+      ShareBar, DayColumnChart and SparkBars.
+
+  - component: Tag Count Cloud
+    use_when:
+      - A ranked vocabulary — themes, topics, tags — where the reader needs the heavy end at a glance
+      - 8+ terms that each carry a count and would waste a whole bar chart
+      - "Top themes panels: which terms lead, not by how much"
+    dont_use_when:
+      - The reader has to compare the numbers — use a horizontal bar chart
+      - A static label with no quantity — use Badge
+      - The user can remove the value — use Tag
+      - Fewer than about five terms; a ramp of five steps has nothing to spread
+    prefer_over:
+      - Badge: when each label carries a count that should be visible without reading it
+      - Tag: when nothing is removable and the fill is data rather than decoration
+    notes: |
+      Waldo extension. Source: the Brand API console's "Top themes" panel on
+      GET /v1/brands/{id}/mentions/summary.
+      Every pill is the same size and the same type — Tag's `sm` metrics (h-7, px-3, text-xs,
+      font-medium) — so it reads as a member of that family. ONLY the fill carries the count:
+      varying the type as well makes the small tags hard to read for no extra information.
+      Ramp: the brand green, light to dark, green-100 / -300 / -500 / -700 / -900. Fill and ink are
+      set together from the tokens, because the DS marries the text colour to the fill — the first
+      three take the ink (zinc-950), the last two take white. That crossover is the DS's own law
+      ("never white on green-500", "never dark text on green-700"); all five steps clear AA at
+      15.29, 9.82, 6.31, 5.97 and 13.31 to 1.
+      Not the chart palette: that is categorical, and five of its hues read as five categories
+      rather than one scale.
+      Shades go by RANK, not value. A vocabulary is skewed — on the source panel the leader has 893
+      and the tail 162 — so scaling on the maximum drops nine of ten tags into the palest step.
+      `scale="value"` is there for when the numbers are the point.
+      Order is the caller's; the shade carries the count.
+      Gap it exposes: the DS has no sequential scale tokens — a ramp has to be assembled by hand
+      from the neutral steps.
+
 component_choice_logic:
 
   dialog_vs_drawer:
@@ -1679,6 +1940,25 @@ component_choice_logic:
 # semantically incorrect even if it looks visually fine.
 
 token_rules:
+
+  surface_elevation:
+    rule: |
+      Elevation in Waldo is carried by SURFACE, not by shadow. A card or panel is flat:
+      background --card over --background, radius 16, NO border and NO drop shadow (.wcard).
+      The background↔card delta IS the affordance — there is no second cue behind it.
+      Documented here because two surfaces re-derived this independently (the Brand API console
+      and Pulse); it is house style, not a per-surface choice.
+    consequences:
+      - The delta is small by design (6 RGB steps on the 2026-08 ramp) and must not be spent —
+        do not tint a card toward the background for any reason.
+      - Never lighten a hover with a translucent SURFACE token (bg-card/80, bg-popover/60).
+        Alpha on a surface composites toward the BACKDROP, and the backdrop is near-black, so a
+        translucent card gets DARKER on hover — the affordance inverts. Lighten with a foreground
+        alpha instead (bg-foreground/[0.06]).
+      - shadow-* tokens are for floating things that leave the page plane (popover, dialog, toast,
+        tooltip, an active pill, a slider thumb) — never for cards or panels.
+      - Black shadows have little room to travel on a near-black ground; if a floating element
+        needs more separation, raise its own surface, don't deepen the shadow.
 
   destructive:
     use_only_for:

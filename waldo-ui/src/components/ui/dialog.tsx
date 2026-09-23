@@ -49,6 +49,7 @@ const DialogContent = React.forwardRef<
       ref={ref}
       className={cn(
         "fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2",
+        "flex max-h-[calc(100dvh_-_2rem)] flex-col",
         "w-full rounded-4xl",
         "bg-card border border-border/[0.08] shadow-dialog",
         "data-[state=open]:animate-fade-in data-[state=closed]:animate-fade-in",
@@ -86,7 +87,7 @@ interface DialogHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
 function DialogHeader({ className, icon, children, ...props }: DialogHeaderProps) {
   return (
     <div
-      className={cn("px-8 pt-7 pb-5", className)}
+      className={cn("shrink-0 px-8 pt-7 pb-5", className)}
       {...props}
     >
       {icon ? (
@@ -104,14 +105,14 @@ function DialogHeader({ className, icon, children, ...props }: DialogHeaderProps
 function DialogFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn("flex items-center justify-end gap-2 px-8 py-5 pb-7", className)}
+      className={cn("shrink-0 flex items-center justify-end gap-2 px-8 py-5 pb-7", className)}
       {...props}
     />
   );
 }
 
 function DialogBody({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("px-8 pb-7", className)} {...props} />;
+  return <div className={cn("flex-1 overflow-y-auto px-8 pb-7", className)} {...props} />;
 }
 
 const DialogTitle = React.forwardRef<

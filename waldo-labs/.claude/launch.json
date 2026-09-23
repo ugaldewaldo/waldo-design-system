@@ -6,7 +6,7 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": [
         "serve",
-        "/Users/miguelugalde/Desktop/waldo-design-system"
+        "/Users/miguelugalde/GitHub/waldo-design-system"
       ],
       "port": 4501,
       "autoPort": true

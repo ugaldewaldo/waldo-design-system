@@ -18,7 +18,20 @@ const path = require('path');
 const CATALOG_PATH = path.join(__dirname, '..', 'docs', 'token-catalog.yaml');
 const SCAN_EXTENSIONS = new Set(['.html', '.css', '.tsx', '.jsx', '.ts', '.js', '.vue', '.svelte']);
 const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'build', '.next']);
-const SKIP_PATH_SEGMENTS = ['waldo-labs']; // prototype lab files — not DS components
+const SKIP_PATH_SEGMENTS = [
+  'waldo-labs',        // prototype lab files — not DS components
+  'brand-kit/preview', // mockups of third-party surfaces — their brand palettes are the point
+];
+
+// A skip entry may name a single directory ('waldo-labs') or a path ('brand-kit/preview');
+// the latter matches only as a consecutive run of path components, never as a loose 'preview'.
+function isSkippedPath(target) {
+  const parts = target.split(path.sep);
+  return SKIP_PATH_SEGMENTS.some((seg) => {
+    const want = seg.split('/');
+    return parts.some((_, i) => want.every((w, j) => parts[i + j] === w));
+  });
+}
 const SKIP_FILES = new Set(['waldo-ds.css']); // compiled DS stylesheet — source of truth, not linted
 
 /* ── Rules from the catalog ────────────────────────────────────── */
@@ -158,7 +171,7 @@ function scanFile(filePath, rules) {
   // rule 10 state — custom-property definitions and consumptions, cross-checked after the loop.
   // Same-file only by design: a self-contained prototype/artifact vendors its theme inline, so a
   // token defined as hex but consumed as hsl(var()) (or a triplet consumed bare) is fully visible
-  // here — and it's the exact mismatch that renders transparent fills / invisible text (PRO-2741).
+  // here — and it's the exact mismatch that renders transparent fills / invisible text.
   const propDefs = new Map();  // name → { value, line } (first definition wins)
   const hslUses = new Map();   // name → first line consumed as hsl(var(--name))
   const bareUses = new Map();  // name → first line consumed as bare var(--name) in a color property
@@ -283,12 +296,16 @@ function scanFile(filePath, rules) {
     for (const m of line.matchAll(/(--[a-zA-Z][\w-]*)\s*:\s*([^;{}]+)[;}]/g)) {
       if (!propDefs.has(m[1])) propDefs.set(m[1], { value: m[2].trim(), line: n });
     }
-    for (const m of line.matchAll(/hsl\(\s*var\((--[a-zA-Z][\w-]*)/g)) {
+    for (const m of line.matchAll(/hsl\(\s*var\((--[a-zA-Z][\w-]*)/gi)) {
       if (!hslUses.has(m[1])) hslUses.set(m[1], n);
     }
     for (const m of line.matchAll(/var\((--[a-zA-Z][\w-]*)\)/g)) {
-      const pre = line.slice(Math.max(0, m.index - 5), m.index);
-      if (/(?:hsla?|rgba?)\($/.test(pre)) continue; // wrapped — handled above
+      const pre = line.slice(0, m.index);
+      // Anchored at the end of everything before the var(), so any amount of inner
+      // whitespace and any casing counts as wrapped. A fixed-width lookback denied
+      // `hsl( var(--x) )` and `HSL(var(--x))` and then suggested writing what was
+      // already written — and this gate now fronts artifact publishes.
+      if (/(?:hsla?|rgba?)\(\s*$/i.test(pre)) continue; // wrapped — handled above
       const propM = line.slice(0, m.index).match(/([a-zA-Z-]+)\s*:\s*[^;{]*$/);
       if (!propM || !COLOR_PROPS.has(propM[1].toLowerCase())) continue;
       if (!bareUses.has(m[1])) bareUses.set(m[1], n);
@@ -330,7 +347,7 @@ function collectFiles(target, allowLabs) {
   // When the explicit target path is itself inside waldo-labs (e.g. the /new-prototype
   // scaffold runs `detect.js waldo-labs/<proto>/`), allowLabs propagates true and we scan
   // the whole subtree. --include-labs forces scanning everywhere regardless.
-  if (!includeLabs && !allowLabs && SKIP_PATH_SEGMENTS.some(seg => target.split(path.sep).includes(seg))) return out;
+  if (!includeLabs && !allowLabs && isSkippedPath(target)) return out;
   if (SKIP_FILES.has(path.basename(target))) return out;
   if (stat.isFile()) {
     if (SCAN_EXTENSIONS.has(path.extname(target))) out.push(target);
@@ -357,8 +374,7 @@ if (!targets.length) {
 }
 
 const rules = loadRules(fs.readFileSync(CATALOG_PATH, 'utf8'));
-const files = targets.flatMap((t) =>
-  collectFiles(t, SKIP_PATH_SEGMENTS.some((seg) => t.split(path.sep).includes(seg))));
+const files = targets.flatMap((t) => collectFiles(t, isSkippedPath(t)));
 const all = files.flatMap((f) => scanFile(f, rules));
 
 const errors = all.filter((f) => f.severity === 'error');

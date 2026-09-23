@@ -1246,6 +1246,79 @@
       ]
     },
     {
+      "id": "entity-chip",
+      "name": "Entity Chip",
+      "selector": "#comp-entity-chip",
+      "category": "brand-api",
+      "use_when": [
+        "A tracked entity as a pill — favicon or type icon, name, and its kind underneath",
+        "Coverage rows listing the brands, audiences and categories a project tracks",
+        "EntityChipAdd as the dashed trailing affordance that adds a new entity to the row"
+      ],
+      "dont_use_when": [
+        "User-entered removable labels — use Tag",
+        "A status or count — use Badge",
+        "Something that filters a list — use FilterChip"
+      ]
+    },
+    {
+      "id": "kv-pill",
+      "name": "Kv Pill",
+      "selector": "#comp-kv-pill",
+      "category": "brand-api",
+      "use_when": [
+        "'Label and value on one baseline in a pill — \"Status: 200\", \"Region: us-east-1\"'",
+        "A row of short metadata under an expanded record or log row"
+      ],
+      "dont_use_when": [
+        "A status with its own colour semantics — use Badge",
+        "The pill is removable — use Tag",
+        "Values are long or need to align across rows — use a Table"
+      ]
+    },
+    {
+      "id": "page-header",
+      "name": "Page Header",
+      "selector": "#comp-page-header",
+      "category": "brand-api",
+      "use_when": [
+        "The top of any console page — title, optional scope suffix, subtitle, actions pinned right",
+        "Twin pages that exist at two scopes (a project's Usage vs the organization's) where the title alone is ambiguous"
+      ],
+      "dont_use_when": [
+        "Section headings inside a page — use a section title, not a second h1",
+        "Card headers — use the Card head classes"
+      ]
+    },
+    {
+      "id": "search-trigger",
+      "name": "Search Trigger",
+      "selector": "#comp-search-trigger",
+      "category": "brand-api",
+      "use_when": [
+        "The pill in a top bar that opens the ⌘K command palette",
+        "Any place a search affordance should look like a field but open a dialog"
+      ],
+      "dont_use_when": [
+        "Real in-place search that filters as you type — use Input",
+        "A bare label + chevron that opens a filter dropdown — use FilterTrigger"
+      ]
+    },
+    {
+      "id": "secret-field",
+      "name": "Secret Field",
+      "selector": "#comp-secret-field",
+      "category": "brand-api",
+      "use_when": [
+        "Showing back a credential the user needs to copy — API key, token, webhook signing secret",
+        "Anywhere a value should be copyable without being exposed on screen first"
+      ],
+      "dont_use_when": [
+        "The user is entering a secret rather than reading one back — use Input type=\"password\"",
+        "The value is a non-sensitive URL — use CopyLink"
+      ]
+    },
+    {
       "id": "vote-column",
       "name": "Vote Column",
       "selector": "#comp-vote-column",
@@ -1354,6 +1427,39 @@
       ]
     },
     {
+      "id": "tag-count-cloud",
+      "name": "Tag Count Cloud",
+      "selector": "#chart-page-tag-count-cloud",
+      "category": "chart",
+      "use_when": [
+        "A ranked vocabulary — themes, topics, tags — where the reader needs the heavy end at a glance",
+        "8+ terms that each carry a count and would waste a whole bar chart",
+        "\"Top themes panels: which terms lead, not by how much\""
+      ],
+      "dont_use_when": [
+        "The reader has to compare the numbers — use a horizontal bar chart",
+        "A static label with no quantity — use Badge",
+        "The user can remove the value — use Tag",
+        "Fewer than about five terms; a ramp of five steps has nothing to spread"
+      ]
+    },
+    {
+      "id": "treemap",
+      "name": "Treemap",
+      "selector": "#chart-page-treemap",
+      "category": "chart",
+      "use_when": [
+        "One whole divided into many parts, where the long tail still has to be visible",
+        "A fixed band (a panel row, a card) that a ranked list of 6+ shares must fit",
+        "\"Top communities / top domains / top themes panels — share of total, not comparison\""
+      ],
+      "dont_use_when": [
+        "Few enough parts to read on one 6px track — use Share Bar",
+        "The reader has to compare values across entities rather than see a whole divided — use a horizontal bar chart",
+        "Values that are not parts of one total — area implies a whole"
+      ]
+    },
+    {
       "id": "donut",
       "name": "Donut Chart",
       "selector": "#chart-page-donut",
@@ -1430,6 +1536,77 @@
         "More than 8 periods — cards become too narrow; use a Bar Chart instead",
         "Comparing multiple brands in the same chart — use grouped Bar Chart",
         "Single metric with no period comparison — use KPI Stat Card"
+      ]
+    },
+    {
+      "id": "tooltip-panel",
+      "name": "Chart Tooltip Panel",
+      "selector": "#chart-page-tooltip-panel",
+      "category": "chart",
+      "use_when": [
+        "The floating panel for any chart drawn by hand rather than by Recharts",
+        "Composing a hover breakdown: label, series rows with colour dots, an optional total or caption"
+      ],
+      "dont_use_when": [
+        "The chart is built on the DS Chart wrapper — use ChartTooltipContent from chart.tsx, which speaks Recharts' payload shape",
+        "A general-purpose hover preview of an entity — use HoverCard"
+      ]
+    },
+    {
+      "id": "legend-row",
+      "name": "Chart Legend Row",
+      "selector": "#chart-page-legend-row",
+      "category": "chart",
+      "use_when": [
+        "The horizontal legend under a hand-drawn chart — dot, series name, share or value",
+        "Legends that must wrap on narrow cards instead of clipping"
+      ],
+      "dont_use_when": [
+        "The chart is built on the DS Chart wrapper — use ChartLegend / ChartLegendContent from chart.tsx",
+        "There is only one series — a legend for one thing is noise"
+      ]
+    },
+    {
+      "id": "day-column",
+      "name": "Day Column Chart",
+      "selector": "#chart-page-day-column",
+      "category": "chart",
+      "use_when": [
+        "A dense period at a glance inside a card — one thin capsule per day, stacked by series",
+        "Usage or volume over a month where the shape matters more than exact values"
+      ],
+      "dont_use_when": [
+        "The buckets need axes, gridlines or per-bar labels — use a stacked Bar chart",
+        "There is a single series with no composition — use Sparkline or Trend Line"
+      ]
+    },
+    {
+      "id": "spark-bars",
+      "name": "Spark Bars",
+      "selector": "#chart-page-spark-bars",
+      "category": "chart",
+      "use_when": [
+        "Recent activity as 2px bars, one per time bucket, with failures stacked on top",
+        "Inside a card beside the numbers it summarizes (total requests, success rate)"
+      ],
+      "dont_use_when": [
+        "A single trajectory with no failure dimension — use Sparkline",
+        "The buckets need axes or labels — use a real Bar chart"
+      ]
+    },
+    {
+      "id": "share-bar",
+      "name": "Share Bar",
+      "selector": "#chart-page-share-bar",
+      "category": "chart",
+      "use_when": [
+        "A 6px track split by share, one segment per project/entity/topic",
+        "Hover naming a segment with its percentage and absolute value, dimming its siblings",
+        "React surfaces — this is the React counterpart of the vanilla Segmented Bar chart page"
+      ],
+      "dont_use_when": [
+        "A single value against a maximum — use Progress",
+        "Comparing absolute values across entities — use Benchmark Bar or Dual-Bar Row"
       ]
     }
   ]
