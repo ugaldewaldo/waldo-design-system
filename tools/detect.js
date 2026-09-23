@@ -18,19 +18,31 @@ const path = require('path');
 const CATALOG_PATH = path.join(__dirname, '..', 'docs', 'token-catalog.yaml');
 const SCAN_EXTENSIONS = new Set(['.html', '.css', '.tsx', '.jsx', '.ts', '.js', '.vue', '.svelte']);
 const SKIP_DIRS = new Set(['node_modules', '.git', 'dist', 'build', '.next']);
-const SKIP_PATH_SEGMENTS = [
+// Opt-in: skipped when we reach them by recursion, scanned when named as the target.
+const LABS_PATH_SEGMENTS = [
   'waldo-labs',        // prototype lab files — not DS components
+];
+// Never scanned, however they are reached — naming one as the target does not change
+// what it is. A changed-files run (CI, pre-commit) passes every file as its own target,
+// so an opt-in entry here would be scanned on exactly the runs that must skip it.
+const ALWAYS_SKIP_PATH_SEGMENTS = [
   'brand-kit/preview', // mockups of third-party surfaces — their brand palettes are the point
 ];
 
 // A skip entry may name a single directory ('waldo-labs') or a path ('brand-kit/preview');
 // the latter matches only as a consecutive run of path components, never as a loose 'preview'.
-function isSkippedPath(target) {
+function matchesSegments(target, segments) {
   const parts = target.split(path.sep);
-  return SKIP_PATH_SEGMENTS.some((seg) => {
+  return segments.some((seg) => {
     const want = seg.split('/');
     return parts.some((_, i) => want.every((w, j) => parts[i + j] === w));
   });
+}
+function isLabsPath(target) {
+  return matchesSegments(target, LABS_PATH_SEGMENTS);
+}
+function isAlwaysSkippedPath(target) {
+  return matchesSegments(target, ALWAYS_SKIP_PATH_SEGMENTS);
 }
 const SKIP_FILES = new Set(['waldo-ds.css']); // compiled DS stylesheet — source of truth, not linted
 
@@ -347,7 +359,8 @@ function collectFiles(target, allowLabs) {
   // When the explicit target path is itself inside waldo-labs (e.g. the /new-prototype
   // scaffold runs `detect.js waldo-labs/<proto>/`), allowLabs propagates true and we scan
   // the whole subtree. --include-labs forces scanning everywhere regardless.
-  if (!includeLabs && !allowLabs && isSkippedPath(target)) return out;
+  if (isAlwaysSkippedPath(target)) return out;
+  if (!includeLabs && !allowLabs && isLabsPath(target)) return out;
   if (SKIP_FILES.has(path.basename(target))) return out;
   if (stat.isFile()) {
     if (SCAN_EXTENSIONS.has(path.extname(target))) out.push(target);
@@ -374,7 +387,7 @@ if (!targets.length) {
 }
 
 const rules = loadRules(fs.readFileSync(CATALOG_PATH, 'utf8'));
-const files = targets.flatMap((t) => collectFiles(t, isSkippedPath(t)));
+const files = targets.flatMap((t) => collectFiles(t, isLabsPath(t)));
 const all = files.flatMap((f) => scanFile(f, rules));
 
 const errors = all.filter((f) => f.severity === 'error');
