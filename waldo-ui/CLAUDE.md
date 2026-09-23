@@ -61,6 +61,13 @@ Skeleton, Sheet/Drawer, Card/ResultCard, DataTable, Combobox, Popover, DatePicke
 - Never use `font-semibold` on buttons
 - Never use `default` and `white` variants together in the same view
 
+### Badge
+- Shape: `rounded-full` (pill) at every size — never an arbitrary radius
+- Font: `font-medium` (500), `text-xs`, `tracking-[-0.01em]`, Inter
+- Never use `font-semibold` on badges
+- No `text-transform` — a value reads as it is written
+- Colour and fill carry the variant; weight and shape never vary between variants
+
 ### Input / Field
 - Shape: `rounded-full` (pill), matches button language
 - Hover/focus border: `border-waldo-green-800` — single border, NO ring

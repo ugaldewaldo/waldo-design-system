@@ -1817,6 +1817,66 @@ components:
       Segment colours are CSS colours: pass hsl(var(--chart-N)).
       Composes ChartTooltipPanel so it matches DayColumnChart and SparkBars.
 
+  - component: Treemap
+    use_when:
+      - One whole divided into many parts, where the long tail still has to be visible
+      - A fixed band (a panel row, a card) that a ranked list of 6+ shares must fit
+      - "Top communities / top domains / top themes panels — share of total, not comparison"
+    dont_use_when:
+      - Few enough parts to read on one 6px track — use Share Bar
+      - The reader has to compare values across entities rather than see a whole divided — use a horizontal bar chart
+      - Values that are not parts of one total — area implies a whole
+    prefer_over:
+      - Share Bar: when the tail would collapse to slivers on a single track
+      - Pie Chart: when there are more slices than a circle can label
+    notes: |
+      Waldo extension. Source of the layout: the Brand API console's "Top communities" panel on
+      GET /v1/brands/{id}/mentions/summary, where a tail of domains and subreddits has to fit 180px.
+      Rows pack greedily — 1 tile, then 2, then 4 — each row's height its share of the total and
+      each tile's width its share of its row. No measurement pass, so it renders on the server and
+      stays stable while the panel resizes.
+      Colours are the chart palette in rank order (chart-1 = largest), so rank reads before any
+      label. Pass `color` on a tile to override.
+      A tile under 12% of its row, or in a row under 34px, drops its labels and keeps the name and
+      value on `title` and `aria-label` — the tail stays reachable without printing clipped text.
+      Label chips are `rounded-full` on a `bg-background/80` scrim, at `text-xs`: the scrim is what
+      keeps a label legible on chart-4 and on chart-9 alike.
+      Sibling dimming to opacity-45 on hover, and ChartTooltipPanel for the breakdown, so it matches
+      ShareBar, DayColumnChart and SparkBars.
+
+  - component: Tag Count Cloud
+    use_when:
+      - A ranked vocabulary — themes, topics, tags — where the reader needs the heavy end at a glance
+      - 8+ terms that each carry a count and would waste a whole bar chart
+      - "Top themes panels: which terms lead, not by how much"
+    dont_use_when:
+      - The reader has to compare the numbers — use a horizontal bar chart
+      - A static label with no quantity — use Badge
+      - The user can remove the value — use Tag
+      - Fewer than about five terms; a ramp of five steps has nothing to spread
+    prefer_over:
+      - Badge: when each label carries a count that should be visible without reading it
+      - Tag: when nothing is removable and the fill is data rather than decoration
+    notes: |
+      Waldo extension. Source: the Brand API console's "Top themes" panel on
+      GET /v1/brands/{id}/mentions/summary.
+      Every pill is the same size and the same type — Tag's `sm` metrics (h-7, px-3, text-xs,
+      font-medium) — so it reads as a member of that family. ONLY the fill carries the count:
+      varying the type as well makes the small tags hard to read for no extra information.
+      Ramp: the brand green, light to dark, green-100 / -300 / -500 / -700 / -900. Fill and ink are
+      set together from the tokens, because the DS marries the text colour to the fill — the first
+      three take the ink (zinc-950), the last two take white. That crossover is the DS's own law
+      ("never white on green-500", "never dark text on green-700"); all five steps clear AA at
+      15.29, 9.82, 6.31, 5.97 and 13.31 to 1.
+      Not the chart palette: that is categorical, and five of its hues read as five categories
+      rather than one scale.
+      Shades go by RANK, not value. A vocabulary is skewed — on the source panel the leader has 893
+      and the tail 162 — so scaling on the maximum drops nine of ten tags into the palest step.
+      `scale="value"` is there for when the numbers are the point.
+      Order is the caller's; the shade carries the count.
+      Gap it exposes: the DS has no sequential scale tokens — a ramp has to be assembled by hand
+      from the neutral steps.
+
 component_choice_logic:
 
   dialog_vs_drawer:

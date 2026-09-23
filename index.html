@@ -133,6 +133,8 @@
     <button class="sb-item" onclick="switchChartPage('chart-page-pie',this)">Pie Charts</button>
     <button class="sb-item" onclick="switchChartPage('chart-page-radar',this)">Radar Charts</button>
     <button class="sb-item" onclick="switchChartPage('chart-page-radial',this)">Radial Charts</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-tag-count-cloud',this)">Tag Count Cloud</button>
+    <button class="sb-item" onclick="switchChartPage('chart-page-treemap',this)">Treemap</button>
     </div>
   </div>
   <div class="sb-no-results" id="sb-no-results">No results</div>
@@ -8613,6 +8615,168 @@ document.querySelectorAll('.checkbox-label input[type="checkbox"]').forEach(cb =
 
 <!-- Sparkline -->
 
+
+<!-- Tag Count Cloud -->
+<div id="chart-page-tag-count-cloud" class="chart-page">
+  <div class="chart-page-title">Tag Count Cloud</div>
+  <div class="chart-page-desc">A ranked vocabulary, scannable without reading a number. Every pill is the same size and the same type &mdash; Tag&rsquo;s <code>sm</code> metrics &mdash; and <strong>only the fill carries the count</strong>: varying the type as well makes the small tags hard to read for no extra information. The ramp is the brand green, <code>green-100</code> to <code>green-900</code>; fill and ink travel together because the DS marries the text colour to the fill, so the first three steps take the ink and the last two take white. All five clear AA (15.29, 9.82, 6.31, 5.97, 13.31&nbsp;:&nbsp;1). Shades go by <strong>rank</strong>, not value &mdash; a vocabulary is skewed, and scaling on the maximum would drop nine of ten tags into the palest step. React: <code>TagCountCloud</code>.</div>
+
+  <style>
+    .wtagcloud { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0; padding: 0; list-style: none; }
+    .wtagcloud li {
+      display: inline-flex; align-items: center; gap: 4px;
+      height: 28px; padding: 0 12px; border-radius: var(--radius-full);
+      font-size: var(--fs-xs); font-weight: 500; line-height: 20px; letter-spacing: -0.02em;
+      user-select: none; white-space: nowrap;
+    }
+    .wtagcloud li span { font-variant-numeric: tabular-nums; }
+    /* Fill and ink are one decision — the DS marries the text colour to the fill. */
+    .wtc-1 { background: hsl(var(--green-100)); color: hsl(var(--zinc-950)); }
+    .wtc-2 { background: hsl(var(--green-300)); color: hsl(var(--zinc-950)); }
+    .wtc-3 { background: hsl(var(--green-500)); color: hsl(var(--zinc-950)); }
+    .wtc-4 { background: hsl(var(--green-700)); color: #fff; }
+    .wtc-5 { background: hsl(var(--green-900)); color: #fff; }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Top themes &mdash; which terms lead</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <ul class="wtagcloud" id="tagcloud-demo"></ul>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code">&lt;TagCountCloud tags={[{ name: "ai-safety", count: 893 }, &hellip;]} /&gt;</span>
+      </div>
+    </div>
+    <script>
+    (function(){
+      var data = [
+        { label: 'ai-safety',               count: 893 },
+        { label: 'ai',                      count: 412 },
+        { label: 'ai-research',             count: 366 },
+        { label: 'artificial-intelligence', count: 340 },
+        { label: 'ai-models',               count: 317 },
+        { label: 'ai-tools',                count: 300 },
+        { label: 'cybersecurity',           count: 225 },
+        { label: 'ai-agents',               count: 192 },
+        { label: 'enterprise-ai',           count: 188 },
+        { label: 'ai-development',          count: 162 }
+      ];
+      var STEPS = 5;
+      var host = document.getElementById('tagcloud-demo');
+      if (!host) return;
+
+      // Rank, not value: cut the ranks into equal groups so every shade is used.
+      var order = data.map(function(d, i){ return { i: i, count: d.count }; })
+                      .sort(function(a, b){ return b.count - a.count; })
+                      .map(function(x){ return x.i; });
+      var rank = {};
+      order.forEach(function(i, r){ rank[i] = r; });
+
+      host.innerHTML = data.map(function(d, i){
+        var step = STEPS - Math.min(STEPS - 1, Math.floor(rank[i] / data.length * STEPS));
+        var val = d.count.toLocaleString('en-US');
+        return '<li class="wtc-' + step + '" title="' + d.label + ' \u00b7 ' + val + '">'
+             + d.label + '<span>(' + val + ')</span></li>';
+      }).join('');
+    })();
+    </script>
+  </div>
+</div>
+
+<!-- Treemap -->
+<div id="chart-page-treemap" class="chart-page">
+  <div class="chart-page-title">Treemap</div>
+  <div class="chart-page-desc">Area is the value. Tiles pack into rows &mdash; each row&rsquo;s height is its share of the total, each tile&rsquo;s width its share of its row &mdash; so a long tail fits a fixed band with no measurement pass. Segments use <code>--chart-1</code> through <code>--chart-12</code> in rank order, largest first, so rank reads before any label. A tile too small for two lines of type drops its labels and keeps the name and value on <code>title</code> and <code>aria-label</code>. Only the outer corners are rounded &mdash; <code>radius-2xl</code>, the Card radius &mdash; and the name and value share one line &mdash; <code>text-base</code> and <code>text-xs</code>, the value washed to 90% white. Labels sit straight on the tile, which is why every tile is mixed with 45% black: white fails AA on all twelve raw palette colours, and the washed value sets the figure. React: <code>Treemap</code>.</div>
+
+  <style>
+    /* Only the outside is rounded — radius-2xl, the Card radius. The tiles are
+       square and the container clips them, so the block reads as one card cut
+       into parts rather than a tray of pills. */
+    .wtreemap {
+      display: flex; flex-direction: column; gap: 1px; width: 100%;
+      overflow: hidden; border-radius: var(--radius-2xl);
+    }
+    .wtreemap-row { display: flex; min-height: 0; gap: 1px; }
+    .wtreemap-tile {
+      display: flex; align-items: baseline;
+      gap: 8px; min-width: 0; overflow: hidden;
+      padding: 12px 16px;
+      transition: opacity .1s;
+    }
+    .wtreemap:hover .wtreemap-tile { opacity: .45; }
+    .wtreemap .wtreemap-tile:hover { opacity: 1; }
+    /* White type straight on the tile, no scrim. White fails AA on every raw
+       palette colour (1.85:1 on chart-1), so each tile is mixed with 45% black.
+       That figure is set by the washed value, not by the name: at 55% colour the
+       worst of the twelve reaches 5.52:1 for full white and 4.81:1 at 90%. */
+    .wtreemap-label, .wtreemap-value {
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      color: #fff;
+    }
+    .wtreemap-label { min-width: 0; font-size: var(--fs-base); font-weight: 500; }
+    .wtreemap-value {
+      flex: none; font-size: var(--fs-xs); font-variant-numeric: tabular-nums;
+      color: rgba(255, 255, 255, 0.9);
+    }
+  </style>
+
+  <div class="section">
+    <div class="section-title">Top communities &mdash; one whole, long tail</div>
+    <div class="demo-block">
+      <div class="demo-canvas">
+        <div class="wtreemap" id="treemap-demo" style="height:180px" role="img" aria-label="Share of the total by area"></div>
+      </div>
+      <div class="demo-code-bar">
+        <span class="demo-code">&lt;Treemap tiles={[{ name: "youtube.com", value: 1130 }, &hellip;]} valueLabel="mentions" /&gt;</span>
+      </div>
+    </div>
+    <script>
+    (function(){
+      var data = [
+        { label: 'youtube.com',  value: 1130 },
+        { label: 'linkedin.com', value: 942 },
+        { label: 'x.com',        value: 521 },
+        { label: 'r/ClaudeAI',   value: 155 },
+        { label: 'r/ClaudeCode', value: 150 },
+        { label: 'r/Anthropic',  value: 118 },
+        { label: 'ft.com',       value: 95 }
+      ];
+      var rowSizes = [1, 2, 4];
+      var total = data.reduce(function(a, d){ return a + d.value; }, 0);
+      var host = document.getElementById('treemap-demo');
+      if (!host) return;
+
+      var i = 0, r = 0, html = '';
+      while (i < data.length) {
+        var size = rowSizes[Math.min(r, rowSizes.length - 1)];
+        var row = data.slice(i, i + size);
+        var rowTotal = row.reduce(function(a, d){ return a + d.value; }, 0);
+        html += '<div class="wtreemap-row" style="flex-basis:' + (rowTotal / total * 100) + '%">';
+        row.forEach(function(d, k){
+          var idx = i + k;
+          var wide = d.value / rowTotal > 0.18;
+          var tall = rowTotal / total * 180 > 30;
+          var val = d.value.toLocaleString('en-US');
+          html += '<div class="wtreemap-tile" title="' + d.label + ' \u00b7 ' + val + '"'
+                + ' aria-label="' + d.label + ' \u00b7 ' + val + '"'
+                + ' style="flex-basis:' + (d.value / rowTotal * 100) + '%;'
+                + 'background-color:color-mix(in srgb, hsl(var(--chart-' + ((idx % 12) + 1) + ')) 55%, black)">'
+                + (wide && tall
+                    ? '<span class="wtreemap-label">' + d.label + '</span>'
+                      + '<span class="wtreemap-value">' + val + '</span>'
+                    : '')
+                + '</div>';
+        });
+        html += '</div>';
+        i += size;
+        r += 1;
+      }
+      host.innerHTML = html;
+    })();
+    </script>
+  </div>
+</div>
 
 <!-- Donut Chart -->
 <div id="chart-page-donut" class="chart-page">

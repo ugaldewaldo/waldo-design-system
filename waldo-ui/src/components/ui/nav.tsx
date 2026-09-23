@@ -76,6 +76,7 @@ export interface NavItemProps {
   expanded?: boolean;
   /** Toggle handler (when collapsible) */
   onToggle?: () => void;
+  /** Click handler. Fires alongside onToggle when the item is also collapsible. */
   onClick?: () => void;
   className?: string;
   children?: React.ReactNode;
@@ -96,18 +97,34 @@ export function NavItem({
   className,
   children,
 }: NavItemProps) {
-  const handleClick = () => {
+  // Acts as a button whenever it can be activated.
+  const isButton = Boolean(collapsible || onClick);
+
+  const activate = () => {
     if (disabled) return;
+    // Both fire: collapsible and onClick are independently optional, so the
+    // combination used to compile and drop the handler with no signal.
     if (collapsible) onToggle?.();
-    else onClick?.();
+    onClick?.();
+  };
+
+  // WAI-ARIA button pattern: Enter and Space activate, Space does not scroll.
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!isButton || disabled) return;
+    if (event.key !== "Enter" && event.key !== " ") return;
+    event.preventDefault();
+    activate();
   };
 
   return (
     <>
       <div
-        role={collapsible ? "button" : onClick ? "button" : undefined}
+        role={isButton ? "button" : undefined}
+        tabIndex={isButton && !disabled ? 0 : undefined}
         aria-expanded={collapsible ? expanded : undefined}
-        onClick={handleClick}
+        aria-disabled={isButton && disabled ? true : undefined}
+        onClick={activate}
+        onKeyDown={handleKeyDown}
         className={cn(
           "group relative flex h-9 items-center gap-1.5",
           "rounded-full px-4",
@@ -184,6 +201,14 @@ interface NavPanelProps {
   className?: string;
   width?: string;
   /**
+   * Accessible name for the <nav> landmark. Sidebar, filter panel and report
+   * builder can be on screen at once, so unnamed landmarks are the norm here
+   * unless each one is labelled.
+   */
+  "aria-label"?: string;
+  /** Id of the element naming this landmark, when a visible heading already does. */
+  "aria-labelledby"?: string;
+  /**
    * Container surface.
    *   floating → boxed panel over another surface (bg-popover + rounded-3xl) — default
    *   plain    → flush to the app shell, no box, sits directly on --background
@@ -196,9 +221,13 @@ export function NavPanel({
   className,
   width = "w-[288px]",
   variant = "floating",
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledBy,
 }: NavPanelProps) {
   return (
     <nav
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy}
       className={cn(
         "flex flex-col h-full overflow-y-auto py-2",
         variant === "floating" ? "bg-popover rounded-3xl" : "bg-transparent",

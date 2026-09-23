@@ -105,7 +105,7 @@ Dashboard-specific patterns for Brand API prototypes — not core atoms.
 - **Vote Column** `#comp-vote-column` — use when: Upvote/downvote affordance on a post or feed item (vertical column variant) · Inline vote row on a comment (mini variant)
 - **Waldo Logo** `#comp-waldo-logo` — use when: Displaying the Waldo wordmark in topbars, splash screens, or branded surfaces
 
-## Charts / Data-viz (21)
+## Charts / Data-viz (23)
 
 - **Area Charts** `#chart-page-area`
 - **Bar Charts** `#chart-page-bar`
@@ -115,6 +115,8 @@ Dashboard-specific patterns for Brand API prototypes — not core atoms.
 - **Radial Charts** `#chart-page-radial`
 - **Chart Tooltip** `#chart-page-tooltip` — use when: Plotting signal volume over time for a brand or competitor feed · Visualizing sentiment or share-of-voice breakdowns inside a report · Rendering trend lines for audience or category insights in a dashboard card
 - **Chart Palette** `#chart-page-palette` — use when: Plotting signal volume over time for a brand or competitor feed · Visualizing sentiment or share-of-voice breakdowns inside a report · Rendering trend lines for audience or category insights in a dashboard card
+- **Tag Count Cloud** `#chart-page-tag-count-cloud` — use when: A ranked vocabulary — themes, topics, tags — where the reader needs the heavy end at a glance · 8+ terms that each carry a count and would waste a whole bar chart · "Top themes panels: which terms lead, not by how much"
+- **Treemap** `#chart-page-treemap` — use when: One whole divided into many parts, where the long tail still has to be visible · A fixed band (a panel row, a card) that a ranked list of 6+ shares must fit · "Top communities / top domains / top themes panels — share of total, not comparison"
 - **Donut Chart** `#chart-page-donut`
 - **Horizontal Bar** `#chart-page-hbar`
 - **Proportion Bar** `#chart-page-proportion`

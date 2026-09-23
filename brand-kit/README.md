@@ -10,6 +10,7 @@ Tracked in Linear: [Marketing Brand Kit](https://linear.app/waldofyi/project/mar
 
 | Folder | Contents |
 |---|---|
+| `doc/` | Planning per slice — currently social: `PLAN.md` (phased plan + status log) and `ONE-PAGER.md` (executive summary) |
 | `DESIGN.md` | Brand tokens + rules, vendored verbatim from the canonical theme in `waldo-agentic` — do not hand-edit; see drift check below |
 | `doctrine/` | Usage doctrine per content type: when to use which pattern, what varies, what's fixed |
 | `emails/` | Sending-ready HTML templates: base skeleton, welcome, feature announcement / newsletter |

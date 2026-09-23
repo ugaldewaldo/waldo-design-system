@@ -41,8 +41,10 @@
   --zinc-750:  220 6% 19%;   /* ANCHOR — fill700Regular (custom step) · #2d2f33 */
   --zinc-800:  225 5% 16%;   /* ANCHOR — fill800Low · #27282b */
   --zinc-850:  225 5% 15%;   /* ANCHOR — bg850High (custom step) · #242528 */
-  --zinc-900:  220 4% 13%;   /* ANCHOR — bg900Regular · #202123 */
-  --zinc-950:  210 4% 9%;   /* ANCHOR — bg950Low · #171819 */
+  --zinc-900:  220 4% 13%;   /* elevated surface, pre-2026-08 · #202123 */
+  --zinc-950:  210 4% 9%;   /* app background, pre-2026-08 · #171819 */
+  --zinc-975:  240 3% 7.6%;  /* ANCHOR — surface-elevated (card) · #131314 */
+  --zinc-990:    0 0% 5%;    /* ANCHOR — surface-default (app background) · #0d0d0d */
 
   /* ── green (brand primary — formerly teal) ── */
   --green-50:   180 57% 95%;   /* DERIVED · #edfafa */

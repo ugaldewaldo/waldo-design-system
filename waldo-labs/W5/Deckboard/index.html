@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deckboard — the brand, in charts</title>
+<link rel="stylesheet" href="../../../waldo-ui/waldo-shadcn-theme.css">
+<link rel="stylesheet" href="../../../waldo-ds.css">
+<style>
+  /* waldo-ds.css sets html,body{height:100%;overflow:hidden} — breaks scroll.
+     Scroll override goes on html ONLY: any overflow other than visible on body
+     silently kills position:sticky (the sticky topbar scrolls away). */
+  html { height: auto !important; overflow: visible !important; overflow-y: auto !important; }
+  body { height: auto !important; overflow: visible !important; }
+  /* waldo-ds.css sets body{display:flex!important} — collapses card widths */
+  body { display: block !important; }
+  /* waldo-ds.css sets svg{display:block} — collapses ring/icon SVGs inside flex containers */
+  svg { flex: none; min-height: fit-content; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    max-width: none !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: hsl(var(--background)); color: hsl(var(--foreground));
+    font-size: var(--fs-sm); line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: hsl(var(--primary)); text-decoration: none; }
+  a:hover { opacity: .85; }
+  a.btn, a.btn:hover, a.wtab-pill, a.wtab-pill:hover { opacity: 1; }
+  button { font-family: inherit; }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  /* ── Shell — canonical .app-header + centered wrap, no sidebar ── */
+  .wrap { max-width: 1184px; margin: 0 auto; padding: 28px 24px 48px; }
+
+  .page-head { margin-bottom: 22px; border-bottom: none !important; display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.8px; line-height: 34px; }
+  .page-head .sub { color: hsl(var(--muted-foreground)); margin-top: 5px; font-size: var(--fs-sm); }
+  .page-head .spacer { flex: 1; }
+
+  /* ── Board pills — DS Tabs pill-primary (the brand's dashboards) ── */
+  .deck-nav { display: flex; align-items: center; gap: 12px; margin: 24px 0; flex-wrap: wrap; }
+  .deck-nav .wtab-pill { text-decoration: none; cursor: pointer; }
+  .deck-note { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); margin-left: auto; }
+
+  /* ── KPI Stat Card — canonical (showcase #comp-kpi-stat-card) ── */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 16px; }
+  .kpi { background: hsl(var(--card)); border-radius: var(--radius-2xl); padding: 22px; display: flex; flex-direction: column; gap: 8px; position: relative; }
+  .k-label { font-size: var(--fs-sm); font-weight: 500; line-height: 20px; letter-spacing: -0.28px; color: hsl(var(--muted-foreground)); }
+  .kpi:has(.k-delta) .k-label { padding-right: 48px; }
+  .k-value { font-size: var(--fs-3xl); font-weight: 600; line-height: 34px; letter-spacing: -0.6px; font-variant-numeric: tabular-nums; }
+  .k-sub { font-size: var(--fs-xs); font-weight: 400; line-height: 16px; letter-spacing: -0.24px; color: hsl(var(--muted-foreground)); }
+  .k-delta { position: absolute; top: 16px; right: 16px; border: none; }
+  .k-delta.good { background: hsl(var(--primary) / 0.12); color: hsl(var(--primary)); }
+  .k-delta.bad { background: hsl(var(--destructive) / 0.12); color: hsl(var(--destructive)); }
+
+  /* ── Question grid — mixed-span chart tiles, Metabase-style ── */
+  .q-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; align-items: stretch; }
+  .q-tile { display: flex; flex-direction: column; gap: 14px; background: hsl(var(--card)); border-radius: 16px; padding: 20px 22px; min-width: 0; }
+  .q-tile.span-2 { grid-column: span 2; }
+  .q-tile.span-3 { grid-column: span 3; }
+  .q-tile.span-4 { grid-column: span 4; }
+  .q-head { display: flex; flex-direction: column; gap: 3px; }
+  .q-title { font-size: var(--fs-sm); font-weight: 500; letter-spacing: -0.01em; }
+  .q-sub { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .q-body { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 6px; min-height: 96px; }
+  .q-foot { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); padding-top: 10px; border-top: 1px solid hsl(var(--border)); font-variant-numeric: tabular-nums; }
+  .q-foot b { color: hsl(var(--foreground)); font-weight: 500; }
+
+  /* ── Chart families — all canonical DS charts, tuned per question ── */
+
+  /* Trend Line (#chart-page-trend) — hairline, area under primary only */
+  .trend-svg { width: 100%; height: 150px; display: block; }
+  .trend-legend { display: flex; gap: 16px; flex-wrap: wrap; }
+  .trend-legend-item { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); color: hsl(var(--foreground) / 0.7); }
+  .trend-swatch { width: 14px; height: 2px; border-radius: 1px; flex: none; }
+  .trend-swatch.you { background: hsl(var(--primary)); }
+  .trend-swatch.last { background: hsl(var(--muted-foreground)); }
+
+  /* Proportion Bar (#chart-page-proportion) */
+  .senti-row { display: flex; align-items: center; gap: 12px; padding: 5px 0; }
+  .senti-label { width: 64px; flex: none; font-size: var(--fs-xs); font-weight: 400; letter-spacing: -0.24px; color: hsl(var(--muted-foreground)); }
+  .senti-bar { flex: 1; height: 8px; border-radius: var(--radius-full); overflow: hidden; display: flex; background: hsl(var(--secondary)); }
+  .senti-seg { height: 100%; }
+  .senti-seg.pos { background: hsl(var(--primary)); }
+  .senti-seg.neu { background: hsl(var(--muted-foreground)); }
+  .senti-seg.neg { background: hsl(var(--warning)); }
+  .senti-seg.mix { background: hsl(var(--highlight)); }
+  .senti-val { width: 34px; flex: none; text-align: right; font-size: var(--fs-xs); font-weight: 600; font-variant-numeric: tabular-nums; color: hsl(var(--muted-foreground)); }
+  .senti-legend { display: flex; gap: 14px; flex-wrap: wrap; }
+  .senti-legend-item { display: flex; align-items: center; gap: 6px; font-size: var(--fs-xs); letter-spacing: -0.24px; color: hsl(var(--foreground) / 0.7); }
+  .senti-swatch { width: 14px; height: 8px; border-radius: 4px; flex: none; }
+  .senti-swatch.pos { background: hsl(var(--primary)); }
+  .senti-swatch.neu { background: hsl(var(--muted-foreground)); }
+  .senti-swatch.neg { background: hsl(var(--warning)); }
+  .senti-swatch.mix { background: hsl(var(--highlight)); }
+
+  /* Horizontal Bar (#chart-page-hbar) — you = teal, competitors = neutral (doctrine) */
+  .ds-hbar-row { display: flex; align-items: center; height: 26px; padding: 4px 0; gap: 12px; }
+  .ds-hbar-name { width: 84px; flex: none; font-size: var(--fs-xs); font-weight: 400; letter-spacing: -0.24px; color: hsl(var(--muted-foreground)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ds-hbar-name.you { color: hsl(var(--foreground)); font-weight: 500; }
+  .ds-hbar-track { flex: 1; height: 6px; background: hsl(var(--muted)); border-radius: var(--radius-full); overflow: hidden; }
+  .ds-hbar-fill { height: 100%; border-radius: var(--radius-full); background: hsl(var(--primary)); }
+  .ds-hbar-fill.rival { background: hsl(var(--muted-foreground) / 0.55); }
+  .ds-hbar-val { width: 36px; flex: none; text-align: right; font-size: var(--fs-xs); font-weight: 400; color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; }
+
+  /* Score Ring (#comp-score-ring) */
+  .ring-wrap { display: flex; align-items: center; gap: 18px; }
+  .sring-svg { width: 104px; height: 104px; display: block; flex: none; }
+  .sring-track { fill: none; stroke: hsl(var(--foreground) / 0.08); stroke-width: 4; }
+  .sring-arc { fill: none; stroke: hsl(var(--primary)); stroke-width: 4; stroke-linecap: round; }
+  .sring-num { font-size: 26px; font-weight: 400; letter-spacing: -0.02em; fill: hsl(var(--foreground)); }
+  .ring-meta { display: flex; flex-direction: column; gap: 4px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .ring-meta b { color: hsl(var(--foreground)); font-weight: 500; }
+  .ring-meta .up { color: hsl(var(--primary)); font-weight: 500; font-variant-numeric: tabular-nums; }
+
+  /* Gantt (#chart-page-gantt) — campaign flights */
+  .gantt-rows { display: flex; flex-direction: column; gap: 8px; }
+  .gantt-row { display: flex; align-items: center; gap: 12px; }
+  .gantt-label { width: 92px; flex: none; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .gantt-track { flex: 1; height: 8px; position: relative; }
+  .gantt-bar { position: absolute; top: 0; height: 8px; border-radius: var(--radius-full); background: hsl(var(--primary)); }
+  .gantt-bar.ahead { background: hsl(var(--secondary)); }
+  .gantt-scale { display: flex; justify-content: space-between; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: hsl(var(--muted-foreground)); margin-top: 4px; padding-left: 104px; }
+
+  /* Leaderboard Row (#comp-leaderboard-row) — compact */
+  .lb-rows { display: flex; flex-direction: column; }
+  .lb-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid hsl(var(--border)); }
+  .lb-row:last-child { border-bottom: none; }
+  .lb-rank { width: 16px; flex: none; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); font-variant-numeric: tabular-nums; }
+  .lb-name { flex: 1; min-width: 0; font-size: var(--fs-sm); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lb-meta { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); flex: none; font-variant-numeric: tabular-nums; }
+
+  /* Sparkline (#chart-page-sparkline) — embedded stat tiles */
+  .spark-wrap { display: flex; align-items: center; gap: 14px; }
+  .spark-svg { flex: 1; height: 56px; display: block; min-width: 0; }
+  .spark-meta { flex: none; display: flex; flex-direction: column; gap: 2px; }
+  .spark-num { font-size: var(--fs-2xl); font-weight: 600; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+  .spark-sub { font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+  .spark-sub .up { color: hsl(var(--primary)); font-weight: 500; }
+  .spark-sub .down { color: hsl(var(--warning)); font-weight: 500; }
+
+  /* Theme Pill (doctrine 5d) — sentiment tint, fixed size, count carries volume */
+  .tpills { display: flex; flex-wrap: wrap; gap: 8px; align-content: center; }
+  .tpill { display: inline-flex; align-items: center; gap: 6px; font-size: var(--fs-xs); padding: 4px 10px; border-radius: var(--radius-full); }
+  .tpill b { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .tpill.pos { background: hsl(var(--primary) / 0.10); color: hsl(var(--primary)); }
+  .tpill.neu { background: hsl(var(--muted-foreground) / 0.10); color: hsl(var(--muted-foreground)); }
+  .tpill.neg { background: hsl(var(--warning) / 0.10); color: hsl(var(--warning)); }
+  .tpill.mix { background: hsl(var(--highlight) / 0.10); color: hsl(var(--highlight)); }
+
+  .api-foot { margin-top: 30px; font-size: var(--fs-xs); color: hsl(var(--muted-foreground)); }
+
+  /* ── Toast — DS wtoast ── */
+  .toast-vp { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(20px); opacity: 0; pointer-events: none; transition: all .25s; z-index: 90; }
+  .toast-vp.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast-vp .wtoast-icon { color: hsl(var(--primary)); }
+
+  @media (max-width: 940px) {
+    .kpi-grid { grid-template-columns: 1fr 1fr; }
+    .q-grid { grid-template-columns: 1fr; }
+    .q-tile.span-2, .q-tile.span-3, .q-tile.span-4 { grid-column: span 1; }
+    .wrap { padding: 20px 16px 80px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════ APP HEADER — canonical chrome: identity + search (no-nav exception) ════ -->
+<header class="app-header">
+  <div class="app-header-inner">
+    <div class="app-ident">
+      <svg width="70" height="18" viewBox="0 0 69.75 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Waldo"><path d="M63.2676 0C67.6298 0 69.75 2.26338 69.75 7.52148V10.6641C69.75 15.7985 67.6298 18 63.2676 18C58.8935 17.9984 56.7862 15.7968 56.7861 10.6641V7.52148C56.7861 2.26354 58.8934 0.000133701 63.2676 0ZM37.0039 14.6191L41.9775 13.9814V17.6562H32.4795V0.335938H37.0039V14.6191ZM5.47168 7.7832C5.68287 9.47803 5.78297 10.7646 5.85742 12.6689H6.10645C6.21888 10.7887 6.35555 9.37851 6.53027 7.7832L7.39062 0.335938H11.4912L12.4258 7.7832C12.6248 9.37852 12.7498 10.7902 12.8379 12.6689H13.1113C13.2116 10.7887 13.3102 9.47652 13.4971 7.7832L14.3193 0.335938H18.707L15.9277 17.6543H10.5449L10.0469 13.4609C9.79769 11.4328 9.62264 9.51443 9.49805 7.43652H9.23633C9.09958 9.51443 8.91281 11.4072 8.67578 13.4609L8.20215 17.6543H2.90332L0 0.335938H4.54883L5.47168 7.7832ZM31.6318 17.6543H26.8457L26.4961 15.5762H22.3086L21.959 17.6543H17.6094L21.6221 0.335938H27.5312L31.6318 17.6543ZM49.2207 0.335938C53.5328 0.335938 55.5898 2.67494 55.5898 7.61035V10.4062C55.5897 15.3172 53.5327 17.6543 49.2207 17.6543H43.2373V0.335938H49.2207ZM63.2676 3.55078C61.984 3.55097 61.3614 4.50431 61.3613 6.48242V11.6904C61.3613 13.5465 61.9839 14.449 63.2676 14.4492C64.5515 14.4492 65.1748 13.5452 65.1748 11.6904V6.48242C65.1748 4.5026 64.5515 3.55078 63.2676 3.55078ZM47.7617 14.1035H48.9717C50.3558 14.1035 51.0156 13.3613 51.0156 11.79V6.19824C51.0155 4.62735 50.3542 3.88577 48.9717 3.88574H47.7617V14.1035ZM24.2764 4.36816C24.1761 5.76588 23.989 7.03991 23.7656 8.53711L22.9043 12.7627L25.834 12.3721L25.0742 8.5498C24.8493 7.04039 24.65 5.76599 24.5254 4.36816H24.2764Z" fill="currentColor"/></svg>
+      <span class="product">Deckboard</span>
+    </div>
+    <div class="app-search input-with-icon">
+      <div class="input-icon">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </div>
+      <input class="input" type="text" placeholder="Ask the brand a question…" autocomplete="off">
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="page-head">
+    <div>
+      <h1>Patagonia</h1>
+      <div class="sub">The brand, in charts — every question answered live from the Brand API.</div>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn btn-default btn-sm" onclick="toast('Ask a question, get a chart — demo')">New chart</button>
+  </div>
+
+  <!-- Board pills — the brand's dashboards (DS Tabs, pill-primary) -->
+  <div class="deck-nav">
+    <div class="wtabs-pill primary" role="tablist" aria-label="Dashboards">
+      <a class="wtab-pill active" role="tab" aria-selected="true" href="#">Overview</a>
+      <a class="wtab-pill" role="tab" aria-selected="false" href="#" onclick="toast('Social dashboard — demo'); return false;">Social</a>
+      <a class="wtab-pill" role="tab" aria-selected="false" href="#" onclick="toast('Paid media dashboard — demo'); return false;">Paid media</a>
+      <a class="wtab-pill" role="tab" aria-selected="false" href="#" onclick="toast('Competitors dashboard — demo'); return false;">Competitors</a>
+      <a class="wtab-pill" role="tab" aria-selected="false" href="#" onclick="toast('Audience dashboard — demo'); return false;">Audience</a>
+      <a class="wtab-pill" role="tab" aria-selected="false" href="#" onclick="toast('News dashboard — demo'); return false;">News</a>
+      <a class="wtab-pill" role="tab" aria-selected="false" href="#" onclick="toast('Alerts — demo'); return false;">Alerts</a>
+    </div>
+    <span class="deck-note">Live from the Brand API · updated 4 min ago</span>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi">
+      <span class="badge badge-sm k-delta good">▲ 8%</span>
+      <div class="k-label">Mentions · L30d</div>
+      <div class="k-value">12.4k</div>
+      <div class="k-sub">across 6 platforms &amp; press</div>
+    </div>
+    <div class="kpi">
+      <div class="k-label">Positive sentiment</div>
+      <div class="k-value">71%</div>
+      <div class="k-sub">repair &amp; durability carry the tone</div>
+    </div>
+    <div class="kpi">
+      <div class="k-label">Share of voice</div>
+      <div class="k-value">34%</div>
+      <div class="k-sub">leads the outdoor category</div>
+    </div>
+    <div class="kpi">
+      <span class="badge badge-sm k-delta good">▲ 12</span>
+      <div class="k-label">Active creatives</div>
+      <div class="k-value">57</div>
+      <div class="k-sub">Worn Wear flight is live</div>
+    </div>
+  </div>
+
+  <div class="q-grid">
+
+    <!-- Q1 — Mentions volume, you vs last period (Trend Line) -->
+    <div class="q-tile span-4">
+      <div class="q-head">
+        <span class="q-title">Mentions volume · 30 days</span>
+        <span class="q-sub">Daily brand mentions, this period vs last</span>
+      </div>
+      <div class="q-body">
+        <svg class="trend-svg" viewBox="0 0 640 150" preserveAspectRatio="none" aria-label="Mentions volume, 30 days">
+          <line x1="0" y1="112" x2="640" y2="112" style="stroke:hsl(var(--foreground) / 0.07)" stroke-width="1"/>
+          <line x1="0" y1="62" x2="640" y2="62" style="stroke:hsl(var(--foreground) / 0.07)" stroke-width="1"/>
+          <path d="M0,118 L46,110 L92,114 L138,102 L184,106 L230,92 L276,98 L322,82 L368,88 L414,70 L460,76 L506,54 L552,60 L598,38 L640,30 L640,150 L0,150 Z" style="fill:hsl(var(--primary) / 0.08)"/>
+          <path d="M0,118 L46,110 L92,114 L138,102 L184,106 L230,92 L276,98 L322,82 L368,88 L414,70 L460,76 L506,54 L552,60 L598,38 L640,30" fill="none" style="stroke:hsl(var(--primary))" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M0,124 L46,120 L92,122 L138,116 L184,118 L230,112 L276,116 L322,108 L368,112 L414,104 L460,108 L506,100 L552,104 L598,96 L640,94" fill="none" style="stroke:hsl(var(--muted-foreground))" stroke-width="1" stroke-dasharray="4 4"/>
+        </svg>
+        <div class="trend-legend">
+          <span class="trend-legend-item"><span class="trend-swatch you"></span>This period</span>
+          <span class="trend-legend-item"><span class="trend-swatch last"></span>Last period</span>
+        </div>
+      </div>
+      <div class="q-foot">Peak <b>612</b> mentions on Jul 6 — the $3B giveaway anniversary thread on r/BuyItForLife</div>
+    </div>
+
+    <!-- Q2 — Brand health (Score Ring) -->
+    <div class="q-tile span-2">
+      <div class="q-head">
+        <span class="q-title">Brand health</span>
+        <span class="q-sub">30-day composite score</span>
+      </div>
+      <div class="q-body">
+        <div class="ring-wrap">
+          <svg class="sring-svg" viewBox="0 0 104 104" aria-label="Brand health score 82">
+            <circle class="sring-track" cx="52" cy="52" r="45"/>
+            <circle class="sring-arc" cx="52" cy="52" r="45" stroke-dasharray="232 283" transform="rotate(-90 52 52)"/>
+            <text class="sring-num" x="52" y="52" dominant-baseline="central" text-anchor="middle">82</text>
+          </svg>
+          <div class="ring-meta">
+            <span><b>Healthy</b></span>
+            <span>Sentiment · reach · echo</span>
+            <span class="up">▲ 4.2 vs last month</span>
+          </div>
+        </div>
+      </div>
+      <div class="q-foot">Strongest input: <b>message echo 88</b> — "buy less" travels verbatim</div>
+    </div>
+
+    <!-- Q3 — Share of voice (HBar, you teal vs competitors neutral) -->
+    <div class="q-tile span-2">
+      <div class="q-head">
+        <span class="q-title">Share of voice</span>
+        <span class="q-sub">Outdoor apparel · L30d</span>
+      </div>
+      <div class="q-body">
+        <div class="ds-hbar-row"><span class="ds-hbar-name you">Patagonia</span><div class="ds-hbar-track"><div class="ds-hbar-fill" style="width:34%"></div></div><span class="ds-hbar-val">34%</span></div>
+        <div class="ds-hbar-row"><span class="ds-hbar-name">The North Face</span><div class="ds-hbar-track"><div class="ds-hbar-fill rival" style="width:27%"></div></div><span class="ds-hbar-val">27%</span></div>
+        <div class="ds-hbar-row"><span class="ds-hbar-name">Arc'teryx</span><div class="ds-hbar-track"><div class="ds-hbar-fill rival" style="width:19%"></div></div><span class="ds-hbar-val">19%</span></div>
+        <div class="ds-hbar-row"><span class="ds-hbar-name">Cotopaxi</span><div class="ds-hbar-track"><div class="ds-hbar-fill rival" style="width:11%"></div></div><span class="ds-hbar-val">11%</span></div>
+        <div class="ds-hbar-row"><span class="ds-hbar-name">REI Co-op</span><div class="ds-hbar-track"><div class="ds-hbar-fill rival" style="width:9%"></div></div><span class="ds-hbar-val">9%</span></div>
+      </div>
+      <div class="q-foot">Gap to #2 widened <b>+3pts</b> this month</div>
+    </div>
+
+    <!-- Q4 — Sentiment by platform (Proportion Bar) -->
+    <div class="q-tile span-2">
+      <div class="q-head">
+        <span class="q-title">Sentiment by platform</span>
+        <span class="q-sub">Share of conversation by tone</span>
+      </div>
+      <div class="q-body">
+        <div class="senti-row"><span class="senti-label">Reddit</span><span class="senti-bar"><span class="senti-seg pos" style="width:76%"></span><span class="senti-seg neu" style="width:15%"></span><span class="senti-seg neg" style="width:6%"></span><span class="senti-seg mix" style="width:3%"></span></span><span class="senti-val">76%</span></div>
+        <div class="senti-row"><span class="senti-label">TikTok</span><span class="senti-bar"><span class="senti-seg pos" style="width:68%"></span><span class="senti-seg neu" style="width:19%"></span><span class="senti-seg neg" style="width:8%"></span><span class="senti-seg mix" style="width:5%"></span></span><span class="senti-val">68%</span></div>
+        <div class="senti-row"><span class="senti-label">Instagram</span><span class="senti-bar"><span class="senti-seg pos" style="width:74%"></span><span class="senti-seg neu" style="width:18%"></span><span class="senti-seg neg" style="width:5%"></span><span class="senti-seg mix" style="width:3%"></span></span><span class="senti-val">74%</span></div>
+        <div class="senti-row"><span class="senti-label">X</span><span class="senti-bar"><span class="senti-seg pos" style="width:52%"></span><span class="senti-seg neu" style="width:27%"></span><span class="senti-seg neg" style="width:16%"></span><span class="senti-seg mix" style="width:5%"></span></span><span class="senti-val">52%</span></div>
+        <div class="senti-legend">
+          <span class="senti-legend-item"><span class="senti-swatch pos"></span>Positive</span>
+          <span class="senti-legend-item"><span class="senti-swatch neu"></span>Neutral</span>
+          <span class="senti-legend-item"><span class="senti-swatch neg"></span>Negative</span>
+          <span class="senti-legend-item"><span class="senti-swatch mix"></span>Mixed</span>
+        </div>
+      </div>
+      <div class="q-foot">Price skepticism concentrates on <b>X</b> — 16% negative</div>
+    </div>
+
+    <!-- Q5 — Top communities (Leaderboard) -->
+    <div class="q-tile span-2">
+      <div class="q-head">
+        <span class="q-title">Top communities</span>
+        <span class="q-sub">Where the brand is discussed</span>
+      </div>
+      <div class="q-body">
+        <div class="lb-rows">
+          <div class="lb-row"><span class="lb-rank">1</span><span class="lb-name">r/BuyItForLife</span><span class="lb-meta">3.1k mentions</span></div>
+          <div class="lb-row"><span class="lb-rank">2</span><span class="lb-name">r/CampingGear</span><span class="lb-meta">1.8k</span></div>
+          <div class="lb-row"><span class="lb-rank">3</span><span class="lb-name">r/onebag</span><span class="lb-meta">1.2k</span></div>
+          <div class="lb-row"><span class="lb-rank">4</span><span class="lb-name">#wornwear · TikTok</span><span class="lb-meta">940</span></div>
+          <div class="lb-row"><span class="lb-rank">5</span><span class="lb-name">r/Ultralight</span><span class="lb-meta">610</span></div>
+        </div>
+      </div>
+      <div class="q-foot">Repair stories drive <b>2.4×</b> the engagement of product posts</div>
+    </div>
+
+    <!-- Q6 — Audience themes (Theme Pills) -->
+    <div class="q-tile span-3">
+      <div class="q-head">
+        <span class="q-title">Audience themes</span>
+        <span class="q-sub">What the conversation is about · tone-tinted</span>
+      </div>
+      <div class="q-body">
+        <div class="tpills">
+          <span class="tpill pos">Repairs &amp; Worn Wear <b>1.4k</b></span>
+          <span class="tpill pos">Durability <b>1.1k</b></span>
+          <span class="tpill pos">$3B giveaway <b>860</b></span>
+          <span class="tpill neu">Sizing &amp; fit <b>720</b></span>
+          <span class="tpill mix">Resale quality <b>510</b></span>
+          <span class="tpill neg">Pricing <b>480</b></span>
+          <span class="tpill neu">Gorpcore <b>350</b></span>
+          <span class="tpill neg">Greenwashing doubts <b>210</b></span>
+        </div>
+      </div>
+      <div class="q-foot">Fastest riser: <b>Resale quality</b> — +64% W/W</div>
+    </div>
+
+    <!-- Q7 — Campaign flights (Gantt) -->
+    <div class="q-tile span-3">
+      <div class="q-head">
+        <span class="q-title">Campaign flights</span>
+        <span class="q-sub">Paid activity on the calendar</span>
+      </div>
+      <div class="q-body">
+        <div class="gantt-rows">
+          <div class="gantt-row"><span class="gantt-label">Worn Wear</span><div class="gantt-track"><div class="gantt-bar" style="left:8%;width:46%"></div></div></div>
+          <div class="gantt-row"><span class="gantt-label">Trail Ready</span><div class="gantt-track"><div class="gantt-bar" style="left:30%;width:34%"></div></div></div>
+          <div class="gantt-row"><span class="gantt-label">Holiday repair</span><div class="gantt-track"><div class="gantt-bar ahead" style="left:70%;width:26%"></div></div></div>
+        </div>
+        <div class="gantt-scale"><span>Jun</span><span>Jul</span><span>Aug</span></div>
+      </div>
+      <div class="q-foot"><b>Worn Wear</b> carries 38 of 57 active creatives</div>
+    </div>
+
+    <!-- Q8 — Owned reach (Sparkline) -->
+    <div class="q-tile span-3">
+      <div class="q-head">
+        <span class="q-title">Owned reach · weekly</span>
+        <span class="q-sub">Brand accounts, all platforms</span>
+      </div>
+      <div class="q-body">
+        <div class="spark-wrap">
+          <svg class="spark-svg" viewBox="0 0 200 56" preserveAspectRatio="none" aria-label="Owned reach, weekly">
+            <path d="M0,44 L18,40 L36,42 L54,34 L72,37 L90,28 L108,31 L126,22 L144,26 L162,16 L180,19 L200,10" fill="none" style="stroke:hsl(var(--primary))" stroke-width="1.25" stroke-linecap="round"/>
+          </svg>
+          <div class="spark-meta">
+            <span class="spark-num">4.8M</span>
+            <span class="spark-sub"><span class="up">▲ 11%</span> W/W</span>
+          </div>
+        </div>
+      </div>
+      <div class="q-foot">Founder-voice posts outperform the brand account <b>3.2×</b></div>
+    </div>
+
+    <!-- Q9 — Search interest (Sparkline, softening) -->
+    <div class="q-tile span-3">
+      <div class="q-head">
+        <span class="q-title">Search interest</span>
+        <span class="q-sub">Branded queries · 12 weeks</span>
+      </div>
+      <div class="q-body">
+        <div class="spark-wrap">
+          <svg class="spark-svg" viewBox="0 0 200 56" preserveAspectRatio="none" aria-label="Search interest, 12 weeks">
+            <path d="M0,18 L18,22 L36,20 L54,26 L72,24 L90,30 L108,28 L126,34 L144,32 L162,38 L180,36 L200,40" fill="none" style="stroke:hsl(var(--warning))" stroke-width="1.25" stroke-linecap="round"/>
+          </svg>
+          <div class="spark-meta">
+            <span class="spark-num">61</span>
+            <span class="spark-sub"><span class="down">▼ 7</span> vs peak</span>
+          </div>
+        </div>
+      </div>
+      <div class="q-foot">Softening since the spring drop — <b>watch</b> next flight</div>
+    </div>
+
+  </div>
+
+  <div class="api-foot">Prototype · Deckboard on the Waldo Design System · synthetic data, fixed to Jul 10, 2026</div>
+</div>
+
+<div class="toast-vp" id="toast-vp">
+  <div class="wtoast">
+    <div class="wtoast-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <div class="wtoast-body"><span class="wtoast-title" id="toast-msg"></span></div>
+  </div>
+</div>
+
+<script>
+var toastTimer = null;
+function toast(msg) {
+  document.getElementById('toast-msg').textContent = msg;
+  var vp = document.getElementById('toast-vp');
+  vp.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { vp.classList.remove('show'); }, 2600);
+}
+</script>
+</body>
+</html>
