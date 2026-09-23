@@ -300,3 +300,26 @@
     @apply bg-zinc-600;
   }
 }
+
+@layer components {
+  /* Horizontal scroll affordance.
+     Two pairs of gradients: a cover painted in the surface colour, attached
+     `local` so it travels with the content, over a shadow attached `scroll` so it
+     stays pinned to the edge. At rest the cover hides the shadow; scroll away from
+     an edge and the cover leaves, revealing it. The cover holds full opacity for
+     its first half (14px of 28px) so it hides the whole 10px shadow rather than
+     letting its head peek through. A table that fits shows nothing,
+     which a plain mask cannot do. No JS, no resize observer.
+     Override --scroll-surface when the scroller sits on a card or popover. */
+  .waldo-scroll-x {
+    --scroll-surface: rgb(var(--background));
+    background:
+      linear-gradient(to right, var(--scroll-surface) 50%, transparent),
+      linear-gradient(to left, var(--scroll-surface) 50%, transparent) 100% 0,
+      linear-gradient(to right, rgb(var(--foreground) / 0.22), transparent),
+      linear-gradient(to left, rgb(var(--foreground) / 0.22), transparent) 100% 0;
+    background-repeat: no-repeat;
+    background-size: 28px 100%, 28px 100%, 10px 100%, 10px 100%;
+    background-attachment: local, local, scroll, scroll;
+  }
+}

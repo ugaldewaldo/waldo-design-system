@@ -18,8 +18,10 @@ const Table = React.forwardRef<HTMLTableElement, TableProps>(
         // Page-level sticky needs NO scroll container on the root (overflow-x-auto
         // would force overflow-y to compute to auto and trap the sticky thead).
         // Only clip when not sticky (wide tables) or sticky+bounded (own scroller).
-        !stickyHeader && "overflow-x-auto",
-        stickyHeader && maxHeight && "overflow-auto"
+        // .waldo-scroll-x shows an edge shadow only while there is more to
+        // scroll that way, so a table that fits is left alone. See globals.css.
+        !stickyHeader && "overflow-x-auto waldo-scroll-x",
+        stickyHeader && maxHeight && "overflow-auto waldo-scroll-x"
       )}
       style={stickyHeader && maxHeight ? { maxHeight } : undefined}
     >
