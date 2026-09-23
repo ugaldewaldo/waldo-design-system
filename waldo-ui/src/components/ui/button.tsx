@@ -33,7 +33,22 @@ import { cn } from "@/lib/utils";
 //   All variants use disabled:opacity-40 (accessible, maintainable).
 //   Figma shows zinc-750 bg + /28% text — that's a specific Figma aesthetic.
 //   In code we normalize to opacity-40 for consistency across all variants.
+//
+// Touch target:
+//   sm and icon-sm are 28px — under the 44px a finger needs. On a coarse pointer
+//   they grow an invisible ::after halo out to 44px; the drawn button is unchanged
+//   and a mouse sees nothing. Applied to the two small sizes only: default (40),
+//   lg and icon-lg (44) are already within reach, and `link` sets its own box.
 // ─────────────────────────────────────────────────────────────────────────────
+
+// 28px + 8px on each side = 44px. Only on a coarse pointer, so desktop is untouched.
+const TOUCH_Y =
+  "relative [@media(pointer:coarse)]:after:content-[''] [@media(pointer:coarse)]:after:absolute " +
+  "[@media(pointer:coarse)]:after:-inset-y-2 [@media(pointer:coarse)]:after:inset-x-0";
+const TOUCH_XY =
+  "relative [@media(pointer:coarse)]:after:content-[''] [@media(pointer:coarse)]:after:absolute " +
+  "[@media(pointer:coarse)]:after:-inset-2";
+
 const buttonVariants = cva(
   [
     "inline-flex items-center justify-center gap-1.5",
@@ -95,10 +110,10 @@ const buttonVariants = cva(
       },
 
       size: {
-        sm:        "h-7  px-3",
+        sm:        `h-7  px-3 ${TOUCH_Y}`,
         default:   "h-10 px-4",
         lg:        "h-11 px-5",
-        "icon-sm": "h-7  w-7  p-0",
+        "icon-sm": `h-7  w-7  p-0 ${TOUCH_XY}`,
         "icon":    "h-10 w-10 p-0",
         "icon-lg": "h-11 w-11 p-0",
       },
