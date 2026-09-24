@@ -12,6 +12,9 @@ Waldo's, and since then they've changed mostly as a by-product of other work: of
 the 35 visual edits since the files were created, **30 rode inside PRs about
 something else**. Nobody asked for those changes and nobody reviewed them as design.
 
+Adveron also took only 20 of Waldo's 84 components, and rebuilt several of the
+missing ones as one-off pieces for a single screen.
+
 ## Findings
 
 ### 1. Most visual changes happened in passing
@@ -57,7 +60,33 @@ furthest apart:
 Adveron uses 20 of Waldo's 84 components, so a fix made in Waldo never reaches
 Adveron, and the reverse is also true.
 
-### 4. The work is spread over four people, none of them on design
+### 4. Adveron rebuilt pieces Waldo already has
+
+Waldo has 64 components Adveron never took, among them Avatar, Sidebar,
+Segmented control, Copy link, Secret field, Combobox, Tag input, Empty state,
+Toast, Pagination, Progress, Slider and Loader.
+
+Instead, adveron-web has its own one-off versions of several of them outside
+`components/ui`. Judging by name, these look like rebuilds:
+
+| Adveron one-off | Waldo already has |
+|---|---|
+| `user-avatar` | Avatar |
+| `app-sidebar`, `adaptive-nav-shell`, `nav-item` | Sidebar, Nav |
+| `segmented-toggle` | Segmented control |
+| `copy-button` | Copy link |
+| `reveal-webhook-secret-dialog` | Secret field |
+| `slack-channel-combobox`, `search-select` | Combobox |
+| `chip-list-input` | Tag input |
+| `error-state` | Empty state |
+| `route-loader` | Loader |
+| `console-search-palette` | Command (dialog) |
+
+Each one is built once, for one screen, and never reaches the rest of the product
+or any design review. Reusing Waldo's version would give Adveron a tested piece in
+its own colors, and one place to fix it.
+
+### 5. The work is spread over four people, none of them on design
 
 | Person | Files created | Changes in passing |
 |---|---|---|
@@ -70,7 +99,7 @@ This isn't about blame. The numbers show where the work happened, not who decide
 anything. Much of it was likely written by Claude sessions while they worked on
 the card in front of them.
 
-### 5. Half the components have never been touched
+### 6. Half the components have never been touched
 
 Checkbox, Command, Label, Popover, Separator, Sheet, Skeleton, Switch, Tabs and
 Tooltip are exactly as they were created. The drift sits in the other ten, which
@@ -89,7 +118,9 @@ Table, Chart, Radio group.
 
 1. Every future change to an Adveron component or theme file reaches Miguel for
    approval before it counts. That review works off the starting point above.
-2. Engineering answers the open questions in `questions-for-engineering.md`: could
+2. Before anyone builds a new Adveron piece, check Waldo first. If Waldo has it,
+   reuse it in Adveron's colors instead of building a new one.
+3. Engineering answers the open questions in `questions-for-engineering.md`: could
    Adveron use Waldo's components directly, who decides what, and how edits made
    in passing get stopped.
 
