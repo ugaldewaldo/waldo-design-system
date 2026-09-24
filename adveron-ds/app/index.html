@@ -11,6 +11,9 @@
 <style>
   /* Page layout only. Every color, size and radius is a DS token; the
      segmented control is the canonical waldo-ds.css class. */
+  /* waldo-ds.css locks html/body scroll for the showcase's own scroll panes;
+     this is an ordinary long page, so give the scroll back. */
+  html, body { height: auto; overflow: auto; }
   body { margin: 0; background: hsl(var(--background)); color: hsl(var(--foreground)); }
   .ab-page { max-width: 1040px; margin: 0 auto; padding: 48px 24px 120px; }
 
