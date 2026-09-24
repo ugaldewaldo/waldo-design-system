@@ -8,6 +8,7 @@ import { dataSections } from "./sections/data";
 import { formSections } from "./sections/forms";
 import { layoutSections } from "./sections/layout";
 import { overlaySections } from "./sections/overlays";
+import { proposalSections } from "./sections/proposals";
 
 /* ?embed=1&only=<section id>&spec=<label>[,<label>]&theme=light|dark renders
    one section with no chrome — the Adveron DS compare page puts it beside
@@ -28,7 +29,8 @@ const SECTIONS = [
 ];
 
 function embedded(): SectionDef[] {
-  return SECTIONS.filter((s) => s.id === ONLY).map((s) => ({
+  // Proposals under review are only reachable embedded, never listed on the page.
+  return [...SECTIONS, ...proposalSections].filter((s) => s.id === ONLY).map((s) => ({
     ...s,
     title: "",
     note: undefined,
