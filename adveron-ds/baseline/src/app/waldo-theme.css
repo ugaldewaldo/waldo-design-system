@@ -1,0 +1,509 @@
+/*
+  WALDO Design System — Shadcn/ui CSS Variables
+  ─────────────────────────────────────────────
+  Nomenclature: Shadcn/Tailwind convention
+    zinc   = Waldo neutral scale (dark grays)
+    green  = Brand primary (formerly teal) (#32a9a9)
+    yellow = Warning / accent (formerly amber)
+    orange = Accent orange
+    pink   = (pink removed from product DS)
+    coral  = Destructive (red-orange, NOT blood-red)
+    
+
+  ANCHOR = real Figma value
+  DERIVED = interpolated to fill scale gaps
+  GAP FILL = new family added for system completeness
+*/
+
+/* Inter is loaded and self-hosted via next/font (see app/layout.tsx) and
+   exposed as the --font-sans variable — the upstream remote @import is removed
+   to avoid the third-party runtime request, the FOUT, and the CSS @import
+   ordering warning. */
+
+
+/* ══════════════════════════════════════════════════════
+   PRIMITIVES — full 50→950 scales
+   ══════════════════════════════════════════════════════ */
+:root {
+  /* type scale + radius-full (vendored for the vanilla layer) */
+  --fs-xs: 12px; --fs-sm: 14px; --fs-base: 16px; --fs-lg: 18px; --fs-xl: 20px; --fs-2xl: 24px; --fs-5xl: 32px;
+  --radius-full: 9999px;
+  /* marketing brand accents — showcase/demo use (HSL to match the theme) */
+  --brand-yellow-500: 42 95% 59%; --brand-pink-500: 334 91% 44%; --brand-purple-500: 264 85% 58%;
+
+
+  /* ── zinc (Waldo dark neutral) ── */
+  --zinc-50:   #f8f8f9;   /* DERIVED */
+  --zinc-100:  #f0f0f2;   /* DERIVED */
+  --zinc-200:  #d2d3d3;   /* ANCHOR — text50High */
+  --zinc-300:  #b4b5b6;   /* DERIVED */
+  --zinc-400:  #8f9091;   /* ANCHOR — text100Regular */
+  --zinc-500:  #636465;   /* ANCHOR — text200Low */
+  --zinc-600:  #41454b;   /* ANCHOR — fill500Highest */
+  --zinc-700:  #323539;   /* ANCHOR — fill600Menu */
+  --zinc-750:  #2d2f33;   /* ANCHOR — fill700Regular (custom step) */
+  --zinc-800:  #27282b;   /* ANCHOR — fill800Low */
+  --zinc-850:  #242528;   /* ANCHOR — bg850High (custom step) */
+  --zinc-900:  #202123;   /* ANCHOR — bg900Regular */
+  --zinc-950:  #171819;   /* ANCHOR — bg950Low */
+
+  /* ── green (brand primary — formerly teal) ── */
+  --green-50:   #edfafa;   /* DERIVED */
+  --green-100:  #d5f3f3;   /* DERIVED */
+  --green-200:  #a8e6e6;   /* DERIVED */
+  --green-300:  #6dcece;   /* DERIVED */
+  --green-400:  #4dbcbc;   /* DERIVED */
+  --green-500:  #32a9a9;   /* ANCHOR — primary brand */
+  --green-600:  #2c797a;   /* ANCHOR */
+  --green-700:  #2a6c6d;   /* ANCHOR */
+  --green-800:  #265152;   /* ANCHOR */
+  --green-900:  #223133;   /* ANCHOR */
+  --green-950:  #111e1f;   /* DERIVED */
+
+  /* ── yellow (formerly amber) ── */
+  --yellow-50:   #fffbeb;  /* DERIVED */
+  --yellow-100:  #fef3c7;  /* DERIVED */
+  --yellow-200:  #fde68a;  /* DERIVED */
+  --yellow-300:  #f7d371;  /* ANCHOR */
+  --yellow-400:  #f0c040;  /* DERIVED */
+  --yellow-500:  #e5b020;  /* DERIVED */
+  --yellow-600:  #d6ac32;  /* ANCHOR */
+  --yellow-700:  #b48a00;  /* ANCHOR */
+  --yellow-800:  #946f00;  /* ANCHOR */
+  --yellow-900:  #713d00;  /* DERIVED */
+  --yellow-950:  #3d2100;  /* DERIVED */
+
+  /* ── orange ── */
+  --orange-50:   #fff8f5; /* DERIVED */
+  --orange-100:  #ffeed5; /* DERIVED */
+  --orange-200:  #ffd4b0; /* DERIVED */
+  --orange-300:  #cd917b; /* ANCHOR — muted warm */
+  --orange-400:  #a95d41; /* ANCHOR — terracotta */
+  --orange-500:  #e76638; /* ANCHOR — bright orange */
+  --orange-600:  #c94e22; /* DERIVED */
+  --orange-700:  #a83a18; /* DERIVED */
+  --orange-800:  #86280f; /* DERIVED */
+  --orange-900:  #5e1a08; /* DERIVED */
+  --orange-950:  #380e03; /* DERIVED */
+
+
+  /* red / blue removed from DS. Destructive now references orange.
+     If you need them later, re-add as primitives. */
+}
+
+
+/* ══════════════════════════════════════════════════════
+   ALPHA PRIMITIVES — transparent variants
+   Why: semi-transparent colors adapt to any background
+   automatically, so the same token works on zinc-900,
+   zinc-850 or zinc-800 without defining separate values.
+   Naming: --{color}-{step}-{opacity%}
+   ══════════════════════════════════════════════════════ */
+:root {
+
+  /* ── zinc-200 alpha — text & borders on dark ── */
+  /* Use for text/icons that sit on variable-depth backgrounds */
+  --zinc-200-4:  rgba(210, 211, 211, 0.04);  /* hover very subtle   — list/row hover bg */
+  --zinc-200-5:  rgba(210, 211, 211, 0.05);  /* fillOpacity800Low   — very subtle fill */
+  --zinc-200-7:  rgba(210, 211, 211, 0.07);  /* bg secondary        — component bg (Linear pattern) */
+  --zinc-200-8:  rgba(210, 211, 211, 0.08);  /* border standard     — default border (Linear pattern) */
+  --zinc-200-10: rgba(210, 211, 211, 0.10);  /* fillOpacity700Reg   — subtle fill */
+  --zinc-200-12: rgba(210, 211, 211, 0.12);  /* border / input bg   — current --border */
+  --zinc-200-20: rgba(210, 211, 211, 0.20);  /* line700Low          — low contrast border */
+  --zinc-200-30: rgba(210, 211, 211, 0.30);  /* line400High         — medium border */
+  --zinc-200-50: rgba(210, 211, 211, 0.50);  /* text50Disabled      — disabled text */
+  --zinc-200-70: rgba(210, 211, 211, 0.70);  /* text50Med           — secondary text */
+
+  /* ── zinc-950 alpha — dark overlays & surface fills ── */
+  /* Use for frosted/overlay surfaces that sit on lighter panels */
+  --zinc-950-40: rgba(23, 24, 25, 0.40);     /* fillOpacityWidgetBg      — widget bg */
+  --zinc-950-50: rgba(23, 24, 25, 0.50);     /* fillOpacityWidgetBgHover — hover state */
+  --zinc-950-80: rgba(23, 24, 25, 0.80);     /* scrim / modal backdrop  */
+
+  /* ── green alpha — brand tints ── */
+  /* Use for highlighted states, tags, focus rings, active indicators */
+  --green-500-10: rgba(50, 169, 169, 0.10);   /* brand tag bg */
+  --green-500-15: rgba(50, 169, 169, 0.15);   /* brand tag hover */
+  --green-500-20: rgba(50, 169, 169, 0.20);   /* brand subtle border */
+  --green-500-25: rgba(50, 169, 169, 0.25);   /* brand ring / focus glow */
+
+  /* ── coral alpha — destructive states ── */
+  --coral-500-10: rgba(222, 58, 40, 0.10); /* destructive bg subtle */
+  --coral-500-15: rgba(222, 58, 40, 0.15); /* destructive bg hover */
+  --coral-500-20: rgba(222, 58, 40, 0.20); /* destructive ring soft */
+  --coral-500-40: rgba(222, 58, 40, 0.40); /* destructive ring strong */
+
+  /* ── orange alpha — warning states ── */
+  --orange-500-10: rgba(231, 102, 56, 0.10); /* warning bg subtle */
+  --orange-500-15: rgba(231, 102, 56, 0.15); /* warning bg hover */
+  --orange-500-20: rgba(231, 102, 56, 0.20); /* warning ring soft */
+
+  /* ── yellow alpha — highlight states ── */
+  --yellow-300-10: rgba(247, 211, 113, 0.10); /* highlight bg subtle */
+  --yellow-300-20: rgba(247, 211, 113, 0.20); /* highlight bg hover */
+}
+
+
+/* ══════════════════════════════════════════════════════
+   SHADCN SEMANTIC TOKENS
+   ══════════════════════════════════════════════════════ */
+
+@layer base {
+  :root {
+    /* ── LIGHT MODE ── */
+    --background:             0 0% 100%;
+    --foreground:             220 4% 9%;            /* zinc-950 */
+
+    --card:                   0 0% 98%;
+    --card-foreground:        220 4% 9%;
+
+    --popover:                0 0% 100%;
+    --popover-foreground:     220 4% 9%;
+
+    --primary:                180 54% 43%;           /* green-500 #32a9a9 */
+    --primary-foreground:     0 0% 100%;
+
+    --secondary:              220 9% 94%;            /* zinc-100 */
+    --secondary-foreground:   220 4% 9%;
+
+    --muted:                  220 9% 94%;
+    --muted-foreground:       210 1% 39%;            /* zinc-500 */
+    --placeholder:            210 1% 55%;            /* zinc-400 — a field's own prompt, lighter than hint text */
+
+    --accent:                 180 70% 96%;           /* green-50 */
+    --accent-foreground:      180 54% 30%;           /* green-700 */
+
+    --destructive:            6 77% 41%;              /* coral-600 #ba2818 */
+    --destructive-foreground: 0 0% 100%;
+
+    --warning:                16 71% 46%;            /* orange-600 #c94e22 */
+    --warning-foreground:     0 0% 100%;
+
+    --border:                 220 9% 88%;
+    --input:                  220 9% 88%;
+    --ring:                   180 54% 43%;           /* green-500 */
+
+    --radius: 0.375rem;
+
+    --chart-1:  174 66% 50%;   /* Cyan Teal    #2DD4C4 */
+    --chart-2:  210 17% 60%;   /* Slate        #8899AA */
+    --chart-3:   16 85% 73%;   /* Salmon       #F5A080 */
+    --chart-4:  353 81% 69%;   /* Rose         #F07080 */
+    --chart-5:  253 59% 71%;   /* Lavender     #9B88E0 */
+    --chart-6:  213 82% 63%;   /* Periwinkle   #5599EE */
+    --chart-7:   38 87% 55%;   /* Amber        #F0A82A */
+    --chart-8:  174 75% 41%;   /* Teal         #1AB8A8 */
+    --chart-9:   83 57% 53%;   /* Lime         #99CC44 */
+    --chart-10: 138 38% 57%;   /* Sage         #66BB80 */
+    --chart-11: 288 45% 63%;   /* Orchid       #BB77CC */
+    --chart-12: 335 66% 64%;   /* Hot Rose     #E06699 */
+
+    --sidebar-background:           220 9% 96%;
+    --sidebar-foreground:           220 4% 9%;
+    --sidebar-primary:              180 54% 43%;
+    --sidebar-primary-foreground:   0 0% 100%;
+    --sidebar-accent:               180 70% 94%;
+    --sidebar-accent-foreground:    180 54% 30%;
+    --sidebar-border:               220 9% 88%;
+    --sidebar-ring:                 180 54% 43%;
+  }
+
+  .dark {
+    /* ── DARK MODE — WALDO ── */
+    --background:             220 4% 9%;             /* zinc-950  #171819 */
+    --foreground:             180 1% 82%;            /* zinc-200  #d2d3d3 */
+
+    --card:                   220 4% 13%;            /* zinc-900  #202123 */
+    --card-foreground:        180 1% 82%;
+
+    --popover:                220 6% 19%;            /* zinc-750  #2d2f33 */
+    --popover-foreground:     180 1% 82%;
+
+    --primary:                180 54% 43%;           /* green-500  #32a9a9 */
+    --primary-foreground:     0 0% 100%;             /* white — brand green is same in both modes */
+
+    --secondary:              220 6% 19%;            /* zinc-750  #2d2f33 */
+    --secondary-foreground:   180 1% 82%;
+
+    --muted:                  225 5% 16%;            /* zinc-800  #27282b */
+    --muted-foreground:       210 1% 56%;            /* zinc-400  #8f9091 */
+    --placeholder:            210 1% 46%;            /* zinc-500 — the same role, dimmed rather than lifted */
+
+    --accent:                 216 7% 27%;            /* zinc-600  #41454b */
+    --accent-foreground:      180 1% 82%;
+
+    --destructive:            6 73% 51%;              /* coral-500 #de3a28 */
+    --destructive-foreground: 180 1% 82%;
+
+    --warning:                16 71% 46%;            /* orange-600 #c94e22 */
+    --warning-foreground:     0 0% 100%;
+
+    --highlight:              46 90% 71%;             /* yellow-300 #f7d371 */
+    --highlight-rgb:          247, 211, 113;          /* for rgba() alpha encoding */
+
+    --border:                 180 1% 82% / 0.12;     /* zinc-200  12% */
+    --input:                  180 1% 82% / 0.20;     /* zinc-200  20% */
+    --ring:                   180 54% 43%;           /* green-500  #32a9a9 */
+
+    --chart-1:  174 66% 50%;   /* Cyan Teal    #2DD4C4 */
+    --chart-2:  210 17% 60%;   /* Slate        #8899AA */
+    --chart-3:   16 85% 73%;   /* Salmon       #F5A080 */
+    --chart-4:  353 81% 69%;   /* Rose         #F07080 */
+    --chart-5:  253 59% 71%;   /* Lavender     #9B88E0 */
+    --chart-6:  213 82% 63%;   /* Periwinkle   #5599EE */
+    --chart-7:   38 87% 55%;   /* Amber        #F0A82A */
+    --chart-8:  174 75% 41%;   /* Teal         #1AB8A8 */
+    --chart-9:   83 57% 53%;   /* Lime         #99CC44 */
+    --chart-10: 138 38% 57%;   /* Sage         #66BB80 */
+    --chart-11: 288 45% 63%;   /* Orchid       #BB77CC */
+    --chart-12: 335 66% 64%;   /* Hot Rose     #E06699 */
+
+    --sidebar-background:           225 5% 15%;     /* zinc-850  #242528 */
+    --sidebar-foreground:           180 1% 82%;
+    --sidebar-primary:              180 54% 43%;
+    --sidebar-primary-foreground:   0 0% 100%;      /* white */
+    --sidebar-accent:               214 7% 21%;     /* zinc-700  #323539 */
+    --sidebar-accent-foreground:    180 1% 82%;
+    --sidebar-border:               180 1% 82% / 0.12;
+    --sidebar-ring:                 180 54% 43%;
+  }
+}
+
+
+/* ══════════════════════════════════════════════════════
+   TYPOGRAPHY — Inter, two-track scale (Linear-style)
+
+   Track A — text-*         UI + body + product (Tailwind standard)
+   Track B — text-display-* Marketing heros + section headings
+
+   Naming uses Tailwind v4 compound syntax: each font-size carries its paired
+   --line-height and --letter-spacing on the same token via `--`. That way a
+   single utility (`text-display-md`) applies size + line-height + tracking
+   automatically when these vars live inside an @theme block.
+
+   Tracking convention:
+     • text-*         uses -0.02em (-2%)  — bundled per size
+     • text-display-* uses -0.04em (-4%)  — bundled per size
+     • --tracking-normal/tight/tighter remain for arbitrary overrides
+
+   ─── For Tailwind v4 users (recommended) ────────────────────────
+   Wrap the typography vars below in `@theme { ... }` so utilities
+   `text-xs`, `text-display-md`, `font-mono`, etc. auto-generate.
+
+   ══════════════════════════════════════════════════════ */
+:root {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+
+  /* ── TEXT TRACK — Tailwind standard sizes, compound syntax ── */
+  --text-xs:                  0.75rem;     /* 12px */
+  --text-xs--line-height:     1rem;        /* 16px */
+  --text-xs--letter-spacing: -0.02em;
+
+  --text-sm:                  0.875rem;    /* 14px */
+  --text-sm--line-height:     1.25rem;     /* 20px */
+  --text-sm--letter-spacing: -0.02em;
+
+  --text-base:                  1rem;      /* 16px — default body */
+  --text-base--line-height:     1.5rem;    /* 24px */
+  --text-base--letter-spacing: -0.02em;
+
+  --text-lg:                  1.125rem;    /* 18px */
+  --text-lg--line-height:     1.75rem;     /* 28px */
+  --text-lg--letter-spacing: -0.02em;
+
+  --text-xl:                  1.25rem;     /* 20px */
+  --text-xl--line-height:     1.75rem;     /* 28px */
+  --text-xl--letter-spacing: -0.02em;
+
+  --text-2xl:                  1.5rem;     /* 24px */
+  --text-2xl--line-height:     2rem;       /* 32px */
+  --text-2xl--letter-spacing: -0.02em;
+
+  --text-3xl:                  1.875rem;   /* 30px */
+  --text-3xl--line-height:     2.25rem;    /* 36px */
+  --text-3xl--letter-spacing: -0.02em;
+
+  --text-4xl:                  2.25rem;    /* 36px — top of text-* track */
+  --text-4xl--line-height:     2.5rem;     /* 40px */
+  --text-4xl--letter-spacing: -0.02em;
+
+  /* For sizes ≥ 40px use text-display-* below. Tailwind's stock text-5xl/6xl/7xl
+     utilities still work via Tailwind defaults if anyone needs them, but they
+     are not declared as Waldo tokens. */
+
+  /* ── DISPLAY TRACK — marketing only, compound syntax ── */
+  --text-display-xs:                  1.5rem;     /* 24px — soft card title (display tracking) */
+  --text-display-xs--line-height:     2rem;       /* 32px */
+  --text-display-xs--letter-spacing: -0.04em;
+
+  --text-display-sm:                  2rem;       /* 32px — section heading */
+  --text-display-sm--line-height:     2.5rem;     /* 40px */
+  --text-display-sm--letter-spacing: -0.04em;
+
+  --text-display-md:                  2.5rem;     /* 40px — default hero */
+  --text-display-md--line-height:     3rem;       /* 48px */
+  --text-display-md--letter-spacing: -0.04em;
+
+  --text-display-lg:                  3.5rem;     /* 56px — big hero (Home / Pricing) */
+  --text-display-lg--line-height:     4rem;       /* 64px */
+  --text-display-lg--letter-spacing: -0.04em;
+
+  --text-display-xl:                  4.5rem;     /* 72px — wow hero / closing CTA */
+  --text-display-xl--line-height:     5rem;       /* 80px */
+  --text-display-xl--letter-spacing: -0.04em;
+
+  --text-display-2xl:                  6rem;       /* 96px — landing wow hero (Vercel/Linear scale max) */
+  --text-display-2xl--line-height:     6.25rem;    /* 100px */
+  --text-display-2xl--letter-spacing: -0.04em;
+
+  /* ── Unitless line-height utilities — for `leading-tight` etc. ── */
+  --leading-none:    1;
+  --leading-tight:   1.25;
+  --leading-snug:    1.375;
+  --leading-normal:  1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose:   2;
+
+  /* ── Letter spacing — independent utilities (Tailwind tracking-*) ── */
+  --tracking-normal:   0em;
+  --tracking-tight:   -0.02em;   /* -2% — matches text-* compound default    */
+  --tracking-tighter: -0.04em;   /* -4% — matches text-display-* compound    */
+}
+
+/* Element defaults belong in @layer base so Tailwind's @layer utilities win —
+   unlayered element selectors (upstream shipped these bare) beat every layer,
+   which made `text-3xl`/`text-2xl` on a heading resolve to the h1 size instead. */
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-size: var(--text-base);
+    line-height: var(--text-base--line-height);
+    letter-spacing: var(--text-base--letter-spacing);
+    font-weight: 400;
+  }
+
+  /* Product / app headings — text-* track, compound vars handle size + LH + tracking */
+  h1 { font-size: var(--text-4xl);  line-height: var(--text-4xl--line-height);  letter-spacing: var(--text-4xl--letter-spacing);  font-weight: 700; }
+  h2 { font-size: var(--text-3xl);  line-height: var(--text-3xl--line-height);  letter-spacing: var(--text-3xl--letter-spacing);  font-weight: 600; }
+  h3 { font-size: var(--text-2xl);  line-height: var(--text-2xl--line-height);  letter-spacing: var(--text-2xl--letter-spacing);  font-weight: 600; }
+  h4 { font-size: var(--text-xl);   line-height: var(--text-xl--line-height);   letter-spacing: var(--text-xl--letter-spacing);   font-weight: 600; }
+  h5 { font-size: var(--text-lg);   line-height: var(--text-lg--line-height);   letter-spacing: var(--text-lg--letter-spacing);   font-weight: 600; }
+  h6 { font-size: var(--text-base); line-height: var(--text-base--line-height); letter-spacing: var(--text-base--letter-spacing); font-weight: 600; }
+}
+
+/* Marketing display helpers — text-display-* track.
+   Class names match the Tailwind utility names so JSX works the same whether
+   Tailwind auto-generates them (v4 @theme) or Steve registers them in v3 config.
+   In raw HTML (no Tailwind) these helpers still produce the right output. */
+.text-display-xs { font-size: var(--text-display-xs); line-height: var(--text-display-xs--line-height); letter-spacing: var(--text-display-xs--letter-spacing); }
+.text-display-sm { font-size: var(--text-display-sm); line-height: var(--text-display-sm--line-height); letter-spacing: var(--text-display-sm--letter-spacing); }
+.text-display-md { font-size: var(--text-display-md); line-height: var(--text-display-md--line-height); letter-spacing: var(--text-display-md--letter-spacing); }
+.text-display-lg { font-size: var(--text-display-lg); line-height: var(--text-display-lg--line-height); letter-spacing: var(--text-display-lg--letter-spacing); }
+.text-display-xl  { font-size: var(--text-display-xl);  line-height: var(--text-display-xl--line-height);  letter-spacing: var(--text-display-xl--letter-spacing); }
+.text-display-2xl { font-size: var(--text-display-2xl); line-height: var(--text-display-2xl--line-height); letter-spacing: var(--text-display-2xl--letter-spacing); }
+
+/* Mono — for code, tags, technical labels */
+code, kbd, samp, pre { font-family: var(--font-mono); }
+
+
+/* ══════════════════════════════════════════════════════
+   TAILWIND v4 @theme block
+   Registers Waldo primitives + design tokens as Tailwind
+   utilities so bg-zinc-800, shadow-popover, animate-blink
+   etc. resolve to Waldo values in v4 consumers.
+
+   v3 users: mirror these in tailwind.config.js →
+   theme.extend.colors / boxShadow / borderRadius / keyframes
+   ══════════════════════════════════════════════════════ */
+@theme {
+  /* ── Color scale ── */
+  --color-zinc-50:  rgb(248 248 249);
+  --color-zinc-100: rgb(240 240 242);
+  --color-zinc-200: rgb(210 211 211);
+  --color-zinc-300: rgb(180 181 182);
+  --color-zinc-400: rgb(143 144 145);
+  --color-zinc-500: rgb(99 100 101);
+  --color-zinc-600: rgb(65 69 75);
+  --color-zinc-700: rgb(50 53 57);
+  --color-zinc-750: rgb(45 47 51);
+  --color-zinc-800: rgb(39 40 43);
+  --color-zinc-850: rgb(36 37 40);
+  --color-zinc-900: rgb(32 33 35);
+  --color-zinc-950: rgb(23 24 25);
+
+  --color-green-400: rgb(77 188 188);
+  --color-green-500: rgb(50 169 169);
+  --color-green-600: rgb(44 121 122);
+  --color-green-700: rgb(42 108 109);
+  --color-green-800: rgb(38 81 82);
+
+  --color-coral-500:  rgb(222 58 40);
+  --color-orange-500: rgb(231 102 56);
+  --color-orange-600: rgb(201 78 34);
+  --color-yellow-300: rgb(247 211 113);
+
+  /* ── Border radius ── */
+  --radius-sm:    calc(var(--radius) - 2px);   /* 4px  */
+  --radius-md:    var(--radius);               /* 6px  */
+  --radius-lg:    calc(var(--radius) + 2px);   /* 8px  */
+  --radius-xl:    calc(var(--radius) + 6px);   /* 12px */
+  --radius-2xl:   calc(var(--radius) + 10px);  /* 16px */
+  --radius-2-5xl: calc(var(--radius) + 14px);  /* 20px — dropdowns */
+  --radius-4xl:   calc(var(--radius) + 26px);  /* 32px — file input */
+
+  /* ── Shadows ── */
+  --shadow-popover: 0px 4px 6px -1px rgba(0,0,0,0.35), 0px 2px 4px -2px rgba(0,0,0,0.25), 0px -2px 3px rgba(0,0,0,0.15);
+  --shadow-surface: 0px 1px 3px rgba(0,0,0,0.30), 0px 2px 4px -1px rgba(0,0,0,0.20);
+  --shadow-dialog:  0px 20px 40px -10px rgba(0,0,0,0.60), 0px 8px 20px rgba(0,0,0,0.30);
+
+  /* ── Animations ── */
+  --animate-blink:           blink 1s ease-in-out infinite;
+  --animate-scale-in:        scale-in 0.15s ease-out forwards;
+  --animate-shimmer:         shimmer 2s linear infinite;
+  --animate-accordion-down:  accordion-down 0.2s ease-out;
+  --animate-accordion-up:    accordion-up 0.2s ease-out;
+  --animate-fade-in:         fade-in 0.15s ease-out;
+  --animate-slide-in-top:    slide-in-from-top 0.15s ease-out;
+  --animate-slide-in-bottom: slide-in-from-bottom 0.15s ease-out;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+@keyframes scale-in {
+  0%   { transform: scale(0);   opacity: 0; }
+  70%  { transform: scale(1.2); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+@keyframes accordion-down {
+  from { height: 0; }
+  to   { height: var(--radix-accordion-content-height); }
+}
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to   { height: 0; }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slide-in-from-top {
+  from { transform: translateY(-4px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@keyframes slide-in-from-bottom {
+  from { transform: translateY(4px); opacity: 0; }
+  to   { transform: translateY(0);   opacity: 1; }
+}

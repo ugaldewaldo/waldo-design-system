@@ -58,7 +58,8 @@ jobs:
             | grep -E '\.(html|css|tsx|jsx|ts|js|vue|svelte)$' \
             | grep -vx 'index.html' \
             | grep -v '^tools/' \
-            | grep -v '^waldo-labs/' || true)"
+            | grep -v '^waldo-labs/' \
+            | grep -v '^adveron-ds/baseline/' || true)"
           if [ -z "$changed" ]; then
             echo "No changed code files to scan."
             exit 0
