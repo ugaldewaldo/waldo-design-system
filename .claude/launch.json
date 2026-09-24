@@ -72,7 +72,7 @@
         "run",
         "dev",
         "--prefix",
-        "/Users/miguelugalde/GitHub/waldo-design-system/adveron-preview"
+        "/Users/miguelugalde/GitHub/adveron-design-system/preview"
       ],
       "port": 4500
     },
@@ -83,7 +83,7 @@
         "run",
         "baseline",
         "--prefix",
-        "/Users/miguelugalde/GitHub/waldo-design-system/adveron-preview"
+        "/Users/miguelugalde/GitHub/adveron-design-system/preview"
       ],
       "port": 4510
     }

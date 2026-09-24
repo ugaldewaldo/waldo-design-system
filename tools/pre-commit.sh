@@ -20,17 +20,14 @@ fail=0
 # 1. detect.js on staged, scannable files — excluding index.html (the DS showcase
 #    reference, full of example colors by design), tools/ (infra, not product UI;
 #    the detector's own source legitimately contains hex literals as detection logic),
-#    brand-kit/preview/ (mockups of third-party surfaces, where LinkedIn blue and
-#    friends are the whole point and are correctly absent from our token catalog),
-#    and adveron-ds/baseline/ (a verbatim snapshot of what Adveron ships — another
-#    brand's palette, recorded as-is on purpose; editing it would falsify the record).
+#    and brand-kit/preview/ (mockups of third-party surfaces, where LinkedIn blue and
+#    friends are the whole point and are correctly absent from our token catalog).
 staged="$(git diff --cached --name-only --diff-filter=ACM \
   | grep -E '\.(html|css|tsx|jsx|ts|js|vue|svelte)$' \
   | grep -vx 'index.html' \
   | grep -v '^tools/' \
   | grep -v '^waldo-labs/' \
-  | grep -v '^brand-kit/preview/' \
-  | grep -v '^adveron-ds/baseline/' || true)"
+  | grep -v '^brand-kit/preview/' || true)"
 if [ -n "$staged" ]; then
   count="$(printf '%s\n' "$staged" | grep -c .)"
   echo "▶ detect.js on $count staged file(s)…"
