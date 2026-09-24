@@ -101,6 +101,29 @@ export const overlaySections: SectionDef[] = [
         ),
       },
       {
+        label: "long dialog",
+        node: (
+          <Dialog>
+            <DialogTrigger asChild><Button variant="outline">Long dialog</Button></DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Terms of access</DialogTitle>
+                <DialogDescription>The title and close button stay put while the body scrolls.</DialogDescription>
+              </DialogHeader>
+              <DialogBody className="space-y-3 text-sm text-foreground/60">
+                {Array.from({ length: 24 }, (_, i) => (
+                  <p key={i}>Clause {i + 1}. Access is granted per workspace and can be revoked at any time by an owner.</p>
+                ))}
+              </DialogBody>
+              <DialogFooter>
+                <Button variant="ghost">Cancel</Button>
+                <Button>Accept</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        ),
+      },
+      {
         label: "alert dialog",
         node: (
           <AlertDialog>

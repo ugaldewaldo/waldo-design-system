@@ -24,6 +24,9 @@ import { TagInput } from "@/components/ui/tag";
 
 import type { SectionDef } from "../lib";
 
+/* Enough options to outgrow a short viewport, so the menu has to scroll. */
+const LONG_OPTIONS = Array.from({ length: 30 }, (_, i) => `Brand ${i + 1}`);
+
 function SegmentedDemo() {
   const [v, setV] = useState("week");
   return (
@@ -122,6 +125,21 @@ export const formSections: SectionDef[] = [
               <SelectItem value="meta">Meta</SelectItem>
               <SelectItem value="google">Google</SelectItem>
               <SelectItem value="linkedin">LinkedIn</SelectItem>
+            </SelectContent>
+          </Select>
+        ),
+      },
+      {
+        label: "long select",
+        node: (
+          <Select defaultValue="brand-1">
+            <SelectTrigger className="w-44">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {LONG_OPTIONS.map((o) => (
+                <SelectItem key={o} value={o.toLowerCase().replace(/ /g, "-")}>{o}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
         ),
