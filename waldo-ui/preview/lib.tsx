@@ -35,10 +35,10 @@ class Boundary extends Component<{ children: ReactNode }, { error: Error | null 
 
 export function Section({ id, title, note, specs }: SectionDef) {
   return (
-    <section id={id} className="scroll-mt-16 border-b border-foreground/10 py-10">
-      <h2 className="text-lg font-semibold tracking-[-0.02em] text-foreground">{title}</h2>
+    <section id={id} className={title ? "scroll-mt-16 border-b border-foreground/10 py-10" : "py-6"}>
+      {title ? <h2 className="text-lg font-semibold tracking-[-0.02em] text-foreground">{title}</h2> : null}
       {note ? <p className="mt-1 max-w-2xl text-sm text-foreground/55">{note}</p> : null}
-      <div className="mt-6 flex flex-wrap items-start gap-x-8 gap-y-7">
+      <div className={title ? "mt-6 flex flex-wrap items-start gap-x-8 gap-y-7" : "flex flex-wrap items-start gap-x-8 gap-y-7"}>
         {specs.map((s, i) => (
           <div
             key={`${s.label}-${i}`}

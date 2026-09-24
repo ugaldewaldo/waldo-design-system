@@ -2,12 +2,22 @@ import { useEffect, useState } from "react";
 
 import { Switch } from "@/components/ui/switch";
 
-import { Section } from "./lib";
+import { Section, type SectionDef } from "./lib";
 import { coreSections } from "./sections/core";
 import { dataSections } from "./sections/data";
 import { formSections } from "./sections/forms";
 import { layoutSections } from "./sections/layout";
 import { overlaySections } from "./sections/overlays";
+
+/* ?embed=1&only=<section id>&spec=<label>[,<label>]&theme=light|dark renders
+   one section with no chrome — the Adveron DS compare page puts it beside
+   Adveron's. spec keeps only specimens whose label starts with one of the
+   given words, for sections that group several components. Embedded, the
+   page posts its height to the parent. */
+const PARAMS = new URLSearchParams(window.location.search);
+const EMBED = PARAMS.get("embed") === "1";
+const ONLY = PARAMS.get("only");
+const SPEC = PARAMS.get("spec")?.split(",").filter(Boolean) ?? null;
 
 const SECTIONS = [
   ...coreSections,
@@ -17,8 +27,30 @@ const SECTIONS = [
   ...dataSections,
 ];
 
+function embedded(): SectionDef[] {
+  return SECTIONS.filter((s) => s.id === ONLY).map((s) => ({
+    ...s,
+    title: "",
+    note: undefined,
+    specs: SPEC ? s.specs.filter((sp) => SPEC.some((w) => sp.label.startsWith(w))) : s.specs,
+  }));
+}
+
 export function Gallery(): React.ReactElement {
-  const [light, setLight] = useState(false);
+  const [light, setLight] = useState(PARAMS.get("theme") === "light");
+
+  useEffect(() => {
+    if (!EMBED || window.parent === window) return;
+    const send = () =>
+      window.parent.postMessage(
+        { type: "gallery-height", source: "waldo", only: ONLY, height: document.documentElement.scrollHeight },
+        "*",
+      );
+    const ro = new ResizeObserver(send);
+    ro.observe(document.body);
+    send();
+    return () => ro.disconnect();
+  }, []);
 
   // The theme is a class on <html>, the same switch a consuming app throws, so
   // what renders here is what renders there.
@@ -26,6 +58,16 @@ export function Gallery(): React.ReactElement {
     document.documentElement.classList.toggle("light", light);
     document.body.className = "bg-background text-foreground antialiased";
   }, [light]);
+
+  if (EMBED) {
+    return (
+      <div className="bg-background px-6">
+        {embedded().map((s) => (
+          <Section key={s.id} {...s} />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
