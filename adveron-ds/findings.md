@@ -102,8 +102,8 @@ the card in front of them.
 ### 6. Half the components have never been touched
 
 Checkbox, Command, Label, Popover, Separator, Sheet, Skeleton, Switch, Tabs and
-Tooltip are exactly as they were created. The drift sits in the other ten, which
-are the ones used most: Button, Dialog, Input, Select, Badge, Card, Dropdown menu,
+Tooltip are exactly as they were created. All the changes landed in the other ten:
+Button, Dialog, Input, Select, Badge, Card, Dropdown menu,
 Table, Chart, Radio group.
 
 ## What's done
