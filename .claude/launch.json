@@ -75,6 +75,17 @@
         "/Users/miguelugalde/GitHub/waldo-design-system/adveron-preview"
       ],
       "port": 4500
+    },
+    {
+      "name": "adveron-baseline",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "baseline",
+        "--prefix",
+        "/Users/miguelugalde/GitHub/waldo-design-system/adveron-preview"
+      ],
+      "port": 4510
     }
   ]
 }
