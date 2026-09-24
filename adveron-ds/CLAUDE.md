@@ -73,4 +73,15 @@ review app** (not a folder pipeline; he explicitly dislikes the folder system).
 
 ## Status
 
-- 2026-09-24: folder created, context written. Phase 1 approved by Miguel, not started.
+- 2026-09-24: folder created, context written. Phase 1 approved by Miguel.
+- 2026-09-24: Phase 1 built.
+  - `baseline/` — verbatim snapshot of adveron-web at the SHA in `UPSTREAM`. Never edit;
+    the Waldo detector skips it on purpose.
+  - `tools/build-history.js` → `app/history.json` — every change per file, with
+    author/date/card/PR and the evidence tag. Re-run after moving `UPSTREAM`.
+  - `app/index.html` — the compare page: http://localhost:4501/adveron-ds/app/
+    Needs three servers from `.claude/launch.json`: `waldo-ds` (4501, the page),
+    `adveron-baseline` (4510), `waldo-ui-preview` (4400).
+  - Both galleries accept `?embed=1&only=…&theme=…` (Waldo also `spec=`) and post
+    their content height to the parent.
+  - Tag heuristic reads commit titles only; it is evidence, not authorship.

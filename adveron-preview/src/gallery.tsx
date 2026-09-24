@@ -494,11 +494,11 @@ function useReportHeight() {
     if (!EMBED || window.parent === window) return;
     const send = () =>
       window.parent.postMessage(
-        { type: "gallery-height", source: "adveron", only: ONLY, height: document.documentElement.scrollHeight },
+        { type: "gallery-height", source: "adveron", only: ONLY, height: Math.ceil(document.getElementById("root")!.getBoundingClientRect().height) },
         "*",
       );
     const ro = new ResizeObserver(send);
-    ro.observe(document.body);
+    ro.observe(document.getElementById("root")!);
     send();
     return () => ro.disconnect();
   }, []);
